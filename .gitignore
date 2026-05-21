@@ -1,3 +1,14 @@
+.DS_Store
+**/.omc/
+.claude/
+.agents/
+.codebuddy/
+AGENTS.md
+CLAUDE.md
+_archive/
+skills-lock.json
+docs/plans/
+
 # === 小说内容（不追踪） ===
 # 标准结构的小说项目（含正文/设定/大纲/追踪/对标子目录）
 */正文/
