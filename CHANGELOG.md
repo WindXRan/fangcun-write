@@ -2,7 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v0.6.8
+
+> story-import 重构 + skill 自包含化 + 起点扫榜与 story-review 子 Agent 修复
+
+### 改进
+
+- **story-import（导入已有小说）**：按篇幅自动分流。长篇走 story-long-analyze 6 阶段管线 + 长篇结构迁移；短篇走 story-short-analyze + 短篇结构迁移（单文件 `正文.md`，不产 `追踪/`、`大纲/` 等长篇专属目录）。判定优先级：用户声明 > 章节结构 > 字数兜底 30000。
+- **story-import**：长篇新增「角色状态反推」7 步算法，从拆书产物反推 `追踪/角色状态.md`，不重读原文。补齐 story-long-write 日更准备层依赖的角色状态文件，避免导入书永久走兜底分支。
+- **story-import**：调用 story-long-analyze 时自动越过 Stage 1 停靠点，以「完整拆解、一次跑完、不要停下询问」模式驱动，确保 Stage 2-5 全套产物落地；停靠询问不透传给用户。
+- **story-import**：skill 自包含化。原先跨 skill 引用 story-long-write / story-short-write 的 references（22+ 处 `../` 路径）全部清除——迁移所需模板（关系/题材定位/卷纲/角色状态）内联到 story-import 自己的 reference 文件，叶子引用文件（state-tracking.md、format-and-structure.md）以本地副本管理。
 
 ### Bug 修复
 
@@ -11,10 +20,11 @@ All notable changes to this project will be documented in this file.
 
 ### 验证
 
+- story-import 篇幅分流、角色状态反推、跨 skill 引用清零均经独立验证；`scripts/static-check.sh` 13/13 PASS，`scripts/check-shared-files.sh` 0 mismatches。
 - story-review / story-setup Agent 模板路径审计通过。
 - 起点畅销榜实时采集成功并生成 Markdown。
 - `node --check skills/story-long-scan/scripts/qidian-rank-scraper.js`
-- `bash scripts/static-check.sh`
+- GitHub CI：macOS / Windows / static-check 全绿。
 
 ## v0.6.7
 
