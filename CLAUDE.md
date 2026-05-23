@@ -11,6 +11,7 @@
 | `/story-long-scan`、`/长篇扫描` | story-long-scan | 长篇小说批量扫描 |
 | `/story-short-scan`、`/短篇扫描` | story-short-scan | 短篇小说批量扫描 |
 | `/story-deslop`、`/去AI味` | story-deslop | 去除 AI 写作痕迹 |
+| `/story-synopsis`、`/简介` | story-synopsis | 小说简介生成 · 多版本对比 |
 | `/story-cover`、`/封面` | story-cover | 生成封面图 |
 | `/story-review`、`/审查` | story-review | 多视角对抗式审查 |
 | `/story-import`、`/导入` | story-import | 逆向导入已有小说到项目结构 |
