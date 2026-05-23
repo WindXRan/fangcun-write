@@ -1,4 +1,4 @@
-<!-- Last synced with README.md: 2026-05-22 -->
+<!-- Last synced with README.md: 2026-05-23 -->
 
 **English** | [中文](README.md)
 
@@ -156,13 +156,15 @@ Writing skills internally coordinate 7 specialized agents:
 
 Agents load writing theory from `references/` on demand (character design, dialogue techniques, twist toolbox, etc. — 100+ methodology files), without reserving context window space.
 
-## Upgrading to v0.6.7
+## Upgrading to v0.6.8
 
-This release refactors the long-form and short-form deconstruction skills. The changes live inside the deconstruction skills and take effect once you update the skill pack.
+If you have already run `/story-setup` inside a writing project, run `/story-setup` again from the project root after updating this skill pack (`agents_version` is bumped to v8 to trigger reviewer template redeploy).
 
-- **Long-form deconstruction**: the "quick / deep" dual modes are merged into a single pipeline. After the golden three chapters it produces `快速预览.md` and asks whether to continue the full deconstruction; on confirmation it resumes from where it paused without re-running completed stages.
-- **Short-form deconstruction**: the "standard / fine" dual tiers are removed in favor of a single full deconstruction; pipeline stage terminology is aligned with the long-form skill.
-- Quality thresholds and chunking strategy for both deconstruction skills are consolidated into a single authoritative file, so the docs no longer repeat themselves.
+- **story-import (import existing novels)**: automatic length routing — long-form runs the full deconstruction pipeline plus long-form project migration, short-form runs the short-form pipeline plus a single-file `正文.md` project. Priority: user declaration > chapter structure > word-count fallback.
+- **story-import**: long-form imports now reverse-engineer `追踪/角色状态.md` so the daily-writing preparation layer no longer falls back to inference when this file is missing.
+- **story-import**: when invoking the deconstruction skill it automatically skips the Stage 1 checkpoint so the "after-golden-three-chapters stop and ask" interaction is not surfaced to import users.
+- **story-review subagent path fix**: reviewers no longer look up bare names like `quality-checklist.md` against the user project's cwd; references are loaded via the owning skill's canonical path.
+- **Qidian scanner fix**: default to mobile SSR scraping with CDP + CAPTCHA fallback, avoiding the PC-site anti-bot block.
 
 ## Automation Hooks
 
