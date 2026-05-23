@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Bug 修复
+
+- 修复起点中文网扫榜在 PC 站触发风控页时无法采集的问题：`qidian-rank-scraper.js` 默认改为移动端 SSR pageContext 抓取，并保留 CAPTCHA/CDP 回退。
+
+### 验证
+
+- 起点畅销榜实时采集成功并生成 Markdown。
+- `node --check skills/story-long-scan/scripts/qidian-rank-scraper.js`
+- `bash scripts/static-check.sh`
+
 ## v0.6.7
 
 > 拆书 skill 重构：长篇双模式合并 + 短篇去模式化
