@@ -1,0 +1,50 @@
+.DS_Store
+**/.omc/
+.claude/
+.agents/
+.codebuddy/
+AGENTS.md
+CLAUDE.md
+_archive/
+skills-lock.json
+docs/plans/
+
+# === 小说内容（不追踪） ===
+# 标准结构的小说项目（含正文/设定/大纲/追踪/对标子目录）
+*/正文/
+*/设定/
+*/大纲/
+*/追踪/
+*/对标/
+
+# 番茄下载器下载的小说（数字ID_书名）
+[0-9]*_*/
+
+# 非标准结构的小说目录
+好果子/
+
+# 对标分析文件
+*对标分析*
+
+# 拆文分析
+拆文库/
+
+# === Agent 记忆中的项目文件（小说内容） ===
+.claude/agent-memory/*/project_*
+
+# === 下载/导入文件 ===
+*.epub
+*.exe
+*.txt
+*.docx
+
+# === 日志 ===
+logs/
+
+# === 个人配置 ===
+config.yml
+eggy.json
+
+# === 临时文件 ===
+*.py
+temp_*
