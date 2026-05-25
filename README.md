@@ -158,15 +158,14 @@ demo/拆文库-盘龙/
 
 Agent 按需加载 `references/` 中的写作理论（角色设计、对话技法、反转工具箱等 100+ 份方法论文件），不预占上下文。
 
-## 升级到 v0.6.8
+## 升级到 v0.6.9
 
-如果你已经在写作项目中运行过 `/story-setup`，升级 skill 后请在项目根目录重新运行一次 `/story-setup`（`agents_version` 已升级到 v8，触发 reviewer 模板重部署）。
+如果你已经在写作项目中运行过 `/story-setup`，升级 skill 后请在项目根目录重新运行一次 `/story-setup`（hook bundle sentinel 升到 v9，触发模板重部署 + 部署完整性校验）。
 
-- **story-import（导入已有小说）**：按篇幅自动分流——长篇走完整拆解 + 长篇项目结构迁移，短篇走短篇拆解 + 单文件 `正文.md` 工程。判定优先级：用户声明 > 章节结构 > 字数兜底。
-- **story-import**：长篇导入会反推 `追踪/角色状态.md`，story-long-write 日更准备层不再因为缺这个文件而走兜底分支。
-- **story-import**：调用拆书 skill 时自动越过 Stage 1 停靠点，避免「黄金三章后停下询问」的交互被透传给导入用户。
-- **story-review 子 Agent 路径修复**：reviewer 不再在用户项目 cwd 下查 `quality-checklist.md` 等裸文件名，统一走 skill 自带的规范路径。
-- **起点扫榜修复**：默认改为移动端 SSR 抓取，保留 CDP + CAPTCHA 回退；规避了 PC 站风控页拦截。
+- **story-cover（封面生成）**：`images/edits` 流程改回标准的 `multipart/form-data`（原 JSON-with-URL 仅在某代理下生效，对 OpenAI 直连必失败）；自动版本号 `封面_v1/v2.png`、`.prompt.txt`/`.ref.txt` 旁注、`jq -n` 防转义、API 错误早退、`// empty` 防假 PNG、`BOOK_DIR/PROMPT` 入口校验，全面加固出图链路。删除与 `references/cover-styles.md` 漂移的平台风格副本表，统一以参考文件为单一来源；新增 Step 1.5 题材判定。
+- **browser-cdp（浏览器操控）**：杀掉用户 Chrome 前先走明确的同意握手——TTY 用 readline 询问，skill 模式以 `NEEDS_CONSENT` 退出码 3 回到 Claude Code 由 `AskUserQuestion` 询问，避免静默关闭浏览器丢失登录态；Profile 复制重新排序到 Chrome 退出之后，避免 SQLite 写锁导致 cookie 撕裂。
+- **story-review（多视角审查）**：模式预检 + Agent 缺失/异常/过旧/启动失败的安全 solo 回退，reference 不可读时走内置 rubric fallback；项目尚未 `story-setup` 也能跑出可用审稿。
+- **story-setup（环境部署）**：sentinel v9 元数据 + 项目内 reference 路径双重校验；新增 `scripts/check-story-setup-deployment.sh` / `check-hook-regex-sync.sh` 兜底回归；hook 包自包含化。
 
 ## 自动化 Hooks
 

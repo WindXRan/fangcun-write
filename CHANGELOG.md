@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.6.9
+
+> story-cover 协议修复 + browser-cdp 同意握手 + story-review / story-setup 可靠性强化
+
+### 改进
+
+- **story-cover（封面生成）**：`images/edits` 流程改回正确的 `multipart/form-data` 形式（原 JSON-with-URL 仅在 yunwu 代理下歪打正着，对 OpenAI 直连必失败），文本字段用 `--form-string` 避免 `@` 前缀被误判为文件引用；自动版本号 `封面_v1/v2.png` 不再相互覆盖；落地 `.prompt.txt` 与 `.ref.txt` 旁注便于迭代；强制 `BOOK_DIR` / `PROMPT` 入口校验；`jq -n --arg` 拼 JSON 体规避中文/引号/换行的 shell 转义陷阱；`jq -er '.data[0].b64_json // empty'` 配合 `-s` 检查杜绝把 `"null"` 解码成 3 字节假 PNG；`jq`、`base64` 加入 `openclaw.requires.bins`。
+- **story-cover**：删除已与 `references/cover-styles.md` 漂移的平台风格副本表，统一以参考文件为单一来源；新增 Step 1.5「题材判定」明确关键词命中 + 多匹配优先级 + 零命中默认都市的确定性规则；`API 配置` 段重写为环境变量速查表。
+- **browser-cdp（浏览器操控）**：`setup-cdp-chrome.js` 在杀掉用户 Chrome 前先做明确的同意握手——TTY 走 readline 询问，skill 模式以 exit 3 + `NEEDS_CONSENT` 行回到 Claude Code 由 `AskUserQuestion` 询问，再以 `--yes` 显式确认。重排 `main()` 确保 Profile 复制在 Chrome 进程退出之后，避免 SQLite 写锁中复制导致 cookie 静默撕裂。
+- **browser-cdp**：cookie 路径全覆盖（旧 `Default/Cookies` + 新 `Default/Network/Cookies` + `Login Data For Account`）；启动加固——端口校验、`--remote-allow-origins`、`--no-first-run`、`SingletonLock` 清理、超时后孤儿进程回收；新增 `--detect-only` / `--reset` / `--profile` 选项。
+- **story-review（多视角审查）**：模式预检 + Agent 缺失/异常/过旧/启动失败的安全 solo 回退；reference 文件不可读时使用内置 rubric fallback；spawn 失败不再让 full/lean 半成品审稿继续；报告附带可机器校验的元数据。
+- **story-setup（环境部署）**：sentinel v9 元数据 + 项目内 reference 路径双重校验；hook 包自包含化；新增 `scripts/check-story-setup-deployment.sh` 与 `scripts/check-hook-regex-sync.sh` 兜底回归。
+
+### Bug 修复
+
+- 修复 story-cover 在 `images/generations` 请求体中带 `response_format: b64_json` 的兼容性问题——`gpt-image-2` 始终返回 base64，该参数已被 gpt-image 系列拒收。
+- 修复 story-cover 在 `BOOK_DIR` 未设置时静默落地到 CWD、`PROMPT` 未设置时报 `unbound variable` 等不友好行为，改为带说明的 `:?` 报错。
+- 修复 browser-cdp 在不询问用户的情况下直接杀掉 Chrome 的破坏性默认。
+- 修复 story-review 在用户项目尚未运行 story-setup 时直接失败而非降级 solo 模式。
+- 修复 story-setup 短篇/长篇项目根目录解析在某些路径下不稳定的问题。
+
+### 验证
+
+- story-cover：双 bash block `bash -n` 全过；`jq -n --arg` 拼接含中文/引号/换行的 prompt 校验通过；`curl --trace` 证实 `--form-string` 不把 `@` 前缀当文件引用；端到端打 `yunwu.ai/v1`，文生图 2.9 MB / 图生图 3.1 MB 两个 1024×1536 PNG + 旁注文件齐全。
+- browser-cdp：本地 fixture + Claude Code skill 模式 `NEEDS_CONSENT` 回环验证。
+- story-review：tmux + Claude Code `/story-review` 单飞回退与 deployed-agent 满编 smoke 全过；3 个独立 read-only sub-agent 审查 + 1 轮 re-review 通过。
+- story-setup：`scripts/check-story-setup-deployment.sh` / `check-hook-regex-sync.sh` / `check-shared-files.sh` / `static-check.sh` 全过；hook 模板 `bash -n` 全部通过。
+- `claude plugin validate` 通过；GitHub CI：macOS / Windows / static-check 全绿。
+
 ## v0.6.8
 
 > story-import 重构 + skill 自包含化 + 起点扫榜与 story-review 子 Agent 修复
