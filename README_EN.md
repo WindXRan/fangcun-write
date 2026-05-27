@@ -135,8 +135,13 @@ demo/拆文库-盘龙/
 ├── 剧情/
 │   └── 故事线.md          # Framework + 4 plotlines + 2 storylines
 └── 设定/
-    ├── 世界观.md          # Power system + geography + factions
-    └── 金手指.md          # Panlong Ring + Delin Cowort
+    ├── 世界观/
+    │   ├── 背景设定.md    # Core rules + special settings
+    │   ├── 力量体系.md    # Battle qi + magic + ranks
+    │   ├── 地理.md        # Andaluxia + Yulan Continent
+    │   └── 金手指.md      # Panlong Ring + Delin Cowort
+    └── 势力/
+        └── 巴鲁克家族.md  # Baluk family (dragon-blood lineage)
 ```
 
 Long-form deconstruction also produces `文风.md`; daily writing reads it to keep dialogue, punctuation, and emotional pacing close to the benchmark.

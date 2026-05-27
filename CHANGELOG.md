@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+> story-long-analyze 拆解管道修正 + 拆文产物按主题拆分 + 下游 story-import / story-long-write 同步对齐
+
+### 改进
+
+- **story-long-analyze（长篇拆文）**：情节点下限统一到 10（原 SKILL.md 路由层与 chapter-extractor 校验层不一致：路由说 3-40，校验说 10-40——短章会被静默拆得过细或过粗）。5 处漂移位点全部对齐到 10-40。
+- **story-long-analyze**：Stage 6 文风提取的句长/标点统计从「眼测」改为 `python3` 切句脚本（按 `[。！？]` 切句、桶化短/中/长句、统计标点密度）。Stage 6 由主线程跑，Bash 工具可用；句长 confidence 从 low 升到 high。
+- **story-long-analyze**：Stage 4 拆为 4a / 4b / 4c——设定（世界观/金手指/势力）与 Stage 3 并行（数据源是 Stage 2 章节摘要 + 情节点，不依赖 Stage 3）；角色完整档案、角色关系串行依赖 Stage 3 合并后的角色实体。修正原并行图把「角色构建」放在 Stage 3 旁边的错误。
+- **story-long-analyze**：概要.md 拆分两版——Stage 0 写 ~200 字 thin first-pass（基于章节标题 + 抽样开头/结尾），Stage 5 用完整剧情信息写 500-1000 字全书概要，覆盖 Stage 0 的首版。避免 Stage 0 在没读完全书的情况下硬凑高密度概要。
+- **story-long-analyze**：新增 Stage 0.5 章节边界表，写入 `_progress.md`（`schema_version: 2`）。Stage 1/2/6 全部从该表取章节切片，不再各自跑 regex。旧 `_progress.md` 续跑时走 lazy migration——现场跑一次正则重建并写回，不破 `paused_after_stage1` 契约。章节正则补 `千` / `两`，支持 1000+ 章长篇。
+- **story-long-analyze**：chapter-extractor 默认 haiku，质量校验失败（情节点 < 10、原文引用缺失、类型/基调超出枚举、角色名为昵称等 9 条自检）→ 主线程用 sonnet 重 spawn 一次。两份 chapter-extractor 模板（`.claude/agents/` + `skills/story-setup/.../templates/agents/`）内容对齐到自包含版本（不再引用 `output-templates.md`）。
+- **story-long-analyze**：Stage 4 设定按主题拆分多文件输出——`设定/世界观/{背景设定,力量体系,地理,金手指}.md` + `设定/势力/{势力名}.md`，与下游 story-import / story-long-write 项目结构对齐，下游不再做 re-split。
+- **story-import（已有小说导入）**：3.5 拆分步骤识别两种拆文库形态——`设定/世界观/` 子目录存在则 pass-through；只有单文件 `设定/世界观.md` 则走原 re-split 逻辑（早期拆文库或手动写的兜底）。
+- **story-long-write（长篇写作）**：单章准备层读取路径从 `设定/金手指.md 或 世界观.md` 改为 glob `设定/世界观/*.md`，回退到单文件 `设定/世界观.md`、再回退 `设定/金手指.md`，全缺失则跳过不阻塞。项目结构文档同步更新到按主题拆分布局。
+
+### Bug 修复
+
+- 修复 story-long-analyze 情节点下限漂移导致短章被过细切（路由层 3，校验层 10）。
+- 修复 chapter-extractor 两份模板内容已经悄悄不一致（一份说「输出对齐 output-templates.md」，另一份说「不依赖外部模板」）。
+- 修复章节正则 `第[一二三四五六七八九十百零0-9]+章` 对 1000+ 章长篇（盘龙 / 诡秘之主等）匹配失败的截断问题。
+- 修复 story-long-write 日更循环读 `设定/金手指.md 或 世界观.md` 的扁平路径——拆文产物已经按主题拆到子目录后，这条扁平读取会 ENOENT 静默失败。
+
+### 验证
+
+- F-codes（F1a/F1b/F2/.../F7）和 plan 上下文（`#F3-defer`）等开发期符号不外泄到 skill 文件——`grep -rn` 在 `skills/` 和 `.claude/agents/` 下 0 命中。
+- 情节点下限：`3-40` 在 `skills/story-long-analyze/` 和两份 chapter-extractor 副本下 0 命中；`10-40` 在期望的 6 处全部命中。
+- `python3` 切句脚本本地用真实中文小样本跑通：`sentences=6; short_lt15=66%; mid_15to30=33%; long_gt30=0%; avg_len=12; punct_density=15%`。
+- 章节正则补全 character class 含 `千` + `两`：`grep -F` 在 `style-profile-generator.md` 行 55 唯一命中。
+- 两份 chapter-extractor 副本 `diff -q` 空输出，byte-identical。
+- 跨 skill 读取路径审计：story-long-write 已无扁平 `设定/世界观.md` / `设定/金手指.md` 单点读，全部走 glob + 回退链；story-import 既能 pass-through 新版子目录形态，也能 re-split 单文件版本。
+- `_progress.md` 4 个状态值（`pending` / `paused_after_stage1` / `completed` / `completed_with_errors`）在 `pipeline-ops.md` 全部保留，无回归。
+
 ## v0.6.9
 
 > story-cover 协议修复 + browser-cdp 同意握手 + story-review / story-setup 可靠性强化
