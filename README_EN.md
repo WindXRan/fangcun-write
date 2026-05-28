@@ -121,6 +121,7 @@ Full output from `/story-long-analyze` deep mode on the first 23 chapters of *Co
 demo/拆文库-盘龙/
 ├── 概要.md              # Novel overview + chapter index
 ├── 拆文报告.md           # 5-dimension scoring + pacing analysis + takeaways
+├── 文风.md              # Benchmark voice: sentence rhythm, punctuation, dialogue subtext, emotion pacing
 ├── 章节/
 │   ├── 第1章_深度拆解.md  # Golden三章 deep analysis
 │   └── 第1-23章_摘要.md   # Per-chapter summary + plot points + character mentions
@@ -134,9 +135,16 @@ demo/拆文库-盘龙/
 ├── 剧情/
 │   └── 故事线.md          # Framework + 4 plotlines + 2 storylines
 └── 设定/
-    ├── 世界观.md          # Power system + geography + factions
-    └── 金手指.md          # Panlong Ring + Delin Cowort
+    ├── 世界观/
+    │   ├── 背景设定.md    # Core rules + special settings
+    │   ├── 力量体系.md    # Battle qi + magic + ranks
+    │   ├── 地理.md        # Andaluxia + Yulan Continent
+    │   └── 金手指.md      # Panlong Ring + Delin Cowort
+    └── 势力/
+        └── 巴鲁克家族.md  # Baluk family (dragon-blood lineage)
 ```
+
+Long-form deconstruction also produces `文风.md`; daily writing reads it to keep dialogue, punctuation, and emotional pacing close to the benchmark.
 
 </details>
 
@@ -156,15 +164,14 @@ Writing skills internally coordinate 7 specialized agents:
 
 Agents load writing theory from `references/` on demand (character design, dialogue techniques, twist toolbox, etc. — 100+ methodology files), without reserving context window space.
 
-## Upgrading to v0.6.8
+## Upgrading to v0.6.9
 
-If you have already run `/story-setup` inside a writing project, run `/story-setup` again from the project root after updating this skill pack (`agents_version` is bumped to v8 to trigger reviewer template redeploy).
+If you have already run `/story-setup` inside a writing project, run `/story-setup` again from the project root after updating this skill pack (the hook-bundle sentinel is bumped to v9, triggering template redeploy plus deployment-integrity checks).
 
-- **story-import (import existing novels)**: automatic length routing — long-form runs the full deconstruction pipeline plus long-form project migration, short-form runs the short-form pipeline plus a single-file `正文.md` project. Priority: user declaration > chapter structure > word-count fallback.
-- **story-import**: long-form imports now reverse-engineer `追踪/角色状态.md` so the daily-writing preparation layer no longer falls back to inference when this file is missing.
-- **story-import**: when invoking the deconstruction skill it automatically skips the Stage 1 checkpoint so the "after-golden-three-chapters stop and ask" interaction is not surfaced to import users.
-- **story-review subagent path fix**: reviewers no longer look up bare names like `quality-checklist.md` against the user project's cwd; references are loaded via the owning skill's canonical path.
-- **Qidian scanner fix**: default to mobile SSR scraping with CDP + CAPTCHA fallback, avoiding the PC-site anti-bot block.
+- **story-cover**: `images/edits` now uses the correct `multipart/form-data` shape (the previous JSON-with-URL shape only worked against a specific proxy quirk and would fail against OpenAI direct). Adds auto-versioned `封面_v1/v2.png` output, `.prompt.txt` / `.ref.txt` sidecars, `jq -n` JSON escaping, early-exit on API errors, `// empty` guard against fake PNGs, and `BOOK_DIR` / `PROMPT` entry checks. Drops the duplicated platform-style table that had drifted from `references/cover-styles.md`; adds deterministic Step 1.5 genre detection.
+- **browser-cdp**: explicit consent handshake before killing the user's Chrome — TTY uses readline; skill mode exits 3 with a `NEEDS_CONSENT` line so Claude Code can ask via `AskUserQuestion`. The profile copy is reordered to run **after** Chrome has exited, eliminating silent cookie corruption from copying SQLite files under a write lock.
+- **story-review**: mode preflight + safe solo fallback when reviewer agents are missing/broken/stale/fail-to-spawn, plus an embedded rubric fallback when reference files are unreadable; usable even before `story-setup` has been run in the project.
+- **story-setup**: sentinel v9 metadata and project-local reference paths are now double-checked; new `scripts/check-story-setup-deployment.sh` and `scripts/check-hook-regex-sync.sh` provide regression coverage; the deployed hook bundle is self-contained.
 
 ## Automation Hooks
 
@@ -209,6 +216,7 @@ The file system separates settings, outlines, prose, and tracking into independe
 │       ├── Characters/         # Structured character profiles (synced from analyze)
 │       ├── Plotlines/          # Structured plot lines (synced from analyze)
 │       ├── Settings/           # Structured world settings (synced from analyze)
+│       ├── 文风.md              # Benchmark voice used before daily writing
 │       └── Report.md            # Analyze skill output
 ├── Tracking/                # Continuity management (layered tracking)
 │   ├── Context.md           # Writing context (for compact recovery)
