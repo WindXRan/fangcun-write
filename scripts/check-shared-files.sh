@@ -21,7 +21,15 @@ fi
 # - material-decomposition.md: long/short analyze use different decomposition pipelines
 # - quality-checklist.md: story-short-analyze's copy points to material-decomposition.md
 #   (absent in story-short-write); the two copies are intentionally skill-specific
-IGNORE_NAMES="output-templates.md material-decomposition.md quality-checklist.md"
+# - 8 genre/character files: story-short-analyze prepends a "## 用作拆文标尺时"
+#   analyst-lens header (file is consumed as a reference standard for source-story
+#   evaluation, not as a writer playbook). Writer skills don't get the header
+#   because the analyst framing doesn't apply there. The divergence is intentional
+#   and analyst-side only — do NOT cascade the header into writer skills.
+IGNORE_NAMES="output-templates.md material-decomposition.md quality-checklist.md \
+genre-catalog.md genre-core-mechanics.md genre-readers.md \
+genre-writing-formulas.md genre-writing-techniques.md \
+character-basics.md character-design-methods.md character-relations.md"
 
 mismatches=0
 checked=0
