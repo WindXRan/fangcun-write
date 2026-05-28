@@ -4,7 +4,6 @@
 
 | 命令 | Skill | 说明 |
 |------|-------|------|
-| `/story-engine-transfer`、`/引擎移植`、`/仿写框架` | story-engine-transfer | 叙事引擎移植（解构热门小说→跨题材移植） |
 | `/story-long-write`、`/写长篇` | story-long-write | 长篇网文写作（逐章推进） |
 | `/story-short-write`、`/写短篇` | story-short-write | 短篇网文写作（情绪驱动） |
 | `/story-long-analyze`、`/长篇拆文` | story-long-analyze | 长篇小说深度拆解 |
