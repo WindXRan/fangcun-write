@@ -257,16 +257,38 @@ metadata:
 
 ### Phase 4：精修打磨
 
-加载 `references/writing-workflow.md` 中的精修清单完成检查。
-重点：开头钩子、情绪曲线、反转铺垫、每句话价值、格式规范、AI 腔排查。
+#### 4.1 去AI味
 
-#### Agent 调用：narrative-writer（去AI味）+ consistency-checker
+调用 `story-deslop` skill 处理正文：
 
-精修阶段，如果项目已部署对应 agent，可 spawn：
-- `Agent(subagent_type: "narrative-writer", prompt: "项目目录：{dir}\n任务描述：去AI味+格式检查\n检查范围：{正文文件}")` — 执行去AI味（6 Gate）和格式合规检查
-- `Agent(subagent_type: "consistency-checker", prompt: "项目目录：{dir}\n检查范围：{正文文件}\n检查类型：事实冲突+伏笔断线+角色属性不一致")` — 执行一致性检查
+```
+/story-deslop
+```
 
-如 agent 不可用，由主线程直接执行。
+或直接调用 narrative-writer agent（已内置 6 Gate）：
+
+```
+Agent(subagent_type: "narrative-writer", prompt: "
+任务描述：去AI味
+项目目录：{dir}
+正文文件：{正文文件路径}
+
+请执行 6 Gate 去AI味流程，修改后写回原文件。
+评分标准：_shared/evaluation/rubric.md
+")
+```
+
+#### 4.2 一致性检查
+
+调用 consistency-checker agent：
+
+```
+Agent(subagent_type: "consistency-checker", prompt: "
+项目目录：{dir}
+检查范围：{正文文件}
+检查类型：事实冲突+伏笔断线+角色属性不一致
+")
+```
 
 **自检记录隔离规则**：
 - 所有自检记录（字数统计、禁用词扫描结果、格式检查清单）必须写入独立文件 `自检_{标题}.md`（标题取自 Phase 2 核心框架）
