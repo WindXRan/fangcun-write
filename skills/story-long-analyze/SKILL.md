@@ -172,7 +172,7 @@ Stage 4c（角色关系提取）— 串行，依赖 4b 角色实体存在
 
 ### 部分失败容忍
 
-单章/单阶段失败不阻断管线。失败记录到 `_progress.md` 的「失败记录」表（`| 类型 | 章节/阶段 | 错误信息 | 重试状态 |`）。最终状态可为 `completed_with_errors`（在拆文报告中注明失败详情）。
+单章/单阶段失败不阻断管道。失败记录到 `_progress.md` 的「失败记录」表（`| 类型 | 章节/阶段 | 错误信息 | 重试状态 |`）。最终状态可为 `completed_with_errors`（在拆文报告中注明失败详情）。
 
 > 与 material-decomposition.md 的对应关系：Stage 0 含 Material 阶段1（章节解析）；Stage 1、5 为新增；Stage 2 = Material 阶段2；Stage 3 = Material 阶段3；Stage 4 合并 Material 阶段4+5。
 

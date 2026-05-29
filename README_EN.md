@@ -10,9 +10,13 @@ A web novel writing skill pack for Claude Code and OpenClaw. Covers the full pip
 
 > **Tropes = deterministic emotional payoff**
 
-Professional authors follow a three-step method: 1. Scan — analyze trending charts, identify genres, characters, and entry points. 2. Deconstruct — break down pacing and plot materials, build a personal module library. 3. Commercialize — learn and apply hooks, payoff density, expectation management.
+Professional authors follow a three-step method:
 
-Built around four pillars: reverse-engineering hits, plot modularization, layered state management, and human-AI collaboration.
+1. **Scan** — analyze trending charts, identify genres, characters, and entry points.
+2. **Deconstruct** — break down pacing and plot materials, build a personal module library.
+3. **Commercialize** — learn and apply hooks, payoff density, expectation management.
+
+Built around four pillars: reverse-engineering hits · plot modularization · layered state management · human-AI collaboration.
 
 ## Pipeline Overview
 
@@ -84,6 +88,8 @@ npx skills add worldwonderer/oh-story-claudecode -y
 ```
 
 Re-run the same command to update.
+
+> After updating, if a project has already run `/story-setup`, re-run `/story-setup` from the project root to sync hooks / agents / references. Per-version changes are in [CHANGELOG.md](CHANGELOG.md) and [Releases](https://github.com/worldwonderer/oh-story-claudecode/releases).
 
 ## Skills
 
@@ -164,15 +170,6 @@ Writing skills internally coordinate 7 specialized agents:
 
 Agents load writing theory from `references/` on demand (character design, dialogue techniques, twist toolbox, etc. — 100+ methodology files), without reserving context window space.
 
-## Upgrading to v0.6.9
-
-If you have already run `/story-setup` inside a writing project, run `/story-setup` again from the project root after updating this skill pack (the hook-bundle sentinel is bumped to v9, triggering template redeploy plus deployment-integrity checks).
-
-- **story-cover**: `images/edits` now uses the correct `multipart/form-data` shape (the previous JSON-with-URL shape only worked against a specific proxy quirk and would fail against OpenAI direct). Adds auto-versioned `封面_v1/v2.png` output, `.prompt.txt` / `.ref.txt` sidecars, `jq -n` JSON escaping, early-exit on API errors, `// empty` guard against fake PNGs, and `BOOK_DIR` / `PROMPT` entry checks. Drops the duplicated platform-style table that had drifted from `references/cover-styles.md`; adds deterministic Step 1.5 genre detection.
-- **browser-cdp**: explicit consent handshake before killing the user's Chrome — TTY uses readline; skill mode exits 3 with a `NEEDS_CONSENT` line so Claude Code can ask via `AskUserQuestion`. The profile copy is reordered to run **after** Chrome has exited, eliminating silent cookie corruption from copying SQLite files under a write lock.
-- **story-review**: mode preflight + safe solo fallback when reviewer agents are missing/broken/stale/fail-to-spawn, plus an embedded rubric fallback when reference files are unreadable; usable even before `story-setup` has been run in the project.
-- **story-setup**: sentinel v9 metadata and project-local reference paths are now double-checked; new `scripts/check-story-setup-deployment.sh` and `scripts/check-hook-regex-sync.sh` provide regression coverage; the deployed hook bundle is self-contained.
-
 ## Automation Hooks
 
 6 hooks deployed automatically by `/story-setup`:
@@ -244,6 +241,9 @@ The file system separates settings, outlines, prose, and tracking into independe
 
 Each skill includes a `references/` knowledge base loaded on demand to keep context lean.
 
+<details>
+<summary>Expand the per-skill knowledge-base topic list</summary>
+
 | Topic | Contents | Skill |
 |:------|:---------|:------|
 | Outline Layout | Five-step outline method · Story structure levels · Node design · Progression design | long-write |
@@ -267,6 +267,8 @@ Each skill includes a `references/` knowledge base loaded on demand to keep cont
 | Market Data | Genre trends · Platform characteristics · Collection formats · Submission guides | long-scan / short-scan |
 | Cover Styles | 10 genre visual styles · Color composition · Prompt templates | story-cover |
 | Adversarial Review | Multi-perspective review · Scoring rubrics · Toxic trope detection | story-review |
+
+</details>
 
 ## Supported Platforms
 

@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.6.11
+
+> story-short-analyze 输出契约 + Phase 7 门控验收 · 多对标书跨书召回（cross-book-recall）· write skill references 内容整理：反转类型对齐拆文枚举 + 跨书字段映射 + 去重瘦身
+
+### 改进
+
+- **story-short-analyze（短篇拆文）**：新增 `references/output-contract.md` 定义 analyze→write 输出契约——Stage→文件映射、`_meta.json` schema（含 `structure_counts`：beats/hooks/setup_clues/character_archetypes/reusable_structures/reversal_type）、下游消费规范。双副本与 story-short-write byte-equal，`scripts/check-shared-files.sh` 守护。拆文产物维持旧 3 文件名（拆文报告.md / 情节节点.md / 写作手法.md），不触及 story-short-write 既有读取。
+- **story-short-analyze**：Phase 1 加字数探针（`<15000` 短篇 / `15000-20000` 灰区询问 / `>20000` 建议改长篇）+ lightweight resume（读 `_meta.json.last_stage_in_progress` + `stages_completed` 续跑）；题材识别扫不到时显式填 `genre_detected="通用"`。
+- **story-short-analyze**：新增 Phase 7 门控验收——(7.1) 拆文报告 AI 腔自检；(7.2) `structure_counts` 数值/枚举校验（beats≥4 结构段、hooks≥3、reversal_type 在 7 枚举内）；(7.3) `output-templates.md` BLOCK 项扫描。`beats` 明确为结构段数（开端/发展/高潮/结局），情节节点 15-60 密度校验仍归 `情节节点.md`。`reversal_type` 枚举含「无反转」，甜宠/喜剧/报应型不被误伤（setup_clues 跳过阈值）。
+- **story-short-analyze**：8 份 genre/character reference 注入「## 用作拆文标尺时」分析师视角 header（仅 analyze 侧分叉，`IGNORE_NAMES` 标注 intentional，不 cascade 进 writer）。
+- **story-long-write / story-short-write（跨书召回）**：新增 `references/cross-book-recall.md`——项目根 `拆文库/` ≥2 本时启用多对标书跨书召回。三道防线：①副对标 `文风.md` 不读 ②角色/剧情/设定 模块只主对标 + 1 本同题材副对标 ③narrative-writer 输入只主对标。跨题材相关度由 agent 读「题材类型」字段自决（同题材/弱相关/不相关），不维护索引、不引入题材标号。长篇 4 个 + 短篇 2 个 HTML anchor 触发点，sync-source byte-equal 双副本。
+- **story-long-write / story-short-write（references 内容整理）**：`reversal-toolkit.md` 反转类型 5→7，补「认知反转」（追妻/世情主力——全程恨结尾翻成爱）「无反转」（甜宠/喜剧/报应型，走甜度递进或报应兑现），与 analyze `_meta.json.reversal_type` 七值枚举字面对齐。`cross-book-recall.md` 加「拆文字段→写作参考」映射表（structure_counts 各字段回查对应 reference）。
+- **story-long-write**：`narrative-units.md` 并入 `plot-emotion-system.md`（提炼层级零-四级 + 常见误区迁入，情绪模块/戏剧单元/卡片去重），减一份文件。
+
+### Bug 修复
+
+- 修复 story-short-analyze `beats≥4` 门控形同虚设——原注释标「情节节点数」但情节节点真实下限 15-60，门控永远通过；改为「结构段数」语义，阈值与定义对齐。
+- 修复 story-short-analyze `reversal_type` 硬阻断会误伤无反转题材（甜宠/喜剧/报应型）——枚举补「无反转」并豁免 setup_clues 阈值。
+- 修复 story-short-analyze 字数探针边界 `15000` 重叠（`≤15000` 与 `15000-20000` 都含 15000）——改非重叠 `<15000 / 15000-20000 / >20000`。
+- 修复 cross-book-recall 触发条件与 `workflow-daily.md` 优雅降级口径冲突——主对标书字段缺失统一为「字典序第一本并提示」，不 fail-fast。
+- 修复 story-long-write SKILL.md「五种反转类型」section-anchor 在 reversal-toolkit 改 7 类后静默失效——锚点同步为「反转类型」。
+- 清理 story-short-write `style-craft.md` 孤儿（SKILL.md 0 引用、无 agent load；long-write 副本保留仍用）。
+
+### 验证
+
+- `scripts/check-shared-files.sh` 全过：output-contract.md / cross-book-recall.md / reversal-toolkit.md 各副本 byte-equal，0 mismatch。
+- `scripts/static-check.sh` 13 skills 0 fail；`scripts/check-story-setup-deployment.sh` 通过（reversal-toolkit 3 副本含 agent-references 同步）；macos / windows / static-check 三套 CI 全绿。
+- reversal_type 七枚举（视角/身份/动机/时间线/信息/认知/无反转）在 reversal-toolkit / output-contract.md / output-templates.md 三处字面一致。
+- cross-book-recall 映射表字段名与 output-contract `structure_counts` 逐字匹配；narrative-writer agent prompt schema 零改动（`git diff` 确认）。
+- 能力锚点回归：reversal-toolkit 原 5 类设置/揭示步骤未动；narrative-units 的「提炼层级」「戏剧性会磨损情绪不会磨损」「重构/微调」「常见误区」已进 plot-emotion-system；删 style-craft 前确认 short-write 0 live 引用。
+
 ## v0.6.10
 
 > story-long-analyze 拆解管道修正 + 拆文产物按主题拆分 + 下游 story-import / story-long-write 同步对齐 · story-deslop rubric 收紧 + 禁用句式批量导入 · 对标书产物术语作者化
