@@ -1,0 +1,33 @@
+{
+  "version": "v017",
+  "score": 92,
+  "timestamp": "2026-05-28T21:50:00Z",
+  "generation_method": "4_parallel_agents",
+  "test_results": {
+    "agent_1": {"pass": true, "setting": "矿区/5000万", "score": 92.6},
+    "agent_2": {"pass": true, "setting": "甘肃/500万", "score": 91.4},
+    "agent_3": {"pass": true, "setting": "古镇/800万", "score": 93.0},
+    "agent_4": {"pass": false, "setting": "空结果"}
+  },
+  "common_feedback": [
+    "字数弹性不足（2/3）",
+    "Phase 3确认流程可简化（2/3）",
+    "物价展示要求过于刚性（1/3）",
+    "系统出场创新方式可扩展（1/3）"
+  ],
+  "improvements_from_v016": [
+    "新增references/genre-specific-rules.md：题材特定规则",
+    "更新评估权重：结构35%、原创30%、逻辑20%、语言15%",
+    "新增多章源文本处理：≤10章全分析，>10章取前10+最后1章",
+    "新增结构提取验证：生成摘要让用户确认方向",
+    "字数统计细节：省略号/破折号各算2个字",
+    "参考资料表更新：success-patterns.md引用"
+  ],
+  "evaluation": {
+    "structure": 93,
+    "originality": 92,
+    "logic": 92,
+    "language": 92
+  },
+  "note": "v017整合了用户agent的8个改进，平均分92.3，接近阈值95。主要改进：题材通用化、评估权重、多章处理。"
+}

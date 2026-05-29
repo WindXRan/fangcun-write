@@ -1,0 +1,42 @@
+{
+  "version": "v022",
+  "score": 90,
+  "timestamp": "2026-05-29T13:20:00Z",
+  "generation_method": "3_agents_3_genres_clean_prompt",
+  "test_results": {
+    "agent_1": {
+      "pass": true,
+      "genre": "神豪/系统",
+      "source": "每天六千万",
+      "score": 86.5,
+      "issues": ["系统出场相似（屏幕黑+金色字）", "验证方式相似（ATM+超市+网购失败）"]
+    },
+    "agent_2": {
+      "pass": true,
+      "genre": "言情/总裁",
+      "source": "女配一睁眼",
+      "score": 93.0,
+      "issues": []
+    },
+    "agent_3": {
+      "pass": true,
+      "genre": "玄幻/网游",
+      "source": "游戏入侵",
+      "score": 92.0,
+      "issues": []
+    }
+  },
+  "improvements_from_v021": [
+    "强化系统出场创新要求",
+    "强化验证方式创新要求",
+    "新增连续排比句式检查",
+    "使用干净prompt测试（无上下文提示）"
+  ],
+  "evaluation": {
+    "structure": 90,
+    "originality": 85,
+    "logic": 93,
+    "language": 91
+  },
+  "note": "v022平均分90.5，言情和玄幻表现良好，神豪仍有系统出场相似问题。"
+}
