@@ -230,7 +230,6 @@ The file system separates settings, outlines, prose, and tracking into independe
 {Book Title}/
 ├── Prose.md                  # Complete short-form prose
 ├── Section_outline.md        # Per-section outline (emotion + hooks + events)
-├── Self-check.md             # Post-writing self-check record
 └── References/               # Writing references
     └── {topic}.md
 ```
