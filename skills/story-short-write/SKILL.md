@@ -70,7 +70,7 @@ metadata:
 
 #### 对标上下文加载
 
-> **拆文库/对标关系**：`拆文库/` = analyze skill 的原始产出（source of truth），位于项目根目录。`对标/` = 当前短篇的引用视图，位于 `{短篇标题}/对标/`。短篇写作优先读取 `{短篇标题}/对标/{书名}/`，不存在则回退项目根 `拆文库/{书名}/`，再回退 `{短篇标题}/拆文库/{书名}/`（兼容旧结构）。
+> **拆文库/对标关系**：`拆文库/` = analyze skill 的原始产出（数据源），位于项目根目录。`对标/` = 当前短篇的引用视图，位于 `{短篇标题}/对标/`。短篇写作优先读取 `{短篇标题}/对标/{书名}/`，不存在则回退项目根 `拆文库/{书名}/`，再回退 `{短篇标题}/拆文库/{书名}/`（兼容旧结构）。
 
 推荐目录结构：
 
@@ -98,6 +98,8 @@ metadata:
 2. 读取核心发现：结构段落、情绪曲线、反转位置、铺垫方式、句式节奏、可借鉴技法
 3. 写入本篇 `设定.md` 的“对标摘要”区，写作时每个场景从中召回 1-2 个相关技法
 4. 如只找到原文、未找到拆文报告，提示用户先运行 `/story-short-analyze`；如用户要求继续，也可只按原文做弱参考
+
+> **拆文产出格式**：analyze 落盘的完整文件树、`_meta.json` schema、Stage→文件映射，以及「story-short-write 怎么读这些产出」的下游消费规范，见 [references/output-contract.md](references/output-contract.md)。
 
 <!-- cross-book-recall:trigger:structure-positioning -->
 > **多对标书时**：参 `references/cross-book-recall.md`，副对标 anchor 入「对标摘要」区
@@ -383,6 +385,24 @@ metadata:
 | [references/genre-core-mechanics.md](references/genre-core-mechanics.md) | 核心梗设计 |
 | [references/genre-readers.md](references/genre-readers.md) | 读者心理 |
 | [references/state-tracking.md](references/state-tracking.md) | 状态追踪协议（Phase 3 准备层参考） |
+| [references/output-contract.md](references/output-contract.md) | Phase 2 对标上下文加载时（理解 analyze 产出格式与消费规范） |
+
+### 按主题快速定位（横切主题）
+
+有些主题散在多个文件里。下表给每个主题一个**权威文件**（先读它，通常够用），配套文件只在需要那个角度时再加载。括号是该文件里对应的小节。
+
+| 主题 | 权威文件（先读） | 配套文件（按角度补充） |
+|------|-----------------|----------------------|
+| 情绪设计 | **`references/emotional-methods.md`**（情感三板斧 + 拉扯节奏 + 失败模式） | `references/emotional-arc-design.md`（六种弧线 / 前反应-复现-后反应结构）· `references/genre-writing-techniques.md`（情绪操控核心法则） |
+| 反转 | **`references/reversal-toolkit.md`**（反转类型 / 铺垫 / 有效性自检） | `references/villain-and-reveal.md`（真相揭露机制 / 反转有效性自检） |
+| 反派揭露 | **`references/villain-and-reveal.md`**（反派模板 / 揭露机制 / 报应设计） | `references/reversal-toolkit.md` |
+| 人物 | **`references/character-basics.md`**（主角/配角/反派/动机模板速填） | `references/character-design-methods.md`（三层标签反差/深化）· `references/character-relations.md`（关系/感情线） |
+| 钩子 | **`references/hooks-chapter.md`**（章节/开篇钩子类型） | `references/hooks-paragraph.md`（段落钩子）· `references/hooks-suspense.md`（悬念设计） |
+| 女频写作 | **`references/female-audience-writing.md`**（核心原则 / 文案结构体系 / 感情线写法深化） | `references/genre-writing-techniques.md`（女频读者心理与写作技法 / 感情线四阶段推进法）· `references/genre-readers.md`（读者心理） |
+| 题材公式 | **`references/genre-writing-formulas.md`**（各题材创作公式速查） | `references/genre-catalog.md`（题材框架）· `references/genre-core-mechanics.md`（核心梗设计） |
+| 开头 | **`references/opening-design.md`**（黄金一章 / 三大基点 / 题材开头模板） | `references/hooks-chapter.md`（开篇钩子类型） |
+| 格式与节奏 | **`references/format-and-structure.md`**（正文格式硬规范） | `references/writing-craft.md`（三维度织入）· `references/writing-workflow.md`（设计/精修工作流） |
+| 去AI味 | **`references/anti-ai-writing.md`**（定性裁定） | `references/banned-words.md`（禁用词扫描）· `references/quality-checklist.md`（成稿检查） |
 
 ---
 
