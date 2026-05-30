@@ -202,6 +202,7 @@ Phase 2 的 agent 返回内容后，主线程**一口气完成以下操作**：
 【仿写框架】（供 /story-long-write 开书时提取）
 ========================================
 源文本：{源书名} | {源题材} | {源章数}章
+源文本路径：{源文本文件的完整路径，供后续继续仿写时使用}
 
 结构锚点（节奏对齐表）：
 | 章 | 情绪基调 | 叙事功能 | 情绪弧线走向 |
@@ -263,6 +264,19 @@ Phase 2 的 agent 返回内容后，主线程**一口气完成以下操作**：
 📁 文件：仿写试水库/试水_{新书名}.txt
 📊 字数：Ch1=XXX | Ch2=XXX | Ch3=XXX（写入后一行bash统计）
 📖 简介：[生成的简介]
+
+⏳ 后台正在运行抄袭检测+质量评估，结果稍后显示...
+```
+
+**review 结果出来后显示**：
+```
+📋 试水审查报告
+抄袭检测：CLEAN/SUSPICIOUS/PLAGIARIZED
+结构：APPROVE/CONCERNS/REJECT
+角色：APPROVE/CONCERNS/REJECT
+写作：APPROVE/CONCERNS/REJECT
+一致性：APPROVE/CONCERNS/REJECT
+总评：[1句话总结]
 ```
 
 ---
