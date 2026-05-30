@@ -3,7 +3,7 @@ name: story-setup
 version: 1.1.1
 description: |
   网文写作工具集基础设施部署。将 hooks/rules/agents/CLAUDE.md 等基础设施部署到用户项目目录。
-  触发方式：/story-setup、「准备写书」「帮我搭一下环境」「配置写作项目」
+  自动检测 OpenCode 项目并同步 agents。触发方式：/story-setup、「准备写书」「帮我搭一下环境」「配置写作项目」
 metadata:
   openclaw:
     source: https://github.com/worldwonderer/oh-story-claudecode
@@ -46,15 +46,28 @@ metadata:
 | `skills/story-setup/references/agent-references/*.md` | `.claude/skills/story-setup/references/agent-references/*.md` | story-setup managed | replace | every `story-setup/references/agent-references/*.md` reference resolves |
 | `skills/story-setup/references/templates/settings-hooks.json` | `.claude/settings.local.json` | user+managed | merge by hook command | hook JSON valid and registered commands deduped |
 | `skills/story-setup/references/templates/上下文.md.tmpl` | `{书名}/追踪/上下文.md` | user state | create only if absent | never overwrite existing writing context |
+| `skills/` 全目录 | `.claude/skills/` | story-setup managed | recursive replace | 所有 skill 目录与 `skills/` 一致 |
+| `skills/story-setup/references/templates/agents/*.md` | `.opencode/agents/*.md` | story-setup managed | replace | 与 `.claude/agents/` 一致（OpenCode 格式） |
 | generated sentinel | `.story-deployed` | story-setup managed | replace | contains `agents_version`, `setup_skill_version`, `target_cli`, `resolver_strategy`, `references_dir` |
 
-### 2.1 部署 CLAUDE.md
+### 2.1 部署 Skills 到 .claude/skills/
+
+**`skills/` 是唯一源目录**，`.claude/skills/` 是部署目标。每次 `/story-setup` 自动同步：
+
+1. 遍历 `skills/` 下所有子目录（每个子目录 = 一个 skill）
+2. 递归复制到 `.claude/skills/`（覆盖旧版）
+3. 删除 `.claude/skills/` 中存在但 `skills/` 中已不存在的废弃 skill 目录
+4. `_shared/` 目录一并同步
+
+此步骤确保 Claude Code 加载的 skill 与源目录完全一致。
+
+### 2.2 部署 CLAUDE.md
 
 - 读取 `skills/story-setup/references/templates/CLAUDE.md.tmpl`
 - 替换占位符（见下方「模板占位符」段）
 - 写入项目根目录 `CLAUDE.md`（如已存在，按「CLAUDE.md 合并策略」处理）
 
-### 2.2 部署 Hooks
+### 2.3 部署 Hooks
 
 - **递归复制完整目录树**：将 `skills/story-setup/references/templates/hooks/` 复制到用户项目 `.claude/hooks/`
 - 必须保留子目录 `lib/`，其中：
@@ -62,35 +75,35 @@ metadata:
   - `lib/sentinel.sh` 提供 `.story-deployed` 字段读取
 - 只需对 `.claude/hooks/*.sh` 设置执行权限（`chmod +x`）；`lib/*.sh` 由 hook `source`，不要求可执行位
 
-### 2.3 部署 Rules
+### 2.4 部署 Rules
 
 - 读取 `skills/story-setup/references/templates/rules/` 下所有 `.md` 文件
 - 复制到用户项目的 `.claude/rules/` 目录
 
-### 2.4 部署 Agents
+### 2.5 部署 Agents
 
 - 读取 `skills/story-setup/references/templates/agents/` 下所有 `.md` 文件
 - 复制到用户项目的 `.claude/agents/` 目录
 - Agent 文件属于 story-setup 管理文件，可安全覆盖；版本升级时按 `UPGRADING.md` 的版本检测结果重新部署
 
-### 2.4.1 Agent 兼容性处理
+### 2.5.1 Agent 兼容性处理
 
 - Agent frontmatter 以 Claude Code 为主；OpenClaw/qclaw 等只要支持 AgentSkills，未知字段（如 `memory`、`skills`、`disallowedTools`）应被忽略。若目标工具报 frontmatter 错误，保留 `name`、`description`、`tools` 三项，删除不支持字段后再部署。
 - 部署到项目后，agent 内引用的参考资料必须走 `story-setup/references/agent-references/*.md` 这一本 skill 内复制路径；不要跨 skill 引用其他 skill 的 references。若全局安装路径不同，优先用项目内 `.claude/skills/` 或 `skills/` 作为规范路径前缀，其次用工具的 skill 搜索能力，不要假定固定绝对路径。
 
-### 2.4.2 部署 Agent References
+### 2.5.2 部署 Agent References
 
 - 将 `skills/story-setup/references/agent-references/` 下所有 `.md` 复制到项目内 `.claude/skills/story-setup/references/agent-references/`
 - 如目标项目已经使用项目本地 `skills/` 目录，也可以同步复制到 `skills/story-setup/references/agent-references/` 作为 fallback，但不得只复制 fallback 而遗漏 `.claude/skills/` 主路径
 - 校验：凡 agent 或 reference 中出现 `story-setup/references/agent-references/<file>.md`，源包与目标包都必须存在 `<file>.md`
 
-### 2.5 部署 Session State 模板
+### 2.6 部署 Session State 模板
 
 - 读取 `skills/story-setup/references/templates/上下文.md.tmpl`
 - 仅当已识别为长篇书目且 `{书名}/追踪/` 已存在时，创建缺失的 `{书名}/追踪/上下文.md`
 - 如果目标文件已存在，不覆盖；短篇项目不得因此创建 `追踪/` 目录
 
-### 2.6 合并 Hooks 注册到 settings.local.json
+### 2.7 合并 Hooks 注册到 settings.local.json
 
 > 兼容性说明：`settings-hooks.json` 中 PreToolUse 的 `if` 字段使用 Claude Code hook 条件语法，需要运行环境支持 hook-level if。若目标工具不支持该字段，hook 脚本本身仍会自检并 advisory-only 退出；部署时可删除该 `if` 字段并保留 matcher + command。
 
@@ -99,7 +112,7 @@ metadata:
 - 合并 hooks 配置（按「settings-hooks.json 合并算法」处理）
 - 写入 `.claude/settings.local.json`
 
-### 2.7 创建部署标记
+### 2.8 创建部署标记
 
 - 创建 `.story-deployed` 文件（sentinel file）
 - 写入以下字段（YAML `key: value` 格式，hook 用 `references/templates/hooks/lib/sentinel.sh` 读取）：
@@ -113,6 +126,22 @@ metadata:
   ```
 - 此文件供 session-start.sh 和写作 skill 检测部署状态，避免重复提示
 - 如果 `.story-deployed` 已存在但无 `agents_version` 或版本 < 10，提示用户重新运行 story-setup 以更新 hooks/agents/rules/reference bundle（具体变更见 `UPGRADING.md`）
+
+### 2.9 部署 OpenCode 兼容（自动检测）
+
+如果项目中存在 `.opencode/` 目录或 `opencode.json`，自动同步 agents 到 OpenCode 格式：
+
+1. **同步 Agents**：将 `skills/story-setup/references/templates/agents/` 下所有 `.md` 转换为 OpenCode frontmatter 格式后复制到 `.opencode/agents/`
+   - 移除 Claude Code 专有字段：`name`、`tools`、`disallowedTools`、`maxTurns`、`memory`、`skills`
+   - 保留：`description`、`mode`
+   - 新增：`permission` 块（根据原 `tools`/`disallowedTools` 映射）
+   - 不写死 `model`，让 OpenCode 使用默认模型
+   - 保留 agent body（prompt）不变
+2. **同步 Skills 路径**：检查 `opencode.json` 中 `skills.paths` 是否包含 `skills`，缺失则提示用户添加
+3. **不需要部署 hooks/rules**：OpenCode 无此机制，跳过
+4. **不需要部署 settings.local.json**：OpenCode 使用 `opencode.json`
+
+如果项目中不存在 `.opencode/` 且无 `opencode.json`，跳过此步骤。
 
 ## Phase 3：验证安装
 
@@ -129,7 +158,10 @@ metadata:
    - 检查所有 `story-setup/references/agent-references/<file>.md` 都能解析到 deployed bundle
 5. 验证部署标记：
    - 检查 `.story-deployed` 是否存在且包含时间戳、`agents_version: 10`、`setup_skill_version: 1.1.1`、`target_cli`、`resolver_strategy`、`references_dir`
-6. 输出安装报告：
+6. 验证 OpenCode 兼容（如适用）：
+   - 检查 `.opencode/agents/` 下的 7 个 agent 文件是否存在
+   - 检查 `opencode.json` 中 `skills.paths` 是否包含 `skills`
+7. 输出安装报告：
    - 列出所有已部署的文件
    - 列出需要注意的事项（如已有配置已合并）
    - 提示用户可以开始使用 `/story-long-write` 或 `/story-short-write`
@@ -183,7 +215,7 @@ hooks 注册合并按 command 字段去重：
 | references/templates/CLAUDE.md.tmpl | 项目根 CLAUDE.md 模板 |
 | references/templates/hooks/ | 6 个 hook 脚本模板 + `lib/common.sh`/`lib/sentinel.sh` |
 | references/templates/rules/ | 4 条 path-scoped 规则模板 |
-| references/templates/agents/ | 7 个 agent 定义模板（story-architect, character-designer, narrative-writer, consistency-checker, story-researcher, story-explorer, chapter-extractor） |
+| references/templates/agents/ | 7 个 agent 定义模板（story-architect, character-designer, narrative-writer, consistency-checker, story-researcher, story-explorer, chapter-extractor）；同时部署到 `.claude/agents/` 和 `.opencode/agents/`（OpenCode 格式） |
 | references/agent-references/ | Agent 模板自带的参考资料副本；部署到 `.claude/skills/story-setup/references/agent-references/`，避免跨 skill references |
 | references/templates/settings-hooks.json | hooks 注册 JSON 片段 |
 | references/templates/上下文.md.tmpl | 写作上下文模板 |
