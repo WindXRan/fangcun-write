@@ -23,3 +23,8 @@ eggy.json
 # === 临时文件 ===
 *.py
 temp_*
+.tnd_update_cache.json
+
+# === 工具缓存目录 ===
+[0-9]*/status.json
+[0-9]*/downloaded_chapters.jsonl
