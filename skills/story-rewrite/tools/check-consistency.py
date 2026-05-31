@@ -104,26 +104,24 @@ def check_emotion_duplicates(text):
     return violations
 
 def check_clichés(text):
-    """检查古早梗"""
+    """检查套路化情节（仅通用模式，不过度检测）"""
     violations = []
     lines = text.split('\n')
     
-    clichés = [
-        ('平地摔', '脚下一滑|脚底一滑|脚下一绊'),
-        ('恰好撞见', '正好.*看见|刚好.*撞见|恰好.*看到'),
-        ('霸总宣言', '除非我死|你是我的|不许离开'),
-        ('记忆涌入', '记忆涌上来|记忆像.*洪水|记忆的闸门'),
-        ('倏地睁眼', '倏地.*睁开眼'),
+    # 只检测最明显的AI套路模式，不穷举
+    patterns = [
+        ('记忆涌入式交代', '记忆涌上来|记忆像.*洪水|记忆的闸门'),
+        ('AI高频起手', '倏地.*睁开眼'),
     ]
     
     for i, line in enumerate(lines):
-        for name, pattern in clichés:
+        for name, pattern in patterns:
             if re.search(pattern, line):
                 violations.append({
                     'line': i + 1,
                     'type': 'Cliché',
                     'dialogue': line.strip()[:60],
-                    'issue': f'古早梗：{name}',
+                    'issue': f'{name}',
                     'suggestion': '换成更有新意的表达'
                 })
     
