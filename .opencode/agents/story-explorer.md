@@ -1,20 +1,19 @@
----
+﻿---
 description: |
   故事项目结构化查询 agent（只读）。响应关于角色状态、伏笔进度、设定出现位置、
-  时间线节点、写作进度的查询。使用 grep + read 从项目文件系统中检索信息，
-  返回结构化 JSON 摘要。
-  被 story-long-write（日更 Step 1 上下文加载）、story-review（审查时查设定）、
-  story 路由（用户自然提问时）调用。
-  不做任何创作判断或修改。
+          时间线节点、写作进度的查询。使用 grep + read 从项目文件系统中检索信息，
+          返回结构化 JSON 摘要。
+          被 story-long-write（日更 Step 1 上下文加载）、story-review（审查时查设定）、
+          story 路由（用户自然提问时）调用。
+          不做任何创作判断或修改。
 mode: subagent
 permission:
   read: allow
   glob: allow
   grep: allow
-  edit: deny
-  write: deny
-  bash: deny
 ---
+
+
 
 # Story Explorer -- 故事资料查询员
 

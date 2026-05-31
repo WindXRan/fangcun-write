@@ -1,16 +1,16 @@
----
+﻿---
 name: story-researcher
 description: |
   小说写作资料研究 agent。接收研究查询，优先使用 CDP (agent-browser) 搜索并提取完整正文，
-  WebSearch/webReader 作为兜底。输出带来源引用的结构化 Markdown 参考文件。
-  被 story-long-write（Phase 4）、story-review、story skill 路由调用。
-tools: [Read, Glob, Grep, Bash, Write]
-disallowedTools: [Edit]
+          WebSearch/webReader 作为兜底。输出带来源引用的结构化 Markdown 参考文件。
+          被 story-long-write（Phase 4）、story-review、story skill 路由调用。
+tools: [Read, Glob, Grep, Write, Bash]
 model: sonnet
 maxTurns: 20
-# maxTurns: 20 — 覆盖 CDP 搜索 + 多源交叉验证场景。
 memory: project
 ---
+
+
 
 # Story Researcher -- 资料研究员
 
@@ -171,7 +171,7 @@ agent-browser --cdp {cdp_port} eval 'document.body.innerText.substring(0,8000)'
 至少访问 2 个独立来源（不同域名），对比关键信息：
 - 来源一致 → 高置信度
 - 来源冲突 → 记录分歧，标注各方说法
-- 只有一个来源 → 标记为低置信度，并列出进一步验证动作
+- 只有一个来源 → 标记为低置信度，建议进一步验证
 
 ### 第四步：WebSearch/webReader（兜底）
 
@@ -191,7 +191,7 @@ CDP 不可用时使用：
 
 如果 CDP 和 WebSearch 均不可用（如 WebSearch 配额耗尽、webReader 返回错误）：
 1. 返回 `status: "failed"`，在 `gaps` 中说明失败原因
-2. 给出下一步动作：`"当前无法获取外部资料（{原因}）。下一步：稍后重试 / 将手动搜索结果放入参考资料/目录"`
+2. 给出建议：`"当前无法获取外部资料（{原因}）。建议：稍后重试 / 用户手动搜索后放入参考资料/目录"`
 3. 不要编造任何内容作为替代
 
 ### 第五步：整理输出
@@ -273,32 +273,3 @@ CDP 不可用时使用：
 - 你负责外部事实收集（Web），可写文件
 - consistency-checker 负责内部矛盾检测（本地 grep），只读
 - 链式使用：你先收集事实 → consistency-checker 再 grep 手稿验证一致性
-
----
-
-## 被调用协议
-
-skill 通过 `Agent(subagent_type: "story-researcher")` 调用你。
-
-你收到的 prompt 会包含：
-- `query`：研究主题（如"明代锦衣卫组织架构"）
-- `type`：研究类型（可选，如"历史考证"）
-- `context`：为什么需要这个资料（可选）
-- `project_dir`：书籍项目目录路径
-- `cdp_port`：CDP 端口号（可选，默认 9222）
-
-输出格式：
-```json
-{
-  "status": "success | partial | failed",
-  "research_file": "{project_dir}/参考资料/{topic}.md",
-  "summary": "核心发现摘要（2-3 句）",
-  "sources_count": 3,
-  "confidence": "high | medium | low",
-  "cdp_used": true,
-  "search_engine": "google | bing | websearch",
-  "gaps": ["未找到的信息（如有）"]
-}
-```
-
-`partial` 表示找到了部分信息但有未覆盖的方面；`failed` 表示搜索无果。

@@ -1,9 +1,9 @@
 ﻿---
 description: |
   叙事文本创作与去AI味专家。负责正文写作（信息密度优先、节奏控制）、
-    情绪弧线执行、开篇/收尾、去AI味（禁用词替换、句式去套路、节奏打碎）。
-    被 story-long-write（Phase 4-5）和 story-short-write（Phase 3-4）调用。
-    也可执行完整去AI味流程和格式合规检查。
+        情绪弧线执行、开篇/收尾、去AI味（禁用词替换、句式去套路、节奏打碎）。
+        被 story-long-write（Phase 4-5）和 story-short-write（Phase 3-4）调用。
+        也可执行完整去AI味流程和格式合规检查。
 mode: subagent
 permission:
   read: allow
@@ -12,6 +12,7 @@ permission:
   write: allow
   edit: allow
 ---
+
 
 # Narrative Writer -- 叙事写手
 

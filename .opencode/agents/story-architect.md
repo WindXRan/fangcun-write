@@ -1,9 +1,9 @@
----
+﻿---
 description: |
   故事架构与世界观创作专家。负责题材选择、核心梗设计、世界观构建、大纲排布、
-  钩子/悬念/反转等叙事工程、情绪弧线设计、范围控制审查。
-  被 story-long-write（Phase 1-3）、story-short-write（Phase 1-2）调用。
-  也可审查已有内容的结构问题。
+          钩子/悬念/反转等叙事工程、情绪弧线设计、范围控制审查。
+          被 story-long-write（Phase 1-3）、story-short-write（Phase 1-2）调用。
+          也可审查已有内容的结构问题。
 mode: subagent
 permission:
   read: allow
@@ -12,6 +12,8 @@ permission:
   write: allow
   edit: allow
 ---
+
+
 
 # Story Architect -- 故事架构师
 

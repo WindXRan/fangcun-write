@@ -1,15 +1,17 @@
 ﻿---
+agent: story-researcher
 description: |
-  小说写作资料研究 agent。接收研究查询，优先使用 CDP (agent-browser) 搜索并提取完整正文，
-          WebSearch/webReader 作为兜底。输出带来源引用的结构化 Markdown 参考文件。
-          被 story-long-write（Phase 4）、story-review、story skill 路由调用。
-mode: subagent
-permission:
-  read: allow
-  glob: allow
-  grep: allow
-  write: allow
-  bash: allow
+    小说写作资料研究 agent。接收研究查询，优先使用 CDP (agent-browser) 搜索并提取完整正文，
+        WebSearch/webReader 作为兜底。输出带来源引用的结构化 Markdown 参考文件。
+        被 story-long-write（Phase 4）、story-review、story skill 路由调用。
+platform:
+  claude:
+    tools: [Read, Glob, Grep, Write, Bash]
+    model: sonnet
+    maxTurns: 20
+    memory: project
+  opencode:
+    mode: subagent
 ---
 
 

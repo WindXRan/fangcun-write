@@ -74,8 +74,9 @@ foreach ($file in $files) {
     # Parse platform configs
     if ($frontmatter -match 'claude:\s*\r?\n([\s\S]*?)(?=\r?\n\s+opencode:|\r?\n\w|\r?\n---)') {
         $claudeBlock = $Matches[1]
-        if ($claudeBlock -match 'tools:\s*\[([^\]]+)\]') { $claudeConfig['tools'] = $Matches[1] }
-        if ($claudeBlock -match 'model:\s*(\S+)') { $claudeConfig['model'] = $Matches[1] }
+    if ($claudeBlock -match 'tools:\s*\[([^\]]+)\]') { $claudeConfig['tools'] = $Matches[1] }
+    if ($claudeBlock -match 'disallowedTools:\s*\[([^\]]+)\]') { $claudeConfig['disallowedTools'] = $Matches[1] }
+    if ($claudeBlock -match 'model:\s*(\S+)') { $claudeConfig['model'] = $Matches[1] }
         if ($claudeBlock -match 'maxTurns:\s*(\d+)') { $claudeConfig['maxTurns'] = $Matches[1] }
         if ($claudeBlock -match 'skills:\s*\[([^\]]+)\]') { $claudeConfig['skills'] = $Matches[1] }
         if ($claudeBlock -match 'memory:\s*(\S+)') { $claudeConfig['memory'] = $Matches[1] }
@@ -105,12 +106,36 @@ foreach ($file in $files) {
         $opencodeFrontmatter += "  $line`n"
     }
     if ($opencodeConfig['mode']) { $opencodeFrontmatter += "mode: $($opencodeConfig['mode'])`n" }
+    # Generate permissions: use explicit if available, else derive from Claude tools/disallowedTools
+    $opencodeFrontmatter += "permission:`n"
     if ($opencodeConfig['permission']) {
         $perms = $opencodeConfig['permission'] -split ',\s*'
-        $opencodeFrontmatter += "permission:`n"
         foreach ($p in $perms) {
-            $opencodeFrontmatter += "  $($p.Trim()): allow`n"
+            $p = $p.Trim()
+            $opencodeFrontmatter += "  ${p}: allow`n"
         }
+    } elseif ($claudeConfig['tools']) {
+        # Derive from Claude tools (allow listed tools)
+        $tools = $claudeConfig['tools'] -split ',\s*'
+        foreach ($t in $tools) {
+            $t = $t.Trim().ToLower()
+            $opencodeFrontmatter += "  ${t}: allow`n"
+        }
+    } elseif ($claudeConfig['disallowedTools']) {
+        # Derive from disallowedTools (allow everything NOT disallowed)
+        $disallowed = $claudeConfig['disallowedTools'] -split ',\s*' | ForEach-Object { $_.Trim().ToLower() }
+        $allPerms = @("read","glob","grep","write","edit","bash")
+        foreach ($p in $allPerms) {
+            if ($disallowed -contains $p) {
+                $opencodeFrontmatter += "  ${p}: deny`n"
+            } else {
+                $opencodeFrontmatter += "  ${p}: allow`n"
+            }
+        }
+        # Also check disallowedTools
+        # (already handled by not including them)
+    } else {
+        $opencodeFrontmatter += "  read: allow`n  glob: allow`n  grep: allow`n"
     }
     $opencodeFrontmatter += "---`n"
     $opencodeContent = $opencodeFrontmatter + $body
