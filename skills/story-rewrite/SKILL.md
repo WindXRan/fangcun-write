@@ -93,6 +93,14 @@ Phase 4（结尾）             全局一致性检查 + 禁用词扫描
 
 ### Step 1：读取源文本
 
+先运行自动提取脚本获取初步分析：
+
+```powershell
+python skills/story-rewrite/tools/extract-style.py <源文本路径>
+```
+
+输出 JSON 包含：人格类型、节奏特征、语感样本。主线程在此基础上补充以下手动分析：
+
 读取前3章 + 最后1章，记录：
 - 源书名、题材、章数
 - 开篇方式（具体场景 → 抽象为叙事功能）
@@ -100,7 +108,7 @@ Phase 4（结尾）             全局一致性检查 + 禁用词扫描
 - 节奏安排（各章情绪基调）
 - 人设标签（女主/男主/配角/反派）
 - 结局走向
-- **叙述者风格**（关键，决定仿写是否"像人"）：
+- **叙述者风格**（脚本输出 + 人工校验）
   1. 叙述者是否跳出来评论（有→吐槽型/冷幽默型/故事人型；无→沉浸型/冷峻型）
   2. 是否有现代人视角/网感语言（强→吐槽型；中→冷幽默/沉浸型；弱→故事人/冷峻型）
   3. 句子平均长度（<15字→吐槽型/冷峻型；15-25字→冷幽默/沉浸型；>25字→故事人型）
@@ -508,17 +516,28 @@ AIGC验证：通过/警告
 
 ## Phase 4：全书质量检查
 
-所有章节写完后，执行全局一致性检查：
+所有章节写完后，执行以下检查：
 
-### 1. 禁用词扫描
+### 1. 自动化检查（脚本）
+
+```powershell
+# AIGC 结构特征验证（10项检查）
+python skills/story-rewrite/tools/validate-aigc.ps1 -Path '{书名}/正文/*.md'
+
+# 人设一致性 + 古早梗 + 重复情绪检查
+python skills/story-rewrite/tools/check-consistency.py '{书名}/正文/*.md'
+
+# 质量扫描（标出可删除的AI废话）
+python skills/story-rewrite/tools/scan-quality.py '{书名}/正文/*.md'
+```
+
+### 2. 禁用词扫描
 
 用 grep 扫描正文目录，对照 `banned-words.md` 一级禁用词列表逐词检查。
 
-### 2. 标题去重检查
+### 3. 标题去重检查
 
 扫描所有章节标题，发现同名或明显重复时，按本章核心事件改名。
-
-### 3. 伏笔状态检查
 
 检查追踪/伏笔.md，确认：
 - 所有已埋伏笔状态正确
@@ -584,6 +603,8 @@ AIGC验证：通过/警告
 | `references/narrator-persona.md` | 人格类型定义 + 语感样本注入方式 | Phase 1 Step 2 人格匹配 + Phase 3 prompt 构造 |
 | `references/anti-zhuque.md` | 朱雀AI检测 4 高权重特征说明 | 理解 narrative-writer.md 反AI补丁的设计依据 |
 | `references/踩坑记录.md` | 历史问题与解法 | 排查 bug 时参考 |
-| `references/success-patterns.md` | 仿写成功模式 | Phase 1 框架生成时 |
 | `references/structure-extraction.md` | 结构提取方法 | Phase 1 读源文本时 |
-| `tools/validate-aigc.ps1` | 统一 AIGC 结构验证脚本（10 项检查） | Phase 4 写入前验证 |
+| `tools/extract-style.py` | 源文本叙述者风格自动提取 | Phase 1 Step 1 |
+| `tools/validate-aigc.ps1` | AIGC 结构特征验证（10 项检查） | Phase 4 全书质量检查 |
+| `tools/check-consistency.py` | 人设一致性 + 古早梗 + 重复情绪检查 | Phase 4 全书质量检查 |
+| `tools/scan-quality.py` | 质量扫描（标出可删除的AI废话） | Phase 4 全书质量检查 |

@@ -51,9 +51,23 @@
 - [ ] 删除规则：___
 - [ ] 调整 persona：___
 
-## 自动验证
+## 自动转化映射
 
+编辑反馈类型 → 需要修改的文件：
+
+| 反馈类型 | 修改文件 | 修改位置 |
+|----------|----------|----------|
+| 禁用词残留 | `skills/story-deslop/references/banned-words.md` | 添加新词 |
+| 古早梗 | `skills/_shared/agents/narrative-writer.md` | "禁用古早梗"段落 |
+| 人设崩了 | `skills/_shared/agents/narrative-writer.md` | "人设一致性"段落 |
+| 叙述者消失 | `skills/_shared/agents/narrative-writer.md` | "正确示范"段落 |
+| 网络梗堆砌 | `skills/story-rewrite/references/narrator-persona.md` | 对应人格类型的"语言特征" |
+| 语感样本重复 | `skills/story-rewrite/references/narrator-persona.md` | "实际仿写时"说明 |
+| 段落太均匀 | `skills/_shared/agents/narrative-writer.md` | "自检2"段落 |
+| 情绪重复 | `skills/_shared/agents/narrative-writer.md` | "反AI补丁"段落 |
+
+修改后运行验证：
 ```powershell
-# 运行验证脚本确认问题是否已修复
-.\skills\story-rewrite\tools\validate-aigc.ps1 -Path '试水文件路径'
+python skills/story-rewrite/tools/validate-aigc.ps1 -Path '<文件>'
+python skills/story-rewrite/tools/check-consistency.py '<文件>'
 ```
