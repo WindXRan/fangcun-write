@@ -55,11 +55,12 @@ skills/story-rewrite/styles/{style-name}/
 
 1. **读取 `meta.json`** → 校验兼容性（不兼容体裁直接报错）
 2. **读取 `source_skill` 文件**（如 `skills/story-style/wenqi/SKILL.md`）
-3. **按注入规则提取section内容**（通过heading标记定位）：
-   - `injections.voice` → 替换 prompt 中 `## 你的声音` 的默认内容
-   - `injections.rules` → 追加到 `## 写作原则` 的6条通用规则之后
-   - `injections.quality` → 在 Step 3（每3批审查）时作为额外检查标准
-   - `injections.templates` → 章纲生成时作为结构模板参考
+3. **按注入规则提取section内容**：遍历 `meta.injections`，每个key按 `source_heading` 定位、`target` 注入。通用规则：
+   - `target` 以 `替换` 开头 → 替换prompt中同名section
+   - `target` 以 `追加` 或 `写作原则` 开头 → 追加到同名section之后
+   - `target` 带 `预览`/`审查`/`检查` → 对应审查阶段使用
+   - `target` 带 `可选` → 仅在agent判断有用时注入
+   - 此外 `source_sub_headings` 非空时只提取匹配的子节内容
 4. **`chapter_word_count`** → 注入章纲prompt覆盖字数参数
 
 不加 `--style` 时保持原行为——用源文本语感样本来模仿，风格由源文本决定。
@@ -75,18 +76,22 @@ skills/story-rewrite/styles/{人物}/
 └── meta.json    # source_skill 指向 skills/story-style/{人物}/SKILL.md
 ```
 
-**注入映射关系**（`meta.json` 的 `injections` 字段定义）：
+**注入映射规则**（`meta.json` 的 `injections` 字段定义）：
 
-| `injections` key | 女娲Skill中提取的section | 注入到prompt位置 | 提取规则 |
-|-----------------|------------------------|----------------|---------|
-| `voice` | `## 表达DNA`（支持 `source_sub_headings` 子节过滤） | `## 你的声音` | 有子节列表时只提取匹配子节内容，跳过禁用词/对照表 |
-| `rules` | `## 写作回答工作流` + `## 核心写作心智模型` + `## 决策启发式` + `## 价值观与反模式` | `写作原则（追加）` | 工作流取全文；模型取标题+一句话摘要+证据；启发式全取；反模式取标题行 |
-| `quality` | `## 质量检查清单`（支持 `source_sub_headings`） | 审查阶段 | 可选，没有跳过 |
-| `templates` | `## 可运行的写作模板` | 章纲生成参考 | 可选，没有跳过 |
-| `recovery` | `## 写作恢复手册` | 写作恢复指引 | 可选，没有跳过 |
+每个 `injections.{key}` 定义了一组从女娲SKILL.md到prompt的映射。引擎是通用的——遍历所有key，按 `source_heading` 提取，按 `target` 注入：
+
+```
+for key, config in meta.injections.items():
+    content = extract(skill_content, config.source_heading, config.source_sub_headings)
+    inject(prompt, config.target, content)
+```
+
+**完整映射关系见 `styles/template/meta.json` 的 `injections` 字段**——它是单一知识源。
+`source_heading` / `source_headings` / `source_sub_headings` 定义从SKILL.md提取什么，
+`target` 定义注入到prompt哪个位置。新增injection key时只需在 `template/meta.json` 添加一项。
 
 **创建步骤**：
-1. 确认女娲SKILL.md包含 `voice`/`rules`/`quality`/`templates`/`recovery` 等需要的section
+1. 确认女娲SKILL.md包含 `injections` 中引用的所有section
 2. 创建 `meta.json`，`source_skill` → `skills/story-style/{人物}/SKILL.md`
 3. 根据 `trigger` 字段提取兼容/不兼容体裁
 4. 从节奏描述中提取 `chapter_word_count`（默认2000-2500）
