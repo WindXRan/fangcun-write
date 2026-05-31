@@ -1,0 +1,80 @@
+{
+  "version": "1.0.0",
+  "description": "story-rewrite benchmark 测试集配置",
+  "test_cases": [
+    {
+      "id": "sweet-pet",
+      "name": "甜宠穿书",
+      "source_text": "女配一睁眼，失忆男主冷脸洗床单.txt",
+      "persona": "A",
+      "persona_name": "吐槽型网文读者",
+      "chapters": 3,
+      "tags": ["甜宠", "穿书", "现代言情"],
+      "notes": "当前主要测试用例，编辑反馈 AI 65%"
+    },
+    {
+      "id": "suspense-urban",
+      "name": "悬疑都市",
+      "source_text": "待选",
+      "persona": "B",
+      "persona_name": "冷幽默旁观者",
+      "chapters": 3,
+      "tags": ["悬疑", "都市", "职场"],
+      "notes": "待选源文本"
+    },
+    {
+      "id": "period-family",
+      "name": "年代家长里短",
+      "source_text": "待选",
+      "persona": "D",
+      "persona_name": "老派故事人",
+      "chapters": 3,
+      "tags": ["年代文", "乡村", "家长里短"],
+      "notes": "待选源文本"
+    }
+  ],
+  "metrics": {
+    "aigc_score": {
+      "description": "AIGC 检测值（朱雀/图灵）",
+      "target": "< 0.5",
+      "current_baseline": "0.93-0.99 (v0 无 persona)"
+    },
+    "validate_aigc_warnings": {
+      "description": "统一验证脚本警告数",
+      "target": "0",
+      "current_baseline": "未测"
+    },
+    "word_count_pass_rate": {
+      "description": "字数达标率（1600-2400）",
+      "target": "100%",
+      "current_baseline": "67% (3章中2章达标)"
+    },
+    "third_person_rate": {
+      "description": "第三人称使用率",
+      "target": "100%",
+      "current_baseline": "33% (第1章正确，2/3章第一人称)"
+    },
+    "editorial_score": {
+      "description": "编辑评分（满分100）",
+      "target": "> 85",
+      "current_baseline": "75"
+    }
+  },
+  "ablation_configs": [
+    {
+      "id": "no-persona",
+      "description": "去掉 persona，保留所有规则",
+      "prompt_variant": "你是网文写作专家。任务：基于章纲，原创第{N}章。"
+    },
+    {
+      "id": "persona-only",
+      "description": "只保留 persona，去掉反AI补丁",
+      "prompt_variant": "persona + 章纲，无反AI规则"
+    },
+    {
+      "id": "full",
+      "description": "persona + 反AI补丁（当前版本）",
+      "prompt_variant": "当前完整 prompt"
+    }
+  ]
+}

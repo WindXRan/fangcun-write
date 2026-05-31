@@ -415,53 +415,31 @@ Phase 3 的 agent 返回后，主线程执行以下步骤：
 
 ⚠️ 临时文件命名规则：`temp_{书名}_ch{1,2,3}.txt`，书名从框架中取，去掉特殊字符（空格保留为下划线）。合并完成后删除临时文件。
 
-### Step X：文字质感快速自查（写入前必过）
+### Step X：AIGC 结构特征验证（写入前必过）
 
-**目的：确保读起来好看，不是机械执行规则。** 以下 4 项不达标说明读感有问题，点对点修：
-
-| 检查项 | 好文字的标准 | 读感差时怎么办 |
-|--------|-------------|---------------|
-| 内心独白太长 | 角色想事情不超过 2 句，第 3 句切动作/对话 | 砍掉后半截推理，让读者自己补 |
-| 情绪词反复出现 | "心里咯噔/心跳漏了一拍/愣住了/僵住了" 全文 < 2 次 | 换动作展示或直接删 |
-| 对话标签太密 | 看起来"他说/她说"一个接一个 | 去掉明显不用标的，或用动作替 |
-| 段落太匀称 | 长短段混着来，不全是三五行一段 | 找连续同长度段，拆或并，制造落差 |
-
-### Step Y：结构特征扫描（写入前可选，仅试水模式初次验证时做）
-
-**目的**：确认 narrative-writer 输出没有系统性 AI 结构指纹。只做统计扫描，不做修改。
+运行统一验证脚本，检查 10 项结构特征：
 
 ```powershell
-# 4项快速扫描（用 PowerShell 跑）
-$content = Get-Content 'temp_{书名}_ch{N}.txt' -Encoding UTF8 -Raw
-
-# 1. 内心独白超长检测（≥3个长推理链→警告）
-$inner = [regex]::Matches($content, '[。！？][^。！？]{10,}(想|觉得|知道|明白)[^。！？]{10,}[。！？]')
-if ($inner.Count -ge 3) { Write-Warning "内心独白链过长：$($inner.Count)处" }
-
-# 2. 情绪模板词
-$emotion = "心里咯噔|心跳漏了一拍|愣住了|僵住了|大脑空白|心中一惊"
-$matches = [regex]::Matches($content, $emotion)
-if ($matches.Count -ge 2) { Write-Warning "情绪模板词重复：$($matches.Count)次" }
-
-# 3. 段落长度标准差（<30 → 可能太均匀）
-$paragraphs = ($content -split '\r?\n\r?\n') | Where-Object { $_ -ne '' }
-$lengths = $paragraphs | ForEach-Object { ($_ -replace '\s+','').Length }
-if ($lengths.Count -ge 3) {
-    $avg = ($lengths | Measure-Object -Average).Average
-    $variance = ($lengths | ForEach-Object { [math]::Pow($_ - $avg, 2) } | Measure-Object -Average).Average
-    $std = [math]::Sqrt($variance)
-    if ($std -lt 30) { Write-Warning "段落标准差仅 $std（目标≥30）" }
-}
-
-# 4. 对话标签密度（>3/100字→可能太规律）
-$tags = [regex]::Matches($content, '(他说|她说|他问|她问)').Count
-$density = [math]::Round($tags / ($content.Length / 100), 1)
-if ($density -gt 3) { Write-Warning "对话标签密度 $density/100字" }
+.\skills\story-rewrite\tools\validate-aigc.ps1 -Path 'temp_{书名}_ch{N}.txt'
 ```
+
+检查项：
+| # | 检查项 | 达标标准 | 不达标处理 |
+|---|--------|----------|-----------|
+| 1 | 情绪模板词 | 全章 ≤1 次 | 替换为具体动作 |
+| 2 | 内心独白链 | ≤2 处 | 砍推理，留 2 句+动作 |
+| 3 | 对话标签密度 | ≤3/100字 | 去掉多余标签，用动作替 |
+| 4 | 段落标准差 | ≥30 | 拆或并段落制造落差 |
+| 5 | 单句段数 | ≥3 个 | 拆部分段为单句 |
+| 6 | 连续同句数段 | ≤2 段 | 打乱段落结构 |
+| 7 | 网络梗频率 | ≤2 个 | 替换为具体判断 |
+| 8 | 禁用词 | 0 个 | 替换 |
+| 9 | 超短句连续 | ≤2 个 | 第 3 句变长 |
+| 10 | 第一人称 | ≤5 次 | 改为第三人称 |
 
 **触发规则**：
 - 试水模式首次运行时执行，观察 narrative-writer 输出质量
-- 如有警告 → 不需要立刻修改，记录到终端，后续在 persona 定义中微调
+- 如有警告 → 记录到终端，后续在 persona 定义中微调
 - 无警告 → 人格注入生效，后续批次可以跳过此扫描
 
 ### 试水模式：合并为TXT
@@ -626,9 +604,9 @@ if ($density -gt 3) { Write-Warning "对话标签密度 $density/100字" }
 
 | 文件 | 用途 | 何时读取 |
 |------|------|----------|
-| `references/anti-aigc.md` | 反AIGC检测技巧 + 扫描标准 + 验证脚本 | Phase 5 全书质量检查时 |
-| `references/anti-zhuque.md` | 朱雀AI检测实测记录 + Phase 5 验证脚本 | Phase 5 质量检查时参考 |
 | `references/narrator-persona.md` | 人格类型定义 + 语感样本注入方式 | Phase 1 Step 2 人格匹配 + Phase 3 prompt 构造 |
+| `references/anti-zhuque.md` | 朱雀AI检测 4 高权重特征说明 | 理解 narrative-writer.md 反AI补丁的设计依据 |
 | `references/踩坑记录.md` | 历史问题与解法 | 排查 bug 时参考 |
 | `references/success-patterns.md` | 仿写成功模式 | Phase 1 框架生成时 |
 | `references/structure-extraction.md` | 结构提取方法 | Phase 1 读源文本时 |
+| `tools/validate-aigc.ps1` | 统一 AIGC 结构验证脚本（10 项检查） | Phase 4 写入前验证 |
