@@ -84,10 +84,10 @@ Install this skill https://github.com/worldwonderer/oh-story-claudecode
 **Option 2** Command line:
 
 ```bash
-npx skills add worldwonderer/oh-story-claudecode -y
+npx skills add worldwonderer/oh-story-claudecode -y -g
 ```
 
-Re-run the same command to update.
+`-g` installs globally (available in every directory); drop `-g` to install only into the current directory. Re-run the same command to update.
 
 > After updating, if a project has already run `/story-setup`, re-run `/story-setup` from the project root to sync hooks / agents / references. Per-version changes are in [CHANGELOG.md](CHANGELOG.md) and [Releases](https://github.com/worldwonderer/oh-story-claudecode/releases).
 
@@ -227,11 +227,14 @@ The file system separates settings, outlines, prose, and tracking into independe
 **Short-form file structure:**
 
 ```
-{Book Title}/
-├── Prose.md                  # Complete short-form prose
-├── Section_outline.md        # Per-section outline (emotion + hooks + events)
-└── References/               # Writing references
-    └── {topic}.md
+短篇/{Title}/
+├── 正文.md                  # Final draft
+├── 小节大纲.md              # 8-section structure + emotion curve
+└── 拆文库/                  # If a reference novel exists (analyze output)
+    └── {Book}/
+        ├── 拆文报告.md
+        ├── 情节节点.md
+        └── 写作手法.md
 ```
 
 **Deconstruction Library:** Deconstruction skills save structured outputs (characters, plotlines, settings, chapters) under `拆文库/{Book Title}/` at project root. Writing skills consume these assets through the `Benchmark/` subdirectory, or automatically fall back to reading from the deconstruction library.
