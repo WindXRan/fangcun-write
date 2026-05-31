@@ -31,7 +31,7 @@
     }
   },
   "features": {
-    "dialogue_ratio": "≥50%",
+    "dialogue_ratio": "≈20-30%（叙事为主）",
     "env_description": "极简（≤1句/场景）",
     "first_chapter_explosion": true,
     "heroine_voice": "吐槽型/内心OS",

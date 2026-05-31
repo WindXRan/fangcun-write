@@ -173,6 +173,25 @@ description: |
 2. **创建风格插件**：`skills/story-rewrite/styles/{name}/meta.json`（参考 `styles/wenqi/meta.json` 模板，自动提取 frontmatter + 表达DNA heading + 字数特征生成 `injections` 块）
 3. **更新路由表**：在 `skills/story-style/SKILL.md` 的文风列表中添加新行
 
+**网文作者预处理（Phase 0.5新增）**：如果用户提供了本地语料（网文原文txt），在Phase 1启动前先运行全文本统计分析：
+
+```
+子agent任务：全文本语料统计
+输入：用户提供的网文txt文件集合
+操作：
+  1. 为每本书统计：总章节数、章节字数分布、对话占比分布（每章）、禁用词命中数
+  2. 跨书汇总：总体对话占比、分布直方图（<40%/40-60%/>60%）、均句长、禁用词密度
+  3. 写入 skill 目录：references/research/00-corpus-stats.json（供Phase 2引用）
+禁止：不要抽样，必须全量扫描全本。统计用python脚本跑，不要手算。
+产出格式：
+  { "book": "书名", "chaptersParsed": N, "totalChars": N,
+    "dialogueRatioOverall": "N%", "dialogueRatioAvgPerChapter": "N%",
+    "dialogueDistribution": {"total": N, "low_lt40": N, "mid_40to60": N, "high_gt60": N},
+    "bannedHitsTotal": N, "avgSentenceLenOverall": N }
+```
+
+统计结果在Phase 2.3（表达DNA分析）中优先于定性估计——如果统计数据与定性观察矛盾，以统计为准。
+
 **完成检查**（自动执行）：
 - [ ] 目录已创建（通用 → `.claude/skills/`，网文作者 → `skills/story-style/`）
 - [ ] 如果是中国人物：信息源策略切换为B站原始视频/小宇宙播客/权威中文媒体优先（知乎和微信公众号始终排除，见信息源黑名单）
