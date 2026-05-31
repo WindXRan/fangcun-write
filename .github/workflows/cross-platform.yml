@@ -10,6 +10,16 @@ jobs:
         run: bash scripts/static-check.sh
       - name: Check hook-regex sync
         run: bash scripts/check-hook-regex-sync.sh
+      - name: Check shared-file consistency
+        run: bash scripts/check-shared-files.sh
+      - name: Check story-setup deployment
+        run: bash scripts/check-story-setup-deployment.sh
+      - name: Syntax-check collection scripts
+        run: |
+          for f in $(find skills -name '*-scraper.js' -o -name 'cdp-utils.js' -o -name 'setup-cdp-chrome.js'); do
+            echo "node --check $f"
+            node --check "$f"
+          done
 
   windows:
     runs-on: windows-latest
