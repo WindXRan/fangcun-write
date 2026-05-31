@@ -13,7 +13,16 @@ import json
 from collections import Counter
 
 def read_file(filepath):
-    with open(filepath, 'r', encoding='utf-8') as f:
+    """读取文件，自动尝试多种编码"""
+    encodings = ['utf-8', 'gbk', 'gb2312', 'utf-16', 'latin-1']
+    for encoding in encodings:
+        try:
+            with open(filepath, 'r', encoding=encoding) as f:
+                return f.read()
+        except (UnicodeDecodeError, UnicodeError):
+            continue
+    # 最后使用 utf-8 with errors='replace'
+    with open(filepath, 'r', encoding='utf-8', errors='replace') as f:
         return f.read()
 
 def extract_chapters(content, max_chapters=3):
@@ -134,19 +143,23 @@ def extract_samples(text, max_samples=5):
     samples = []
     for para in paragraphs:
         # 跳过太短或太长的段落
-        if len(para) < 20 or len(para) > 150:
+        if len(para) < 15 or len(para) > 200:
+            continue
+        
+        # 跳过纯对话段落（没有叙述性）
+        if re.match(r'^["「]', para) and para.count('"') + para.count('「') > 2:
             continue
         
         # 识别风格标签
         tag = '叙述型'
-        if re.search(r'["「]', para):
-            tag = '对话型'
-        elif re.search(r'(觉得|想|心里|脑子)', para):
-            tag = '内心独白型'
-        elif re.search(r'(说实话|不得不说|你别说|行吧)', para):
+        if re.search(r'(说实话|不得不说|你别说|行吧|好家伙|根本|算来算去)', para):
             tag = '吐槽打断型'
-        elif len(para) < 40:
+        elif re.search(r'(觉得|想|心里|脑子|他知道|他想起)', para):
+            tag = '内心独白型'
+        elif len(para) < 40 and re.search(r'[。！？]$', para):
             tag = '短句型'
+        elif re.search(r'(碗|块|钱|万|千|百)\d', para):
+            tag = '数字细节型'
         
         samples.append({
             'text': para[:100],
@@ -154,13 +167,38 @@ def extract_samples(text, max_samples=5):
             'length': len(para)
         })
     
-    # 优先选有辨识度的样本（吐槽型、对话型优先）
-    priority_order = ['吐槽打断型', '对话型', '内心独白型', '短句型', '叙述型']
+    # 优先选有辨识度的样本（吐槽型>内心独白型>数字细节型>短句型>叙述型）
+    priority_order = ['吐槽打断型', '内心独白型', '数字细节型', '短句型', '叙述型']
     sorted_samples = sorted(samples, key=lambda s: priority_order.index(s['tag']) if s['tag'] in priority_order else 99)
     
-    return sorted_samples[:max_samples]
+    # 确保返回的样本类型多样化
+    result = []
+    seen_tags = set()
+    for s in sorted_samples:
+        if s['tag'] not in seen_tags or len(result) < 3:
+            result.append(s)
+            seen_tags.add(s['tag'])
+        if len(result) >= max_samples:
+            break
+    
+    return result
 
 def main():
+    # Windows环境编码修复
+    import io
+    import os
+    
+    # 设置环境变量确保 UTF-8
+    os.environ['PYTHONIOENCODING'] = 'utf-8'
+    
+    # 修复 stdout/stderr 编码
+    try:
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+    except AttributeError:
+        # 如果已经在 IDE 中运行，可能没有 buffer 属性
+        pass
+    
     if len(sys.argv) < 2:
         print('Usage: python extract-style.py <源文本路径>')
         sys.exit(1)

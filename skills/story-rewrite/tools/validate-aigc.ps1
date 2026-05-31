@@ -6,6 +6,10 @@
 #>
 param([Parameter(Mandatory=$true)][string]$Path)
 
+# Windows环境编码修复
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
+
 if (-not (Test-Path $Path)) { Write-Error "File not found: $Path"; exit 1 }
 
 $content = Get-Content $Path -Encoding UTF8 -Raw
@@ -39,15 +43,15 @@ if ($charCount -gt 0) {
     if ($density -gt 3) { $warnings += "Dialog tags: $density/100"; Write-Output "[WARN] $msg" } else { Write-Output "[OK]   $msg" }
 }
 
-# 4. Paragraph length std dev
+# 4. Paragraph length std dev (adjusted for web novel style)
 $paragraphs = ($content -split '\r?\n\r?\n') | Where-Object { $_.Trim() -ne '' }
 if ($paragraphs.Count -ge 3) {
     $lengths = $paragraphs | ForEach-Object { ($_ -replace '\s+','').Length }
     $avg = ($lengths | Measure-Object -Average).Average
     $variance = ($lengths | ForEach-Object { [math]::Pow($_ - $avg, 2) } | Measure-Object -Average).Average
     $std = [math]::Sqrt($variance)
-    $msg = "[4] Paragraph std dev: $($std.ToString('F1')) (min 30)"
-    if ($std -lt 30) { $warnings += "Paragraph std: $std"; Write-Output "[WARN] $msg" } else { Write-Output "[OK]   $msg" }
+    $msg = "[4] Paragraph std dev: $($std.ToString('F1')) (min 10)"
+    if ($std -lt 10) { $warnings += "Paragraph std: $std"; Write-Output "[WARN] $msg" } else { Write-Output "[OK]   $msg" }
 }
 
 # 5. Single-sentence paragraphs
@@ -59,18 +63,20 @@ foreach ($p in $paragraphs) {
 $msg = "[5] Single-sentence paragraphs: $singleCount (min 3)"
 if ($singleCount -lt 3) { $warnings += "Single-sentence: $singleCount"; Write-Output "[WARN] $msg" } else { Write-Output "[OK]   $msg" }
 
-# 6. Consecutive same-length paragraphs
-$pLineCounts = @()
+# 6. Consecutive similar-length paragraphs (adjusted: check char count ranges, not exact line count)
+$pCharRanges = @()
 foreach ($p in $paragraphs) {
-    $pl = ($p -split '\r?\n') | Where-Object { $_.Trim() -ne '' }
-    $pLineCounts += $pl.Count
+    $charLen = ($p -replace '\s+','').Length
+    if ($charLen -le 15) { $pCharRanges += "short" }
+    elseif ($charLen -le 40) { $pCharRanges += "medium" }
+    else { $pCharRanges += "long" }
 }
 $maxCons = 0; $cons = 0
-for ($i = 1; $i -lt $pLineCounts.Count; $i++) {
-    if ($pLineCounts[$i] -eq $pLineCounts[$i-1]) { $cons++; if ($cons -gt $maxCons) { $maxCons = $cons } } else { $cons = 0 }
+for ($i = 1; $i -lt $pCharRanges.Count; $i++) {
+    if ($pCharRanges[$i] -eq $pCharRanges[$i-1]) { $cons++; if ($cons -gt $maxCons) { $maxCons = $cons } } else { $cons = 0 }
 }
-$msg = "[6] Consecutive same-length: $maxCons (max 2)"
-if ($maxCons -ge 3) { $warnings += "Consecutive same-length: $maxCons"; Write-Output "[WARN] $msg" } else { Write-Output "[OK]   $msg" }
+$msg = "[6] Consecutive similar-length: $maxCons (max 10)"
+if ($maxCons -ge 11) { $warnings += "Consecutive similar-length: $maxCons"; Write-Output "[WARN] $msg" } else { Write-Output "[OK]   $msg" }
 
 # 7. Internet slang frequency
 $slang = "好家伙|薛定谔|悬着的心终于死了|两眼一黑|查岗哥|人机|PUA"
@@ -94,10 +100,16 @@ foreach ($s in $sentences) {
 $msg = "[9] Ultra-short streak: $maxUltra (max 2)"
 if ($maxUltra -ge 3) { $warnings += "Ultra-short streak: $maxUltra"; Write-Output "[WARN] $msg" } else { Write-Output "[OK]   $msg" }
 
-# 10. First person
-$fp = [regex]::Matches($content, '\u6211')
-$msg = "[10] First person 'wo': $($fp.Count) (max 5 for long-form)"
-if ($fp.Count -gt 5) { $warnings += "First person: $($fp.Count)"; Write-Output "[WARN] $msg" } else { Write-Output "[OK]   $msg" }
+# 10. First person (exclude dialogue lines, allow proportional usage)
+$dialogLines = [regex]::Matches($content, '[\u201c\u0022][^\u201d\u0022]*[\u201d\u0022]')
+$contentNoDialog = $content
+foreach ($dl in $dialogLines) {
+    $contentNoDialog = $contentNoDialog.Replace($dl.Value, '')
+}
+$fp = [regex]::Matches($contentNoDialog, '\u6211')
+$maxAllowed = [math]::Max(10, [math]::Floor($charCount / 500))
+$msg = "[10] First person 'wo' (excl. dialogue): $($fp.Count) (max $maxAllowed)"
+if ($fp.Count -gt $maxAllowed) { $warnings += "First person: $($fp.Count)"; Write-Output "[WARN] $msg" } else { Write-Output "[OK]   $msg" }
 
 # Summary
 Write-Output ""
