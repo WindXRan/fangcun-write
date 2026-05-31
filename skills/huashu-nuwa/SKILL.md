@@ -140,6 +140,7 @@ description: |
 
 **收到确认后立即执行**，在调研之前完成：
 
+**目录结构（通用人物）**：
 ```
 .claude/skills/[person-name]-perspective/
 ├── SKILL.md                          # 最终产物
@@ -158,46 +159,62 @@ description: |
         └── articles/
 ```
 
+**目录结构（网文作者）—— 替换顶层的 skills/ 目录**：
+```
+skills/story-style/{name}/             # 代替 .claude/skills/
+├── SKILL.md                           # 女娲蒸馏出的文风
+├── references/
+│   ├── research/
+│   │   ├── 01-writings.md ~ 06-timeline.md
+│   │   └── corpus_stats/              # ⚡ 全文本统计结果
+│   └── sources/
+│       └── books/                     # ⚡ 用户提供的原文
+├── scripts/                           # 工具脚本（选用）
+└── (同时创建 skills/story-rewrite/styles/{name}/meta.json)
+```
+
 **自动路由检测**（Phase 0A 确认后立即判断）：
 
-| 场景 | 检测条件 | 输出目录 | 额外步骤 |
-|------|---------|---------|---------|
-| **通用人物Skill** | 非网文作者 | `.claude/skills/{name}-perspective/` | 无 |
-| **网文作者文风** | 用户提到「网文作者」「写网文」「番茄」「女频」「男频」「网文风格」「文风蒸馏」或目标人物是网文作者 | `skills/story-style/{name}/` | ⚡ 自动创建 `skills/story-rewrite/styles/{name}/meta.json` 插件 + 更新 `story-style/SKILL.md` 路由表 |
+| 场景 | 检测条件 | 输出目录 | Phase 0.5 动作 | Phase 4 动作 |
+|------|---------|---------|---------------|-------------|
+| **通用人物Skill** | 非网文作者 | `.claude/skills/{name}-perspective/` | 创建空目录 | 无 |
+| **网文作者文风** | 用户提到「网文作者」「写网文」「番茄」「女频」「男频」「网文风格」「文风蒸馏」或目标人物是网文作者 | `skills/story-style/{name}/` | ⚡ 强制检查原文 → 复制原文到sources/books/ → 全量统计 | 创建 `meta.json` 插件 + 更新路由表 |
 
-**网文作者模式的额外产出**：
+**网文作者模式的强制门**（Phase 0.5 入口）：
 
-检测到网文作者时，在 Phase 4 验证通过后自动执行：
+检测为网文作者后，**先检查用户是否提供了至少一本完整原文txt**：
+- 有 → 复制到 `{output_dir}/sources/books/`，继续
+- 没有 → 报错：「女娲网文模式需要至少一本完结长篇原文txt。请提供该作者至少一本完结作品的txt/md文件，放在项目目录下，告诉我路径。没有原文无法做定量分析，无法生成可靠的文风Skill。」**中止当前流程，等待用户提供后再重新开始。**
 
-1. **目录结构**：`skills/story-style/{name}/`（取代 `.claude/skills/`）
+这扇门不可跳过——没有原文的网文文风Skill是瞎猜的，女娲不做。
+
+**网文作者预处理（Phase 0.5 全量统计）**：
+
+在Phase 1启动前执行全文本统计分析。输入文件已放在 `{output_dir}/sources/books/` 下。
+
+```
+子agent任务：全文本语料统计
+输入目录：{output_dir}/sources/books/（网文原文txt文件集合）
+输出目录：{output_dir}/references/research/corpus_stats/
+操作：
+  1. 读入所有txt文件，逐书解析章节（分隔符为 ---或===，章节标题格式：第N章 xxx）
+  2. 为每本书统计：总章节数、章节字数分布（min/max/avg/std）、对话占比分布（每章）、禁用词命中数
+  3. 跨书汇总：总体对话占比、分布直方图（<40%/40-60%/>60%）、均句长、禁用词密度
+  4. 写入输出目录：cross-book-stats.json + book_{书名}.json（每本）
+  5. 统计结果自动回写 meta.json 的 features 字段（dialogue_ratio等）
+提示：统计逻辑参考 huashu-nuwa/scripts/analyze_novel_corpus.py 的实现，但直接用python代码执行，不要依赖文件路径。
+禁止：不要抽样，必须全量扫描全本。不要手动算，用python跑。
+```
+
+统计结果在Phase 2.3（表达DNA分析）中优先于定性估计——如果统计数据与定性观察矛盾，以统计为准。
+
+**网文作者模式的额外产出**（Phase 4 验证通过后执行）：
+
+1. **目录结构**：`skills/story-style/{name}/`（已创建，不需要重建）
 2. **创建风格插件**：`skills/story-rewrite/styles/{name}/meta.json`（参考 `styles/template/meta.json` 模板 + `styles/wenqi/meta.json` 完整示例，自动生成 injections）
 3. **更新路由表**：在 `skills/story-style/SKILL.md` 的文风列表中添加新行
 
-**网文作者预处理（Phase 0.5 全量分析）**：在Phase 1启动前执行全文本统计分析。分两种情况：
-
-**情况A：用户提供了本地语料（网文原文txt）**
-运行 `scripts/analyze_novel_corpus.py` 对用户提供的txt文件集合做全量扫描。输入文件放在 `sources/books/` 目录下。
-
-```bash
-python3 scripts/analyze_novel_corpus.py --input_dir sources/books --output_dir references/research/corpus_stats
-```
-
-脚本产出（自动写入 `references/research/corpus_stats/`）：
-- `cross-book-stats.json` — 跨书汇总（总章节数、对话占比、分布、均句长、禁用词密度）
-- `book_{书名}.json` — 每本逐书统计
-- 统计结果自动回写 `meta.json` 的 `features` 字段（子agent执行）
-
-**情况B：用户没有提供原文**
-1. 启动 Phase 1 调研时，额外要求每个Agent收集1-2个样章片段（含对话的典型章节）
-2. 收集到3个以上完整样章后，手写小脚本做简易统计
-3. 在 `features.dialogue_ratio` 中标注「基于N章样章估算」
-
-**全量统计 vs 定性估计优先级**：
-- 有全量数据 → 以统计为准（Phase 2.3 优先引用）
-- 只有样章 → 标注「样章估算」的不确定性
-- 统计数据与定性观察矛盾 → 以统计为准，在research文件中记录矛盾以备分析
-
-**meta.json 创建指引**（子agent在Phase 0.5执行）：
+**meta.json 创建指引**（子agent在Phase 4执行）：
 
 参照 `styles/template/meta.json` 的结构，从蒸馏结果自动填充：
 
@@ -218,13 +235,15 @@ python3 scripts/analyze_novel_corpus.py --input_dir sources/books --output_dir r
 - `rules`：心智模型取标题+一句话摘要+来源证据（不要含全文）；启发式全取；反模式只取标题行不取全文。
 - `quality` / `templates`：可选，没有就跳过。
 
-**完成检查**（自动执行）：
-- [ ] 目录已创建（通用 → `.claude/skills/`，网文作者 → `skills/story-style/`）
+**完成检查**（自动执行，带 ⚠️ 的项为**不可跳过门**，不通过即中止）：
+
+- [ ] ⚠️ **目录已创建**（通用 → `.claude/skills/`，网文作者 → `skills/story-style/`）
+- [ ] ⚠️ **如果是网文作者：原文已提供**（用户确实给了一个或多个完整txt，且已复制到 `sources/books/`）
+- [ ] ⚠️ **如果是网文作者：全量统计已完成**（`references/research/corpus_stats/cross-book-stats.json` 存在且含有效数据）
 - [ ] 如果是中国人物：信息源策略切换为B站原始视频/小宇宙播客/权威中文媒体优先（知乎和微信公众号始终排除，见信息源黑名单）
 - [ ] 如果是更新模式：已读取现有SKILL.md，标注哪些信息需要刷新
-- [ ] 如果用户提供了本地语料：将素材复制/移动到 `sources/` 对应子目录，标记为**本地语料模式**
-- [ ] 如果是网文作者：确认 `skills/story-rewrite/styles/{name}/meta.json` 已创建
-- [ ] 如果是网文作者且有关键统计：`meta.json.features` 中的 `dialogue_ratio` / `env_description` / `binding_type` 等字段已填非空值
+- [ ] 如果是网文作者：`meta.json.features` 已填充（`dialogue_ratio` / `env_description` / `binding_type` 等为非空值）
+- [ ] ⚠️ **如果是网文作者：`skills/story-rewrite/styles/{name}/meta.json` 已创建且注入规则可工作**
 
 **关键规则**：
 - 每个subagent必须把调研结果写入对应的md文件。不存文件的调研等于没做。
