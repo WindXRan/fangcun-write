@@ -49,15 +49,16 @@ skills/story-style/
 | `SKILL.md` | ✅ | 女娲蒸馏输出，含 frontmatter + 写作模型 + 表达DNA + 模板 + 质量检查清单 |
 | `references/` | ✅ | 女娲调研的原始资料 |
 
-`SKILL.md` 的 sections 结构决定了 story-rewrite 能从它提取到什么：
+`SKILL.md` 的 sections 结构必须与 `story-rewrite/styles/template/meta.json` 的 `injections` 定义一致。
+注入映射关系的**单一知识源**是 `template/meta.json`——它的 `injections` 字段定义了每个 section 从 SKILL.md 的哪个 heading 提取、注入到 story-rewrite 的什么位置。
+当前要求的 sections（与 template 对齐）：
 
-| section | 用途 |
-|---------|------|
-| frontmatter.trigger | 路由匹配词 + 风格插件兼容体裁 |
-| `## 表达DNA` | → 替换「你的声音」（句式/高频词/对话风格） |
-| `## 核心写作心智模型` + `## 决策启发式` + `## 价值观与反模式` | → 追加「写作原则」 |
-| `## 质量检查清单` | → 审查标准 |
-| `## 可运行的写作模板` | → 章纲结构参考 |
+- `## 表达DNA`（或同级别 heading，由 `meta.json.injections.voice.source_heading` 指定）
+- `## 核心写作心智模型` + `## 决策启发式` + `## 价值观与反模式`（由 `meta.json.injections.rules.source_headings` 指定）
+- `## 质量检查清单`（可选，对应 `injections.quality`）
+- `## 可运行的写作模板`（可选，对应 `injections.templates`）
+
+**新增 injection key 时**：改 `template/meta.json`（添加新的 `injections.{key}`）+ `story-rewrite/SKILL.md`（添加注入逻辑），不用改本文件。
 
 ## story-rewrite 加载路径
 
