@@ -1,18 +1,9 @@
 {
-  "说明": "=== 这是风格插件创建模板 ===",
-  "说明2": "=== 只保留 meta.json，内容从女娲蒸馏的 skills/story-style/{name}/SKILL.md 运行时提取 ===",
-  "说明3": "=== 参考 skills/story-rewrite/styles/wenqi/meta.json 的完整实现 ===",
-
   "name": "替换为风格名称（英文，如 wenqi）",
   "label": "替换为中文标签",
   "description": "简短描述：体裁·核心特征",
   "author": "来源作者或说明",
   "source_skill": "skills/story-style/{name}/SKILL.md",
-
-  "兼容体裁参考": [
-    "女娲SKILL.md frontmatter 的 trigger 字段定义了兼容体裁",
-    "空数组表示不限制"
-  ],
   "compatible_genres": [],
   "incompatible_genres": [],
 
@@ -25,8 +16,9 @@
   "injections": {
     "voice": {
       "source_heading": "## 表达DNA",
+      "source_sub_headings": [],
       "target": "你的声音",
-      "description": "替换默认语感样本，用此section内容"
+      "description": "有 source_sub_headings 时只提取这些子节内容（防禁用词混入），空数组则提取整个section"
     },
     "rules": {
       "source_headings": [
@@ -35,7 +27,7 @@
         "## 价值观与反模式"
       ],
       "target": "写作原则（追加）",
-      "description": "如果SKILL.md缺少其中某个heading，跳过即可"
+      "description": "追加到通用6条之后。提取规则：模型取标题+一句话摘要+来源证据；启发式全取；反模式取标题行"
     },
     "quality": {
       "source_heading": "## 质量检查清单",
@@ -47,5 +39,14 @@
       "target": "模板参考（可选读取）",
       "description": "如果SKILL.md没有此section，跳过"
     }
+  },
+
+  "features": {
+    "dialogue_ratio": "待全文本统计回写",
+    "env_description": "",
+    "first_chapter_explosion": false,
+    "heroine_voice": "",
+    "hero_voice": "",
+    "binding_type": ""
   }
 }

@@ -11,8 +11,9 @@
   "injections": {
     "voice": {
       "source_heading": "## 表达DNA",
+      "source_sub_headings": ["句式特征", "转折词系统", "高频动词池", "口癖系统", "章节开头/结尾模式"],
       "target": "你的声音",
-      "description": "替换默认语感样本，注入闻栖句式偏好+高频词+对话风格+节奏感"
+      "description": "只提取句式+转折词+动词+口癖+章节模式，跳过古现对照表（不注入voice）"
     },
     "rules": {
       "source_headings": ["## 核心写作心智模型", "## 决策启发式", "## 价值观与反模式"],

@@ -170,27 +170,53 @@ description: |
 检测到网文作者时，在 Phase 4 验证通过后自动执行：
 
 1. **目录结构**：`skills/story-style/{name}/`（取代 `.claude/skills/`）
-2. **创建风格插件**：`skills/story-rewrite/styles/{name}/meta.json`（参考 `styles/wenqi/meta.json` 模板，自动提取 frontmatter + 表达DNA heading + 字数特征生成 `injections` 块）
+2. **创建风格插件**：`skills/story-rewrite/styles/{name}/meta.json`（参考 `styles/template/meta.json` 模板 + `styles/wenqi/meta.json` 完整示例，自动生成 injections）
 3. **更新路由表**：在 `skills/story-style/SKILL.md` 的文风列表中添加新行
 
-**网文作者预处理（Phase 0.5新增）**：如果用户提供了本地语料（网文原文txt），在Phase 1启动前先运行全文本统计分析：
+**网文作者预处理（Phase 0.5 全量分析）**：在Phase 1启动前执行全文本统计分析。分两种情况：
 
-```
-子agent任务：全文本语料统计
-输入：用户提供的网文txt文件集合
-操作：
-  1. 为每本书统计：总章节数、章节字数分布、对话占比分布（每章）、禁用词命中数
-  2. 跨书汇总：总体对话占比、分布直方图（<40%/40-60%/>60%）、均句长、禁用词密度
-  3. 写入 skill 目录：references/research/00-corpus-stats.json（供Phase 2引用）
-禁止：不要抽样，必须全量扫描全本。统计用python脚本跑，不要手算。
-产出格式：
-  { "book": "书名", "chaptersParsed": N, "totalChars": N,
-    "dialogueRatioOverall": "N%", "dialogueRatioAvgPerChapter": "N%",
-    "dialogueDistribution": {"total": N, "low_lt40": N, "mid_40to60": N, "high_gt60": N},
-    "bannedHitsTotal": N, "avgSentenceLenOverall": N }
+**情况A：用户提供了本地语料（网文原文txt）**
+运行 `scripts/analyze_novel_corpus.py` 对用户提供的txt文件集合做全量扫描。输入文件放在 `sources/books/` 目录下。
+
+```bash
+python3 scripts/analyze_novel_corpus.py --input_dir sources/books --output_dir references/research/corpus_stats
 ```
 
-统计结果在Phase 2.3（表达DNA分析）中优先于定性估计——如果统计数据与定性观察矛盾，以统计为准。
+脚本产出（自动写入 `references/research/corpus_stats/`）：
+- `cross-book-stats.json` — 跨书汇总（总章节数、对话占比、分布、均句长、禁用词密度）
+- `book_{书名}.json` — 每本逐书统计
+- 统计结果自动回写 `meta.json` 的 `features` 字段（子agent执行）
+
+**情况B：用户没有提供原文**
+1. 启动 Phase 1 调研时，额外要求每个Agent收集1-2个样章片段（含对话的典型章节）
+2. 收集到3个以上完整样章后，手写小脚本做简易统计
+3. 在 `features.dialogue_ratio` 中标注「基于N章样章估算」
+
+**全量统计 vs 定性估计优先级**：
+- 有全量数据 → 以统计为准（Phase 2.3 优先引用）
+- 只有样章 → 标注「样章估算」的不确定性
+- 统计数据与定性观察矛盾 → 以统计为准，在research文件中记录矛盾以备分析
+
+**meta.json 创建指引**（子agent在Phase 0.5执行）：
+
+参照 `styles/template/meta.json` 的结构，从蒸馏结果自动填充：
+
+| meta.json 字段 | 填充来源 |
+|---------------|---------|
+| `name` | 风格英文名（frontmatter的name去掉-perspective后缀） |
+| `label` | 中文名+简短标签（从user输入提炼） |
+| `description` | frontmatter的description前50字 |
+| `source_skill` | `skills/story-style/{name}/SKILL.md` |
+| `compatible_genres` | frontmatter的trigger中提取的题材词（女频/现言/古言/穿书等） |
+| `chapter_word_count` | 全量统计中的均值±标准差，无则用默认2,200 |
+| `injections.voice.source_sub_headings` | 从表达DNA section提取子节标题列表（跳过古现对照表等不适用voice的节） |
+| `features.dialogue_ratio` | 来自全量统计的 cross-book-stats.json，无则留空 |
+| `features` 其余字段 | Phase 2.3 分析结果 |
+
+**injections 提取规则**：
+- `voice`：取整个 `## 表达DNA` section，但当 `source_sub_headings` 非空时只提取匹配的子节内容。禁用词/反模式类内容不要放入voice——它们应在rules中（Rule 6 去AI规则）。
+- `rules`：心智模型取标题+一句话摘要+来源证据（不要含全文）；启发式全取；反模式只取标题行不取全文。
+- `quality` / `templates`：可选，没有就跳过。
 
 **完成检查**（自动执行）：
 - [ ] 目录已创建（通用 → `.claude/skills/`，网文作者 → `skills/story-style/`）
@@ -198,6 +224,7 @@ description: |
 - [ ] 如果是更新模式：已读取现有SKILL.md，标注哪些信息需要刷新
 - [ ] 如果用户提供了本地语料：将素材复制/移动到 `sources/` 对应子目录，标记为**本地语料模式**
 - [ ] 如果是网文作者：确认 `skills/story-rewrite/styles/{name}/meta.json` 已创建
+- [ ] 如果是网文作者且有关键统计：`meta.json.features` 中的 `dialogue_ratio` / `env_description` / `binding_type` 等字段已填非空值
 
 **关键规则**：
 - 每个subagent必须把调研结果写入对应的md文件。不存文件的调研等于没做。
