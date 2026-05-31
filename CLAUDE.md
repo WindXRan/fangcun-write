@@ -22,7 +22,8 @@
 | `/story-cover`、`/封面` | story-cover | 生成封面图 |
 | `/story-publish`、`/发布`、`/番茄标签` | story-publish | 番茄小说发布 · 标签推荐 |
 | `/story-export-docx`、`/导出` | story-export-docx | 正文导出 Word 文档 |
-| `/story-rewrite`、`/仿写`、`/结构仿写` | story-rewrite | 结构仿写 · 套用爆款骨架写新书 |
+| `/story-rewrite`、`/仿写`、`/结构仿写` | story-rewrite | 结构仿写 · 直接写全书 |
+| `/story-rewrite-preview`、`/仿写试水` | story-rewrite-preview | 仿写试水 · 只写3章预览 |
 | `/story-synopsis`、`/简介` | story-synopsis | 小说简介生成 · 多版本对比（全局 skill） |
 | `/browser-cdp` | browser-cdp | 浏览器 CDP 工具 |
 | `/meta-iterate`、`/迭代`、`/自我迭代` | meta-iterative-improvement | 元迭代改进 - 让技能自我进化（全局 skill） |

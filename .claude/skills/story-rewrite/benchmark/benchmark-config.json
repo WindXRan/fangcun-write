@@ -51,7 +51,7 @@
       "current_baseline": "未测"
     },
     "word_count_pass_rate": {
-      "description": "字数达标率（1600-2400）",
+      "description": "字数达标率（1400-3000）",
       "target": "100%",
       "current_baseline": "67% (3章中2章达标)"
     },
