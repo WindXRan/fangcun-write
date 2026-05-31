@@ -190,8 +190,8 @@ touch "$root/拆文库/sample/_progress.md"
 
 out_start="$(run_from_nested "$root" session-start.sh || true)"
 echo "$out_start" | grep -q '当前位置' || fail "session-start did not resolve active book from project root"
-echo "$out_start" | grep -q 'incomplete analysis' || fail "session-start did not resolve 拆文库 from project root"
-if echo "$out_start" | grep -q 'reference bundle is missing'; then
+echo "$out_start" | grep -q '未完成拆文' || fail "session-start did not resolve 拆文库 from project root"
+if echo "$out_start" | grep -q '参考资料包缺失'; then
   fail "session-start reported missing reference bundle after deployed refs were copied"
 fi
 
@@ -227,7 +227,7 @@ copy_hooks "$broken_root"
 write_sentinel "$broken_root"
 rm -f "$broken_root/.claude/hooks/lib/sentinel.sh"
 broken_out="$(run_from_nested "$broken_root" session-start.sh 2>&1 || true)"
-echo "$broken_out" | grep -q 'hook libraries are missing' || fail "session-start did not explain missing hook libraries before sourcing"
+echo "$broken_out" | grep -q 'hook 函数库缺失' || fail "session-start did not explain missing hook libraries before sourcing"
 
 bad_sentinel_root="$TMP_DIR/bad-sentinel"
 mkdir -p "$bad_sentinel_root"
@@ -241,8 +241,8 @@ resolver_strategy: project-local-skill-reference
 references_dir: .claude/skills/story-setup/references/agent-references
 SENTINEL
 bad_sentinel_out="$(run_from_nested "$bad_sentinel_root" session-start.sh 2>&1 || true)"
-echo "$bad_sentinel_out" | grep -q 'missing target_cli' || fail "session-start did not warn for missing sentinel target_cli"
-echo "$bad_sentinel_out" | grep -q 'reference bundle is missing or empty' || fail "session-start did not warn for missing deployed reference bundle"
+echo "$bad_sentinel_out" | grep -q '缺少 target_cli' || fail "session-start did not warn for missing sentinel target_cli"
+echo "$bad_sentinel_out" | grep -q '参考资料包缺失或为空' || fail "session-start did not warn for missing deployed reference bundle"
 echo "  OK TS5 sentinel diagnostics"
 
 # TS6 — Short project non-mutation
@@ -320,9 +320,9 @@ printf 'long\n' > "$multi_root/.active-book"
 printf '长篇正文\n' > "$multi_root/long/正文/第1章.md"
 printf '短篇正文\n' > "$multi_root/short/正文.md"
 multi_out="$(run_from_nested "$multi_root" detect-story-gaps.sh || true)"
-echo "$multi_out" | grep -q '^Checking: long$' || fail "detect-story-gaps did not inspect long project when .active-book is set"
-echo "$multi_out" | grep -q '^Checking: short$' || fail "detect-story-gaps did not inspect short project alongside long project"
-long_count="$(printf '%s\n' "$multi_out" | grep -c '^Checking: long$' || true)"
+echo "$multi_out" | grep -q '^检查：long$' || fail "detect-story-gaps did not inspect long project when .active-book is set"
+echo "$multi_out" | grep -q '^检查：short$' || fail "detect-story-gaps did not inspect short project alongside long project"
+long_count="$(printf '%s\n' "$multi_out" | grep -c '^检查：long$' || true)"
 [ "$long_count" -eq 1 ] || fail "detect-story-gaps reported long project $long_count times; expected exactly once"
 echo "  OK TS8 multi-book gap detection"
 

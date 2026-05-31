@@ -71,7 +71,7 @@ assert_no_foreshadow_warn() {
   local root output
   root=$(setup_fixture "$case_name" "$body")
   output=$(run_hook "$root" || true)
-  if echo "$output" | grep -q 'foreshadowing entries detected\|伏笔'; then
+  if echo "$output" | grep -q '伏笔'; then
     echo "FAIL: $case_name should not emit foreshadow warning"
     echo "Output:"
     echo "$output"
@@ -86,7 +86,7 @@ assert_foreshadow_warn() {
   local root output
   root=$(setup_fixture "$case_name" "$body")
   output=$(run_hook "$root" || true)
-  if ! echo "$output" | grep -q 'Overdue/abnormal foreshadowing entries detected'; then
+  if ! echo "$output" | grep -q '检测到过期或异常的伏笔条目'; then
     echo "FAIL: $case_name should emit overdue/abnormal foreshadow warning"
     echo "Output:"
     echo "$output"
@@ -110,7 +110,7 @@ cat > "$plain_header_root/book/追踪/伏笔.md" <<'EOF_PLAIN_HEADER'
 | F001 | 玉佩 | 第1章 | 第20章 | 未埋 | ok |
 EOF_PLAIN_HEADER
 plain_header_output=$(run_hook "$plain_header_root" || true)
-if echo "$plain_header_output" | grep -q 'foreshadowing entries detected\|伏笔'; then
+if echo "$plain_header_output" | grep -q '伏笔'; then
   echo "FAIL: plain-header should not emit foreshadow warning"
   echo "Output:"
   echo "$plain_header_output"
