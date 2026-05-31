@@ -1,0 +1,51 @@
+{
+  "说明": "=== 这是风格插件创建模板 ===",
+  "说明2": "=== 只保留 meta.json，内容从女娲蒸馏的 skills/story-style/{name}/SKILL.md 运行时提取 ===",
+  "说明3": "=== 参考 skills/story-rewrite/styles/wenqi/meta.json 的完整实现 ===",
+
+  "name": "替换为风格名称（英文，如 wenqi）",
+  "label": "替换为中文标签",
+  "description": "简短描述：体裁·核心特征",
+  "author": "来源作者或说明",
+  "source_skill": "skills/story-style/{name}/SKILL.md",
+
+  "兼容体裁参考": [
+    "女娲SKILL.md frontmatter 的 trigger 字段定义了兼容体裁",
+    "空数组表示不限制"
+  ],
+  "compatible_genres": [],
+  "incompatible_genres": [],
+
+  "chapter_word_count": {
+    "min": 1600,
+    "target": 2200,
+    "max": 3000
+  },
+
+  "injections": {
+    "voice": {
+      "source_heading": "## 表达DNA",
+      "target": "你的声音",
+      "description": "替换默认语感样本，用此section内容"
+    },
+    "rules": {
+      "source_headings": [
+        "## 核心写作心智模型",
+        "## 决策启发式",
+        "## 价值观与反模式"
+      ],
+      "target": "写作原则（追加）",
+      "description": "如果SKILL.md缺少其中某个heading，跳过即可"
+    },
+    "quality": {
+      "source_heading": "## 质量检查清单",
+      "target": "质量检查",
+      "description": "如果SKILL.md没有此section，跳过"
+    },
+    "templates": {
+      "source_heading": "## 可运行的写作模板",
+      "target": "模板参考（可选读取）",
+      "description": "如果SKILL.md没有此section，跳过"
+    }
+  }
+}

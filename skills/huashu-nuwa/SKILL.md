@@ -158,11 +158,27 @@ description: |
         └── articles/
 ```
 
+**自动路由检测**（Phase 0A 确认后立即判断）：
+
+| 场景 | 检测条件 | 输出目录 | 额外步骤 |
+|------|---------|---------|---------|
+| **通用人物Skill** | 非网文作者 | `.claude/skills/{name}-perspective/` | 无 |
+| **网文作者文风** | 用户提到「网文作者」「写网文」「番茄」「女频」「男频」「网文风格」「文风蒸馏」或目标人物是网文作者 | `skills/story-style/{name}/` | ⚡ 自动创建 `skills/story-rewrite/styles/{name}/meta.json` 插件 + 更新 `story-style/SKILL.md` 路由表 |
+
+**网文作者模式的额外产出**：
+
+检测到网文作者时，在 Phase 4 验证通过后自动执行：
+
+1. **目录结构**：`skills/story-style/{name}/`（取代 `.claude/skills/`）
+2. **创建风格插件**：`skills/story-rewrite/styles/{name}/meta.json`（参考 `styles/wenqi/meta.json` 模板，自动提取 frontmatter + 表达DNA heading + 字数特征生成 `injections` 块）
+3. **更新路由表**：在 `skills/story-style/SKILL.md` 的文风列表中添加新行
+
 **完成检查**（自动执行）：
-- [ ] 目录已创建
+- [ ] 目录已创建（通用 → `.claude/skills/`，网文作者 → `skills/story-style/`）
 - [ ] 如果是中国人物：信息源策略切换为B站原始视频/小宇宙播客/权威中文媒体优先（知乎和微信公众号始终排除，见信息源黑名单）
 - [ ] 如果是更新模式：已读取现有SKILL.md，标注哪些信息需要刷新
 - [ ] 如果用户提供了本地语料：将素材复制/移动到 `sources/` 对应子目录，标记为**本地语料模式**
+- [ ] 如果是网文作者：确认 `skills/story-rewrite/styles/{name}/meta.json` 已创建
 
 **关键规则**：
 - 每个subagent必须把调研结果写入对应的md文件。不存文件的调研等于没做。

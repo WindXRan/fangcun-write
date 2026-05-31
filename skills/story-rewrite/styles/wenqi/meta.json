@@ -1,0 +1,42 @@
+{
+  "name": "wenqi",
+  "label": "闻栖风格",
+  "description": "番茄女频·穿书甜宠·反套路式偏爱·吐槽型女主",
+  "author": "闻栖 (由女娲Skill造人术蒸馏)",
+  "source_skill": "skills/story-style/wenqi/SKILL.md",
+  "compatible_genres": ["现代言情", "古代言情", "穿书", "重生", "先婚后爱", "甜宠"],
+  "incompatible_genres": ["男频", "悬疑", "推理", "现实主义"],
+  "trigger_keywords": ["闻栖风格", "仿闻栖", "穿书甜宠", "反套路式偏爱", "吐槽型女主"],
+  "chapter_word_count": {"min": 1600, "target": 2200, "max": 3000},
+  "injections": {
+    "voice": {
+      "source_heading": "## 表达DNA",
+      "target": "你的声音",
+      "description": "替换默认语感样本，注入闻栖句式偏好+高频词+对话风格+节奏感"
+    },
+    "rules": {
+      "source_headings": ["## 核心写作心智模型", "## 决策启发式", "## 价值观与反模式"],
+      "target": "写作原则（追加）",
+      "description": "追加到通用6条写作原则之后：7个心智模型→9条启发式→反模式"
+    },
+    "quality": {
+      "source_heading": "## 质量检查清单",
+      "target": "质量检查",
+      "description": "替换默认审查清单：黄金三章自查+误用检测+章节节奏自检"
+    },
+    "templates": {
+      "source_heading": "## 可运行的写作模板",
+      "target": "模板参考（可选读取）",
+      "description": "4套可用模板：黄金三章/简介生成/感情线节奏/番外"
+    }
+  },
+  "features": {
+    "dialogue_ratio": "≥50%",
+    "env_description": "极简（≤1句/场景）",
+    "first_chapter_explosion": true,
+    "heroine_voice": "吐槽型/内心OS",
+    "hero_voice": "沉默型/话少",
+    "binding_type": "契约/闪婚/系统任务",
+    "dark_love_reveal": "最后30%"
+  }
+}
