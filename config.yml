@@ -43,7 +43,7 @@ audiobook_tts_api_token: ''
 # 第三方 TTS 模型名称或 ID
 audiobook_tts_model: ''
 # 保存路径
-save_path: C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\闻栖
+save_path: C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\顾了之
 # 使用官方API
 use_official_api: true
 # API列表
