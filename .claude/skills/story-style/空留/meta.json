@@ -1,0 +1,29 @@
+{
+  "name": "空留",
+  "label": "空留风格",
+  "description": "从6本小说中提取的写作决策框架",
+  "source_skill": ".claude/skills/story-style/空留/SKILL.md",
+  "compatible_genres": ["古言", "权谋", "种田", "穿越", "复仇", "娱乐圈"],
+  "chapter_word_count": 2197,
+  "decision_framework": {
+    "mental_models": ["开篇即冲突", "女性独立主体", "交易结盟", "克制叙事"],
+    "decision_heuristics_count": 15,
+    "anti_patterns_count": 12,
+    "synopsis_rules_count": 7,
+    "chapter_template_count": 5
+  },
+  "features": {
+    "dialogue_ratio": "15-50%",
+    "avg_sentence_length": "短句≤10字，长句20-40字",
+    "emotion_expression_ratio": "行为展示:直接命名≈4:1",
+    "sensory_ratio": "视觉55-75%，触觉13-30%，听觉8-23%，嗅觉4-5%",
+    "sweet_bitter_ratio": "权谋3:7，种田6:4",
+    "foreshadow_cycle": "120-150章",
+    "emotion_cycle": "60-80章"
+  },
+  "extraction_info": {
+    "source_books": ["惜花芷", "惹金枝", "逢灯纪", "簪花少年郎", "幺女长乐", "最佳词作"],
+    "extraction_date": "2026-06-01",
+    "novel_distill_version": "2.0.0"
+  }
+}

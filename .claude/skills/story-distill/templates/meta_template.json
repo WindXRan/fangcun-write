@@ -1,0 +1,23 @@
+{
+  "name": "{作者名}",
+  "label": "{作者名}风格",
+  "description": "从{N}本小说中提取的写作决策框架",
+  "source_skill": ".claude/skills/story-style/{作者名}/SKILL.md",
+  "compatible_genres": ["{题材1}", "{题材2}"],
+  "chapter_word_count": {平均章均字数},
+  "decision_framework": {
+    "mental_models": ["{模型1}", "{模型2}"],
+    "decision_heuristics_count": {规则数量},
+    "anti_patterns_count": {反模式数量},
+    "synopsis_rules_count": {简介规则数量},
+    "chapter_template_count": {章纲规则数量}
+  },
+  "features": {
+    "avg_chapter_words": {平均章均字数}
+  },
+  "extraction_info": {
+    "source_books": ["{书名1}", "{书名2}"],
+    "extraction_date": "{日期}",
+    "novel_distill_version": "2.0.0"
+  }
+}
