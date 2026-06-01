@@ -38,8 +38,8 @@
     },
     "templates": {
       "source_heading": "## 可运行的写作模板",
-      "target": "模板参考（可选读取）",
-      "description": "如果SKILL.md没有此section，跳过"
+      "target": "写作模板（强制应用）",
+      "description": "如果SKILL.md没有此section，跳过。有则强制注入，不可跳过"
     },
     "recovery": {
       "source_heading": "## 写作恢复手册",

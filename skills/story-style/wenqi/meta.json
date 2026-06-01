@@ -28,8 +28,8 @@
     },
     "templates": {
       "source_heading": "## 可运行的写作模板",
-      "target": "模板参考（可选读取）",
-      "description": "4套可用模板：黄金三章/简介生成/感情线节奏/番外"
+      "target": "写作模板（强制应用）",
+      "description": "4套可用模板：黄金三章/简介生成/感情线节奏/番外（强制注入，不可跳过）"
     },
     "recovery": {
       "source_heading": "## 卡壳恢复手册",

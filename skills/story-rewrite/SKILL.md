@@ -450,6 +450,13 @@ Batch 1 写作 → Batch 1 字数校验+轻量检查 → Batch 2 写作 → Batc
 {!   - 删除所有与"你的声音"重复的内容（对话≥50%、不做环境描写等已在voice中）}
 {! 无 --style 时：此部分为空 }
 
+## 写作模板（强制应用）
+{STYLE_TEMPLATES}
+{! --style 时：从 source_skill 提取 ## 可运行的写作模板 section，强制注入}
+{!   - 模板A：黄金三章结构（第1-3章必须按此模板）
+{!   - 模板C：感情线节奏骨架（全书节奏必须按此模板）
+{! 无 --style 时：此部分为空 }
+
 你拥有以下参考文件，遇到具体问题时按需读取（路径相对于项目根目录）：
 - `skills/story-long-write/references/style-craft.md`（镜头式写作、五感描写、文笔技巧、毒点规避）
 - `skills/story-long-write/references/hooks-chapter.md`（章首7式+章尾13式+爽点设计）
