@@ -1,0 +1,52 @@
+{
+  "name": "wenqi",
+  "label": "闻栖风格（v2-重蒸馏）",
+  "description": "番茄女频·模版化开篇工程·短章铁律·量化表达DNA·信息钩结尾",
+  "author": "闻栖 (由女娲Skill造人术重蒸馏)",
+  "source_skill": "skills/story-style/wenqi/SKILL.md",
+  "compatible_genres": ["现代言情", "古代言情", "穿书", "重生", "先婚后爱", "甜宠"],
+  "incompatible_genres": ["男频", "悬疑", "推理", "现实主义"],
+  "trigger_keywords": ["闻栖风格", "仿闻栖", "--style=wenqi"],
+  "chapter_word_count": {"min": 1800, "target": 2200, "max": 3000},
+  "injections": {
+    "voice": {
+      "source_heading": "## 表达DNA（量化版）",
+      "source_sub_headings": ["句式特征", "转折词系统", "高频动词池", "口癖系统", "章节开头/结尾模式"],
+      "target": "你的声音",
+      "description": "只提取句式+转折词+动词+口癖+章节模式，跳过古现对照表"
+    },
+    "rules": {
+      "source_headings": ["## 写作工作流（执行入口）", "## 核心写作心智模型", "## 决策启发式", "## 价值观与反模式"],
+      "target": "写作原则（追加）",
+      "description": "追加执行入口+5个心智模型+9条启发式+反模式"
+    },
+    "quality": {
+      "source_heading": "## 质量检查清单",
+      "source_sub_headings": ["黄金三章自查", "写作过程自查", "误用检测", "章节节奏自检"],
+      "target": "质量检查",
+      "description": "替换默认审查清单：三章自查+过程自查+误用检测+节奏自检"
+    },
+    "templates": {
+      "source_heading": "## 可运行的写作模板",
+      "target": "模板参考（可选读取）",
+      "description": "4套可用模板：黄金三章/简介生成/感情线节奏/番外"
+    },
+    "recovery": {
+      "source_heading": "## 卡壳恢复手册",
+      "target": "写作卡壳恢复（可选读取）",
+      "description": "6个常见卡壳场景的恢复方案"
+    }
+  },
+  "features": {
+    "dialogue_ratio": "叙事为主，对话+内心OS+动作混合驱动",
+    "sentence_length": "现代24-28字/古言26-29字",
+    "env_description": "极简（≤1句/场景）",
+    "first_chapter_explosion": true,
+    "chapter_end_hook": true,
+    "heroine_voice": "吐槽型/内心OS",
+    "hero_voice": "沉默型/话少",
+    "binding_type": "契约/闪婚/系统任务",
+    "sugar_density": "每3章1糖点",
+    "dark_love_reveal": "最后30%"
+  }
+}
