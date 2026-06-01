@@ -155,13 +155,45 @@ python skills/story-style/extract-injection.py --style={name}
 **加载流程**：
 1. **调用脚本** → 获取 JSON 输出
 2. **校验 `injections.voice.found`** → 为 false 则报错：`风格 '{name}' 的表达DNA缺失`
-3. **注入到 prompt**：
+3. **注入到 narrative-writer prompt**：
    - `injections.voice.content` → 替换 prompt 中的 `{STYLE_VOICE}`
-   - `injections.rules.content` → 追加到 prompt 中的 `写作原则` section
-   - `injections.quality.content` → 替换 `质量检查` section（如有）
-   - `injections.templates.content` → 注入到 `模板参考`（可选读取）
-   - `injections.recovery.content` → 注入到 `写作卡壳恢复`（可选读取）
+   - `injections.rules.content` → 替换 prompt 中的 `{STYLE_RULES}`
+   - `injections.templates.content` → 替换 prompt 中的 `{STYLE_TEMPLATES}`
 4. **`chapter_word_count`** → 替换 prompt 中的 `{STYLE_TARGET_WORDS}` 等变量
+
+**narrative-writer prompt 构造示例**：
+```python
+# 1. 调用 extract-injection.py 获取风格注入
+style_output = subprocess.run([
+    "python", "skills/story-style/extract-injection.py", "--style=wenqi"
+], capture_output=True, text=True)
+style_data = json.loads(style_output.stdout)
+
+# 2. 构造 prompt
+prompt = f"""
+# ⚠️ 叙事视角：必须第三人称。
+
+## 你的声音
+{style_data['injections']['voice']['content']}
+
+## ⚠️ 写作前检查清单
+1. 读取设定锁：{书名}/设定/设定锁.md
+2. 读取章纲：{书名}/大纲/章纲_全书.md
+3. 读取上章摘要：{书名}/追踪/上下文.md
+
+## 本次任务
+你负责写 {K} 章（第{start}章 ~ 第{end}章）
+
+## 写作原则
+{style_data['injections']['rules']['content']}
+
+## 写作模板
+{style_data['injections']['templates']['content']}
+"""
+
+# 3. spawn narrative-writer
+task(description=f"写第{start}-{end}章", subagent_type="narrative-writer", prompt=prompt)
+```
 
 **错误处理**：
 - 脚本返回 `error` 字段 → 报错并终止
@@ -490,30 +522,61 @@ task(
 
 ⚠️ **强制流程**：正文必须由 narrative-writer subagent 生成，主线程禁止手写正文。
 
+**narrative-writer prompt 构造规则**：
+
+1. **精简原则**：prompt 只包含必要信息，其他通过 read 工具读取
+2. **状态管理**：设定锁、章纲、摘要都存储在文件中，通过 read 工具读取
+3. **风格加载**：通过 `python skills/story-style/extract-injection.py --style={name}` 加载
+
 ```python
-# 单个 narrative-writer 调用（必须使用此方式，不能手写）
-# ⚠️ 状态管理：设定锁、章纲、摘要都存储在文件中，narrative-writer 通过 read 工具读取
+# narrative-writer prompt 模板（精简版）
+# ⚠️ 状态管理：设定锁、章纲、摘要都存储在文件中，通过 read 工具读取
+# ⚠️ 风格加载：通过 extract-injection.py 加载，注入到 {STYLE_VOICE} 和 {STYLE_RULES}
+
 task(
-    description="写第1-2章",
+    description="写第{start}-{end}章",
     subagent_type="narrative-writer",
     prompt=f"""
-你负责写第1-2章。
+# ⚠️ 叙事视角：必须第三人称。
 
-## 第一步：读取必要文件（必须先读取，不要假设内容）
-1. 读取设定锁：{书名}/设定/设定锁.md
-2. 读取章纲：{书名}/大纲/章纲_全书.md（找到第1-2章的章纲）
-3. 读取上章摘要：{书名}/追踪/上下文.md（第1章无需读取）
-4. 读取语感样本：{语感样本路径}
+## 你的声音
+{STYLE_VOICE}
+{! 从 extract-injection.py 输出的 injections.voice.content 注入}
 
-## 第二步：核对角色名（写之前必须核对）
-从设定锁中提取角色名表，确保写作时角色名正确。
+## ⚠️ 写作前检查清单（每章写之前必须核对）
+1. 读取设定锁：{书名}/设定/设定锁.md → 核对角色名、地名、人物关系
+2. 读取章纲：{书名}/大纲/章纲_全书.md → 找到第{start}-{end}章的章纲
+3. 读取上章摘要：{书名}/追踪/上下文.md → 核对时间线、伏笔状态
+4. 读取语感样本：{书名}/设定/语感样本.md → 模仿源文本风格
 
-## 第三步：写作
-- 直接用 write 工具写入文件，不返回正文
-- 第1章写入：{书名}/正文/第1章_{章名}.md
-- 第2章写入：{书名}/正文/第2章_{章名}.md
-- 字数：每章 1600-3000 字
-- 遵循设定锁中的所有约束
+## 本次任务
+你负责写 {K} 章（第{start}章 ~ 第{end}章），依次写入以下文件：
+{逐行列出：{书名}/正文/第{N}章_{章名}.md}
+
+每章独立成篇，但章与章之间要有连贯性：
+- 第2章开头自然承接第1章结尾，不要重复已写内容
+- 同一 agent 内后续章节不需要注入前章摘要（你能看到自己刚写的内容）
+- 每章字数独立计算，各自满足 {STYLE_MIN_WORDS}-{STYLE_MAX_WORDS}
+
+## 写作原则（按优先级执行）
+{STYLE_RULES}
+{! 从 extract-injection.py 输出的 injections.rules.content 注入}
+
+## 写作模板（强制应用）
+{STYLE_TEMPLATES}
+{! 从 extract-injection.py 输出的 injections.templates.content 注入}
+
+## 格式
+第一行：`第{{N}}章 {{章名}}`
+⚠️ 目的词是你的内部写作指导，不要写入正文。
+用 write 工具直接写入文件。
+
+## 参考文件（按需读取）
+- `skills/story-long-write/references/style-craft.md`（镜头式写作）
+- `skills/story-long-write/references/hooks-chapter.md`（钩子设计）
+- `skills/story-long-write/references/dialogue-mastery.md`（对话规则）
+- `skills/story-long-write/references/anti-ai-writing.md`（去AI）
+- `skills/story-long-write/references/banned-words.md`（禁用词表）
 """
 )
 
@@ -650,27 +713,20 @@ Batch 1 写作 → Batch 1 字数校验+轻量检查 → Batch 2 写作 → Batc
 
 ## prompt 模板（narrative-writer）
 
+**精简原则**：prompt 只包含必要信息，其他通过 read 工具读取。
+
 ```
 # ⚠️ 叙事视角：必须第三人称。
 
-## 第一步：读取必要文件（必须先读取，不要假设内容）
-⚠️ 状态管理：设定锁、章纲、摘要都存储在文件中，你必须通过 read 工具读取，不要假设内容。
-
-1. 读取设定锁：{书名}/设定/设定锁.md
-2. 读取章纲：{书名}/大纲/章纲_全书.md（找到第{N}-{N+K-1}章的章纲）
-3. 读取上章摘要：{书名}/追踪/上下文.md（第1章无需读取）
-4. 读取语感样本：{语感样本路径}
-
-## 第二步：核对角色名（写之前必须核对）
-从设定锁中提取角色名表，确保写作时角色名正确。
-
-## 第三步：写作
-
 ## 你的声音
 {STYLE_VOICE}
-{! 正面风格指引专区。禁用词等负面约束仅出现在Rule 6，勿在此重复。}
-{! 无 --style 时：用源文本语感样本 }
-{! --style 时：从 source_skill 读取 ## 表达DNA section（只取句式偏好/高频词/对话风格/节奏感，跳过禁用词列表）替换此处 }
+{! 从 extract-injection.py 输出的 injections.voice.content 注入}
+
+## ⚠️ 写作前检查清单（每章写之前必须核对）
+1. 读取设定锁：{书名}/设定/设定锁.md → 核对角色名、地名、人物关系
+2. 读取章纲：{书名}/大纲/章纲_全书.md → 找到第{N}-{N+K-1}章的章纲
+3. 读取上章摘要：{书名}/追踪/上下文.md → 核对时间线、伏笔状态
+4. 读取语感样本：{书名}/设定/语感样本.md → 模仿源文本风格
 
 ## 本次任务
 你负责写 {K} 章（第{N}章 ~ 第{N+K-1}章），依次写入以下文件：
@@ -681,31 +737,26 @@ Batch 1 写作 → Batch 1 字数校验+轻量检查 → Batch 2 写作 → Batc
 - 同一 agent 内后续章节不需要注入前章摘要（你能看到自己刚写的内容）
 - 每章字数独立计算，各自满足 {STYLE_MIN_WORDS}-{STYLE_MAX_WORDS}
 
-## ⚠️ 写作前检查清单（每章写之前必须核对）
-1. 角色名是否正确？（核对第二步的角色名表）
-2. 地名是否正确？（核对设定锁）
-3. 时间线是否连贯？（核对上章摘要）
-4. 人物关系是否一致？（核对设定锁中的人物关系锁）
-5. 章首钩子是否符合章纲要求？
-6. 章尾钩子是否制造了未闭环的期待？
-
 ## 写作原则（按优先级执行）
 {STYLE_RULES}
-{! --style 时：从 source_skill 提取追加到此，格式：}
-{!   - ## 核心写作心智模型：只取模型名+一句话摘要（如"反套路式偏爱：女主不被看见→男主早爱惨→最后揭晓"），跳过每个模型的案例/失效条件}
-{!   - ## 决策启发式：全取（短条目）}
-{!   - ## 价值观与反模式：只取反模式条目（❌行），跳过正文}
-{!   - 删除所有与"你的声音"重复的内容（对话≥50%、不做环境描写等已在voice中）}
-{! 无 --style 时：此部分为空 }
+{! 从 extract-injection.py 输出的 injections.rules.content 注入}
 
 ## 写作模板（强制应用）
 {STYLE_TEMPLATES}
-{! --style 时：从 source_skill 提取 ## 可运行的写作模板 section，强制注入}
-{!   - 模板A：黄金三章结构（第1-3章必须按此模板）
-{!   - 模板C：感情线节奏骨架（全书节奏必须按此模板）
-{! 无 --style 时：此部分为空 }
+{! 从 extract-injection.py 输出的 injections.templates.content 注入}
 
-你拥有以下参考文件，遇到具体问题时按需读取（路径相对于项目根目录）：
+## 格式
+第一行：`第{{N}}章 {{章名}}`
+⚠️ 目的词是你的内部写作指导，不要写入正文。
+用 write 工具直接写入文件。
+
+## 参考文件（按需读取）
+- `skills/story-long-write/references/style-craft.md`（镜头式写作）
+- `skills/story-long-write/references/hooks-chapter.md`（钩子设计）
+- `skills/story-long-write/references/dialogue-mastery.md`（对话规则）
+- `skills/story-long-write/references/anti-ai-writing.md`（去AI）
+- `skills/story-long-write/references/banned-words.md`（禁用词表）
+```
 - `skills/story-long-write/references/style-craft.md`（镜头式写作、五感描写、文笔技巧、毒点规避）
 - `skills/story-long-write/references/hooks-chapter.md`（章首7式+章尾13式+爽点设计）
 - `skills/story-long-write/references/dialogue-mastery.md`（对话规则、权力博弈、人物语言差异化）
