@@ -776,6 +776,29 @@ Batch 1 写作 → Batch 1 字数校验+轻量检查 → Batch 2 写作 → Batc
 
 **统一用 PowerShell**（Windows 环境，避免 Python 编码问题）。
 
+**⚠️ PowerShell 中文编码问题**：
+PowerShell 5.1 默认使用 GBK 编码，处理中文文件名/内容时会乱码。解决方案：
+
+```powershell
+# 方案1：设置 PowerShell 编码（推荐）
+$OutputEncoding = [System.Text.Encoding]::UTF8
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
+# 方案2：使用 Python 替代（更可靠）
+python -c "
+import re
+count = 0
+with open('文件路径', 'r', encoding='utf-8') as f:
+    for line in f:
+        if re.match(r'^第\d+章', line):
+            count += 1
+print(f'章数: {count}')
+"
+
+# 方案3：使用 grep 工具替代 Select-String
+grep -r "pattern" path/
+```
+
 ```powershell
 # 批量校验本批章节（$batchFiles 由主线程从本批 spawn 的文件列表传入）
 foreach ($file in $batchFiles) {
