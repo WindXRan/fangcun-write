@@ -51,7 +51,7 @@ api_endpoints: []
 # 是否下载段评（段落评论）
 enable_segment_comments: false
 # 每段最多保存的评论数
-segment_comments_top_n: 10
+segment_comments_top_n: 10000
 # 段评抓取的并发线程数（每章内）
 segment_comments_workers: 32
 # 是否下载评论区图片（不含头像）

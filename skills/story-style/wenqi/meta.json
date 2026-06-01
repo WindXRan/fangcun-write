@@ -35,6 +35,16 @@
       "source_heading": "## 卡壳恢复手册",
       "target": "写作卡壳恢复（可选读取）",
       "description": "6个常见卡壳场景的恢复方案"
+    },
+    "title": {
+      "source_heading": "## 书名命名模式",
+      "target": "书名生成（追加）",
+      "description": "注入闻栖书名公式：一睁眼型/身份反应型/事件转折型/和XX型 + 关键词池 + 反差手法"
+    },
+    "synopsis": {
+      "source_heading": "## 简介钩子手法",
+      "target": "简介生成（追加）",
+      "description": "注入闻栖简介三段式模板 + 收尾金句模板 + 逐本钩子分析"
     }
   },
   "features": {

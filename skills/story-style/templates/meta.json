@@ -45,6 +45,16 @@
       "source_heading": "## 写作恢复手册",
       "target": "写作恢复指引（可选读取）",
       "description": "6个常见卡文场景的恢复策略。如果SKILL.md没有此section，跳过"
+    },
+    "title": {
+      "source_heading": "## 书名命名模式",
+      "target": "书名生成（追加）",
+      "description": "网文作者专属。注入书名结构模板+关键词池+情绪标签。如果SKILL.md没有此section，跳过"
+    },
+    "synopsis": {
+      "source_heading": "## 简介钩子手法",
+      "target": "简介生成（追加）",
+      "description": "网文作者专属。注入钩子类型+结构模板+收尾方式。如果SKILL.md没有此section，跳过"
     }
   },
 
