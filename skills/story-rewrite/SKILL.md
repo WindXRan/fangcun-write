@@ -290,6 +290,11 @@ for batch in batches:
 ```
 
 ```
+Step 0：黄金三章特殊处理
+        前3章必须由同一个 agent 写（保持开篇一致性）：
+        - 第1批：1 个 agent 写第1-3章（K=3，不参与并行）
+        - 第2批开始：正常并行（K=2 或 3）
+
 Step 1：M 个 narrative-writer agent 并行 spawn
         每个 agent 负责连续 K 章（K=2 或 3，由主线程分配）
         prompt 注入：设定锁 + 语感样本 + K 章的章纲 + 上章摘要
