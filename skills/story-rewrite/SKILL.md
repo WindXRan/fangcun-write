@@ -157,16 +157,23 @@ python skills/story-style/extract-injection.py --style={name}
 - `injections`: 各 key 的提取结果（`{target, content, found}`）
 
 **加载流程**：
-1. **读取 style SKILL.md** → 获取完整的风格特征
-2. **提取关键信息** → 构造精简但完整的 prompt
-3. **注入到 narrative-writer prompt**
+1. **获取 style SKILL.md 路径** → 从 meta.json 的 source_skill 字段获取
+2. **注入到 narrative-writer prompt** → 将 style_skill_path 注入到 prompt 中
 
 **narrative-writer prompt 构造规则**：
 
-1. **读取 style SKILL.md**，提取以下关键信息：
-   - 句式特征（量化数据）
-   - 转折词系统（有频率数据）
-   - 高频动词池（有频率数据）
+1. **获取 style SKILL.md 路径**：
+   ```python
+   # 从 meta.json 获取 source_skill 路径
+   import json
+   with open("skills/story-style/wenqi/meta.json", "r", encoding="utf-8") as f:
+       meta = json.load(f)
+   style_skill_path = meta["source_skill"]  # 输出：skills/story-style/wenqi/SKILL.md
+   ```
+
+2. **注入到 prompt**：
+   - `{style_skill_path}` → 替换为实际路径（如 `skills/story-style/wenqi/SKILL.md`）
+   - narrative-writer 通过 read 工具读取此文件，获取完整风格信息
    - 口癖系统（有频率数据）
    - 章节开头/结尾模式
 
@@ -796,14 +803,14 @@ Batch 1 写作 → Batch 1 字数校验+轻量检查 → Batch 2 写作 → Batc
 
 **设计原则**：
 - **prompt 精简**：只包含任务信息，风格信息通过 read 工具读取
-- **参考文件**：语感样本、设定锁、章纲都存储在文件中
+- **参考文件**：风格 SKILL.md、设定锁、章纲都存储在文件中
 - **prompt 长度**：约 500-800 字（精简版）
 
 ```
 # ⚠️ 叙事视角：必须第三人称。
 
 ## ⚠️ 写作前检查清单（每章写之前必须核对）
-1. 读取语感样本：{书名}/设定/语感样本.md → 了解风格特征
+1. **读取风格 SKILL.md**：{style_skill_path} → 了解风格特征、写作原则、反模式
 2. 读取设定锁：{书名}/设定/设定锁.md → 核对角色名、地名、人物关系
 3. 读取章纲：{书名}/大纲/章纲_全书.md → 找到第{N}-{N+K-1}章的章纲
 4. 读取上章正文：{书名}/正文/第{N-1}章_{章名}.md → 了解前情（第1章无需读取）
@@ -815,7 +822,7 @@ Batch 1 写作 → Batch 1 字数校验+轻量检查 → Batch 2 写作 → Batc
 每章独立成篇，但章与章之间要有连贯性：
 - 第2章开头自然承接第1章结尾，不要重复已写内容
 - 同一 agent 内后续章节不需要注入前章摘要（你能看到自己刚写的内容）
-- 每章字数独立计算，各自满足 1800-2600 字
+- 每章字数独立计算，各自满足 1800-2600 字，目标 2200 字
 
 ## 格式
 第一行：`第{{N}}章 {{章名}}`
@@ -823,7 +830,7 @@ Batch 1 写作 → Batch 1 字数校验+轻量检查 → Batch 2 写作 → Batc
 用 write 工具直接写入文件。
 
 ## 参考文件（按需读取）
-- `{书名}/设定/语感样本.md`（风格特征、写作原则、反模式）
+- `{style_skill_path}`（风格特征、写作原则、反模式）← 必须读取
 - `{书名}/设定/设定锁.md`（角色名、地名、人物关系）
 - `{书名}/大纲/章纲_全书.md`（章纲）
 - `skills/story-long-write/references/banned-words.md`（禁用词表）
