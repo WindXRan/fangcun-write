@@ -1,0 +1,86 @@
+{
+  "version": "1.0.0",
+  "description": "story-rewrite benchmark 测试集配置",
+  "test_cases": [
+    {
+      "id": "sweet-pet-1",
+      "name": "甜宠·穿书替身",
+      "source_text": "女配一睁眼，失忆男主冷脸洗床单.txt",
+      "source_path": "女配一睁眼，失忆男主冷脸洗床单.txt",
+      "persona": "A",
+      "persona_name": "吐槽型网文读者",
+      "chapters": 3,
+      "tags": ["甜宠", "穿书", "替身", "失忆"],
+      "source_meta": "评分9.2 | 41.6万在读 | 完结",
+      "notes": "主要测试用例，编辑反馈 AI 65%"
+    },
+    {
+      "id": "sweet-pet-2",
+      "name": "甜宠·校园认亲",
+      "source_text": "认亲后，大家的画风一起跑偏了.txt",
+      "source_path": "认亲后，大家的画风一起跑偏了.txt",
+      "persona": "A",
+      "persona_name": "吐槽型网文读者",
+      "chapters": 3,
+      "tags": ["甜宠", "校园", "认亲", "家庭"],
+      "source_meta": "评分9.5 | 13.9万在读 | 完结",
+      "notes": "待测试"
+    },
+    {
+      "id": "sweet-pet-3",
+      "name": "甜宠·重生暗恋",
+      "source_text": "睁眼！重生阴湿亡夫少年时.txt",
+      "source_path": "睁眼！重生阴湿亡夫少年时.txt",
+      "persona": "A",
+      "persona_name": "吐槽型网文读者",
+      "chapters": 3,
+      "tags": ["甜宠", "重生", "校园", "暗恋"],
+      "source_meta": "评分9.4 | 28.3万在读 | 完结",
+      "notes": "待测试"
+    }
+  ],
+  "metrics": {
+    "aigc_score": {
+      "description": "AIGC 检测值（朱雀/图灵）",
+      "target": "< 0.5",
+      "current_baseline": "0.93-0.99 (v0 无 persona)"
+    },
+    "validate_aigc_warnings": {
+      "description": "统一验证脚本警告数",
+      "target": "0",
+      "current_baseline": "未测"
+    },
+    "word_count_pass_rate": {
+      "description": "字数达标率（1400-3000）",
+      "target": "100%",
+      "current_baseline": "67% (3章中2章达标)"
+    },
+    "third_person_rate": {
+      "description": "第三人称使用率",
+      "target": "100%",
+      "current_baseline": "33% (第1章正确，2/3章第一人称)"
+    },
+    "editorial_score": {
+      "description": "编辑评分（满分100）",
+      "target": "> 85",
+      "current_baseline": "75"
+    }
+  },
+  "ablation_configs": [
+    {
+      "id": "no-persona",
+      "description": "去掉 persona，保留所有规则",
+      "prompt_variant": "你是网文写作专家。任务：基于章纲，原创第{N}章。"
+    },
+    {
+      "id": "persona-only",
+      "description": "只保留 persona，去掉反AI补丁",
+      "prompt_variant": "persona + 章纲，无反AI规则"
+    },
+    {
+      "id": "full",
+      "description": "persona + 反AI补丁（当前版本）",
+      "prompt_variant": "当前完整 prompt"
+    }
+  ]
+}

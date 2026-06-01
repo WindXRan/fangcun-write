@@ -445,3 +445,208 @@
 2026-05-29T06:26:11.098789Z  INFO ThreadId(90) finalize start: chapters=178
 2026-05-29T06:26:11.144965Z  INFO ThreadId(90) written: C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\认亲后，大家的画风一起跑偏了.txt
 2026-05-29T06:26:11.231340Z  INFO main 下载完成 book_id=7490227290643647550
+2026-06-01T02:51:31.408728Z  WARN main 检查程序更新失败: request latest release
+2026-06-01T02:51:33.089671Z  INFO ThreadId(06) IID 预热完成
+2026-06-01T02:57:43.138497Z  INFO main 开始搜索: 顾了之
+2026-06-01T02:58:37.991812Z  INFO main 开始搜索: 穿成反派的炮灰前妻
+2026-06-01T09:29:29.599232Z  INFO ThreadId(06) IID 预热完成
+2026-06-01T09:29:29.606437Z  WARN main 检查程序更新失败: request latest release
+2026-06-01T09:32:16.745922Z  INFO main 开始搜索: 空留
+2026-06-01T09:32:21.400971Z  INFO main 开始加载目录/预览 book_id=7501543539474435097
+2026-06-01T09:32:21.401181Z  INFO ThreadId(13) 准备下载计划 book_id="7501543539474435097"
+2026-06-01T09:32:21.402663Z  INFO ThreadId(13) 准备下载计划（web fallback） book_id="7501543539474435097"
+2026-06-01T09:32:23.336121Z  INFO ThreadId(13) web 封面下载成功 book_id="7501543539474435097" path=C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\空留\7501543539474435097\cover.jpg
+2026-06-01T09:32:24.343356Z  INFO ThreadId(13) 封面文件已存在，跳过下载 book_id="7501543539474435097" path=C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\空留\7501543539474435097\cover.jpg
+2026-06-01T09:32:25.385806Z  INFO main 启动下载任务 book_id=7501543539474435097
+2026-06-01T09:32:25.386039Z  INFO ThreadId(24) 启动下载 book_id=7501543539474435097
+2026-06-01T09:32:25.386987Z  INFO ThreadId(24) 已按 BookID 解析稳定缓存目录 book_id="7501543539474435097" folder=C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\空留\7501543539474435097
+2026-06-01T09:32:25.388738Z  INFO ThreadId(24) 开始下载：逢灯纪 (471 章)
+2026-06-01T09:32:26.963616Z  INFO ThreadId(24) 保存完成 10 章 剩 461 章 done=10 remaining=461
+2026-06-01T09:32:26.968012Z  INFO ThreadId(24) 下载完成 1 组 剩 30 组 done=1 remaining=30
+2026-06-01T09:32:28.347430Z  INFO ThreadId(24) 保存完成 20 章 剩 451 章 done=20 remaining=451
+2026-06-01T09:32:28.354645Z  INFO ThreadId(24) 保存完成 30 章 剩 441 章 done=30 remaining=441
+2026-06-01T09:32:28.357955Z  INFO ThreadId(24) 下载完成 2 组 剩 29 组 done=2 remaining=29
+2026-06-01T09:32:29.747635Z  INFO ThreadId(24) 保存完成 40 章 剩 431 章 done=40 remaining=431
+2026-06-01T09:32:29.752979Z  INFO ThreadId(24) 下载完成 3 组 剩 28 组 done=3 remaining=28
+2026-06-01T09:32:31.141562Z  INFO ThreadId(24) 保存完成 50 章 剩 421 章 done=50 remaining=421
+2026-06-01T09:32:31.146704Z  INFO ThreadId(24) 保存完成 60 章 剩 411 章 done=60 remaining=411
+2026-06-01T09:32:31.151405Z  INFO ThreadId(24) 下载完成 4 组 剩 27 组 done=4 remaining=27
+2026-06-01T09:32:32.566344Z  INFO ThreadId(24) 保存完成 70 章 剩 401 章 done=70 remaining=401
+2026-06-01T09:32:32.571021Z  INFO ThreadId(24) 保存完成 80 章 剩 391 章 done=80 remaining=391
+2026-06-01T09:32:32.574713Z  INFO ThreadId(24) 下载完成 5 组 剩 26 组 done=5 remaining=26
+2026-06-01T09:32:33.959884Z  INFO ThreadId(24) 保存完成 90 章 剩 381 章 done=90 remaining=381
+2026-06-01T09:32:33.965728Z  INFO ThreadId(24) 下载完成 6 组 剩 25 组 done=6 remaining=25
+2026-06-01T09:32:35.410720Z  INFO ThreadId(24) 保存完成 100 章 剩 371 章 done=100 remaining=371
+2026-06-01T09:32:35.419049Z  INFO ThreadId(24) 保存完成 110 章 剩 361 章 done=110 remaining=361
+2026-06-01T09:32:35.424901Z  INFO ThreadId(24) 下载完成 7 组 剩 24 组 done=7 remaining=24
+2026-06-01T09:32:36.811092Z  INFO ThreadId(24) 保存完成 120 章 剩 351 章 done=120 remaining=351
+2026-06-01T09:32:36.819180Z  INFO ThreadId(24) 下载完成 8 组 剩 23 组 done=8 remaining=23
+2026-06-01T09:32:38.198730Z  INFO ThreadId(24) 保存完成 130 章 剩 341 章 done=130 remaining=341
+2026-06-01T09:32:38.203095Z  INFO ThreadId(24) 保存完成 140 章 剩 331 章 done=140 remaining=331
+2026-06-01T09:32:38.208911Z  INFO ThreadId(24) 下载完成 9 组 剩 22 组 done=9 remaining=22
+2026-06-01T09:32:39.586623Z  INFO ThreadId(24) 保存完成 150 章 剩 321 章 done=150 remaining=321
+2026-06-01T09:32:39.597307Z  INFO ThreadId(24) 下载完成 10 组 剩 21 组 done=10 remaining=21
+2026-06-01T09:32:40.984887Z  INFO ThreadId(24) 保存完成 160 章 剩 311 章 done=160 remaining=311
+2026-06-01T09:32:40.990134Z  INFO ThreadId(24) 保存完成 170 章 剩 301 章 done=170 remaining=301
+2026-06-01T09:32:40.995214Z  INFO ThreadId(24) 下载完成 11 组 剩 20 组 done=11 remaining=20
+2026-06-01T09:32:42.429364Z  INFO ThreadId(24) 保存完成 180 章 剩 291 章 done=180 remaining=291
+2026-06-01T09:32:42.444452Z  INFO ThreadId(24) 下载完成 12 组 剩 19 组 done=12 remaining=19
+2026-06-01T09:32:43.938804Z  INFO ThreadId(24) 保存完成 190 章 剩 281 章 done=190 remaining=281
+2026-06-01T09:32:43.944559Z  INFO ThreadId(24) 保存完成 200 章 剩 271 章 done=200 remaining=271
+2026-06-01T09:32:43.956188Z  INFO ThreadId(24) 下载完成 13 组 剩 18 组 done=13 remaining=18
+2026-06-01T09:32:45.367174Z  INFO ThreadId(24) 保存完成 210 章 剩 261 章 done=210 remaining=261
+2026-06-01T09:32:45.378372Z  INFO ThreadId(24) 下载完成 14 组 剩 17 组 done=14 remaining=17
+2026-06-01T09:32:46.858973Z  INFO ThreadId(24) 保存完成 220 章 剩 251 章 done=220 remaining=251
+2026-06-01T09:32:46.866066Z  INFO ThreadId(24) 保存完成 230 章 剩 241 章 done=230 remaining=241
+2026-06-01T09:32:46.879410Z  INFO ThreadId(24) 下载完成 15 组 剩 16 组 done=15 remaining=16
+2026-06-01T09:32:48.311042Z  INFO ThreadId(24) 保存完成 240 章 剩 231 章 done=240 remaining=231
+2026-06-01T09:32:48.323259Z  INFO ThreadId(24) 下载完成 16 组 剩 15 组 done=16 remaining=15
+2026-06-01T09:32:49.739544Z  INFO ThreadId(24) 保存完成 250 章 剩 221 章 done=250 remaining=221
+2026-06-01T09:32:49.744142Z  INFO ThreadId(24) 保存完成 260 章 剩 211 章 done=260 remaining=211
+2026-06-01T09:32:49.755885Z  INFO ThreadId(24) 下载完成 17 组 剩 14 组 done=17 remaining=14
+2026-06-01T09:32:51.212336Z  INFO ThreadId(24) 保存完成 270 章 剩 201 章 done=270 remaining=201
+2026-06-01T09:32:51.225683Z  INFO ThreadId(24) 下载完成 18 组 剩 13 组 done=18 remaining=13
+2026-06-01T09:32:52.642753Z  INFO ThreadId(24) 保存完成 280 章 剩 191 章 done=280 remaining=191
+2026-06-01T09:32:52.649102Z  INFO ThreadId(24) 保存完成 290 章 剩 181 章 done=290 remaining=181
+2026-06-01T09:32:52.662175Z  INFO ThreadId(24) 下载完成 19 组 剩 12 组 done=19 remaining=12
+2026-06-01T09:32:54.104020Z  INFO ThreadId(24) 保存完成 300 章 剩 171 章 done=300 remaining=171
+2026-06-01T09:32:54.117514Z  INFO ThreadId(24) 下载完成 20 组 剩 11 组 done=20 remaining=11
+2026-06-01T09:32:55.526015Z  INFO ThreadId(24) 保存完成 310 章 剩 161 章 done=310 remaining=161
+2026-06-01T09:32:55.530870Z  INFO ThreadId(24) 保存完成 320 章 剩 151 章 done=320 remaining=151
+2026-06-01T09:32:55.543622Z  INFO ThreadId(24) 下载完成 21 组 剩 10 组 done=21 remaining=10
+2026-06-01T09:32:56.918047Z  INFO ThreadId(24) 保存完成 330 章 剩 141 章 done=330 remaining=141
+2026-06-01T09:32:56.937907Z  INFO ThreadId(24) 下载完成 22 组 剩 9 组 done=22 remaining=9
+2026-06-01T09:32:58.338361Z  INFO ThreadId(24) 保存完成 340 章 剩 131 章 done=340 remaining=131
+2026-06-01T09:32:58.344690Z  INFO ThreadId(24) 保存完成 350 章 剩 121 章 done=350 remaining=121
+2026-06-01T09:32:58.356873Z  INFO ThreadId(24) 下载完成 23 组 剩 8 组 done=23 remaining=8
+2026-06-01T09:32:59.746859Z  INFO ThreadId(24) 保存完成 360 章 剩 111 章 done=360 remaining=111
+2026-06-01T09:32:59.761940Z  INFO ThreadId(24) 下载完成 24 组 剩 7 组 done=24 remaining=7
+2026-06-01T09:33:01.209051Z  INFO ThreadId(24) 保存完成 370 章 剩 101 章 done=370 remaining=101
+2026-06-01T09:33:01.214091Z  INFO ThreadId(24) 保存完成 380 章 剩 91 章 done=380 remaining=91
+2026-06-01T09:33:01.238342Z  INFO ThreadId(24) 下载完成 25 组 剩 6 组 done=25 remaining=6
+2026-06-01T09:33:02.634205Z  INFO ThreadId(24) 保存完成 390 章 剩 81 章 done=390 remaining=81
+2026-06-01T09:33:02.649644Z  INFO ThreadId(24) 下载完成 26 组 剩 5 组 done=26 remaining=5
+2026-06-01T09:33:04.111116Z  INFO ThreadId(24) 保存完成 400 章 剩 71 章 done=400 remaining=71
+2026-06-01T09:33:04.116787Z  INFO ThreadId(24) 保存完成 410 章 剩 61 章 done=410 remaining=61
+2026-06-01T09:33:04.131662Z  INFO ThreadId(24) 下载完成 27 组 剩 4 组 done=27 remaining=4
+2026-06-01T09:33:05.578117Z  INFO ThreadId(24) 保存完成 420 章 剩 51 章 done=420 remaining=51
+2026-06-01T09:33:05.595671Z  INFO ThreadId(24) 下载完成 28 组 剩 3 组 done=28 remaining=3
+2026-06-01T09:33:07.041708Z  INFO ThreadId(24) 保存完成 430 章 剩 41 章 done=430 remaining=41
+2026-06-01T09:33:07.046766Z  INFO ThreadId(24) 保存完成 440 章 剩 31 章 done=440 remaining=31
+2026-06-01T09:33:07.059226Z  INFO ThreadId(24) 下载完成 29 组 剩 2 组 done=29 remaining=2
+2026-06-01T09:33:08.462868Z  INFO ThreadId(24) 保存完成 450 章 剩 21 章 done=450 remaining=21
+2026-06-01T09:33:08.485452Z  INFO ThreadId(24) 下载完成 30 组 剩 1 组 done=30 remaining=1
+2026-06-01T09:33:09.957238Z  INFO ThreadId(24) 保存完成 460 章 剩 11 章 done=460 remaining=11
+2026-06-01T09:33:09.960861Z  INFO ThreadId(24) 保存完成 470 章 剩 1 章 done=470 remaining=1
+2026-06-01T09:33:09.961360Z  INFO ThreadId(24) 保存完成 471 章 剩 0 章 done=471 remaining=0
+2026-06-01T09:33:09.976658Z  INFO ThreadId(24) 下载完成 31 组 剩 0 组 done=31 remaining=0
+2026-06-01T09:33:09.977400Z  INFO ThreadId(24) 下载完成：逢灯纪 成功 471 章，失败 0 章，用时 44.6s
+2026-06-01T09:33:09.994677Z  INFO ThreadId(24) finalize start: chapters=471
+2026-06-01T09:33:10.067444Z  INFO ThreadId(24) written: C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\空留\逢灯纪.txt
+2026-06-01T09:33:10.294000Z  INFO main 下载完成 book_id=7501543539474435097
+2026-06-01T09:35:22.810493Z  INFO main 开始搜索: 空留
+2026-06-01T09:35:29.976467Z  INFO main 开始加载目录/预览 book_id=7231424472606051384
+2026-06-01T09:35:29.976662Z  INFO ThreadId(29) 准备下载计划 book_id="7231424472606051384"
+2026-06-01T09:35:29.977327Z  INFO ThreadId(29) 准备下载计划（web fallback） book_id="7231424472606051384"
+2026-06-01T09:35:31.952784Z  INFO ThreadId(29) web 封面下载成功 book_id="7231424472606051384" path=C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\空留\7231424472606051384\cover.jpg
+2026-06-01T09:35:32.370932Z  INFO ThreadId(29) 封面文件已存在，跳过下载 book_id="7231424472606051384" path=C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\空留\7231424472606051384\cover.jpg
+2026-06-01T09:35:34.843616Z  INFO main 启动下载任务 book_id=7231424472606051384
+2026-06-01T09:35:34.843882Z  INFO ThreadId(37) 启动下载 book_id=7231424472606051384
+2026-06-01T09:35:34.844794Z  INFO ThreadId(37) 已按 BookID 解析稳定缓存目录 book_id="7231424472606051384" folder=C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\空留\7231424472606051384
+2026-06-01T09:35:34.846530Z  INFO ThreadId(37) 开始下载：惹金枝 (550 章)
+2026-06-01T09:35:37.621263Z  INFO ThreadId(37) 保存完成 10 章 剩 540 章 done=10 remaining=540
+2026-06-01T09:35:37.625498Z  INFO ThreadId(37) 下载完成 1 组 剩 35 组 done=1 remaining=35
+2026-06-01T09:35:39.279701Z  INFO ThreadId(37) 保存完成 20 章 剩 530 章 done=20 remaining=530
+2026-06-01T09:35:39.284421Z  INFO ThreadId(37) 保存完成 30 章 剩 520 章 done=30 remaining=520
+2026-06-01T09:35:39.286797Z  INFO ThreadId(37) 下载完成 2 组 剩 34 组 done=2 remaining=34
+2026-06-01T09:35:40.781128Z  INFO ThreadId(37) 保存完成 40 章 剩 510 章 done=40 remaining=510
+2026-06-01T09:35:40.787174Z  INFO ThreadId(37) 下载完成 3 组 剩 33 组 done=3 remaining=33
+2026-06-01T09:35:43.016507Z  INFO ThreadId(37) 保存完成 50 章 剩 500 章 done=50 remaining=500
+2026-06-01T09:35:43.020129Z  INFO ThreadId(37) 保存完成 60 章 剩 490 章 done=60 remaining=490
+2026-06-01T09:35:43.024893Z  INFO ThreadId(37) 下载完成 4 组 剩 32 组 done=4 remaining=32
+2026-06-01T09:35:44.839896Z  INFO ThreadId(37) 保存完成 70 章 剩 480 章 done=70 remaining=480
+2026-06-01T09:35:44.844615Z  INFO ThreadId(37) 保存完成 80 章 剩 470 章 done=80 remaining=470
+2026-06-01T09:35:44.847583Z  INFO ThreadId(37) 下载完成 5 组 剩 31 组 done=5 remaining=31
+2026-06-01T09:35:46.684439Z  INFO ThreadId(37) 保存完成 90 章 剩 460 章 done=90 remaining=460
+2026-06-01T09:35:46.690227Z  INFO ThreadId(37) 下载完成 6 组 剩 30 组 done=6 remaining=30
+2026-06-01T09:35:48.234721Z  INFO ThreadId(37) 保存完成 100 章 剩 450 章 done=100 remaining=450
+2026-06-01T09:35:48.238977Z  INFO ThreadId(37) 保存完成 110 章 剩 440 章 done=110 remaining=440
+2026-06-01T09:35:48.244096Z  INFO ThreadId(37) 下载完成 7 组 剩 29 组 done=7 remaining=29
+2026-06-01T09:35:49.946539Z  INFO ThreadId(37) 保存完成 120 章 剩 430 章 done=120 remaining=430
+2026-06-01T09:35:49.958162Z  INFO ThreadId(37) 下载完成 8 组 剩 28 组 done=8 remaining=28
+2026-06-01T09:35:51.768124Z  INFO ThreadId(37) 保存完成 130 章 剩 420 章 done=130 remaining=420
+2026-06-01T09:35:51.773746Z  INFO ThreadId(37) 保存完成 140 章 剩 410 章 done=140 remaining=410
+2026-06-01T09:35:51.780057Z  INFO ThreadId(37) 下载完成 9 组 剩 27 组 done=9 remaining=27
+2026-06-01T09:35:53.248533Z  INFO ThreadId(37) 保存完成 150 章 剩 400 章 done=150 remaining=400
+2026-06-01T09:35:53.253525Z  INFO ThreadId(37) 保存完成 160 章 剩 390 章 done=160 remaining=390
+2026-06-01T09:35:53.258871Z  INFO ThreadId(37) 下载完成 10 组 剩 26 组 done=10 remaining=26
+2026-06-01T09:35:54.766122Z  INFO ThreadId(37) 保存完成 170 章 剩 380 章 done=170 remaining=380
+2026-06-01T09:35:54.775899Z  INFO ThreadId(37) 下载完成 11 组 剩 25 组 done=11 remaining=25
+2026-06-01T09:35:56.441171Z  INFO ThreadId(37) 保存完成 180 章 剩 370 章 done=180 remaining=370
+2026-06-01T09:35:56.447535Z  INFO ThreadId(37) 保存完成 190 章 剩 360 章 done=190 remaining=360
+2026-06-01T09:35:56.457997Z  INFO ThreadId(37) 下载完成 12 组 剩 24 组 done=12 remaining=24
+2026-06-01T09:35:57.973918Z  INFO ThreadId(37) 保存完成 200 章 剩 350 章 done=200 remaining=350
+2026-06-01T09:35:57.982730Z  INFO ThreadId(37) 下载完成 13 组 剩 23 组 done=13 remaining=23
+2026-06-01T09:35:59.417736Z  INFO ThreadId(37) 保存完成 210 章 剩 340 章 done=210 remaining=340
+2026-06-01T09:35:59.422213Z  INFO ThreadId(37) 保存完成 220 章 剩 330 章 done=220 remaining=330
+2026-06-01T09:35:59.430704Z  INFO ThreadId(37) 下载完成 14 组 剩 22 组 done=14 remaining=22
+2026-06-01T09:36:00.839143Z  INFO ThreadId(37) 保存完成 230 章 剩 320 章 done=230 remaining=320
+2026-06-01T09:36:00.849072Z  INFO ThreadId(37) 下载完成 15 组 剩 21 组 done=15 remaining=21
+2026-06-01T09:36:02.431264Z  INFO ThreadId(37) 保存完成 240 章 剩 310 章 done=240 remaining=310
+2026-06-01T09:36:02.435728Z  INFO ThreadId(37) 保存完成 250 章 剩 300 章 done=250 remaining=300
+2026-06-01T09:36:02.445070Z  INFO ThreadId(37) 下载完成 16 组 剩 20 组 done=16 remaining=20
+2026-06-01T09:36:03.900688Z  INFO ThreadId(37) 保存完成 260 章 剩 290 章 done=260 remaining=290
+2026-06-01T09:36:03.915902Z  INFO ThreadId(37) 下载完成 17 组 剩 19 组 done=17 remaining=19
+2026-06-01T09:36:05.618669Z  INFO ThreadId(37) 保存完成 270 章 剩 280 章 done=270 remaining=280
+2026-06-01T09:36:05.626898Z  INFO ThreadId(37) 保存完成 280 章 剩 270 章 done=280 remaining=270
+2026-06-01T09:36:05.635442Z  INFO ThreadId(37) 下载完成 18 组 剩 18 组 done=18 remaining=18
+2026-06-01T09:36:07.130914Z  INFO ThreadId(37) 保存完成 290 章 剩 260 章 done=290 remaining=260
+2026-06-01T09:36:07.142692Z  INFO ThreadId(37) 下载完成 19 组 剩 17 组 done=19 remaining=17
+2026-06-01T09:36:08.573525Z  INFO ThreadId(37) 保存完成 300 章 剩 250 章 done=300 remaining=250
+2026-06-01T09:36:08.578412Z  INFO ThreadId(37) 保存完成 310 章 剩 240 章 done=310 remaining=240
+2026-06-01T09:36:08.586880Z  INFO ThreadId(37) 下载完成 20 组 剩 16 组 done=20 remaining=16
+2026-06-01T09:36:10.829430Z  INFO ThreadId(37) 保存完成 320 章 剩 230 章 done=320 remaining=230
+2026-06-01T09:36:10.845883Z  INFO ThreadId(37) 下载完成 21 组 剩 15 组 done=21 remaining=15
+2026-06-01T09:36:12.458407Z  INFO ThreadId(37) 保存完成 330 章 剩 220 章 done=330 remaining=220
+2026-06-01T09:36:12.463259Z  INFO ThreadId(37) 保存完成 340 章 剩 210 章 done=340 remaining=210
+2026-06-01T09:36:12.478464Z  INFO ThreadId(37) 下载完成 22 组 剩 14 组 done=22 remaining=14
+2026-06-01T09:36:14.260189Z  INFO ThreadId(37) 保存完成 350 章 剩 200 章 done=350 remaining=200
+2026-06-01T09:36:14.274794Z  INFO ThreadId(37) 下载完成 23 组 剩 13 组 done=23 remaining=13
+2026-06-01T09:36:15.756409Z  INFO ThreadId(37) 保存完成 360 章 剩 190 章 done=360 remaining=190
+2026-06-01T09:36:15.760929Z  INFO ThreadId(37) 保存完成 370 章 剩 180 章 done=370 remaining=180
+2026-06-01T09:36:15.773657Z  INFO ThreadId(37) 下载完成 24 组 剩 12 组 done=24 remaining=12
+2026-06-01T09:36:17.686733Z  INFO ThreadId(37) 保存完成 380 章 剩 170 章 done=380 remaining=170
+2026-06-01T09:36:17.699118Z  INFO ThreadId(37) 下载完成 25 组 剩 11 组 done=25 remaining=11
+2026-06-01T09:36:19.163467Z  INFO ThreadId(37) 保存完成 390 章 剩 160 章 done=390 remaining=160
+2026-06-01T09:36:19.168401Z  INFO ThreadId(37) 保存完成 400 章 剩 150 章 done=400 remaining=150
+2026-06-01T09:36:19.180391Z  INFO ThreadId(37) 下载完成 26 组 剩 10 组 done=26 remaining=10
+2026-06-01T09:36:20.624320Z  INFO ThreadId(37) 保存完成 410 章 剩 140 章 done=410 remaining=140
+2026-06-01T09:36:20.643078Z  INFO ThreadId(37) 下载完成 27 组 剩 9 组 done=27 remaining=9
+2026-06-01T09:36:22.122495Z  INFO ThreadId(37) 保存完成 420 章 剩 130 章 done=420 remaining=130
+2026-06-01T09:36:22.127862Z  INFO ThreadId(37) 保存完成 430 章 剩 120 章 done=430 remaining=120
+2026-06-01T09:36:22.142151Z  INFO ThreadId(37) 下载完成 28 组 剩 8 组 done=28 remaining=8
+2026-06-01T09:36:23.589389Z  INFO ThreadId(37) 保存完成 440 章 剩 110 章 done=440 remaining=110
+2026-06-01T09:36:23.605669Z  INFO ThreadId(37) 下载完成 29 组 剩 7 组 done=29 remaining=7
+2026-06-01T09:36:25.037778Z  INFO ThreadId(37) 保存完成 450 章 剩 100 章 done=450 remaining=100
+2026-06-01T09:36:25.043410Z  INFO ThreadId(37) 保存完成 460 章 剩 90 章 done=460 remaining=90
+2026-06-01T09:36:25.058466Z  INFO ThreadId(37) 下载完成 30 组 剩 6 组 done=30 remaining=6
+2026-06-01T09:36:26.700735Z  INFO ThreadId(37) 保存完成 470 章 剩 80 章 done=470 remaining=80
+2026-06-01T09:36:26.722506Z  INFO ThreadId(37) 下载完成 31 组 剩 5 组 done=31 remaining=5
+2026-06-01T09:36:28.502362Z  INFO ThreadId(37) 保存完成 480 章 剩 70 章 done=480 remaining=70
+2026-06-01T09:36:28.508576Z  INFO ThreadId(37) 保存完成 490 章 剩 60 章 done=490 remaining=60
+2026-06-01T09:36:28.527074Z  INFO ThreadId(37) 下载完成 32 组 剩 4 组 done=32 remaining=4
+2026-06-01T09:36:30.185055Z  INFO ThreadId(37) 保存完成 500 章 剩 50 章 done=500 remaining=50
+2026-06-01T09:36:30.205718Z  INFO ThreadId(37) 下载完成 33 组 剩 3 组 done=33 remaining=3
+2026-06-01T09:36:32.456679Z  INFO ThreadId(37) 保存完成 510 章 剩 40 章 done=510 remaining=40
+2026-06-01T09:36:32.460086Z  INFO ThreadId(37) 保存完成 520 章 剩 30 章 done=520 remaining=30
+2026-06-01T09:36:32.475595Z  INFO ThreadId(37) 下载完成 34 组 剩 2 组 done=34 remaining=2
+2026-06-01T09:36:34.041226Z  INFO ThreadId(37) 保存完成 530 章 剩 20 章 done=530 remaining=20
+2026-06-01T09:36:34.059370Z  INFO ThreadId(37) 下载完成 35 组 剩 1 组 done=35 remaining=1
+2026-06-01T09:36:35.718940Z  INFO ThreadId(37) 保存完成 540 章 剩 10 章 done=540 remaining=10
+2026-06-01T09:36:35.723774Z  INFO ThreadId(37) 保存完成 550 章 剩 0 章 done=550 remaining=0
+2026-06-01T09:36:35.742987Z  INFO ThreadId(37) 下载完成 36 组 剩 0 组 done=36 remaining=0
+2026-06-01T09:36:35.743346Z  INFO ThreadId(37) 下载完成：惹金枝 成功 550 章，失败 0 章，用时 60.9s
+2026-06-01T09:36:35.763194Z  INFO ThreadId(37) finalize start: chapters=550
+2026-06-01T09:36:35.858216Z  INFO ThreadId(37) written: C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\空留\惹金枝.txt
+2026-06-01T09:36:35.898341Z  INFO main 下载完成 book_id=7231424472606051384
+2026-06-01T09:37:38.105399Z  INFO main 开始搜索: 空留
