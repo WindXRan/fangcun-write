@@ -178,6 +178,26 @@ while IFS= read -r -d '' file; do
       if [ -n "$HARDCODED" ]; then
         WARNINGS="$WARNINGS\n⚠ $file: Hardcoded character attributes found (should reference 设定/ files):\n$HARDCODED"
       fi
+
+      # 禁止词扫描：从风格 SKILL.md 动态读取
+      STYLE_DIR="$ROOT/.claude/skills/story-style"
+      if [ -d "$STYLE_DIR" ]; then
+        for style_skill in "$STYLE_DIR"/*/SKILL.md; do
+          [ -f "$style_skill" ] || continue
+          STYLE_NAME=$(basename "$(dirname "$style_skill")")
+          # 提取「反模式」部分中的「」词汇
+          FORBIDDEN_WORDS=$(sed -n '/^## 反模式/,/^## /p' "$style_skill" 2>/dev/null | grep -oE '「[^」]+」' | sed 's/[「」]//g' || true)
+          if [ -n "$FORBIDDEN_WORDS" ]; then
+            while IFS= read -r word; do
+              [ -z "$word" ] && continue
+              MATCHES=$(grep -n "$word" "$FULL_PATH" 2>/dev/null || true)
+              if [ -n "$MATCHES" ]; then
+                WARNINGS="$WARNINGS\n⚠ $file: 禁止词「$word」(风格:$STYLE_NAME):\n$MATCHES"
+              fi
+            done <<< "$FORBIDDEN_WORDS"
+          fi
+        done
+      fi
       ;;
   esac
 

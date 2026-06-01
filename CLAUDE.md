@@ -27,8 +27,8 @@ story-rewrite（流程引擎）     story-style（知识库）
 | `/story-rewrite`、`/仿写` | story-rewrite | 仿写流程引擎 |
 | `/story-style`、`/文风` | story-style | 写作风格知识库 |
 | `/story-review`、`/审查` | story-review | 一致性审查 |
-| `/story-long-scan`、`/长篇扫榜` | story-long-scan | 长篇网文扫榜 |
-| `/fanqie`、`/番茄指数` | FanqieZhiShu | 番茄小说排行榜分析 |
+| `/story-scan`、`/番茄扫描` | story-scan | 番茄小说排行榜分析 |
+| `/story-distill`、`/蒸馏`、`/炼丹` | story-distill | 网文作者蒸馏 |
 
 ## 文件结构
 
@@ -44,10 +44,9 @@ AI网文小说项目/
 │   │   ├── story/              # 路由入口
 │   │   ├── story-review/       # 一致性审查
 │   │   ├── story-long-scan/    # 长篇网文扫榜
-│   │   └── FanqieZhiShu/       # 番茄指数项目
+│   │   └── story-scan/         # 番茄小说排行榜分析
 │   └── hooks/                  # 会话管理 hooks
-├── authors/                    # 蒸馏的作者数据
-├── 仿写试水库/                 # 仿写中间产物
+├── .claude/skills/novel-download/novel-download-authors/  # 蒸馏的作者数据
 └── {书名}/                     # 仿写产出
     ├── 正文/
     ├── 设定/
@@ -72,7 +71,7 @@ AI网文小说项目/
 
 风格来源：
 1. story-style 内置风格（wenqi 等）
-2. authors/ 目录下的蒸馏数据
+2. novel-download-authors/ 目录下的蒸馏数据（位于 .claude/skills/novel-download/）
 
 ## Compact 后恢复
 
