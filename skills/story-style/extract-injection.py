@@ -127,7 +127,42 @@ def validate_injection(meta, skill_content):
     return errors, warnings
 
 
-def extract_injections(meta, skill_content, keys=None):
+def compact_content(content, max_length=2000):
+    """精简内容，只保留关键信息"""
+    if not content:
+        return content
+    
+    # 如果内容已经很短，直接返回
+    if len(content) <= max_length:
+        return content
+    
+    # 提取关键信息：表格、列表、代码块
+    lines = content.split('\n')
+    result = []
+    current_length = 0
+    
+    for line in lines:
+        # 保留表格行、列表项、代码块
+        if (line.strip().startswith('|') or 
+            line.strip().startswith('-') or 
+            line.strip().startswith('*') or
+            line.strip().startswith('```') or
+            line.strip().startswith('#')):
+            result.append(line)
+            current_length += len(line)
+        # 保留短行（可能是重要信息）
+        elif len(line.strip()) < 100:
+            result.append(line)
+            current_length += len(line)
+        
+        # 超过长度限制，停止
+        if current_length >= max_length:
+            break
+    
+    return '\n'.join(result)
+
+
+def extract_injections(meta, skill_content, keys=None, compact=False):
     """执行 injection 提取"""
     result = {}
     
@@ -152,6 +187,10 @@ def extract_injections(meta, skill_content, keys=None):
         elif 'source_headings' in config:
             headings = [re.sub(r'^##\s+', '', h) for h in config['source_headings']]
             content = extract_multi_headings(skill_content, headings)
+        
+        # 精简模式
+        if compact and content:
+            content = compact_content(content, max_length=1500)
         
         result[key] = {
             'target': config.get('target', ''),
@@ -182,6 +221,7 @@ def main():
     parser.add_argument('--keys', help='只提取指定的 injection key（逗号分隔）')
     parser.add_argument('--validate', action='store_true', help='只验证，不提取')
     parser.add_argument('--chapter-word-count', action='store_true', help='只输出章数字数配置')
+    parser.add_argument('--compact', action='store_true', help='精简输出（只保留关键信息，适合注入prompt）')
     
     args = parser.parse_args()
     
@@ -238,7 +278,7 @@ def main():
     
     # 提取模式
     keys = args.keys.split(',') if args.keys else None
-    injections = extract_injections(meta, skill_content, keys)
+    injections = extract_injections(meta, skill_content, keys, compact=args.compact)
     
     output = {
         'style': meta.get('name', 'unknown'),
