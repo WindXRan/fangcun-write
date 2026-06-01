@@ -20,6 +20,7 @@ description: |
 | 封面 | 封面、封面图 | `/story-cover` |
 | 续写 | 续写、继续写、日更、接着写 | 见下方「续写路由」 |
 | 查角色状态 | 查角色、查伏笔、查进度 | spawn story-explorer agent |
+| 番茄指数 | 番茄、番茄数据、番茄分析、fanqie | `/fanqie` |
 
 ## 路由流程
 
