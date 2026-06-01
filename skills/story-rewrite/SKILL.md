@@ -69,9 +69,16 @@ python skills/story-style/extract-injection.py --style={name}
 **错误处理**：
 - 脚本返回 `error` 字段 → 报错并终止
 - `injections.voice.found` 为 false → 报错：`风格 '{name}' 的表达DNA缺失`
-- `injections` 全部为 false → 降级为无风格模式，警告用户
+- `injections` 全部为 false → 报错并终止
 
-不加 `--style` 时保持原行为——用源文本语感样本来模仿，风格由源文本决定。
+**⚠️ 必须指定风格**：不加 `--style` 时，询问用户选择风格：
+```
+请选择写作风格：
+1. 闻栖（--style=wenqi）- 番茄女频·穿书/甜宠/反套路偏爱·吐槽型女主
+2. 其他风格（请指定 --style=名称）
+
+可用风格列表：/story-style
+```
 
 ### 从女娲创建新风格（Nuwa→Style）
 
@@ -83,8 +90,9 @@ python skills/story-style/extract-injection.py --style={name}
 
 | 风格 | --style | 描述 | 来源 |
 |------|---------|------|------|
-| 通用（默认） | （不加参数） | 由源文本语感样本驱动，风格自然匹配 | 源文本本身 |
 | 闻栖 | `--style=wenqi` | 番茄女频·穿书/甜宠/反套路偏爱·吐槽型女主 | `story-style/wenqi/SKILL.md` |
+
+**⚠️ 必须指定风格**：不加 `--style` 时会询问用户选择。
 
 ---
 

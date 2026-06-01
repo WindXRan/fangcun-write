@@ -31,7 +31,14 @@ Phase 2（试水）      出3章章纲 → 3章并行写 → 字数修复 → re
 /story-rewrite-preview --style=wenqi    # 闻栖风格试水3章
 ```
 
-不加 `--style` 时用源文本语感样本驱动（原行为）。
+**⚠️ 必须指定风格**：不加 `--style` 时，询问用户选择风格：
+```
+请选择写作风格：
+1. 闻栖（--style=wenqi）- 番茄女频·穿书/甜宠/反套路偏爱·吐槽型女主
+2. 其他风格（请指定 --style=名称）
+
+可用风格列表：/story-style
+```
 
 风格加载路径：`skills/story-style/{name}/meta.json` → `story-style` injection 引擎提取 section 注入 prompt。
 
