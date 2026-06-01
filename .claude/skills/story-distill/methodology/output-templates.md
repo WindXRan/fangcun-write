@@ -23,6 +23,7 @@ story-distill 的输出必须符合 story-style 的格式要求，确保 story-r
 │   ├── synopsis-patterns.md    # 书名与简介风格（附原文示例）
 │   ├── chapter-template.md     # 章纲模板（附原文引用）
 │   ├── writing-samples.md      # 语感样本（附出处标注）
+│   ├── de-ai-strategy.md       # 去AI策略（预选模块+阈值）
 │   ├── candidates/             # 提取器原始产出 + 通过验证的规则
 │   └── rejected/               # 淘汰的规则+原因（审计用）
 └── sources/                    # 原文备份（可选）
@@ -46,6 +47,7 @@ story-distill 的输出必须符合 story-style 的格式要求，确保 story-r
 | 章纲模板 | 章节命名/结构/事件密度 | story-architect 无法生成章纲 |
 | 写作样本 | 4类语感锚点段落 | narrative-writer 无法校准语感 |
 | 写作检查清单 | 写之前问自己+写完后检查 | 无法验证产出质量 |
+| 去AI策略 | 连接词/副词/句长等阈值+预选模块 | 无法检测AI指纹，产出AI味重 |
 
 ### 格式规范
 
@@ -98,11 +100,7 @@ story-distill 的输出必须符合 story-style 的格式要求，确保 story-r
 
 ## 验证方式
 
-使用 `scripts/validate_output.py` 验证：
-
-```bash
-python .claude/skills/story-distill/scripts/validate_output.py .claude/skills/story-style/{作者名} {作者名}
-```
+手动检查 SKILL.md 是否包含所有必要 section（见下方格式要求）。
 
 ---
 
