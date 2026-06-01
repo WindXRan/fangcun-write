@@ -1,6 +1,6 @@
 {
   "name": "wenqi",
-  "label": "闻栖风格（v2-重蒸馏）",
+  "label": "闻栖风格（v3-语感样本）",
   "description": "番茄女频·模版化开篇工程·短章铁律·量化表达DNA·信息钩结尾",
   "author": "闻栖 (由女娲Skill造人术重蒸馏)",
   "source_skill": "skills/story-style/wenqi/SKILL.md",
@@ -8,57 +8,6 @@
   "incompatible_genres": ["男频", "悬疑", "推理", "现实主义"],
   "trigger_keywords": ["闻栖风格", "仿闻栖", "--style=wenqi"],
   "chapter_word_count": {"min": 1800, "target": 2200, "max": 3000},
-  "injections": {
-    "voice": {
-      "source_heading": "## 表达DNA（量化版）",
-      "source_sub_headings": ["句式特征", "转折词系统（闻栖的叙事引擎）", "高频动词池（闻栖的微表情代码）", "口癖系统", "章节开头/结尾模式"],
-      "target": "你的声音",
-      "description": "只提取句式+转折词+动词+口癖+章节模式，跳过古现对照表"
-    },
-    "rules": {
-      "source_headings": ["## 写作工作流（执行入口）", "## 核心写作心智模型", "## 决策启发式", "## 价值观与反模式"],
-      "target": "写作原则（追加）",
-      "description": "追加执行入口+5个心智模型+9条启发式+反模式"
-    },
-    "quality": {
-      "source_heading": "## 质量检查清单",
-      "source_sub_headings": ["黄金三章自查", "写作过程自查", "误用检测", "章节节奏自检"],
-      "target": "质量检查",
-      "description": "替换默认审查清单：三章自查+过程自查+误用检测+节奏自检"
-    },
-    "templates": {
-      "source_heading": "## 可运行的写作模板",
-      "target": "写作模板（强制应用）",
-      "description": "4套可用模板：黄金三章/简介生成/感情线节奏/番外（强制注入，不可跳过）"
-    },
-    "recovery": {
-      "source_heading": "## 卡壳恢复手册",
-      "target": "写作卡壳恢复（可选读取）",
-      "description": "6个常见卡壳场景的恢复方案"
-    },
-    "title": {
-      "source_heading": "## 书名命名模式",
-      "target": "书名生成（追加）",
-      "description": "注入闻栖书名公式：一睁眼型/身份反应型/事件转折型/和XX型 + 关键词池 + 反差手法"
-    },
-    "synopsis": {
-      "source_heading": "## 简介钩子手法",
-      "target": "简介生成（追加）",
-      "description": "注入闻栖简介三段式模板 + 收尾金句模板 + 逐本钩子分析"
-    },
-    "chapter_outline": {
-      "source_heading": "## 核心写作心智模型",
-      "source_sub_headings": ["模型1：模板化开篇工程", "模型4：三章一糖密度律", "模型5：信息钩结尾法"],
-      "target": "章纲生成·心智模型（追加）",
-      "description": "注入闻栖章纲模板：开篇3章结构 + 糖点密度（每3-5章1糖）+ 结尾钩子4式"
-    },
-    "chapter_outline_template": {
-      "source_heading": "## 可运行的写作模板",
-      "source_sub_headings": ["模板C：闻栖式感情线节奏骨架"],
-      "target": "章纲生成·骨架模板（追加）",
-      "description": "注入闻栖感情线5阶段骨架：前30章绑定期→31-100章发糖期→101-150章冲突期→151-200章真相期→结尾HE"
-    }
-  },
   "features": {
     "dialogue_ratio": "叙事为主，对话+内心OS+动作混合驱动",
     "sentence_length": "现代24-28字/古言26-29字",

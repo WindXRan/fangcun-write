@@ -163,7 +163,7 @@ description: |
 ```
 skills/story-style/{name}/             # 代替 .claude/skills/
 ├── SKILL.md                           # 女娲蒸馏出的文风
-├── meta.json                          # ⚡ injection 配置 + 元数据
+├── meta.json                          # 风格元数据
 ├── references/
 │   ├── research/
 │   │   ├── 01-writings.md ~ 06-timeline.md
@@ -211,7 +211,7 @@ skills/story-style/{name}/             # 代替 .claude/skills/
 **网文作者模式的额外产出**（Phase 4 验证通过后执行）：
 
 1. **目录结构**：`skills/story-style/{name}/`（已创建，不需要重建）
-2. **创建风格配置**：`skills/story-style/{name}/meta.json`（参考 `skills/story-style/templates/meta.json` 模板 + `skills/story-style/wenqi/meta.json` 完整示例，自动生成 injections）
+2. **创建风格配置**：`skills/story-style/{name}/meta.json`（参考 `skills/story-style/templates/meta.json` 模板 + `skills/story-style/wenqi/meta.json` 完整示例）
 3. **更新路由表**：在 `skills/story-style/SKILL.md` 的文风列表中添加新行
 
 **meta.json 创建指引**（子agent在Phase 4执行）：
@@ -226,24 +226,10 @@ skills/story-style/{name}/             # 代替 .claude/skills/
 | `source_skill` | `skills/story-style/{name}/SKILL.md` |
 | `compatible_genres` | frontmatter的trigger中提取的题材词（女频/现言/古言/穿书等） |
 | `chapter_word_count` | 全量统计中的均值±标准差，无则用默认2,200 |
-| `injections.voice.source_sub_headings` | 从表达DNA section提取子节标题列表（跳过古现对照表等不适用voice的节） |
-| `injections.chapter_outline.source_heading` | 固定 `## 核心写作心智模型`（提取章纲相关的心智模型） |
-| `injections.chapter_outline.source_sub_headings` | 从核心写作心智模型中提取章纲相关的子节（如开篇结构、糖点密度、结尾钩子等） |
-| `injections.chapter_outline_template.source_heading` | 固定 `## 可运行的写作模板`（提取章纲骨架模板） |
-| `injections.chapter_outline_template.source_sub_headings` | 从可运行的写作模板中提取章纲骨架相关的子节（如感情线节奏骨架等） |
-| `injections.title.source_heading` | 固定 `## 书名命名模式`（网文作者专属，无则留空） |
-| `injections.synopsis.source_heading` | 固定 `## 简介钩子手法`（网文作者专属，无则留空） |
 | `features.dialogue_ratio` | 来自全量统计的 cross-book-stats.json，无则留空 |
 | `features` 其余字段 | Phase 2.3 分析结果 |
 
-**injections 提取规则**（详见 `skills/story-style/SKILL.md` 的 Injection 引擎 section）：
-- `voice`：取整个 `## 表达DNA` section，但当 `source_sub_headings` 非空时只提取匹配的子节内容。禁用词/反模式类内容不要放入voice——它们应在rules中（Rule 6 去AI规则）。
-- `rules`：心智模型取标题+一句话摘要+来源证据（不要含全文）；启发式全取；反模式只取标题行不取全文。
-- `quality` / `templates`：可选，没有就跳过。
-- `chapter_outline`：从 `## 核心写作心智模型` 中提取章纲相关的子节（如开篇结构、糖点密度、结尾钩子等）。这是章纲生成时的风格指导。
-- `chapter_outline_template`：从 `## 可运行的写作模板` 中提取章纲骨架相关的子节（如感情线节奏骨架等）。这是章纲生成时的结构模板。
-- `title`：取 `## 书名命名模式` 的共性规律+关键词池+结构模板。网文作者专属，无则跳过。
-- `synopsis`：取 `## 简介钩子手法` 的钩子类型+结构模板+收尾方式。网文作者专属，无则跳过。
+**meta.json 不再包含 injections 字段**。agent 通过 read 工具直接读取 SKILL.md 获取风格信息，不需要预先提取。
 
 **完成检查**（自动执行，带 ⚠️ 的项为**不可跳过门**，不通过即中止）：
 
@@ -253,7 +239,7 @@ skills/story-style/{name}/             # 代替 .claude/skills/
 - [ ] 如果是中国人物：信息源策略切换为B站原始视频/小宇宙播客/权威中文媒体优先（知乎和微信公众号始终排除，见信息源黑名单）
 - [ ] 如果是更新模式：已读取现有SKILL.md，标注哪些信息需要刷新
 - [ ] 如果是网文作者：`meta.json.features` 已填充（`dialogue_ratio` / `env_description` / `binding_type` 等为非空值）
-- [ ] ⚠️ **如果是网文作者：`skills/story-style/{name}/meta.json` 已创建且 injection 兼容性验证通过**
+- [ ] ⚠️ **如果是网文作者：`skills/story-style/{name}/meta.json` 已创建且字段完整**
 
 **关键规则**：
 - 每个subagent必须把调研结果写入对应的md文件。不存文件的调研等于没做。

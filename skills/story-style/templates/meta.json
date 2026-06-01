@@ -13,63 +13,6 @@
     "max": 3000
   },
 
-  "injections": {
-    "voice": {
-      "source_heading": "## 表达DNA",
-      "source_sub_headings": [],
-      "target": "你的声音",
-      "description": "有 source_sub_headings 时只提取这些子节内容（防禁用词混入），空数组则提取整个section"
-    },
-    "rules": {
-      "source_headings": [
-        "## 写作工作流（执行入口）",
-        "## 核心写作心智模型",
-        "## 决策启发式",
-        "## 价值观与反模式"
-      ],
-      "target": "写作原则（追加）",
-      "description": "追加到通用6条之后。提取规则：工作流取标题+完整内容；模型取标题+一句话摘要+来源证据；启发式全取；反模式取标题行"
-    },
-    "quality": {
-      "source_heading": "## 质量检查清单",
-      "source_sub_headings": [],
-      "target": "质量检查",
-      "description": "有 source_sub_headings 时只提取这些子节，空数组则提取整个section。无此section则跳过"
-    },
-    "templates": {
-      "source_heading": "## 可运行的写作模板",
-      "target": "写作模板（强制应用）",
-      "description": "如果SKILL.md没有此section，跳过。有则强制注入，不可跳过"
-    },
-    "recovery": {
-      "source_heading": "## 卡壳恢复手册",
-      "target": "写作恢复指引（可选读取）",
-      "description": "常见卡文场景的恢复策略。如果SKILL.md没有此section，跳过"
-    },
-    "chapter_outline": {
-      "source_heading": "## 核心写作心智模型",
-      "source_sub_headings": [],
-      "target": "章纲生成·心智模型（追加）",
-      "description": "注入章纲相关的心智模型（如开篇结构、糖点密度、结尾钩子等）。source_sub_headings 为空时提取整个section"
-    },
-    "chapter_outline_template": {
-      "source_heading": "## 可运行的写作模板",
-      "source_sub_headings": [],
-      "target": "章纲生成·骨架模板（追加）",
-      "description": "注入感情线/剧情线骨架模板。source_sub_headings 为空时提取整个section"
-    },
-    "title": {
-      "source_heading": "## 书名命名模式",
-      "target": "书名生成（追加）",
-      "description": "网文作者专属。注入书名结构模板+关键词池+情绪标签。如果SKILL.md没有此section，跳过"
-    },
-    "synopsis": {
-      "source_heading": "## 简介钩子手法",
-      "target": "简介生成（追加）",
-      "description": "网文作者专属。注入钩子类型+结构模板+收尾方式。如果SKILL.md没有此section，跳过"
-    }
-  },
-
   "features": {
     "dialogue_ratio": "待全文本统计回写",
     "env_description": "",
