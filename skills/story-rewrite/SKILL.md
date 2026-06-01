@@ -261,11 +261,13 @@ task(
 
 **多个 story-architect 并行调用**（>50 章时）：
 ```python
-# 并行 spawn 4 个 story-architect（191章需要4个）
+# 并行 spawn N 个 story-architect（每50章一个，191章→4个）
+# 实际章数根据源文本决定，示例为191章的情况
 task(description="生成章纲 第1-50章", subagent_type="story-architect", prompt="...")
 task(description="生成章纲 第51-100章", subagent_type="story-architect", prompt="...")
 task(description="生成章纲 第101-150章", subagent_type="story-architect", prompt="...")
 task(description="生成章纲 第151-191章", subagent_type="story-architect", prompt="...")
+# ⚠️ 最后一个 agent 的结束章号 = 源文本总章数，不能硬编码
 ```
 
 **章纲补写调用**（发现断层时）：
