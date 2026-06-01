@@ -671,6 +671,17 @@ Step 1：M 个 narrative-writer agent 并行 spawn
           ...
         ⚠️ 不返回正文到主线程，直接写文件（省 token）
 
+        **并行 spawn 示例**（必须在同一消息中发送多个 task 调用）：
+        ```python
+        # 在同一消息中并行 spawn 5 个 narrative-writer agent
+        task(description="写第4-6章", subagent_type="narrative-writer", prompt="...")
+        task(description="写第7-9章", subagent_type="narrative-writer", prompt="...")
+        task(description="写第10-12章", subagent_type="narrative-writer", prompt="...")
+        task(description="写第13-15章", subagent_type="narrative-writer", prompt="...")
+        task(description="写第16-18章", subagent_type="narrative-writer", prompt="...")
+        # ⚠️ 必须在同一消息中发送，不要一个一个发
+        ```
+
         **文件完整性校验**：所有 agent 返回后，主线程检查每章的.md是否实际存在。
         缺失的章 → 自动标记并 spawn 1 个补写 agent（K=缺失章数），不询问用户。
         连续缺失 >5 章 → 降 K=1 重试全批。
