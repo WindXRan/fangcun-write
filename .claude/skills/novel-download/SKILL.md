@@ -127,7 +127,7 @@ skills/novel-download/TomatoNovelDownloader-Win64-v2.4.11.exe --update <book_id>
 | 配置项 | 说明 |
 |--------|------|
 | `save_path` | 下载保存路径（指向 downloads/） |
-| `novel_format` | 输出格式（txt/epub/pdf） |
+| `novel_format` | 输出格式（必须设为 txt，蒸馏需要 txt 原始文本，不要用 epub） |
 | `enable_segment_comments` | 段评下载（建议关闭，触发IP风控） |
 | `max_workers` | 并发线程数 |
 
