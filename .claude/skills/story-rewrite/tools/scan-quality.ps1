@@ -12,7 +12,7 @@
 .PARAMETER Path
     要扫描的正文文件路径
 .EXAMPLE
-    .\scan-quality.ps1 -Path "仿写试水库/试水_xxx.txt"
+    .\scan-quality.ps1 -Path "{书名}/正文/第1章.txt"
 #>
 
 param([Parameter(Mandatory=$true)][string]$Path)
