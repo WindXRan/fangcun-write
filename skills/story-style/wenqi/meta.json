@@ -45,6 +45,18 @@
       "source_heading": "## 简介钩子手法",
       "target": "简介生成（追加）",
       "description": "注入闻栖简介三段式模板 + 收尾金句模板 + 逐本钩子分析"
+    },
+    "chapter_outline": {
+      "source_heading": "## 核心写作心智模型",
+      "source_sub_headings": ["模型1：模板化开篇工程", "模型4：三章一糖密度律", "模型5：信息钩结尾法"],
+      "target": "章纲生成·心智模型（追加）",
+      "description": "注入闻栖章纲模板：开篇3章结构 + 糖点密度（每3-5章1糖）+ 结尾钩子4式"
+    },
+    "chapter_outline_template": {
+      "source_heading": "## 可运行的写作模板",
+      "source_sub_headings": ["模板C：闻栖式感情线节奏骨架"],
+      "target": "章纲生成·骨架模板（追加）",
+      "description": "注入闻栖感情线5阶段骨架：前30章绑定期→31-100章发糖期→101-150章冲突期→151-200章真相期→结尾HE"
     }
   },
   "features": {

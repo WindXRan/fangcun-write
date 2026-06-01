@@ -22,7 +22,7 @@
     },
     "rules": {
       "source_headings": [
-        "## 写作回答工作流（Agentic Protocol）",
+        "## 写作工作流（执行入口）",
         "## 核心写作心智模型",
         "## 决策启发式",
         "## 价值观与反模式"
@@ -42,9 +42,21 @@
       "description": "如果SKILL.md没有此section，跳过。有则强制注入，不可跳过"
     },
     "recovery": {
-      "source_heading": "## 写作恢复手册",
+      "source_heading": "## 卡壳恢复手册",
       "target": "写作恢复指引（可选读取）",
-      "description": "6个常见卡文场景的恢复策略。如果SKILL.md没有此section，跳过"
+      "description": "常见卡文场景的恢复策略。如果SKILL.md没有此section，跳过"
+    },
+    "chapter_outline": {
+      "source_heading": "## 核心写作心智模型",
+      "source_sub_headings": [],
+      "target": "章纲生成·心智模型（追加）",
+      "description": "注入章纲相关的心智模型（如开篇结构、糖点密度、结尾钩子等）。source_sub_headings 为空时提取整个section"
+    },
+    "chapter_outline_template": {
+      "source_heading": "## 可运行的写作模板",
+      "source_sub_headings": [],
+      "target": "章纲生成·骨架模板（追加）",
+      "description": "注入感情线/剧情线骨架模板。source_sub_headings 为空时提取整个section"
     },
     "title": {
       "source_heading": "## 书名命名模式",

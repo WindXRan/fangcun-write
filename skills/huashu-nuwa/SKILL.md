@@ -227,6 +227,10 @@ skills/story-style/{name}/             # 代替 .claude/skills/
 | `compatible_genres` | frontmatter的trigger中提取的题材词（女频/现言/古言/穿书等） |
 | `chapter_word_count` | 全量统计中的均值±标准差，无则用默认2,200 |
 | `injections.voice.source_sub_headings` | 从表达DNA section提取子节标题列表（跳过古现对照表等不适用voice的节） |
+| `injections.chapter_outline.source_heading` | 固定 `## 核心写作心智模型`（提取章纲相关的心智模型） |
+| `injections.chapter_outline.source_sub_headings` | 从核心写作心智模型中提取章纲相关的子节（如开篇结构、糖点密度、结尾钩子等） |
+| `injections.chapter_outline_template.source_heading` | 固定 `## 可运行的写作模板`（提取章纲骨架模板） |
+| `injections.chapter_outline_template.source_sub_headings` | 从可运行的写作模板中提取章纲骨架相关的子节（如感情线节奏骨架等） |
 | `injections.title.source_heading` | 固定 `## 书名命名模式`（网文作者专属，无则留空） |
 | `injections.synopsis.source_heading` | 固定 `## 简介钩子手法`（网文作者专属，无则留空） |
 | `features.dialogue_ratio` | 来自全量统计的 cross-book-stats.json，无则留空 |
@@ -236,6 +240,8 @@ skills/story-style/{name}/             # 代替 .claude/skills/
 - `voice`：取整个 `## 表达DNA` section，但当 `source_sub_headings` 非空时只提取匹配的子节内容。禁用词/反模式类内容不要放入voice——它们应在rules中（Rule 6 去AI规则）。
 - `rules`：心智模型取标题+一句话摘要+来源证据（不要含全文）；启发式全取；反模式只取标题行不取全文。
 - `quality` / `templates`：可选，没有就跳过。
+- `chapter_outline`：从 `## 核心写作心智模型` 中提取章纲相关的子节（如开篇结构、糖点密度、结尾钩子等）。这是章纲生成时的风格指导。
+- `chapter_outline_template`：从 `## 可运行的写作模板` 中提取章纲骨架相关的子节（如感情线节奏骨架等）。这是章纲生成时的结构模板。
 - `title`：取 `## 书名命名模式` 的共性规律+关键词池+结构模板。网文作者专属，无则跳过。
 - `synopsis`：取 `## 简介钩子手法` 的钩子类型+结构模板+收尾方式。网文作者专属，无则跳过。
 
