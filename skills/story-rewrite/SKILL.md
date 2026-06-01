@@ -153,46 +153,115 @@ python skills/story-style/extract-injection.py --style={name}
 - `injections`: 各 key 的提取结果（`{target, content, found}`）
 
 **加载流程**：
-1. **调用脚本** → 获取 JSON 输出
-2. **校验 `injections.voice.found`** → 为 false 则报错：`风格 '{name}' 的表达DNA缺失`
-3. **注入到 narrative-writer prompt**：
-   - `injections.voice.content` → 替换 prompt 中的 `{STYLE_VOICE}`
-   - `injections.rules.content` → 替换 prompt 中的 `{STYLE_RULES}`
-   - `injections.templates.content` → 替换 prompt 中的 `{STYLE_TEMPLATES}`
-4. **`chapter_word_count`** → 替换 prompt 中的 `{STYLE_TARGET_WORDS}` 等变量
+1. **读取 style SKILL.md** → 获取完整的风格特征
+2. **提取关键信息** → 构造精简但完整的 prompt
+3. **注入到 narrative-writer prompt**
 
-**narrative-writer prompt 构造示例**：
+**narrative-writer prompt 构造规则**：
+
+1. **读取 style SKILL.md**，提取以下关键信息：
+   - 句式特征（量化数据）
+   - 转折词系统（有频率数据）
+   - 高频动词池（有频率数据）
+   - 口癖系统（有频率数据）
+   - 章节开头/结尾模式
+
+2. **构造 prompt**，按以下格式：
+```
+# ⚠️ 叙事视角：必须第三人称。
+
+## 你的声音
+
+### 句式特征
+| 维度 | 数据 |
+|------|------|
+| 平均句长 | {数据} |
+| 平均段长 | {数据} |
+| 问号占比 | {数据} |
+| 感叹号占比 | {数据} |
+
+### 转折词系统（闻栖的叙事引擎）
+几乎每段都含至少一个转折词：{转折词列表}
+
+### 高频动词池
+{动词列表，保留频率数据}
+
+### 口癖系统（女主内心OS高频词）⚠️ 必须大量使用
+{口癖列表，保留频率数据}
+
+### 章节开头/结尾
+{开头/结尾模式}
+
+---
+
+## ⚠️ 设定锁（不可违反）
+请读取：{书名}/设定/设定锁.md
+
+## 前情摘要
+{前情摘要}
+
+## 本次任务
+你负责写 {K} 章（第{start}章 ~ 第{end}章），依次写入以下文件：
+{文件列表}
+
+每章独立成篇，但章与章之间要有连贯性：
+- 第2章开头自然承接第1章结尾，不要重复已写内容
+- 同一 agent 内后续章节不需要注入前章摘要（你能看到自己刚写的内容）
+- 每章字数独立计算，各自满足 {min}-{max} 字
+
+## 各章章纲
+请读取：{书名}/大纲/章纲_全书.md → 找第{start}-{end}章章纲
+
+## 写作原则（按优先级执行）
+{从 style SKILL.md 提取的写作原则}
+
+## 写作模板（强制应用）
+{从 style SKILL.md 提取的写作模板}
+
+## 格式
+第一行：`第{{N}}章 {{章名}}`
+⚠️ 目的词是你的内部写作指导，不要写入正文。
+用 write 工具直接写入文件。
+
+## 参考文件（按需读取）
+{参考文件列表}
+
+## ⚠️ 角色锚点（写错角色名=致命错误）
+{从设定锁中提取的角色名表}
+```
+
+**示例**：闻栖风格的 prompt 构造
 ```python
-# 1. 调用 extract-injection.py 获取风格注入
-style_output = subprocess.run([
-    "python", "skills/story-style/extract-injection.py", "--style=wenqi"
-], capture_output=True, text=True)
-style_data = json.loads(style_output.stdout)
+# 1. 读取闻栖 SKILL.md
+with open("skills/story-style/wenqi/SKILL.md", "r", encoding="utf-8") as f:
+    skill_content = f.read()
 
-# 2. 构造 prompt
+# 2. 提取关键信息
+voice_section = extract_section(skill_content, "## 表达DNA（量化版）")
+rules_section = extract_section(skill_content, "## 核心写作心智模型")
+templates_section = extract_section(skill_content, "## 可运行的写作模板")
+
+# 3. 构造 prompt
 prompt = f"""
 # ⚠️ 叙事视角：必须第三人称。
 
 ## 你的声音
-{style_data['injections']['voice']['content']}
+{voice_section}
 
-## ⚠️ 写作前检查清单
-1. 读取设定锁：{书名}/设定/设定锁.md
-2. 读取章纲：{书名}/大纲/章纲_全书.md
-3. 读取上章摘要：{书名}/追踪/上下文.md
+---
+
+## ⚠️ 设定锁（不可违反）
+请读取：{书名}/设定/设定锁.md
 
 ## 本次任务
 你负责写 {K} 章（第{start}章 ~ 第{end}章）
 
 ## 写作原则
-{style_data['injections']['rules']['content']}
+{rules_section}
 
 ## 写作模板
-{style_data['injections']['templates']['content']}
+{templates_section}
 """
-
-# 3. spawn narrative-writer
-task(description=f"写第{start}-{end}章", subagent_type="narrative-writer", prompt=prompt)
 ```
 
 **错误处理**：
