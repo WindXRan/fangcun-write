@@ -283,9 +283,14 @@ task(
 
 **核心：每 agent 写 2-3 章（减少 spawn 开销 2-3 倍）**
 
+⚠️ **强制流程**：正文必须由 narrative-writer subagent 生成，主线程禁止手写正文。
+
 **narrative-writer 调用方式**（使用 Task tool）：
+
+⚠️ **强制流程**：正文必须由 narrative-writer subagent 生成，主线程禁止手写正文。
+
 ```python
-# 单个 narrative-writer 调用
+# 单个 narrative-writer 调用（必须使用此方式，不能手写）
 task(
     description="写第1-2章",
     subagent_type="narrative-writer",
