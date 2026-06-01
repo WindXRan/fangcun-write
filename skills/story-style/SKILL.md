@@ -57,12 +57,39 @@ skills/story-style/
 
 `story-rewrite` 发起 `--style={name}` 请求时，本引擎执行：
 
+```bash
+python skills/story-style/extract-injection.py --style={name}
 ```
-1. 读取 skills/story-style/{name}/meta.json
+
+**脚本功能**：
+1. 读取 `skills/story-style/{name}/meta.json`
 2. 校验兼容性（compatible_genres / incompatible_genres）
-3. 读取 meta.source_skill 指向的 SKILL.md
-4. 遍历 meta.injections，按规则提取 section → 注入到 story-rewrite prompt
-5. 注入 meta.chapter_word_count 覆盖字数参数
+3. 读取 `meta.source_skill` 指向的 SKILL.md
+4. 遍历 `meta.injections`，按规则提取 section
+5. 输出 JSON 格式的注入内容
+
+**脚本参数**：
+| 参数 | 说明 |
+|------|------|
+| `--style=wenqi` | 按风格名查找 meta.json |
+| `--meta=path` | 直接指定 meta.json 路径 |
+| `--keys=voice,rules` | 只提取指定的 injection key（逗号分隔） |
+| `--validate` | 只验证配置，不提取内容 |
+| `--chapter-word-count` | 只输出字数配置 |
+
+**输出格式**（JSON）：
+```json
+{
+  "style": "wenqi",
+  "label": "闻栖风格（v2-重蒸馏）",
+  "chapter_word_count": {"min": 1800, "target": 2200, "max": 3000},
+  "features": {...},
+  "injections": {
+    "voice": {"target": "你的声音", "content": "...", "found": true},
+    "rules": {"target": "写作原则（追加）", "content": "...", "found": true},
+    ...
+  }
+}
 ```
 
 ### 提取规则

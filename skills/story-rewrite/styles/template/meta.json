@@ -1,4 +1,0 @@
-{
-  "_MOVED": "此文件已迁移到 skills/story-style/templates/meta.json。请使用新路径。",
-  "_NOTE": "story-style 现在是独立 skill，管理所有风格的注册、injection 和验证。"
-}
