@@ -1,0 +1,59 @@
+{
+  "name": "替换为风格名称（英文，如 wenqi）",
+  "label": "替换为中文标签",
+  "description": "简短描述：体裁·核心特征",
+  "author": "来源作者或说明",
+  "source_skill": "skills/story-style/{name}/SKILL.md",
+  "compatible_genres": [],
+  "incompatible_genres": [],
+
+  "chapter_word_count": {
+    "min": 1600,
+    "target": 2200,
+    "max": 3000
+  },
+
+  "injections": {
+    "voice": {
+      "source_heading": "## 表达DNA",
+      "source_sub_headings": [],
+      "target": "你的声音",
+      "description": "有 source_sub_headings 时只提取这些子节内容（防禁用词混入），空数组则提取整个section"
+    },
+    "rules": {
+      "source_headings": [
+        "## 写作回答工作流（Agentic Protocol）",
+        "## 核心写作心智模型",
+        "## 决策启发式",
+        "## 价值观与反模式"
+      ],
+      "target": "写作原则（追加）",
+      "description": "追加到通用6条之后。提取规则：工作流取标题+完整内容；模型取标题+一句话摘要+来源证据；启发式全取；反模式取标题行"
+    },
+    "quality": {
+      "source_heading": "## 质量检查清单",
+      "source_sub_headings": [],
+      "target": "质量检查",
+      "description": "有 source_sub_headings 时只提取这些子节，空数组则提取整个section。无此section则跳过"
+    },
+    "templates": {
+      "source_heading": "## 可运行的写作模板",
+      "target": "模板参考（可选读取）",
+      "description": "如果SKILL.md没有此section，跳过"
+    },
+    "recovery": {
+      "source_heading": "## 写作恢复手册",
+      "target": "写作恢复指引（可选读取）",
+      "description": "6个常见卡文场景的恢复策略。如果SKILL.md没有此section，跳过"
+    }
+  },
+
+  "features": {
+    "dialogue_ratio": "待全文本统计回写",
+    "env_description": "",
+    "first_chapter_explosion": false,
+    "heroine_voice": "",
+    "hero_voice": "",
+    "binding_type": ""
+  }
+}

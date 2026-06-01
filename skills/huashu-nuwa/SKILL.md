@@ -163,14 +163,14 @@ description: |
 ```
 skills/story-style/{name}/             # 代替 .claude/skills/
 ├── SKILL.md                           # 女娲蒸馏出的文风
+├── meta.json                          # ⚡ injection 配置 + 元数据
 ├── references/
 │   ├── research/
 │   │   ├── 01-writings.md ~ 06-timeline.md
 │   │   └── corpus_stats/              # ⚡ 全文本统计结果
 │   └── sources/
 │       └── books/                     # ⚡ 用户提供的原文
-├── scripts/                           # 工具脚本（选用）
-└── (同时创建 skills/story-rewrite/styles/{name}/meta.json)
+└── scripts/                           # 工具脚本（选用）
 ```
 
 **自动路由检测**（Phase 0A 确认后立即判断）：
@@ -211,12 +211,12 @@ skills/story-style/{name}/             # 代替 .claude/skills/
 **网文作者模式的额外产出**（Phase 4 验证通过后执行）：
 
 1. **目录结构**：`skills/story-style/{name}/`（已创建，不需要重建）
-2. **创建风格插件**：`skills/story-rewrite/styles/{name}/meta.json`（参考 `styles/template/meta.json` 模板 + `styles/wenqi/meta.json` 完整示例，自动生成 injections）
+2. **创建风格配置**：`skills/story-style/{name}/meta.json`（参考 `skills/story-style/templates/meta.json` 模板 + `skills/story-style/wenqi/meta.json` 完整示例，自动生成 injections）
 3. **更新路由表**：在 `skills/story-style/SKILL.md` 的文风列表中添加新行
 
 **meta.json 创建指引**（子agent在Phase 4执行）：
 
-参照 `styles/template/meta.json` 的结构，从蒸馏结果自动填充：
+参照 `skills/story-style/templates/meta.json` 的结构，从蒸馏结果自动填充：
 
 | meta.json 字段 | 填充来源 |
 |---------------|---------|
@@ -230,7 +230,7 @@ skills/story-style/{name}/             # 代替 .claude/skills/
 | `features.dialogue_ratio` | 来自全量统计的 cross-book-stats.json，无则留空 |
 | `features` 其余字段 | Phase 2.3 分析结果 |
 
-**injections 提取规则**：
+**injections 提取规则**（详见 `skills/story-style/SKILL.md` 的 Injection 引擎 section）：
 - `voice`：取整个 `## 表达DNA` section，但当 `source_sub_headings` 非空时只提取匹配的子节内容。禁用词/反模式类内容不要放入voice——它们应在rules中（Rule 6 去AI规则）。
 - `rules`：心智模型取标题+一句话摘要+来源证据（不要含全文）；启发式全取；反模式只取标题行不取全文。
 - `quality` / `templates`：可选，没有就跳过。
@@ -243,7 +243,7 @@ skills/story-style/{name}/             # 代替 .claude/skills/
 - [ ] 如果是中国人物：信息源策略切换为B站原始视频/小宇宙播客/权威中文媒体优先（知乎和微信公众号始终排除，见信息源黑名单）
 - [ ] 如果是更新模式：已读取现有SKILL.md，标注哪些信息需要刷新
 - [ ] 如果是网文作者：`meta.json.features` 已填充（`dialogue_ratio` / `env_description` / `binding_type` 等为非空值）
-- [ ] ⚠️ **如果是网文作者：`skills/story-rewrite/styles/{name}/meta.json` 已创建且注入规则可工作**
+- [ ] ⚠️ **如果是网文作者：`skills/story-style/{name}/meta.json` 已创建且 injection 兼容性验证通过**
 
 **关键规则**：
 - 每个subagent必须把调研结果写入对应的md文件。不存文件的调研等于没做。

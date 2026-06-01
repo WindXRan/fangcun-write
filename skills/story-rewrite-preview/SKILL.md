@@ -25,7 +25,7 @@ Phase 2（试水）      出3章章纲 → 3章并行写 → 字数修复 → re
 
 ### 风格插件支持
 
-与 `story-rewrite` 共享同一个风格插件系统。支持 `--style` 参数：
+与 `story-rewrite` 共享同一个风格插件系统（由 `story-style` skill 管理）。支持 `--style` 参数：
 
 ```
 /story-rewrite-preview --style=wenqi    # 闻栖风格试水3章
@@ -33,7 +33,7 @@ Phase 2（试水）      出3章章纲 → 3章并行写 → 字数修复 → re
 
 不加 `--style` 时用源文本语感样本驱动（原行为）。
 
-风格插件目录：`skills/story-rewrite/styles/{style-name}/`
+风格加载路径：`skills/story-style/{name}/meta.json` → `story-style` injection 引擎提取 section 注入 prompt。
 
 > **Phase 1 复用**：如果项目已有 `仿写试水库/框架_{书名}.md`（由 `/story-rewrite` 生成），直接读取，跳过 Phase 1。
 
@@ -222,3 +222,4 @@ if ($chars -lt 1800) {
 | `skills/story-rewrite/references/anti-ai-complete.md` | 写作原则 |
 | `skills/story-rewrite/references/synopsis.md` | 简介生成 |
 | `skills/story-rewrite/references/踩坑记录.md` | 历史问题 |
+| `skills/story-style/` | 风格管理引擎（注册+injection+验证） |
