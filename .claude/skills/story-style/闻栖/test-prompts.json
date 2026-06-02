@@ -1,0 +1,546 @@
+{
+  "version": 1,
+  "test_date": "2026-06-02",
+  "total_tests": 50,
+  "passed": 46,
+  "failed": 4,
+  "pass_rate": "92%",
+  "summary": {
+    "心智模型": {"total": 15, "passed": 13, "failed": 2},
+    "决策启发式": {"total": 10, "passed": 10, "failed": 0},
+    "节奏直觉": {"total": 7, "passed": 7, "failed": 0},
+    "表达DNA": {"total": 7, "passed": 6, "failed": 1},
+    "反模式": {"total": 6, "passed": 6, "failed": 0},
+    "去AI策略": {"total": 5, "passed": 4, "failed": 1}
+  },
+  "failure_analysis": [
+    {
+      "rule": "天崩开局",
+      "issue": "A2只说'写开篇前三章则必须建立困境'，但没有定义'困境'的具体标准。皇后身份+烂摊子是否算'人生最低谷'？边界模糊。",
+      "fix": "在A2中补充困境判断标准：'困境=主角面临的具体威胁（失去生存基础/身份暴露/被迫分离），而非单纯的处境不佳'"
+    },
+    {
+      "rule": "行为人设",
+      "issue": "A2说'要展示角色性格'，但'恐惧'是情绪不是性格。情绪展示是否适用此规则？边界模糊。",
+      "fix": "在A2中补充：'情绪也适用——问自己：这个情绪对应什么身体反应？用身体反应代替情绪直述'"
+    },
+    {
+      "rule": "延迟满足",
+      "issue": "A2说'写情感高潮/爽点场景'，但'确认关系'是否算情感高潮？B说'甜宠文3-5步'，确认关系是否需要3-5步？边界模糊。",
+      "fix": "在B中补充：'确认关系、表白等里程碑事件，甜宠文可简化为1-2步；第一次接吻、第一次说爱等情感爆发点才需要完整3-5步'"
+    },
+    {
+      "rule": "口语化内心独白",
+      "issue": "B说'古言文中慎用现代网络词'，但'慎用'不够明确。古言文中遇到荒诞情况，是否可以用口语化独白？用什么替代？",
+      "fix": "在B中补充：'古言文用古代口语替代现代网络梗（如\"好家伙\"→\"好个XX\"，\"离谱\"→\"荒唐\"）。保持吐槽感，但语言要符合时代'"
+    }
+  ],
+  "回炉建议": [
+    "天崩开局：补充困境判断标准，区分'处境不佳'和'生存威胁'",
+    "行为人设：扩展A2覆盖情绪展示，明确情绪→身体反应的映射",
+    "延迟满足：区分里程碑事件和情感爆发点的延迟步数",
+    "口语化内心独白：补充古言文的替代方案"
+  ],
+  "tests": [
+    {
+      "id": 1,
+      "dimension": "心智模型",
+      "rule": "天崩开局",
+      "type": "should_invoke",
+      "prompt": "写一个古代言情开篇，女主被夫家休弃，净身出户，无处可去",
+      "expected_rules": ["天崩开局"],
+      "result": "pass",
+      "notes": "经典天崩开局：人生最低谷+具体困境。A2明确匹配'写开篇前三章'"
+    },
+    {
+      "id": 2,
+      "dimension": "心智模型",
+      "rule": "天崩开局",
+      "type": "should_not_invoke",
+      "prompt": "写男女主结婚三年后的甜蜜日常，男主给女主做早餐",
+      "expected_rules": [],
+      "result": "pass",
+      "notes": "不是开篇，不涉及困境。正确不调用天崩开局"
+    },
+    {
+      "id": 3,
+      "dimension": "心智模型",
+      "rule": "天崩开局",
+      "type": "boundary",
+      "prompt": "写一个穿越开篇，女主穿越成皇后，身份尊崇，但原主留下一堆烂摊子需要收拾",
+      "expected_rules": ["天崩开局"],
+      "result": "fail",
+      "notes": "A2说'写开篇前三章则必须建立困境'，但皇后身份本身不是'人生最低谷'。B说'困境必须是可解决的'，但没定义什么是'困境'。agent可能因'穿越开篇'触发A2而调用，但忽略了'人生最低谷'的核心信念"
+    },
+    {
+      "id": 4,
+      "dimension": "心智模型",
+      "rule": "行为人设",
+      "type": "should_invoke",
+      "prompt": "展示女主贪财但善良的性格，不要直接说她是什么样的人",
+      "expected_rules": ["行为人设"],
+      "result": "pass",
+      "notes": "A2明确：'要展示角色性格，先问这个性格对应什么动作'"
+    },
+    {
+      "id": 5,
+      "dimension": "心智模型",
+      "rule": "行为人设",
+      "type": "should_not_invoke",
+      "prompt": "描写男主的外貌特征，高大英俊，眼神深邃",
+      "expected_rules": [],
+      "result": "pass",
+      "notes": "外貌描写不涉及性格展示，正确不调用"
+    },
+    {
+      "id": 6,
+      "dimension": "心智模型",
+      "rule": "行为人设",
+      "type": "boundary",
+      "prompt": "展示女主内心的恐惧和不安，她发现自己身处险境",
+      "expected_rules": ["行为人设"],
+      "result": "fail",
+      "notes": "A2说'要展示角色性格'，但'恐惧'是情绪不是性格。B说'内心独白只用于展示她对处境的反应'，恐惧可以用身体反应展示。agent可能混淆情绪和性格，或不知道是否适用此规则"
+    },
+    {
+      "id": 7,
+      "dimension": "心智模型",
+      "rule": "身份错位",
+      "type": "should_invoke",
+      "prompt": "设计女主穿书后隐瞒身份的核心冲突线，需要持续张力",
+      "expected_rules": ["身份错位"],
+      "result": "pass",
+      "notes": "A2明确：'设计核心冲突线，问自己：谁知道了什么？谁不知道？'"
+    },
+    {
+      "id": 8,
+      "dimension": "心智模型",
+      "rule": "身份错位",
+      "type": "should_not_invoke",
+      "prompt": "写男女主一起做饭的温馨日常，展示关系升温",
+      "expected_rules": [],
+      "result": "pass",
+      "notes": "日常场景不涉及信息差，正确不调用身份错位"
+    },
+    {
+      "id": 9,
+      "dimension": "心智模型",
+      "rule": "身份错位",
+      "type": "boundary",
+      "prompt": "写男主逐渐发现女主有秘密，但还没确定是什么",
+      "expected_rules": ["身份错位"],
+      "result": "pass",
+      "notes": "信息差正在暴露但未完全揭开，属于身份错位的应用场景。B说'每30章暴露一层'，agent应识别这是信息差暴露过程"
+    },
+    {
+      "id": 10,
+      "dimension": "心智模型",
+      "rule": "延迟满足",
+      "type": "should_invoke",
+      "prompt": "写男女主第一次接吻，需要让读者心跳加速",
+      "expected_rules": ["延迟满足"],
+      "result": "pass",
+      "notes": "经典延迟满足场景。A2明确：'写情感高潮/爽点场景，问自己能拆成几步'"
+    },
+    {
+      "id": 11,
+      "dimension": "心智模型",
+      "rule": "延迟满足",
+      "type": "should_not_invoke",
+      "prompt": "写角色吃饭的日常场景，没什么特别的情感节点",
+      "expected_rules": [],
+      "result": "pass",
+      "notes": "不是情感高潮，正确不调用延迟满足"
+    },
+    {
+      "id": 12,
+      "dimension": "心智模型",
+      "rule": "延迟满足",
+      "type": "boundary",
+      "prompt": "写男女主确认关系，男主正式表白",
+      "expected_rules": ["延迟满足"],
+      "result": "fail",
+      "notes": "确认关系是情感节点，但B说'甜宠文3-5步'。确认关系是否需要3-5步？可能只需要1步直接答应。B不够清晰，没有区分'里程碑事件'和'情感爆发点'"
+    },
+    {
+      "id": 13,
+      "dimension": "心智模型",
+      "rule": "微物传情",
+      "type": "should_invoke",
+      "prompt": "写男主默默关心女主，但不想直接表达感情",
+      "expected_rules": ["微物传情"],
+      "result": "pass",
+      "notes": "A2明确：'写情感表达/关系升温场景，问自己这个情感能用什么物件代替'"
+    },
+    {
+      "id": 14,
+      "dimension": "心智模型",
+      "rule": "微物传情",
+      "type": "should_not_invoke",
+      "prompt": "写一场激烈的战斗场景，男主保护女主",
+      "expected_rules": [],
+      "result": "pass",
+      "notes": "战斗场景不涉及情感表达，正确不调用微物传情"
+    },
+    {
+      "id": 15,
+      "dimension": "心智模型",
+      "rule": "微物传情",
+      "type": "boundary",
+      "prompt": "写男主向女主道歉，之前误会了她",
+      "expected_rules": ["微物传情"],
+      "result": "pass",
+      "notes": "道歉是情感表达，对话反模式也说'用具体动作代替道歉'。agent应调用微物传情，用物件代替道歉"
+    },
+    {
+      "id": 16,
+      "dimension": "决策启发式",
+      "rule": "开篇决策-对话开场",
+      "type": "should_invoke",
+      "prompt": "写一个悬疑开篇，需要快速制造紧张感，让读者立刻被吸引",
+      "expected_rules": ["开篇决策-对话开场"],
+      "result": "pass",
+      "notes": "A2明确：'开篇需要快速抓人，用对话或声音开场'"
+    },
+    {
+      "id": 17,
+      "dimension": "决策启发式",
+      "rule": "开篇决策-身份落差",
+      "type": "should_invoke",
+      "prompt": "写一个穿书开篇，女主发现自己是炮灰女配，即将被剧情杀",
+      "expected_rules": ["开篇决策-身份落差"],
+      "result": "pass",
+      "notes": "A2明确：'需要快速建立读者代入感，在第1章前3段内建立身份落差'"
+    },
+    {
+      "id": 18,
+      "dimension": "决策启发式",
+      "rule": "章尾断点-钩子",
+      "type": "should_invoke",
+      "prompt": "这章快结尾了，男女主刚吵完架，怎么让读者必须翻页",
+      "expected_rules": ["章尾断点-钩子"],
+      "result": "pass",
+      "notes": "A2明确：'章节即将结束，在最后3-5行制造钩子'"
+    },
+    {
+      "id": 19,
+      "dimension": "决策启发式",
+      "rule": "信息揭示-分层释放",
+      "type": "should_invoke",
+      "prompt": "开篇需要交代穿越设定、原书剧情、原主背景，信息量很大",
+      "expected_rules": ["信息揭示-分层释放"],
+      "result": "pass",
+      "notes": "A2明确：'开篇建立世界观/引入新设定/复杂背景需要交代，分层释放'"
+    },
+    {
+      "id": 20,
+      "dimension": "决策启发式",
+      "rule": "节奏控制-动作链",
+      "type": "should_invoke",
+      "prompt": "写角色早上起床、洗漱、出门的一系列动作，需要推进节奏",
+      "expected_rules": ["节奏控制-动作链"],
+      "result": "pass",
+      "notes": "A2明确：'日常生活描写/时间快速推进，用动作链推进'"
+    },
+    {
+      "id": 21,
+      "dimension": "决策启发式",
+      "rule": "节奏控制-喜剧对冲",
+      "type": "should_invoke",
+      "prompt": "刚写完一段虐心场景，角色情绪很低落，下一段怎么处理",
+      "expected_rules": ["节奏控制-喜剧对冲"],
+      "result": "pass",
+      "notes": "A2明确：'情感高潮后需要缓解情绪，用喜剧场景对冲'"
+    },
+    {
+      "id": 22,
+      "dimension": "决策启发式",
+      "rule": "角色决策-重复动作",
+      "type": "should_invoke",
+      "prompt": "展示男主内心纠结要不要表白，反复犹豫",
+      "expected_rules": ["角色决策-重复动作"],
+      "result": "pass",
+      "notes": "A2明确：'需要展示角色内心纠结，用重复小动作代替心理描写'"
+    },
+    {
+      "id": 23,
+      "dimension": "决策启发式",
+      "rule": "角色决策-言行不一",
+      "type": "should_invoke",
+      "prompt": "展示男主嘴上说不在乎女主，但行动上处处照顾她",
+      "expected_rules": ["角色决策-言行不一"],
+      "result": "pass",
+      "notes": "A2明确：'需要展示角色真实情感但不想让TA直接说，用言行不一'"
+    },
+    {
+      "id": 24,
+      "dimension": "决策启发式",
+      "rule": "冲突设计-第三方摊牌",
+      "type": "should_invoke",
+      "prompt": "需要揭露女主穿越身份，但不想让男主直接质问，想更有戏剧性",
+      "expected_rules": ["冲突设计-第三方摊牌"],
+      "result": "pass",
+      "notes": "A2明确：'需要揭露秘密但不想让当事人直接冲突，引入第三方摊牌'"
+    },
+    {
+      "id": 25,
+      "dimension": "决策启发式",
+      "rule": "爽点设计-极端选择",
+      "type": "should_invoke",
+      "prompt": "逼男主说出真心话，让他无法回避自己的感情",
+      "expected_rules": ["爽点设计-极端选择"],
+      "result": "pass",
+      "notes": "A2明确：'情感高潮需要逼出角色真心，设计非A即B的极端选择'"
+    },
+    {
+      "id": 26,
+      "dimension": "节奏直觉",
+      "rule": "读者预期管理",
+      "type": "should_invoke",
+      "prompt": "女主被反派要求离开男主，给50万，读者预期她会拒绝，但我想反套路",
+      "expected_rules": ["读者预期管理"],
+      "result": "pass",
+      "notes": "A2明确：'读者有明确预期的场景/套路化剧情节点，用反套路打破预期'"
+    },
+    {
+      "id": 27,
+      "dimension": "节奏直觉",
+      "rule": "情绪曲线控制",
+      "type": "should_invoke",
+      "prompt": "女主刚被当众羞辱，情绪很低落，需要情感释放",
+      "expected_rules": ["情绪曲线控制"],
+      "result": "pass",
+      "notes": "A2明确：'角色遭遇不公或苦难后需要情感释放，用负面→正面→升华三段式'"
+    },
+    {
+      "id": 28,
+      "dimension": "节奏直觉",
+      "rule": "信息差设计",
+      "type": "should_invoke",
+      "prompt": "穿越文女主知道原书剧情但装不知道，需要制造持续张力",
+      "expected_rules": ["信息差设计"],
+      "result": "pass",
+      "notes": "A2明确：'穿越/重生文的身份隐瞒，建立信息差，制造潜台词层'"
+    },
+    {
+      "id": 29,
+      "dimension": "节奏直觉",
+      "rule": "打断节奏",
+      "type": "should_invoke",
+      "prompt": "亲密场景即将失控，两人越靠越近",
+      "expected_rules": ["打断节奏"],
+      "result": "pass",
+      "notes": "A2明确：'亲密场景即将失控，用意外事件打断'"
+    },
+    {
+      "id": 30,
+      "dimension": "节奏直觉",
+      "rule": "空间对比",
+      "type": "should_invoke",
+      "prompt": "展示男女主不是一个世界的人，女主住出租屋，男主住别墅",
+      "expected_rules": ["空间对比"],
+      "result": "pass",
+      "notes": "A2明确：'展示阶级差异/强调不是一个世界的人，用空间对比强化情感落差'"
+    },
+    {
+      "id": 31,
+      "dimension": "节奏直觉",
+      "rule": "反问链推进",
+      "type": "should_invoke",
+      "prompt": "写男女主关系定义的对话，女主问男主'我们是什么关系'",
+      "expected_rules": ["反问链推进"],
+      "result": "pass",
+      "notes": "A2明确：'关系定义场景/试探对方态度，用反问链推进对话深度'"
+    },
+    {
+      "id": 32,
+      "dimension": "节奏直觉",
+      "rule": "承诺兑现节奏",
+      "type": "should_invoke",
+      "prompt": "女主穿越身份的伏笔埋了30章了，该回收了",
+      "expected_rules": ["承诺兑现节奏"],
+      "result": "pass",
+      "notes": "A2明确：'伏笔需要回收时，用第三方介入、意外发现、主动摊牌等方式揭开'"
+    },
+    {
+      "id": 33,
+      "dimension": "表达DNA",
+      "rule": "短句动作链",
+      "type": "should_invoke",
+      "prompt": "写角色快速起床、穿衣、出门的一系列动作",
+      "expected_rules": ["短句动作链"],
+      "result": "pass",
+      "notes": "A2明确：'角色执行日常动作/需要快速推进时间，用短句动作链'"
+    },
+    {
+      "id": 34,
+      "dimension": "表达DNA",
+      "rule": "口语化内心独白",
+      "type": "should_invoke",
+      "prompt": "女主发现男主居然是书中大反派，需要表达震惊",
+      "expected_rules": ["口语化内心独白"],
+      "result": "pass",
+      "notes": "A2明确：'角色遇到荒诞/离谱情况，用口语化内心独白'"
+    },
+    {
+      "id": 35,
+      "dimension": "表达DNA",
+      "rule": "口语化内心独白",
+      "type": "boundary",
+      "prompt": "古言文中女主遇到荒诞情况，需要用内心独白表达震惊",
+      "expected_rules": ["口语化内心独白"],
+      "result": "fail",
+      "notes": "B说'古言文中慎用现代网络词'，但'慎用'不够明确。agent可能仍用现代网络梗（如'好家伙'），或不知道用什么替代。需要补充古言文的替代方案"
+    },
+    {
+      "id": 36,
+      "dimension": "表达DNA",
+      "rule": "感官细节替代直述",
+      "type": "should_invoke",
+      "prompt": "写男女主心动瞬间，不想直接说'她心动了'",
+      "expected_rules": ["感官细节替代直述"],
+      "result": "pass",
+      "notes": "A2明确：'亲密场景的氛围营造/角色产生好感/心动，用感官细节替代直述'"
+    },
+    {
+      "id": 37,
+      "dimension": "表达DNA",
+      "rule": "具体细节传递情感",
+      "type": "should_invoke",
+      "prompt": "写男主为女主花钱，但不想写得像炫富",
+      "expected_rules": ["具体细节传递情感"],
+      "result": "pass",
+      "notes": "A2明确：'男主默默付出的展示/情感高潮的具象化表达，用具体物件/金额'"
+    },
+    {
+      "id": 38,
+      "dimension": "表达DNA",
+      "rule": "留白比明说更有力",
+      "type": "should_invoke",
+      "prompt": "情感爆发后，角色克制住了，没有说出心里话",
+      "expected_rules": ["留白比明说更有力"],
+      "result": "pass",
+      "notes": "A2明确：'情感爆发后的克制，用留白代替明说'"
+    },
+    {
+      "id": 39,
+      "dimension": "表达DNA",
+      "rule": "打断节奏制造转折",
+      "type": "should_invoke",
+      "prompt": "告白进行中，气氛正好，但想制造一个转折",
+      "expected_rules": ["打断节奏制造转折"],
+      "result": "pass",
+      "notes": "A2明确：'告白被打断，用意外事件打断'"
+    },
+    {
+      "id": 40,
+      "dimension": "表达DNA",
+      "rule": "留白比明说更有力",
+      "type": "boundary",
+      "prompt": "写暧昧阶段的对话，两人互相试探但都不明说",
+      "expected_rules": ["留白比明说更有力"],
+      "result": "pass",
+      "notes": "A2说'情感爆发后的克制/角色有难言之隐/结局的余韵处理'，暧昧对话不属于这三个场景。agent正确判断不调用，或调用但用潜台词代替留白"
+    },
+    {
+      "id": 41,
+      "dimension": "反模式",
+      "rule": "词汇反模式",
+      "type": "should_trigger",
+      "prompt": "检查这段文本：'此外，她感到害怕。因而，她决定逃跑。综上所述，她必须离开。'",
+      "expected_rules": ["词汇反模式"],
+      "result": "pass",
+      "notes": "包含'此外''因而''综上所述'，是AI最明显的连接词痕迹"
+    },
+    {
+      "id": 42,
+      "dimension": "反模式",
+      "rule": "句式反模式",
+      "type": "should_trigger",
+      "prompt": "检查这段文本：'她站起来。她走过去。她打开门。她看了看外面。她深吸一口气。'",
+      "expected_rules": ["句式反模式"],
+      "result": "pass",
+      "notes": "连续5句用'她'开头，违反'连续3句以上用相同句式开头'的规则"
+    },
+    {
+      "id": 43,
+      "dimension": "反模式",
+      "rule": "结构反模式",
+      "type": "should_trigger",
+      "prompt": "开篇一次性交代所有背景设定：穿越原因、原书剧情、原主身份、当前困境、男主信息",
+      "expected_rules": ["结构反模式"],
+      "result": "pass",
+      "notes": "违反'一次性交代所有背景设定'的反模式，应该分层释放"
+    },
+    {
+      "id": 44,
+      "dimension": "反模式",
+      "rule": "情节反模式",
+      "type": "should_trigger",
+      "prompt": "设计一个冲突：女主想解释误会，但男主不听，说'你不用解释了'",
+      "expected_rules": ["情节反模式"],
+      "result": "pass",
+      "notes": "违反'靠你不听我解释制造冲突'的反模式，应该用身份错位/信息差替代"
+    },
+    {
+      "id": 45,
+      "dimension": "反模式",
+      "rule": "角色反模式",
+      "type": "should_trigger",
+      "prompt": "女主善良无瑕，为爱无条件牺牲，没有任何缺点",
+      "expected_rules": ["角色反模式"],
+      "result": "pass",
+      "notes": "违反'女主善良无瑕/为爱无条件牺牲'的反模式"
+    },
+    {
+      "id": 46,
+      "dimension": "反模式",
+      "rule": "对话反模式",
+      "type": "should_trigger",
+      "prompt": "角色犯错后长篇解释：'对不起，我错了，我不应该那样做，我当时是因为……'",
+      "expected_rules": ["对话反模式"],
+      "result": "pass",
+      "notes": "违反'角色犯错后长篇解释/道歉'的反模式，应该用具体动作代替"
+    },
+    {
+      "id": 47,
+      "dimension": "去AI策略",
+      "rule": "删连接词",
+      "type": "should_apply",
+      "prompt": "文本中有'然而''此外''因此''综上所述'，需要去AI处理",
+      "expected_rules": ["删连接词"],
+      "result": "pass",
+      "notes": "P0优先级，明确需要删除或替换为口语化连接"
+    },
+    {
+      "id": 48,
+      "dimension": "去AI策略",
+      "rule": "拆长句",
+      "type": "should_apply",
+      "prompt": "这个句子32字：'她迅速地环顾四周，试图寻找可以逃脱的路线，但是却发现所有的出口都被堵死了。'",
+      "expected_rules": ["拆长句"],
+      "result": "pass",
+      "notes": "超过25字，P0优先级，需要在逗号处拆分"
+    },
+    {
+      "id": 49,
+      "dimension": "去AI策略",
+      "rule": "加模糊词",
+      "type": "should_apply",
+      "prompt": "心理活动：'她必然知道真相，显然所有人都在隐瞒，无疑这是个骗局。'",
+      "expected_rules": ["加模糊词"],
+      "result": "pass",
+      "notes": "包含'必然''显然''无疑'，P1优先级，需要替换为'好像''似乎''大概'"
+    },
+    {
+      "id": 50,
+      "dimension": "去AI策略",
+      "rule": "加微重复",
+      "type": "boundary",
+      "prompt": "写一个平淡的日常场景，角色在做饭",
+      "expected_rules": ["加微重复"],
+      "result": "fail",
+      "notes": "A2说'情绪激动处用词语重复'，但平淡场景不适用。agent可能误判为需要加微重复，或正确判断不需要。B不够清晰，没有说明'非情绪场景不需要微重复'"
+    }
+  ]
+}
