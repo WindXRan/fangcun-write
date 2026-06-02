@@ -224,7 +224,7 @@ Phase 5    合成输出 → 生成 SKILL.md + meta.json
 
 ### Subagent 任务表
 
-**并行** spawn 12 个 Task sub-agents：
+**并行** spawn 15 个 Task sub-agents：
 
 | subagent | 读取的 prompt | 读取的数据 | 产出文件 |
 |----------|--------------|-----------|---------|
@@ -238,8 +238,11 @@ Phase 5    合成输出 → 生成 SKILL.md + meta.json
 | 8 去AI策略 | `extractors/de-ai-extractor.md` | `sources/*.txt` + `de-ai-modules/*.md` | `candidates/de-ai-strategy.md` |
 | 9 爽点分布 | `extractors/satisfaction-point-extractor.md` | `book-overviews/*.md` + `sources/*.txt` | `candidates/satisfaction-points.md` |
 | 10 评分模型 | `extractors/scoring-model-extractor.md` | `book-overviews/*.md` + `candidates/*.md` + `sources/*.txt` | `candidates/scoring-model.md` |
-| **11 审稿人格** | `extractors/review-persona-extractor.md` | `book-overviews/*.md` + `sources/*.txt` + `candidates/*.md` | `candidates/review-persona.md` |
-| **12 修改能力** | `extractors/revision-capability-extractor.md` | `book-overviews/*.md` + `sources/*.txt` + `candidates/*.md` + `candidates/review-persona.md` | `candidates/revision-capability.md` |
+| **11 审稿红线** | `extractors/review-redline-extractor.md` | `book-overviews/*.md` + `sources/*.txt` + `candidates/anti-patterns.md` | `candidates/review-redlines.md` |
+| **12 修改处方** | `extractors/edit-prescription-extractor.md` | `book-overviews/*.md` + `sources/*.txt` + `candidates/*.md` | `candidates/edit-prescriptions.md` |
+| **13 质量阈值** | `extractors/quality-threshold-extractor.md` | `sources/*.txt` + `book-overviews/*.md` + `writing-samples-*.md` | `candidates/quality-thresholds.md` |
+| **14 审稿人格** | `extractors/review-persona-extractor.md` | `book-overviews/*.md` + `sources/*.txt` + `candidates/*.md` | `candidates/review-persona.md` |
+| **15 修改能力** | `extractors/revision-capability-extractor.md` | `book-overviews/*.md` + `sources/*.txt` + `candidates/*.md` + `candidates/review-persona.md` | `candidates/revision-capability.md` |
 
 **增强维度说明**：
 - 提取器1（心智模型）增加了「人设架构」子维度（角色首次出场+核心特质+动机+弧光+关系网）
