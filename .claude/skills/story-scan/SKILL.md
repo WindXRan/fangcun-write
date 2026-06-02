@@ -142,3 +142,34 @@ FanqieZhiShu/
 ├── api/latest/                 # 静态 API
 └── *.html                      # 看板页面
 ```
+
+---
+
+## 与 story-rewrite 集成
+
+`market-data/番茄女频市场数据.json` 是 rewrite 直接消费的市场数据文件，位于本 skill 目录下。
+
+### 数据接口
+
+| 字段 | 类型 | 用途 | rewrite 消费场景 |
+|------|------|------|-----------------|
+| `hot_genres` | array | 热门题材热度排行 | Phase 1 新书方案选题材 |
+| `title_patterns` | object | 书名命名模式+示例 | Phase 1 新书方案定书名 |
+| `tag_combinations` | object | 标签组合公式 | Phase 1 新书方案配标签 |
+| `golden_three` | object | 黄金三章标准 | Phase 1.5 前3章检查 |
+| `chapter_spec` | object | 章节字数/节奏标准 | Phase 2 写作参数 |
+| `current_top_authors` | array | 顶流作者参考 | story-distill 蒸馏目标 |
+
+### 更新方式
+
+手动更新（爬虫数据产出后手动更新此文件）或：
+```bash
+# 从爬虫数据转换（待实现适配脚本）
+python scripts/adapt_for_rewrite.py data/latest_female_new_ranks.json market-data/番茄女频市场数据.json
+```
+
+### 集成流程
+
+```
+story-scan 采集数据 → build 分析 → adapt_for_rewrite 转换 → market-data/*.json → story-rewrite Phase 1 读取
+```
