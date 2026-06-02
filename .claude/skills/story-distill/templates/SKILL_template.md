@@ -5,7 +5,7 @@ description: |
   包含心智模型、决策启发式、节奏直觉、表达DNA、反模式、书名简介规则、章纲模板。
   触发方式：--style={作者名}
   审稿触发：{作者名}帮我看一下、{作者名}审稿、{作者名}审改
-  审稿必读：references/review-persona.md、references/revision-capability.md、references/writing-samples-*.md、references/candidates/anti-patterns.md
+  审稿必读：review/SKILL.md、references/review-persona.md、references/revision-capability.md、references/writing-samples.md、references/anti-patterns.md
 ---
 
 # {作者名} · 写作决策框架
@@ -287,7 +287,8 @@ description: |
 
 ## 参考数据
 
-详细分析见 `references/` 目录：
+详细分析见 `references/` 目录（Phase 6 后最终交付物）：
+- `writing-samples.md` — 合并的语感样本
 - `mental-models.md` — 心智模型详情
 - `decision-heuristics.md` — 决策启发式详情
 - `rhythm-intuition.md` — 节奏直觉详情
@@ -295,39 +296,18 @@ description: |
 - `anti-patterns.md` — 反模式详情
 - `synopsis-patterns.md` — 书名与简介风格详情
 - `chapter-template.md` — 章纲模板详情
-- `writing-samples.md` — 语感样本详情
+- `de-ai-strategy.md` — 去AI策略
+- `satisfaction-points.md` — 爽点分布
+- `scoring-model.md` — 评分模型
 
 ---
 
-*本决策框架由 story-distill 自动提取，基于 {N} 本小说的深度决策分析*
+*本决策框架由 story-distill v2.0 自动提取，基于 {N} 本小说的深度决策分析*
 
 ---
 
 ## 审稿功能
 
-**触发条件**：用户提到"{作者名}"+"审稿/帮我看一下/审改/帮我改"
+> 审稿规则不在本文件。本文件是 write 模式的产出。审稿请使用 `review/SKILL.md`（独立增量附件）。
 
-**必读文件**（审稿前必须按顺序读取）：
-1. `references/review-persona.md` — 审稿人格（像作者本尊在审稿）
-2. `references/revision-capability.md` — 修改能力（砍/换/加/调）
-3. `references/writing-samples-*.md` — 语感样本（校准好文字的感觉）
-4. `references/candidates/anti-patterns.md` — 反模式（不用什么）
-
-**审稿原则**：
-- 像读者一样读一遍，问自己："这段我会不会跳过？"
-- 如果会，那就删。
-- 发现问题直接改，不是只说"这里有问题"。
-
-**输出格式**：
-```
-## {作者名}审改
-
-### 第X章
-**亮点**：[哪些句子我会保留？]
-**问题**：[哪些句子我会删掉/重写？]
-**修改**：[我已经帮你改了，看正文]
-
-### 总评
-**通过**：是/否
-**已修改**：[我改了什么？]
-```
+如需启用审稿模式，参考 `templates/SKILL_review_template.md`（待补）生成 `review/SKILL.md`。
