@@ -225,10 +225,54 @@ Phase 1 完成后直接开始，不等确认。
 
 ## 字数标准
 
+### 统一字数统计规范
+
+**所有字数统计必须使用统一模块 `tools/word_count.py`**
+
+```python
+# 导入方式
+from word_count import count_chapter_words, count_words, MODE_STANDARD
+
+# 统计章节字数
+chars = count_chapter_words(text, MODE_STANDARD)
+
+# 详细统计
+stats = count_words(text, MODE_STANDARD)
+# 返回: {'total': 2200, 'chinese': 1800, 'punctuation': 200, ...}
+```
+
+**统计模式**：
+- `standard`（默认）：中文字符+中文标点+英文单词+数字位数（网文平台标准）
+- `strict`：仅中文字符+中文标点+省略号+破折号
+- `loose`：所有可见字符
+
+**统计规则**：
+| 类型 | 统计规则 |
+|------|----------|
+| 中文字符 | 1字/字（\u4e00-\u9fff） |
+| 中文标点 | 1字/个（，。！？、；：""''【】《》（）） |
+| 省略号…… | 1字/组 |
+| 破折号—— | 1字/组 |
+| 英文单词 | 1字/词 |
+| 数字 | 1字/位 |
+| 空格/换行 | 不计 |
+
+### 章节字数要求
+
 - 目标：2200 字/章
 - 范围：1800-2600 字
 - 硬上限：3000 字（按段落边界截断到 2950）
 - 硬下限：1600 字（低于则标记补写）
+
+### 字数校验命令
+
+```bash
+# 统计单个文件
+python tools/word_count.py <文件路径>
+
+# 统计试水库
+python tools/wordcount.py
+```
 
 ---
 
