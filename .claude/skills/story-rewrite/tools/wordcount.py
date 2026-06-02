@@ -25,23 +25,30 @@ def main():
     with open(filepath, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # 按章节分割
-    chapters = re.split(r'第[123]章\s+\S+\n[-=]{20,}\n', content)
+    # 章节名模式：支持"第X章"和"番外"等格式
+    # 匹配：第1章、第123章、番外、番外一、番外1、新春番外、番外·xxx 等
+    chapter_pattern = r'(第\d+章|番外[一二三四五六七八九十百千\d]*|新春番外|蛇年新春番外|现代番外|番外[·\-].+?)(\s+\S+)?'
 
-    # 找到各章内容
-    ch_markers = re.findall(r'(第[123]章\s+\S+)\n[-=]{20,}\n', content)
+    # 按章节分割（分隔符为20个以上短横线或等号）
+    chapters = re.split(r'\n[-=]{20,}\n', content)
+
+    # 找到各章内容（匹配章节标题行）
+    ch_markers = []
+    for line in content.split('\n'):
+        line = line.strip()
+        if re.match(chapter_pattern, line):
+            ch_markers.append(line)
 
     results = []
     for i, marker in enumerate(ch_markers):
-        ch_num = marker[1]  # 1, 2, 3
-        if i + 1 < len(chapters):
-            # 找到下一章或后续方向之前的文本
+        if i < len(chapters) - 1:
+            # 章节内容在分隔符之后
             ch_text = chapters[i + 1]
             # 去掉末尾的分隔符和后续方向
             ch_text = re.split(r'\n[-=]{20,}\n|\n={40,}\n', ch_text)[0]
             # 使用统一字数统计
             chars = count_chapter_words(ch_text, MODE_STANDARD)
-            results.append(f"Ch{ch_num}={chars}")
+            results.append(f"{marker}={chars}")
 
     print(" | ".join(results))
 
