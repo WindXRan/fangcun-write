@@ -5,6 +5,7 @@ description: |
   包含心智模型、决策启发式、节奏直觉、表达DNA、反模式、书名简介规则、章纲模板。
   触发方式：--style=初点点
   审稿触发：初点点帮我看一下、初点点审稿、初点点审改
+  审稿必读：references/review-persona.md、references/revision-capability.md、references/writing-samples-*.md、references/candidates/anti-patterns.md
 ---
 
 # 初点点 · 写作决策框架
