@@ -4,7 +4,8 @@ description: |
   {作者名}写作决策框架 · 从{N}本小说中提取的决策规则。
   包含心智模型、决策启发式、节奏直觉、表达DNA、反模式、书名简介规则、章纲模板。
   触发方式：--style={作者名}
-  审稿触发：{作者名}帮我看一下、{作者名}审稿（详见review/SKILL.md）
+  审稿触发：{作者名}帮我看一下、{作者名}审稿、{作者名}审改
+  审稿必读：references/review-persona.md、references/revision-capability.md、references/writing-samples-*.md、references/candidates/anti-patterns.md
 ---
 
 # {作者名} · 写作决策框架
