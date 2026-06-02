@@ -222,9 +222,9 @@ Phase 5    合成输出 → 生成 SKILL.md + meta.json
 
 **目的**：从精读场景中提取决策框架
 
-### Subagent 任务表（write 模式）
+### Subagent 任务表
 
-**并行** spawn 10 个 Task sub-agents：
+**并行** spawn 12 个 Task sub-agents：
 
 | subagent | 读取的 prompt | 读取的数据 | 产出文件 |
 |----------|--------------|-----------|---------|
@@ -236,34 +236,16 @@ Phase 5    合成输出 → 生成 SKILL.md + meta.json
 | 6 书名简介 | `extractors/synopsis-extractor.md` | 每本书的书名+简介+标签 | `candidates/synopsis-patterns.md` |
 | 7 章纲模板+钩子分析 | `extractors/chapter-parser.md` | `sources/*.txt` | `candidates/chapter-template.md` |
 | 8 去AI策略 | `extractors/de-ai-extractor.md` | `sources/*.txt` + `de-ai-modules/*.md` | `candidates/de-ai-strategy.md` |
-| **9 爽点分布** | `extractors/satisfaction-point-extractor.md` | `book-overviews/*.md` + `sources/*.txt` | `candidates/satisfaction-points.md` |
-| **10 评分模型** | `extractors/scoring-model-extractor.md` | `book-overviews/*.md` + `candidates/*.md` + `sources/*.txt` | `candidates/scoring-model.md` |
+| 9 爽点分布 | `extractors/satisfaction-point-extractor.md` | `book-overviews/*.md` + `sources/*.txt` | `candidates/satisfaction-points.md` |
+| 10 评分模型 | `extractors/scoring-model-extractor.md` | `book-overviews/*.md` + `candidates/*.md` + `sources/*.txt` | `candidates/scoring-model.md` |
+| **11 审稿人格** | `extractors/review-persona-extractor.md` | `book-overviews/*.md` + `sources/*.txt` + `candidates/*.md` | `candidates/review-persona.md` |
+| **12 修改能力** | `extractors/revision-capability-extractor.md` | `book-overviews/*.md` + `sources/*.txt` + `candidates/*.md` + `candidates/review-persona.md` | `candidates/revision-capability.md` |
 
 **增强维度说明**：
 - 提取器1（心智模型）增加了「人设架构」子维度（角色首次出场+核心特质+动机+弧光+关系网）
 - 提取器3（节奏直觉）增加了「节奏曲线」子维度（按章情绪密度+高低点分布+节奏模式）
 - 提取器4（表达DNA）增加了「动作电影感」「对话层次」「环境情绪映射」3个子维度
 - 提取器7（章纲模板）增加了「钩子类型分析」子维度（章首/章尾钩子分类+频率分布）
-
-### Subagent 任务表（review 模式）
-
-**并行** spawn 15 个 Task sub-agents（上述 10 个 + 下述 5 个）：
-
-| subagent | 读取的 prompt | 读取的数据 | 产出文件 |
-|----------|--------------|-----------|---------|
-| 1-10 | 同 write 模式 | 同 write 模式 | 同 write 模式 |
-| 11 审稿红线 | `extractors/review-redline-extractor.md` | `book-overviews/*.md` + `sources/*.txt` + `candidates/anti-patterns.md` | `candidates/review-redlines.md` |
-| 12 修改处方 | `extractors/edit-prescription-extractor.md` | `book-overviews/*.md` + `sources/*.txt` + `candidates/*.md` | `candidates/edit-prescriptions.md` |
-| 13 质量阈值 | `extractors/quality-threshold-extractor.md` | `sources/*.txt` + `book-overviews/*.md` + `writing-samples-*.md` | `candidates/quality-thresholds.md` |
-| 14 审稿人格 | `extractors/review-persona-extractor.md` | `book-overviews/*.md` + `sources/*.txt` + `candidates/*.md` | `candidates/review-persona.md` |
-| 15 修改能力 | `extractors/revision-capability-extractor.md` | `book-overviews/*.md` + `sources/*.txt` + `candidates/*.md` + `candidates/review-persona.md` | `candidates/revision-capability.md` |
-
-**review 模式的 5 个新提取器**：
-- **审稿红线**：从反模式中提炼「什么级别的问题直接打回修改」（严重等级+判定标准）
-- **修改处方**：从作者的修改痕迹中推断「发现某类问题时怎么改」（改前改后示例）
-- **质量阈值**：用脚本统计量化指标，设定告警阈值（自动检测用）
-- **审稿人格**：提取作者的审稿风格——她审稿时关注什么、怎么判断、语气如何（像真人编辑）
-- **修改能力**：提取作者的修改风格——她发现问题后会怎么改（砍/换/加/调，审改一体）
 
 ### Subagent prompt 模板
 
