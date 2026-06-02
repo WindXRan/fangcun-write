@@ -1,34 +1,116 @@
-# 输出模板规范
+# 输出模板规范（v2.0）
 
 ## 概述
 
 story-distill 的输出必须符合 story-style 的格式要求，确保 story-rewrite 能正确读取。
 
+**v2.0 变更**：引入 `.distill/` 工作目录概念。Phase 2-5 中间产物全部写到 `.distill/` 子目录，Phase 6 Consolidation 收口时合并到正式位置并删除 `.distill/`。
+
 ---
 
-## 输出目录结构
+## 双层目录结构
+
+### 概念
+
+| 层 | 路径 | 生命周期 | 内容 |
+|----|------|---------|------|
+| **交付层** | `references/`、`review/` | 永久 | 最终交付物，被 story-rewrite 读取 |
+| **工作层** | `.distill/` | 临时，Phase 6 删除 | Phase 1-5 中间产物 |
+
+工作层和交付层物理隔离，避免：
+- candidates/ 与 references/ 重复占用
+- rejected/ 误导 story-rewrite 误读
+- sources/ 占用磁盘
+
+---
+
+## 交付层（最终形态）
+
+### write 模式（14 个文件）
 
 ```
 .claude/skills/story-style/{作者名}/
-├── SKILL.md                    # 决策框架（RIA++结构，必需）
-├── meta.json                   # 量化数据（必需）
-├── test-prompts.json           # 压力测试（可选）
-├── references/                 # 详细分析（必需）
-│   ├── book-overviews/         # 每本书的结构分析
-│   ├── mental-models.md        # 心智模型（附原文引用）
-│   ├── decision-heuristics.md  # 决策启发式（附原文引用）
-│   ├── rhythm-intuition.md     # 节奏直觉（附原文引用）
-│   ├── expression-dna.md       # 表达DNA（附原文引用）
-│   ├── anti-patterns.md        # 反模式（附原文引用）
-│   ├── synopsis-patterns.md    # 书名与简介风格（附原文示例）
-│   ├── chapter-template.md     # 章纲模板（附原文引用）
-│   ├── writing-samples.md      # 语感样本（附出处标注）
-│   ├── de-ai-strategy.md       # 去AI策略（预选模块+阈值）
-│   ├── candidates/             # 提取器原始产出 + 通过验证的规则
-│   └── rejected/               # 淘汰的规则+原因（审计用）
-└── sources/                    # 原文备份（可选）
-    └── {book_name}.txt
+├── SKILL.md                          # 写作决策框架（15-20KB）
+├── meta.json                         # 量化数据
+├── test-prompts.json                 # 验证产物（可选）
+└── references/                       # 11 个
+    ├── writing-samples.md
+    ├── mental-models.md
+    ├── decision-heuristics.md
+    ├── rhythm-intuition.md
+    ├── expression-dna.md
+    ├── anti-patterns.md
+    ├── synopsis-patterns.md
+    ├── chapter-template.md
+    ├── de-ai-strategy.md
+    ├── satisfaction-points.md
+    └── scoring-model.md
 ```
+
+### review 模式（21 个文件）
+
+```
+.claude/skills/story-style/{作者名}/
+├── SKILL.md
+├── meta.json
+├── test-prompts.json
+├── review/                           # 2 个
+│   ├── SKILL.md
+│   └── meta.json
+└── references/                       # 16 个
+    ├── （write 模式的 11 个）
+    ├── review-redlines.md
+    ├── edit-prescriptions.md
+    ├── quality-thresholds.md
+    ├── review-persona.md
+    └── revision-capability.md
+```
+
+---
+
+## 工作层（Phase 6 收口前形态）
+
+```
+.claude/skills/story-style/{作者名}/
+└── .distill/
+    ├── book-overviews/                # Phase 1 产出
+    │   └── {书名}.md                  # 6 本书 = 6 文件
+    ├── writing-samples-*.md           # Phase 1 产出（每本一个）
+    ├── candidates/                    # Phase 2 原始产出
+    │   ├── mental-models.md
+    │   ├── decision-heuristics.md
+    │   ├── ... (10 个 write 维度)
+    │   ├── review-redlines.md         # review 模式
+    │   └── ... (5 个 review 维度)
+    ├── constructed/                   # Phase 4 RIA++ 终版
+    │   └── （同 candidates 结构）
+    ├── rejected/                      # Phase 3 淘汰
+    │   ├── cross-book.md
+    │   ├── frequency.md
+    │   └── uniqueness.md
+    └── sources/                       # 原文备份
+        └── {书名}.txt
+```
+
+**禁止**：在工作层和交付层同时存在同名文件。Phase 6 必须保证工作层被清空。
+
+---
+
+## 迁移对照表（v1.0 → v2.0）
+
+| v1.0 路径 | v2.0 路径 | 迁移动作 |
+|----------|----------|---------|
+| `references/candidates/X.md` | `.distill/candidates/X.md`（Phase 2-5）→ 验证后丢弃 | 不保留 |
+| `references/rejected/X.md` | `.distill/rejected/X.md` | 不保留 |
+| `references/constructed/X.md` | `.distill/constructed/X.md` | Phase 6 合并到 `references/X.md` |
+| `references/constructed/constructed-X.md` | 删（与 X.md 重复） | 不保留 |
+| `references/book-overviews/X.md` | `.distill/book-overviews/X.md` | 不保留 |
+| `references/writing-samples-{书名}.md` | `.distill/writing-samples-{书名}.md` | 合并为 `references/writing-samples.md` |
+| `references/writing-samples.md` | 同 v2.0 | 保留 |
+| `references/X.md`（11 个维度） | 同 v2.0 | 保留 |
+| `sources/{书名}.txt` | `.distill/sources/{书名}.txt` | 不保留 |
+| 无 | `review/SKILL.md` | review 模式新增 |
+| 无 | `test-prompts.json` | verify 阶段新增（v1.0 也有但散落） |
 
 ---
 

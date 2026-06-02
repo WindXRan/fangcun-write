@@ -119,7 +119,7 @@
 2. 对每个场景做「四步分析」（结构/解释/批判/应用）
 3. 提取「心智模型」
 
-**输出**：`references/mental-models.md`
+**输出**：`.distill/candidates/mental-models.md`
 
 ### 提取器 2：决策启发式提取器
 
@@ -139,7 +139,7 @@
 2. 分析「触发条件」——什么导致了变化
 3. 提取「决策规则」——如果X，则Y
 
-**输出**：`references/decision-heuristics.md`
+**输出**：`.distill/candidates/decision-heuristics.md`
 
 ### 提取器 3：节奏直觉提取器
 
@@ -157,7 +157,7 @@
 3. 分析「情绪曲线」——应该上升还是下降
 4. 分析「信息差」——读者知道什么不知道什么
 
-**输出**：`references/rhythm-intuition.md`
+**输出**：`.distill/candidates/rhythm-intuition.md`
 
 ### 提取器 4：表达DNA提取器
 
@@ -176,7 +176,7 @@
 3. 分析「情绪表达」——直接命名还是行为展示
 4. 分析「对话原则」——对话的目的是什么
 
-**输出**：`references/expression-dna.md`
+**输出**：`.distill/candidates/expression-dna.md`
 
 ### 提取器 5：反模式提取器
 
@@ -195,7 +195,7 @@
 2. 分析「为什么」——为什么不做
 3. 提取「反模式」——决策禁区
 
-**输出**：`references/anti-patterns.md`
+**输出**：`.distill/candidates/anti-patterns.md`
 
 ### 提取器 6：书名简介提取器
 
@@ -214,11 +214,11 @@
 3. 分析简介的信息排列顺序
 4. 分析结尾钩子的类型
 
-**输出**：`references/synopsis-patterns.md`
+**输出**：`.distill/candidates/synopsis-patterns.md`
 
 ### 提取器 7：章纲模板提取器
 
-**输入**：`sources/*.txt`
+**输入**：`.distill/sources/*.txt`
 
 **提取维度**：
 - 章节命名模式
@@ -232,11 +232,11 @@
 2. 抽取每章首段和末段，分析开篇方式和断点方式
 3. 统计每章核心事件数量
 
-**输出**：`references/chapter-template.md`
+**输出**：`.distill/candidates/chapter-template.md`
 
 ### 提取器 8：去AI策略提取器
 
-**输入**：`sources/*.txt` + `de-ai-modules/*.md`
+**输入**：`.distill/sources/*.txt` + `de-ai-modules/*.md`
 
 **提取维度**：
 - 连接词频率
@@ -253,7 +253,7 @@
 2. 对照 de-ai-modules 的每个模块触发条件
 3. 选择 3-5 个匹配度最高的模块
 
-**输出**：`references/candidates/de-ai-strategy.md`
+**输出**：`.distill/candidates/de-ai-strategy.md`
 
 ---
 
@@ -293,7 +293,18 @@
 | **E**（可执行步骤） | 具体怎么执行 |
 | **B**（边界与盲点） | 这个规则的局限性 |
 
+**输出**：`.distill/constructed/{维度}.md`（10 个 write 维度 + 5 个 review 维度）
+
 详见 `ria-construction.md`
+
+---
+
+## Phase 5：合成输出 + Phase 6：Consolidation（详见 `post-processing.md`）
+
+Phase 5 从 `.distill/constructed/*.md` 读 RIA++ 终版，合成 `SKILL.md` + `meta.json`。
+Phase 6 跑 5 步清理，把 `.distill/` 整个删掉。
+
+**关键**：所有中间产物（candidates/、constructed/、rejected/、sources/、book-overviews/、writing-samples-*.md）必须从 Phase 2 起就写到 `.distill/` 子目录。Phase 6 的工作就是清理 `.distill/` 并把 RIA++ 终版合并到正式 `references/`。
 
 ---
 
