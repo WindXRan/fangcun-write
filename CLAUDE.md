@@ -29,6 +29,7 @@ story-rewrite（流程引擎）     story-style（知识库）
 | `/story-review`、`/审查` | story-review | 一致性审查 |
 | `/story-scan`、`/番茄扫描` | story-scan | 番茄小说排行榜分析 |
 | `/story-distill`、`/蒸馏`、`/炼丹` | story-distill | 网文作者蒸馏（默认 write 模式，`--mode=review` 生成审稿框架） |
+| `/story-compare`、`/对比` | story-compare | 仿写书与源文逐章对比 |
 
 ## 文件结构
 
