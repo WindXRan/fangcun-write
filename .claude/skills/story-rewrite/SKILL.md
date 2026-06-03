@@ -1,13 +1,13 @@
 ---
 name: story-rewrite
 description: |
-  仿写引擎：学习源文成功因子，用新的人物和场景重新演绎。
-  核心方法论：成功因子提取 + 文风蒸馏 + 结构映射。
+  超级仿写引擎：融合InkOS多Agent管线 + 网文爆款方法论。
+  核心能力：成功因子提取 + 文风蒸馏 + 结构映射 + 33维度审计 + 题材管理 + 去AI系统。
 trigger:
   - /story-rewrite、/仿写
 ---
 
-# story-rewrite：仿写引擎
+# story-rewrite：超级仿写引擎
 
 ## 核心原理
 
@@ -20,6 +20,23 @@ trigger:
 ```
 
 **不是照搬情节，而是学习源文为什么火，然后用新的人物和场景重新演绎。**
+
+---
+
+## 核心能力（对标InkOS）
+
+| 能力 | 说明 | 来源 |
+|------|------|------|
+| **成功因子提取** | 分析源文为什么火 | Story-Rewrite |
+| **文风蒸馏** | 学习源文的写作风格 | Story-Rewrite |
+| **结构映射** | 保留情绪弧线，创新情节 | Story-Rewrite |
+| **33维度审计** | 全面质量检查 | InkOS |
+| **题材管理** | 6个内置题材，fatigue词表+节奏规则 | InkOS |
+| **去AI系统** | 11条规则+5种修订模式+anti-detect | InkOS |
+| **章节意图管理** | 写作前规划 | InkOS |
+| **5个真相文件** | 长期记忆，一致性保障 | InkOS |
+| **血崩检查点** | 防止写到中间失控 | Story-Rewrite |
+| **市场数据集成** | 番茄排行榜数据 | Story-Rewrite |
 
 ---
 
@@ -296,9 +313,37 @@ python style_analyzer.py {书名}/追踪/源文_{start}-{end}.txt
 
 输出：`{书名}/正文/第{N}章.txt`
 
-**并行执行**：
-- 每区间10章，启动10个并行管线
-- 每个管线独立运行
+**并行执行（⚠️ 必须用 Task 工具启动子 agent）**：
+
+```
+⚠️ 禁止主 agent 直接写正文！
+⚠️ 必须使用 Task 工具启动子 agent！
+
+for chapter in range(start, end+1):
+    Task(
+        description=f"写第{chapter}章",
+        subagent_type="general",
+        prompt=f"""
+你是一位专业的网络小说作家。请根据以下信息写第{chapter}章。
+
+【世界设定】请先读取：{书名}/设定/story_bible.md
+【写作规则】请先读取：{书名}/设定/book_rules.md
+【章纲】{本章章纲内容}
+【文风指南】请先读取：{书名}/追踪/蒸馏_{start}-{end}.md
+【真相文件】请先读取：{书名}/真相文件/ 下所有 .md 文件
+
+【输出要求】
+- 输出到：{书名}/正文/第{chapter}章.txt
+- 字数：2000-2500字
+- 必须先读取所有参考文件再开始写作
+"""
+    )
+```
+
+**为什么必须用子 agent**：
+- 并行执行：10章同时写，效率高
+- 上下文隔离：每章独立，不会互相干扰
+- 主 agent 可以继续处理其他任务
 
 ---
 
@@ -319,46 +364,41 @@ python style_analyzer.py {书名}/追踪/源文_{start}-{end}.txt
 
 ## Phase 3：收尾
 
-### 3.1 全书去AI
+### 3.1 全书去AI ⚠️ 对标InkOS
 
-**目标**：清除 AI 写作痕迹，让文字更自然。
+**去AI系统**：`prompts/de-ai-system.md`
 
-**检查清单**：
-- [ ] 删除"首先"、"其次"、"总之"等路标词
-- [ ] 减少"然而"、"但是"、"因此"的过度使用
-- [ ] 删除"仿佛"、"似乎"、"好像"的连续使用
-- [ ] 增加口语化表达和个性化细节
-- [ ] 检查句式是否过于规整
+**包含**：
+- fatigue词表（每个题材独立）
+- 11条确定性规则
+- 5种修订模式（polish/spot-fix/rewrite/rework/anti-detect）
+- anti-detect流程（检测→改写→重检测循环）
+- 跨章重复检测
 
-**方法**：
-1. 逐章扫描，标记疑似 AI 痕迹
-2. 人工或 LLM 修复
-3. 重新检查
-
----
+**执行流程**：
+```
+Step 1: 检测 → detection_report.json
+Step 2: 改写 → revised_chapter.txt
+Step 3: 重检测 → 循环直到通过
+```
 
 ### 3.2 一致性终检
 
-**检查维度**：
+检查：
+- 角色一致性
+- 世界观一致性
+- 时间线一致性
+- 伏笔回收
 
-| 维度 | 检查内容 |
-|------|----------|
-| 角色一致性 | 角色言行是否符合人设，有无崩塌 |
-| 世界观一致性 | 是否与 story_bible.md 设定一致 |
-| 时间线一致性 | 时间线是否正确，有无矛盾 |
-| 伏笔回收 | pending_hooks.md 中的伏笔是否都已回收 |
-| 关系一致性 | character_matrix.md 中的关系是否正确发展 |
+### 3.3 字数总校验
 
-**方法**：
-1. 读取所有真相文件
-2. 逐章检查一致性
-3. 标记问题并修复
+确保每章2000-2500字。
 
----
+### 3.4 导出
 
-### 3.3 导出
-
-**导出格式**：
+```bash
+# 合并所有章节
+cat {书名}/正文/*.txt > {书名}/{书名}.txt
 ```
 {书名}/{书名}.txt
 ```
@@ -433,6 +473,26 @@ cat {书名}/正文/*.txt > {书名}/{书名}.txt
 | `prompts/writer-system.md` | Writer |
 | `prompts/state-updater.md` | 更新真相文件 |
 | `prompts/auditor-system.md` | 5维度审计 |
+| `prompts/de-ai.md` | Phase 3 全书去AI |
+
+---
+
+## 附属文件
+
+| 文件 | 用途 |
+|------|------|
+| `source_chapter_splitter.py` | 源文章节提取 |
+| `style_analyzer.py` | 统计指纹 |
+| `prompts/source-deep-analyzer.md` | 源文深度分析器 |
+| `prompts/chapter-analyzer.md` | 章节分析器 |
+| `prompts/writer-system.md` | Writer system prompt |
+| `prompts/style-analysis.md` | 文风分析 |
+| `prompts/observer-system.md` | Observer |
+| `prompts/auditor-system.md` | 33维度审计 |
+| `prompts/de-ai-system.md` | 去AI系统（fatigue词表+11条规则+5种修订模式） |
+| `prompts/genre-management.md` | 题材管理（6个内置题材） |
+| `prompts/chapter-intent.md` | 章节意图管理 |
+| `references/market-data.json` | 番茄市场数据 |
 
 ---
 
