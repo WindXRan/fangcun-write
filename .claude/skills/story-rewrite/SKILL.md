@@ -58,7 +58,7 @@ Phase 3：收尾
 
 2. **源文分析**：
    - prompt：`prompts/source-analyzer.md`
-   - 输入：源文全文（限前 50000 字）
+   - 输入：源文全文（限前 20000 字符，对齐 inkos slice 窗口）
    - temperature：0.3
    - 输出：`追踪/源文特征.md`
 
