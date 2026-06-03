@@ -64,6 +64,8 @@ Phase 3：收尾
 prompt：`prompts/source-analyzer.md`
 输出：`追踪/源文特征.md`
 
+**注意：源文特征.md 不直接传给 writer，而是用于生成派生文件（1.5 设定生成 + 2.5 角色语音）。**
+
 ### 1.2 市场扫描（可选）
 
 调用 `/story-scan` 获取同题材热门。
