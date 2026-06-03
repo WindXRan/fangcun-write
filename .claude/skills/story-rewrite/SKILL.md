@@ -19,7 +19,7 @@ trigger:
 
 | 模式 | 说明 | 使用的源文特征 |
 |------|------|---------------|
-| `--mode=style` | 文风仿写 | writing_style + character_profiles |
+| `--mode=style` | 文风仿写 | character_profiles + 每区间文风蒸馏 |
 | `--mode=structure` | 结构仿写 | plot_structure + key_events |
 | `--mode=both` | 文风+结构 | 全部 |
 
@@ -62,12 +62,11 @@ Phase 3：收尾
    - temperature：0.3
    - 输出：`追踪/源文特征.md`
 
-   源文特征包含 6 个 section：
+   源文特征包含 5 个 section：
    - `world_rules`：世界规则（供参考，不照搬）
    - `character_profiles`：角色特征（语癖/说话风格/行为模式，供新书角色模仿）
    - `key_events`：关键事件时间线（供结构映射）
    - `power_system`：力量体系（供参考）
-   - `writing_style`：写作风格（7维度+例句）
    - `plot_structure`：逐章情节骨架（供结构映射）
 
 3. **设定生成**：基于源文特征 + 用户概念，生成新书设定
