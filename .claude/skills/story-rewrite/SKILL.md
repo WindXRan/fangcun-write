@@ -79,6 +79,10 @@ Phase 3：收尾
    - style：章纲独立设计
    - 输出：`大纲/章纲_*.md`
 
+5. **简介生成**：
+   - 基于 story_bible + 章纲，生成多个版本简介供选择
+   - 输出：`简介.md`
+
 ---
 
 ## Phase 2：写作
@@ -236,6 +240,7 @@ truth files：
 │   ├── story_bible.md
 │   └── book_rules.md
 ├── 大纲/章纲_*.md
+├── 简介.md
 ├── 追踪/
 │   ├── 源文特征.md              # Phase 1 生成
 │   ├── 蒸馏_{x-y}.md           # 每区间文风蒸馏
