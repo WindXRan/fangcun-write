@@ -68,11 +68,10 @@ prompt：`prompts/source-analyzer.md`
 
 **注意：源文特征.md 不直接传给 writer，而是用于生成派生文件（1.5 设定生成 + 2.5 角色语音）。**
 
-### 1.2 市场扫描（自动）
+### 1.2 市场扫描（可选）
 
-自动检测 `story-scan/market-data/` 目录：
-- 存在 → 读取同题材热门数据
-- 不存在 → 自动运行 `/story-scan`，结果缓存到 `story-scan/market-data/`，后续复用
+如需市场数据，先运行 `/story-scan`，结果自动缓存到 `story-scan/market-data/`。
+再次运行 `/story-rewrite` 时自动检测并使用。
 
 ### 1.3 新书概念生成
 
