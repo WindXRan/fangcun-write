@@ -13,11 +13,12 @@ trigger:
 ## 用法
 
 ```
-/story-compare {书名} [起始章] [结束章]
+/story-compare {书名}
 ```
 
-示例：`/story-compare 白月光拒绝下线` → 对比所有已写章节
-示例：`/story-compare 白月光拒绝下线 1 10` → 对比指定区间
+默认对比全书所有已写章节，每章和源文对应章节做对比。
+
+也可指定区间：`/story-compare {书名} 1 10`
 
 ## 输出
 
