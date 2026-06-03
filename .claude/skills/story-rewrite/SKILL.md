@@ -143,7 +143,9 @@ python source_chapter_splitter.py extract <源文.txt> <start> <end> <追踪/源
 prompt：`prompts/source-analyzer.md`
 输出：`追踪/源文特征_{start}-{end}.md`
 
-### 2.3 文风蒸馏（style/both）
+### 2.3 文风蒸馏（style/both）⚠️ 每个区间必须重新蒸馏
+
+**⚠️ 关键：每个区间必须对本区间的源文重新进行文风蒸馏，不能复用其他区间的蒸馏数据！**
 
 Layer A：`python style_analyzer.py 追踪/源文_{x-y}.txt`
 Layer B：`prompts/style-analysis.md`，temperature 0.3
@@ -170,46 +172,51 @@ Layer C：读取 `追踪/写作方法论.md`（首次生成，后续复用）
 
 spawn M 个 writer agent（M = `--parallel`）。
 
-**system prompt**：`prompts/writer-system.md`
-
-**user message**（必须读取的文件标 ⚠️）：
+**system prompt**（动态拼接）：
 
 ```
-【世界设定】⚠️ 请先读取：{设定/story_bible.md}
+{writer-system.md 内容}
 
-【写作规则】⚠️ 请先读取：{设定/book_rules.md}
+## 文风指南（本区间）
+{蒸馏_{x-y}.md 内容}
 
-【卷纲】⚠️ 请先读取：{大纲/卷纲.md}
+## 文风指纹（统计约束）
+{统计约束：平均句长/短句占比/段落长度等}
+
+## 写作方法论
+{写作方法论.md 内容}
+
+## 角色语音（style/both）
+{角色语音.md 内容}
+```
+
+**user message**（每章不同）：
+
+```
+【世界设定】请先读取：{设定/story_bible.md}
+
+【写作规则】请先读取：{设定/book_rules.md}
+
+【卷纲】请先读取：{大纲/卷纲.md}
 
 【本章章纲】{章纲内容}
 
-【文风指纹】（style/both）
-{统计约束：平均句长/短句占比/段落长度等}
+【结构映射】（structure/both）{本章映射}
 
-【文风指南】⚠️ 请先读取：{追踪/蒸馏_{x-y}.md}
+【当前状态卡】请先读取：{追踪/current_state.md}
 
-【写作方法论】⚠️ 请先读取：{追踪/写作方法论.md}
+【伏笔池】请先读取：{追踪/pending_hooks.md}
 
-【角色语音】（style/both）⚠️ 请先读取：{追踪/角色语音.md}
+【章节摘要】请先读取：{追踪/chapter_summaries.md}
 
-【结构映射】（structure/both）
-{本章映射}
-
-【当前状态卡】⚠️ 请先读取：{追踪/current_state.md}
-
-【伏笔池】⚠️ 请先读取：{追踪/pending_hooks.md}
-
-【章节摘要】⚠️ 请先读取：{追踪/chapter_summaries.md}
-
-【上章结尾】（第2章起）
-{上章最后500字}
+【上章结尾】（第2章起）{上章最后500字}
 
 【输出要求】
 - 输出到：{书名}/正文/第{N}章.txt
 - 字数：2000-2500 字
 ```
 
-**⚠️ 关键：writer 必须读取蒸馏文件（蒸馏_{x-y}.md），否则文风无法保证。**
+**⚠️ 关键：蒸馏文件注入 system prompt，不是 user message。**
 
 ### 2.8 校验
 
@@ -284,3 +291,39 @@ Settler：`prompts/settler-system.md` → 更新 truth files
 | `prompts/style-analysis.md` | 文风分析 |
 | `prompts/observer-system.md` | Observer |
 | `prompts/settler-system.md` | Settler |
+| `执行指南.md` | 详细执行步骤和常见错误 |
+
+---
+
+## 常见错误
+
+❌ **错误1**：主agent自己直接写新章
+✅ **正确**：必须使用Task工具启动子agent
+
+❌ **错误2**：不传提示词，只传章纲给writer agent
+✅ **正确**：传递完整的user message模板（包含世界设定、写作规则、卷纲、章纲、文风指南、角色语音等）
+
+❌ **错误3**：串行执行，一章一章写
+✅ **正确**：并行执行，同时启动10个agent
+
+❌ **错误4**：不读取参考文件
+✅ **正确**：在prompt中明确要求先读取所有参考文件
+
+❌ **错误5**：用第1-10章的蒸馏数据写第11-20章
+✅ **正确**：每个区间必须重新蒸馏，用本区间的蒸馏数据
+
+❌ **错误6**：跳过蒸馏步骤，直接写新章
+✅ **正确**：必须先完成Step 1-5（提取、分析、蒸馏、映射、章纲），再执行Step 6写新章
+
+---
+
+## 执行指南
+
+**详细执行步骤请参考**：`执行指南.md`
+
+该文件包含：
+- 每区间完整流程（8个步骤）
+- Writer Agent Prompt模板
+- 常见错误和正确做法
+- 检查清单
+- 执行示例
