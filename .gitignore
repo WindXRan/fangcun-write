@@ -29,6 +29,11 @@ temp_*
 [0-9]*/status.json
 [0-9]*/downloaded_chapters.jsonl
 
+# === novel-download 临时目录 ===
+.claude/skills/novel-download/downloads/
+.claude/skills/novel-download/logs/
+.claude/skills/novel-download/[0-9]*/
+
 # === 测试和临时目录 ===
 测试产出/
 测试滚动蒸馏/
