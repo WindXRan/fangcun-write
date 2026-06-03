@@ -28,3 +28,16 @@ temp_*
 # === 工具缓存目录 ===
 [0-9]*/status.json
 [0-9]*/downloaded_chapters.jsonl
+
+# === 测试和临时目录 ===
+测试产出/
+测试滚动蒸馏/
+inkos-test/
+
+# === 临时文件 ===
+*.log
+server_*.txt
+session-*.md
+plan_*.md
+*对比*.md
+*对比*.txt
