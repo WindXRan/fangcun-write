@@ -19,32 +19,31 @@ story-rewrite（流程引擎）
 | 命令 | Skill | 说明 |
 |------|-------|------|
 | `/story-rewrite`、`/仿写` | story-rewrite | 仿写流程引擎 |
-| `/story-review`、`/审查` | story-review | 一致性审查 |
 | `/story-scan`、`/番茄扫描` | story-scan | 番茄小说排行榜分析 |
-| `/story-distill`、`/蒸馏`、`/炼丹` | story-distill | 网文作者蒸馏（默认 write 模式，`--mode=review` 生成审稿框架） |
+| `/story-cover`、`/封面` | story-cover | 小说封面生成 |
 | `/story-compare`、`/对比` | story-compare | 仿写书与源文逐章对比 |
+| `/novel-download`、`/下载小说` | novel-download | 番茄小说下载 |
 
 ## 文件结构
 
 ```
 AI网文小说项目/
 ├── .claude/
-│   ├── skills/
-│   │   ├── story-rewrite/      # 仿写流程引擎
-│   │   ├── story-style/        # 写作风格知识库
-│   │   │   ├── SKILL.md        # 通用写作知识
-│   │   │   ├── references/     # 详细参考文件
-│   │   │   └── wenqi/          # 闻栖风格
-│   │   ├── story/              # 路由入口
-│   │   ├── story-review/       # 一致性审查
-│   │   ├── story-long-scan/    # 长篇网文扫榜
-│   │   └── story-scan/         # 番茄小说排行榜分析
-│   └── hooks/                  # 会话管理 hooks
-├── .claude/skills/novel-download/novel-download-authors/  # 蒸馏的作者数据
-└── {书名}/                     # 仿写产出
+│   ├── skills/                  # 所有 skill
+│   │   ├── story-rewrite/       # 仿写流程引擎（含 prompts/ tools/）
+│   │   ├── story-compare/       # 对比文件生成
+│   │   ├── story-scan/          # 番茄排行榜分析
+│   │   ├── story-cover/         # 封面生成
+│   │   ├── novel-download/      # 小说下载
+│   │   └── story-author-query/  # 作者查询
+│   └── hooks/                   # 会话管理 hooks
+├── novel-download-authors/      # 源文缓存（作者/书名，按章拆分）
+└── {书名}/                      # 仿写产出
     ├── 正文/
     ├── 设定/
     ├── 大纲/
+    ├── 真相文件/
+    ├── 对比/
     └── 追踪/
 ```
 
@@ -60,19 +59,6 @@ AI网文小说项目/
 用户说"继续""续写"时，自动检测 `仿写框架.md`：
 - 存在 → 仿写项目，路由到 story-rewrite
 - 不存在 → 常规项目
-
-## 风格系统
-
-通过 `--style` 参数选配写作风格：
-
-```
-/story-rewrite --style=wenqi    # 用闻栖风格
-/story-style                    # 查看可用风格
-```
-
-风格来源：
-1. story-style 内置风格（wenqi 等）
-2. novel-download-authors/ 目录下的蒸馏数据（位于 .claude/skills/novel-download/）
 
 ## Compact 后恢复
 
