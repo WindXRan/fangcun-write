@@ -73,12 +73,12 @@ Phase 2：写作（每区间10章，循环执行）
   2.1 提取源文 + 深度分析（逐章分析+蒸馏）
   2.2 章纲细化
   2.3 写新章（3步管线）
-  2.4 状态沉淀 → 下一区间
+  2.4 去AI（每10章执行一次anti-detect）
+  2.5 状态沉淀 → 下一区间
 
 Phase 3：收尾
-  3.1 全书去AI
-  3.2 一致性终检
-  3.3 导出
+  3.1 一致性终检
+  3.2 导出
 ```
 
 ---
@@ -89,38 +89,48 @@ Phase 3：收尾
 
 **Step 1：创建目录**
 
+⚠️ **重要**：目录名必须使用新书的名字，不能用"仿写项目"、"新书"等临时名称。
+- 如果书名尚未确定，先完成1.1新书概念生成，确定书名后再创建目录
+- 如果已有"仿写项目"等临时目录，在确定书名后必须立即重命名
+
 ```bash
 mkdir -p {书名}/设定
 mkdir -p {书名}/大纲
-mkdir -p {书名}/追踪
 mkdir -p {书名}/正文
 mkdir -p {书名}/真相文件
 ```
 
-**Step 2：源文全书拆章**
+**Step 2：源文全书拆章（⚠️ 缓存机制）**
+
+**源文位置**：`novel-download-authors/{作者名}/{书名}.txt`
+
+**拆章缓存**：`novel-download-authors/{作者名}/{书名}/` （公共位置，多次仿写共用）
 
 ```bash
-python source_chapter_splitter.py split <源文.txt> {书名}/追踪/源文章节/
+# 检查是否已拆章
+if novel-download-authors/{作者名}/{书名}/ 目录存在且有文件:
+    跳过拆章，直接使用缓存
+else:
+    python source_chapter_splitter.py split <源文.txt> novel-download-authors/{作者名}/{书名}/
 ```
 
-**Step 3：快速扫描（⚠️ 不是深度分析）**
+**仿写书目录**：`{新书名}/` （只放新书内容，不放源文）
+
+**Step 3：快速扫描（⚠️ 缓存机制）**
 
 ```bash
-python style_analyzer.py <源文.txt> --name "源文全书"
+# 检查是否已扫描
+if novel-download-authors/{作者名}/{书名}/统计指纹.md 存在:
+    跳过扫描，直接使用缓存
+else:
+    python style_analyzer.py <源文.txt> --name "源文全书"
+    扫描章节标题，识别卷结构
 ```
 
-扫描章节标题，识别：
-- 卷/区间划分（通常每30-50章一个转折）
-- 关键转折点位置（标题含"真相""分手""恢复记忆"等）
-- 高潮区间（标题含"大结局""最终""决定"等）
-
-输出：
-- `{书名}/追踪/统计指纹.md`
-- `{书名}/追踪/卷结构.md`
-
-**血崩检查点**：
-- [ ] style_analyzer.py 已运行，有量化数据
-- [ ] 卷结构已识别，有明确的转折点位置
+**缓存的好处**：
+- 同一本书多次仿写时，不用重复拆章和扫描
+- 源文拆章在公共位置，多个仿写项目共用
+- 仿写书目录只放新书内容，干净整洁
 
 ---
 
@@ -142,12 +152,6 @@ python style_analyzer.py <源文.txt> --name "源文全书"
 - 角色设定
 - 地点设定
 - 关键道具
-
-**写作规则**（`{书名}/设定/book_rules.md`）：
-- 文风规则
-- 人物规则
-- 剧情规则
-- 禁忌规则
 
 **简介**（`{书名}/简介.md`）：
 - 3个版本（标准版/悬念版/甜宠版）
@@ -188,7 +192,9 @@ python style_analyzer.py <源文.txt> --name "源文全书"
 │      ↓                                                │
 │  2.3 写新章（3步管线）                                │
 │      ↓                                                │
-│  2.4 状态沉淀（更新真相文件）→ 下一区间                │
+│  2.4 去AI（每10章执行一次anti-detect）                │
+│      ↓                                                │
+│  2.5 状态沉淀（更新真相文件）→ 下一区间                │
 └─────────────────────────────────────────────────────┘
 ```
 
@@ -198,27 +204,39 @@ python style_analyzer.py <源文.txt> --name "源文全书"
 
 **⚠️ 每个区间必须重新分析，不能复用其他区间**
 
-**Step 1：提取本区间源文**
+**Step 1：提取本区间源文（⚠️ 从公共缓存提取）**
 
 ```bash
-python source_chapter_splitter.py extract <源文.txt> <start> <end> <{书名}/追踪/源文_{start}-{end}.txt>
+# 从公共缓存提取本区间源文
+python source_chapter_splitter.py extract novel-download-authors/{作者名}/{书名}/ <start> <end> <{新书名}/源文_{start}-{end}.txt>
 ```
 
-**Step 2：逐章分析（情节结构）**
+**注意**：
+- 源文拆章在 `novel-download-authors/{作者名}/{书名}/` （公共位置）
+- 提取到 `{新书名}/源文_{start}-{end}.txt` （临时文件，用完可删除）
 
-使用 `prompts/chapter-analyzer.md` 分析本区间每章：
-- 核心事件类型
-- 情绪弧线
-- 钩子类型
-- 爽点来源
-- 关键细节
-
-输出：`{书名}/追踪/源文分析_{start}-{end}.md`
-
-**Step 3：蒸馏 Layer A（统计指纹）**
+**Step 2：逐章分析（情节结构）（⚠️ 缓存机制）**
 
 ```bash
-python style_analyzer.py {书名}/追踪/源文_{start}-{end}.txt
+# 检查是否已分析（在公共缓存中）
+if novel-download-authors/{作者名}/{书名}/源文分析_{start}-{end}.md 存在:
+    跳过分析，直接使用缓存
+else:
+    使用 prompts/chapter-analyzer.md 分析本区间每章
+    保存到公共缓存
+```
+
+输出：`novel-download-authors/{作者名}/{书名}/源文分析_{start}-{end}.md`
+
+**Step 3：蒸馏 Layer A（统计指纹）（⚠️ 缓存机制）**
+
+```bash
+# 检查是否已蒸馏（在公共缓存中）
+if novel-download-authors/{作者名}/{书名}/蒸馏_{start}-{end}.md 存在:
+    跳过蒸馏，直接使用缓存
+else:
+    python style_analyzer.py {新书名}/源文_{start}-{end}.txt
+    保存到公共缓存
 ```
 
 **⚠️ 输入必须是本区间的10章，不是全书！**
@@ -237,7 +255,7 @@ python style_analyzer.py {书名}/追踪/源文_{start}-{end}.txt
 
 **⚠️ Step 4 必须引用 Step 3 的统计数据，禁止引用全书指标！**
 
-输出：`{书名}/追踪/蒸馏_{start}-{end}.md`
+输出：`novel-download-authors/{作者名}/{书名}/蒸馏_{start}-{end}.md`
 
 **血崩检查点**：
 - [ ] 逐章分析完成，每章都有分析
@@ -288,9 +306,9 @@ python style_analyzer.py {书名}/追踪/源文_{start}-{end}.txt
 读取：
 - 章纲
 - 真相文件（真相文件目录下所有 .md 文件）
-- 蒸馏_{start}-{end}.md（文风指南）
-- story_bible.md
-- book_rules.md
+- 蒸馏_{start}-{end}.md（**文风指南，核心参考**）
+
+**⚠️ 文风规则主要用蒸馏数据，不要加太多通用规则，会死板！**
 
 输出：第N章初稿（2000-2500字）
 
@@ -298,7 +316,7 @@ python style_analyzer.py {书名}/追踪/源文_{start}-{end}.txt
 
 读取：第N章初稿
 
-使用 `prompts/auditor-system.md` 进行5维度审计：
+使用 `prompts/auditor-system.md` 进行审计：
 1. 字数合规（2000-2500字）
 2. 情绪弧线
 3. 钩子设计
@@ -324,34 +342,48 @@ for chapter in range(start, end+1):
         description=f"写第{chapter}章",
         subagent_type="general",
         prompt=f"""
-你是一位专业的网络小说作家。请根据以下信息写第{chapter}章。
-
-【世界设定】请先读取：{书名}/设定/story_bible.md
-【写作规则】请先读取：{书名}/设定/book_rules.md
 【章纲】{本章章纲内容}
-【文风指南】请先读取：{书名}/追踪/蒸馏_{start}-{end}.md
+
+【文风指南】⚠️ 核心参考，请先读取：novel-download-authors/{作者名}/{书名}/蒸馏_{start}-{end}.md
+
 【真相文件】请先读取：{书名}/真相文件/ 下所有 .md 文件
 
 【输出要求】
 - 输出到：{书名}/正文/第{chapter}章.txt
 - 字数：2000-2500字
-- 必须先读取所有参考文件再开始写作
+- 必须先读取蒸馏文件再开始写作
+- 文风规则以蒸馏文件为准
+- 输出纯正文，不要输出元数据或分析报告
 """
     )
 ```
 
-**为什么必须用子 agent**：
-- 并行执行：10章同时写，效率高
-- 上下文隔离：每章独立，不会互相干扰
-- 主 agent 可以继续处理其他任务
+---
+
+### 2.4 去AI（每10章执行一次）
+
+**⚠️ 每写完10章，执行一次anti-detect**
+
+使用 `prompts/de-ai-system.md`：
+- 11条确定性规则检测
+- fatigue词表检查
+- anti-detect流程（检测→改写→重检测循环）
+
+**执行方式**：
+```
+对本区间10章逐章检测：
+  Step 1: 检测 → detection_report.json
+  Step 2: 如果有critical问题 → 改写
+  Step 3: 重检测 → 循环直到通过
+```
 
 ---
 
-### 2.4 状态沉淀
+### 2.5 状态沉淀
 
 **⚠️ 每区间更新一次真相文件（10章写完后）**
 
-使用 `prompts/state-updater.md` 更新真相文件：
+直接更新真相文件：
 - current_state.md（当前状态）
 - pending_hooks.md（伏笔池）
 - chapter_summaries.md（章节摘要）
@@ -364,25 +396,7 @@ for chapter in range(start, end+1):
 
 ## Phase 3：收尾
 
-### 3.1 全书去AI ⚠️ 对标InkOS
-
-**去AI系统**：`prompts/de-ai-system.md`
-
-**包含**：
-- fatigue词表（每个题材独立）
-- 11条确定性规则
-- 5种修订模式（polish/spot-fix/rewrite/rework/anti-detect）
-- anti-detect流程（检测→改写→重检测循环）
-- 跨章重复检测
-
-**执行流程**：
-```
-Step 1: 检测 → detection_report.json
-Step 2: 改写 → revised_chapter.txt
-Step 3: 重检测 → 循环直到通过
-```
-
-### 3.2 一致性终检
+### 3.1 一致性终检
 
 检查：
 - 角色一致性
@@ -390,25 +404,8 @@ Step 3: 重检测 → 循环直到通过
 - 时间线一致性
 - 伏笔回收
 
-### 3.3 字数总校验
+### 3.2 导出
 
-确保每章2000-2500字。
-
-### 3.4 导出
-
-```bash
-# 合并所有章节
-cat {书名}/正文/*.txt > {书名}/{书名}.txt
-```
-{书名}/{书名}.txt
-```
-
-**导出内容**：
-- 按章节顺序合并所有正文
-- 添加书名和简介
-- 添加目录（可选）
-
-**导出命令**：
 ```bash
 # 合并所有章节
 cat {书名}/正文/*.txt > {书名}/{书名}.txt
@@ -420,35 +417,33 @@ cat {书名}/正文/*.txt > {书名}/{书名}.txt
 
 | 检查点 | 检查内容 | 失败处理 |
 |--------|----------|----------|
-| 1.0 快速扫描 | style_analyzer.py 已运行 | 强制运行 |
-| 1.0 快速扫描 | 卷结构已识别 | 重新扫描 |
+| 1.0 源文拆章 | 源文在公共位置已拆章 | 执行拆章 |
+| 1.0 快速扫描 | 统计指纹和卷结构已生成 | 执行扫描 |
 | 2.1 深度分析 | 逐章分析完成，每章都有分析 | 补充分析 |
 | 2.1 深度分析 | style_analyzer.py 输入是本区间文件 | 重新运行 |
 | 2.1 深度分析 | 蒸馏引用本区间统计数据，不是全书指标 | 重新蒸馏 |
 | 2.2 章纲细化 | 基于深度分析，不是自创剧情 | 重新生成 |
 | 2.3 写新章 | 执行了3步管线 | 重新执行 |
-| 2.4 状态沉淀 | 真相文件已更新 | 强制更新 |
+| 2.4 去AI | 每10章执行一次anti-detect | 执行去AI |
+| 2.5 状态沉淀 | 真相文件已更新 | 强制更新 |
+
+**缓存位置**：
+- 源文拆章：`novel-download-authors/{作者名}/{书名}/`
+- 分析结果：`novel-download-authors/{作者名}/{书名}/`
+- 真相文件：`{新书名}/真相文件/`
 
 ---
 
 ## 输出结构
 
 ```
-{书名}/
+{新书名}/
 ├── 设定/
 │   ├── 新书概念.md
-│   ├── story_bible.md
-│   └── book_rules.md
+│   └── story_bible.md
 ├── 大纲/
 │   └── 章纲_{x-y}.md
 ├── 简介.md
-├── 追踪/
-│   ├── 统计指纹.md          # Phase 1 全书统计
-│   ├── 卷结构.md            # Phase 1 快速扫描
-│   ├── 源文分析_{x-y}.md    # Phase 2 本区间逐章分析
-│   ├── 蒸馏_{x-y}.md       # Phase 2 本区间文风蒸馏
-│   ├── 结构映射_{x-y}.md   # Phase 2 本区间结构映射
-│   └── 源文_{x-y}.txt       # Phase 2 本区间源文
 ├── 真相文件/
 │   ├── current_state.md
 │   ├── pending_hooks.md
@@ -457,9 +452,26 @@ cat {书名}/正文/*.txt > {书名}/{书名}.txt
 │   └── emotional_arcs.md
 ├── 正文/
 │   └── 第{N}章.txt
-└── {书名}.txt
+└── {新书名}.txt
 ```
 
+**分析缓存**（公共，多次仿写共用）：
+```
+novel-download-authors/{作者名}/{书名}/
+├── 第1章.txt
+├── 第2章.txt
+├── ...
+├── 统计指纹.md
+├── 卷结构.md
+├── 源文分析_{x-y}.md
+└── 蒸馏_{x-y}.md
+```
+
+**说明**：
+- 真相文件在 `{新书名}/真相文件/`
+- 分析结果在 `novel-download-authors/{作者名}/{书名}/` （公共缓存）
+- 仿写书目录只放新书内容，干净整洁
+
 ---
 
 ## 附属文件
@@ -468,29 +480,11 @@ cat {书名}/正文/*.txt > {书名}/{书名}.txt
 |------|------|
 | `source_chapter_splitter.py` | 源文章节提取 |
 | `style_analyzer.py` | 统计指纹 |
-| `prompts/chapter-analyzer.md` | 逐章分析 |
-| `prompts/style-analysis.md` | 文风蒸馏 |
-| `prompts/writer-system.md` | Writer |
-| `prompts/state-updater.md` | 更新真相文件 |
-| `prompts/auditor-system.md` | 5维度审计 |
-| `prompts/de-ai.md` | Phase 3 全书去AI |
-
----
-
-## 附属文件
-
-| 文件 | 用途 |
-|------|------|
-| `source_chapter_splitter.py` | 源文章节提取 |
-| `style_analyzer.py` | 统计指纹 |
-| `prompts/source-deep-analyzer.md` | 源文深度分析器 |
 | `prompts/chapter-analyzer.md` | 章节分析器 |
-| `prompts/writer-system.md` | Writer system prompt |
 | `prompts/style-analysis.md` | 文风分析 |
-| `prompts/observer-system.md` | Observer |
 | `prompts/auditor-system.md` | 33维度审计 |
-| `prompts/de-ai-system.md` | 去AI系统（fatigue词表+11条规则+5种修订模式） |
-| `prompts/genre-management.md` | 题材管理（6个内置题材） |
+| `prompts/de-ai-system.md` | 去AI系统 |
+| `prompts/genre-management.md` | 题材管理 |
 | `prompts/chapter-intent.md` | 章节意图管理 |
 | `references/market-data.json` | 番茄市场数据 |
 
