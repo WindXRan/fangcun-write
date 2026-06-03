@@ -64,7 +64,7 @@ Phase 3：收尾
 - power_system（力量体系）
 
 prompt：`prompts/source-analyzer.md`
-输出：`追踪/源文特征.md`
+输出：`{书名}/追踪/源文特征.md`
 
 **注意：源文特征.md 不直接传给 writer，而是用于生成派生文件（1.5 设定生成 + 2.5 角色语音）。**
 
@@ -96,7 +96,7 @@ prompt：`prompts/source-analyzer.md`
 - 生成新书概念（保留结构，替换元素）
 - 书名参考热门模式
 
-输出：`设定/新书概念.md`
+输出：`{书名}/设定/新书概念.md`
 
 ### 1.4 卷纲生成
 
@@ -106,7 +106,7 @@ prompt：`prompts/source-analyzer.md`
 - 高潮位置
 - 卷/章节规划
 
-输出：`大纲/卷纲.md`
+输出：`{书名}/大纲/卷纲.md`
 
 ### 1.5 设定生成
 
@@ -116,16 +116,16 @@ prompt：`prompts/source-analyzer.md`
 ### 1.6 简介生成
 
 基于卷纲 + 设定，生成多个版本。
-输出：`简介.md`
+输出：`{书名}/简介.md`
 
 ### 1.7 初始化 truth files
 
 ```
-追踪/current_state.md    ← 初始状态
-追踪/pending_hooks.md    ← 空
-追踪/chapter_summaries.md ← 空
-追踪/character_matrix.md  ← 初始角色关系
-追踪/emotional_arcs.md   ← 空
+{书名}/追踪/current_state.md    ← 初始状态
+{书名}/追踪/pending_hooks.md    ← 空
+{书名}/追踪/chapter_summaries.md ← 空
+{书名}/追踪/character_matrix.md  ← 初始角色关系
+{书名}/追踪/emotional_arcs.md   ← 空
 ```
 
 ---
@@ -144,7 +144,7 @@ prompt：`prompts/source-analyzer.md`
 ### 2.1 提取源文对应章节
 
 ```bash
-python source_chapter_splitter.py extract <源文.txt> <start> <end> <追踪/源文_{start}-{end}.txt>
+python source_chapter_splitter.py extract <源文.txt> <start> <end> <{书名}/追踪/源文_{start}-{end}.txt>
 ```
 
 ### 2.2 源文逐章分析
@@ -154,32 +154,32 @@ python source_chapter_splitter.py extract <源文.txt> <start> <end> <追踪/源
 - key_events（关键事件）
 
 prompt：`prompts/source-analyzer.md`
-输出：`追踪/源文特征_{start}-{end}.md`
+输出：`{书名}/追踪/源文特征_{start}-{end}.md`
 
 ### 2.3 文风蒸馏（style/both）⚠️ 每个区间必须重新蒸馏
 
 **⚠️ 关键：每个区间必须对本区间的源文重新进行文风蒸馏，不能复用其他区间的蒸馏数据！**
 
-Layer A：`python style_analyzer.py 追踪/源文_{x-y}.txt`
+Layer A：`python style_analyzer.py {书名}/追踪/源文_{x-y}.txt`
 Layer B：`prompts/style-analysis.md`，temperature 0.3
-Layer C：读取 `追踪/写作方法论.md`（首次生成，后续复用）
+Layer C：读取 `{书名}/追踪/写作方法论.md`（首次生成，后续复用）
 
-输出：`追踪/蒸馏_{start}-{end}.md`
+输出：`{书名}/追踪/蒸馏_{start}-{end}.md`
 
 ### 2.4 结构提取（structure/both）
 
 从源文分析结果提取逐章映射。
-输出：`追踪/结构映射_{start}-{end}.md`
+输出：`{书名}/追踪/结构映射_{start}-{end}.md`
 
 ### 2.5 角色语音（style/both，首次）
 
 从 character_profiles 提取。
-输出：`追踪/角色语音.md`（首次生成，后续复用）
+输出：`{书名}/追踪/角色语音.md`（首次生成，后续复用）
 
 ### 2.6 章纲细化
 
 基于：卷纲 + 源文分析 + 当前 truth files
-输出：`大纲/章纲_{start}-{end}.md`
+输出：`{书名}/大纲/章纲_{start}-{end}.md`
 
 ### 2.7 写新章
 
@@ -246,11 +246,11 @@ Observer：`prompts/observer-system.md` → 提取事实
 Settler：`prompts/settler-system.md` → 更新 truth files
 
 更新：
-- `追踪/current_state.md`
-- `追踪/pending_hooks.md`
-- `追踪/chapter_summaries.md`
-- `追踪/character_matrix.md`
-- `追踪/emotional_arcs.md`
+- `{书名}/追踪/current_state.md`
+- `{书名}/追踪/pending_hooks.md`
+- `{书名}/追踪/chapter_summaries.md`
+- `{书名}/追踪/character_matrix.md`
+- `{书名}/追踪/emotional_arcs.md`
 
 ---
 
