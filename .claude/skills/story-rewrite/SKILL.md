@@ -1,399 +1,270 @@
 ---
 name: story-rewrite
 description: |
-  结构仿写流程引擎 · 只负责调度，不负责写作规则。
-  写作规则全部从 story-style 读取。
-  触发方式：/story-rewrite、/仿写、/结构仿写
-  断点续写：「继续写」（检测到已有仿写正文目录时自动恢复）
-  风格插件：/story-rewrite --style={名称}
+  仿写引擎：文风仿写 + 结构仿写。
+  从源文提取特征，指导新书写作。
+  输入：源文 txt + 新书概念
+  输出：完整小说
+trigger:
+  - /story-rewrite、/仿写
 ---
 
-# story-rewrite：仿写流程引擎
+# story-rewrite：仿写引擎
 
-**职责：调度 Agent、管理状态、校验质量。不包含任何写作规则。**
+**从源文提取特征，用特征指导新书写作。**
 
 ---
 
-## 流程总览
+## 仿写模式
+
+| 模式 | 说明 | 使用的源文特征 |
+|------|------|---------------|
+| `--mode=style` | 文风仿写 | writing_style + character_profiles |
+| `--mode=structure` | 结构仿写 | plot_structure + key_events |
+| `--mode=both` | 文风+结构 | 全部 |
+
+---
+
+## 流程
 
 ```
-Phase 1（主线程）    读源文本 → 提取框架 + 设定锁 + 生成简介
-                      ↑ 目录分析与源文本基础层并行
-Phase 1.5（测试）    前3章 → 用户确认（可 --skip-test 跳过）
-Phase 2（全书写作）  章纲生成 ↘
-                      ↘ 正文写作 → 循环至完本（章纲滚动 + 流水线写校）
-Phase 3（收尾）      去AI + 一致性检查 + 字数校验（并行）
+Phase 1：源文分析
+  └── 源文分析器 → 源文特征.md
+
+Phase 2：写作（每区间 10 章）
+  ├── 文风蒸馏（每区间从源文对应章节提取）
+  ├── 结构映射（每区间从源文特征提取）
+  ├── 写新章（10 并行）
+  ├── Observer → 提取事实
+  ├── Settler → 滚动更新 truth files
+  └── 校验
+
+Phase 3：收尾
 ```
 
 ---
 
-## 核心原则
+## Phase 1：源文分析
 
-1. **分层架构**：主线程调度+校验（子 agent：story-architect 章纲 / narrative-writer 正文 / quality-validator 校验）。子 agent 单一任务、read 读取、直接写文件不返回正文。
-2. **状态管理**：关键信息存文件，agent 通过 read 读取。状态文件遵循原子写入（`.tmp → rename`）+ 读取后验证。
-3. **并行优先**：多 agent 必须在单条消息中同时发起所有 task tool call。单批 agent 数 ≤ 平台上限（默认 8），超限时自动分批延迟 2s 后发第二组。
-4. **风格优先**：风格规则绝对优先于通用规则。prompt 注入语感样本+风格锚点路径，让 agent 自然模仿。
-5. **职责分离**：rewrite 定义"何时检查"和"触发条件"，style 定义"检查什么"和"怎么判定"。rewrite 不包含任何写作规则。
-6. **资源限制**：单批 ≤10 agent（或平台上限取小值），全书累计 >100 暂停确认。网络超时 5 分钟指数退避重试 3 次（30s→60s→120s），生成超时 5 分钟标记跳过入待补写。同一章最多重写 1 次。连续失败 <3 批正常重试，=3 批暂停降级（M/2），>3 批人工介入。
-7. **审查分层**：
-   - **质量检查（始终运行）**：Phase 2 的内置检查，每章写完后异步执行。检查字数、AI 痕迹、风格一致性等基础指标。pass/fail 决定是否触发自动重写。
-   - **审稿检查（review 模式）**：质量检查的增强版。在质量检查基础上增加风格特化的审稿红线、质量阈值、修改处方。`--mode=write` 时不启用，`--mode=review` 时启用。
-   - **关系**：review 不替代质量检查，而是在其之上叠加。质量检查保证基础底线，审稿检查保证风格一致性。
+### 输入
 
-### 角色定义
+- 源文 txt（UTF-8，章节以「第X章」开头，≥3章）
+- 新书概念（题材/人物/冲突，可选）
+- `--mode`：style / structure / both（默认 style）
 
-| 角色 | 职责 | 产出 |
-|------|------|------|
-| 调度 agent | 主线程，编排流程、spawn agent、校验结果、维护状态文件 | 不直接写正文 |
-| story-architect | 章纲生成，批量写章纲文件 | `大纲/章纲_*.md` |
-| narrative-writer | 正文写作，按 prompt 模板写单章 | `正文/第{N}章.txt` |
-| quality-validator | 质量校验，读目标文件写评分 | 不写文件，返回 pass/fail/分数 |
+### 步骤
 
-### 状态文件
+1. **目录分析**：读取源文目录，了解全书结构
 
-| 文件 | 内容 | 更新方式 |
-|------|------|---------|
-| `{书名}/设定/设定锁.md` | 核心地名、关键物件、人物关系 | Phase 1 写入后只读 |
-| `{书名}/设定/反调色盘.md` | 源书DNA + 新书反调设计 | Phase 1 写入后只读 |
-| `{书名}/设定/source-metrics.md` | 源文风格度量（对话比例/均段长/句长分布） | Phase 1 写入后只读 |
-| `{书名}/简介.md` | 简介正文 | Phase 1 写入后只读 |
-| `{书名}/大纲/章纲_*.md` | 分批章纲 | 按需滚动生成 |
-| `{书名}/大纲/章纲摘要.md` | 总章数、卷结构、关键转折点 | Phase 1 写入后只读 |
-| `{书名}/追踪/上下文.md` | 当前写作上下文（增量追加，懒截断 5000 字） | 每章写完追加 |
-| `{书名}/追踪/检查点.md` | phase/step/batch/chapter/时间戳 | 每批/每阶段结束更新 |
-| `{书名}/追踪/禁止词.md` | 反模式词汇（生成一次复用） | Phase 2 生成后只读 |
-| `{书名}/追踪/变异指令.md` | 当前批次的风格变异参数（3 维） | 每变异周期更新 |
-| `{书名}/追踪/变异日志.md` | 历史变异组合 + 质量评分 | 每批追加 |
-| `{书名}/追踪/进度.md` | 已完成章号 + 待补写队列（行级追加） | 每章写完追加 |
-| `{书名}/追踪/风格锚点.md` | 风格锚点句（从 style 表达DNA 提取，3句） | Phase 1 写入后只读 |
-| `{书名}/追踪/用户反馈.md` | 用户反馈记录 | 按需追加 |
-| `{书名}/追踪/review框架路径.md` | review SKILL.md 路径 | Phase 1 完成后 |
-| `{书名}/追踪/审稿报告_{标识}.md` | 审稿结果，标识=Phase1.5/批号/终审 | 每批/每阶段审稿完成后 |
-| `{书名}/追踪/质量趋势.md` | 质量评分趋势 | 每批/每阶段更新 |
-| `{书名}/追踪/market-data-path.md` | 市场数据文件路径（可选） | Phase 1 加载 |
+2. **源文分析**：
+   - prompt：`prompts/source-analyzer.md`
+   - 输入：源文全文（限前 50000 字）
+   - temperature：0.3
+   - 输出：`追踪/源文特征.md`
 
-**并发安全**：进度.md 每章写完立即追加 `{章号}|written` 行，读取时取最后一行。上下文.md 只由主线程追加写入。检查点.md 每批启动前读取最新状态。所有文件写入使用 `.tmp → rename` 模式。
+   源文特征包含 6 个 section：
+   - `world_rules`：世界规则（供参考，不照搬）
+   - `character_profiles`：角色特征（语癖/说话风格/行为模式，供新书角色模仿）
+   - `key_events`：关键事件时间线（供结构映射）
+   - `power_system`：力量体系（供参考）
+   - `writing_style`：写作风格（7维度+例句）
+   - `plot_structure`：逐章情节骨架（供结构映射）
+
+3. **设定生成**：基于源文特征 + 用户概念，生成新书设定
+   - `story_bible.md`：世界设定（世界观/角色/关键事件）
+   - `book_rules.md`：写作规则（主角铁律/禁忌/风格禁区）
+   - 输出：`设定/story_bible.md` + `设定/book_rules.md`
+
+4. **章纲生成**：
+   - structure/both：章纲必须对齐源文特征的 plot_structure
+   - style：章纲独立设计
+   - 输出：`大纲/章纲_*.md`
 
 ---
 
-## Style 加载
-
-`--style` 指定风格，不指定则询问。
-
-**加载顺序**：先读通用规则，再读风格规则。风格规则绝对优先于通用规则，字段级覆盖。
+## Phase 2：写作
 
 ### 参数
 
 | 参数 | 默认值 | 说明 |
 |------|--------|------|
-| `--style` | 询问 | 必须指定 |
-| `--parallel` | 5 | 每批并行 agent 数，1-10（自动调整见动态 M/K） |
-| `--per-agent` | 3 | 每 agent 写几章，2-5（自动调整见动态 M/K） |
-| `--skip-test` | false | 跳过 Phase 1.5，直接进 Phase 2 |
-| `--timeout` | 5 | 单 agent 超时（分钟），网络超时自动退避重试 |
-| `--resume` | 自动检测 | 断点续写 |
-| `--mode` | `write` | `write`（默认）/ `review`。review 模式启用审稿检查 |
-| `--market-data` | 自动检测 | 市场数据文件路径，默认自动检测 `story-scan/market-data/` |
+| `--chunk-size` | 10 | 每区间写几章（对齐 inkos 20000 字符分析窗口） |
+| `--parallel` | 10 | 每区间并行 agent 数 |
+| `--skip-test` | false | 跳过前3章测试 |
 
-### prompt 模板
+### 每区间流程
+
+#### Step 1：文风蒸馏（style/both）
+
+从源文对应章节中提取当区间的文风细节。
+
+**Layer A：统计指纹**（Python，零 token）
+
+```bash
+python style_analyzer.py 源文_{start}-{end}.txt
+```
+
+**Layer B：LLM 8维度分析**（1 agent）
+- prompt：`prompts/style-analysis.md`
+- temperature：0.3
+
+**Layer C：写作方法论**
+- 一次性生成 `追踪/写作方法论.md`
+
+**合并输出**：`追踪/蒸馏_{start}-{end}.md`
+
+#### Step 2：结构映射（structure/both）
+
+从源文特征的 plot_structure 中提取本区间的逐章映射。
+
+每章映射：
+- 源文核心事件 → 新书对应事件
+- 源文情绪弧线 → 新书保持
+- 源文钩子 → 新书对应钩子
+- 源文转折 → 新书对应转折
+- 源文角色动态 → 新书角色动态
+
+输出：`追踪/结构映射_{start}-{end}.md`
+
+#### Step 3：角色语音参照（style/both）
+
+从源文特征的 character_profiles 中提取角色语音特征。
+
+提取：
+- 口头禅/语癖
+- 说话风格
+- 典型行为
+
+输出：`追踪/角色语音.md`（一次性生成，后续直接读取）
+
+#### Step 4：写新章
+
+spawn M 个 writer agent（M = `--parallel`）。
+
+**system prompt**：`prompts/writer-system.md`
+
+**user message**：
 
 ```
-你是小说写手。请根据以下材料写第 {N} 章。
+【世界设定】请先读取：{story_bible.md}
 
-【风格规则】请先读取：{style_path}
-【设定锁】请先读取：{设定锁_path}
-【风格锚点】请先读取：{风格锚点_path}
-【源文度量】请先读取：{source_metrics_path}
+【写作规则】请先读取：{book_rules.md}
 
-【语感样本】（模仿此语感写作）
-{2-3段源书语感样本，≤500字}
+【本章章纲】{章纲内容}
 
-【上章结尾】（必须衔接）
-{上章最后500字}
-上章情绪：{紧张/舒缓/悬念}
-本章开头应：{衔接/转折/升级}
+【文风指纹】（style/both）{统计约束}
 
-【本章章纲】
-{当前章章纲}
+【文风指南】（style/both）请先读取：{蒸馏_{x-y}.md}
 
-【变异指令】（如有）
-{句长分布/对话密度/段落节奏的具体调整要求}
+【写作方法论】请先读取：{写作方法论.md}
+
+【角色语音】（style/both）请先读取：{角色语音.md}
+
+【结构映射】（structure/both）{本章映射}
+
+【当前状态卡】{current_state.md}
+
+【伏笔池】{pending_hooks.md}
+
+【章节摘要】{chapter_summaries.md}
+
+【上章结尾】（第2章起）{上章最后500字}
 
 【输出要求】
 - 输出到：{书名}/正文/第{N}章.txt
-- 字数：1800-2600 字（风格可覆盖）
-- 不返回正文内容，直接写文件
+- 字数：{target}字，允许区间：{softMin}-{softMax}字
+- 先输出 PRE_WRITE_CHECK 表格，再写正文
 ```
 
-**风格锚点文件**（`{书名}/追踪/风格锚点.md`）：Phase 1 完成后，从 style SKILL.md「表达DNA」提取 3 句代表性句子写入此文件。agent 读取后自然获得风格锚点。
+#### Step 5：状态沉淀（每区间一次）
 
-### Review 框架加载
+每区间写完后，spawn 2 个 agent 更新 truth files。
 
-style review 框架驱动所有审查检查（仅 `--mode=review` 时启用）。
+**Observer**：`prompts/observer-system.md`
+- 从本区间所有章节正文中提取事实
+- 输出：事实清单
 
-**加载逻辑**：
-1. 构造 review 路径：`{style_dir}/review/SKILL.md`
-   - 如 style_dir=`.claude/skills/story-style/闻栖/`，则 review 路径=`.claude/skills/story-style/闻栖/review/SKILL.md`
-2. 若存在 → 加载为 `review_framework_path`，写入 `{书名}/追踪/review框架路径.md`
-3. 若不存在 → fallback 到 `story-style/SKILL.md#十二、审稿检查`（通用审稿规则）
-4. 通用规则也不存在 → review 步骤跳过
+**Settler**：`prompts/settler-system.md`
+- 基于 Observer 输出 + 当前 truth files，更新状态
+- 输出：更新后的 truth files（=== TAG === 格式）
 
-**注入方式**：所有 review agent 的 prompt 中注入 `【审稿框架】请先读取：{review_framework_path}`。
+truth files：
+- `追踪/current_state.md`
+- `追踪/pending_hooks.md`
+- `追踪/chapter_summaries.md`
+- `追踪/character_matrix.md`
+- `追踪/emotional_arcs.md`
 
-### Review 模式附加模板
+#### Step 6：校验
 
-review 模式时，在 prompt 模板末尾追加以下内容：
+1. `post_write_validator.py`（零 LLM）→ error 直接重写
+2. Auditor（LLM，33 维审计）→ 详见 `auditor.md`
+   - ≥70 分且无 critical → passed
+   - <70 分或有 critical → 触发 Reviser
+3. Reviser（LLM，自动修订）→ 详见 `reviser.md`
+   - spot-fix / rewrite / anti-detect
+   - 修订后重审 → passed → 通过
+   - 仍 failed → manual_required（每章最多修订 1 次）
+4. Observer + Settler 更新 truth files
 
-```markdown
-【审稿框架路径】{review_framework_path}
-```
+### 流水线规则
 
-审稿人角色根据审查范围确定：
-- 单章审查 → `逐章审稿人`
-- 批量抽检 → `批量审稿人`
-- 全书终审 → `终审审稿人`
-
-**审稿报告_{标识}.md 标准字段**：
-
-| 字段 | 说明 |
-|------|------|
-| identifier | 标识：Phase1.5 / batch_{批号} / final |
-| chapters_reviewed | 本批审查的章号列表 |
-| verdict | 判定结果（由 review SKILL.md 的判定逻辑决定） |
-| issues | 问题清单（含编号、位置、描述） |
-| rewrite_needed | 是否触发重写（由 review SKILL.md 判定） |
-
-**质量趋势.md 标准字段**：
-
-| 字段 | 说明 |
-|------|------|
-| batch | 批号 |
-| verdict | 通过/需修改/打回 |
-| issue_count | 问题数 |
-| baseline | Phase 1.5 基线值 |
-
----
-
-## Phase 1：框架提取
-
-### 源文本要求
-
-txt 或 md，UTF-8，每章以 `第X章` 开头，≥3章。
-
-### 提取流程（4 层串行 → 3 层串行）
-
-步骤②和③合并为一个 agent 完成（源文分析 + 新书方案）。
-
-0. **市场数据加载**（可选，与①并行）：
-   - 自动检测 `story-scan/market-data/番茄女频市场数据.json` 是否存在
-   - 若存在 → 加载为 `market_data_path`，写入 `{书名}/追踪/market-data-path.md`
-   - 若不存在 → 跳过，新书方案不依赖市场数据
-   - agent prompt 注入 `【市场数据】请先读取：{market_data_path}（指导题材选择、书名命名、节奏设定）`
-1. **目录分析 + 源文本基础层**（并行）：章名风格、章节密度、第1-3章+最后3章
-2. **源文分析 + 新书方案**（合并，依赖①，可选依赖 market_data）：
-   - 每个 agent 分析源文 1/3 章节（1/4、1/2、3/4处各±1章 + 情绪高点 + 转折点）
-   - 读取市场数据（如存在），参考 hot_genres 选题材、title_patterns 定书名、tag_combinations 配标签
-   - 输出固定 YAML 模板（见下方）
-   - 调度 agent 汇总：≥2/3 agent 共识的规则直接采用，冲突项标记「争议」并保留两种解读
-   - 同时输出：全书章数、卷结构、3-5段语感样本（≤500字）、叙述者风格、风格度量
-   - **核心原则：模仿 > 定义。** 语感样本嵌入写作 prompt
-3. **新书方案**：书名、人物名、核心设定、章数、题材、**核心冲突**、**爽点类型**
-   - **强制**：人物名/地名必须新创。市场数据存在时参考 hot_genres 热度选材、title_patterns 命名
-   - 输出：`{书名}/设定/新书方案.md`
-4. **简介 + 设定锁 + 风格锚点 + source-metrics**（依赖③，四者并行）：
-   - 简介：读取 style「书名与简介」，输出 `{书名}/简介.md`
-   - 设定锁：一级锁定+二级锁定，输出 `{书名}/设定/设定锁.md`
-   - 风格锚点：从 style「表达DNA」提取 3 句，输出 `{书名}/追踪/风格锚点.md`
-   - source-metrics：汇总对话比例/均段长/句长分布，输出 `{书名}/设定/source-metrics.md`
-5. **大纲设计**（依赖③）：读取 style「章纲模板」，输出 `{书名}/大纲/大纲.md`
-
-### 反抄袭机制
-
-触发规则：每章写完自动触发 | Phase 1.5 后批量检查 | Phase 2 每批抽检1章 | Phase 3 终检。具体方法委托 style「反抄袭检查」节。
-
-反调色盘：`{书名}/设定/反调色盘.md`，供 style 检查流程参考。
-
-### Phase 1 agent 输出模板
-
-每个 agent 分析完毕后必须输出以下 YAML 结构：
-
-```yaml
-agent_id: architect-1
-analyzed_sections:
-  - "第4章~第10章"
-  - "第25章~第30章"
-  - "第48章~第52章"
-chapter_count: 96
-volume_structure:
-  - {start: 1, end: 30, title: "初入京城", tone: "舒缓"}
-  - {start: 31, end: 65, title: "风云渐起", tone: "紧张"}
-  - {start: 66, end: 96, title: "天下定局", tone: "高潮"}
-style_metrics:
-  dialogue_ratio: 0.35      # 对话占比
-  avg_paragraph_len: 98     # 平均段长（字）
-  short_sentence_ratio: 0.22 # 短句（<15字）占比
-  long_sentence_ratio: 0.15 # 长句（>60字）占比
-key_turns:
-  - {chapter: 12, type: "身份暴露", impact: "high"}
-  - {chapter: 45, type: "背叛", impact: "critical"}
-narrator_style: "第三人称有限视角，偶尔切换女主内心"
-conflicts:
-  - {type: "核心冲突", description: "女主隐藏身份 vs 权势压迫"}
-writing_samples: "（≤500字语感样本）"
-conflicting_items: []  # 与本组其他 agent 有分歧的点
-```
-
-**汇总规则**：
-- 量化字段（chapter_count/对话比例等）：取中位数
-- 卷结构/冲突/关键转折：≥2/3 agent 共识则采纳，否则保留分歧标注 `[争议]`
-- narrator_style：优先取描述最具体的版本
-- writing_samples：直接从原文提取，取信息密度最高的版本
-
----
-
-## Phase 1.5：前三章测试
-
-1. 生成前3章 mini-outline（主线程直接生成）
-2. 写前3章正文（注入 mini-outline + 设定锁 + style 路径 + 语感样本 + 风格锚点 + source-metrics）
-3. 字数校验 + 抄袭检查 + **review 审查**（并行，仅 `--mode=review` 时执行 review）
-   - review 审查：读取 `review框架路径.md`，委托 agent 按审稿框架执行
-   - 输出 `{书名}/追踪/审稿报告_Phase1.5.md`
-4. 评分结果写入 `{书名}/追踪/质量趋势.md`，作为 Phase 2 质量基线
-
-**异步模式**（默认）：写完前3章后立即进入 Phase 2，不等待用户确认。用户反馈到达后将待修章入死章队列，下批优先处理。
-
-**同步模式**（`--wait-feedback`）：写完前3章后阻塞，等待用户确认。
-
-**反馈循环**（最多2轮）：满意→Phase 2继续 | 不满意→待修章入死章队列 | 2轮后仍不满意→回 Phase 1 调整设定/风格后重试。
-   - review 判定为"打回" → 标记待修章，优先在 Phase 2 首批处理
-
-`--skip-test` 跳过此阶段。
-
----
-
-## Phase 2：全书写作
+- 每章校验完立即开始下一章
+- fail → 重写1次 → 仍 fail 标记 manual_required
 
 ### 断点续写
 
-正文目录存在时：读取 `检查点.md` → 获得最大章号 + 最后完成的 phase/step → 读取进度/上下文/反馈 → 验证最后 3 章完整性（存在、非空、字数≥目标50%、有完整结尾、段落数≥3） → 从 N+1 章续写。检查点缺失时回退到扫描最大章号。
-
-### Step 1：章纲滚动生成
-
-1. **章纲滚动窗口**：首批生成前 30 章章纲（story-architect，≤50章/agent，必须并行），写入 `大纲/章纲_001-030.md`
-2. 完整性校验 + 生成章纲摘要 + 提取禁止词 + 初始化进度 + 写入检查点
-3. 容错：全部失败→降级重试；部分失败→只重跑失败 agent；超时→跳过后补写
-4. **补充机制**：剩余章纲不足 10 章时自动补充生成下一批（+30 章），检查前后章衔接
-5. 章纲局部修改：只重新生成被修改章，检查前后章衔接
-
-### Step 2：写作流水线
-
-M=5 并行，K=3 章/agent。推荐 M=5/K=3，K 范围 2-5，M 范围 1-10。
-
-**动态 M/K 调整**：
-- 剩余 >100 章且失败率 <10%：M 增加 1（不超过上限）
-- 剩余 <50 章：M 减少 1，K 减少 1
-- 失败率 >20%：M 减少到 3，K 减少到 2
-- 章节复杂度高（转折/高潮章）：K 减少到 2，M 不变
-
-**写作-校验流水线**（不再整批等待）：
-1. spawn M 个 narrative-writer（注入设定锁+章纲+style 路径+变异指令+source-metrics+上章结尾+语感样本+风格锚点路径）
-2. 每章写完**立即**异步 spawn quality-validator（不等待，不阻塞下一批）
-3. 校验结果到达时：
-   - pass → 正常，进度.md 追加行
-   - fail → 入死章队列（最多重写 1 次 → 标记 manual_required），重写时注入已写的后续章节摘要（最后 500 字）确保向前衔接
-   - 重写完成后对后续章节做轻量上下文审查（单 quality-validator 检查是否出现矛盾）：仅涉及关键伏笔/转折时才触发后续重写，且不产生级联重写风暴
-4. 所有已提交的章节校验都到达后，启动下一批（不等个别死章的重写）
-5. 剩余章纲不足 10 章时触发补充生成
-6. 每批结束更新检查点.md（batch 号 + 各章状态）
-
-**每批验收**：
-- 字数：pass（1800-2600）| 软边界标记 | 硬边界重写1次
-- 质量评分卡：pass(≥70) | 边缘(50-69)标记不重写 | fail(<50)重写
-- 抽查1章反抄袭 + 更新进度 + 上下文滚动（增量追加 >5000字时截断，保留最近 2 批摘要）
-- **review 审查**（仅 `--mode=review`）：每批抽检1章，每10章全量review。委托 agent 按审稿框架执行，输出审稿报告 + 质量趋势。review 判定为"打回"或"需修改" → 触发该章重写（注入审稿报告作为修改指引，限1次）
-- 死章队列：每批优先分配死章（≤2 个），余量分配新章
-
-### 质量评分卡（6 维加权，≥70 pass）
-
-quality-validator 按以下维度打分：
-
-| 维度 | 权重 | 评分方法 | pass 标准 |
-|------|------|---------|----------|
-| 字数合规 | 20% | 目标 2200±400 字 | 在范围内满分，否则等比扣分 |
-| AI 痕迹 | 25% | 检测禁止词/路标词/二分对照/协作口吻 | 命中 0 项满分，每项 -8 分 |
-| 情绪告知 | 15% | 是否用表情/动作/场景展示情绪而非命名 | 全展示满分，每 1 处直接命名 -5 分 |
-| 段落多样性 | 10% | 段落长度是否交替，非等长切片 | 3 种以上段长交替满分 |
-| 风格一致性 | 20% | 禁止词使用 0 次、语感是否偏离风格锚点 | quality-validator 主观判定偏离则 -15 分 |
-| 章节完整性 | 10% | 有开头/发展/钩子/衔接上章 | 缺项每项 -5 分 |
-
-**风格特异性检查**（可选，有 source-metrics 数据才执行）：
-- 对话比例偏离 source-metrics ±15pp 扣 5 分
-- 平均段长偏离 source-metrics ±40% 扣 5 分
-
-### 风格变异（表达层，不作用内容层）
-
-变异只作用于表达层：句长分布、对话密度、段落节奏。不涉及情绪基调、视角远近等内容层。
-
-每 N 批执行一次（自适应 interval，默认每 3 批）：
-
-| 维度 | 操作 | 优先级 |
-|------|------|--------|
-| 句长分布 | 增加/减少短句（<15字）比例 ±5% | P0 |
-| 对话密度 | 增加/减少对话占比 ±10% | P0 |
-| 段落节奏 | 增加短段（<50字）或厚段（>200字）比例 | P1 |
-
-**自适应 interval**：最近 3 批质量评分均值 ≥80 → 加速（interval ≤1 批）；均值 60-79 → 保持（3 批）；均值 <60 → 减缓（5 批）。
-
-每次从 3 维中随机选 1-2 维组合，写入 `变异指令.md`。组合不重复最近 2 次已用组合（查 `变异日志.md`）。
-
-### 用户反馈
-
-修改某章→入死章队列优先处理 | 修改章纲→局部修改 | 暂停→保存检查点。反馈写入 `用户反馈.md`。
+检测到 `正文/` 目录存在时：
+1. 读取 `追踪/进度.md` 获得最大章号
+2. 验证最后3章完整性
+3. 从 N+1 章续写
 
 ---
 
-## Phase 3：全书写完后
+## Phase 3：收尾
 
-1. **全书去AI**：按 style「去AI策略」节，调用 tools/ 脚本（可并行）。review 模式时额外引用 review 去AI检查清单
-2. **终审 review**（仅 `--mode=review`）：
-   - 委托 agent 读取 `{书名}/追踪/review框架路径.md` 执行审稿
-   - 具体审稿流程（单 agent / 多 agent、分卷策略、交叉复审、汇总报告）全部由 `review/SKILL.md` 定义，rewrite 不重新实现
-   - 输出 `{书名}/追踪/审稿报告_终审.md`
-3. **一致性终检**：角色属性/时间线/伏笔状态（可与终审 review 并行）
-4. **字数总校验**：按通用规则 7.1 标准
-5. **质量闭环**：评分记录到 `{书名}/追踪/质量趋势.md`
-6. **更新检查点.md** 标记 phase 3 complete
-
-200+ 章并行 spawn 3-5 agent 处理。
+1. 全书去AI
+2. 一致性终检
+3. 字数总校验
 
 ---
 
-## 性能追踪
-
-每批结束时记录以下指标到 `{书名}/追踪/性能日志.md`：
+## 输出结构
 
 ```
-batch: 5
-parallel: 5
-per_agent: 3
-started: 2026-06-02T10:00:00
-completed: 2026-06-02T10:08:30
-total_duration: 510
-chapters: [21,22,23,24,25]
-writing_durations: [95,102,88,110,115]
-quality_scores: [85,72,91,68,88]
-pass_count: 4
-fail_count: 1
-dead_chapters: 0
-avg_score: 80.8
-pass_rate: 80%
+{书名}/
+├── 设定/
+│   ├── story_bible.md
+│   └── book_rules.md
+├── 大纲/章纲_*.md
+├── 追踪/
+│   ├── 源文特征.md              # Phase 1 生成
+│   ├── 蒸馏_{x-y}.md           # 每区间文风蒸馏
+│   ├── 结构映射_{x-y}.md       # 每区间结构映射
+│   ├── 角色语音.md              # 一次性生成
+│   ├── 写作方法论.md            # 一次性生成
+│   ├── 进度.md
+│   ├── current_state.md         # 每章更新
+│   ├── pending_hooks.md         # 每章更新
+│   ├── chapter_summaries.md     # 每章追加
+│   ├── character_matrix.md      # 每章更新
+│   └── emotional_arcs.md        # 每章更新
+└── 正文/第{N}章.txt
 ```
 
 ---
 
-## 参考文件
+## 附属文件
 
 | 文件 | 用途 |
 |------|------|
-| `story-style/SKILL.md` | 风格知识库（含通用规则+接口契约） |
-| `story-style/{name}/SKILL.md` | 风格定义 |
+| `style_analyzer.py` | 统计指纹（Layer A） |
+| `post_write_validator.py` | 写后验证（零 LLM，15+ 规则） |
+| `auditor.md` | 33 维连续性审计（LLM） |
+| `reviser.md` | 自动修订（LLM） |
+| `truth-files.md` | Truth Files 模板 + Observer 规则 |
+| `prompts/source-analyzer.md` | 源文分析器 prompt |
+| `prompts/writer-system.md` | Writer system prompt |
+| `prompts/style-analysis.md` | 文风分析 prompt（Layer B） |
+| `prompts/observer-system.md` | Observer prompt |
+| `prompts/settler-system.md` | Settler prompt |
