@@ -162,14 +162,25 @@ FanqieZhiShu/
 
 ### 更新方式
 
-手动更新（爬虫数据产出后手动更新此文件）或：
+**手动同步**（推荐）：
 ```bash
-# 从爬虫数据转换（待实现适配脚本）
-python scripts/adapt_for_rewrite.py data/latest_female_new_ranks.json market-data/番茄女频市场数据.json
+python sync_market_data.py
+```
+
+**自动流程**：
+```bash
+# 1. 采集最新数据
+python run.py scrape
+
+# 2. 构建分析
+python run.py build
+
+# 3. 同步到story-rewrite
+python sync_market_data.py
 ```
 
 ### 集成流程
 
 ```
-story-scan 采集数据 → build 分析 → adapt_for_rewrite 转换 → market-data/*.json → story-rewrite Phase 1 读取
+story-scan 采集数据 → build 分析 → sync_market_data.py 同步 → story-rewrite Phase 1 读取
 ```
