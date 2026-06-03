@@ -16,11 +16,35 @@ description: |
 ├── scripts/
 │   ├── archive_novel.py
 │   └── download_by_author.ps1
-├── downloads/                    # 下载临时目录（带 book_id 子目录）
-├── novel-download-authors/       # 归档目录（永久）
-│   └── {作者名}/{书名}.txt
+├── downloads/                    # 下载临时目录（用完可清理）
+├── novel-download-authors/       # 归档目录（永久，公共缓存）
+│   └── {作者名}/
+│       ├── {书名}.txt            # 原始小说文件
+│       ├── {书名}/               # 拆章缓存（公共，多次仿写共用）
+│       │   ├── 第1章.txt
+│       │   ├── 第2章.txt
+│       │   ├── ...
+│       │   ├── 统计指纹.md
+│       │   ├── 卷结构.md
+│       │   ├── 源文分析_{x-y}.md
+│       │   └── 蒸馏_{x-y}.md
+│       └── ...
 └── SKILL.md
 ```
+
+## 公共缓存机制
+
+**核心思想**：源文拆章和分析结果放在 `novel-download-authors/{作者名}/{书名}/` 目录下，多个仿写项目共用。
+
+**好处**：
+- 同一本书多次仿写时，不用重复拆章和扫描
+- 源文拆章在公共位置，多个仿写项目共用
+- 仿写书目录只放新书内容，干净整洁
+
+**与 story-rewrite 集成**：
+- story-rewrite 的 Phase 1 会检查 `novel-download-authors/{作者名}/{书名}/` 是否已有拆章缓存
+- 如果有，直接使用；如果没有，执行拆章并保存到公共缓存
+- Phase 2 从公共缓存提取本区间源文，分析结果也保存到公共缓存
 
 ## 一键下载（推荐）
 
@@ -115,29 +139,14 @@ Get-ChildItem "$skillDir\downloads\*.txt" | ForEach-Object {
 }
 ```
 
-### 7. 复制到 story-style（蒸馏用）
-
-**关键：必须用 UTF-8 无 BOM 写入，否则蒸馏时读取乱码**
-
-```powershell
-$author = "初点点"
-$srcDir = "$skillDir\novel-download-authors\$author"
-$dstDir = "C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\.claude\skills\story-style\$author\sources"
-New-Item -ItemType Directory -Path $dstDir -Force | Out-Null
-
-Get-ChildItem "$srcDir\*.txt" | ForEach-Object {
-    $content = [System.IO.File]::ReadAllText($_.FullName, [System.Text.Encoding]::UTF8)
-    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
-    [System.IO.File]::WriteAllText("$dstDir\$($_.Name)", $content, $utf8NoBom)
-    Write-Host "复制: $($_.Name)"
-}
-```
-
-### 8. 清理
+### 7. 清理
 
 ```powershell
 Get-Process TomatoNovelDownloader -ErrorAction SilentlyContinue | Stop-Process -Force
 taskkill /F /IM chrome.exe 2>$null
+# 清理 downloads 目录
+Remove-Item -Recurse -Force "$skillDir\downloads" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$skillDir\logs" -ErrorAction SilentlyContinue
 ```
 
 ## 编码验证
@@ -156,7 +165,6 @@ if ($head -match '[锛€浠涔﹀悕鐩綍]') { "编码损坏" } else { "编码
 | `click "[ref=eXX]"` 失败 | ref 格式错误 | 用 `click "@eXX"` |
 | `eval` 报 SyntaxError | JS 中引号/特殊字符冲突 | 简化 JS，避免模板字符串 |
 | Chrome 连接断开 | 长时间操作后 Chrome 崩溃 | 重启 Chrome + 重连 |
-| story-style/sources/ 乱码 | 复制时编码被破坏 | 用 `UTF8Encoding::new($false)` 写入 |
 | 搜索结果不显示 | 页面 hash 变化但内容未刷新 | 用 `press "Enter"` 提交搜索 |
 
 ## config.yml 关键配置
