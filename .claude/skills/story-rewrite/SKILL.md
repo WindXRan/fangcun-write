@@ -68,16 +68,30 @@ prompt：`prompts/source-analyzer.md`
 
 **注意：源文特征.md 不直接传给 writer，而是用于生成派生文件（1.5 设定生成 + 2.5 角色语音）。**
 
-### 1.2 市场扫描（可选，有 bug 跳过）
+### 1.2 市场扫描
 
-如需市场数据，可运行 `/story-scan`（如有 bug 则跳过）。
-不依赖扫榜数据，不影响后续流程。
+**数据来源**：`references/market-data.json`（从story-scan集成）
+
+**数据字段**：
+| 字段 | 用途 |
+|------|------|
+| `hot_genres` | 热门题材热度排行，用于选题材 |
+| `title_patterns` | 书名命名模式，用于定书名 |
+| `tag_combinations` | 标签组合公式，用于配标签 |
+| `golden_three` | 黄金三章标准，用于前3章检查 |
+| `chapter_spec` | 章节字数/节奏标准 |
+
+**更新方式**：运行 `/story-scan` 后手动同步到 `references/market-data.json`
 
 ### 1.3 新书概念生成
 
 方法论：同题材 + 同受众 + 保留成功因子 + 交叉验证 + 微创新
 
 - 分析源文成功因子（钩子/角色/情绪/爽点）
+- **读取市场数据**（`references/market-data.json`）：
+  - `hot_genres`：选择热门题材
+  - `title_patterns`：参考书名模式
+  - `tag_combinations`：配置标签组合
 - 交叉验证（源文成功因子 ∩ 热门元素）
 - 生成新书概念（保留结构，替换元素）
 - 书名参考热门模式
@@ -290,6 +304,7 @@ Settler：`prompts/settler-system.md` → 更新 truth files
 | `prompts/style-analysis.md` | 文风分析 |
 | `prompts/observer-system.md` | Observer |
 | `prompts/settler-system.md` | Settler |
+| `references/market-data.json` | 番茄市场数据（从story-scan集成） |
 | `执行指南.md` | 详细执行步骤和常见错误 |
 
 ---
