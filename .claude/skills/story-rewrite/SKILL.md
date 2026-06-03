@@ -28,28 +28,24 @@ trigger:
 ## 流程
 
 ```
-Phase 1：初始化（一次性）
-  ├── 目录分析 + 分割源文章节
-  ├── 源文分析（样本+逐章）→ 追踪/源文特征.md
+Phase 1：初始化
+  ├── 源文样本分析（20000字符）→ world_rules, character_profiles, power_system
+  ├── 卷纲生成 → 大纲/卷纲.md
   ├── 设定生成 → 设定/story_bible.md + book_rules.md
-  ├── 章纲生成 → 大纲/章纲_*.md
   ├── 简介生成 → 简介.md
-  ├── 写作方法论 → 追踪/写作方法论.md
-  ├── 角色语音 → 追踪/角色语音.md（style/both）
   └── 初始化 truth files
 
 Phase 2：写作（每区间 10 章）
   ├── 提取源文对应章节
-  ├── 文风蒸馏（style/both）→ 追踪/蒸馏_{x-y}.md
-  ├── 结构映射（structure/both）→ 追踪/结构映射_{x-y}.md
-  ├── 写新章（10 并行）→ 正文/第N章.txt
-  ├── 校验 → pass/fail
-  └── Observer + Settler → 更新 truth files
+  ├── 源文逐章分析 → plot_structure, key_events
+  ├── 文风蒸馏（style/both）
+  ├── 结构提取（structure/both）
+  ├── 章纲细化（基于卷纲）→ 大纲/章纲_{x-y}.md
+  ├── 写新章（10 并行）
+  ├── 校验
+  └── Observer + Settler
 
 Phase 3：收尾
-  ├── 全书去AI
-  ├── 一致性终检
-  └── 字数总校验
 ```
 
 ---
@@ -64,46 +60,39 @@ Phase 3：收尾
 
 ### 步骤
 
-1. **目录分析 + 分割源文章节**
+1. **源文样本分析**
 
-   用 `source_chapter_splitter.py` 分割源文为独立章节：
+   分析源文前 20000 字符，提取：
+   - `world_rules`：世界规则
+   - `character_profiles`：角色特征（语癖/说话风格/行为模式）
+   - `power_system`：力量体系
 
-   ```bash
-   python source_chapter_splitter.py split <源文.txt> <源文章节目录>
-   ```
+   prompt：`prompts/source-analyzer.md`
+   输出：`追踪/源文特征.md`
 
-   同时提取目录结构（章数、卷结构）。
+2. **卷纲生成**
 
-2. **源文分析**
+   基于源文样本分析 + 新书概念，生成整体卷纲：
+   - 故事弧线（三幕结构）
+   - 主要转折点
+   - 高潮位置
+   - 卷/章节规划
 
-   **A. 样本分析**（世界规则/角色/力量体系）：
-   - prompt：`prompts/source-analyzer.md`
-   - 输入：源文前 20000 字符
-   - temperature：0.3
-   - 提取：world_rules, character_profiles, power_system
+   输出：`大纲/卷纲.md`
 
-   **B. 结构分析**（情节骨架/关键事件）：
-   - 逐章提取 plot_structure 和 key_events
-   - 每章：核心事件/情绪弧线/钩子/角色动态/转折点/节奏标记
-   - 可并行处理
+3. **设定生成**
 
-   合并输出：`追踪/源文特征.md`
-
-3. **设定生成**：基于源文特征 + 用户概念
+   基于源文样本分析 + 新书概念：
    - `story_bible.md`：世界设定
    - `book_rules.md`：写作规则
 
-4. **章纲生成**：
-   - structure/both：章纲必须对齐 plot_structure
-   - style：章纲独立设计
+4. **简介生成**
 
-5. **简介生成**：基于 story_bible + 章纲
+   基于卷纲 + 设定，生成多个版本简介供选择。
+   输出：`简介.md`
 
-6. **写作方法论**（一次性）：`追踪/写作方法论.md`
+5. **初始化 truth files**
 
-7. **角色语音**（style/both，一次性）：从 character_profiles 提取 → `追踪/角色语音.md`
-
-8. **初始化 truth files**：
    - `追踪/current_state.md`：初始状态
    - `追踪/pending_hooks.md`：空
    - `追踪/chapter_summaries.md`：空
@@ -125,13 +114,22 @@ Phase 3：收尾
 
 #### Step 1：提取源文对应章节
 
-从分割后的源文章节中提取本区间对应的章节：
+从源文中提取本区间对应的章节：
 
 ```bash
 python source_chapter_splitter.py extract <源文.txt> <start> <end> <追踪/源文_{start}-{end}.txt>
 ```
 
-#### Step 2：文风蒸馏（style/only/both）
+#### Step 2：源文逐章分析（每区间）
+
+从本区间的源文章节中提取：
+- `plot_structure`：逐章情节骨架
+- `key_events`：关键事件时间线
+
+prompt：`prompts/source-analyzer.md`
+输出：`追踪/源文特征_{start}-{end}.md`
+
+#### Step 3：文风蒸馏（style/only/both）
 
 **Layer A：统计指纹**
 
@@ -144,17 +142,40 @@ python style_analyzer.py 追踪/源文_{start}-{end}.txt
 - temperature：0.3
 
 **Layer C：写作方法论**
-- 读取 `追踪/写作方法论.md`
+- 首次区间生成 `追踪/写作方法论.md`，后续复用
 
 **合并输出**：`追踪/蒸馏_{start}-{end}.md`
 
-#### Step 3：结构映射（structure/only/both）
+#### Step 4：结构提取（structure/only/both）
 
-从 `追踪/源文特征.md` 的 plot_structure 中提取本区间的逐章映射。
+从本区间的源文分析结果中提取逐章映射：
+
+每章映射：
+- 源文核心事件 → 新书对应事件
+- 源文情绪弧线 → 新书保持
+- 源文钩子 → 新书对应钩子
+- 源文转折 → 新书对应转折
+- 源文角色动态 → 新书角色动态
 
 输出：`追踪/结构映射_{start}-{end}.md`
 
-#### Step 4：写新章
+#### Step 5：角色语音（style/only/both，首次区间）
+
+从源文样本分析的 character_profiles 中提取角色语音特征。
+输出：`追踪/角色语音.md`（首次区间生成，后续复用）
+
+#### Step 6：章纲细化（本区间）
+
+基于：
+- 卷纲（整体规划）
+- 源文分析的 plot_structure（structure/both）
+- 当前 truth files（了解已有剧情）
+
+生成本区间的详细章纲。
+
+输出：`大纲/章纲_{start}-{end}.md`
+
+#### Step 7：写新章
 
 spawn M 个 writer agent（M = `--parallel`）。
 
@@ -166,6 +187,8 @@ spawn M 个 writer agent（M = `--parallel`）。
 【世界设定】请先读取：{设定/story_bible.md}
 
 【写作规则】请先读取：{设定/book_rules.md}
+
+【卷纲】请先读取：{大纲/卷纲.md}
 
 【本章章纲】{章纲内容}
 
@@ -192,7 +215,7 @@ spawn M 个 writer agent（M = `--parallel`）。
 - 字数：2000-2500 字
 ```
 
-#### Step 5：校验
+#### Step 8：校验
 
 对每章执行质量检查：
 - 字数合规（2000-2500 字）
@@ -202,7 +225,7 @@ spawn M 个 writer agent（M = `--parallel`）。
 
 fail → 重写1次 → 仍 fail 标记 manual_required
 
-#### Step 6：状态沉淀（每区间一次）
+#### Step 9：状态沉淀（每区间一次）
 
 spawn 2 个 agent 更新 truth files：
 
@@ -240,19 +263,19 @@ spawn 2 个 agent 更新 truth files：
 ├── 设定/
 │   ├── story_bible.md
 │   └── book_rules.md
-├── 大纲/章纲_*.md
-├── 简介.md
-├── 源文章节/                    # 分割后的源文章节
-│   ├── 第1章.txt
-│   ├── 第2章.txt
+├── 大纲/
+│   ├── 卷纲.md                  # Phase 1 生成（整体规划）
+│   ├── 章纲_{x-y}.md            # 每区间生成
 │   └── ...
+├── 简介.md
 ├── 追踪/
-│   ├── 源文特征.md              # Phase 1 生成
-│   ├── 写作方法论.md            # Phase 1 生成（一次性）
-│   ├── 角色语音.md              # Phase 1 生成（style/both）
-│   ├── 源文_{x-y}.txt          # 每区间提取的源文章节
+│   ├── 源文特征.md              # Phase 1 样本分析
+│   ├── 源文特征_{x-y}.md       # 每区间逐章分析
 │   ├── 蒸馏_{x-y}.md           # 每区间文风蒸馏
 │   ├── 结构映射_{x-y}.md       # 每区间结构映射
+│   ├── 写作方法论.md            # 首次区间生成（复用）
+│   ├── 角色语音.md              # 首次区间生成（复用）
+│   ├── 源文_{x-y}.txt          # 每区间提取的源文章节
 │   ├── 进度.md
 │   ├── current_state.md         # 每区间更新
 │   ├── pending_hooks.md         # 每区间更新
@@ -268,7 +291,7 @@ spawn 2 个 agent 更新 truth files：
 
 | 文件 | 用途 |
 |------|------|
-| `source_chapter_splitter.py` | 源文章节分割 |
+| `source_chapter_splitter.py` | 源文章节提取 |
 | `style_analyzer.py` | 统计指纹（Layer A） |
 | `prompts/source-analyzer.md` | 源文分析器 prompt |
 | `prompts/writer-system.md` | Writer system prompt |
