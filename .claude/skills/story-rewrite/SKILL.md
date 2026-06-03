@@ -30,9 +30,11 @@ Phase 2：写作（每区间 10 章，循环直到完成）
   [ ] 文风蒸馏 → 追踪/蒸馏_{x-y}.md
   [ ] 结构提取 → 追踪/结构映射_{x-y}.md
   [ ] 章纲细化 → 大纲/章纲_{x-y}.md
-  [ ] 写新章（10 并行）→ 正文/第N章.txt
+  [ ] 写新章（10 并行）→ 正文/第N章.txt  ⚠️ 必须用Task工具启动子agent
   [ ] 校验 → pass/fail
   [ ] Observer + Settler → 更新 truth files
+
+⚠️ 重要：写新章必须使用Task工具启动子agent，详见「执行指南.md」
 
 Phase 3：收尾
   [ ] 全书去AI
@@ -66,13 +68,11 @@ prompt：`prompts/source-analyzer.md`
 
 **注意：源文特征.md 不直接传给 writer，而是用于生成派生文件（1.5 设定生成 + 2.5 角色语音）。**
 
-### 1.2 市场扫描（自动检测）
+### 1.2 市场扫描（自动）
 
 自动检测 `story-scan/market-data/` 目录：
 - 存在 → 读取同题材热门数据
-- 不存在 → 跳过，不影响后续流程
-
-如需扫榜数据，先运行 `/story-scan`，再运行 `/story-rewrite`。
+- 不存在 → 自动运行 `/story-scan`，结果缓存到 `story-scan/market-data/`，后续复用
 
 ### 1.3 新书概念生成
 
