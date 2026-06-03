@@ -1,6 +1,6 @@
 import os, re, sys, glob
 
-NOVEL_DB = '.claude/skills/novel-download/novel-download-authors'
+NOVEL_DB = 'novel-download-authors'
 
 def read_chapter(path):
     with open(path, encoding='utf-8') as f:
