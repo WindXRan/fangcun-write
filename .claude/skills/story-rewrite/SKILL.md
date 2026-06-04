@@ -249,13 +249,15 @@ for i in range(1, total_chapters+1):
 你是一个专业的网文写手。请写出《{书名}》第N章正文。
 
 【源文】请读取：novel-download-authors/{作者名}/{书名}/源文/第N章.txt
-【风格指南】请读取：novel-download-authors/{作者名}/{书名}/蒸馏/mode-b/蒸馏_N.md
+【风格指纹】请读取：novel-download-authors/{作者名}/{书名}/蒸馏/mode-b/style_profile_N.json
+【风格指南】请读取：novel-download-authors/{作者名}/{书名}/蒸馏/mode-b/style_guide_N.md
 【真相文件】请读取：{书名}/真相文件/ 下所有 .md 文件
+【新书概念】请读取：{书名}/设定/新书概念.md
 
 【流程】
-1. 结构分析：分析源文章节的结构（爽点分布、因果逻辑），保存到 novel-download-authors/{作者名}/{书名}/蒸馏/mode-b/结构_N.md
+1. 风格分析：读取style_profile_N.json，调用LLM生成风格指南（8个维度），保存到 novel-download-authors/{作者名}/{书名}/蒸馏/mode-b/style_guide_N.md
 2. 章纲：生成章纲，必须通过"因果逻辑链测试"，保存到 {书名}/大纲/章纲_N.md
-3. 写章：根据章纲写出正文
+3. 写章：读取style_guide_N.md，根据章纲写出正文
 
 【合规仿写规则】
 - 可以借鉴：爽点公式、宏观框架、节奏结构
