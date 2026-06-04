@@ -115,8 +115,11 @@ Step 4：执行2.5更新真相文件
 python source_chapter_splitter.py extract novel-download-authors/{作者名}/{书名}/ <start> <end> <{书名}/源文_{x-y}.txt>
 # 用 prompts/chapter-analyzer.md 分析 → 源文分析_{x-y}.md
 
-# 蒸馏
-python style_analyzer.py {书名}/源文_{x-y}.txt
+# ⚠️ 先跑脚本统计客观数据（必须先于大模型分析）
+python style_analyzer.py {书名}/源文_{x-y}.txt --output {书名}/源文_{x-y}_stats.json
+# 脚本会输出：句长分布、段长分布、对话占比、高频词等客观数据
+
+# 再用大模型做定性分析
 # 用 prompts/style-analysis.md 做8维度分析 → 蒸馏_{x-y}.md
 ```
 
@@ -124,6 +127,7 @@ python style_analyzer.py {书名}/源文_{x-y}.txt
 - ✅ 情绪弧线类型（如：失落→惊喜→尴尬→心动）
 - ✅ 冲突类型（如：误会型、利益冲突型、身份揭露型）
 - ✅ 钩子类型（如：悬念型、甜蜜型、反转型）
+- ✅ 客观数据快照（从脚本结果复制，不能自己统计）
 - ❌ 不要求：具体句长、段落数、对话占比等数值指标
 
 ### 2.2 章纲 → `{书名}/大纲/章纲_{x-y}.md`

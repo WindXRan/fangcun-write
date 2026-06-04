@@ -7,7 +7,8 @@ def read_chapter(path):
         return f.read()
 
 def count_words(text):
-    return len(re.findall(r'[\u4e00-\u9fff]', text))
+    """番茄标准字数：所有非空格字符"""
+    return len(re.sub(r'[\s\n\r]', '', text))
 
 def count_sentences(text):
     return len(re.findall(r'[。！？.!?]', text))
@@ -29,11 +30,32 @@ def avg_sentence_len(text):
     sents = [s.strip() for s in re.split(r'[。！？.!?\n]', text) if len(s.strip()) > 3]
     if not sents:
         return 0
-    words = [len(re.findall(r'[\u4e00-\u9fff]', s)) for s in sents]
+    # 番茄标准字数
+    words = [len(re.sub(r'[\s\n\r]', '', s)) for s in sents]
     return round(sum(words) / len(words), 1)
 
-def find_source_chapter(chapter_num):
+def find_source_chapter(chapter_num, source_override=None):
     results = []
+    # If source override is specified, look there first
+    if source_override:
+        src_dir = os.path.join(NOVEL_DB, source_override)
+        if os.path.isdir(src_dir):
+            # Check for split chapters directory
+            split_dir = os.path.join(src_dir)
+            if os.path.isdir(split_dir):
+                pattern = os.path.join(split_dir, f'第{chapter_num}章*.txt')
+                for f in sorted(glob.glob(pattern)):
+                    results.append(f)
+            # Check for combined file
+            for f in os.listdir(src_dir):
+                if f.endswith('.txt') and os.path.isfile(os.path.join(src_dir, f)):
+                    path = os.path.join(src_dir, f)
+                    text = read_chapter(path)
+                    if re.search(rf'第{chapter_num}章\s', text):
+                        results.append(path)
+    if results:
+        return results
+    # Fallback to searching all directories
     pattern = os.path.join(NOVEL_DB, '*', '*', f'第{chapter_num}章*.txt')
     for f in sorted(glob.glob(pattern)):
         results.append(f)
@@ -90,15 +112,23 @@ def strip_title_line(text):
 def main():
     args = sys.argv[1:]
     if not args:
-        print('用法: python compare.py <书名> [起始章] [结束章]')
+        print('用法: python compare.py <书名> [起始章] [结束章] [--source <作者/书名>]')
         print('示例: python compare.py 假扮失忆大佬女友后我翻车了')
         print('示例: python compare.py 假扮失忆大佬女友后我翻车了 1 10')
+        print('示例: python compare.py 学姐从不恋爱 1 10 --source 隔胳呜呜/校花学姐从无绯闻，直到我上大学')
         sys.exit(1)
 
     book_name = args[0]
     base_dir = book_name
     start = int(args[1]) if len(args) > 1 else 1
     end = int(args[2]) if len(args) > 2 else min(start + 2, start + 2)
+
+    # Parse --source flag
+    source_override = None
+    for i, arg in enumerate(args):
+        if arg == '--source' and i + 1 < len(args):
+            source_override = args[i + 1]
+            break
 
     out_dir = os.path.join(base_dir, '对比')
     os.makedirs(out_dir, exist_ok=True)
@@ -142,7 +172,7 @@ def main():
         new_dialog = calc_dialog_ratio(new_text)
         new_avg_len = avg_sentence_len(new_text)
 
-        source_files = find_source_chapter(ch)
+        source_files = find_source_chapter(ch, source_override)
         src_text = None
         src_author = None
 
@@ -185,7 +215,7 @@ def main():
     output.append('')
 
     for ch in range(start, end + 1):
-        source_files = find_source_chapter(ch)
+        source_files = find_source_chapter(ch, source_override)
         src_text = None
         src_author = None
 

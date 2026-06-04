@@ -3,7 +3,11 @@ name: story-compare
 description: |
   快速生成仿写书与源文的逐章对比文件，用于投稿前质量评估或问AI哪本更好。
 trigger:
-  - /story-compare、/对比
+  - /story-compare
+  - /对比
+  - 对比
+  - 生成对比
+  - 看看对比
 ---
 
 # story-compare：仿写对比文件生成
@@ -30,6 +34,10 @@ python .claude/skills/story-compare/compare.py "{书名}" [起始章] [结束章
 1. **统计对比表**（所有章节汇总，一目了然）
 2. **版本A（源文）**（全部章节连着放，方便连续阅读）
 3. **版本B（新书）**（全部章节连着放，方便连续阅读）
+
+## 字数统计
+
+**使用番茄标准**：所有非空格字符（汉字+标点+数字+英文）
 
 ## 注意事项
 
