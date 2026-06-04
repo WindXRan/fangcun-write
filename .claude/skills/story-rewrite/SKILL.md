@@ -258,6 +258,10 @@ for i in range(1, total_chapters+1):
 1. 风格分析：读取style_profile_N.json，调用LLM生成风格指南（8个维度），保存到 novel-download-authors/{作者名}/{书名}/蒸馏/mode-b/style_guide_N.md
 2. 章纲：生成章纲，必须通过"因果逻辑链测试"，保存到 {书名}/大纲/章纲_N.md
 3. 写章：读取style_guide_N.md，根据章纲写出正文
+4. 字数统计：写完后用脚本统计字数
+```bash
+python tools/word_count.py {书名}/正文/第N章.txt
+```
 
 【合规仿写规则】
 - 可以借鉴：爽点公式、宏观框架、节奏结构
@@ -266,11 +270,6 @@ for i in range(1, total_chapters+1):
 
 【输出】保存到：{书名}/正文/第N章.txt
 """
-
-写章完成后，用脚本统计字数：
-```bash
-python tools/word_count.py {书名}/正文/第N章.txt
-```
 ```
 
 #### B3 更新真相文件（脚本保证一致性）
