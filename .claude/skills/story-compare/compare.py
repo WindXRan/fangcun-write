@@ -127,11 +127,12 @@ def main():
     output.append('---')
     output.append('')
 
+    # 统计数据（所有章节汇总）
+    all_stats = []
+
     for ch in range(start, end + 1):
         new_path = os.path.join(base_dir, '正文', f'第{ch}章.txt')
         if not os.path.exists(new_path):
-            output.append(f'## 第{ch}章 版本B未写，跳过')
-            output.append('')
             continue
 
         new_text = read_chapter(new_path)
@@ -158,51 +159,80 @@ def main():
                     src_text = extracted
 
         if src_text:
-            src_body = strip_title_line(src_text)
-            new_body = strip_title_line(new_text)
-
             src_words = count_words(src_text)
             src_paras = count_paragraphs(src_text)
             src_sents = count_sentences(src_text)
             src_dialog = calc_dialog_ratio(src_text)
             src_avg_len = avg_sentence_len(src_text)
+            all_stats.append((ch, src_words, src_paras, src_sents, src_dialog, src_avg_len,
+                              new_words, new_paras, new_sents, new_dialog, new_avg_len))
 
+    # 统计汇总表
+    if all_stats:
+        output.append('## 统计对比')
+        output.append('')
+        output.append('| 章节 | A字数 | B字数 | A段落 | B段落 | A对话% | B对话% | A句长 | B句长 |')
+        output.append('|------|-------|-------|-------|-------|--------|--------|-------|-------|')
+        for s in all_stats:
+            ch, sw, sp, ss, sd, sl, nw, np_, ns, nd, nl = s
+            output.append(f'| 第{ch}章 | {sw} | {nw} | {sp} | {np_} | {sd:.0%} | {nd:.0%} | {sl} | {nl} |')
+        output.append('')
+
+    # 版本A（源文）全部连着放
+    output.append('---')
+    output.append('')
+    output.append('# 版本A（源文）')
+    output.append('')
+
+    for ch in range(start, end + 1):
+        source_files = find_source_chapter(ch)
+        src_text = None
+        src_author = None
+
+        if source_files:
+            src_path = source_files[0]
+            src_text = read_chapter(src_path)
+            src_author, _ = parse_source_path(src_path)
+
+        if not src_text and src_author:
+            combined_path = find_combined_file(src_author, ch)
+            if combined_path:
+                extracted = extract_from_combined(combined_path, ch)
+                if extracted:
+                    src_text = extracted
+
+        if src_text:
+            src_body = strip_title_line(src_text)
             output.append(f'## 第{ch}章')
-            output.append('')
-            output.append('| 维度 | 版本A | 版本B |')
-            output.append('|------|------|------|')
-            output.append(f'| 正文字数 | {src_words} | {new_words} |')
-            output.append(f'| 段落数 | {src_paras} | {new_paras} |')
-            output.append(f'| 句数 | {src_sents} | {new_sents} |')
-            output.append(f'| 对话占比 | {src_dialog:.0%} | {new_dialog:.0%} |')
-            output.append(f'| 平均句长(字) | {src_avg_len} | {new_avg_len} |')
-            output.append('')
-            output.append('### 【版本A】')
             output.append('')
             output.append(src_body)
             output.append('')
-            output.append('### 【版本B】')
-            output.append('')
-            output.append(new_body)
-            output.append('')
         else:
-            new_body = strip_title_line(new_text)
             output.append(f'## 第{ch}章')
             output.append('')
-            output.append('⚠️ 仅找到版本B')
-            output.append('')
-            output.append(f'| 正文字数 | {new_words} |')
-            output.append(f'| 段落数 | {new_paras} |')
-            output.append(f'| 句数 | {new_sents} |')
-            output.append(f'| 对话占比 | {new_dialog:.0%} |')
-            output.append(f'| 平均句长(字) | {new_avg_len} |')
-            output.append('')
-            output.append('### 【版本B】')
-            output.append('')
-            output.append(new_body)
+            output.append('⚠️ 未找到源文')
             output.append('')
 
-        output.append('---')
+    # 版本B（新书）全部连着放
+    output.append('---')
+    output.append('')
+    output.append('# 版本B（新书）')
+    output.append('')
+
+    for ch in range(start, end + 1):
+        new_path = os.path.join(base_dir, '正文', f'第{ch}章.txt')
+        if not os.path.exists(new_path):
+            output.append(f'## 第{ch}章')
+            output.append('')
+            output.append('⚠️ 未写')
+            output.append('')
+            continue
+
+        new_text = read_chapter(new_path)
+        new_body = strip_title_line(new_text)
+        output.append(f'## 第{ch}章')
+        output.append('')
+        output.append(new_body)
         output.append('')
 
     with open(out_path, 'w', encoding='utf-8') as f:
