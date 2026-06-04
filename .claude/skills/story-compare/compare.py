@@ -2,6 +2,19 @@ import os, re, sys, glob
 
 NOVEL_DB = 'novel-download-authors'
 
+def read_source_path_from_concept(book_dir):
+    """从新书概念.md中读取源文路径"""
+    concept_file = os.path.join(book_dir, '设定', '新书概念.md')
+    if not os.path.exists(concept_file):
+        return None
+    with open(concept_file, encoding='utf-8') as f:
+        content = f.read()
+    # 查找"源文路径："开头的行（支持加粗标记）
+    match = re.search(r'\*?\*?源文路径\*?\*?[：:]\s*(.+)', content)
+    if match:
+        return match.group(1).strip()
+    return None
+
 def read_chapter(path):
     with open(path, encoding='utf-8') as f:
         return f.read()
@@ -129,6 +142,17 @@ def main():
         if arg == '--source' and i + 1 < len(args):
             source_override = args[i + 1]
             break
+
+    # 从新书概念.md中读取源文路径（如果没有指定--source）
+    if not source_override:
+        source_path = read_source_path_from_concept(base_dir)
+        if source_path:
+            # 移除novel-download-authors前缀（如果有）
+            if source_path.startswith(NOVEL_DB + '/'):
+                source_path = source_path[len(NOVEL_DB) + 1:]
+            elif source_path.startswith(NOVEL_DB + '\\\\'):
+                source_path = source_path[len(NOVEL_DB) + 2:]
+            source_override = source_path
 
     out_dir = os.path.join(base_dir, '对比')
     os.makedirs(out_dir, exist_ok=True)
