@@ -465,6 +465,8 @@ novel-download-authors/{作者名}/{书名}/
 |------|------|
 | `source_chapter_splitter.py` | 源文章节提取 |
 | `style_analyzer.py` | 统计指纹 |
+| `word_counter.py` | 统一字数统计（与番茄一致） |
+| `post_write_validator.py` | 写后验证器 |
 | `prompts/chapter-analyzer.md` | 章节分析器 |
 | `prompts/style-analysis.md` | 文风分析 |
 | `prompts/auditor-system.md` | 33维度审计 |
@@ -472,6 +474,32 @@ novel-download-authors/{作者名}/{书名}/
 | `prompts/genre-management.md` | 题材管理 |
 | `prompts/chapter-intent.md` | 章节意图管理 |
 | `references/market-data.json` | 番茄市场数据 |
+
+## 字数统计规则
+
+**与番茄小说网站保持一致**：
+- 只统计汉字（中文字符）
+- 不统计标点符号（中文/英文标点都不统计）
+- 不统计空格、换行符
+- 不统计数字
+- 不统计英文字母
+
+**使用方式**：
+```python
+from word_counter import count_words
+
+# 统计文本字数
+words = count_words("这是一段测试文本")
+
+# 统计文件字数
+from word_counter import count_words_from_file
+words = count_words_from_file("chapter.txt")
+```
+
+**命令行**：
+```bash
+python word_counter.py <txt文件或目录>
+```
 
 ---
 
