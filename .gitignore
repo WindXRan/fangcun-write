@@ -46,3 +46,13 @@ session-*.md
 plan_*.md
 *对比*.md
 *对比*.txt
+
+# === 仿写项目数据 ===
+穿成*/
+穿成假冒失忆大佬女友后我只想跑路/
+穿成假冒失忆大佬女友后，我只想跑路/
+
+# === 源文章节（按作者归档）===
+novel-download-authors/*/*.txt
+novel-download-authors/*/*/*.txt
+!novel-download-authors/*/.gitkeep
