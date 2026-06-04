@@ -266,6 +266,11 @@ for i in range(1, total_chapters+1):
 
 【输出】保存到：{书名}/正文/第N章.txt
 """
+
+写章完成后，用脚本统计字数：
+```bash
+python tools/word_count.py {书名}/正文/第N章.txt
+```
 ```
 
 #### B3 更新真相文件（脚本保证一致性）
