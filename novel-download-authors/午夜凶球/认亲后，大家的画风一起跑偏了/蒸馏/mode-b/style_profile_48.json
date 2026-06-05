@@ -1,41 +1,42 @@
 ﻿{
-  "source_name": "第48章.txt",
-  "total_chars": 2875,
-  "total_words": 2232,
-  "total_sentences": 108,
-  "total_paragraphs": 69,
+  "source_name": "第45章.txt",
+  "total_chars": 2390,
+  "total_words": 1905,
+  "total_sentences": 80,
+  "total_paragraphs": 55,
   "sentence_length": {
-    "avg": 20.7,
-    "stddev": 15.2
+    "avg": 23.8,
+    "stddev": 16.2
   },
   "paragraph_length": {
-    "avg": 32.3,
-    "stddev": 27.2,
+    "avg": 34.6,
+    "stddev": 30.2,
     "min": 0,
-    "max": 130
+    "max": 146
   },
-  "vocabulary_ttr": 0.257,
-  "dialogue_ratio": 0.193,
+  "vocabulary_ttr": 0.279,
+  "dialogue_ratio": 0.072,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.454,
-    "long_ratio_gt60": 0.009
+    "short_ratio_lt15": 0.325,
+    "long_ratio_gt60": 0.025
   },
   "paragraph_distribution": {
-    "short_lt50": 0.739,
-    "medium_50_200": 0.261,
+    "short_lt50": 0.764,
+    "medium_50_200": 0.236,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.29
+    "single_sentence_ratio": 0.491
   },
   "top_opening_patterns": [
-    "” ...(23次)",
-    "”，...(13次)",
+    "” ...(10次)",
     "李观...(5次)",
-    "“我...(3次)"
+    "”，...(3次)",
+    "李萱...(3次)",
+    "张凤...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(6处)"
+    "短句节奏(9处)"
   ],
   "ai_tells": [
-    "路标词(3处)"
+    "路标词(1处)"
   ]
 }

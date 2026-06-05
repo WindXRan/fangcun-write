@@ -1,40 +1,37 @@
 ﻿{
-  "source_name": "第46章.txt",
-  "total_chars": 2554,
-  "total_words": 2039,
-  "total_sentences": 80,
-  "total_paragraphs": 45,
+  "source_name": "第43章.txt",
+  "total_chars": 2427,
+  "total_words": 1941,
+  "total_sentences": 76,
+  "total_paragraphs": 46,
   "sentence_length": {
     "avg": 25.5,
-    "stddev": 16.2
+    "stddev": 15.0
   },
   "paragraph_length": {
-    "avg": 45.3,
-    "stddev": 35.2,
+    "avg": 42.2,
+    "stddev": 30.0,
     "min": 0,
-    "max": 132
+    "max": 139
   },
-  "vocabulary_ttr": 0.243,
-  "dialogue_ratio": 0.301,
+  "vocabulary_ttr": 0.274,
+  "dialogue_ratio": 0.237,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.287,
-    "long_ratio_gt60": 0.025
+    "short_ratio_lt15": 0.237,
+    "long_ratio_gt60": 0.013
   },
   "paragraph_distribution": {
-    "short_lt50": 0.6,
-    "medium_50_200": 0.4,
+    "short_lt50": 0.652,
+    "medium_50_200": 0.348,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.244
+    "single_sentence_ratio": 0.326
   },
   "top_opening_patterns": [
-    "” ...(18次)",
-    "”，...(9次)",
-    "卫骁...(3次)"
+    "” ...(13次)",
+    "”，...(6次)"
   ],
   "rhetorical_features": [
-    "短句节奏(3处)"
+    "短句节奏(4处)"
   ],
-  "ai_tells": [
-    "路标词(1处)"
-  ]
+  "ai_tells": []
 }

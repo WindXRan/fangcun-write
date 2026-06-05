@@ -1,42 +1,41 @@
 ﻿{
-  "source_name": "第77章.txt",
-  "total_chars": 2479,
-  "total_words": 1903,
-  "total_sentences": 74,
-  "total_paragraphs": 56,
+  "source_name": "第74章.txt",
+  "total_chars": 2242,
+  "total_words": 1684,
+  "total_sentences": 77,
+  "total_paragraphs": 58,
   "sentence_length": {
-    "avg": 25.7,
-    "stddev": 16.3
+    "avg": 21.9,
+    "stddev": 13.3
   },
   "paragraph_length": {
-    "avg": 34.0,
-    "stddev": 16.9,
+    "avg": 29.0,
+    "stddev": 18.0,
     "min": 0,
-    "max": 82
+    "max": 80
   },
-  "vocabulary_ttr": 0.249,
-  "dialogue_ratio": 0.332,
+  "vocabulary_ttr": 0.256,
+  "dialogue_ratio": 0.222,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.284,
-    "long_ratio_gt60": 0.014
+    "short_ratio_lt15": 0.351,
+    "long_ratio_gt60": 0.013
   },
   "paragraph_distribution": {
-    "short_lt50": 0.821,
-    "medium_50_200": 0.179,
+    "short_lt50": 0.828,
+    "medium_50_200": 0.172,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.304
+    "single_sentence_ratio": 0.431
   },
   "top_opening_patterns": [
-    "” ...(28次)",
-    "”，...(11次)",
-    "李观...(3次)",
-    "李卫...(3次)",
-    "朱文...(3次)"
+    "” ...(19次)",
+    "”，...(6次)",
+    "李昭...(4次)",
+    "李观...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(7处)"
+    "短句节奏(6处)"
   ],
   "ai_tells": [
-    "协作口吻(1处)"
+    "路标词(1处)"
   ]
 }

@@ -1,41 +1,43 @@
 ﻿{
-  "source_name": "第106章.txt",
-  "total_chars": 2330,
-  "total_words": 1765,
-  "total_sentences": 79,
-  "total_paragraphs": 67,
+  "source_name": "第103章.txt",
+  "total_chars": 4822,
+  "total_words": 3690,
+  "total_sentences": 168,
+  "total_paragraphs": 114,
   "sentence_length": {
-    "avg": 22.3,
-    "stddev": 15.1
+    "avg": 22.0,
+    "stddev": 13.4
   },
   "paragraph_length": {
-    "avg": 26.3,
-    "stddev": 17.0,
+    "avg": 32.4,
+    "stddev": 18.5,
     "min": 0,
-    "max": 66
+    "max": 92
   },
-  "vocabulary_ttr": 0.277,
-  "dialogue_ratio": 0.207,
+  "vocabulary_ttr": 0.19,
+  "dialogue_ratio": 0.312,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.38,
-    "long_ratio_gt60": 0.013
+    "short_ratio_lt15": 0.333,
+    "long_ratio_gt60": 0.018
   },
   "paragraph_distribution": {
-    "short_lt50": 0.896,
-    "medium_50_200": 0.104,
+    "short_lt50": 0.798,
+    "medium_50_200": 0.202,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.552
+    "single_sentence_ratio": 0.412
   },
   "top_opening_patterns": [
-    "” ...(20次)",
-    "谢玉...(4次)",
-    "”，...(4次)",
-    "江流...(3次)"
+    "” ...(37次)",
+    "”，...(28次)",
+    "“你...(7次)",
+    "李观...(4次)",
+    "杨雷...(4次)"
   ],
   "rhetorical_features": [
-    "短句节奏(4处)"
+    "短句节奏(10处)"
   ],
   "ai_tells": [
-    "路标词(1处)"
+    "路标词(1处)",
+    "高频副词(1处)"
   ]
 }

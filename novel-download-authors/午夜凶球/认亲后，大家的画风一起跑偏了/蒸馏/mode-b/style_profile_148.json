@@ -1,46 +1,42 @@
 ﻿{
-  "source_name": "第148章.txt",
-  "total_chars": 49231,
-  "total_words": 36249,
-  "total_sentences": 1746,
-  "total_paragraphs": 1374,
+  "source_name": "第145章.txt",
+  "total_chars": 2385,
+  "total_words": 1888,
+  "total_sentences": 77,
+  "total_paragraphs": 55,
   "sentence_length": {
-    "avg": 20.8,
-    "stddev": 15.4
+    "avg": 24.5,
+    "stddev": 12.3
   },
   "paragraph_length": {
-    "avg": 26.4,
-    "stddev": 18.1,
+    "avg": 34.3,
+    "stddev": 22.2,
     "min": 0,
-    "max": 117
+    "max": 119
   },
-  "vocabulary_ttr": 0.055,
-  "dialogue_ratio": 0.737,
+  "vocabulary_ttr": 0.291,
+  "dialogue_ratio": 0.086,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.413,
-    "long_ratio_gt60": 0.022
+    "short_ratio_lt15": 0.195,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.898,
-    "medium_50_200": 0.102,
+    "short_lt50": 0.836,
+    "medium_50_200": 0.164,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.504
+    "single_sentence_ratio": 0.582
   },
   "top_opening_patterns": [
-    "” ...(323次)",
-    "”，...(174次)",
-    "李观...(46次)",
-    "林霆...(32次)",
-    "网友...(32次)"
+    "” ...(7次)",
+    "江流...(5次)",
+    "朱文...(4次)",
+    "林霆...(3次)",
+    "”，...(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(5处)",
-    "排比(2处)",
-    "反问(6处)",
-    "短句节奏(169处)"
+    "短句节奏(3处)"
   ],
   "ai_tells": [
-    "路标词(16处)",
-    "高频副词(12处)"
+    "路标词(2处)"
   ]
 }

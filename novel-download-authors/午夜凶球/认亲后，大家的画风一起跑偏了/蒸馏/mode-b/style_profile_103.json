@@ -1,43 +1,41 @@
 ﻿{
-  "source_name": "第103章.txt",
-  "total_chars": 4822,
-  "total_words": 3690,
-  "total_sentences": 168,
-  "total_paragraphs": 114,
+  "source_name": "第100章.txt",
+  "total_chars": 2253,
+  "total_words": 1704,
+  "total_sentences": 69,
+  "total_paragraphs": 49,
   "sentence_length": {
-    "avg": 22.0,
-    "stddev": 13.4
+    "avg": 24.7,
+    "stddev": 15.3
   },
   "paragraph_length": {
-    "avg": 32.4,
-    "stddev": 18.5,
+    "avg": 34.8,
+    "stddev": 28.0,
     "min": 0,
-    "max": 92
+    "max": 146
   },
-  "vocabulary_ttr": 0.19,
-  "dialogue_ratio": 0.312,
+  "vocabulary_ttr": 0.243,
+  "dialogue_ratio": 0.433,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.333,
-    "long_ratio_gt60": 0.018
+    "short_ratio_lt15": 0.304,
+    "long_ratio_gt60": 0.043
   },
   "paragraph_distribution": {
-    "short_lt50": 0.798,
-    "medium_50_200": 0.202,
+    "short_lt50": 0.796,
+    "medium_50_200": 0.204,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.412
+    "single_sentence_ratio": 0.347
   },
   "top_opening_patterns": [
-    "” ...(37次)",
-    "”，...(28次)",
-    "“你...(7次)",
-    "李观...(4次)",
-    "杨雷...(4次)"
+    "” ...(24次)",
+    "”，...(6次)",
+    "“你...(4次)",
+    "李观...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(10处)"
+    "反问(2处)"
   ],
   "ai_tells": [
-    "路标词(1处)",
-    "高频副词(1处)"
+    "协作口吻(1处)"
   ]
 }

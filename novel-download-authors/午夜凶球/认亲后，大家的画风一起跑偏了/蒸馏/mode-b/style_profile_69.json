@@ -1,38 +1,41 @@
 ﻿{
-  "source_name": "第69章.txt",
-  "total_chars": 2237,
-  "total_words": 1710,
-  "total_sentences": 71,
-  "total_paragraphs": 51,
+  "source_name": "第66章.txt",
+  "total_chars": 2319,
+  "total_words": 1769,
+  "total_sentences": 84,
+  "total_paragraphs": 58,
   "sentence_length": {
-    "avg": 24.1,
-    "stddev": 17.9
+    "avg": 21.1,
+    "stddev": 17.2
   },
   "paragraph_length": {
-    "avg": 33.5,
-    "stddev": 22.4,
+    "avg": 30.5,
+    "stddev": 23.5,
     "min": 0,
-    "max": 104
+    "max": 102
   },
-  "vocabulary_ttr": 0.253,
-  "dialogue_ratio": 0.269,
+  "vocabulary_ttr": 0.284,
+  "dialogue_ratio": 0.254,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.338,
-    "long_ratio_gt60": 0.028
+    "short_ratio_lt15": 0.429,
+    "long_ratio_gt60": 0.024
   },
   "paragraph_distribution": {
-    "short_lt50": 0.863,
-    "medium_50_200": 0.137,
+    "short_lt50": 0.845,
+    "medium_50_200": 0.155,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.392
+    "single_sentence_ratio": 0.431
   },
   "top_opening_patterns": [
-    "” ...(19次)",
-    "”，...(10次)",
-    "李观...(5次)"
+    "” ...(20次)",
+    "”，...(9次)",
+    "“妈...(5次)",
+    "张自...(5次)"
   ],
   "rhetorical_features": [
-    "短句节奏(7处)"
+    "短句节奏(10处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "高频副词(2处)"
+  ]
 }

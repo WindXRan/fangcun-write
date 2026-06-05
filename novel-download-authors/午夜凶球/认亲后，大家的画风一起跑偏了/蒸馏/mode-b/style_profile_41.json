@@ -1,40 +1,41 @@
 ﻿{
-  "source_name": "第41章.txt",
-  "total_chars": 3133,
-  "total_words": 2315,
-  "total_sentences": 104,
-  "total_paragraphs": 80,
+  "source_name": "第38章.txt",
+  "total_chars": 2611,
+  "total_words": 2073,
+  "total_sentences": 80,
+  "total_paragraphs": 45,
   "sentence_length": {
-    "avg": 22.3,
-    "stddev": 18.2
+    "avg": 25.9,
+    "stddev": 18.3
   },
   "paragraph_length": {
-    "avg": 28.9,
-    "stddev": 28.7,
+    "avg": 46.1,
+    "stddev": 32.7,
     "min": 0,
-    "max": 196
+    "max": 158
   },
-  "vocabulary_ttr": 0.229,
-  "dialogue_ratio": 0.502,
+  "vocabulary_ttr": 0.221,
+  "dialogue_ratio": 0.378,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.394,
-    "long_ratio_gt60": 0.029
+    "short_ratio_lt15": 0.25,
+    "long_ratio_gt60": 0.05
   },
   "paragraph_distribution": {
-    "short_lt50": 0.825,
-    "medium_50_200": 0.175,
+    "short_lt50": 0.6,
+    "medium_50_200": 0.4,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.4
+    "single_sentence_ratio": 0.267
   },
   "top_opening_patterns": [
-    "” ...(35次)",
-    "”，...(13次)",
-    "“你...(4次)",
-    "李建...(4次)",
-    "李观...(3次)"
+    "” ...(14次)",
+    "沈琳...(9次)",
+    "”，...(8次)"
   ],
   "rhetorical_features": [
-    "短句节奏(8处)"
+    "短句节奏(6处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "协作口吻(1处)",
+    "高频副词(2处)"
+  ]
 }

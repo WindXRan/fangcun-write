@@ -1,41 +1,42 @@
 ﻿{
-  "source_name": "第28章.txt",
-  "total_chars": 2436,
-  "total_words": 1935,
-  "total_sentences": 78,
-  "total_paragraphs": 44,
+  "source_name": "第25章.txt",
+  "total_chars": 2379,
+  "total_words": 1814,
+  "total_sentences": 88,
+  "total_paragraphs": 60,
   "sentence_length": {
-    "avg": 24.8,
-    "stddev": 16.5
+    "avg": 20.6,
+    "stddev": 15.7
   },
   "paragraph_length": {
-    "avg": 44.0,
-    "stddev": 30.6,
+    "avg": 30.2,
+    "stddev": 22.1,
     "min": 0,
-    "max": 135
+    "max": 108
   },
-  "vocabulary_ttr": 0.241,
-  "dialogue_ratio": 0.386,
+  "vocabulary_ttr": 0.276,
+  "dialogue_ratio": 0.226,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.321,
-    "long_ratio_gt60": 0.026
+    "short_ratio_lt15": 0.42,
+    "long_ratio_gt60": 0.011
   },
   "paragraph_distribution": {
-    "short_lt50": 0.659,
-    "medium_50_200": 0.341,
+    "short_lt50": 0.85,
+    "medium_50_200": 0.15,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.25
+    "single_sentence_ratio": 0.383
   },
   "top_opening_patterns": [
-    "” ...(16次)",
-    "”，...(7次)",
+    "” ...(18次)",
+    "”李...(10次)",
+    "李观...(5次)",
     "李萱...(4次)",
-    "“你...(3次)"
+    "中年...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(3处)"
+    "短句节奏(11处)"
   ],
   "ai_tells": [
-    "路标词(2处)"
+    "高频副词(1处)"
   ]
 }

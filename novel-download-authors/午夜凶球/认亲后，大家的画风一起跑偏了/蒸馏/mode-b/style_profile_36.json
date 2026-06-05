@@ -1,40 +1,42 @@
 ﻿{
-  "source_name": "第36章.txt",
-  "total_chars": 2406,
-  "total_words": 1908,
-  "total_sentences": 72,
-  "total_paragraphs": 46,
+  "source_name": "第33章.txt",
+  "total_chars": 2515,
+  "total_words": 2030,
+  "total_sentences": 78,
+  "total_paragraphs": 48,
   "sentence_length": {
-    "avg": 26.5,
-    "stddev": 20.1
+    "avg": 26.0,
+    "stddev": 15.3
   },
   "paragraph_length": {
-    "avg": 41.5,
-    "stddev": 32.7,
+    "avg": 42.3,
+    "stddev": 26.9,
     "min": 0,
-    "max": 125
+    "max": 133
   },
   "vocabulary_ttr": 0.256,
-  "dialogue_ratio": 0.338,
+  "dialogue_ratio": 0.162,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.347,
-    "long_ratio_gt60": 0.083
+    "short_ratio_lt15": 0.269,
+    "long_ratio_gt60": 0.038
   },
   "paragraph_distribution": {
-    "short_lt50": 0.652,
-    "medium_50_200": 0.348,
+    "short_lt50": 0.708,
+    "medium_50_200": 0.292,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.326
+    "single_sentence_ratio": 0.438
   },
   "top_opening_patterns": [
-    "” ...(15次)",
-    "”，...(9次)",
-    "林霆...(5次)"
+    "”，...(7次)",
+    "” ...(6次)",
+    "李观...(4次)",
+    "徐楠...(4次)",
+    "林霆...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(6处)"
+    "短句节奏(4处)"
   ],
   "ai_tells": [
-    "协作口吻(1处)"
+    "路标词(2处)"
   ]
 }

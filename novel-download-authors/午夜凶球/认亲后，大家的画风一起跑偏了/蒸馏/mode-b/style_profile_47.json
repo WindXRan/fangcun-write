@@ -1,40 +1,37 @@
 ﻿{
-  "source_name": "第47章.txt",
-  "total_chars": 3065,
-  "total_words": 2397,
-  "total_sentences": 109,
-  "total_paragraphs": 69,
+  "source_name": "第44章.txt",
+  "total_chars": 2595,
+  "total_words": 2075,
+  "total_sentences": 76,
+  "total_paragraphs": 45,
   "sentence_length": {
-    "avg": 22.0,
-    "stddev": 14.1
+    "avg": 27.3,
+    "stddev": 16.5
   },
   "paragraph_length": {
-    "avg": 34.7,
-    "stddev": 24.5,
+    "avg": 46.1,
+    "stddev": 28.1,
     "min": 0,
-    "max": 109
+    "max": 108
   },
-  "vocabulary_ttr": 0.22,
-  "dialogue_ratio": 0.212,
+  "vocabulary_ttr": 0.264,
+  "dialogue_ratio": 0.215,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.339,
-    "long_ratio_gt60": 0.009
+    "short_ratio_lt15": 0.224,
+    "long_ratio_gt60": 0.026
   },
   "paragraph_distribution": {
-    "short_lt50": 0.768,
-    "medium_50_200": 0.232,
+    "short_lt50": 0.578,
+    "medium_50_200": 0.422,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.377
+    "single_sentence_ratio": 0.289
   },
   "top_opening_patterns": [
-    "” ...(17次)",
-    "”，...(13次)",
-    "刘佳...(8次)",
-    "李观...(7次)",
-    "李萱...(5次)"
+    "” ...(13次)",
+    "”，...(12次)",
+    "李观...(3次)"
   ],
   "rhetorical_features": [
-    "反问(2处)",
     "短句节奏(4处)"
   ],
   "ai_tells": [

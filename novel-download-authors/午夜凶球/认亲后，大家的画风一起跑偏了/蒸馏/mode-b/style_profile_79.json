@@ -1,40 +1,37 @@
 ﻿{
-  "source_name": "第79章.txt",
-  "total_chars": 2388,
-  "total_words": 1731,
-  "total_sentences": 102,
-  "total_paragraphs": 71,
+  "source_name": "第76章.txt",
+  "total_chars": 2307,
+  "total_words": 1785,
+  "total_sentences": 67,
+  "total_paragraphs": 53,
   "sentence_length": {
-    "avg": 17.0,
-    "stddev": 12.7
+    "avg": 26.6,
+    "stddev": 14.5
   },
   "paragraph_length": {
-    "avg": 24.4,
-    "stddev": 18.2,
+    "avg": 33.7,
+    "stddev": 20.8,
     "min": 0,
-    "max": 63
+    "max": 103
   },
-  "vocabulary_ttr": 0.249,
-  "dialogue_ratio": 0.317,
+  "vocabulary_ttr": 0.248,
+  "dialogue_ratio": 0.25,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.51,
-    "long_ratio_gt60": 0.0
+    "short_ratio_lt15": 0.239,
+    "long_ratio_gt60": 0.015
   },
   "paragraph_distribution": {
-    "short_lt50": 0.887,
-    "medium_50_200": 0.113,
+    "short_lt50": 0.83,
+    "medium_50_200": 0.17,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.254
+    "single_sentence_ratio": 0.453
   },
   "top_opening_patterns": [
-    "” ...(27次)",
-    "”林...(8次)",
-    "”李...(5次)",
-    "林霆...(3次)",
-    "两个...(3次)"
+    "” ...(20次)",
+    "”，...(6次)",
+    "孙老...(4次)",
+    "李观...(3次)"
   ],
-  "rhetorical_features": [
-    "短句节奏(12处)"
-  ],
+  "rhetorical_features": [],
   "ai_tells": []
 }

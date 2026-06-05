@@ -1,40 +1,43 @@
 ﻿{
-  "source_name": "第37章.txt",
-  "total_chars": 2419,
-  "total_words": 1846,
-  "total_sentences": 86,
-  "total_paragraphs": 54,
+  "source_name": "第34章.txt",
+  "total_chars": 4458,
+  "total_words": 3573,
+  "total_sentences": 140,
+  "total_paragraphs": 87,
   "sentence_length": {
-    "avg": 21.5,
-    "stddev": 17.5
+    "avg": 25.5,
+    "stddev": 14.3
   },
   "paragraph_length": {
-    "avg": 34.2,
-    "stddev": 37.6,
+    "avg": 41.1,
+    "stddev": 25.5,
     "min": 0,
-    "max": 216
+    "max": 123
   },
-  "vocabulary_ttr": 0.243,
-  "dialogue_ratio": 0.349,
+  "vocabulary_ttr": 0.193,
+  "dialogue_ratio": 0.301,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.419,
-    "long_ratio_gt60": 0.023
+    "short_ratio_lt15": 0.229,
+    "long_ratio_gt60": 0.029
   },
   "paragraph_distribution": {
-    "short_lt50": 0.833,
-    "medium_50_200": 0.148,
-    "long_gt200": 0.019,
-    "single_sentence_ratio": 0.426
+    "short_lt50": 0.678,
+    "medium_50_200": 0.322,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.391
   },
   "top_opening_patterns": [
+    "” ...(22次)",
     "”，...(12次)",
-    "” ...(10次)",
-    "虎子...(4次)",
-    "“你...(3次)",
-    "孙晓...(3次)"
+    "欣欣...(6次)",
+    "李观...(4次)",
+    "“那...(4次)"
   ],
   "rhetorical_features": [
-    "短句节奏(14处)"
+    "短句节奏(4处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "路标词(1处)",
+    "协作口吻(1处)"
+  ]
 }

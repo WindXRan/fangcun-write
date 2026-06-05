@@ -1,39 +1,41 @@
 ﻿{
-  "source_name": "第93章.txt",
-  "total_chars": 2275,
-  "total_words": 1826,
-  "total_sentences": 72,
-  "total_paragraphs": 45,
+  "source_name": "第90章.txt",
+  "total_chars": 2362,
+  "total_words": 1813,
+  "total_sentences": 84,
+  "total_paragraphs": 49,
   "sentence_length": {
-    "avg": 25.4,
-    "stddev": 17.0
+    "avg": 21.6,
+    "stddev": 16.4
   },
   "paragraph_length": {
-    "avg": 40.6,
-    "stddev": 28.3,
+    "avg": 37.0,
+    "stddev": 23.5,
     "min": 0,
-    "max": 116
+    "max": 114
   },
-  "vocabulary_ttr": 0.24,
-  "dialogue_ratio": 0.205,
+  "vocabulary_ttr": 0.251,
+  "dialogue_ratio": 0.402,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.236,
-    "long_ratio_gt60": 0.042
+    "short_ratio_lt15": 0.44,
+    "long_ratio_gt60": 0.036
   },
   "paragraph_distribution": {
-    "short_lt50": 0.689,
-    "medium_50_200": 0.311,
+    "short_lt50": 0.735,
+    "medium_50_200": 0.265,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.444
+    "single_sentence_ratio": 0.204
   },
   "top_opening_patterns": [
-    "” ...(15次)",
-    "”，...(5次)",
-    "孙老...(4次)",
-    "顾伟...(4次)"
+    "” ...(18次)",
+    "”，...(16次)",
+    "林秋...(3次)",
+    "“也...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(7处)"
+    "短句节奏(9处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "高频副词(1处)"
+  ]
 }

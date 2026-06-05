@@ -1,40 +1,36 @@
 ﻿{
-  "source_name": "第17章.txt",
-  "total_chars": 2333,
-  "total_words": 1793,
-  "total_sentences": 98,
-  "total_paragraphs": 46,
+  "source_name": "第14章.txt",
+  "total_chars": 3446,
+  "total_words": 2747,
+  "total_sentences": 122,
+  "total_paragraphs": 56,
   "sentence_length": {
-    "avg": 18.3,
-    "stddev": 13.7
+    "avg": 22.5,
+    "stddev": 17.8
   },
   "paragraph_length": {
-    "avg": 39.0,
-    "stddev": 26.9,
+    "avg": 49.1,
+    "stddev": 44.5,
     "min": 0,
-    "max": 156
+    "max": 256
   },
-  "vocabulary_ttr": 0.244,
-  "dialogue_ratio": 0.416,
+  "vocabulary_ttr": 0.207,
+  "dialogue_ratio": 0.645,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.52,
-    "long_ratio_gt60": 0.01
+    "short_ratio_lt15": 0.385,
+    "long_ratio_gt60": 0.033
   },
   "paragraph_distribution": {
-    "short_lt50": 0.674,
-    "medium_50_200": 0.326,
-    "long_gt200": 0.0,
-    "single_sentence_ratio": 0.174
+    "short_lt50": 0.607,
+    "medium_50_200": 0.375,
+    "long_gt200": 0.018,
+    "single_sentence_ratio": 0.214
   },
   "top_opening_patterns": [
-    "” ...(18次)",
-    "”李...(7次)",
-    "李观...(6次)",
-    "”刘...(5次)",
-    "”林...(4次)"
+    "” ...(31次)"
   ],
   "rhetorical_features": [
-    "短句节奏(12处)"
+    "短句节奏(11处)"
   ],
   "ai_tells": []
 }

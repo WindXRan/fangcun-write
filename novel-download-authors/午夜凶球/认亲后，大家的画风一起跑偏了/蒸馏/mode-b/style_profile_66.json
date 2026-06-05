@@ -1,41 +1,40 @@
 ﻿{
-  "source_name": "第66章.txt",
-  "total_chars": 2319,
-  "total_words": 1769,
-  "total_sentences": 84,
-  "total_paragraphs": 58,
+  "source_name": "第63章.txt",
+  "total_chars": 2261,
+  "total_words": 1704,
+  "total_sentences": 78,
+  "total_paragraphs": 52,
   "sentence_length": {
-    "avg": 21.1,
-    "stddev": 17.2
+    "avg": 21.8,
+    "stddev": 13.0
   },
   "paragraph_length": {
-    "avg": 30.5,
-    "stddev": 23.5,
+    "avg": 32.8,
+    "stddev": 17.8,
     "min": 0,
-    "max": 102
+    "max": 78
   },
-  "vocabulary_ttr": 0.284,
-  "dialogue_ratio": 0.254,
+  "vocabulary_ttr": 0.277,
+  "dialogue_ratio": 0.29,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.429,
-    "long_ratio_gt60": 0.024
+    "short_ratio_lt15": 0.282,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.845,
-    "medium_50_200": 0.155,
+    "short_lt50": 0.808,
+    "medium_50_200": 0.192,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.431
+    "single_sentence_ratio": 0.462
   },
   "top_opening_patterns": [
-    "” ...(20次)",
-    "”，...(9次)",
-    "“妈...(5次)",
-    "张自...(5次)"
+    "”，...(17次)",
+    "” ...(14次)",
+    "“哎...(4次)",
+    "谢玉...(4次)",
+    "李观...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(10处)"
+    "短句节奏(4处)"
   ],
-  "ai_tells": [
-    "高频副词(2处)"
-  ]
+  "ai_tells": []
 }

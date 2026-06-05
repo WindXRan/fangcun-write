@@ -1,42 +1,40 @@
 ﻿{
-  "source_name": "第136章.txt",
-  "total_chars": 2429,
-  "total_words": 1851,
-  "total_sentences": 88,
-  "total_paragraphs": 56,
+  "source_name": "第133章.txt",
+  "total_chars": 2346,
+  "total_words": 1837,
+  "total_sentences": 68,
+  "total_paragraphs": 48,
   "sentence_length": {
-    "avg": 21.0,
-    "stddev": 14.6
+    "avg": 27.0,
+    "stddev": 16.4
   },
   "paragraph_length": {
-    "avg": 33.1,
-    "stddev": 22.9,
+    "avg": 38.3,
+    "stddev": 19.9,
     "min": 0,
-    "max": 113
+    "max": 95
   },
-  "vocabulary_ttr": 0.245,
-  "dialogue_ratio": 0.33,
+  "vocabulary_ttr": 0.258,
+  "dialogue_ratio": 0.232,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.409,
-    "long_ratio_gt60": 0.011
+    "short_ratio_lt15": 0.279,
+    "long_ratio_gt60": 0.029
   },
   "paragraph_distribution": {
-    "short_lt50": 0.839,
-    "medium_50_200": 0.161,
+    "short_lt50": 0.667,
+    "medium_50_200": 0.333,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.429
+    "single_sentence_ratio": 0.5
   },
   "top_opening_patterns": [
-    "”，...(16次)",
-    "” ...(12次)",
-    "李卫...(4次)",
-    "“哎...(3次)",
-    "老赵...(3次)"
+    "”，...(14次)",
+    "” ...(11次)",
+    "林秋...(4次)",
+    "李观...(3次)",
+    "“你...(3次)"
   ],
   "rhetorical_features": [
     "短句节奏(4处)"
   ],
-  "ai_tells": [
-    "路标词(1处)"
-  ]
+  "ai_tells": []
 }

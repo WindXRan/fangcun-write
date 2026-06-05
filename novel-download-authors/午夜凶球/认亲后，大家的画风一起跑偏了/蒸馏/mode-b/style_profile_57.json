@@ -1,40 +1,37 @@
 ﻿{
-  "source_name": "第57章.txt",
-  "total_chars": 2272,
-  "total_words": 1811,
-  "total_sentences": 66,
-  "total_paragraphs": 41,
+  "source_name": "第54章.txt",
+  "total_chars": 2417,
+  "total_words": 1976,
+  "total_sentences": 72,
+  "total_paragraphs": 35,
   "sentence_length": {
     "avg": 27.4,
-    "stddev": 17.4
+    "stddev": 15.2
   },
   "paragraph_length": {
-    "avg": 44.2,
-    "stddev": 25.2,
+    "avg": 56.5,
+    "stddev": 34.2,
     "min": 0,
-    "max": 104
+    "max": 138
   },
-  "vocabulary_ttr": 0.25,
-  "dialogue_ratio": 0.248,
+  "vocabulary_ttr": 0.262,
+  "dialogue_ratio": 0.314,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.273,
-    "long_ratio_gt60": 0.061
+    "short_ratio_lt15": 0.236,
+    "long_ratio_gt60": 0.014
   },
   "paragraph_distribution": {
-    "short_lt50": 0.683,
-    "medium_50_200": 0.317,
+    "short_lt50": 0.486,
+    "medium_50_200": 0.514,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.244
+    "single_sentence_ratio": 0.314
   },
   "top_opening_patterns": [
-    "” ...(14次)",
-    "”，...(11次)",
-    "马强...(3次)",
-    "孙晓...(3次)",
-    "李建...(3次)"
+    "”，...(13次)",
+    "” ...(5次)"
   ],
   "rhetorical_features": [
-    "短句节奏(4处)"
+    "短句节奏(3处)"
   ],
   "ai_tells": []
 }

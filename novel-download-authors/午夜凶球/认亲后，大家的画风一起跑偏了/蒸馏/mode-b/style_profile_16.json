@@ -1,40 +1,40 @@
 ﻿{
-  "source_name": "第16章.txt",
-  "total_chars": 2470,
-  "total_words": 1837,
-  "total_sentences": 101,
-  "total_paragraphs": 62,
+  "source_name": "第13章.txt",
+  "total_chars": 2248,
+  "total_words": 1848,
+  "total_sentences": 72,
+  "total_paragraphs": 25,
   "sentence_length": {
-    "avg": 18.2,
-    "stddev": 12.8
+    "avg": 25.7,
+    "stddev": 16.6
   },
   "paragraph_length": {
-    "avg": 29.6,
-    "stddev": 23.1,
+    "avg": 73.9,
+    "stddev": 67.0,
     "min": 0,
-    "max": 94
+    "max": 240
   },
-  "vocabulary_ttr": 0.248,
-  "dialogue_ratio": 0.409,
+  "vocabulary_ttr": 0.251,
+  "dialogue_ratio": 0.788,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.416,
-    "long_ratio_gt60": 0.01
+    "short_ratio_lt15": 0.306,
+    "long_ratio_gt60": 0.042
   },
   "paragraph_distribution": {
-    "short_lt50": 0.855,
-    "medium_50_200": 0.145,
-    "long_gt200": 0.0,
-    "single_sentence_ratio": 0.242
+    "short_lt50": 0.4,
+    "medium_50_200": 0.48,
+    "long_gt200": 0.12,
+    "single_sentence_ratio": 0.32
   },
   "top_opening_patterns": [
-    "” ...(28次)",
-    "李建...(4次)",
-    "”李...(3次)"
+    "” ...(6次)",
+    "我妈...(4次)",
+    "我爸...(4次)",
+    "徐楠...(3次)",
+    "’，...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(14处)"
+    "短句节奏(5处)"
   ],
-  "ai_tells": [
-    "路标词(4处)"
-  ]
+  "ai_tells": []
 }

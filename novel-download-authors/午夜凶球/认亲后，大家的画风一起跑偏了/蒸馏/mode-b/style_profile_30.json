@@ -1,38 +1,40 @@
 ﻿{
-  "source_name": "第30章.txt",
-  "total_chars": 2393,
-  "total_words": 1979,
-  "total_sentences": 67,
-  "total_paragraphs": 40,
+  "source_name": "第27章.txt",
+  "total_chars": 2453,
+  "total_words": 1983,
+  "total_sentences": 83,
+  "total_paragraphs": 45,
   "sentence_length": {
-    "avg": 29.5,
-    "stddev": 16.6
+    "avg": 23.9,
+    "stddev": 15.5
   },
   "paragraph_length": {
-    "avg": 49.5,
-    "stddev": 31.3,
+    "avg": 44.1,
+    "stddev": 31.2,
     "min": 0,
-    "max": 125
+    "max": 128
   },
-  "vocabulary_ttr": 0.266,
-  "dialogue_ratio": 0.274,
+  "vocabulary_ttr": 0.26,
+  "dialogue_ratio": 0.127,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.149,
-    "long_ratio_gt60": 0.06
+    "short_ratio_lt15": 0.313,
+    "long_ratio_gt60": 0.012
   },
   "paragraph_distribution": {
-    "short_lt50": 0.575,
-    "medium_50_200": 0.425,
+    "short_lt50": 0.622,
+    "medium_50_200": 0.378,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.35
+    "single_sentence_ratio": 0.311
   },
   "top_opening_patterns": [
-    "” ...(13次)",
-    "林霆...(4次)",
-    "李观...(3次)"
+    "” ...(12次)",
+    "张自...(6次)",
+    "李卫...(4次)",
+    "”，...(4次)",
+    "李萱...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(3处)"
+    "短句节奏(6处)"
   ],
   "ai_tells": []
 }

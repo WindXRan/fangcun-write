@@ -1,40 +1,42 @@
 ﻿{
-  "source_name": "第4章.txt",
-  "total_chars": 2475,
-  "total_words": 1806,
-  "total_sentences": 102,
-  "total_paragraphs": 71,
+  "source_name": "第1章.txt",
+  "total_chars": 2423,
+  "total_words": 1929,
+  "total_sentences": 75,
+  "total_paragraphs": 40,
   "sentence_length": {
-    "avg": 17.7,
-    "stddev": 11.6
+    "avg": 25.7,
+    "stddev": 17.1
   },
   "paragraph_length": {
-    "avg": 25.4,
-    "stddev": 21.0,
+    "avg": 48.2,
+    "stddev": 42.0,
     "min": 0,
-    "max": 106
+    "max": 212
   },
-  "vocabulary_ttr": 0.287,
-  "dialogue_ratio": 0.38,
+  "vocabulary_ttr": 0.248,
+  "dialogue_ratio": 0.466,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.431,
-    "long_ratio_gt60": 0.0
+    "short_ratio_lt15": 0.28,
+    "long_ratio_gt60": 0.027
   },
   "paragraph_distribution": {
-    "short_lt50": 0.887,
-    "medium_50_200": 0.113,
-    "long_gt200": 0.0,
-    "single_sentence_ratio": 0.352
+    "short_lt50": 0.7,
+    "medium_50_200": 0.275,
+    "long_gt200": 0.025,
+    "single_sentence_ratio": 0.25
   },
   "top_opening_patterns": [
-    "” ...(27次)",
-    "李观...(5次)",
-    "”吴...(5次)",
-    "江流...(5次)",
-    "吴明...(4次)"
+    "” ...(20次)",
+    "李建...(4次)",
+    "”李...(3次)",
+    "”林...(3次)",
+    "”，...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(7处)"
+    "短句节奏(6处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "路标词(1处)"
+  ]
 }

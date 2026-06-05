@@ -1,40 +1,38 @@
 ﻿{
-  "source_name": "第88章.txt",
-  "total_chars": 2412,
-  "total_words": 1725,
-  "total_sentences": 104,
-  "total_paragraphs": 77,
+  "source_name": "第85章.txt",
+  "total_chars": 2253,
+  "total_words": 1802,
+  "total_sentences": 62,
+  "total_paragraphs": 40,
   "sentence_length": {
-    "avg": 16.6,
-    "stddev": 13.1
+    "avg": 29.1,
+    "stddev": 16.5
   },
   "paragraph_length": {
-    "avg": 22.4,
-    "stddev": 18.3,
+    "avg": 45.0,
+    "stddev": 24.5,
     "min": 0,
-    "max": 100
+    "max": 106
   },
-  "vocabulary_ttr": 0.25,
-  "dialogue_ratio": 0.324,
+  "vocabulary_ttr": 0.242,
+  "dialogue_ratio": 0.266,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.538,
-    "long_ratio_gt60": 0.019
+    "short_ratio_lt15": 0.242,
+    "long_ratio_gt60": 0.032
   },
   "paragraph_distribution": {
-    "short_lt50": 0.909,
-    "medium_50_200": 0.091,
+    "short_lt50": 0.575,
+    "medium_50_200": 0.425,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.377
+    "single_sentence_ratio": 0.35
   },
   "top_opening_patterns": [
-    "” ...(28次)",
-    "”，...(14次)",
-    "警察...(4次)",
-    "“这...(3次)"
+    "” ...(15次)",
+    "”，...(4次)",
+    "孙老...(3次)",
+    "李卫...(3次)"
   ],
-  "rhetorical_features": [
-    "短句节奏(13处)"
-  ],
+  "rhetorical_features": [],
   "ai_tells": [
     "路标词(1处)"
   ]

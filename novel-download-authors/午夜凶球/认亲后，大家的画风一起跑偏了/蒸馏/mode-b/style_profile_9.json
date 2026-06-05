@@ -1,42 +1,40 @@
 ﻿{
-  "source_name": "第9章.txt",
-  "total_chars": 2555,
-  "total_words": 1898,
-  "total_sentences": 94,
-  "total_paragraphs": 69,
+  "source_name": "第6章.txt",
+  "total_chars": 2267,
+  "total_words": 1714,
+  "total_sentences": 96,
+  "total_paragraphs": 55,
   "sentence_length": {
-    "avg": 20.2,
-    "stddev": 15.1
+    "avg": 17.9,
+    "stddev": 13.8
   },
   "paragraph_length": {
-    "avg": 27.5,
-    "stddev": 20.0,
+    "avg": 31.2,
+    "stddev": 33.1,
     "min": 0,
-    "max": 85
+    "max": 189
   },
-  "vocabulary_ttr": 0.267,
-  "dialogue_ratio": 0.24,
+  "vocabulary_ttr": 0.291,
+  "dialogue_ratio": 0.516,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.468,
+    "short_ratio_lt15": 0.562,
     "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.826,
-    "medium_50_200": 0.174,
+    "short_lt50": 0.836,
+    "medium_50_200": 0.164,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.406
+    "single_sentence_ratio": 0.364
   },
   "top_opening_patterns": [
-    "” ...(28次)",
-    "”，...(6次)",
-    "谢玉...(4次)",
-    "”李...(3次)",
-    "江流...(3次)"
+    "” ...(24次)",
+    "”，...(4次)",
+    "李观...(3次)",
+    "不过...(3次)",
+    "“你...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(8处)"
+    "短句节奏(9处)"
   ],
-  "ai_tells": [
-    "协作口吻(1处)"
-  ]
+  "ai_tells": []
 }

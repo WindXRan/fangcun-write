@@ -1,40 +1,40 @@
 ﻿{
-  "source_name": "第53章.txt",
-  "total_chars": 2295,
-  "total_words": 1825,
-  "total_sentences": 80,
-  "total_paragraphs": 44,
+  "source_name": "第50章.txt",
+  "total_chars": 2319,
+  "total_words": 1833,
+  "total_sentences": 75,
+  "total_paragraphs": 45,
   "sentence_length": {
-    "avg": 22.8,
-    "stddev": 14.3
+    "avg": 24.4,
+    "stddev": 18.8
   },
   "paragraph_length": {
-    "avg": 41.5,
-    "stddev": 37.9,
+    "avg": 40.7,
+    "stddev": 30.1,
     "min": 0,
-    "max": 178
+    "max": 133
   },
-  "vocabulary_ttr": 0.263,
-  "dialogue_ratio": 0.351,
+  "vocabulary_ttr": 0.268,
+  "dialogue_ratio": 0.322,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.287,
-    "long_ratio_gt60": 0.013
+    "short_ratio_lt15": 0.307,
+    "long_ratio_gt60": 0.053
   },
   "paragraph_distribution": {
-    "short_lt50": 0.682,
-    "medium_50_200": 0.318,
+    "short_lt50": 0.644,
+    "medium_50_200": 0.356,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.5
+    "single_sentence_ratio": 0.378
   },
   "top_opening_patterns": [
-    "”，...(13次)",
-    "” ...(5次)",
-    "“我...(4次)",
-    "老太...(3次)"
+    "” ...(10次)",
+    "”，...(8次)",
+    "“我...(3次)"
   ],
   "rhetorical_features": [
-    "反问(3处)",
-    "短句节奏(6处)"
+    "短句节奏(2处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "高频副词(1处)"
+  ]
 }

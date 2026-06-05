@@ -1,42 +1,39 @@
 ﻿{
-  "source_name": "第137章.txt",
-  "total_chars": 2376,
-  "total_words": 1735,
-  "total_sentences": 86,
-  "total_paragraphs": 65,
+  "source_name": "第134章.txt",
+  "total_chars": 2284,
+  "total_words": 1718,
+  "total_sentences": 75,
+  "total_paragraphs": 55,
   "sentence_length": {
-    "avg": 20.2,
-    "stddev": 13.8
+    "avg": 22.9,
+    "stddev": 14.7
   },
   "paragraph_length": {
-    "avg": 26.7,
-    "stddev": 16.3,
+    "avg": 31.2,
+    "stddev": 19.8,
     "min": 0,
-    "max": 69
+    "max": 82
   },
-  "vocabulary_ttr": 0.25,
-  "dialogue_ratio": 0.443,
+  "vocabulary_ttr": 0.256,
+  "dialogue_ratio": 0.35,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.407,
-    "long_ratio_gt60": 0.012
+    "short_ratio_lt15": 0.293,
+    "long_ratio_gt60": 0.013
   },
   "paragraph_distribution": {
-    "short_lt50": 0.923,
-    "medium_50_200": 0.077,
+    "short_lt50": 0.818,
+    "medium_50_200": 0.182,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.415
+    "single_sentence_ratio": 0.364
   },
   "top_opening_patterns": [
-    "” ...(27次)",
-    "李观...(8次)",
-    "”，...(7次)",
-    "二，...(3次)",
-    "那么...(3次)"
+    "” ...(24次)",
+    "”，...(11次)",
+    "张自...(4次)",
+    "林秋...(3次)"
   ],
   "rhetorical_features": [
     "短句节奏(6处)"
   ],
-  "ai_tells": [
-    "协作口吻(1处)"
-  ]
+  "ai_tells": []
 }

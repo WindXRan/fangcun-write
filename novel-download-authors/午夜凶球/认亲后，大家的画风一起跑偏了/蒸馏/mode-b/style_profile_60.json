@@ -1,39 +1,40 @@
 ﻿{
-  "source_name": "第60章.txt",
-  "total_chars": 2293,
-  "total_words": 1701,
-  "total_sentences": 93,
-  "total_paragraphs": 61,
+  "source_name": "第57章.txt",
+  "total_chars": 2272,
+  "total_words": 1811,
+  "total_sentences": 66,
+  "total_paragraphs": 41,
   "sentence_length": {
-    "avg": 18.3,
-    "stddev": 13.0
+    "avg": 27.4,
+    "stddev": 17.4
   },
   "paragraph_length": {
-    "avg": 27.9,
-    "stddev": 17.3,
+    "avg": 44.2,
+    "stddev": 25.2,
     "min": 0,
-    "max": 73
+    "max": 104
   },
-  "vocabulary_ttr": 0.268,
-  "dialogue_ratio": 0.212,
+  "vocabulary_ttr": 0.25,
+  "dialogue_ratio": 0.248,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.452,
-    "long_ratio_gt60": 0.0
+    "short_ratio_lt15": 0.273,
+    "long_ratio_gt60": 0.061
   },
   "paragraph_distribution": {
-    "short_lt50": 0.885,
-    "medium_50_200": 0.115,
+    "short_lt50": 0.683,
+    "medium_50_200": 0.317,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.377
+    "single_sentence_ratio": 0.244
   },
   "top_opening_patterns": [
-    "”，...(16次)",
-    "” ...(13次)",
-    "董寡...(4次)",
-    "“你...(3次)"
+    "” ...(14次)",
+    "”，...(11次)",
+    "马强...(3次)",
+    "孙晓...(3次)",
+    "李建...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(14处)"
+    "短句节奏(4处)"
   ],
   "ai_tells": []
 }

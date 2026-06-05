@@ -1,39 +1,42 @@
 ﻿{
-  "source_name": "第107章.txt",
-  "total_chars": 2400,
-  "total_words": 1872,
-  "total_sentences": 83,
-  "total_paragraphs": 50,
+  "source_name": "第104章.txt",
+  "total_chars": 2344,
+  "total_words": 1804,
+  "total_sentences": 79,
+  "total_paragraphs": 52,
   "sentence_length": {
-    "avg": 22.6,
-    "stddev": 16.2
+    "avg": 22.8,
+    "stddev": 16.3
   },
   "paragraph_length": {
-    "avg": 37.4,
-    "stddev": 23.1,
+    "avg": 34.7,
+    "stddev": 20.6,
     "min": 0,
-    "max": 98
+    "max": 83
   },
-  "vocabulary_ttr": 0.26,
-  "dialogue_ratio": 0.338,
+  "vocabulary_ttr": 0.266,
+  "dialogue_ratio": 0.222,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.386,
-    "long_ratio_gt60": 0.024
+    "short_ratio_lt15": 0.354,
+    "long_ratio_gt60": 0.013
   },
   "paragraph_distribution": {
-    "short_lt50": 0.74,
-    "medium_50_200": 0.26,
+    "short_lt50": 0.731,
+    "medium_50_200": 0.269,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.34
+    "single_sentence_ratio": 0.308
   },
   "top_opening_patterns": [
-    "”，...(17次)",
-    "” ...(13次)",
-    "“你...(4次)"
+    "” ...(20次)",
+    "”，...(10次)",
+    "张自...(6次)",
+    "顾伟...(4次)",
+    "”顾...(3次)"
   ],
   "rhetorical_features": [
-    "反问(2处)",
-    "短句节奏(8处)"
+    "短句节奏(7处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "高频副词(1处)"
+  ]
 }

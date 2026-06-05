@@ -1,42 +1,38 @@
 ﻿{
-  "source_name": "第33章.txt",
-  "total_chars": 2515,
-  "total_words": 2030,
-  "total_sentences": 78,
-  "total_paragraphs": 48,
+  "source_name": "第30章.txt",
+  "total_chars": 2393,
+  "total_words": 1979,
+  "total_sentences": 67,
+  "total_paragraphs": 40,
   "sentence_length": {
-    "avg": 26.0,
-    "stddev": 15.3
+    "avg": 29.5,
+    "stddev": 16.6
   },
   "paragraph_length": {
-    "avg": 42.3,
-    "stddev": 26.9,
+    "avg": 49.5,
+    "stddev": 31.3,
     "min": 0,
-    "max": 133
+    "max": 125
   },
-  "vocabulary_ttr": 0.256,
-  "dialogue_ratio": 0.162,
+  "vocabulary_ttr": 0.266,
+  "dialogue_ratio": 0.274,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.269,
-    "long_ratio_gt60": 0.038
+    "short_ratio_lt15": 0.149,
+    "long_ratio_gt60": 0.06
   },
   "paragraph_distribution": {
-    "short_lt50": 0.708,
-    "medium_50_200": 0.292,
+    "short_lt50": 0.575,
+    "medium_50_200": 0.425,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.438
+    "single_sentence_ratio": 0.35
   },
   "top_opening_patterns": [
-    "”，...(7次)",
-    "” ...(6次)",
-    "李观...(4次)",
-    "徐楠...(4次)",
-    "林霆...(3次)"
+    "” ...(13次)",
+    "林霆...(4次)",
+    "李观...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(4处)"
+    "短句节奏(3处)"
   ],
-  "ai_tells": [
-    "路标词(2处)"
-  ]
+  "ai_tells": []
 }

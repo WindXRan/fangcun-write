@@ -1,40 +1,42 @@
 ﻿{
-  "source_name": "第123章.txt",
-  "total_chars": 2386,
-  "total_words": 1852,
+  "source_name": "第120章.txt",
+  "total_chars": 2366,
+  "total_words": 1792,
   "total_sentences": 68,
-  "total_paragraphs": 54,
+  "total_paragraphs": 55,
   "sentence_length": {
-    "avg": 27.2,
-    "stddev": 14.5
+    "avg": 26.4,
+    "stddev": 23.3
   },
   "paragraph_length": {
-    "avg": 34.3,
-    "stddev": 22.4,
+    "avg": 32.6,
+    "stddev": 21.8,
     "min": 0,
-    "max": 95
+    "max": 93
   },
-  "vocabulary_ttr": 0.24,
-  "dialogue_ratio": 0.302,
+  "vocabulary_ttr": 0.256,
+  "dialogue_ratio": 0.467,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.206,
-    "long_ratio_gt60": 0.044
+    "short_ratio_lt15": 0.412,
+    "long_ratio_gt60": 0.088
   },
   "paragraph_distribution": {
-    "short_lt50": 0.778,
-    "medium_50_200": 0.222,
+    "short_lt50": 0.8,
+    "medium_50_200": 0.2,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.537
+    "single_sentence_ratio": 0.418
   },
   "top_opening_patterns": [
-    "” ...(17次)",
-    "齐奶...(7次)",
-    "”，...(4次)",
-    "孙老...(4次)"
+    "” ...(23次)",
+    "”，...(11次)",
+    "陈觅...(3次)",
+    "朱文...(3次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(2处)"
+  ],
   "ai_tells": [
-    "路标词(2处)",
-    "协作口吻(2处)"
+    "高频副词(2处)"
   ]
 }

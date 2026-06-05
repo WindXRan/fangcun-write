@@ -1,41 +1,42 @@
 ﻿{
-  "source_name": "第11章.txt",
-  "total_chars": 2530,
-  "total_words": 1952,
-  "total_sentences": 84,
-  "total_paragraphs": 59,
+  "source_name": "第8章.txt",
+  "total_chars": 2665,
+  "total_words": 2028,
+  "total_sentences": 113,
+  "total_paragraphs": 61,
   "sentence_length": {
-    "avg": 23.2,
-    "stddev": 16.3
+    "avg": 17.9,
+    "stddev": 12.4
   },
   "paragraph_length": {
-    "avg": 33.1,
-    "stddev": 25.6,
+    "avg": 33.2,
+    "stddev": 23.6,
     "min": 0,
-    "max": 116
+    "max": 148
   },
-  "vocabulary_ttr": 0.267,
-  "dialogue_ratio": 0.407,
+  "vocabulary_ttr": 0.262,
+  "dialogue_ratio": 0.316,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.381,
-    "long_ratio_gt60": 0.036
+    "short_ratio_lt15": 0.504,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.797,
-    "medium_50_200": 0.203,
+    "short_lt50": 0.803,
+    "medium_50_200": 0.197,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.339
+    "single_sentence_ratio": 0.23
   },
   "top_opening_patterns": [
-    "” ...(27次)",
-    "李观...(6次)",
-    "谢飞...(4次)"
+    "” ...(21次)",
+    "”李...(6次)",
+    "”，...(6次)",
+    "”谢...(3次)",
+    "谢玉...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(6处)"
+    "短句节奏(16处)"
   ],
   "ai_tells": [
-    "路标词(1处)",
-    "高频副词(1处)"
+    "路标词(1处)"
   ]
 }

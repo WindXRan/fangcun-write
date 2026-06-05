@@ -1,40 +1,41 @@
 ﻿{
-  "source_name": "第114章.txt",
-  "total_chars": 2383,
-  "total_words": 1806,
-  "total_sentences": 87,
-  "total_paragraphs": 61,
+  "source_name": "第111章.txt",
+  "total_chars": 2696,
+  "total_words": 1872,
+  "total_sentences": 101,
+  "total_paragraphs": 89,
   "sentence_length": {
-    "avg": 20.8,
-    "stddev": 12.0
+    "avg": 18.5,
+    "stddev": 14.4
   },
   "paragraph_length": {
-    "avg": 29.6,
-    "stddev": 14.4,
+    "avg": 21.0,
+    "stddev": 15.7,
     "min": 0,
-    "max": 61
+    "max": 85
   },
-  "vocabulary_ttr": 0.266,
-  "dialogue_ratio": 0.179,
+  "vocabulary_ttr": 0.257,
+  "dialogue_ratio": 0.304,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.333,
-    "long_ratio_gt60": 0.0
+    "short_ratio_lt15": 0.485,
+    "long_ratio_gt60": 0.01
   },
   "paragraph_distribution": {
-    "short_lt50": 0.902,
-    "medium_50_200": 0.098,
+    "short_lt50": 0.966,
+    "medium_50_200": 0.034,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.426
+    "single_sentence_ratio": 0.461
   },
   "top_opening_patterns": [
-    "” ...(13次)",
-    "”，...(9次)",
-    "李观...(3次)",
-    "李昭...(3次)"
+    "” ...(28次)",
+    "”，...(14次)",
+    "李观...(4次)",
+    "林秋...(4次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(2处)",
-    "短句节奏(5处)"
+    "短句节奏(10处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "路标词(1处)"
+  ]
 }

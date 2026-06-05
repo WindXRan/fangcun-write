@@ -1,39 +1,41 @@
 ﻿{
-  "source_name": "第31章.txt",
-  "total_chars": 2243,
-  "total_words": 1756,
-  "total_sentences": 87,
-  "total_paragraphs": 42,
+  "source_name": "第28章.txt",
+  "total_chars": 2436,
+  "total_words": 1935,
+  "total_sentences": 78,
+  "total_paragraphs": 44,
   "sentence_length": {
-    "avg": 20.2,
-    "stddev": 16.4
+    "avg": 24.8,
+    "stddev": 16.5
   },
   "paragraph_length": {
-    "avg": 41.8,
-    "stddev": 39.1,
+    "avg": 44.0,
+    "stddev": 30.6,
     "min": 0,
-    "max": 184
+    "max": 135
   },
-  "vocabulary_ttr": 0.252,
-  "dialogue_ratio": 0.655,
+  "vocabulary_ttr": 0.241,
+  "dialogue_ratio": 0.386,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.46,
-    "long_ratio_gt60": 0.046
+    "short_ratio_lt15": 0.321,
+    "long_ratio_gt60": 0.026
   },
   "paragraph_distribution": {
-    "short_lt50": 0.619,
-    "medium_50_200": 0.381,
+    "short_lt50": 0.659,
+    "medium_50_200": 0.341,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.286
+    "single_sentence_ratio": 0.25
   },
   "top_opening_patterns": [
-    "” ...(20次)",
-    "”，...(13次)"
+    "” ...(16次)",
+    "”，...(7次)",
+    "李萱...(4次)",
+    "“你...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(11处)"
+    "短句节奏(3处)"
   ],
   "ai_tells": [
-    "路标词(1处)"
+    "路标词(2处)"
   ]
 }

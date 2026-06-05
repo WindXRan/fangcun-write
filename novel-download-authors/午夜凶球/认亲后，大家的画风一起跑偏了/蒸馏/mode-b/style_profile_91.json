@@ -1,40 +1,41 @@
 ﻿{
-  "source_name": "第91章.txt",
-  "total_chars": 2400,
-  "total_words": 1690,
-  "total_sentences": 105,
+  "source_name": "第88章.txt",
+  "total_chars": 2412,
+  "total_words": 1725,
+  "total_sentences": 104,
   "total_paragraphs": 77,
   "sentence_length": {
-    "avg": 16.1,
-    "stddev": 12.2
+    "avg": 16.6,
+    "stddev": 13.1
   },
   "paragraph_length": {
-    "avg": 21.9,
-    "stddev": 16.7,
+    "avg": 22.4,
+    "stddev": 18.3,
     "min": 0,
-    "max": 71
+    "max": 100
   },
-  "vocabulary_ttr": 0.245,
-  "dialogue_ratio": 0.407,
+  "vocabulary_ttr": 0.25,
+  "dialogue_ratio": 0.324,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.59,
-    "long_ratio_gt60": 0.0
+    "short_ratio_lt15": 0.538,
+    "long_ratio_gt60": 0.019
   },
   "paragraph_distribution": {
-    "short_lt50": 0.922,
-    "medium_50_200": 0.078,
+    "short_lt50": 0.909,
+    "medium_50_200": 0.091,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.442
+    "single_sentence_ratio": 0.377
   },
   "top_opening_patterns": [
-    "” ...(30次)",
-    "”，...(5次)",
-    "江流...(5次)",
-    "林霆...(5次)",
-    "谢玉...(5次)"
+    "” ...(28次)",
+    "”，...(14次)",
+    "警察...(4次)",
+    "“这...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(10处)"
+    "短句节奏(13处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "路标词(1处)"
+  ]
 }

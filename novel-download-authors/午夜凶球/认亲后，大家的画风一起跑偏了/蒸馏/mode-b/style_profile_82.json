@@ -1,43 +1,40 @@
 ﻿{
-  "source_name": "第82章.txt",
-  "total_chars": 3763,
-  "total_words": 2730,
-  "total_sentences": 130,
-  "total_paragraphs": 116,
+  "source_name": "第79章.txt",
+  "total_chars": 2388,
+  "total_words": 1731,
+  "total_sentences": 102,
+  "total_paragraphs": 71,
   "sentence_length": {
-    "avg": 21.0,
-    "stddev": 14.4
+    "avg": 17.0,
+    "stddev": 12.7
   },
   "paragraph_length": {
-    "avg": 23.5,
-    "stddev": 17.7,
+    "avg": 24.4,
+    "stddev": 18.2,
     "min": 0,
-    "max": 104
+    "max": 63
   },
-  "vocabulary_ttr": 0.21,
-  "dialogue_ratio": 0.264,
+  "vocabulary_ttr": 0.249,
+  "dialogue_ratio": 0.317,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.369,
-    "long_ratio_gt60": 0.015
+    "short_ratio_lt15": 0.51,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.931,
-    "medium_50_200": 0.069,
+    "short_lt50": 0.887,
+    "medium_50_200": 0.113,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.552
+    "single_sentence_ratio": 0.254
   },
   "top_opening_patterns": [
-    "” ...(38次)",
-    "”，...(12次)",
-    "李观...(6次)",
-    "顾伟...(5次)",
-    "谢玉...(4次)"
+    "” ...(27次)",
+    "”林...(8次)",
+    "”李...(5次)",
+    "林霆...(3次)",
+    "两个...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(11处)"
+    "短句节奏(12处)"
   ],
-  "ai_tells": [
-    "路标词(1处)",
-    "高频副词(1处)"
-  ]
+  "ai_tells": []
 }

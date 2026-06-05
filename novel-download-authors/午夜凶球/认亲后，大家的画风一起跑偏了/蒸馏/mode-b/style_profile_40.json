@@ -1,40 +1,40 @@
 ﻿{
-  "source_name": "第40章.txt",
-  "total_chars": 2315,
-  "total_words": 1800,
-  "total_sentences": 91,
-  "total_paragraphs": 50,
+  "source_name": "第37章.txt",
+  "total_chars": 2419,
+  "total_words": 1846,
+  "total_sentences": 86,
+  "total_paragraphs": 54,
   "sentence_length": {
-    "avg": 19.8,
-    "stddev": 15.3
+    "avg": 21.5,
+    "stddev": 17.5
   },
   "paragraph_length": {
-    "avg": 36.0,
-    "stddev": 29.2,
+    "avg": 34.2,
+    "stddev": 37.6,
     "min": 0,
-    "max": 133
+    "max": 216
   },
-  "vocabulary_ttr": 0.257,
-  "dialogue_ratio": 0.404,
+  "vocabulary_ttr": 0.243,
+  "dialogue_ratio": 0.349,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.407,
-    "long_ratio_gt60": 0.022
+    "short_ratio_lt15": 0.419,
+    "long_ratio_gt60": 0.023
   },
   "paragraph_distribution": {
-    "short_lt50": 0.76,
-    "medium_50_200": 0.24,
-    "long_gt200": 0.0,
-    "single_sentence_ratio": 0.4
+    "short_lt50": 0.833,
+    "medium_50_200": 0.148,
+    "long_gt200": 0.019,
+    "single_sentence_ratio": 0.426
   },
   "top_opening_patterns": [
-    "”，...(14次)",
-    "” ...(12次)",
+    "”，...(12次)",
+    "” ...(10次)",
     "虎子...(4次)",
-    "林霆...(3次)",
-    "梁双...(3次)"
+    "“你...(3次)",
+    "孙晓...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(7处)"
+    "短句节奏(14处)"
   ],
   "ai_tells": []
 }

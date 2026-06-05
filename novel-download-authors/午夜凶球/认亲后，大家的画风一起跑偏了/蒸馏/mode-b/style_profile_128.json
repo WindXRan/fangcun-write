@@ -1,40 +1,41 @@
 ﻿{
-  "source_name": "第128章.txt",
-  "total_chars": 2421,
-  "total_words": 1720,
-  "total_sentences": 79,
-  "total_paragraphs": 62,
+  "source_name": "第125章.txt",
+  "total_chars": 2447,
+  "total_words": 1827,
+  "total_sentences": 94,
+  "total_paragraphs": 63,
   "sentence_length": {
-    "avg": 21.8,
-    "stddev": 17.4
+    "avg": 19.4,
+    "stddev": 13.7
   },
   "paragraph_length": {
-    "avg": 27.7,
-    "stddev": 18.4,
+    "avg": 29.0,
+    "stddev": 15.3,
     "min": 0,
-    "max": 77
+    "max": 65
   },
-  "vocabulary_ttr": 0.274,
-  "dialogue_ratio": 0.258,
+  "vocabulary_ttr": 0.255,
+  "dialogue_ratio": 0.267,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.456,
-    "long_ratio_gt60": 0.038
+    "short_ratio_lt15": 0.457,
+    "long_ratio_gt60": 0.011
   },
   "paragraph_distribution": {
-    "short_lt50": 0.887,
-    "medium_50_200": 0.113,
+    "short_lt50": 0.889,
+    "medium_50_200": 0.111,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.5
+    "single_sentence_ratio": 0.444
   },
   "top_opening_patterns": [
-    "” ...(21次)",
-    "”，...(13次)",
-    "李观...(3次)"
+    "”，...(20次)",
+    "” ...(10次)",
+    "老太...(9次)",
+    "“我...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(5处)"
+    "短句节奏(9处)"
   ],
   "ai_tells": [
-    "路标词(2处)"
+    "高频副词(1处)"
   ]
 }

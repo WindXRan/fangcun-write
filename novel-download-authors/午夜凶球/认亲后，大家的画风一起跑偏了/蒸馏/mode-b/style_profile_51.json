@@ -1,39 +1,41 @@
 ﻿{
-  "source_name": "第51章.txt",
-  "total_chars": 2260,
-  "total_words": 1832,
-  "total_sentences": 73,
-  "total_paragraphs": 35,
+  "source_name": "第48章.txt",
+  "total_chars": 2875,
+  "total_words": 2232,
+  "total_sentences": 108,
+  "total_paragraphs": 69,
   "sentence_length": {
-    "avg": 25.1,
-    "stddev": 19.5
+    "avg": 20.7,
+    "stddev": 15.2
   },
   "paragraph_length": {
-    "avg": 52.3,
-    "stddev": 39.0,
+    "avg": 32.3,
+    "stddev": 27.2,
     "min": 0,
-    "max": 138
+    "max": 130
   },
-  "vocabulary_ttr": 0.267,
-  "dialogue_ratio": 0.391,
+  "vocabulary_ttr": 0.257,
+  "dialogue_ratio": 0.193,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.342,
-    "long_ratio_gt60": 0.055
+    "short_ratio_lt15": 0.454,
+    "long_ratio_gt60": 0.009
   },
   "paragraph_distribution": {
-    "short_lt50": 0.571,
-    "medium_50_200": 0.429,
+    "short_lt50": 0.739,
+    "medium_50_200": 0.261,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.314
+    "single_sentence_ratio": 0.29
   },
   "top_opening_patterns": [
-    "” ...(11次)",
-    "”，...(11次)",
-    "杨秘...(3次)",
-    "“你...(3次)"
+    "” ...(23次)",
+    "”，...(13次)",
+    "李观...(5次)",
+    "“我...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(4处)"
+    "短句节奏(6处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "路标词(3处)"
+  ]
 }

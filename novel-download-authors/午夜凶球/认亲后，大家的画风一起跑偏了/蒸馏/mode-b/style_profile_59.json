@@ -1,39 +1,39 @@
 ﻿{
-  "source_name": "第59章.txt",
-  "total_chars": 2218,
-  "total_words": 1758,
-  "total_sentences": 69,
-  "total_paragraphs": 40,
+  "source_name": "第56章.txt",
+  "total_chars": 2425,
+  "total_words": 1868,
+  "total_sentences": 71,
+  "total_paragraphs": 51,
   "sentence_length": {
-    "avg": 25.5,
-    "stddev": 16.1
+    "avg": 26.3,
+    "stddev": 20.2
   },
   "paragraph_length": {
-    "avg": 44.0,
-    "stddev": 25.0,
+    "avg": 36.6,
+    "stddev": 27.8,
     "min": 0,
-    "max": 108
+    "max": 123
   },
   "vocabulary_ttr": 0.258,
-  "dialogue_ratio": 0.226,
+  "dialogue_ratio": 0.285,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.29,
-    "long_ratio_gt60": 0.029
+    "short_ratio_lt15": 0.338,
+    "long_ratio_gt60": 0.099
   },
   "paragraph_distribution": {
-    "short_lt50": 0.6,
-    "medium_50_200": 0.4,
+    "short_lt50": 0.765,
+    "medium_50_200": 0.235,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.275
+    "single_sentence_ratio": 0.314
   },
   "top_opening_patterns": [
-    "” ...(13次)",
-    "”，...(11次)"
+    "” ...(23次)",
+    "”李...(5次)"
   ],
   "rhetorical_features": [
-    "短句节奏(4处)"
+    "短句节奏(7处)"
   ],
   "ai_tells": [
-    "路标词(2处)"
+    "路标词(1处)"
   ]
 }

@@ -1,38 +1,42 @@
 ﻿{
-  "source_name": "第112章.txt",
-  "total_chars": 2044,
-  "total_words": 1567,
-  "total_sentences": 72,
-  "total_paragraphs": 42,
+  "source_name": "第109章.txt",
+  "total_chars": 2448,
+  "total_words": 1756,
+  "total_sentences": 103,
+  "total_paragraphs": 77,
   "sentence_length": {
-    "avg": 21.8,
-    "stddev": 11.5
+    "avg": 17.0,
+    "stddev": 11.4
   },
   "paragraph_length": {
-    "avg": 37.3,
-    "stddev": 19.1,
+    "avg": 22.8,
+    "stddev": 15.4,
     "min": 0,
-    "max": 96
+    "max": 73
   },
-  "vocabulary_ttr": 0.268,
-  "dialogue_ratio": 0.341,
+  "vocabulary_ttr": 0.257,
+  "dialogue_ratio": 0.474,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.292,
+    "short_ratio_lt15": 0.466,
     "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.714,
-    "medium_50_200": 0.286,
+    "short_lt50": 0.948,
+    "medium_50_200": 0.052,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.31
+    "single_sentence_ratio": 0.455
   },
   "top_opening_patterns": [
-    "”，...(20次)",
-    "” ...(8次)",
-    "“你...(3次)"
+    "” ...(24次)",
+    "”李...(6次)",
+    "”林...(6次)",
+    "“那...(4次)",
+    "李建...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(4处)"
+    "短句节奏(10处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "路标词(1处)"
+  ]
 }

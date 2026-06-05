@@ -1,41 +1,42 @@
 ﻿{
-  "source_name": "第75章.txt",
-  "total_chars": 2322,
-  "total_words": 1783,
-  "total_sentences": 70,
-  "total_paragraphs": 51,
+  "source_name": "第72章.txt",
+  "total_chars": 2605,
+  "total_words": 1979,
+  "total_sentences": 90,
+  "total_paragraphs": 63,
   "sentence_length": {
-    "avg": 25.5,
-    "stddev": 14.7
+    "avg": 22.0,
+    "stddev": 15.7
   },
   "paragraph_length": {
-    "avg": 35.0,
-    "stddev": 18.6,
+    "avg": 31.4,
+    "stddev": 18.7,
     "min": 0,
-    "max": 92
+    "max": 87
   },
-  "vocabulary_ttr": 0.25,
-  "dialogue_ratio": 0.379,
+  "vocabulary_ttr": 0.224,
+  "dialogue_ratio": 0.294,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.186,
-    "long_ratio_gt60": 0.029
+    "short_ratio_lt15": 0.389,
+    "long_ratio_gt60": 0.022
   },
   "paragraph_distribution": {
-    "short_lt50": 0.824,
-    "medium_50_200": 0.176,
+    "short_lt50": 0.825,
+    "medium_50_200": 0.175,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.373
+    "single_sentence_ratio": 0.365
   },
   "top_opening_patterns": [
-    "” ...(20次)",
-    "”，...(10次)",
-    "李观...(5次)",
-    "李昭...(3次)"
+    "” ...(21次)",
+    "”，...(16次)",
+    "孙老...(6次)",
+    "李卫...(5次)",
+    "李昭...(4次)"
   ],
   "rhetorical_features": [
-    "短句节奏(2处)"
+    "短句节奏(7处)"
   ],
   "ai_tells": [
-    "路标词(1处)"
+    "高频副词(1处)"
   ]
 }

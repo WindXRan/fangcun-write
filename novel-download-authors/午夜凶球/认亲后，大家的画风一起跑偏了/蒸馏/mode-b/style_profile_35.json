@@ -1,42 +1,42 @@
 ﻿{
-  "source_name": "第35章.txt",
-  "total_chars": 2828,
-  "total_words": 2307,
-  "total_sentences": 79,
-  "total_paragraphs": 47,
+  "source_name": "第32章.txt",
+  "total_chars": 2408,
+  "total_words": 1850,
+  "total_sentences": 89,
+  "total_paragraphs": 56,
   "sentence_length": {
-    "avg": 29.2,
-    "stddev": 18.9
+    "avg": 20.8,
+    "stddev": 14.4
   },
   "paragraph_length": {
-    "avg": 49.1,
-    "stddev": 33.5,
+    "avg": 33.0,
+    "stddev": 29.4,
     "min": 0,
-    "max": 186
+    "max": 150
   },
-  "vocabulary_ttr": 0.238,
-  "dialogue_ratio": 0.278,
+  "vocabulary_ttr": 0.259,
+  "dialogue_ratio": 0.449,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.203,
-    "long_ratio_gt60": 0.025
+    "short_ratio_lt15": 0.404,
+    "long_ratio_gt60": 0.011
   },
   "paragraph_distribution": {
-    "short_lt50": 0.574,
-    "medium_50_200": 0.426,
+    "short_lt50": 0.804,
+    "medium_50_200": 0.196,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.34
+    "single_sentence_ratio": 0.393
   },
   "top_opening_patterns": [
-    "” ...(10次)",
-    "”，...(8次)",
-    "林霆...(5次)",
+    "” ...(17次)",
+    "”，...(10次)",
+    "黄毛...(4次)",
+    "林霆...(3次)",
     "“你...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(3处)"
+    "短句节奏(6处)"
   ],
   "ai_tells": [
-    "路标词(2处)",
-    "高频副词(3处)"
+    "路标词(1处)"
   ]
 }

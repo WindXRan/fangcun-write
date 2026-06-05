@@ -1,42 +1,42 @@
 ﻿{
-  "source_name": "第45章.txt",
-  "total_chars": 2390,
-  "total_words": 1905,
-  "total_sentences": 80,
-  "total_paragraphs": 55,
+  "source_name": "第42章.txt",
+  "total_chars": 2307,
+  "total_words": 1804,
+  "total_sentences": 74,
+  "total_paragraphs": 47,
   "sentence_length": {
-    "avg": 23.8,
-    "stddev": 16.2
+    "avg": 24.4,
+    "stddev": 15.2
   },
   "paragraph_length": {
-    "avg": 34.6,
-    "stddev": 30.2,
+    "avg": 38.4,
+    "stddev": 38.8,
     "min": 0,
-    "max": 146
+    "max": 262
   },
-  "vocabulary_ttr": 0.279,
-  "dialogue_ratio": 0.072,
+  "vocabulary_ttr": 0.255,
+  "dialogue_ratio": 0.323,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.325,
-    "long_ratio_gt60": 0.025
+    "short_ratio_lt15": 0.311,
+    "long_ratio_gt60": 0.027
   },
   "paragraph_distribution": {
-    "short_lt50": 0.764,
-    "medium_50_200": 0.236,
-    "long_gt200": 0.0,
-    "single_sentence_ratio": 0.491
+    "short_lt50": 0.766,
+    "medium_50_200": 0.213,
+    "long_gt200": 0.021,
+    "single_sentence_ratio": 0.447
   },
   "top_opening_patterns": [
-    "” ...(10次)",
-    "李观...(5次)",
-    "”，...(3次)",
-    "李萱...(3次)",
-    "张凤...(3次)"
+    "” ...(13次)",
+    "”，...(11次)",
+    "刘佳...(5次)",
+    "李萱...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(9处)"
+    "短句节奏(5处)"
   ],
   "ai_tells": [
-    "路标词(1处)"
+    "路标词(2处)",
+    "高频副词(1处)"
   ]
 }

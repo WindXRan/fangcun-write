@@ -1,40 +1,40 @@
 ﻿{
-  "source_name": "第89章.txt",
-  "total_chars": 2385,
-  "total_words": 1750,
-  "total_sentences": 88,
-  "total_paragraphs": 75,
+  "source_name": "第86章.txt",
+  "total_chars": 2345,
+  "total_words": 1796,
+  "total_sentences": 73,
+  "total_paragraphs": 55,
   "sentence_length": {
-    "avg": 19.9,
-    "stddev": 15.1
+    "avg": 24.6,
+    "stddev": 14.4
   },
   "paragraph_length": {
-    "avg": 23.3,
-    "stddev": 19.1,
+    "avg": 32.7,
+    "stddev": 19.3,
     "min": 0,
-    "max": 77
+    "max": 76
   },
-  "vocabulary_ttr": 0.279,
-  "dialogue_ratio": 0.27,
+  "vocabulary_ttr": 0.249,
+  "dialogue_ratio": 0.421,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.409,
-    "long_ratio_gt60": 0.011
+    "short_ratio_lt15": 0.274,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.893,
-    "medium_50_200": 0.107,
+    "short_lt50": 0.782,
+    "medium_50_200": 0.218,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.387
+    "single_sentence_ratio": 0.327
   },
   "top_opening_patterns": [
-    "” ...(33次)",
-    "”，...(6次)",
-    "李观...(6次)",
-    "“我...(3次)",
-    "李卫...(3次)"
+    "” ...(28次)",
+    "”，...(7次)",
+    "张自...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(7处)"
+    "短句节奏(4处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "高频副词(1处)"
+  ]
 }

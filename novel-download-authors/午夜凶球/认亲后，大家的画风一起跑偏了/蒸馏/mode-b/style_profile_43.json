@@ -1,37 +1,40 @@
 ﻿{
-  "source_name": "第43章.txt",
-  "total_chars": 2427,
-  "total_words": 1941,
-  "total_sentences": 76,
-  "total_paragraphs": 46,
+  "source_name": "第40章.txt",
+  "total_chars": 2315,
+  "total_words": 1800,
+  "total_sentences": 91,
+  "total_paragraphs": 50,
   "sentence_length": {
-    "avg": 25.5,
-    "stddev": 15.0
+    "avg": 19.8,
+    "stddev": 15.3
   },
   "paragraph_length": {
-    "avg": 42.2,
-    "stddev": 30.0,
+    "avg": 36.0,
+    "stddev": 29.2,
     "min": 0,
-    "max": 139
+    "max": 133
   },
-  "vocabulary_ttr": 0.274,
-  "dialogue_ratio": 0.237,
+  "vocabulary_ttr": 0.257,
+  "dialogue_ratio": 0.404,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.237,
-    "long_ratio_gt60": 0.013
+    "short_ratio_lt15": 0.407,
+    "long_ratio_gt60": 0.022
   },
   "paragraph_distribution": {
-    "short_lt50": 0.652,
-    "medium_50_200": 0.348,
+    "short_lt50": 0.76,
+    "medium_50_200": 0.24,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.326
+    "single_sentence_ratio": 0.4
   },
   "top_opening_patterns": [
-    "” ...(13次)",
-    "”，...(6次)"
+    "”，...(14次)",
+    "” ...(12次)",
+    "虎子...(4次)",
+    "林霆...(3次)",
+    "梁双...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(4处)"
+    "短句节奏(7处)"
   ],
   "ai_tells": []
 }

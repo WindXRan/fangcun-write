@@ -1,38 +1,40 @@
 ﻿{
-  "source_name": "第105章.txt",
-  "total_chars": 2380,
-  "total_words": 1806,
-  "total_sentences": 80,
-  "total_paragraphs": 57,
+  "source_name": "第102章.txt",
+  "total_chars": 2233,
+  "total_words": 1753,
+  "total_sentences": 62,
+  "total_paragraphs": 43,
   "sentence_length": {
-    "avg": 22.6,
-    "stddev": 15.2
+    "avg": 28.3,
+    "stddev": 19.6
   },
   "paragraph_length": {
-    "avg": 31.7,
-    "stddev": 22.0,
+    "avg": 40.8,
+    "stddev": 22.9,
     "min": 0,
-    "max": 116
+    "max": 96
   },
-  "vocabulary_ttr": 0.268,
-  "dialogue_ratio": 0.454,
+  "vocabulary_ttr": 0.269,
+  "dialogue_ratio": 0.2,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.375,
-    "long_ratio_gt60": 0.025
+    "short_ratio_lt15": 0.306,
+    "long_ratio_gt60": 0.065
   },
   "paragraph_distribution": {
-    "short_lt50": 0.825,
-    "medium_50_200": 0.175,
+    "short_lt50": 0.558,
+    "medium_50_200": 0.442,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.404
+    "single_sentence_ratio": 0.442
   },
   "top_opening_patterns": [
-    "” ...(21次)",
-    "”，...(11次)",
-    "李观...(3次)"
+    "” ...(12次)",
+    "”，...(9次)"
   ],
   "rhetorical_features": [
     "短句节奏(6处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "路标词(2处)",
+    "协作口吻(1处)"
+  ]
 }

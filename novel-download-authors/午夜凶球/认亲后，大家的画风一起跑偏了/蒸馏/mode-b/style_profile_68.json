@@ -1,43 +1,41 @@
 ﻿{
-  "source_name": "第68章.txt",
-  "total_chars": 2299,
-  "total_words": 1656,
-  "total_sentences": 78,
-  "total_paragraphs": 68,
+  "source_name": "第65章.txt",
+  "total_chars": 2433,
+  "total_words": 1857,
+  "total_sentences": 90,
+  "total_paragraphs": 52,
   "sentence_length": {
-    "avg": 21.2,
-    "stddev": 15.9
+    "avg": 20.6,
+    "stddev": 15.0
   },
   "paragraph_length": {
-    "avg": 24.4,
-    "stddev": 17.6,
+    "avg": 35.7,
+    "stddev": 24.0,
     "min": 0,
-    "max": 83
+    "max": 108
   },
-  "vocabulary_ttr": 0.254,
-  "dialogue_ratio": 0.342,
+  "vocabulary_ttr": 0.258,
+  "dialogue_ratio": 0.264,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.436,
-    "long_ratio_gt60": 0.026
+    "short_ratio_lt15": 0.411,
+    "long_ratio_gt60": 0.011
   },
   "paragraph_distribution": {
-    "short_lt50": 0.912,
-    "medium_50_200": 0.088,
+    "short_lt50": 0.769,
+    "medium_50_200": 0.231,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.294
+    "single_sentence_ratio": 0.365
   },
   "top_opening_patterns": [
-    "” ...(35次)",
-    "”，...(12次)",
-    "齐奶...(4次)",
-    "顾伟...(4次)",
-    "“妈...(3次)"
+    "”，...(17次)",
+    "” ...(10次)",
+    "顾伟...(3次)",
+    "“哎...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(6处)"
+    "短句节奏(10处)"
   ],
   "ai_tells": [
-    "路标词(2处)",
     "高频副词(1处)"
   ]
 }

@@ -1,41 +1,42 @@
 ﻿{
-  "source_name": "第125章.txt",
-  "total_chars": 2447,
-  "total_words": 1827,
-  "total_sentences": 94,
-  "total_paragraphs": 63,
+  "source_name": "第122章.txt",
+  "total_chars": 2334,
+  "total_words": 1756,
+  "total_sentences": 79,
+  "total_paragraphs": 57,
   "sentence_length": {
-    "avg": 19.4,
-    "stddev": 13.7
+    "avg": 22.2,
+    "stddev": 16.7
   },
   "paragraph_length": {
-    "avg": 29.0,
-    "stddev": 15.3,
+    "avg": 30.8,
+    "stddev": 20.1,
     "min": 0,
-    "max": 65
+    "max": 88
   },
-  "vocabulary_ttr": 0.255,
-  "dialogue_ratio": 0.267,
+  "vocabulary_ttr": 0.253,
+  "dialogue_ratio": 0.31,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.457,
-    "long_ratio_gt60": 0.011
+    "short_ratio_lt15": 0.405,
+    "long_ratio_gt60": 0.051
   },
   "paragraph_distribution": {
-    "short_lt50": 0.889,
-    "medium_50_200": 0.111,
+    "short_lt50": 0.789,
+    "medium_50_200": 0.211,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.444
+    "single_sentence_ratio": 0.404
   },
   "top_opening_patterns": [
-    "”，...(20次)",
-    "” ...(10次)",
-    "老太...(9次)",
-    "“我...(3次)"
+    "” ...(19次)",
+    "”，...(14次)",
+    "朱文...(3次)",
+    "“你...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(9处)"
+    "短句节奏(5处)"
   ],
   "ai_tells": [
+    "路标词(2处)",
     "高频副词(1处)"
   ]
 }

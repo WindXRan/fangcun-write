@@ -1,40 +1,40 @@
 ﻿{
-  "source_name": "第126章.txt",
-  "total_chars": 2392,
-  "total_words": 1799,
-  "total_sentences": 85,
-  "total_paragraphs": 58,
+  "source_name": "第123章.txt",
+  "total_chars": 2386,
+  "total_words": 1852,
+  "total_sentences": 68,
+  "total_paragraphs": 54,
   "sentence_length": {
-    "avg": 21.2,
-    "stddev": 13.7
+    "avg": 27.2,
+    "stddev": 14.5
   },
   "paragraph_length": {
-    "avg": 31.0,
-    "stddev": 21.0,
+    "avg": 34.3,
+    "stddev": 22.4,
     "min": 0,
-    "max": 105
+    "max": 95
   },
-  "vocabulary_ttr": 0.268,
-  "dialogue_ratio": 0.338,
+  "vocabulary_ttr": 0.24,
+  "dialogue_ratio": 0.302,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.388,
-    "long_ratio_gt60": 0.0
+    "short_ratio_lt15": 0.206,
+    "long_ratio_gt60": 0.044
   },
   "paragraph_distribution": {
-    "short_lt50": 0.845,
-    "medium_50_200": 0.155,
+    "short_lt50": 0.778,
+    "medium_50_200": 0.222,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.397
+    "single_sentence_ratio": 0.537
   },
   "top_opening_patterns": [
-    "” ...(18次)",
-    "”，...(17次)",
-    "李观...(7次)"
+    "” ...(17次)",
+    "齐奶...(7次)",
+    "”，...(4次)",
+    "孙老...(4次)"
   ],
-  "rhetorical_features": [
-    "短句节奏(6处)"
-  ],
+  "rhetorical_features": [],
   "ai_tells": [
-    "路标词(1处)"
+    "路标词(2处)",
+    "协作口吻(2处)"
   ]
 }

@@ -1,42 +1,39 @@
 ﻿{
-  "source_name": "第15章.txt",
-  "total_chars": 2468,
-  "total_words": 1921,
-  "total_sentences": 96,
-  "total_paragraphs": 49,
+  "source_name": "第12章.txt",
+  "total_chars": 2421,
+  "total_words": 1950,
+  "total_sentences": 70,
+  "total_paragraphs": 43,
   "sentence_length": {
-    "avg": 20.0,
-    "stddev": 12.7
+    "avg": 27.9,
+    "stddev": 18.2
   },
   "paragraph_length": {
-    "avg": 39.2,
-    "stddev": 27.4,
+    "avg": 45.3,
+    "stddev": 35.6,
     "min": 0,
-    "max": 126
+    "max": 199
   },
-  "vocabulary_ttr": 0.231,
-  "dialogue_ratio": 0.389,
+  "vocabulary_ttr": 0.246,
+  "dialogue_ratio": 0.39,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.396,
-    "long_ratio_gt60": 0.01
+    "short_ratio_lt15": 0.286,
+    "long_ratio_gt60": 0.057
   },
   "paragraph_distribution": {
-    "short_lt50": 0.673,
-    "medium_50_200": 0.327,
+    "short_lt50": 0.628,
+    "medium_50_200": 0.372,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.163
+    "single_sentence_ratio": 0.302
   },
   "top_opening_patterns": [
-    "” ...(25次)",
-    "李建...(5次)",
-    "”李...(5次)",
-    "“老...(3次)",
-    "摊主...(3次)"
+    "” ...(16次)",
+    "李观...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(13处)"
+    "短句节奏(5处)"
   ],
   "ai_tells": [
-    "路标词(1处)"
+    "路标词(2处)"
   ]
 }

@@ -1,42 +1,38 @@
 ﻿{
-  "source_name": "第99章.txt",
-  "total_chars": 2275,
-  "total_words": 1699,
-  "total_sentences": 82,
-  "total_paragraphs": 59,
+  "source_name": "第96章.txt",
+  "total_chars": 2293,
+  "total_words": 1764,
+  "total_sentences": 77,
+  "total_paragraphs": 56,
   "sentence_length": {
-    "avg": 20.7,
-    "stddev": 13.7
+    "avg": 22.9,
+    "stddev": 14.0
   },
   "paragraph_length": {
-    "avg": 28.8,
-    "stddev": 17.6,
+    "avg": 31.5,
+    "stddev": 19.9,
     "min": 0,
-    "max": 90
+    "max": 95
   },
-  "vocabulary_ttr": 0.254,
-  "dialogue_ratio": 0.43,
+  "vocabulary_ttr": 0.275,
+  "dialogue_ratio": 0.303,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.415,
-    "long_ratio_gt60": 0.024
+    "short_ratio_lt15": 0.325,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.898,
-    "medium_50_200": 0.102,
+    "short_lt50": 0.821,
+    "medium_50_200": 0.179,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.424
+    "single_sentence_ratio": 0.446
   },
   "top_opening_patterns": [
-    "” ...(15次)",
-    "”，...(14次)",
-    "“李...(4次)",
-    "“我...(3次)"
+    "” ...(19次)",
+    "”，...(5次)",
+    "谢玉...(5次)"
   ],
   "rhetorical_features": [
-    "短句节奏(3处)"
+    "短句节奏(5处)"
   ],
-  "ai_tells": [
-    "路标词(1处)",
-    "协作口吻(1处)"
-  ]
+  "ai_tells": []
 }

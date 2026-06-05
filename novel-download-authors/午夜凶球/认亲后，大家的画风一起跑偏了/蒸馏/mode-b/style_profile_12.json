@@ -1,39 +1,42 @@
 ﻿{
-  "source_name": "第12章.txt",
-  "total_chars": 2421,
-  "total_words": 1950,
-  "total_sentences": 70,
-  "total_paragraphs": 43,
+  "source_name": "第9章.txt",
+  "total_chars": 2555,
+  "total_words": 1898,
+  "total_sentences": 94,
+  "total_paragraphs": 69,
   "sentence_length": {
-    "avg": 27.9,
-    "stddev": 18.2
+    "avg": 20.2,
+    "stddev": 15.1
   },
   "paragraph_length": {
-    "avg": 45.3,
-    "stddev": 35.6,
+    "avg": 27.5,
+    "stddev": 20.0,
     "min": 0,
-    "max": 199
+    "max": 85
   },
-  "vocabulary_ttr": 0.246,
-  "dialogue_ratio": 0.39,
+  "vocabulary_ttr": 0.267,
+  "dialogue_ratio": 0.24,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.286,
-    "long_ratio_gt60": 0.057
+    "short_ratio_lt15": 0.468,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.628,
-    "medium_50_200": 0.372,
+    "short_lt50": 0.826,
+    "medium_50_200": 0.174,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.302
+    "single_sentence_ratio": 0.406
   },
   "top_opening_patterns": [
-    "” ...(16次)",
-    "李观...(3次)"
+    "” ...(28次)",
+    "”，...(6次)",
+    "谢玉...(4次)",
+    "”李...(3次)",
+    "江流...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(5处)"
+    "短句节奏(8处)"
   ],
   "ai_tells": [
-    "路标词(2处)"
+    "协作口吻(1处)"
   ]
 }

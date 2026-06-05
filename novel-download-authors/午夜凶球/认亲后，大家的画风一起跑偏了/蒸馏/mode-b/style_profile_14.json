@@ -1,36 +1,41 @@
 ﻿{
-  "source_name": "第14章.txt",
-  "total_chars": 3446,
-  "total_words": 2747,
-  "total_sentences": 122,
-  "total_paragraphs": 56,
+  "source_name": "第11章.txt",
+  "total_chars": 2530,
+  "total_words": 1952,
+  "total_sentences": 84,
+  "total_paragraphs": 59,
   "sentence_length": {
-    "avg": 22.5,
-    "stddev": 17.8
+    "avg": 23.2,
+    "stddev": 16.3
   },
   "paragraph_length": {
-    "avg": 49.1,
-    "stddev": 44.5,
+    "avg": 33.1,
+    "stddev": 25.6,
     "min": 0,
-    "max": 256
+    "max": 116
   },
-  "vocabulary_ttr": 0.207,
-  "dialogue_ratio": 0.645,
+  "vocabulary_ttr": 0.267,
+  "dialogue_ratio": 0.407,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.385,
-    "long_ratio_gt60": 0.033
+    "short_ratio_lt15": 0.381,
+    "long_ratio_gt60": 0.036
   },
   "paragraph_distribution": {
-    "short_lt50": 0.607,
-    "medium_50_200": 0.375,
-    "long_gt200": 0.018,
-    "single_sentence_ratio": 0.214
+    "short_lt50": 0.797,
+    "medium_50_200": 0.203,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.339
   },
   "top_opening_patterns": [
-    "” ...(31次)"
+    "” ...(27次)",
+    "李观...(6次)",
+    "谢飞...(4次)"
   ],
   "rhetorical_features": [
-    "短句节奏(11处)"
+    "短句节奏(6处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "路标词(1处)",
+    "高频副词(1处)"
+  ]
 }

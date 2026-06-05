@@ -1,40 +1,40 @@
 ﻿{
-  "source_name": "第39章.txt",
-  "total_chars": 2321,
-  "total_words": 1686,
-  "total_sentences": 113,
-  "total_paragraphs": 63,
+  "source_name": "第36章.txt",
+  "total_chars": 2406,
+  "total_words": 1908,
+  "total_sentences": 72,
+  "total_paragraphs": 46,
   "sentence_length": {
-    "avg": 14.9,
-    "stddev": 10.3
+    "avg": 26.5,
+    "stddev": 20.1
   },
   "paragraph_length": {
-    "avg": 26.8,
-    "stddev": 23.8,
+    "avg": 41.5,
+    "stddev": 32.7,
     "min": 0,
-    "max": 90
+    "max": 125
   },
-  "vocabulary_ttr": 0.275,
-  "dialogue_ratio": 0.501,
+  "vocabulary_ttr": 0.256,
+  "dialogue_ratio": 0.338,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.575,
-    "long_ratio_gt60": 0.0
+    "short_ratio_lt15": 0.347,
+    "long_ratio_gt60": 0.083
   },
   "paragraph_distribution": {
-    "short_lt50": 0.794,
-    "medium_50_200": 0.206,
+    "short_lt50": 0.652,
+    "medium_50_200": 0.348,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.397
+    "single_sentence_ratio": 0.326
   },
   "top_opening_patterns": [
-    "” ...(26次)",
-    "”，...(10次)",
-    "林霆...(6次)"
+    "” ...(15次)",
+    "”，...(9次)",
+    "林霆...(5次)"
   ],
   "rhetorical_features": [
-    "短句节奏(19处)"
+    "短句节奏(6处)"
   ],
   "ai_tells": [
-    "路标词(1处)"
+    "协作口吻(1处)"
   ]
 }
