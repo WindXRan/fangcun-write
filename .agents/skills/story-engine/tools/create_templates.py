@@ -239,6 +239,35 @@ HOOK_TEMPLATE = """# 钩子工程分析：第{N}章
 （填入：作者怎么打破读者预期？在哪里做了反转？效果是什么？）
 """
 
+CHARACTER_TEMPLATE = """# 角色塑造分析：第{N}章
+
+> 来源：{源书名} 第{N}章
+
+## 1. 角色立体感
+
+（填入：作者怎么让角色感觉像真人？用了什么细节？引用原文例句）
+
+## 2. 性格外化技法
+
+（填入：作者怎么通过动作/对话/反应展示性格，而不是直说「她很XX」？）
+
+## 3. 角色差异化
+
+（填入：不同角色的说话方式、行为模式有什么区别？怎么一眼分出谁是谁？）
+
+## 4. 配角塑造
+
+（填入：配角怎么做到有存在感但不抢戏？用了什么技法？）
+
+## 5. 角色关系张力
+
+（填入：角色之间的关系怎么制造有趣/紧张/甜蜜的动态？）
+
+## 6. 角色成长暗示
+
+（填入：作者怎么暗示角色在变化？用了什么伏笔或细节？）
+"""
+
 
 def create_style_templates(count, output_dir):
     os.makedirs(output_dir, exist_ok=True)
@@ -268,6 +297,16 @@ def create_hook_templates(count, output_dir):
             with open(path, 'w', encoding='utf-8') as f:
                 f.write(HOOK_TEMPLATE.replace("{N}", str(i)))
     print(f"Created {count} hook guide templates in {output_dir}")
+
+
+def create_character_templates(count, output_dir):
+    os.makedirs(output_dir, exist_ok=True)
+    for i in range(1, count + 1):
+        path = os.path.join(output_dir, f"character_guide_{i}.md")
+        if not os.path.exists(path):
+            with open(path, 'w', encoding='utf-8') as f:
+                f.write(CHARACTER_TEMPLATE.replace("{N}", str(i)))
+    print(f"Created {count} character guide templates in {output_dir}")
 
 
 def create_outline_templates(count, output_dir):
@@ -334,6 +373,7 @@ if __name__ == '__main__':
         print("用法:")
         print("  python create_templates.py style <章节数> <输出目录>")
         print("  python create_templates.py hook <章节数> <输出目录>")
+        print("  python create_templates.py character <章节数> <输出目录>")
         print("  python create_templates.py outline <章节数> <输出目录>")
         print("  python create_templates.py concept <输出目录> [章节数]")
         print("  python create_templates.py bible <输出目录>")
@@ -352,6 +392,10 @@ if __name__ == '__main__':
         count = int(sys.argv[2])
         output_dir = sys.argv[3] if len(sys.argv) > 3 else '.'
         create_hook_templates(count, output_dir)
+    elif template_type == 'character':
+        count = int(sys.argv[2])
+        output_dir = sys.argv[3] if len(sys.argv) > 3 else '.'
+        create_character_templates(count, output_dir)
     elif template_type == 'outline':
         count = int(sys.argv[2])
         output_dir = sys.argv[3] if len(sys.argv) > 3 else '.'
@@ -373,6 +417,7 @@ if __name__ == '__main__':
         outline_dir = sys.argv[5]
         create_style_templates(count, distill_dir)
         create_hook_templates(count, distill_dir)
+        create_character_templates(count, distill_dir)
         create_outline_templates(count, outline_dir)
         create_concept_template(setting_dir, count)
         create_bible_template(setting_dir)
