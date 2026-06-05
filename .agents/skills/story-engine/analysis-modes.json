@@ -20,6 +20,15 @@
       "output_dir": "蒸馏/mode-b",
       "description": "角色塑造：立体感、性格外化、角色差异化、配角塑造、关系张力、成长暗示",
       "enabled": true
+    },
+    "plot": {
+      "template": "prompts/plot-guide-task.md",
+      "output_pattern": "plot_guide_{N}.md",
+      "output_dir": "蒸馏/mode-b",
+      "description": "情节结构：核心情节桥段、排除项、可复用模式、叙事技巧",
+      "enabled": true,
+      "priority": 1,
+      "required_for": ["chapter-outline", "arc-skeleton"]
     }
   },
   "defaults": {
