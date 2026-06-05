@@ -1,4 +1,4 @@
----
+﻿---
 name: story-rewrite_vPlan
 description: |
   仿写引擎 vPlan：全书规划先行，一次出稿。
@@ -23,7 +23,7 @@ novel-download-authors/{作者名}/{源书名}/
 │   ├── style_guide_N.md         # LLM inkos 8维度风格指南
 │   └── strategy_guide_N.md      # LLM 排除项+节奏骨架+叙事策略
 
-{新书名}/
+仿写/仿写/{新书名}/
 ├── 设定/
 │   ├── 新书概念.md
 │   ├── story_bible.md
@@ -34,49 +34,19 @@ novel-download-authors/{作者名}/{源书名}/
 └── 正文/第N章.txt
 ```
 
+⚠️ 产出目录：`仿写/仿写/仿写/{新书名}/`（不是根目录）
+
 ## 去重等级
 
 默认 Lv1+Lv2。Lv2 触发逻辑标准（至少满足2条）：起因不同、动机不同、后果不同、参与人不同。
 
 ---
 
-## Phase 0：源文分析（一次性，可缓存）
+## Phase 0：源文分析（前置依赖）
 
-### 缓存策略
-
-**读取缓存时**：抽检3个 `style_guide_N.md` + 3个 `strategy_guide_N.md`，验证质量：
-- style_guide：8维度齐全、≥600字、每维度有例句？
-- strategy_guide：排除项≥2个、节奏骨架有数值、叙事策略5子维度非空？
-
-全部合格 → 跳过，用缓存。有不合格 → 删掉该章缓存，重跑。
-
-**写入缓存时**：同样验证，合格才写入。不合格最多重跑2轮。
-
-**手动刷新**：删除 `蒸馏/mode-b/` 目录下文件，重新运行 Phase 0。
-
-### 0.1 拆章
-```bash
-python .claude/skills/story-rewrite_vPlan/tools/source_chapter_splitter.py split <源文.txt> novel-download-authors/{作者名}/{源书名}/源文/
-```
-
-### 0.2 风格指纹 + 风格分析
-
-脚本指纹：
-```bash
-python .claude/skills/story-rewrite_vPlan/tools/style_analyzer.py novel-download-authors/{作者名}/{源书名}/源文/第N章.txt --json | Out-File -FilePath novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/style_profile_N.json -Encoding utf8
-```
-
-LLM 风格分析（10 agents × N批，并行，`context: fork`）：
-
-⚠️ **每个 agent 只分析1章，禁止合并多章到同一个 agent。** 每批启动10个独立 Task。
-
-Task prompt 见 [prompts/style-analysis-task.md](prompts/style-analysis-task.md)。每章输出保存到 `蒸馏/mode-b/style_guide_N.md`。
-
-LLM 叙事策略提取（10 agents × N批，并行，`context: fork`）：
-
-⚠️ 与风格分析并行，同样每 agent 只处理1章。
-
-Task prompt 见 [prompts/strategy-guide-task.md](prompts/strategy-guide-task.md)。每章输出保存到 `蒸馏/mode-b/strategy_guide_N.md`。
+⚠️ 运行前检查 `蒸馏/mode-b/` 下是否有 `style_guide_*.md` + `strategy_guide_*.md`。
+- 已有 → 跳过
+- 没有 → 先运行 `/story-rewrite_phase0-style` 和 `/story-rewrite_phase0-strategy`（可并行开两个 agent 会话同时跑）
 
 ---
 
@@ -123,5 +93,5 @@ Task prompt 见 [prompts/write-chapter.md](prompts/write-chapter.md)。每章输
 
 ## Phase 3：导出
 ```bash
-cat {新书名}/正文/*.txt > {新书名}/{新书名}.txt
+cat 仿写/仿写/{新书名}/正文/*.txt > 仿写/仿写/{新书名}/{新书名}.txt
 ```
