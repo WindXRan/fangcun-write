@@ -17,19 +17,25 @@ shell: powershell
 ## 前置依赖
 
 需要 `novel-download-authors/{作者名}/{源书名}/源文/` 目录下有拆章后的章节文件。
-如果没有，先运行 `/story-style` 拆章。
+如果没有，自动拆章。
 
 ## 输出
 
 ```
 novel-download-authors/{作者名}/{源书名}/
+├── 源文/                          # 拆章后章节（如不存在则自动创建）
 └── 蒸馏/mode-b/
     └── strategy_guide_N.md    # 排除项+节奏骨架+叙事策略
 ```
 
 ## 流程
 
-### 叙事策略提取（10 agents × N批，并行）
+### 0.1 拆章（如源文章节已存在则跳过）
+```bash
+python ${CLAUDE_SKILL_DIR}/tools/source_chapter_splitter.py split <源文.txt> novel-download-authors/{作者名}/{源书名}/源文/
+```
+
+### 0.2 叙事策略提取（10 agents × N批，并行）
 
 ⚠️ **每个 agent 只分析1章，禁止合并多章。**
 
