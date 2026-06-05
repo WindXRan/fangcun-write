@@ -191,6 +191,16 @@ python .agents/skills/story-engine/tools/timer.py start "全本蒸馏" --session
 python .agents/skills/story-engine/tools/timer.py stop "全本蒸馏" --session "vplan-{新书名}"
 ```
 
+### Step 2.5：生成情节概览
+
+```bash
+python .agents/skills/story-engine/tools/extract_plot_overview.py <蒸馏目录> <设定目录>/plot_overview.md
+```
+
+- 蒸馏目录：`novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/`
+- 设定目录：`仿写/仿写/{新书名}/设定/`
+- 生成 plot_overview.md，供后续 agents 读取
+
 ### Step 3：弧线骨架（3 agents 并行）
 
 全本蒸馏完成后，**同时启动 3 个 agent**：

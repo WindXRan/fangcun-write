@@ -1,22 +1,22 @@
-﻿请为《{新书名}》设计弧线骨架（并行模式）。
+﻿请为《{新书名}》设计弧线骨架（串行模式）。
 
 【源文总章数】{N}章
 【情节指南】请读取：novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/plot_guide_*.md
 
 【任务】
-同时启动 3 个子 agent：
+串行启动 3 个子 agent（必须按顺序执行）：
 
-1. **Agent A1：新书概念**
+1. **Agent A1：新书概念**（必须先完成）
    - Task prompt：prompts/arc-concept.md
-   - 输出：仿写/{新书名}/设定/新书概念.md
+   - 输出：仿写/仿写/{新书名}/设定/新书概念.md
 
-2. **Agent A2：世界观设定**
+2. **Agent A2：世界观设定**（等 A1 完成后启动）
    - Task prompt：prompts/arc-bible.md
-   - 输出：仿写/{新书名}/设定/story_bible.md
+   - 输出：仿写/仿写/{新书名}/设定/story_bible.md
 
-3. **Agent A3：全书弧线骨架**
+3. **Agent A3：全书弧线骨架**（等 A1 完成后启动）
    - Task prompt：prompts/arc-skeleton-core.md
-   - 输出：仿写/{新书名}/设定/全书弧线骨架.md
+   - 输出：仿写/仿写/{新书名}/设定/全书弧线骨架.md
 
 【输出】3个文件分别保存到对应位置
 

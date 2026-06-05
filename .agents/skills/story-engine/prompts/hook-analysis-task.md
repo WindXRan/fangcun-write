@@ -14,3 +14,6 @@
 - 总字数不少于400字
 
 【输出】覆盖保存到：novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/hook_guide_N.md
+
+【回传格式】完成后只回传一行，禁止总结分析内容：
+✅ hook 第N章 | hook_guide_N.md | XXX字
