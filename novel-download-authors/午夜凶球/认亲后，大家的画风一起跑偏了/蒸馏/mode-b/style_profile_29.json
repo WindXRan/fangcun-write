@@ -1,0 +1,39 @@
+﻿{
+  "source_name": "第29章.txt",
+  "total_chars": 2512,
+  "total_words": 1835,
+  "total_sentences": 92,
+  "total_paragraphs": 81,
+  "sentence_length": {
+    "avg": 19.9,
+    "stddev": 13.5
+  },
+  "paragraph_length": {
+    "avg": 22.7,
+    "stddev": 18.7,
+    "min": 0,
+    "max": 87
+  },
+  "vocabulary_ttr": 0.287,
+  "dialogue_ratio": 0.254,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.413,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.901,
+    "medium_50_200": 0.099,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.543
+  },
+  "top_opening_patterns": [
+    "” ...(25次)",
+    "李观...(8次)",
+    "”，...(5次)",
+    "谢玉...(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "ai_tells": []
+}

@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第7章.txt",
+  "total_chars": 2696,
+  "total_words": 2021,
+  "total_sentences": 126,
+  "total_paragraphs": 63,
+  "sentence_length": {
+    "avg": 16.0,
+    "stddev": 11.8
+  },
+  "paragraph_length": {
+    "avg": 32.1,
+    "stddev": 19.4,
+    "min": 0,
+    "max": 82
+  },
+  "vocabulary_ttr": 0.257,
+  "dialogue_ratio": 0.374,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.5,
+    "long_ratio_gt60": 0.008
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.794,
+    "medium_50_200": 0.206,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.19
+  },
+  "top_opening_patterns": [
+    "” ...(26次)",
+    "”，...(9次)",
+    "”李...(9次)",
+    "谢玉...(8次)",
+    "徐楠...(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(16处)"
+  ],
+  "ai_tells": []
+}

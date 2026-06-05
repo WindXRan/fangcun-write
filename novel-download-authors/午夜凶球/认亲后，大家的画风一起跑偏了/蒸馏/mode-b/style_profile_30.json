@@ -1,0 +1,38 @@
+﻿{
+  "source_name": "第30章.txt",
+  "total_chars": 2393,
+  "total_words": 1979,
+  "total_sentences": 67,
+  "total_paragraphs": 40,
+  "sentence_length": {
+    "avg": 29.5,
+    "stddev": 16.6
+  },
+  "paragraph_length": {
+    "avg": 49.5,
+    "stddev": 31.3,
+    "min": 0,
+    "max": 125
+  },
+  "vocabulary_ttr": 0.266,
+  "dialogue_ratio": 0.274,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.149,
+    "long_ratio_gt60": 0.06
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.575,
+    "medium_50_200": 0.425,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.35
+  },
+  "top_opening_patterns": [
+    "” ...(13次)",
+    "林霆...(4次)",
+    "李观...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "ai_tells": []
+}

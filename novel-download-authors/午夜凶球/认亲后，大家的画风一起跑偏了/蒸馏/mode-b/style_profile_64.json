@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第64章.txt",
+  "total_chars": 2304,
+  "total_words": 1782,
+  "total_sentences": 77,
+  "total_paragraphs": 47,
+  "sentence_length": {
+    "avg": 23.1,
+    "stddev": 16.2
+  },
+  "paragraph_length": {
+    "avg": 37.9,
+    "stddev": 25.9,
+    "min": 0,
+    "max": 140
+  },
+  "vocabulary_ttr": 0.236,
+  "dialogue_ratio": 0.312,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.377,
+    "long_ratio_gt60": 0.013
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.702,
+    "medium_50_200": 0.298,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.319
+  },
+  "top_opening_patterns": [
+    "” ...(15次)",
+    "”，...(14次)",
+    "李观...(3次)",
+    "张凤...(3次)",
+    "“好...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "ai_tells": []
+}

@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第4章.txt",
+  "total_chars": 2475,
+  "total_words": 1806,
+  "total_sentences": 102,
+  "total_paragraphs": 71,
+  "sentence_length": {
+    "avg": 17.7,
+    "stddev": 11.6
+  },
+  "paragraph_length": {
+    "avg": 25.4,
+    "stddev": 21.0,
+    "min": 0,
+    "max": 106
+  },
+  "vocabulary_ttr": 0.287,
+  "dialogue_ratio": 0.38,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.431,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.887,
+    "medium_50_200": 0.113,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.352
+  },
+  "top_opening_patterns": [
+    "” ...(27次)",
+    "李观...(5次)",
+    "”吴...(5次)",
+    "江流...(5次)",
+    "吴明...(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "ai_tells": []
+}

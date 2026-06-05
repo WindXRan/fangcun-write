@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第10章.txt",
+  "total_chars": 2562,
+  "total_words": 2044,
+  "total_sentences": 84,
+  "total_paragraphs": 53,
+  "sentence_length": {
+    "avg": 24.3,
+    "stddev": 13.5
+  },
+  "paragraph_length": {
+    "avg": 38.6,
+    "stddev": 29.7,
+    "min": 0,
+    "max": 142
+  },
+  "vocabulary_ttr": 0.281,
+  "dialogue_ratio": 0.133,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.25,
+    "long_ratio_gt60": 0.012
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.698,
+    "medium_50_200": 0.302,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.453
+  },
+  "top_opening_patterns": [
+    "谢玉...(6次)",
+    "” ...(6次)",
+    "”，...(5次)",
+    "刘洁...(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "ai_tells": [
+    "高频副词(1处)"
+  ]
+}

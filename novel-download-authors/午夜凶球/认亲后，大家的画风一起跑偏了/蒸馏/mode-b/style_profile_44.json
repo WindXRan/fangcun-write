@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第44章.txt",
+  "total_chars": 2595,
+  "total_words": 2075,
+  "total_sentences": 76,
+  "total_paragraphs": 45,
+  "sentence_length": {
+    "avg": 27.3,
+    "stddev": 16.5
+  },
+  "paragraph_length": {
+    "avg": 46.1,
+    "stddev": 28.1,
+    "min": 0,
+    "max": 108
+  },
+  "vocabulary_ttr": 0.264,
+  "dialogue_ratio": 0.215,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.224,
+    "long_ratio_gt60": 0.026
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.578,
+    "medium_50_200": 0.422,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.289
+  },
+  "top_opening_patterns": [
+    "” ...(13次)",
+    "”，...(12次)",
+    "李观...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)"
+  ]
+}
