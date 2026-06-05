@@ -1,10 +1,10 @@
 ---
 name: story-style
 description: |
-  源文风格分析：拆章+风格指纹+inkos 8维度风格指南。
-  输出 style_profile_N.json + style_guide_N.md。
-  触发条件：用户说「分析风格」「跑风格分析」「提取风格指南」，或直接传源文文件路径。
-  可与 story-strategy 并行运行。
+  源文分析：拆章+风格指纹+多模式插件分析。
+  当前模式：style（inkos 8维度）、hook（钩子工程学）。
+  触发条件：用户说「分析风格」「跑风格分析」「提取风格」，或直接传源文文件路径。
+  加新模式只需在 analysis-modes.json 加配置+创建prompt文件。
 argument-hint: <源文.txt路径>
 allowed-tools: Bash(python *) Bash(ls *) Bash(mkdir *)
 shell: powershell
@@ -12,12 +12,13 @@ shell: powershell
 
 # story-style
 
-> 源文风格分析，可缓存。所有工具和prompt引用 story-engine。
+> 源文分析，插件式，可缓存。所有工具和prompt引用 story-engine。
 
 ## 共享文件
 
 - 工具：`.agents/skills/story-engine/tools/`
-- prompt：`.agents/skills/story-engine/prompts/style-analysis-task.md`
+- 配置：`.agents/skills/story-engine/analysis-modes.json`
+- prompt：`.agents/skills/story-engine/prompts/`
 
 ## 输出
 
@@ -26,7 +27,8 @@ novel-download-authors/{作者名}/{源书名}/
 ├── 源文/                          # 拆章后章节
 └── 蒸馏/mode-b/
     ├── style_profile_N.json       # 脚本指纹
-    ├── style_guide_N.md           # inkos 8维度风格指南（模板+填入）
+    ├── style_guide_N.md           # style 插件输出
+    └── hook_guide_N.md            # hook 插件输出
 ```
 
 ## 流程
@@ -43,22 +45,32 @@ python .agents/skills/story-engine/tools/style_analyzer.py novel-download-author
 ```
 
 ### 0.3 创建分析模板（脚本）
+
+读取 `analysis-modes.json`，为每个 enabled 的模式创建模板：
+
 ```bash
 python .agents/skills/story-engine/tools/create_templates.py style <章节数> novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/
 python .agents/skills/story-engine/tools/create_templates.py hook <章节数> novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/
 ```
 
-### 0.4 风格分析 + 钩子分析（10 agents × N批，并行）
+### 0.4 分析（10 agents × N批，并行）
 
 ⚠️ **每个 agent 只分析1章，禁止合并多章。**
 
-Task prompt 见 `.agents/skills/story-engine/prompts/style-analysis-task.md`（风格）和 `.agents/skills/story-engine/prompts/hook-analysis-task.md`（钩子）。
+每个 agent 读1个源文，输出该章所有模式的 guide 文件。
 
-每个 agent 读1个源文，输出 `style_guide_N.md` + `hook_guide_N.md` 两个文件。
+Task prompt 见 `.agents/skills/story-engine/prompts/` 下各模式的 prompt 文件。
+
+## 插件扩展
+
+加新模式只需：
+1. 创建 `.agents/skills/story-engine/prompts/{mode}-analysis-task.md`
+2. 在 `.agents/skills/story-engine/analysis-modes.json` 加一行配置
+3. 在 `create_templates.py` 加一个 template 函数
 
 ## 缓存策略
 
-- `style_profile_*.json` + `style_guide_*.md` 齐全 → 跳过
-- 抽检3个 style_guide：是否有实际分析内容（不是空模板）？8维度全部填入？每维度有原文例句？总字数≥600？
+- 所有模式的 guide 文件齐全 → 跳过
+- 抽检3个：是否有实际分析内容（不是空模板）？
 - 空模板 = 未完成，需重新分析
-- 手动刷新 → 删除 `style_profile_*.json` 和 `style_guide_*.md`
+- 手动刷新 → 删除 `蒸馏/mode-b/` 下对应文件
