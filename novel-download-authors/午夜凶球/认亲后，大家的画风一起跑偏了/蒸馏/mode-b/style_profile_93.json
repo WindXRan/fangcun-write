@@ -1,0 +1,39 @@
+﻿{
+  "source_name": "第93章.txt",
+  "total_chars": 2275,
+  "total_words": 1826,
+  "total_sentences": 72,
+  "total_paragraphs": 45,
+  "sentence_length": {
+    "avg": 25.4,
+    "stddev": 17.0
+  },
+  "paragraph_length": {
+    "avg": 40.6,
+    "stddev": 28.3,
+    "min": 0,
+    "max": 116
+  },
+  "vocabulary_ttr": 0.24,
+  "dialogue_ratio": 0.205,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.236,
+    "long_ratio_gt60": 0.042
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.689,
+    "medium_50_200": 0.311,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.444
+  },
+  "top_opening_patterns": [
+    "” ...(15次)",
+    "”，...(5次)",
+    "孙老...(4次)",
+    "顾伟...(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "ai_tells": []
+}

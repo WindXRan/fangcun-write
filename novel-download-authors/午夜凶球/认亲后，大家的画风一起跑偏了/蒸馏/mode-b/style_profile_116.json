@@ -1,0 +1,39 @@
+﻿{
+  "source_name": "第116章.txt",
+  "total_chars": 2433,
+  "total_words": 1749,
+  "total_sentences": 97,
+  "total_paragraphs": 75,
+  "sentence_length": {
+    "avg": 18.0,
+    "stddev": 11.9
+  },
+  "paragraph_length": {
+    "avg": 23.3,
+    "stddev": 15.2,
+    "min": 0,
+    "max": 66
+  },
+  "vocabulary_ttr": 0.251,
+  "dialogue_ratio": 0.22,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.392,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.947,
+    "medium_50_200": 0.053,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.453
+  },
+  "top_opening_patterns": [
+    "” ...(25次)",
+    "”，...(13次)",
+    "李昭...(5次)",
+    "李观...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
+  "ai_tells": []
+}

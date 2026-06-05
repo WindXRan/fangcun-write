@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第77章.txt",
+  "total_chars": 2479,
+  "total_words": 1903,
+  "total_sentences": 74,
+  "total_paragraphs": 56,
+  "sentence_length": {
+    "avg": 25.7,
+    "stddev": 16.3
+  },
+  "paragraph_length": {
+    "avg": 34.0,
+    "stddev": 16.9,
+    "min": 0,
+    "max": 82
+  },
+  "vocabulary_ttr": 0.249,
+  "dialogue_ratio": 0.332,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.284,
+    "long_ratio_gt60": 0.014
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.821,
+    "medium_50_200": 0.179,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.304
+  },
+  "top_opening_patterns": [
+    "” ...(28次)",
+    "”，...(11次)",
+    "李观...(3次)",
+    "李卫...(3次)",
+    "朱文...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "ai_tells": [
+    "协作口吻(1处)"
+  ]
+}

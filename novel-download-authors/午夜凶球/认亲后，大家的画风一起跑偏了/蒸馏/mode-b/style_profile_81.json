@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第81章.txt",
+  "total_chars": 2315,
+  "total_words": 1803,
+  "total_sentences": 77,
+  "total_paragraphs": 47,
+  "sentence_length": {
+    "avg": 23.4,
+    "stddev": 15.0
+  },
+  "paragraph_length": {
+    "avg": 38.4,
+    "stddev": 28.0,
+    "min": 0,
+    "max": 98
+  },
+  "vocabulary_ttr": 0.271,
+  "dialogue_ratio": 0.39,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.325,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.617,
+    "medium_50_200": 0.383,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.277
+  },
+  "top_opening_patterns": [
+    "” ...(18次)",
+    "”，...(8次)",
+    "张自...(4次)",
+    "李观...(3次)"
+  ],
+  "rhetorical_features": [
+    "反问(2处)",
+    "短句节奏(5处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)"
+  ]
+}

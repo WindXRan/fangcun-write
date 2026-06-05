@@ -1,0 +1,38 @@
+﻿{
+  "source_name": "第119章.txt",
+  "total_chars": 2267,
+  "total_words": 1784,
+  "total_sentences": 61,
+  "total_paragraphs": 48,
+  "sentence_length": {
+    "avg": 29.2,
+    "stddev": 19.4
+  },
+  "paragraph_length": {
+    "avg": 37.2,
+    "stddev": 22.0,
+    "min": 0,
+    "max": 93
+  },
+  "vocabulary_ttr": 0.253,
+  "dialogue_ratio": 0.168,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.246,
+    "long_ratio_gt60": 0.049
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.708,
+    "medium_50_200": 0.292,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.5
+  },
+  "top_opening_patterns": [
+    "” ...(14次)",
+    "李观...(6次)",
+    "”，...(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "ai_tells": []
+}

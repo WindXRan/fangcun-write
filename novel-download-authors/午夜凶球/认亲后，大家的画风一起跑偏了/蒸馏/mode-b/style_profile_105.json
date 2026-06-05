@@ -1,0 +1,38 @@
+﻿{
+  "source_name": "第105章.txt",
+  "total_chars": 2380,
+  "total_words": 1806,
+  "total_sentences": 80,
+  "total_paragraphs": 57,
+  "sentence_length": {
+    "avg": 22.6,
+    "stddev": 15.2
+  },
+  "paragraph_length": {
+    "avg": 31.7,
+    "stddev": 22.0,
+    "min": 0,
+    "max": 116
+  },
+  "vocabulary_ttr": 0.268,
+  "dialogue_ratio": 0.454,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.375,
+    "long_ratio_gt60": 0.025
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.825,
+    "medium_50_200": 0.175,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.404
+  },
+  "top_opening_patterns": [
+    "” ...(21次)",
+    "”，...(11次)",
+    "李观...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "ai_tells": []
+}

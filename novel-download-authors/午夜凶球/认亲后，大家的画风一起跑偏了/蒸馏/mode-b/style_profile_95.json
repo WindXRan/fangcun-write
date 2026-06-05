@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第95章.txt",
+  "total_chars": 2305,
+  "total_words": 1826,
+  "total_sentences": 69,
+  "total_paragraphs": 46,
+  "sentence_length": {
+    "avg": 26.5,
+    "stddev": 19.8
+  },
+  "paragraph_length": {
+    "avg": 39.7,
+    "stddev": 26.1,
+    "min": 0,
+    "max": 114
+  },
+  "vocabulary_ttr": 0.29,
+  "dialogue_ratio": 0.208,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.333,
+    "long_ratio_gt60": 0.101
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.652,
+    "medium_50_200": 0.348,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.435
+  },
+  "top_opening_patterns": [
+    "” ...(10次)",
+    "”，...(9次)",
+    "李萱...(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(2处)"
+  ],
+  "ai_tells": [
+    "高频副词(1处)"
+  ]
+}

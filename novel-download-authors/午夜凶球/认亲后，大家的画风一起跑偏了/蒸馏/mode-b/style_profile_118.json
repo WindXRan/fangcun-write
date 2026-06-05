@@ -1,0 +1,39 @@
+﻿{
+  "source_name": "第118章.txt",
+  "total_chars": 2341,
+  "total_words": 1788,
+  "total_sentences": 73,
+  "total_paragraphs": 57,
+  "sentence_length": {
+    "avg": 24.5,
+    "stddev": 19.4
+  },
+  "paragraph_length": {
+    "avg": 31.4,
+    "stddev": 25.6,
+    "min": 0,
+    "max": 107
+  },
+  "vocabulary_ttr": 0.253,
+  "dialogue_ratio": 0.299,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.315,
+    "long_ratio_gt60": 0.041
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.807,
+    "medium_50_200": 0.193,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.491
+  },
+  "top_opening_patterns": [
+    "” ...(16次)",
+    "”，...(12次)",
+    "李昭...(5次)",
+    "“陈...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "ai_tells": []
+}

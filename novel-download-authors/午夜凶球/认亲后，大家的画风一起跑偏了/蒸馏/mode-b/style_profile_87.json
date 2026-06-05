@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第87章.txt",
+  "total_chars": 2339,
+  "total_words": 1777,
+  "total_sentences": 76,
+  "total_paragraphs": 54,
+  "sentence_length": {
+    "avg": 23.4,
+    "stddev": 14.0
+  },
+  "paragraph_length": {
+    "avg": 32.9,
+    "stddev": 20.6,
+    "min": 0,
+    "max": 87
+  },
+  "vocabulary_ttr": 0.238,
+  "dialogue_ratio": 0.377,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.329,
+    "long_ratio_gt60": 0.013
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.833,
+    "medium_50_200": 0.167,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.37
+  },
+  "top_opening_patterns": [
+    "” ...(22次)",
+    "”，...(7次)",
+    "李观...(3次)",
+    "齐奶...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "ai_tells": [
+    "高频副词(1处)"
+  ]
+}

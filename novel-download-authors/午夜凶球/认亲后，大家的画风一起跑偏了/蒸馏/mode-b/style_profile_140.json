@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第140章.txt",
+  "total_chars": 2410,
+  "total_words": 1893,
+  "total_sentences": 84,
+  "total_paragraphs": 49,
+  "sentence_length": {
+    "avg": 22.5,
+    "stddev": 15.8
+  },
+  "paragraph_length": {
+    "avg": 38.6,
+    "stddev": 22.6,
+    "min": 0,
+    "max": 86
+  },
+  "vocabulary_ttr": 0.25,
+  "dialogue_ratio": 0.223,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.369,
+    "long_ratio_gt60": 0.012
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.673,
+    "medium_50_200": 0.327,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.388
+  },
+  "top_opening_patterns": [
+    "” ...(16次)",
+    "孙老...(10次)",
+    "”，...(8次)",
+    "张自...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "ai_tells": [
+    "路标词(2处)"
+  ]
+}

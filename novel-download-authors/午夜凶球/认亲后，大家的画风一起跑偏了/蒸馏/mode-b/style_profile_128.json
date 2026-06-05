@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第128章.txt",
+  "total_chars": 2421,
+  "total_words": 1720,
+  "total_sentences": 79,
+  "total_paragraphs": 62,
+  "sentence_length": {
+    "avg": 21.8,
+    "stddev": 17.4
+  },
+  "paragraph_length": {
+    "avg": 27.7,
+    "stddev": 18.4,
+    "min": 0,
+    "max": 77
+  },
+  "vocabulary_ttr": 0.274,
+  "dialogue_ratio": 0.258,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.456,
+    "long_ratio_gt60": 0.038
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.887,
+    "medium_50_200": 0.113,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.5
+  },
+  "top_opening_patterns": [
+    "” ...(21次)",
+    "”，...(13次)",
+    "李观...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "ai_tells": [
+    "路标词(2处)"
+  ]
+}

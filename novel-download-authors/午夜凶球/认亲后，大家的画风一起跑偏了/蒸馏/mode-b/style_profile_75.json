@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第75章.txt",
+  "total_chars": 2322,
+  "total_words": 1783,
+  "total_sentences": 70,
+  "total_paragraphs": 51,
+  "sentence_length": {
+    "avg": 25.5,
+    "stddev": 14.7
+  },
+  "paragraph_length": {
+    "avg": 35.0,
+    "stddev": 18.6,
+    "min": 0,
+    "max": 92
+  },
+  "vocabulary_ttr": 0.25,
+  "dialogue_ratio": 0.379,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.186,
+    "long_ratio_gt60": 0.029
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.824,
+    "medium_50_200": 0.176,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.373
+  },
+  "top_opening_patterns": [
+    "” ...(20次)",
+    "”，...(10次)",
+    "李观...(5次)",
+    "李昭...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)"
+  ]
+}

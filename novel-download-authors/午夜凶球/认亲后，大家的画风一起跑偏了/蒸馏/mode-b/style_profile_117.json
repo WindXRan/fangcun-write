@@ -1,0 +1,39 @@
+﻿{
+  "source_name": "第117章.txt",
+  "total_chars": 2356,
+  "total_words": 1800,
+  "total_sentences": 81,
+  "total_paragraphs": 59,
+  "sentence_length": {
+    "avg": 22.2,
+    "stddev": 16.5
+  },
+  "paragraph_length": {
+    "avg": 30.5,
+    "stddev": 20.4,
+    "min": 0,
+    "max": 106
+  },
+  "vocabulary_ttr": 0.26,
+  "dialogue_ratio": 0.173,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.37,
+    "long_ratio_gt60": 0.012
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.847,
+    "medium_50_200": 0.153,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.458
+  },
+  "top_opening_patterns": [
+    "”，...(14次)",
+    "” ...(13次)",
+    "陈觅...(7次)",
+    "朱文...(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "ai_tells": []
+}

@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第80章.txt",
+  "total_chars": 2558,
+  "total_words": 1815,
+  "total_sentences": 107,
+  "total_paragraphs": 79,
+  "sentence_length": {
+    "avg": 17.0,
+    "stddev": 13.1
+  },
+  "paragraph_length": {
+    "avg": 23.0,
+    "stddev": 18.2,
+    "min": 0,
+    "max": 81
+  },
+  "vocabulary_ttr": 0.275,
+  "dialogue_ratio": 0.487,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.495,
+    "long_ratio_gt60": 0.009
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.924,
+    "medium_50_200": 0.076,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.228
+  },
+  "top_opening_patterns": [
+    "” ...(38次)",
+    "”，...(16次)",
+    "“我...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(10处)"
+  ],
+  "ai_tells": [
+    "高频副词(1处)"
+  ]
+}

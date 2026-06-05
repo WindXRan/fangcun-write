@@ -33,9 +33,9 @@ story-engine（全书规划先行引擎）
 AI网文小说项目/
 ├── .agents/
 │   ├── skills/
-│   │   ├── story-engine/             # 仿写引擎（主入口）
-│   │   ├── story-style/              # 源文风格分析
-│   │   ├── story-strategy/           # 源文叙事策略分析
+│   │   ├── story-engine/             # 仿写引擎（主入口，共享工具+prompt）
+│   │   ├── story-style/              # 源文风格分析（引用story-engine）
+│   │   ├── story-strategy/           # 源文叙事策略分析（引用story-engine）
 │   │   ├── story-compare/             # 对比文件生成
 │   │   ├── story-scan/                # 番茄排行榜分析
 │   │   ├── story-cover/               # 封面生成

@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第74章.txt",
+  "total_chars": 2242,
+  "total_words": 1684,
+  "total_sentences": 77,
+  "total_paragraphs": 58,
+  "sentence_length": {
+    "avg": 21.9,
+    "stddev": 13.3
+  },
+  "paragraph_length": {
+    "avg": 29.0,
+    "stddev": 18.0,
+    "min": 0,
+    "max": 80
+  },
+  "vocabulary_ttr": 0.256,
+  "dialogue_ratio": 0.222,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.351,
+    "long_ratio_gt60": 0.013
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.828,
+    "medium_50_200": 0.172,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.431
+  },
+  "top_opening_patterns": [
+    "” ...(19次)",
+    "”，...(6次)",
+    "李昭...(4次)",
+    "李观...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)"
+  ]
+}
