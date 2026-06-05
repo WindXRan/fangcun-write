@@ -14,3 +14,6 @@
 - 不确定的维度标注「信息不足」，不得编造
 
 【输出】覆盖保存到：novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/style_guide_N.md
+
+【回传格式】完成后只回传一行，禁止总结分析内容：
+✅ style 第N章 | style_guide_N.md | XXX字
