@@ -3,8 +3,9 @@ name: story-style
 description: |
   源文风格分析：拆章+风格指纹+inkos 8维度风格指南。
   输出 style_profile_N.json + style_guide_N.md。
-  触发条件：「分析风格」「跑风格分析」「提取风格指南」。
-  可与 phase0-strategy 并行运行。
+  触发条件：用户说「分析风格」「跑风格分析」「提取风格指南」，或直接传源文文件路径。
+  可与 story-strategy 并行运行。
+argument-hint: <源文.txt路径>
 allowed-tools: Bash(python *) Bash(ls *) Bash(mkdir *)
 shell: powershell
 ---
