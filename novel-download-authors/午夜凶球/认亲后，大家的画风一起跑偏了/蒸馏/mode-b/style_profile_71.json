@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第71章.txt",
+  "total_chars": 2583,
+  "total_words": 1996,
+  "total_sentences": 82,
+  "total_paragraphs": 54,
+  "sentence_length": {
+    "avg": 24.3,
+    "stddev": 15.1
+  },
+  "paragraph_length": {
+    "avg": 37.0,
+    "stddev": 23.1,
+    "min": 0,
+    "max": 126
+  },
+  "vocabulary_ttr": 0.232,
+  "dialogue_ratio": 0.29,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.293,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.722,
+    "medium_50_200": 0.278,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.278
+  },
+  "top_opening_patterns": [
+    "” ...(21次)",
+    "”，...(16次)",
+    "李观...(5次)",
+    "李卫...(4次)",
+    "“你...(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "ai_tells": []
+}

@@ -1,0 +1,43 @@
+﻿{
+  "source_name": "第21章.txt",
+  "total_chars": 2497,
+  "total_words": 1993,
+  "total_sentences": 77,
+  "total_paragraphs": 46,
+  "sentence_length": {
+    "avg": 25.9,
+    "stddev": 16.2
+  },
+  "paragraph_length": {
+    "avg": 43.3,
+    "stddev": 28.2,
+    "min": 0,
+    "max": 143
+  },
+  "vocabulary_ttr": 0.26,
+  "dialogue_ratio": 0.245,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.234,
+    "long_ratio_gt60": 0.026
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.652,
+    "medium_50_200": 0.348,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.326
+  },
+  "top_opening_patterns": [
+    "” ...(16次)",
+    "”，...(6次)",
+    "李观...(5次)",
+    "李建...(3次)",
+    "张自...(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(5处)"
+  ],
+  "ai_tells": [
+    "高频副词(2处)"
+  ]
+}

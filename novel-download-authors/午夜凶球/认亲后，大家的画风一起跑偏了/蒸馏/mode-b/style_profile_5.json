@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第5章.txt",
+  "total_chars": 2341,
+  "total_words": 1769,
+  "total_sentences": 99,
+  "total_paragraphs": 57,
+  "sentence_length": {
+    "avg": 17.9,
+    "stddev": 13.6
+  },
+  "paragraph_length": {
+    "avg": 31.0,
+    "stddev": 24.4,
+    "min": 0,
+    "max": 104
+  },
+  "vocabulary_ttr": 0.276,
+  "dialogue_ratio": 0.322,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.455,
+    "long_ratio_gt60": 0.02
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.772,
+    "medium_50_200": 0.228,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.281
+  },
+  "top_opening_patterns": [
+    "” ...(26次)",
+    "李观...(5次)",
+    "老班...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(16处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)"
+  ]
+}

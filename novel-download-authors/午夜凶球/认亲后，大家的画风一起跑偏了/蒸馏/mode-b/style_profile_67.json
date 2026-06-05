@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第67章.txt",
+  "total_chars": 2590,
+  "total_words": 1818,
+  "total_sentences": 108,
+  "total_paragraphs": 85,
+  "sentence_length": {
+    "avg": 16.8,
+    "stddev": 12.7
+  },
+  "paragraph_length": {
+    "avg": 21.4,
+    "stddev": 16.7,
+    "min": 0,
+    "max": 84
+  },
+  "vocabulary_ttr": 0.262,
+  "dialogue_ratio": 0.405,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.583,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.906,
+    "medium_50_200": 0.094,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.341
+  },
+  "top_opening_patterns": [
+    "” ...(42次)",
+    "”，...(9次)",
+    "李观...(7次)",
+    "谢玉...(4次)",
+    "江流...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "ai_tells": []
+}

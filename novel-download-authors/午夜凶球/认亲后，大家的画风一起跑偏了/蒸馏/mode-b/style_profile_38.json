@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第38章.txt",
+  "total_chars": 2611,
+  "total_words": 2073,
+  "total_sentences": 80,
+  "total_paragraphs": 45,
+  "sentence_length": {
+    "avg": 25.9,
+    "stddev": 18.3
+  },
+  "paragraph_length": {
+    "avg": 46.1,
+    "stddev": 32.7,
+    "min": 0,
+    "max": 158
+  },
+  "vocabulary_ttr": 0.221,
+  "dialogue_ratio": 0.378,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.25,
+    "long_ratio_gt60": 0.05
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.6,
+    "medium_50_200": 0.4,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.267
+  },
+  "top_opening_patterns": [
+    "” ...(14次)",
+    "沈琳...(9次)",
+    "”，...(8次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "ai_tells": [
+    "协作口吻(1处)",
+    "高频副词(2处)"
+  ]
+}

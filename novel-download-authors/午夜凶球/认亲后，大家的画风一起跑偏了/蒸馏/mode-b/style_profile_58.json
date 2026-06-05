@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第58章.txt",
+  "total_chars": 2601,
+  "total_words": 2021,
+  "total_sentences": 94,
+  "total_paragraphs": 52,
+  "sentence_length": {
+    "avg": 21.5,
+    "stddev": 15.8
+  },
+  "paragraph_length": {
+    "avg": 38.9,
+    "stddev": 32.2,
+    "min": 0,
+    "max": 130
+  },
+  "vocabulary_ttr": 0.235,
+  "dialogue_ratio": 0.384,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.457,
+    "long_ratio_gt60": 0.021
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.75,
+    "medium_50_200": 0.25,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.308
+  },
+  "top_opening_patterns": [
+    "”，...(18次)",
+    "” ...(16次)",
+    "李建...(3次)"
+  ],
+  "rhetorical_features": [
+    "反问(2处)",
+    "短句节奏(5处)"
+  ],
+  "ai_tells": [
+    "高频副词(2处)"
+  ]
+}

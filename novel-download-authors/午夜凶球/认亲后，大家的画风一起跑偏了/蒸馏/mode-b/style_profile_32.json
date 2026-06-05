@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第32章.txt",
+  "total_chars": 2408,
+  "total_words": 1850,
+  "total_sentences": 89,
+  "total_paragraphs": 56,
+  "sentence_length": {
+    "avg": 20.8,
+    "stddev": 14.4
+  },
+  "paragraph_length": {
+    "avg": 33.0,
+    "stddev": 29.4,
+    "min": 0,
+    "max": 150
+  },
+  "vocabulary_ttr": 0.259,
+  "dialogue_ratio": 0.449,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.404,
+    "long_ratio_gt60": 0.011
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.804,
+    "medium_50_200": 0.196,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.393
+  },
+  "top_opening_patterns": [
+    "” ...(17次)",
+    "”，...(10次)",
+    "黄毛...(4次)",
+    "林霆...(3次)",
+    "“你...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)"
+  ]
+}

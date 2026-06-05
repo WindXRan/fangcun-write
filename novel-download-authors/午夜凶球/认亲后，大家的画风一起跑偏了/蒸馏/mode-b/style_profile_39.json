@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第39章.txt",
+  "total_chars": 2321,
+  "total_words": 1686,
+  "total_sentences": 113,
+  "total_paragraphs": 63,
+  "sentence_length": {
+    "avg": 14.9,
+    "stddev": 10.3
+  },
+  "paragraph_length": {
+    "avg": 26.8,
+    "stddev": 23.8,
+    "min": 0,
+    "max": 90
+  },
+  "vocabulary_ttr": 0.275,
+  "dialogue_ratio": 0.501,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.575,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.794,
+    "medium_50_200": 0.206,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.397
+  },
+  "top_opening_patterns": [
+    "” ...(26次)",
+    "”，...(10次)",
+    "林霆...(6次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(19处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)"
+  ]
+}

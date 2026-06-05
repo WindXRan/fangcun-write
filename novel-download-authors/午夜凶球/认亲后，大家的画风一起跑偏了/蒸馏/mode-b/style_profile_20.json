@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第20章.txt",
+  "total_chars": 2528,
+  "total_words": 1881,
+  "total_sentences": 113,
+  "total_paragraphs": 60,
+  "sentence_length": {
+    "avg": 16.6,
+    "stddev": 11.7
+  },
+  "paragraph_length": {
+    "avg": 31.4,
+    "stddev": 21.5,
+    "min": 0,
+    "max": 139
+  },
+  "vocabulary_ttr": 0.246,
+  "dialogue_ratio": 0.35,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.504,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.883,
+    "medium_50_200": 0.117,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.25
+  },
+  "top_opening_patterns": [
+    "” ...(21次)",
+    "”，...(19次)",
+    "李建...(5次)",
+    "李观...(5次)",
+    "“那...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(16处)"
+  ],
+  "ai_tells": []
+}
