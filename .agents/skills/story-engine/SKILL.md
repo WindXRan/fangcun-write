@@ -1,5 +1,5 @@
 ﻿---
-name: story-rewrite_vPlan
+name: story-engine
 description: |
   仿写引擎 vPlan：全书规划先行，一次出稿。
   触发条件：用户说「仿写」「用vPlan写」「帮我仿写这本书」「写第N章」「继续写」。
@@ -9,7 +9,7 @@ allowed-tools: Bash(python *) Bash(cat *) Bash(ls *) Bash(cp *) Bash(mkdir *)
 shell: powershell
 ---
 
-# story-rewrite_vPlan
+# story-engine
 
 > 全书规划先行，纯写作出稿。
 
@@ -46,7 +46,7 @@ novel-download-authors/{作者名}/{源书名}/
 
 ⚠️ 运行前检查 `蒸馏/mode-b/` 下是否有 `style_guide_*.md` + `strategy_guide_*.md`。
 - 已有 → 跳过
-- 没有 → 先运行 `/story-rewrite_phase0-style` 和 `/story-rewrite_phase0-strategy`（可并行开两个 agent 会话同时跑）
+- 没有 → 先运行 `/story-style` 和 `/story-strategy`（可并行开两个 agent 会话同时跑）
 
 ---
 
