@@ -37,7 +37,7 @@ python .agents/skills/story-strategy/tools/source_chapter_splitter.py split <源
 
 ### 0.2 创建叙事策略模板（脚本）
 ```bash
-python .agents/skills/story-engine/tools/create_templates.py strategy <章节数> novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/
+python .agents/skills/story-strategy/tools/create_templates.py strategy <章节数> novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/
 ```
 
 ### 0.3 叙事策略提取（10 agents × N批，并行）
@@ -49,6 +49,10 @@ Task prompt 见 [prompts/strategy-guide-task.md](prompts/strategy-guide-task.md)
 ## 缓存策略
 
 - `strategy_guide_*.md` 齐全 → 跳过
-- 抽检3个：排除项≥2个？节奏骨架有数值？叙事策略5子维度非空？
-- 不合格 → 重跑该章
+- 抽检3个：
+  - 是否有实际分析内容（不是空模板）？
+  - 排除项≥2个？
+  - 节奏骨架有数值？
+  - 叙事策略5子维度非空？
+- 空模板 = 未完成，需重新分析
 - 手动刷新 → 删除 `strategy_guide_*.md`

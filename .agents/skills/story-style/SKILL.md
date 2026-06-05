@@ -37,12 +37,13 @@ python .agents/skills/story-style/tools/source_chapter_splitter.py split <源文
 
 ### 0.2 风格指纹（脚本）
 ```bash
+mkdir -Force novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/
 python .agents/skills/story-style/tools/style_analyzer.py novel-download-authors/{作者名}/{源书名}/源文/第N章.txt --json | Out-File -FilePath novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/style_profile_N.json -Encoding utf8
 ```
 
 ### 0.3 创建风格指南模板（脚本）
 ```bash
-python .agents/skills/story-engine/tools/create_templates.py style <章节数> novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/
+python .agents/skills/story-style/tools/create_templates.py style <章节数> novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/
 ```
 
 ### 0.4 风格分析（10 agents × N批，并行）
@@ -54,6 +55,11 @@ Task prompt 见 [prompts/style-analysis-task.md](prompts/style-analysis-task.md)
 ## 缓存策略
 
 - `style_profile_*.json` + `style_guide_*.md` 齐全 → 跳过
-- 抽检3个 style_guide：8维度齐全？≥600字？每维度有例句？
+- 抽检3个 style_guide：
+  - 是否有实际分析内容（不是空模板）？
+  - 8维度是否全部填入？
+  - 每维度有原文例句？
+  - 总字数≥600？
+- 空模板 = 未完成，需重新分析
 - 不合格 → 重跑该章
 - 手动刷新 → 删除 `style_profile_*.json` 和 `style_guide_*.md`
