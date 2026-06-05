@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第76章.txt",
+  "total_chars": 2465,
+  "total_words": 1776,
+  "total_sentences": 84,
+  "total_paragraphs": 83,
+  "sentence_length": {
+    "avg": 21.1,
+    "stddev": 12.8
+  },
+  "paragraph_length": {
+    "avg": 21.4,
+    "stddev": 12.5,
+    "min": 0,
+    "max": 58
+  },
+  "vocabulary_ttr": 0.255,
+  "dialogue_ratio": 0.23,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.333,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.952,
+    "medium_50_200": 0.048,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.578
+  },
+  "top_opening_patterns": [
+    "” ...(21次)",
+    "宋云...(16次)",
+    "] ...(11次)"
+  ],
+  "rhetorical_features": [
+    "反问(2处)",
+    "短句节奏(2处)"
+  ],
+  "ai_tells": [
+    "路标词(2处)"
+  ]
+}

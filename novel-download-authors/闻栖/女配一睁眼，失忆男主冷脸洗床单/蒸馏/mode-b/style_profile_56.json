@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第56章.txt",
+  "total_chars": 2537,
+  "total_words": 1824,
+  "total_sentences": 97,
+  "total_paragraphs": 91,
+  "sentence_length": {
+    "avg": 18.8,
+    "stddev": 10.8
+  },
+  "paragraph_length": {
+    "avg": 20.0,
+    "stddev": 11.1,
+    "min": 0,
+    "max": 47
+  },
+  "vocabulary_ttr": 0.256,
+  "dialogue_ratio": 0.158,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.412,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.648
+  },
+  "top_opening_patterns": [
+    "” ...(29次)",
+    "宋云...(13次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)",
+    "高频副词(3处)"
+  ]
+}

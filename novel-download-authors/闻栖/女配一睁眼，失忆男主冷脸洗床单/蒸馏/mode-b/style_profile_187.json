@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第187章.txt",
+  "total_chars": 2480,
+  "total_words": 1849,
+  "total_sentences": 78,
+  "total_paragraphs": 76,
+  "sentence_length": {
+    "avg": 23.7,
+    "stddev": 12.1
+  },
+  "paragraph_length": {
+    "avg": 24.3,
+    "stddev": 12.4,
+    "min": 0,
+    "max": 60
+  },
+  "vocabulary_ttr": 0.273,
+  "dialogue_ratio": 0.242,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.231,
+    "long_ratio_gt60": 0.013
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.961,
+    "medium_50_200": 0.039,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.737
+  },
+  "top_opening_patterns": [
+    "” ...(18次)",
+    "柏庾...(4次)",
+    "两人...(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "反问(2处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)",
+    "高频副词(2处)"
+  ]
+}

@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第118章.txt",
+  "total_chars": 2425,
+  "total_words": 1731,
+  "total_sentences": 91,
+  "total_paragraphs": 90,
+  "sentence_length": {
+    "avg": 19.0,
+    "stddev": 9.9
+  },
+  "paragraph_length": {
+    "avg": 19.2,
+    "stddev": 9.8,
+    "min": 0,
+    "max": 52
+  },
+  "vocabulary_ttr": 0.239,
+  "dialogue_ratio": 0.169,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.33,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.989,
+    "medium_50_200": 0.011,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.667
+  },
+  "top_opening_patterns": [
+    "” ...(29次)",
+    "宋云...(10次)",
+    "楚靳...(5次)",
+    "吴伟...(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)",
+    "高频副词(1处)"
+  ]
+}

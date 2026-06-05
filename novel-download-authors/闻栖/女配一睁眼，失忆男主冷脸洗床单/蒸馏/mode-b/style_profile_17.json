@@ -1,0 +1,43 @@
+﻿{
+  "source_name": "第17章.txt",
+  "total_chars": 2476,
+  "total_words": 1718,
+  "total_sentences": 103,
+  "total_paragraphs": 92,
+  "sentence_length": {
+    "avg": 16.7,
+    "stddev": 9.7
+  },
+  "paragraph_length": {
+    "avg": 18.7,
+    "stddev": 8.9,
+    "min": 0,
+    "max": 51
+  },
+  "vocabulary_ttr": 0.256,
+  "dialogue_ratio": 0.242,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.437,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.989,
+    "medium_50_200": 0.011,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.554
+  },
+  "top_opening_patterns": [
+    "” ...(37次)",
+    "吴伟...(12次)",
+    "宋云...(4次)",
+    "群里...(3次)"
+  ],
+  "rhetorical_features": [
+    "反问(3处)",
+    "短句节奏(11处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)",
+    "高频副词(1处)"
+  ]
+}

@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第78章.txt",
+  "total_chars": 2652,
+  "total_words": 1860,
+  "total_sentences": 109,
+  "total_paragraphs": 99,
+  "sentence_length": {
+    "avg": 17.1,
+    "stddev": 10.4
+  },
+  "paragraph_length": {
+    "avg": 18.8,
+    "stddev": 10.7,
+    "min": 0,
+    "max": 53
+  },
+  "vocabulary_ttr": 0.255,
+  "dialogue_ratio": 0.28,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.459,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.99,
+    "medium_50_200": 0.01,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.556
+  },
+  "top_opening_patterns": [
+    "” ...(40次)",
+    "宋云...(11次)",
+    "吴伟...(4次)",
+    "楚靳...(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)",
+    "高频副词(1处)"
+  ]
+}

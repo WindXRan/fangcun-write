@@ -1,0 +1,43 @@
+﻿{
+  "source_name": "第44章.txt",
+  "total_chars": 2594,
+  "total_words": 1928,
+  "total_sentences": 84,
+  "total_paragraphs": 81,
+  "sentence_length": {
+    "avg": 23.0,
+    "stddev": 10.0
+  },
+  "paragraph_length": {
+    "avg": 23.8,
+    "stddev": 9.8,
+    "min": 0,
+    "max": 50
+  },
+  "vocabulary_ttr": 0.253,
+  "dialogue_ratio": 0.204,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.202,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.988,
+    "medium_50_200": 0.012,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.63
+  },
+  "top_opening_patterns": [
+    "” ...(29次)",
+    "宋云...(6次)",
+    "楚靳...(5次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "反问(2处)",
+    "短句节奏(3处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)",
+    "高频副词(1处)"
+  ]
+}

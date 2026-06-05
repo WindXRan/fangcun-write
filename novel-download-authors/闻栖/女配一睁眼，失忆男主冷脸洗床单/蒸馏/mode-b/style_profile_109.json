@@ -1,0 +1,39 @@
+﻿{
+  "source_name": "第109章.txt",
+  "total_chars": 2320,
+  "total_words": 1728,
+  "total_sentences": 73,
+  "total_paragraphs": 71,
+  "sentence_length": {
+    "avg": 23.7,
+    "stddev": 11.0
+  },
+  "paragraph_length": {
+    "avg": 24.3,
+    "stddev": 12.1,
+    "min": 0,
+    "max": 59
+  },
+  "vocabulary_ttr": 0.26,
+  "dialogue_ratio": 0.26,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.178,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.944,
+    "medium_50_200": 0.056,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.746
+  },
+  "top_opening_patterns": [
+    "” ...(17次)",
+    "宋云...(4次)",
+    "楚靳...(3次)"
+  ],
+  "rhetorical_features": [],
+  "ai_tells": [
+    "路标词(1处)",
+    "高频副词(1处)"
+  ]
+}

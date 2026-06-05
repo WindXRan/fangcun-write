@@ -1,0 +1,39 @@
+﻿{
+  "source_name": "第89章.txt",
+  "total_chars": 2556,
+  "total_words": 1887,
+  "total_sentences": 86,
+  "total_paragraphs": 87,
+  "sentence_length": {
+    "avg": 21.9,
+    "stddev": 10.9
+  },
+  "paragraph_length": {
+    "avg": 21.7,
+    "stddev": 10.7,
+    "min": 0,
+    "max": 43
+  },
+  "vocabulary_ttr": 0.262,
+  "dialogue_ratio": 0.121,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.314,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.77
+  },
+  "top_opening_patterns": [
+    "” ...(20次)",
+    "丰天...(6次)",
+    "柏庾...(4次)",
+    "宋云...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "ai_tells": []
+}

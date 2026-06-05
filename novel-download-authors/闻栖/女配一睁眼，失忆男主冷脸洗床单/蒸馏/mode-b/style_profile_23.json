@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第23章.txt",
+  "total_chars": 2432,
+  "total_words": 1746,
+  "total_sentences": 87,
+  "total_paragraphs": 85,
+  "sentence_length": {
+    "avg": 20.1,
+    "stddev": 11.2
+  },
+  "paragraph_length": {
+    "avg": 20.5,
+    "stddev": 11.1,
+    "min": 0,
+    "max": 54
+  },
+  "vocabulary_ttr": 0.248,
+  "dialogue_ratio": 0.298,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.31,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.988,
+    "medium_50_200": 0.012,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.635
+  },
+  "top_opening_patterns": [
+    "” ...(31次)",
+    "宋云...(11次)",
+    "楚靳...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "ai_tells": [
+    "高频副词(1处)"
+  ]
+}

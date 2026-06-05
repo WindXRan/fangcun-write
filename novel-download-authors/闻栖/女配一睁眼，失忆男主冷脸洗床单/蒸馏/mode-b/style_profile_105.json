@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第105章.txt",
+  "total_chars": 2554,
+  "total_words": 1807,
+  "total_sentences": 97,
+  "total_paragraphs": 97,
+  "sentence_length": {
+    "avg": 18.6,
+    "stddev": 9.6
+  },
+  "paragraph_length": {
+    "avg": 18.6,
+    "stddev": 10.0,
+    "min": 0,
+    "max": 46
+  },
+  "vocabulary_ttr": 0.277,
+  "dialogue_ratio": 0.144,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.33,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.691
+  },
+  "top_opening_patterns": [
+    "” ...(29次)",
+    "楚靳...(7次)",
+    "宋云...(7次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "ai_tells": [
+    "高频副词(4处)"
+  ]
+}

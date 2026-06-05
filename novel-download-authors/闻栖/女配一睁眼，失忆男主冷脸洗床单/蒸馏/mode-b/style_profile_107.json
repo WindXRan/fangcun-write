@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第107章.txt",
+  "total_chars": 2851,
+  "total_words": 2060,
+  "total_sentences": 103,
+  "total_paragraphs": 102,
+  "sentence_length": {
+    "avg": 20.0,
+    "stddev": 9.6
+  },
+  "paragraph_length": {
+    "avg": 20.2,
+    "stddev": 9.8,
+    "min": 0,
+    "max": 45
+  },
+  "vocabulary_ttr": 0.25,
+  "dialogue_ratio": 0.609,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.311,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.745
+  },
+  "top_opening_patterns": [
+    "” ...(25次)",
+    "宋云...(5次)",
+    "楚靳...(4次)",
+    "柏庾...(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "ai_tells": [
+    "高频副词(3处)"
+  ]
+}

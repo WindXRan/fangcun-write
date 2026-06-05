@@ -1,4 +1,4 @@
-# AI网文小说项目 — 仿写引擎
+﻿# AI网文小说项目 — 仿写引擎
 
 基于自研仿写流程引擎的网文创作工具集。
 
@@ -24,7 +24,7 @@
 ## 项目结构
 
 ```
-.claude/skills/
+.agents/skills/
 ├── story-rewrite/        # 仿写流程引擎
 ├── story-style/          # 写作风格知识库
 │   └── wenqi/            # 闻栖风格

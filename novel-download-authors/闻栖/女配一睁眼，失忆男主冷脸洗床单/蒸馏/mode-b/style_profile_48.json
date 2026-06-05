@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第48章.txt",
+  "total_chars": 2309,
+  "total_words": 1726,
+  "total_sentences": 78,
+  "total_paragraphs": 70,
+  "sentence_length": {
+    "avg": 22.1,
+    "stddev": 11.0
+  },
+  "paragraph_length": {
+    "avg": 24.7,
+    "stddev": 10.9,
+    "min": 0,
+    "max": 59
+  },
+  "vocabulary_ttr": 0.263,
+  "dialogue_ratio": 0.163,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.231,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.971,
+    "medium_50_200": 0.029,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.743
+  },
+  "top_opening_patterns": [
+    "” ...(15次)",
+    "宋云...(7次)",
+    "楚靳...(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "ai_tells": [
+    "高频副词(2处)"
+  ]
+}

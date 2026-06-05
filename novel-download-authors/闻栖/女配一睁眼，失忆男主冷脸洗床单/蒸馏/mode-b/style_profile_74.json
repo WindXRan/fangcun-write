@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第74章.txt",
+  "total_chars": 2837,
+  "total_words": 2007,
+  "total_sentences": 105,
+  "total_paragraphs": 107,
+  "sentence_length": {
+    "avg": 19.1,
+    "stddev": 9.2
+  },
+  "paragraph_length": {
+    "avg": 18.8,
+    "stddev": 10.1,
+    "min": 0,
+    "max": 56
+  },
+  "vocabulary_ttr": 0.249,
+  "dialogue_ratio": 0.089,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.343,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.991,
+    "medium_50_200": 0.009,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.785
+  },
+  "top_opening_patterns": [
+    "” ...(16次)",
+    "宋云...(9次)",
+    "] ...(5次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(4处)"
+  ],
+  "ai_tells": [
+    "高频副词(1处)"
+  ]
+}

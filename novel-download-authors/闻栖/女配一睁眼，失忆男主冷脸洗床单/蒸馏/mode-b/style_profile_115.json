@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第115章.txt",
+  "total_chars": 2372,
+  "total_words": 1699,
+  "total_sentences": 82,
+  "total_paragraphs": 77,
+  "sentence_length": {
+    "avg": 20.7,
+    "stddev": 10.4
+  },
+  "paragraph_length": {
+    "avg": 22.1,
+    "stddev": 10.7,
+    "min": 0,
+    "max": 58
+  },
+  "vocabulary_ttr": 0.223,
+  "dialogue_ratio": 0.341,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.293,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.974,
+    "medium_50_200": 0.026,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.494
+  },
+  "top_opening_patterns": [
+    "” ...(36次)",
+    "柏庾...(5次)",
+    "宋云...(5次)",
+    "宋母...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "ai_tells": [
+    "高频副词(1处)"
+  ]
+}

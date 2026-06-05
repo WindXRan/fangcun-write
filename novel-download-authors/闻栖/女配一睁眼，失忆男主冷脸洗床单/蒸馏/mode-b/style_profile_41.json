@@ -1,0 +1,38 @@
+﻿{
+  "source_name": "第41章.txt",
+  "total_chars": 2318,
+  "total_words": 1762,
+  "total_sentences": 70,
+  "total_paragraphs": 66,
+  "sentence_length": {
+    "avg": 25.2,
+    "stddev": 13.2
+  },
+  "paragraph_length": {
+    "avg": 26.7,
+    "stddev": 13.7,
+    "min": 0,
+    "max": 71
+  },
+  "vocabulary_ttr": 0.241,
+  "dialogue_ratio": 0.305,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.2,
+    "long_ratio_gt60": 0.029
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.939,
+    "medium_50_200": 0.061,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.697
+  },
+  "top_opening_patterns": [
+    "” ...(19次)",
+    "黎姗...(6次)",
+    "宋云...(4次)"
+  ],
+  "rhetorical_features": [],
+  "ai_tells": [
+    "路标词(1处)"
+  ]
+}

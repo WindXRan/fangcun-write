@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第171章.txt",
+  "total_chars": 2541,
+  "total_words": 1918,
+  "total_sentences": 80,
+  "total_paragraphs": 72,
+  "sentence_length": {
+    "avg": 24.0,
+    "stddev": 13.6
+  },
+  "paragraph_length": {
+    "avg": 26.6,
+    "stddev": 12.2,
+    "min": 0,
+    "max": 53
+  },
+  "vocabulary_ttr": 0.286,
+  "dialogue_ratio": 0.14,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.25,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.986,
+    "medium_50_200": 0.014,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.722
+  },
+  "top_opening_patterns": [
+    "” ...(16次)",
+    "柏庾...(4次)",
+    "楚靳...(4次)",
+    "宋云...(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(7处)"
+  ],
+  "ai_tells": [
+    "高频副词(6处)"
+  ]
+}

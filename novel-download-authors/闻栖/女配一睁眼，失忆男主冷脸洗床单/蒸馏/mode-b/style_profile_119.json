@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第119章.txt",
+  "total_chars": 2462,
+  "total_words": 1734,
+  "total_sentences": 96,
+  "total_paragraphs": 89,
+  "sentence_length": {
+    "avg": 18.1,
+    "stddev": 9.9
+  },
+  "paragraph_length": {
+    "avg": 19.5,
+    "stddev": 8.7,
+    "min": 0,
+    "max": 42
+  },
+  "vocabulary_ttr": 0.237,
+  "dialogue_ratio": 0.235,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.365,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.584
+  },
+  "top_opening_patterns": [
+    "” ...(34次)",
+    "宋云...(7次)"
+  ],
+  "rhetorical_features": [
+    "反问(4处)",
+    "短句节奏(7处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)"
+  ]
+}

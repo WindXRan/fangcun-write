@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第183章.txt",
+  "total_chars": 2574,
+  "total_words": 1896,
+  "total_sentences": 87,
+  "total_paragraphs": 85,
+  "sentence_length": {
+    "avg": 21.8,
+    "stddev": 11.9
+  },
+  "paragraph_length": {
+    "avg": 22.3,
+    "stddev": 11.0,
+    "min": 0,
+    "max": 55
+  },
+  "vocabulary_ttr": 0.252,
+  "dialogue_ratio": 0.197,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.31,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.988,
+    "medium_50_200": 0.012,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.753
+  },
+  "top_opening_patterns": [
+    "” ...(19次)",
+    "宋云...(7次)",
+    "楚靳...(6次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "ai_tells": [
+    "路标词(2处)",
+    "高频副词(1处)"
+  ]
+}

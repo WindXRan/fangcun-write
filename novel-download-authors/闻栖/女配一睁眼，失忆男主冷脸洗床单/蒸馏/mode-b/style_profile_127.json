@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第127章.txt",
+  "total_chars": 2473,
+  "total_words": 1656,
+  "total_sentences": 101,
+  "total_paragraphs": 100,
+  "sentence_length": {
+    "avg": 16.4,
+    "stddev": 10.2
+  },
+  "paragraph_length": {
+    "avg": 16.6,
+    "stddev": 9.8,
+    "min": 0,
+    "max": 48
+  },
+  "vocabulary_ttr": 0.241,
+  "dialogue_ratio": 0.412,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.426,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.42
+  },
+  "top_opening_patterns": [
+    "” ...(57次)",
+    "宋云...(4次)",
+    "柏庾...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "ai_tells": [
+    "高频副词(1处)"
+  ]
+}

@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第67章.txt",
+  "total_chars": 2586,
+  "total_words": 1833,
+  "total_sentences": 103,
+  "total_paragraphs": 98,
+  "sentence_length": {
+    "avg": 17.8,
+    "stddev": 10.6
+  },
+  "paragraph_length": {
+    "avg": 18.7,
+    "stddev": 10.4,
+    "min": 0,
+    "max": 43
+  },
+  "vocabulary_ttr": 0.261,
+  "dialogue_ratio": 0.188,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.437,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.602
+  },
+  "top_opening_patterns": [
+    "” ...(34次)",
+    "宋云...(11次)",
+    "楚靳...(5次)",
+    "“你...(3次)",
+    "”宋...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "ai_tells": []
+}

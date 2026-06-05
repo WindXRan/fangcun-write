@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第128章.txt",
+  "total_chars": 2467,
+  "total_words": 1724,
+  "total_sentences": 93,
+  "total_paragraphs": 95,
+  "sentence_length": {
+    "avg": 18.5,
+    "stddev": 10.2
+  },
+  "paragraph_length": {
+    "avg": 18.1,
+    "stddev": 9.9,
+    "min": 0,
+    "max": 41
+  },
+  "vocabulary_ttr": 0.25,
+  "dialogue_ratio": 0.144,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.355,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.695
+  },
+  "top_opening_patterns": [
+    "” ...(28次)",
+    "宋云...(6次)",
+    "楚靳...(6次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(4处)",
+    "短句节奏(3处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)",
+    "高频副词(3处)"
+  ]
+}

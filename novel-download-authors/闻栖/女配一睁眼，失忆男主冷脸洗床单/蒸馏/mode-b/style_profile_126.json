@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第126章.txt",
+  "total_chars": 2407,
+  "total_words": 1731,
+  "total_sentences": 77,
+  "total_paragraphs": 79,
+  "sentence_length": {
+    "avg": 22.5,
+    "stddev": 12.2
+  },
+  "paragraph_length": {
+    "avg": 21.9,
+    "stddev": 12.0,
+    "min": 0,
+    "max": 74
+  },
+  "vocabulary_ttr": 0.272,
+  "dialogue_ratio": 0.269,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.286,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.987,
+    "medium_50_200": 0.013,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.671
+  },
+  "top_opening_patterns": [
+    "” ...(24次)",
+    "宋云...(8次)",
+    "楚靳...(3次)"
+  ],
+  "rhetorical_features": [
+    "反问(2处)",
+    "短句节奏(3处)"
+  ],
+  "ai_tells": [
+    "高频副词(8处)"
+  ]
+}

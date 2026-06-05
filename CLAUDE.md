@@ -31,7 +31,7 @@ story-rewrite_vPlan（全书规划先行引擎）
 
 ```
 AI网文小说项目/
-├── .claude/
+├── .agents/
 │   ├── skills/
 │   │   ├── story-rewrite_vPlan/       # 仿写引擎（主入口）
 │   │   ├── story-rewrite_phase0-style/     # 源文风格分析

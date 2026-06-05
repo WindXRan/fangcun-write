@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第157章.txt",
+  "total_chars": 2452,
+  "total_words": 1695,
+  "total_sentences": 91,
+  "total_paragraphs": 87,
+  "sentence_length": {
+    "avg": 18.6,
+    "stddev": 11.6
+  },
+  "paragraph_length": {
+    "avg": 19.5,
+    "stddev": 11.8,
+    "min": 0,
+    "max": 61
+  },
+  "vocabulary_ttr": 0.233,
+  "dialogue_ratio": 0.371,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.429,
+    "long_ratio_gt60": 0.011
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.989,
+    "medium_50_200": 0.011,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.425
+  },
+  "top_opening_patterns": [
+    "” ...(49次)",
+    "楚靳...(5次)",
+    "楚太...(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)",
+    "说道(2处)"
+  ]
+}

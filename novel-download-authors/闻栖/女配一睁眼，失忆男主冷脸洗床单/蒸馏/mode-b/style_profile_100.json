@@ -1,0 +1,38 @@
+﻿{
+  "source_name": "第100章.txt",
+  "total_chars": 2655,
+  "total_words": 1913,
+  "total_sentences": 96,
+  "total_paragraphs": 96,
+  "sentence_length": {
+    "avg": 19.9,
+    "stddev": 10.2
+  },
+  "paragraph_length": {
+    "avg": 19.9,
+    "stddev": 10.2,
+    "min": 0,
+    "max": 47
+  },
+  "vocabulary_ttr": 0.245,
+  "dialogue_ratio": 0.152,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.292,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.688
+  },
+  "top_opening_patterns": [
+    "” ...(29次)",
+    "宋云...(9次)",
+    "楚靳...(8次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "ai_tells": []
+}

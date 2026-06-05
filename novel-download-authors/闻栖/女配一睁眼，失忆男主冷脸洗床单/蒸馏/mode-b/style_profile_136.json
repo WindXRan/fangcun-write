@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第136章.txt",
+  "total_chars": 2401,
+  "total_words": 1719,
+  "total_sentences": 92,
+  "total_paragraphs": 86,
+  "sentence_length": {
+    "avg": 18.7,
+    "stddev": 9.3
+  },
+  "paragraph_length": {
+    "avg": 20.0,
+    "stddev": 9.4,
+    "min": 0,
+    "max": 45
+  },
+  "vocabulary_ttr": 0.247,
+  "dialogue_ratio": 0.232,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.391,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.663
+  },
+  "top_opening_patterns": [
+    "” ...(28次)",
+    "宋云...(7次)",
+    "楚靳...(5次)",
+    "卫岢...(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "ai_tells": [
+    "协作口吻(1处)",
+    "高频副词(2处)"
+  ]
+}

@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第59章.txt",
+  "total_chars": 2583,
+  "total_words": 1903,
+  "total_sentences": 86,
+  "total_paragraphs": 84,
+  "sentence_length": {
+    "avg": 22.1,
+    "stddev": 11.4
+  },
+  "paragraph_length": {
+    "avg": 22.7,
+    "stddev": 11.2,
+    "min": 0,
+    "max": 56
+  },
+  "vocabulary_ttr": 0.254,
+  "dialogue_ratio": 0.199,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.256,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.988,
+    "medium_50_200": 0.012,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.667
+  },
+  "top_opening_patterns": [
+    "” ...(28次)",
+    "李妙...(3次)",
+    "何总...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "ai_tells": [
+    "协作口吻(1处)",
+    "高频副词(1处)"
+  ]
+}

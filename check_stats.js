@@ -1,0 +1,12 @@
+const fs = require('fs');
+const t = fs.readFileSync('替嫁后，冷面军官天天想贴贴/正文/第12章.txt', 'utf8');
+const lines = t.split('\n').filter(l => l.trim());
+const dialogLines = lines.filter(l => /["""]/.test(l));
+const totalChars = t.replace(/\s/g, '').length;
+const dialogChars = dialogLines.join('').replace(/\s/g, '').length;
+console.log('总段落数:', lines.length);
+console.log('对话段落:', dialogLines.length);
+console.log('对话段落占比:', (dialogLines.length / lines.length * 100).toFixed(1) + '%');
+console.log('对话字符占比:', (dialogChars / totalChars * 100).toFixed(1) + '%');
+console.log('单句段落(<50字):', lines.filter(l => l.replace(/\s/g, '').length < 50).length);
+console.log('单句段落占比:', (lines.filter(l => l.replace(/\s/g, '').length < 50).length / lines.length * 100).toFixed(1) + '%');

@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第162章.txt",
+  "total_chars": 2704,
+  "total_words": 1942,
+  "total_sentences": 100,
+  "total_paragraphs": 103,
+  "sentence_length": {
+    "avg": 19.4,
+    "stddev": 9.5
+  },
+  "paragraph_length": {
+    "avg": 18.9,
+    "stddev": 9.2,
+    "min": 0,
+    "max": 50
+  },
+  "vocabulary_ttr": 0.266,
+  "dialogue_ratio": 0.149,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.29,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.99,
+    "medium_50_200": 0.01,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.806
+  },
+  "top_opening_patterns": [
+    "” ...(19次)",
+    "宋云...(9次)",
+    "楚靳...(3次)"
+  ],
+  "rhetorical_features": [
+    "反问(2处)",
+    "短句节奏(2处)"
+  ],
+  "ai_tells": [
+    "路标词(2处)",
+    "高频副词(3处)"
+  ]
+}

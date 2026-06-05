@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第35章.txt",
+  "total_chars": 2521,
+  "total_words": 1860,
+  "total_sentences": 89,
+  "total_paragraphs": 81,
+  "sentence_length": {
+    "avg": 20.9,
+    "stddev": 11.3
+  },
+  "paragraph_length": {
+    "avg": 23.0,
+    "stddev": 11.5,
+    "min": 0,
+    "max": 56
+  },
+  "vocabulary_ttr": 0.259,
+  "dialogue_ratio": 0.259,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.315,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.975,
+    "medium_50_200": 0.025,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.617
+  },
+  "top_opening_patterns": [
+    "” ...(26次)",
+    "李哲...(5次)",
+    "何总...(4次)",
+    "楚靳...(3次)",
+    "宋云...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)"
+  ]
+}

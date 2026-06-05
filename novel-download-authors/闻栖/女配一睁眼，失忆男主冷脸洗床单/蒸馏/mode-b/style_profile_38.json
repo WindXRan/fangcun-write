@@ -1,0 +1,43 @@
+﻿{
+  "source_name": "第38章.txt",
+  "total_chars": 2038,
+  "total_words": 1492,
+  "total_sentences": 69,
+  "total_paragraphs": 69,
+  "sentence_length": {
+    "avg": 21.6,
+    "stddev": 10.7
+  },
+  "paragraph_length": {
+    "avg": 21.6,
+    "stddev": 10.7,
+    "min": 0,
+    "max": 61
+  },
+  "vocabulary_ttr": 0.269,
+  "dialogue_ratio": 0.174,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.232,
+    "long_ratio_gt60": 0.014
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.971,
+    "medium_50_200": 0.029,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.754
+  },
+  "top_opening_patterns": [
+    "” ...(14次)",
+    "宋云...(11次)",
+    "楚靳...(5次)",
+    "妙妙...(5次)"
+  ],
+  "rhetorical_features": [
+    "反问(2处)",
+    "短句节奏(2处)"
+  ],
+  "ai_tells": [
+    "路标词(3处)",
+    "高频副词(1处)"
+  ]
+}
