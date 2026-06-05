@@ -145,7 +145,7 @@ FanqieZhiShu/
 
 ---
 
-## 与 story-rewrite 集成
+## 与 test-rewrite 集成
 
 `market-data/番茄女频市场数据.json` 是 rewrite 直接消费的市场数据文件，位于本 skill 目录下。
 
@@ -175,12 +175,12 @@ python run.py scrape
 # 2. 构建分析
 python run.py build
 
-# 3. 同步到story-rewrite
+# 3. 同步到test-rewrite
 python sync_market_data.py
 ```
 
 ### 集成流程
 
 ```
-story-scan 采集数据 → build 分析 → sync_market_data.py 同步 → story-rewrite Phase 1 读取
+story-scan 采集数据 → build 分析 → sync_market_data.py 同步 → test-rewrite Phase 1 读取
 ```

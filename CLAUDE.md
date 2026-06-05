@@ -7,18 +7,19 @@
 ## 架构
 
 ```
-story-rewrite（流程引擎）
-├── 调度 Agent
-├── 状态管理
-├── 质量校验
-└── 进度追踪
+test-rewrite（流程引擎 v3）
+├── 三轮并行 Agent（风格分析→章纲→写章）
+├── Lv1/Lv2/Lv3 防洗稿
+├── 字数校验 + 超限重写
+└── 章纲即真相
 ```
 
 ## Skill 路由表
 
 | 命令 | Skill | 说明 |
 |------|-------|------|
-| `/story-rewrite`、`/仿写` | story-rewrite | 仿写流程引擎 |
+| `/story-rewrite`、`/仿写` | test-rewrite | 仿写流程引擎 |
+| `/仿写vPlan`、`/vPlan` | story-rewrite_vPlan | 全书规划先行仿写引擎 |
 | `/story-scan`、`/番茄扫描` | story-scan | 番茄小说排行榜分析 |
 | `/story-cover`、`/封面` | story-cover | 小说封面生成 |
 | `/story-compare`、`/对比` | story-compare | 仿写书与源文逐章对比 |
@@ -30,7 +31,8 @@ story-rewrite（流程引擎）
 AI网文小说项目/
 ├── .claude/
 │   ├── skills/                  # 所有 skill
-│   │   ├── story-rewrite/       # 仿写流程引擎（含 prompts/ tools/）
+│   │   ├── test-rewrite/        # 仿写流程引擎 v3（含 prompts/ tools/）
+│   │   ├── story-rewrite_vPlan/ # 全书规划先行仿写引擎（含 prompts/ tools/）
 │   │   ├── story-compare/       # 对比文件生成
 │   │   ├── story-scan/          # 番茄排行榜分析
 │   │   ├── story-cover/         # 封面生成
@@ -57,7 +59,7 @@ AI网文小说项目/
 ## 仿写项目识别
 
 用户说"继续""续写"时，自动检测 `仿写框架.md`：
-- 存在 → 仿写项目，路由到 story-rewrite
+- 存在 → 仿写项目，路由到 test-rewrite
 - 不存在 → 常规项目
 
 ## Compact 后恢复

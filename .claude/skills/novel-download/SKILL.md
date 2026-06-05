@@ -41,8 +41,8 @@ description: |
 - 源文拆章在公共位置，多个仿写项目共用
 - 仿写书目录只放新书内容，干净整洁
 
-**与 story-rewrite 集成**：
-- story-rewrite 的 Phase 1 会检查 `novel-download-authors/{作者名}/{书名}/` 是否已有拆章缓存
+**与 test-rewrite 集成**：
+- test-rewrite 的 Phase 1 会检查 `novel-download-authors/{作者名}/{书名}/` 是否已有拆章缓存
 - 如果有，直接使用；如果没有，执行拆章并保存到公共缓存
 - Phase 2 从公共缓存提取本区间源文，分析结果也保存到公共缓存
 
