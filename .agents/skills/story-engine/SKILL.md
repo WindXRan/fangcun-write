@@ -60,7 +60,9 @@ novel-download-authors/{作者名}/{源书名}/
 **加新模式只需**：
 1. 创建 `prompts/{mode}-analysis-task.md`
 2. 在 `analysis-modes.json` 加一行配置
-3. `create_templates.py` 自动支持 `--mode {mode}`
+3. `create_templates.py` 加一个 template 函数
+
+写章 agent 自动读取所有 `*_guide_*.md` 文件，无需改 write-chapter.md。
 
 ---
 

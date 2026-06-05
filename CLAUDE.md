@@ -20,8 +20,7 @@ story-engine（全书规划先行引擎）
 | 命令 | Skill | 说明 |
 |------|-------|------|
 | `/仿写`、`/vPlan` | story-engine | 仿写引擎（全书规划先行） |
-| `/分析风格` | story-style | 源文风格分析（可缓存） |
-| `/分析策略` | story-strategy | 源文叙事策略分析（可缓存） |
+| `/分析风格` | story-style | 源文分析（插件式：style+hook+...） |
 | `/story-scan`、`/番茄扫描` | story-scan | 番茄小说排行榜分析 |
 | `/story-cover`、`/封面` | story-cover | 小说封面生成 |
 | `/story-compare`、`/对比` | story-compare | 仿写书与源文逐章对比 |
@@ -34,8 +33,7 @@ AI网文小说项目/
 ├── .agents/
 │   ├── skills/
 │   │   ├── story-engine/             # 仿写引擎（主入口，共享工具+prompt）
-│   │   ├── story-style/              # 源文风格分析（引用story-engine）
-│   │   ├── story-strategy/           # 源文叙事策略分析（引用story-engine）
+│   │   ├── story-style/              # 源文分析（插件式，引用story-engine）
 │   │   ├── story-compare/             # 对比文件生成
 │   │   ├── story-scan/                # 番茄排行榜分析
 │   │   ├── story-cover/               # 封面生成
