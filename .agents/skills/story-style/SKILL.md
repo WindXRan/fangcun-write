@@ -40,7 +40,12 @@ python .agents/skills/story-style/tools/source_chapter_splitter.py split <源文
 python .agents/skills/story-style/tools/style_analyzer.py novel-download-authors/{作者名}/{源书名}/源文/第N章.txt --json | Out-File -FilePath novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/style_profile_N.json -Encoding utf8
 ```
 
-### 0.3 风格分析（10 agents × N批，并行）
+### 0.3 创建风格指南模板（脚本）
+```bash
+python .agents/skills/story-engine/tools/create_templates.py style <章节数> novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/
+```
+
+### 0.4 风格分析（10 agents × N批，并行）
 
 ⚠️ **每个 agent 只分析1章，禁止合并多章。**
 

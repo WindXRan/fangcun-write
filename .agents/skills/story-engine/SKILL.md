@@ -54,7 +54,22 @@ novel-download-authors/{作者名}/{源书名}/
 
 字数约束：2000-2500字，硬上限3000字。
 
-### 1.0 新书概念 + 世界观 + 题材识别
+### 1.0 创建模板（脚本，一次性）
+
+先用脚本批量创建模板文件，agent 只填内容不写格式：
+
+```bash
+python .agents/skills/story-engine/tools/create_templates.py all <章节数> <蒸馏目录> <设定目录> <大纲目录>
+```
+
+示例（188章）：
+```bash
+python .agents/skills/story-engine/tools/create_templates.py all 188 novel-download-authors/闻栖/女配一睁眼/蒸馏/mode-b 仿写/新书名/设定 仿写/新书名/大纲
+```
+
+⚠️ 已存在的文件不会被覆盖。可安全重复运行。
+
+### 1.1 新书概念 + 世界观 + 题材识别
 
 - 新书概念.md：书名、类型、核心卖点、NPC命名映射表（必填）、故事弧线、差异化
 - story_bible.md

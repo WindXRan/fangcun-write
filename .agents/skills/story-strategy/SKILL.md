@@ -35,7 +35,12 @@ novel-download-authors/{作者名}/{源书名}/
 python .agents/skills/story-strategy/tools/source_chapter_splitter.py split <源文.txt> novel-download-authors/{作者名}/{源书名}/源文/
 ```
 
-### 0.2 叙事策略提取（10 agents × N批，并行）
+### 0.2 创建叙事策略模板（脚本）
+```bash
+python .agents/skills/story-engine/tools/create_templates.py strategy <章节数> novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/
+```
+
+### 0.3 叙事策略提取（10 agents × N批，并行）
 
 ⚠️ **每个 agent 只分析1章，禁止合并多章。**
 
