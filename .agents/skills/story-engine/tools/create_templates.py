@@ -11,6 +11,10 @@
   bible       - 世界观模板
   arc         - 全书弧线骨架模板
   mapping     - 章节顺序映射模板
+  hook        - 钩子工程模板
+  character   - 角色塑造模板
+  setup       - 创建设定+大纲模板（不依赖蒸馏）
+  all         - 创建全部模板（需要蒸馏目录）
 """
 
 import sys
@@ -379,6 +383,7 @@ if __name__ == '__main__':
         print("  python create_templates.py bible <输出目录>")
         print("  python create_templates.py arc <输出目录>")
         print("  python create_templates.py mapping <输出目录>")
+        print("  python create_templates.py setup <章节数> <设定目录> <大纲目录>")
         print("  python create_templates.py all <章节数> <蒸馏目录> <设定目录> <大纲目录>")
         sys.exit(1)
 
@@ -410,6 +415,15 @@ if __name__ == '__main__':
         create_arc_template(sys.argv[2])
     elif template_type == 'mapping':
         create_mapping_template(sys.argv[2])
+    elif template_type == 'setup':
+        count = int(sys.argv[2])
+        setting_dir = sys.argv[3]
+        outline_dir = sys.argv[4]
+        create_outline_templates(count, outline_dir)
+        create_concept_template(setting_dir, count)
+        create_bible_template(setting_dir)
+        create_arc_template(setting_dir, count)
+        create_mapping_template(setting_dir)
     elif template_type == 'all':
         count = int(sys.argv[2])
         distill_dir = sys.argv[3]
