@@ -140,13 +140,11 @@ CONCEPT_TEMPLATE = """# 新书概念
 
 ## 故事弧线
 
-### 第一幕（1-30章）
+### 第一幕（1-{act1}章）
 
-### 第二幕（31-80章）
+### 第二幕（{act2}-{act3}章）
 
-### 第三幕（81-130章）
-
-### 第四幕（131-{章节数}章）
+### 第三幕（{act4}-{章节数}章）
 
 ## 差异化
 
@@ -167,9 +165,7 @@ BIBLE_TEMPLATE = """# 世界观设定
 
 ## 核心设定
 
-### 穿书/穿越规则
-
-### 金手指
+（根据题材填写：穿书规则/修炼体系/科技设定/社会规则等）
 
 ## 关键道具
 
@@ -184,10 +180,11 @@ ARC_TEMPLATE = """# 全书弧线骨架
 
 | 章范围 | 情绪类型 | 强度(1-10) | 功能 | 设计理由 |
 |--------|---------|-----------|------|---------|
-| 1-5 | | | 开局 | |
-| 6-15 | | | 日常 | |
-| 16-30 | | | 推进 | |
-| ... | | | | |
+| 1-{seg1} | | | 开局 | |
+| {seg2}-{seg3} | | | 推进 | |
+| {seg4}-{seg5} | | | 高潮 | |
+| {seg6}-{章节数} | | | 收尾 | |
+（根据实际章节数调整段落划分）
 
 ## 角色成长主线
 
@@ -246,9 +243,18 @@ def create_outline_templates(count, output_dir):
 
 def create_concept_template(output_dir, chapter_count=188):
     os.makedirs(output_dir, exist_ok=True)
+    act1 = max(10, chapter_count // 6)
+    act2 = act1 + 1
+    act3 = act1 + chapter_count // 3
+    act4 = act3 + 1
+    content = CONCEPT_TEMPLATE.replace("{章节数}", str(chapter_count))
+    content = content.replace("{act1}", str(act1))
+    content = content.replace("{act2}", str(act2))
+    content = content.replace("{act3}", str(act3))
+    content = content.replace("{act4}", str(act4))
     path = os.path.join(output_dir, "新书概念.md")
     with open(path, 'w', encoding='utf-8') as f:
-        f.write(CONCEPT_TEMPLATE.replace("{章节数}", str(chapter_count)))
+        f.write(content)
     print(f"Created concept template in {output_dir}")
 
 
@@ -260,11 +266,19 @@ def create_bible_template(output_dir):
     print(f"Created story bible template in {output_dir}")
 
 
-def create_arc_template(output_dir):
+def create_arc_template(output_dir, chapter_count=188):
     os.makedirs(output_dir, exist_ok=True)
+    seg = chapter_count // 4
+    content = ARC_TEMPLATE.replace("{章节数}", str(chapter_count))
+    content = content.replace("{seg1}", str(seg))
+    content = content.replace("{seg2}", str(seg + 1))
+    content = content.replace("{seg3}", str(seg * 2))
+    content = content.replace("{seg4}", str(seg * 2 + 1))
+    content = content.replace("{seg5}", str(seg * 3))
+    content = content.replace("{seg6}", str(seg * 3 + 1))
     path = os.path.join(output_dir, "全书弧线骨架.md")
     with open(path, 'w', encoding='utf-8') as f:
-        f.write(ARC_TEMPLATE)
+        f.write(content)
     print(f"Created arc skeleton template in {output_dir}")
 
 
@@ -323,7 +337,7 @@ if __name__ == '__main__':
         create_outline_templates(count, outline_dir)
         create_concept_template(setting_dir, count)
         create_bible_template(setting_dir)
-        create_arc_template(setting_dir)
+        create_arc_template(setting_dir, count)
         create_mapping_template(setting_dir)
     else:
         print(f"未知类型: {template_type}")
