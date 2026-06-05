@@ -5,7 +5,7 @@
 
 类型：
   style       - 风格指南模板（inkos 8维度）
-  strategy    - 叙事策略模板
+  plot        - 情节指南模板（核心桥段+排除项+叙事技巧）
   outline     - 章纲模板
   concept     - 新书概念模板
   bible       - 世界观模板
@@ -58,26 +58,88 @@ STYLE_TEMPLATE = """# 风格指南：第{N}章
 （填入：值得模仿的个人写作习惯）
 """
 
-STRATEGY_TEMPLATE = """# 叙事策略：第{N}章
+PLOT_TEMPLATE = """# 情节指南：第{N}章
 
 > 来源：{源书名} 第{N}章
 
-## 排除项
+## 一、骨架：情节结构
 
-（填入：模仿了会暴露抄源文的特征，至少2个）
+### 本章功能
+
+（填入：本章在全书中的功能是什么？如：开局铺垫/关系推进/冲突升级/高潮爆发/转折收尾）
+
+### 情绪曲线
+
+- 起始情绪：（填入，如：平淡/紧张/甜蜜）
+- 情绪强度变化：（填入具体数值，如 5→7→8→6）
+- 峰值位置：（填入，如：中段/结尾）
+- 结束情绪：（填入，如：悬念/满足/心酸）
+
+### 节奏模式
+
+- 段落节奏：（填入，如：慢热开场→快速冲突→爆发→余韵）
+- 场景切换次数：（填入数字）
+- 场景切换节奏：（填入，如：快切/慢推/渐进）
+
+### 钩子设计
+
+- 章首钩子：（填入类型，如：悬念/冲突/反常）
+- 章中钩子：（填入位置和类型）
+- 章末钩子：（填入类型，如：反转/信息缺口/情感悬念/甜点）
+
+---
+
+## 二、血肉：情节桥段
+
+### 核心桥段清单
+
+| 序号 | 情节功能 | 具体描述 | 触发方式 | 情感效果 |
+|------|---------|---------|---------|---------|
+| 1 | | | | |
+| 2 | | | | |
+| 3 | | | | |
+
+⚠️ **情节功能**用抽象词：告白/秘密揭露/惊艳亮相/亲吻触发/情敌挑衅/男主救场/误会澄清/身份反转/打脸/撒糖/...
+⚠️ **触发方式**写具体：直接台词/回忆杀/意外撞见/第三方揭露/物品触发/环境催化/...
+
+### 关键场景细节
+
+（填入：本章有哪些让读者印象深刻的场景细节？这些是"血肉"，写新书时必须原创）
+
+1.
+2.
+3.
+
+### 关键台词/对话模式
+
+（填入：本章有哪些标志性对话？说话方式有什么特点？）
 
 1.
 2.
 
-## 节奏骨架
+---
 
-- 情绪强度变化：（填入具体数值，如 5→7→8→6）
-- 钩子位置和类型：（填入：章末钩子是悬念/反转/甜/虐？）
-- 爽点公式：（填入：抽象描述，如"弱者展示实力→强者震惊"）
-- 节奏模式：（填入：几段日常+几段冲突+几段甜？）
-- 场景切换频率：（填入：快/中/慢）
+## 三、排除项
 
-## 叙事策略
+（填入：模仿了会暴露抄源文的特征，至少2个。写新书时必须避开）
+
+1.
+2.
+
+---
+
+## 四、可复用的抽象模式
+
+（填入：可以借鉴的"公式"，但必须换具体实现）
+
+- 爽点公式：（如"弱者展示实力→强者震惊"）
+- 甜点公式：（如"无意间的亲密→双方心虚"）
+- 虐点公式：（如"误解→伤害→真相大白→后悔"）
+- 悬念公式：（如"信息缺口→读者好奇→延迟揭露"）
+
+---
+
+## 五、叙事技巧
 
 ### 信息差设计
 
@@ -90,14 +152,6 @@ STRATEGY_TEMPLATE = """# 叙事策略：第{N}章
 ### 情绪操控
 
 （填入：用什么手法让读者笑/紧张/心动？）
-
-### 视角策略
-
-（填入：为什么选这个视角？限制了什么信息？）
-
-### 节奏意图
-
-（填入：为什么这里快？为什么这里慢？）
 """
 
 OUTLINE_TEMPLATE = """# 章纲：第{N}章
@@ -149,12 +203,6 @@ CONCEPT_TEMPLATE = """# 新书概念
 ### 第二幕（{act2}-{act3}章）
 
 ### 第三幕（{act4}-{章节数}章）
-
-## 差异化
-
-1.
-2.
-3.
 """
 
 BIBLE_TEMPLATE = """# 世界观设定
@@ -283,14 +331,14 @@ def create_style_templates(count, output_dir):
     print(f"Created {count} style guide templates in {output_dir}")
 
 
-def create_strategy_templates(count, output_dir):
+def create_plot_templates(count, output_dir):
     os.makedirs(output_dir, exist_ok=True)
     for i in range(1, count + 1):
-        path = os.path.join(output_dir, f"strategy_guide_{i}.md")
+        path = os.path.join(output_dir, f"plot_guide_{i}.md")
         if not os.path.exists(path):
             with open(path, 'w', encoding='utf-8') as f:
-                f.write(STRATEGY_TEMPLATE.replace("{N}", str(i)))
-    print(f"Created {count} strategy guide templates in {output_dir}")
+                f.write(PLOT_TEMPLATE.replace("{N}", str(i)))
+    print(f"Created {count} plot guide templates in {output_dir}")
 
 
 def create_hook_templates(count, output_dir):
@@ -378,6 +426,7 @@ if __name__ == '__main__':
         print("  python create_templates.py style <章节数> <输出目录>")
         print("  python create_templates.py hook <章节数> <输出目录>")
         print("  python create_templates.py character <章节数> <输出目录>")
+        print("  python create_templates.py plot <章节数> <输出目录>")
         print("  python create_templates.py outline <章节数> <输出目录>")
         print("  python create_templates.py concept <输出目录> [章节数]")
         print("  python create_templates.py bible <输出目录>")
@@ -401,6 +450,10 @@ if __name__ == '__main__':
         count = int(sys.argv[2])
         output_dir = sys.argv[3] if len(sys.argv) > 3 else '.'
         create_character_templates(count, output_dir)
+    elif template_type == 'plot':
+        count = int(sys.argv[2])
+        output_dir = sys.argv[3] if len(sys.argv) > 3 else '.'
+        create_plot_templates(count, output_dir)
     elif template_type == 'outline':
         count = int(sys.argv[2])
         output_dir = sys.argv[3] if len(sys.argv) > 3 else '.'
@@ -432,6 +485,7 @@ if __name__ == '__main__':
         create_style_templates(count, distill_dir)
         create_hook_templates(count, distill_dir)
         create_character_templates(count, distill_dir)
+        create_plot_templates(count, distill_dir)
         create_outline_templates(count, outline_dir)
         create_concept_template(setting_dir, count)
         create_bible_template(setting_dir)
