@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第60章.txt",
+  "total_chars": 1932,
+  "total_words": 1307,
+  "total_sentences": 72,
+  "total_paragraphs": 72,
+  "sentence_length": {
+    "avg": 18.2,
+    "stddev": 8.8
+  },
+  "paragraph_length": {
+    "avg": 18.2,
+    "stddev": 9.2,
+    "min": 0,
+    "max": 46
+  },
+  "vocabulary_ttr": 0.276,
+  "dialogue_ratio": 0.3,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.375,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.486
+  },
+  "top_opening_patterns": [
+    "” ...(33次)",
+    "宋云...(4次)",
+    "楚靳...(4次)",
+    "“我...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)",
+    "高频副词(2处)"
+  ]
+}

@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第70章.txt",
+  "total_chars": 2512,
+  "total_words": 1777,
+  "total_sentences": 92,
+  "total_paragraphs": 90,
+  "sentence_length": {
+    "avg": 19.3,
+    "stddev": 9.3
+  },
+  "paragraph_length": {
+    "avg": 19.7,
+    "stddev": 9.9,
+    "min": 0,
+    "max": 48
+  },
+  "vocabulary_ttr": 0.255,
+  "dialogue_ratio": 0.256,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.315,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.589
+  },
+  "top_opening_patterns": [
+    "” ...(36次)",
+    "柏庾...(8次)",
+    "宋云...(6次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(4处)",
+    "短句节奏(2处)"
+  ],
+  "ai_tells": [
+    "高频副词(3处)"
+  ]
+}

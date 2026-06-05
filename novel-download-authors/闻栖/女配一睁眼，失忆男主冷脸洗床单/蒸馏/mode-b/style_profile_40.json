@@ -1,0 +1,38 @@
+﻿{
+  "source_name": "第40章.txt",
+  "total_chars": 2341,
+  "total_words": 1784,
+  "total_sentences": 66,
+  "total_paragraphs": 64,
+  "sentence_length": {
+    "avg": 27.0,
+    "stddev": 15.3
+  },
+  "paragraph_length": {
+    "avg": 27.9,
+    "stddev": 15.1,
+    "min": 0,
+    "max": 69
+  },
+  "vocabulary_ttr": 0.239,
+  "dialogue_ratio": 0.287,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.197,
+    "long_ratio_gt60": 0.03
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.891,
+    "medium_50_200": 0.109,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.625
+  },
+  "top_opening_patterns": [
+    "” ...(22次)",
+    "宋云...(6次)",
+    "很快...(3次)"
+  ],
+  "rhetorical_features": [],
+  "ai_tells": [
+    "路标词(1处)"
+  ]
+}

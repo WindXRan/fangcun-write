@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第53章.txt",
+  "total_chars": 2446,
+  "total_words": 1793,
+  "total_sentences": 74,
+  "total_paragraphs": 73,
+  "sentence_length": {
+    "avg": 24.2,
+    "stddev": 11.3
+  },
+  "paragraph_length": {
+    "avg": 24.6,
+    "stddev": 11.0,
+    "min": 0,
+    "max": 51
+  },
+  "vocabulary_ttr": 0.272,
+  "dialogue_ratio": 0.282,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.189,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.986,
+    "medium_50_200": 0.014,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.603
+  },
+  "top_opening_patterns": [
+    "” ...(29次)",
+    "丰天...(6次)"
+  ],
+  "rhetorical_features": [
+    "反问(2处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)",
+    "协作口吻(1处)",
+    "高频副词(1处)"
+  ]
+}

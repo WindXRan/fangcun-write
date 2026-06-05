@@ -1,0 +1,37 @@
+﻿{
+  "source_name": "第28章.txt",
+  "total_chars": 2438,
+  "total_words": 1758,
+  "total_sentences": 87,
+  "total_paragraphs": 85,
+  "sentence_length": {
+    "avg": 20.2,
+    "stddev": 9.4
+  },
+  "paragraph_length": {
+    "avg": 20.7,
+    "stddev": 9.8,
+    "min": 0,
+    "max": 52
+  },
+  "vocabulary_ttr": 0.266,
+  "dialogue_ratio": 0.209,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.322,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.988,
+    "medium_50_200": 0.012,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.682
+  },
+  "top_opening_patterns": [
+    "” ...(27次)",
+    "宋云...(7次)"
+  ],
+  "rhetorical_features": [],
+  "ai_tells": [
+    "路标词(2处)"
+  ]
+}

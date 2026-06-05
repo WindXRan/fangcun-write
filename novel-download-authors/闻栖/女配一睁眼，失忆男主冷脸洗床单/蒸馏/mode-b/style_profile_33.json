@@ -1,0 +1,37 @@
+﻿{
+  "source_name": "第33章.txt",
+  "total_chars": 2371,
+  "total_words": 1796,
+  "total_sentences": 75,
+  "total_paragraphs": 72,
+  "sentence_length": {
+    "avg": 23.9,
+    "stddev": 10.2
+  },
+  "paragraph_length": {
+    "avg": 24.9,
+    "stddev": 10.1,
+    "min": 0,
+    "max": 56
+  },
+  "vocabulary_ttr": 0.249,
+  "dialogue_ratio": 0.172,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.187,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.986,
+    "medium_50_200": 0.014,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.764
+  },
+  "top_opening_patterns": [
+    "” ...(17次)",
+    "何总...(4次)",
+    "胡瑶...(4次)",
+    "宋云...(3次)"
+  ],
+  "rhetorical_features": [],
+  "ai_tells": []
+}

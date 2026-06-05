@@ -1,0 +1,38 @@
+﻿{
+  "source_name": "第97章.txt",
+  "total_chars": 2345,
+  "total_words": 1618,
+  "total_sentences": 92,
+  "total_paragraphs": 93,
+  "sentence_length": {
+    "avg": 17.6,
+    "stddev": 8.0
+  },
+  "paragraph_length": {
+    "avg": 17.4,
+    "stddev": 8.7,
+    "min": 0,
+    "max": 34
+  },
+  "vocabulary_ttr": 0.274,
+  "dialogue_ratio": 0.192,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.38,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.656
+  },
+  "top_opening_patterns": [
+    "” ...(30次)",
+    "宋云...(7次)",
+    "“你...(3次)"
+  ],
+  "rhetorical_features": [],
+  "ai_tells": [
+    "路标词(1处)"
+  ]
+}

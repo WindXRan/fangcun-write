@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第154章.txt",
+  "total_chars": 2600,
+  "total_words": 1852,
+  "total_sentences": 100,
+  "total_paragraphs": 93,
+  "sentence_length": {
+    "avg": 18.5,
+    "stddev": 10.0
+  },
+  "paragraph_length": {
+    "avg": 19.9,
+    "stddev": 9.9,
+    "min": 0,
+    "max": 45
+  },
+  "vocabulary_ttr": 0.244,
+  "dialogue_ratio": 0.263,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.4,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.548
+  },
+  "top_opening_patterns": [
+    "” ...(41次)",
+    "楚靳...(7次)",
+    "宋云...(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)",
+    "协作口吻(1处)"
+  ]
+}

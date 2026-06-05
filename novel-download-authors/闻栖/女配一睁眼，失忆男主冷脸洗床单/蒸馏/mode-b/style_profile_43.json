@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第43章.txt",
+  "total_chars": 2639,
+  "total_words": 1918,
+  "total_sentences": 90,
+  "total_paragraphs": 89,
+  "sentence_length": {
+    "avg": 21.3,
+    "stddev": 10.8
+  },
+  "paragraph_length": {
+    "avg": 21.6,
+    "stddev": 9.7,
+    "min": 0,
+    "max": 44
+  },
+  "vocabulary_ttr": 0.237,
+  "dialogue_ratio": 0.241,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.278,
+    "long_ratio_gt60": 0.011
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.596
+  },
+  "top_opening_patterns": [
+    "” ...(33次)",
+    "宋云...(13次)",
+    "楚靳...(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "ai_tells": [
+    "高频副词(1处)"
+  ]
+}

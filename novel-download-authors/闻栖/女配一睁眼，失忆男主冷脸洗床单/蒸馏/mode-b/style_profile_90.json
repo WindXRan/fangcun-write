@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第90章.txt",
+  "total_chars": 2462,
+  "total_words": 1775,
+  "total_sentences": 92,
+  "total_paragraphs": 86,
+  "sentence_length": {
+    "avg": 19.3,
+    "stddev": 9.9
+  },
+  "paragraph_length": {
+    "avg": 20.6,
+    "stddev": 10.7,
+    "min": 0,
+    "max": 56
+  },
+  "vocabulary_ttr": 0.283,
+  "dialogue_ratio": 0.175,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.304,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.977,
+    "medium_50_200": 0.023,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.791
+  },
+  "top_opening_patterns": [
+    "” ...(17次)",
+    "宋云...(5次)",
+    "楚靳...(4次)",
+    "转账...(4次)",
+    "柏庾...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "ai_tells": [
+    "高频副词(1处)"
+  ]
+}

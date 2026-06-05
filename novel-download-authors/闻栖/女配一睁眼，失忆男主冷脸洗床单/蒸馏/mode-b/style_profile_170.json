@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第170章.txt",
+  "total_chars": 3640,
+  "total_words": 2695,
+  "total_sentences": 123,
+  "total_paragraphs": 119,
+  "sentence_length": {
+    "avg": 21.9,
+    "stddev": 10.6
+  },
+  "paragraph_length": {
+    "avg": 22.6,
+    "stddev": 11.8,
+    "min": 0,
+    "max": 56
+  },
+  "vocabulary_ttr": 0.234,
+  "dialogue_ratio": 0.131,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.236,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.975,
+    "medium_50_200": 0.025,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.756
+  },
+  "top_opening_patterns": [
+    "” ...(25次)",
+    "卫岢...(8次)",
+    "宋云...(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)"
+  ]
+}

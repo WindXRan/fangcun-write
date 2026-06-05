@@ -1,0 +1,44 @@
+﻿{
+  "source_name": "第175章.txt",
+  "total_chars": 2735,
+  "total_words": 1923,
+  "total_sentences": 102,
+  "total_paragraphs": 101,
+  "sentence_length": {
+    "avg": 18.9,
+    "stddev": 9.9
+  },
+  "paragraph_length": {
+    "avg": 19.0,
+    "stddev": 10.7,
+    "min": 0,
+    "max": 48
+  },
+  "vocabulary_ttr": 0.25,
+  "dialogue_ratio": 0.259,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.373,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.545
+  },
+  "top_opening_patterns": [
+    "” ...(45次)",
+    "宋云...(7次)",
+    "“你...(3次)",
+    "楚靳...(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "反问(2处)",
+    "短句节奏(3处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)",
+    "高频副词(7处)"
+  ]
+}

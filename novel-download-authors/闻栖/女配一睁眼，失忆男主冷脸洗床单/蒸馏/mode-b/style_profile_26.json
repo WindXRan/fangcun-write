@@ -1,0 +1,40 @@
+﻿{
+  "source_name": "第26章.txt",
+  "total_chars": 2636,
+  "total_words": 1932,
+  "total_sentences": 97,
+  "total_paragraphs": 91,
+  "sentence_length": {
+    "avg": 19.9,
+    "stddev": 9.2
+  },
+  "paragraph_length": {
+    "avg": 21.2,
+    "stddev": 9.5,
+    "min": 0,
+    "max": 59
+  },
+  "vocabulary_ttr": 0.249,
+  "dialogue_ratio": 0.139,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.268,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.989,
+    "medium_50_200": 0.011,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.725
+  },
+  "top_opening_patterns": [
+    "” ...(20次)",
+    "楚靳...(9次)",
+    "宋云...(9次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "ai_tells": [
+    "高频副词(1处)"
+  ]
+}

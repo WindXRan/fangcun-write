@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第151章.txt",
+  "total_chars": 2393,
+  "total_words": 1726,
+  "total_sentences": 84,
+  "total_paragraphs": 80,
+  "sentence_length": {
+    "avg": 20.5,
+    "stddev": 10.0
+  },
+  "paragraph_length": {
+    "avg": 21.6,
+    "stddev": 10.9,
+    "min": 0,
+    "max": 56
+  },
+  "vocabulary_ttr": 0.258,
+  "dialogue_ratio": 0.271,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.262,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.988,
+    "medium_50_200": 0.013,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.575
+  },
+  "top_opening_patterns": [
+    "” ...(32次)",
+    "楚靳...(6次)",
+    "何总...(6次)",
+    "宋云...(3次)"
+  ],
+  "rhetorical_features": [
+    "反问(3处)",
+    "短句节奏(3处)"
+  ],
+  "ai_tells": [
+    "协作口吻(1处)"
+  ]
+}

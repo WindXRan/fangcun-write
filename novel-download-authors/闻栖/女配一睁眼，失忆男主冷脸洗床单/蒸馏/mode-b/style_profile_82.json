@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第82章.txt",
+  "total_chars": 2533,
+  "total_words": 1835,
+  "total_sentences": 95,
+  "total_paragraphs": 85,
+  "sentence_length": {
+    "avg": 19.3,
+    "stddev": 10.3
+  },
+  "paragraph_length": {
+    "avg": 21.6,
+    "stddev": 9.9,
+    "min": 0,
+    "max": 51
+  },
+  "vocabulary_ttr": 0.256,
+  "dialogue_ratio": 0.221,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.305,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.988,
+    "medium_50_200": 0.012,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.6
+  },
+  "top_opening_patterns": [
+    "” ...(31次)",
+    "宋云...(8次)",
+    "小霜...(5次)",
+    "男人...(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)",
+    "高频副词(1处)"
+  ]
+}

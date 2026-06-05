@@ -1,0 +1,36 @@
+﻿{
+  "source_name": "第4章.txt",
+  "total_chars": 2452,
+  "total_words": 1840,
+  "total_sentences": 79,
+  "total_paragraphs": 80,
+  "sentence_length": {
+    "avg": 23.3,
+    "stddev": 9.7
+  },
+  "paragraph_length": {
+    "avg": 23.0,
+    "stddev": 9.4,
+    "min": 0,
+    "max": 51
+  },
+  "vocabulary_ttr": 0.251,
+  "dialogue_ratio": 0.089,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.177,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.988,
+    "medium_50_200": 0.013,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.838
+  },
+  "top_opening_patterns": [
+    "宋云...(12次)",
+    "” ...(12次)",
+    "楚靳...(9次)"
+  ],
+  "rhetorical_features": [],
+  "ai_tells": []
+}

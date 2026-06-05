@@ -1,0 +1,38 @@
+﻿{
+  "source_name": "第148章.txt",
+  "total_chars": 2443,
+  "total_words": 1701,
+  "total_sentences": 96,
+  "total_paragraphs": 96,
+  "sentence_length": {
+    "avg": 17.7,
+    "stddev": 9.5
+  },
+  "paragraph_length": {
+    "avg": 17.7,
+    "stddev": 10.1,
+    "min": 0,
+    "max": 49
+  },
+  "vocabulary_ttr": 0.252,
+  "dialogue_ratio": 0.167,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.323,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.625
+  },
+  "top_opening_patterns": [
+    "” ...(34次)",
+    "宋云...(15次)",
+    "楚靳...(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "ai_tells": []
+}

@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第19章.txt",
+  "total_chars": 2562,
+  "total_words": 1804,
+  "total_sentences": 104,
+  "total_paragraphs": 103,
+  "sentence_length": {
+    "avg": 17.3,
+    "stddev": 7.6
+  },
+  "paragraph_length": {
+    "avg": 17.5,
+    "stddev": 7.6,
+    "min": 0,
+    "max": 50
+  },
+  "vocabulary_ttr": 0.28,
+  "dialogue_ratio": 0.123,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.365,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.99,
+    "medium_50_200": 0.01,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.757
+  },
+  "top_opening_patterns": [
+    "” ...(22次)",
+    "宋云...(13次)",
+    "楚靳...(9次)",
+    "“你...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "ai_tells": [
+    "高频副词(2处)"
+  ]
+}

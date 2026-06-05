@@ -1,0 +1,39 @@
+﻿{
+  "source_name": "第139章.txt",
+  "total_chars": 2456,
+  "total_words": 1772,
+  "total_sentences": 92,
+  "total_paragraphs": 93,
+  "sentence_length": {
+    "avg": 19.3,
+    "stddev": 9.8
+  },
+  "paragraph_length": {
+    "avg": 19.1,
+    "stddev": 10.4,
+    "min": 0,
+    "max": 48
+  },
+  "vocabulary_ttr": 0.268,
+  "dialogue_ratio": 0.09,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.283,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 1.0,
+    "medium_50_200": 0.0,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.839
+  },
+  "top_opening_patterns": [
+    "” ...(13次)",
+    "卫岢...(10次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "ai_tells": [
+    "高频副词(2处)"
+  ]
+}

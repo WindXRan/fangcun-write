@@ -1,0 +1,38 @@
+﻿{
+  "source_name": "第108章.txt",
+  "total_chars": 2428,
+  "total_words": 1712,
+  "total_sentences": 88,
+  "total_paragraphs": 83,
+  "sentence_length": {
+    "avg": 19.5,
+    "stddev": 10.8
+  },
+  "paragraph_length": {
+    "avg": 20.6,
+    "stddev": 11.0,
+    "min": 0,
+    "max": 56
+  },
+  "vocabulary_ttr": 0.24,
+  "dialogue_ratio": 0.384,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.352,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.988,
+    "medium_50_200": 0.012,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.458
+  },
+  "top_opening_patterns": [
+    "” ...(44次)",
+    "柏庾...(5次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(4处)"
+  ],
+  "ai_tells": []
+}
