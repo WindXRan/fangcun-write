@@ -48,6 +48,19 @@ novel-download-authors/{作者名}/{源书名}/
 - 已有 → 跳过
 - 没有 → 运行 `/story-style`（所有模式一次跑完）
 
+### 启动时询问
+
+**1. 分析范围**：
+- 前10章（快速预览，~5分钟）
+- 前30章（标准，~15分钟）
+- 全本（完整，~40分钟）
+
+**2. 分析模式**（读取 `analysis-modes.json`）：
+- style（inkos 8维度）
+- hook（钩子工程学）
+- character（角色塑造）
+- 全部
+
 ### 插件架构
 
 分析模式定义在 `analysis-modes.json`，当前启用：

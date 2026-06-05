@@ -14,6 +14,21 @@ shell: powershell
 
 > 源文分析，插件式，可缓存。所有工具和prompt引用 story-engine。
 
+## 启动时询问
+
+运行前先问用户两个问题：
+
+**1. 分析范围**：
+- 前10章（快速预览）
+- 前30章（标准）
+- 全本（完整）
+
+**2. 分析模式**（读取 `analysis-modes.json` 中 enabled 的模式，列出选项）：
+- style（inkos 8维度）
+- hook（钩子工程学）
+- character（角色塑造）
+- 全部
+
 ## 共享文件
 
 - 工具：`.agents/skills/story-engine/tools/`
