@@ -32,7 +32,7 @@ novel-download-authors/{作者名}/{源书名}/
 
 ### 0.1 拆章（如源文章节已存在则跳过）
 ```bash
-python ${CLAUDE_SKILL_DIR}/tools/source_chapter_splitter.py split <源文.txt> novel-download-authors/{作者名}/{源书名}/源文/
+python .agents/skills/story-strategy/tools/source_chapter_splitter.py split <源文.txt> novel-download-authors/{作者名}/{源书名}/源文/
 ```
 
 ### 0.2 叙事策略提取（10 agents × N批，并行）

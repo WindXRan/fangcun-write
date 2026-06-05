@@ -32,12 +32,12 @@ novel-download-authors/{作者名}/{源书名}/
 
 ### 0.1 拆章
 ```bash
-python ${CLAUDE_SKILL_DIR}/tools/source_chapter_splitter.py split <源文.txt> novel-download-authors/{作者名}/{源书名}/源文/
+python .agents/skills/story-style/tools/source_chapter_splitter.py split <源文.txt> novel-download-authors/{作者名}/{源书名}/源文/
 ```
 
 ### 0.2 风格指纹（脚本）
 ```bash
-python ${CLAUDE_SKILL_DIR}/tools/style_analyzer.py novel-download-authors/{作者名}/{源书名}/源文/第N章.txt --json | Out-File -FilePath novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/style_profile_N.json -Encoding utf8
+python .agents/skills/story-style/tools/style_analyzer.py novel-download-authors/{作者名}/{源书名}/源文/第N章.txt --json | Out-File -FilePath novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/style_profile_N.json -Encoding utf8
 ```
 
 ### 0.3 风格分析（10 agents × N批，并行）
