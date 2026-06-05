@@ -42,11 +42,25 @@ novel-download-authors/{作者名}/{源书名}/
 
 ---
 
-## Phase 0：源文分析（前置依赖）
+## Phase 0：源文分析（前置依赖，插件式）
 
-⚠️ 运行前检查 `蒸馏/mode-b/` 下是否有 `style_guide_*.md` + `strategy_guide_*.md`。
+⚠️ 运行前检查 `蒸馏/mode-b/` 下是否已有各模式的 guide 文件。
 - 已有 → 跳过
-- 没有 → 先运行 `/story-style` 和 `/story-strategy`（可并行开两个 agent 会话同时跑）
+- 没有 → 运行 `/story-style`（所有模式一次跑完）
+
+### 插件架构
+
+分析模式定义在 `analysis-modes.json`，当前启用：
+
+| 模式 | 输出文件 | 说明 |
+|------|---------|------|
+| style | style_guide_N.md | inkos 8维度文风分析 |
+| hook | hook_guide_N.md | 钩子工程学 |
+
+**加新模式只需**：
+1. 创建 `prompts/{mode}-analysis-task.md`
+2. 在 `analysis-modes.json` 加一行配置
+3. `create_templates.py` 自动支持 `--mode {mode}`
 
 ---
 

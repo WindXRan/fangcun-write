@@ -42,16 +42,19 @@ mkdir -Force novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/
 python .agents/skills/story-engine/tools/style_analyzer.py novel-download-authors/{作者名}/{源书名}/源文/第N章.txt --json | Out-File -FilePath novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/style_profile_N.json -Encoding utf8
 ```
 
-### 0.3 创建风格指南模板（脚本）
+### 0.3 创建分析模板（脚本）
 ```bash
 python .agents/skills/story-engine/tools/create_templates.py style <章节数> novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/
+python .agents/skills/story-engine/tools/create_templates.py hook <章节数> novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/
 ```
 
-### 0.4 风格分析（10 agents × N批，并行）
+### 0.4 风格分析 + 钩子分析（10 agents × N批，并行）
 
 ⚠️ **每个 agent 只分析1章，禁止合并多章。**
 
-Task prompt 见 `.agents/skills/story-engine/prompts/style-analysis-task.md`。输出保存到 `style_guide_N.md`。
+Task prompt 见 `.agents/skills/story-engine/prompts/style-analysis-task.md`（风格）和 `.agents/skills/story-engine/prompts/hook-analysis-task.md`（钩子）。
+
+每个 agent 读1个源文，输出 `style_guide_N.md` + `hook_guide_N.md` 两个文件。
 
 ## 缓存策略
 

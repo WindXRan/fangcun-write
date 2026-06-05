@@ -210,6 +210,35 @@ MAPPING_TEMPLATE = """# 章节顺序映射
 |---------|---------|------|---------|
 """
 
+HOOK_TEMPLATE = """# 钩子工程分析：第{N}章
+
+> 来源：{源书名} 第{N}章
+
+## 1. 段落钩子
+
+（填入：作者怎么在段落结尾勾住读者往下读？用了什么技法？引用原文例句）
+
+## 2. 章首钩子
+
+（填入：开头几段怎么抓住注意力？第一句话是什么类型的钩子？）
+
+## 3. 章末钩子
+
+（填入：结尾怎么让读者必须翻页？是悬念、反转、情感、还是信息缺口？）
+
+## 4. 情绪钩子
+
+（填入：作者怎么让读者在意角色？用了什么情感绑定技法？）
+
+## 5. 信息钩子
+
+（填入：作者怎么制造「想知道答案」的欲望？藏了什么信息？）
+
+## 6. 反预期钩子
+
+（填入：作者怎么打破读者预期？在哪里做了反转？效果是什么？）
+"""
+
 
 def create_style_templates(count, output_dir):
     os.makedirs(output_dir, exist_ok=True)
@@ -229,6 +258,16 @@ def create_strategy_templates(count, output_dir):
             with open(path, 'w', encoding='utf-8') as f:
                 f.write(STRATEGY_TEMPLATE.replace("{N}", str(i)))
     print(f"Created {count} strategy guide templates in {output_dir}")
+
+
+def create_hook_templates(count, output_dir):
+    os.makedirs(output_dir, exist_ok=True)
+    for i in range(1, count + 1):
+        path = os.path.join(output_dir, f"hook_guide_{i}.md")
+        if not os.path.exists(path):
+            with open(path, 'w', encoding='utf-8') as f:
+                f.write(HOOK_TEMPLATE.replace("{N}", str(i)))
+    print(f"Created {count} hook guide templates in {output_dir}")
 
 
 def create_outline_templates(count, output_dir):
@@ -294,7 +333,7 @@ if __name__ == '__main__':
     if len(sys.argv) < 3:
         print("用法:")
         print("  python create_templates.py style <章节数> <输出目录>")
-        print("  python create_templates.py strategy <章节数> <输出目录>")
+        print("  python create_templates.py hook <章节数> <输出目录>")
         print("  python create_templates.py outline <章节数> <输出目录>")
         print("  python create_templates.py concept <输出目录> [章节数]")
         print("  python create_templates.py bible <输出目录>")
@@ -309,10 +348,10 @@ if __name__ == '__main__':
         count = int(sys.argv[2])
         output_dir = sys.argv[3] if len(sys.argv) > 3 else '.'
         create_style_templates(count, output_dir)
-    elif template_type == 'strategy':
+    elif template_type == 'hook':
         count = int(sys.argv[2])
         output_dir = sys.argv[3] if len(sys.argv) > 3 else '.'
-        create_strategy_templates(count, output_dir)
+        create_hook_templates(count, output_dir)
     elif template_type == 'outline':
         count = int(sys.argv[2])
         output_dir = sys.argv[3] if len(sys.argv) > 3 else '.'
@@ -333,7 +372,7 @@ if __name__ == '__main__':
         setting_dir = sys.argv[4]
         outline_dir = sys.argv[5]
         create_style_templates(count, distill_dir)
-        create_strategy_templates(count, distill_dir)
+        create_hook_templates(count, distill_dir)
         create_outline_templates(count, outline_dir)
         create_concept_template(setting_dir, count)
         create_bible_template(setting_dir)
