@@ -1,5 +1,5 @@
 ---
-name: story-rewrite_phase0-style
+name: story-style
 description: |
   源文风格分析：拆章+风格指纹+inkos 8维度风格指南。
   输出 style_profile_N.json + style_guide_N.md。
@@ -9,7 +9,7 @@ allowed-tools: Bash(python *) Bash(ls *) Bash(mkdir *)
 shell: powershell
 ---
 
-# story-rewrite_phase0-style
+# story-style
 
 > 源文风格分析，可缓存。
 

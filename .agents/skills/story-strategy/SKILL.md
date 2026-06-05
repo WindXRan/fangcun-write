@@ -1,5 +1,5 @@
 ---
-name: story-rewrite_phase0-strategy
+name: story-strategy
 description: |
   源文叙事策略分析：排除项+节奏骨架+叙事策略。
   输出 strategy_guide_N.md。
@@ -9,14 +9,14 @@ allowed-tools: Bash(python *) Bash(ls *) Bash(mkdir *)
 shell: powershell
 ---
 
-# story-rewrite_phase0-strategy
+# story-strategy
 
 > 源文叙事策略分析，可缓存。
 
 ## 前置依赖
 
 需要 `novel-download-authors/{作者名}/{源书名}/源文/` 目录下有拆章后的章节文件。
-如果没有，先运行 `/story-rewrite_phase0-style` 拆章。
+如果没有，先运行 `/story-style` 拆章。
 
 ## 输出
 
