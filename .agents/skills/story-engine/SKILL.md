@@ -15,13 +15,22 @@ shell: powershell
 
 ## 文件结构
 
+⚠️ **章节命名格式**：`第N章`（N 为阿拉伯数字），如 `第1章`、`第2章`、`第101章`。
+- ❌ 禁止：第一章、第二章、第０１章
+- ✅ 正确：第1章、第2章、第101章
+- 文件名、章节标题、引用全部统一用此格式
+
 ```
 novel-download-authors/{作者名}/{源书名}/
 ├── 源文/
+│   ├── 第1章.txt
+│   ├── 第2章.txt
+│   └── ...
 ├── 蒸馏/mode-b/
-│   ├── style_profile_N.json     # 脚本指纹
-│   ├── style_guide_N.md         # LLM inkos 8维度风格指南
-│   └── plot_guide_N.md          # LLM 情节指南（骨架+血肉+排除项）
+│   ├── style_profile_1.json     # 脚本指纹
+│   ├── style_guide_1.md         # LLM inkos 8维度风格指南
+│   ├── plot_guide_1.md          # LLM 情节指南（骨架+血肉+排除项）
+│   └── ...
 
 仿写/{新书名}/                    ⚠️ 用新书名，不是源文名
 ├── 设定/
