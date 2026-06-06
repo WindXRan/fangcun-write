@@ -21,7 +21,6 @@ config.yml
 eggy.json
 
 # === 临时文件 ===
-*.py
 temp_*
 .tnd_update_cache.json
 
