@@ -8,15 +8,15 @@
 
 1. **Agent A1：新书概念**（必须先完成）
    - Task prompt：prompts/arc-concept.md
-   - 输出：仿写/仿写/{新书名}/设定/新书概念.md
+   - 输出：仿写/{新书名}/设定/新书概念.md
 
 2. **Agent A2：世界观设定**（等 A1 完成后启动）
    - Task prompt：prompts/arc-bible.md
-   - 输出：仿写/仿写/{新书名}/设定/story_bible.md
+   - 输出：仿写/{新书名}/设定/story_bible.md
 
 3. **Agent A3：全书弧线骨架**（等 A1 完成后启动）
    - Task prompt：prompts/arc-skeleton-core.md
-   - 输出：仿写/仿写/{新书名}/设定/全书弧线骨架.md
+   - 输出：仿写/{新书名}/设定/全书弧线骨架.md
 
 【输出】3个文件分别保存到对应位置
 

@@ -42,5 +42,6 @@ python .agents/skills/story-compare/compare.py "{书名}" [起始章] [结束章
 ## 注意事项
 
 1. 默认只比黄金三章，如需全书加 `1 9999`
-2. 源文自动从 `novel-download-authors/` 查找
+2. 源文自动检测：优先从新书概念.md 的 `源文路径` 字段读取，未找到则搜索 `novel-download-authors/`
 3. 只对比有正文的章节
+4. 新书目录结构：`仿写/{新书名}/正文/第N章.txt`

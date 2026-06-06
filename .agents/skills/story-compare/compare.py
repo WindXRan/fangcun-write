@@ -146,22 +146,35 @@ def find_source_chapter(chapter_num, source_override=None):
     if source_override:
         src_dir = os.path.join(NOVEL_DB, source_override)
         if os.path.isdir(src_dir):
-            split_dir = os.path.join(src_dir)
+            # 1. 先搜 源文/ 子目录（拆章后的章节文件）
+            split_dir = os.path.join(src_dir, '源文')
             if os.path.isdir(split_dir):
                 pattern = os.path.join(split_dir, f'第{chapter_num}章*.txt')
                 for f in sorted(glob.glob(pattern)):
                     results.append(f)
-            for f in os.listdir(src_dir):
-                if f.endswith('.txt') and os.path.isfile(os.path.join(src_dir, f)):
-                    path = os.path.join(src_dir, f)
-                    text = read_chapter(path)
-                    if re.search(rf'第{chapter_num}章\s', text):
-                        results.append(path)
+            # 2. 搜根目录下的拆章文件
+            pattern = os.path.join(src_dir, f'第{chapter_num}章*.txt')
+            for f in sorted(glob.glob(pattern)):
+                if f not in results:
+                    results.append(f)
+            # 3. 搜根目录下的合并文件（在文件内容中匹配章节）
+            if not results:
+                for f in os.listdir(src_dir):
+                    if f.endswith('.txt') and os.path.isfile(os.path.join(src_dir, f)):
+                        path = os.path.join(src_dir, f)
+                        text = read_chapter(path)
+                        if re.search(rf'第{chapter_num}章\s', text):
+                            results.append(path)
     if results:
         return results
-    pattern = os.path.join(NOVEL_DB, '*', '*', f'第{chapter_num}章*.txt')
+    # 4. 全局搜索（兜底）
+    pattern = os.path.join(NOVEL_DB, '*', '*', '源文', f'第{chapter_num}章*.txt')
     for f in sorted(glob.glob(pattern)):
         results.append(f)
+    pattern = os.path.join(NOVEL_DB, '*', '*', f'第{chapter_num}章*.txt')
+    for f in sorted(glob.glob(pattern)):
+        if f not in results:
+            results.append(f)
     pattern2 = os.path.join(NOVEL_DB, '*', f'第{chapter_num}章*.txt')
     for f in sorted(glob.glob(pattern2)):
         if f not in results:
