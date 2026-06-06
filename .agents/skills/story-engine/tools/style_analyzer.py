@@ -149,9 +149,6 @@ def analyze_style(text: str, source_name: str = "") -> dict[str, Any]:
     # 英文双引号对话 ""
     for m in re.finditer(r'"([^"]*)"', text):
         dialogue_chars += count_chinese_chars(m.group(1))
-    # 中文破折号对话 ——
-    for m in re.finditer(r"\u2014\u2014([^\u2014\u2014]*)\u2014\u2014", text):
-        dialogue_chars += count_chinese_chars(m.group(1))
     total_chinese = count_chinese_chars(text)
     dialogue_ratio = round(dialogue_chars / total_chinese, 3) if total_chinese else 0
 

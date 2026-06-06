@@ -8,7 +8,7 @@
       "enabled": true,
       "priority": 1,
       "order": 1,
-      "required_for": ["chapter-outline", "arc-skeleton"],
+      "required_for": ["write-chapter"],
       "dependencies": [],
       "min_word_count": 400
     },
@@ -29,7 +29,7 @@
       "output_pattern": "hook_guide_{N}.md",
       "output_dir": "蒸馏/mode-b",
       "description": "钩子工程学：段落钩子、章首钩子、章末钩子、情绪钩子、信息钩子、反预期钩子",
-      "enabled": true,
+      "enabled": false,
       "priority": 3,
       "order": 3,
       "required_for": [],
@@ -41,14 +41,26 @@
       "output_pattern": "character_guide_{N}.md",
       "output_dir": "蒸馏/mode-b",
       "description": "角色塑造：立体感、性格外化、角色差异化、配角塑造、关系张力、成长暗示",
-      "enabled": true,
+      "enabled": false,
       "priority": 3,
       "order": 4,
       "required_for": [],
       "dependencies": [],
       "min_word_count": 400
+    },
+    "de-ai": {
+      "template": "prompts/de-ai-task.md",
+      "output_pattern": "de-ai_guide_{N}.md",
+      "output_dir": "蒸馏/mode-b",
+      "description": "源文统计指纹（脚本）+过渡/描写/情绪/信息/叙事指令（LLM）",
+      "enabled": true,
+      "priority": 2,
+      "order": 5,
+      "required_for": ["write-chapter"],
+      "dependencies": ["plot"]
     }
   },
+  "note": "hook/character 默认关闭。de-ai 默认开启（写章必读，降AI检测率）。",
   "defaults": {
     "batch_size": 10,
     "word_count_min": 2000,

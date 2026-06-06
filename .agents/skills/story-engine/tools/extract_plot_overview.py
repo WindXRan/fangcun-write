@@ -67,9 +67,9 @@ def main():
             m = re.search(r'###\s*本章功能\s*\n(.+?)(?=\n###|\n---|\Z)', text, re.DOTALL)
             func = m.group(1).strip() if m else ''
 
-        # 提取情绪曲线
+        # 提取情绪曲线（从"- 情绪曲线："提取）
         emotion = ''
-        m = re.search(r'###\s*情绪曲线\s*\n(.+?)(?=\n###|\n---|\Z)', text, re.DOTALL)
+        m = re.search(r'-\s*情绪曲线[：:]\s*(.+)', text)
         if m:
             emotion = m.group(1).strip()
 
@@ -81,8 +81,10 @@ def main():
                 if line and (line.startswith('-') or line.startswith('*') or re.match(r'^\d+\.', line)):
                     all_exclusions.append(f'第{ch_num}章: {line}')
 
-        # 提取可复用的抽象模式
-        formulas = extract_field(text, '可复用的抽象模式')
+        # 提取可复用的抽象公式
+        formulas = extract_field(text, '可复用的抽象公式')
+        if not formulas:
+            formulas = extract_field(text, '可复用的抽象模式')
         if formulas:
             for key in all_formulas:
                 m = re.search(rf'{key}公式[：:]\s*(.+)', formulas)
