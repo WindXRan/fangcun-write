@@ -1,10 +1,10 @@
 ﻿---
 name: story-engine
 description: |
-  仿写引擎 vPlan：全书规划先行，一次出稿。
-  触发条件：用户说「仿写」「用vPlan写」「帮我仿写这本书」「写第N章」「继续写」。
-  全书规划（弧线+章纲+映射）在写作前完成，写作阶段纯并行无后处理。
-  不要在用户只是问「怎么写小说」「帮我写大纲」时触发。
+   仿写引擎 vPlan：全书规划先行，一次出稿。
+   触发条件：用户说「仿写」「用vPlan写」「帮我仿写这本书」「写第N章」「继续写」。
+    全书规划（弧线+映射）在写作前完成，写章阶段直出+批后冲突检测。直出模式：写章agent直接读取plot_guide，跳过章纲。
+   不要在用户只是问「怎么写小说」「帮我写大纲」时触发。
 allowed-tools: Bash(python *) Bash(cat *) Bash(ls *) Bash(cp *) Bash(mkdir *)
 shell: powershell
 ---
@@ -16,37 +16,29 @@ shell: powershell
 ## 文件结构
 
 ⚠️ **章节命名格式**：`第N章`（N 为阿拉伯数字），如 `第1章`、`第2章`、`第101章`。
-- ❌ 禁止：第一章、第二章、第０１章
-- ✅ 正确：第1章、第2章、第101章
-- 文件名、章节标题、引用全部统一用此格式
 
 ```
-novel-download-authors/{作者名}/{源书名}/
-├── 源文/
-│   ├── 第1章.txt
-│   ├── 第2章.txt
-│   └── ...
-├── 蒸馏/mode-b/
-│   ├── style_profile_1.json     # 脚本指纹
-│   ├── style_guide_1.md         # LLM inkos 8维度风格指南
-│   ├── plot_guide_1.md          # LLM 情节指南（骨架+血肉+排除项）
-│   └── ...
+novel-download-authors/{作者名}/
+├── {源书名}.txt                 # 原文合并文件（开头含书名/分类/标签/简介+全部章节）
 
-仿写/{新书名}/                    ⚠️ 用新书名，不是源文名
+蒸馏/mode-b/                     # 分析产物，由story-style生成
+├── plot_guide_N.md              # 情节指南（必读）
+├── de-ai_guide_N.md             # 去AI指南（含统计指纹，必读）
+├── style_guide_N.md             # 风格指南（可选）
+├── hook_guide_N.md              # 钩子指南（关闭）
+└── character_guide_N.md         # 角色指南（关闭）
+
+仿写/{新书名}/
 ├── 设定/
-│   ├── 新书概念.md（3候选书名+卖点+人设+故事弧线+NPC映射）
-│   ├── 简介.md（3种风格：标准版/悬念版/甜宠版）
-│   ├── story_bible.md
-│   ├── 全书弧线骨架.md
+│   ├── 新书设定.md（书名+类型+卖点+人设+NPC映射+世界观）
+│   ├── 全书弧线.md（情感曲线+角色成长+伏笔+转折点）
+│   ├── 简介.md（3种风格）
 │   ├── plot_overview.md
-│   ├── 章节顺序.md
-│   └── 支线大纲.md
-├── 大纲/章纲_N.md
+│   └── 章节顺序.md
+├── 追踪/
+│   └── 真相.md（时间线+角色状态+伏笔状态，批后更新）
 └── 正文/第N章.txt
 ```
-
-⚠️ 产出目录：`仿写/{新书名}/`（不是根目录，不是 `仿写/仿写/`）
-⚠️ `{新书名}` 由 A1 agent 在新书概念中生成（3选1），目录在 A1 完成后确定
 
 ## 去重等级
 
@@ -54,323 +46,152 @@ novel-download-authors/{作者名}/{源书名}/
 
 ---
 
-## Phase 0：源文分析（并行，插件式）
+## Phase 0：源文分析（写章参考，不阻塞开书）
 
-⚠️ Phase 0 与 Phase 1.1 可并行启动，不阻塞弧线骨架。
-⚠️ 具体编排步骤见「开书编排」。
-⚠️ **每个 agent 只分析1章，禁止合并多章到同一个 agent。**
+开书不需要plot_guide。开书只需读源文合并文件的开头部分（含书名/分类/标签/简介），就知道是什么故事。
+plot_guide 是写章阶段的精细化参考，与开书完全并行。
 
-### 分析范围（自动决策，无需询问用户）
+### 分析模式（读取 analysis-modes.json）
 
-- 前10章（快速预览，~5分钟）
-- 前30章（标准，~15分钟）
-- 全本（完整，~40分钟）
-
-默认：全本。
-
-### 分析模式（读取 `analysis-modes.json`）
-
-当前启用的模式（按 order 排序）：
-
-| 模式 | 输出文件 | 说明 | 优先级 | 执行顺序 |
-|------|---------|------|--------|---------|
-| plot | plot_guide_N.md | 情节结构（章纲必需前置） | 1 | 1 |
-| style | style_guide_N.md | inkos 8维度文风分析 | 2 | 2 |
-| hook | hook_guide_N.md | 钩子工程学 | 3 | 3 |
-| character | character_guide_N.md | 角色塑造 | 3 | 4 |
-
-**执行顺序**：按 order 排序，同 priority 可并行。plot 必须先全部完成。
+| 模式 | 输出 | 用途 | 默认 |
+|------|------|------|------|
+| plot | plot_guide_N.md | 情节节奏骨架（写章时用） | 必需 |
+| style | style_guide_N.md | 文风仿写指南（可选） | 增强 |
+| de-ai | de-ai_guide_N.md | 统计指纹（脚本生成，无LLM，写章必读） | 必需 |
+| hook | hook_guide_N.md | 钩子技法指南 | 关闭 |
+| character | character_guide_N.md | 角色塑造指南 | 关闭 |
 
 ### 流程
 
-1. 检查 `蒸馏/mode-b/` 下是否已有各模式的 guide 文件 → 已有则跳过
-2. 拆章（如源文章节已存在则跳过）
-3. 创建蒸馏模板（`python create_templates.py all <章节数> <输出目录>`）
-4. 按 order 分批分析：
-   - order=1（plot）：10 agents 并行
-   - order=2（style）：10 agents 并行
-   - order=3（hook/character）：可并行，10 agents 并行
-   - 每个 agent 只处理1章
-
-### 插件架构
-
-分析模式定义在 `analysis-modes.json`，按 `priority` 和 `order` 排序执行。
-
-**加新模式只需 2 步**：
-1. 在 `analysis-modes.json` 加一行配置
-2. 创建 `prompts/{mode}-analysis-task.md`
-
-模板自动从 `templates/` 目录读取，或使用内置默认模板。无需改代码。
-
-写章 agent 自动读取蒸馏目录下所有 `*_guide_*.md` 文件，无需改 write-chapter.md。
+1. 检查 `蒸馏/mode-b/` 下已有 guide → 跳过
+2. 拆章（已存在则跳过）
+3. 创建蒸馏模板：`python create_templates.py all <章节数> <输出目录>`
+4. 流式分批（与开书并行，不阻塞）：
+   - plot：10 agents 并行（优先）
+   - de-ai：plot 全部完成后启动，10 agents 并行
+   - style：plot 全部完成后启动，10 agents 并行（写章并行不阻塞）
 
 ---
 
-## Phase 1：全书规划（每本新书都要做）
+## Phase 1：全书规划
 
 字数约束：2000-2500字，硬上限3000字。
-⚠️ 具体编排步骤见「开书编排」。
 
-### 依赖关系
+### 依赖关系（开书不依赖蒸馏，写章不依赖章纲）
 
 ```
-Phase 1.0 设定/大纲模板 ──→ Phase 1.1 弧线骨架（无依赖，立即启动）
-                          └── Phase 0 蒸馏（并行）
-                              ├── plot 蒸馏（必需，优先完成）
-                              ├── style/hook/character 蒸馏（可选，增强质量）
-                              └── Phase 1.2 章纲（逐章，等 plot 完成）
-                                  └── Phase 1.3 章节映射（等全部章纲完成）
+Phase 1.0 设定模板 ──→ Phase 1.1 开书（无依赖，读源文合并文件）
+                       │  ├── A1：新书设定（书名/类型/卖点/人设/世界观/NPC映射）
+                       │  └── A2：全书弧线（情感曲线/角色成长/伏笔/转折点）
+                       │
+开书完成后 ──→ 初始化真相（记录初始角色状态+时间线）
+              └── 注入章节意图（为每个 plot_guide 追加意图字段）
+
+  开书 + plot + de-ai + 注入完成后 ──→ Phase 2 写章（直出，写章agent读取 plot_guide + de-ai_guide + 全书弧线 + 真相）
+                   │
+              每批写完后 ──→ 批后处理（汇总状态→冲突检测→修复→更新真相）
+                   ↓
+              下一批写章（读取最新真相，避免跨章矛盾）
+                   │
+                   └── Phase 0 蒸馏（与开书完全并行，不阻塞）
+                       ├── plot（流式到达，注入后再启动写章）
+                       ├── de-ai（plot完成后启动，写章阻塞等待）
+                       └── style（plot完成后启动，与写章并行不阻塞，可选读）
 ```
 
-### 1.0 创建设定/大纲模板（脚本，一次性，无依赖）
+### 1.0 创建设定模板
 
 ```bash
-python .agents/skills/story-engine/tools/create_templates.py setup <章节数> <设定目录> <大纲目录>
+python .agents/skills/story-engine/tools/create_templates.py setup <章节数> <设定目录>
 ```
 
-示例（148章）：
-```bash
-python .agents/skills/story-engine/tools/create_templates.py setup 148 仿写/新书名/设定 仿写/新书名/大纲
-```
+### 1.1 开书（2 agents 串行，无依赖）
 
-⚠️ 已存在的文件不会被覆盖。可安全重复运行。
-⚠️ 此命令只创建设定+大纲模板，不依赖蒸馏目录。
+| 顺序 | Agent | Task prompt | 输出 |
+|------|-------|-------------|------|
+| 1 | A1：新书设定 | arc-concept.md | 设定/新书设定.md + 设定/简介.md |
+| 2 | A2：全书弧线 | arc-skeleton-core.md | 设定/全书弧线.md |
 
-### 1.1 新书概念 + 全书弧线骨架（1 agent，无依赖，立即启动）
+⚠️ 开书不依赖蒸馏，可与 Phase 0 并行。
 
-- 新书概念.md：**3个候选书名**（标推荐）、核心卖点、NPC命名映射表（必填）、故事弧线（三幕结构）、差异化
-- 简介.md：**3种风格**（标准版/悬念版/甜宠版），每种150-250字完整简介
-- story_bible.md
-- 题材识别：应用 [prompts/genre-management.md](prompts/genre-management.md) 中的 fatigue 词表
+### 1.2 全书章节顺序映射
 
-Task prompt 见 [prompts/arc-skeleton.md](prompts/arc-skeleton.md)。输出保存到 `设定/全书弧线骨架.md`。
-
-⚠️ 弧线骨架不依赖蒸馏，可与 Phase 0 并行。
-⚠️ 新书概念必须包含 3 个候选书名（标推荐）。简介单独生成为 `简介.md`，包含 3 种风格。
-
-### 1.2 章纲生成（10 agents × N批，并行，逐章启动）
-
-⚠️ **每个 agent 只生成1章章纲，禁止合并多章到同一个 agent。** 每批启动10个独立 Task。
-
-前置条件：该章的 `plot_guide_X.md`（必需）已在蒸馏目录中。
-可选读取：蒸馏目录下所有其他 `*_guide_X.md` 文件（自动发现，无需逐个指定）。
-可逐章启动，不必等全部蒸馏完成。
-
-Task prompt 见 [prompts/chapter-outline.md](prompts/chapter-outline.md)。每章输出保存到 `大纲/章纲_N.md`。
-
-### 1.3 全书章节顺序映射（1 agent，依赖全部章纲完成）
-
-Task prompt 见 [prompts/chapter-mapping.md](prompts/chapter-mapping.md)。输出保存到 `设定/章节顺序.md`。
+Task prompt：`prompts/chapter-mapping.md`
 
 ---
 
-## 开书编排（端到端，agent 自动执行）
-
-用户说「仿写」「用vPlan写」「帮我仿写这本书」时，按以下步骤自动执行，不需要用户输任何命令。
-
-⚠️ **时间统计**：每步操作前后调用计时工具，记录耗时到会话 `vplan-{新书名}`。
+## 开书编排（agent 自动执行）
 
 ### Step 0：定位源文
 
-1. 检查用户是否提供了源文路径（.txt 文件或目录）
-2. 如果是目录，查找目录下的 .txt 文件
-3. 如果没有提供，扫描 `novel-download-authors/` 下所有作者目录，列出可选源文
-4. 确定 `{作者名}` 和 `{源书名}`
+检查用户提供的路径或扫描 `novel-download-authors/{作者名}/{源书名}.txt`（合并文件）。
 
-⚠️ **目录命名**：项目目录使用新书名，不是源文名。即 `仿写/{新书名}/`，新书名由 A1 agent 在新书概念中生成。
-⚠️ 在 A1 完成前，可用临时目录名（如 `仿写/temp-{timestamp}/`），A1 完成后重命名为正式书名。
-
-### Step 1：创建项目目录 + 设定/大纲模板
+### Step 1：创建项目目录 + 设定模板
 
 ```bash
-python .agents/skills/story-engine/tools/timer.py start "创建模板" --session "vplan-{新书名}"
-python .agents/skills/story-engine/tools/create_templates.py setup <章节数> <设定目录> <大纲目录>
-python .agents/skills/story-engine/tools/timer.py stop "创建模板" --session "vplan-{新书名}"
+python .agents/skills/story-engine/tools/create_templates.py setup <章节数> <设定目录>
 ```
 
-- 章节数：先用拆章脚本得到源文章节数，或用户提供
-- 设定目录：`仿写/{新书名}/设定/`
-- 大纲目录：`仿写/{新书名}/大纲/`
+### Step 2：蒸馏（与开书完全并行）
 
-⚠️ **全本蒸馏必须完成后再进入 Step 3**，确保弧线骨架有完整的情节参考。
+加载 story-style skill。plot 优先，流式到达。de-ai 在 plot 完成后启动。写章需等 plot + de-ai + 开书 + 注入完成后才启动。
 
-### Step 2：全本蒸馏
-
-```bash
-python .agents/skills/story-engine/tools/timer.py start "全本蒸馏" --session "vplan-{新书名}"
-```
-- 加载 story-style skill，执行 Phase 0 完整流程
-- **⚠️ plot 优先**：先完成全部 plot 蒸馏，再启动 hook/character/style
-- 10 agents 并行分析，逐批完成
-- 每个 agent 只处理1章
-
-```bash
-python .agents/skills/story-engine/tools/timer.py stop "全本蒸馏" --session "vplan-{新书名}"
-```
-
-### Step 2.5：生成情节概览
+### Step 2.5：生成情节概览（可选，plot 全部完成后执行）
 
 ```bash
 python .agents/skills/story-engine/tools/extract_plot_overview.py <蒸馏目录> <设定目录>/plot_overview.md
 ```
 
-- 蒸馏目录：`novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/`
-- 设定目录：`仿写/{新书名}/设定/`
-- 生成 plot_overview.md，供后续 agents 读取
+### Step 3：开书（2 agents 串行，无依赖）
 
-### Step 3：弧线骨架（3 agents 并行）
+| 顺序 | Agent | 输出 |
+|------|-------|------|
+| 1 | A1：新书设定 | 设定/新书设定.md + 设定/简介.md |
+| 2 | A2：全书弧线 | 设定/全书弧线.md |
 
-全本蒸馏完成后，**同时启动 3 个 agent**：
+### Step 3.5：初始化真相（开书完成后执行）
 
-| Agent | 任务 | 输出文件 |
-|-------|------|---------|
-| A1 | 新书概念（人设、NPC映射） | 设定/新书概念.md |
-| A2 | 世界观设定 | 设定/story_bible.md |
-| A3 | 全书弧线骨架（情感曲线、角色成长、伏笔） | 设定/全书弧线骨架.md |
+Task prompt：`prompts/init-truth.md`
+输出：仿写/{新书名}/追踪/真相.md
 
-```bash
-python .agents/skills/story-engine/tools/timer.py start "弧线骨架" --session "vplan-{新书名}"
-# 3 agents 并行，每个读取 plot_guide_*.md
-python .agents/skills/story-engine/tools/timer.py stop "弧线骨架" --session "vplan-{新书名}"
-```
-
-Task prompt 见 prompts/arc-skeleton.md。
-
-### Step 4：章纲生成（流水线）
-
-弧线骨架完成后，**分批启动章纲生成**：
-- 第1批：第1-10章章纲（10 agents 并行）
-- 第2批：第11-20章章纲（10 agents 并行）
-- ... 逐批进行
+### Step 3.6：注入章节意图（开书完成后执行）
 
 ```bash
-python .agents/skills/story-engine/tools/timer.py start "章纲生成" --session "vplan-{新书名}"
-# 10 agents 并行，逐批完成
-python .agents/skills/story-engine/tools/timer.py stop "章纲生成" --session "vplan-{新书名}"
+python .agents/skills/story-engine/tools/inject_chapter_intent.py <全书弧线.md> <蒸馏目录>
 ```
+为每个 plot_guide_N.md 合并章节意图字段（写章目标+位置+推进目标+伏笔+过期债务）。
 
-Task prompt 见 prompts/chapter-outline.md。
-
-### Step 5：写章（流水线，与章纲并行）
-
-**流水线优化**：章纲第1批完成后，立即开始写章第1批，同时继续章纲第2批。
-
-```
-章纲：  [第1批] [第2批] [第3批] ...
-             ↓      ↓      ↓
-写章：  [第1批] [第2批] [第3批] ...
-```
+### Step 3.7：校验章节映射
 
 ```bash
-python .agents/skills/story-engine/tools/timer.py start "写章" --session "vplan-{新书名}"
-# 10 agents 并行，逐批完成
-python .agents/skills/story-engine/tools/timer.py stop "写章" --session "vplan-{新书名}"
+python .agents/skills/story-engine/tools/verify_chapter_mapping.py <章节顺序.md> <蒸馏目录>
 ```
+检查映射是否完整、无重复、源文 plot_guide 是否存在。失败则中断。
 
-Task prompt 见 prompts/write-chapter.md。
+### Step 4：写章（流式，10 agents × N批循环）
 
-### Step 7：导出
+等待所有 plot_guide 和注入完成后启动。写章agent直接读取 plot_guide（含章节意图）+ de-ai_guide（精确计数）+ 全书弧线 + 新书设定 + 真相，跳过章纲。
+
+⛔ **一次出稿，不准重写**。写章agent写完后直接回传，不跑 verify_chapter.py 校验指纹，不因此重写。如果指纹偏差大，调 tolerance 或改 gen_guide 目标，不在写章时迭代。
+
+每批写完后执行 **Step 4.5 批后处理**，再启动下一批。
+
+### Step 4.5：批后处理（每批写完后执行）
+
+Task prompt：`prompts/post-batch.md`
+- 汇总本批各章回传的状态变更
+- 检测冲突（角色位置/关系阶段/伏笔状态）
+- 自动修复矛盾段落
+- 更新追踪/真相.md
+
+### Step 5：导出
 
 ```bash
-python .agents/skills/story-engine/tools/timer.py start "导出" --session "vplan-{新书名}"
 cat 仿写/{新书名}/正文/*.txt > 仿写/{新书名}/{新书名}.txt
-python .agents/skills/story-engine/tools/timer.py stop "导出" --session "vplan-{新书名}"
 ```
 
-### Step 8：生成时间报告
+### Step 6：时间报告
 
 ```bash
 python .agents/skills/story-engine/tools/timer.py report --session "vplan-{新书名}" --output "仿写/{新书名}/timing_report.md"
 ```
-
----
-
-## Phase 2：纯写作（每批循环）
-
-⚠️ 具体编排步骤见「开书编排」Step 5。
-
-### B4 写章（10 agents 并行，`context: fork`）
-
-⚠️ **每个 agent 只写1章，禁止合并多章到同一个 agent。** 每批启动10个独立 Task。
-
-Task prompt 见 [prompts/write-chapter.md](prompts/write-chapter.md)。每章输出保存到 `正文/第N章.txt`。
-
-### B5 循环
-1. 检查是否还有未写章节
-2. 有 → 启动下一批
-3. 无 → 导出
-
----
-
-## Phase 3：导出
-```bash
-cat 仿写/{新书名}/正文/*.txt > 仿写/{新书名}/{新书名}.txt
-```
-
----
-
-## 断点续传
-
-使用 `timer.py` 的检查点功能，支持中断后继续。
-
-### 会话命名
-
-```
-vplan-{新书名}          # 全流程会话
-style-{作者名}-{书名}   # 蒸馏会话
-```
-
-### 蒸馏阶段（逐章检查点）
-
-```bash
-# 开始蒸馏第1章
-python timer.py start "蒸馏-第1章" --session "vplan-{新书名}"
-
-# 蒸馏完成，记录检查点
-python timer.py mark-completed "蒸馏-第1章" --session "vplan-{新书名}"
-
-# 查看哪些章节待处理
-python timer.py pending --session "vplan-{新书名}"
-```
-
-### 章纲阶段（逐章检查点）
-
-```bash
-python timer.py mark-completed "章纲-第1章" --session "vplan-{新书名}"
-```
-
-### 写章阶段（逐章检查点）
-
-```bash
-python timer.py mark-completed "写章-第1章" --session "vplan-{新书名}"
-```
-
-### 断点续传流程
-
-```bash
-# 1. 检查会话状态
-python timer.py status --session "vplan-{新书名}"
-
-# 2. 查看待完成任务
-python timer.py pending --session "vplan-{新书名}"
-
-# 3. 检查特定任务是否完成
-python timer.py is-completed "蒸馏-第1章" --session "vplan-{新书名}"
-
-# 4. 继续未完成的任务
-# ... 只运行 pending 的任务
-```
-
-### 命令参考
-
-| 命令 | 说明 |
-|------|------|
-| `start <任务>` | 开始计时 |
-| `stop <任务>` | 结束计时 |
-| `checkpoint <任务> --status <状态>` | 记录检查点 |
-| `mark-completed <任务>` | 标记完成 |
-| `mark-failed <任务>` | 标记失败 |
-| `is-completed <任务>` | 检查是否完成（返回 true/false） |
-| `status` | 显示会话状态 |
-| `pending` | 显示待完成任务 |
-| `report` | 生成时间报告 |
