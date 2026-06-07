@@ -399,7 +399,7 @@ def phase_write(config, start, end, workers=10):
                 continue
             text = ch_file.read_text(encoding='utf-8')
             chars = len(re2.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text))
-            if chars < 900 or chars > 2700:  # 统一1800字目标，±50%触发重跑
+            if chars < 900 or chars > 3000:  # 1800字目标，宽容上限
                 retry_list.append((ch, chars))
 
         if not retry_list:
