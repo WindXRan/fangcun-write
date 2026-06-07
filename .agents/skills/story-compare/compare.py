@@ -460,26 +460,11 @@ def generate_ai_analysis(start, end, all_stats, all_profiles, src_chapters, new_
     output.append('')
     output.append('1. **差异分析**：版本A和版本B在叙事风格、节奏控制、人设塑造、信息密度上有什么核心差异？')
     output.append('2. **优劣评估**：分别指出两版各自的优势和不足。哪个版本的阅读体验更好？好在哪里？')
-    output.append('3. **数据特征**：结合每章的统计指标和风格指纹，分析数据差异背后的叙事策略。')
-    output.append('4. **市场判断**：从网文市场的角度，哪一版更容易留住读者？为什么？')
-    output.append('5. **改进建议**：给较弱的那一版提出具体修改方向。')
-    output.append('6. **抄袭风险评估**：逐章对比两版的具体情节、对话、场景设计，判断是否存在抄袭嫌疑。重点关注：(1) 情节走向是否高度雷同 (2) 关键场景/对话是否有大段相似 (3) 人设/关系框架是否照搬 (4) 两版的差异化程度是否足够。给出具体的风险等级（低/中/高）和需要重点修改的段落。')
+    output.append('3. **市场判断**：从网文市场的角度，哪一版更容易留住读者？为什么？')
+    output.append('4. **改进建议**：给较弱的那一版提出具体修改方向。')
+    output.append('5. **抄袭风险评估**：逐章对比两版的具体情节、对话、场景设计，判断是否存在抄袭嫌疑。重点关注：(1) 情节走向是否高度雷同 (2) 关键场景/对话是否有大段相似 (3) 人设/关系框架是否照搬 (4) 两版的差异化程度是否足够。给出具体的风险等级（低/中/高）和需要重点修改的段落。')
     output.append('')
     output.append('请逐章分析，最后给出总体评价。**不要猜测哪版是仿写**，仅基于文本本身做判断。')
-    output.append('')
-    output.append('---')
-    output.append('')
-    
-    # 数据表
-    output.append('## 数据总览')
-    output.append('')
-    output.append('| 章节 | A字数 | B字数 | A对话% | B对话% | A句长 | B句长 | A短句% | B短句% | A-TTR | B-TTR | AI痕迹A | AI痕迹B |')
-    output.append('|------|-------|-------|--------|--------|-------|-------|--------|--------|-------|-------|---------|---------|')
-    for i, s in enumerate(all_stats):
-        ch = s[0]
-        src_p = all_profiles[i][1]
-        new_p = all_profiles[i][2]
-        output.append(f'| 第{ch}章 | {s[1]} | {s[6]} | {s[4]:.0%} | {s[9]:.0%} | {s[5]} | {s[10]} | {src_p["sentence_distribution"]["short_ratio_lt15"]:.0%} | {new_p["sentence_distribution"]["short_ratio_lt15"]:.0%} | {src_p["vocabulary_ttr"]} | {new_p["vocabulary_ttr"]} | {len(src_p["ai_tells"])} | {len(new_p["ai_tells"])} |')
     output.append('')
     output.append('---')
     output.append('')

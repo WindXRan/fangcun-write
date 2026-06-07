@@ -102,7 +102,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     # 需要源文字数时，脚本计算（API 无法跑 PowerShell）
     if prompt_type in ("plot-guide", "style-guide", "write-chapter", "trim-chapter") and chapter_num:
         src_chars = count_source_chars(config, chapter_num)
-        target_chars = 2000  # 番茄标准统一2000字
+        target_chars = 1800  # 番茄标准统一1800字
         replacements["源文字数"] = str(src_chars)
         replacements["目标字数"] = str(target_chars)
         replacements["目标字数_min"] = str(int(target_chars * 0.9))
@@ -399,8 +399,7 @@ def phase_write(config, start, end, workers=10):
                 continue
             text = ch_file.read_text(encoding='utf-8')
             chars = len(re2.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text))
-            target = count_source_chars(config, ch)
-            if target > 0 and (chars < target * 0.5 or chars > target * 1.5):
+            if chars < 900 or chars > 2700:  # 统一1800字目标，±50%触发重跑
                 retry_list.append((ch, chars))
 
         if not retry_list:
