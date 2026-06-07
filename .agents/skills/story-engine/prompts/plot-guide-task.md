@@ -46,7 +46,10 @@
 - "换血肉"的替代事件与源文完全不同
 - 鼓点节奏四段覆盖全章
 
-【输出】novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/plot_guide_N.md
+【输出】
+1. plot_guide_N.md（本指南）
+2. 运行脚本生成 de-ai_guide_N.md：
+   tools/verify_chapter.py --gen-guide <源文第N章.txt> -o novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b/de-ai_guide_N.md
 
 【回传】
-✅ plot 第N章 | plot_guide_N.md
+✅ plot 第N章 | plot_guide_N.md | de-ai_guide_N.md
