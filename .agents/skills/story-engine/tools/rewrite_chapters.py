@@ -183,6 +183,88 @@ def prepend_title(content, title):
 
 
 # ============================================================
+# Phase 0: Prep（提取元数据+章节目录）
+# ============================================================
+
+def phase_prep(config):
+    """从原始 TXT 提取头部元数据和章节目录，供 open-book 使用。兼容 projects/ 下各种目录结构。"""
+    import glob as g
+
+    base_dir = config.get("base_dir", os.getcwd())
+    author = config.get("author", "")
+    source_book = config.get("source_book", "")
+
+    cache_dir = Path(base_dir) / "projects" / author / source_book / "_cache"
+    os.makedirs(cache_dir, exist_ok=True)
+
+    # 1. 提取原始 TXT 头部（书名/作者/简介/标签/等级体系）
+    header_file = cache_dir / "_header.txt"
+    if not header_file.exists():
+        # 多路径搜索原始 TXT
+        raw_paths = [
+            Path(base_dir) / "projects" / f"{source_book}.txt",
+            Path(base_dir) / "projects" / author / f"{source_book}.txt",
+            Path(base_dir) / "projects" / author / source_book / f"{source_book}.txt",
+            Path(base_dir) / "novel-download-authors" / author / f"{source_book}.txt",
+            Path(base_dir) / f"{source_book}.txt",
+        ]
+        raw_txt = None
+        for p in raw_paths:
+            if p.exists():
+                raw_txt = p
+                break
+
+        if raw_txt:
+            with open(raw_txt, encoding='utf-8') as f:
+                head_lines = []
+                for i, line in enumerate(f):
+                    if i >= 80:
+                        break
+                    stripped = line.strip()
+                    # 多种章节标题模式：第1章 / 第一章 / 第001章 / Chapter 1
+                    if stripped and (
+                        (stripped.startswith('第') and '章' in stripped[:15]) or
+                        stripped.lower().startswith('chapter')
+                    ):
+                        break
+                    head_lines.append(line)
+            header_file.write_text(''.join(head_lines), encoding='utf-8')
+            print(f"[OK] _header.txt ({len(head_lines)}行) -> {raw_txt}")
+        else:
+            print(f"[WARN] 未找到原始 TXT，_header.txt 跳过")
+
+    # 2. 生成章节目录（从已拆分的章节）
+    toc_file = cache_dir / "_toc.txt"
+    if not toc_file.exists():
+        # 多路径搜索拆分章节
+        chapters_dirs = [
+            cache_dir / "chapters",
+            Path(base_dir) / "projects" / author / source_book / "源文",
+            Path(base_dir) / "novel-download-authors" / author / source_book / "源文",
+        ]
+        chapter_files = []
+        for d in chapters_dirs:
+            if d.exists():
+                import re as re_toc
+                cf = sorted(
+                    d.glob("第*章*.txt"),
+                    key=lambda f: int(re_toc.search(r'第(\d+)章', f.stem).group(1)) if re_toc.search(r'第(\d+)章', f.stem) else 0
+                )
+                if cf:
+                    chapter_files = cf
+                    break
+
+        if chapter_files:
+            toc_lines = [f"总章数: {len(chapter_files)}\n\n"]
+            for cf in chapter_files:
+                toc_lines.append(cf.stem)
+            toc_file.write_text('\n'.join(toc_lines), encoding='utf-8')
+            print(f"[OK] _toc.txt ({len(chapter_files)}章)")
+        else:
+            print(f"[WARN] 未找到拆分章节，_toc.txt 跳过")
+
+
+# ============================================================
 # Phase 1: 开书
 # ============================================================
 
@@ -548,16 +630,17 @@ def phase_postfix(config, start, end):
             lines[0] = lines[0][2:]
             fixed += 1
 
-        # 2. 字数超标则从后往前砍单句段（机械操作，不调LLM）
+        # 2. 字数超标则轻度削减（上限10段，防误伤）
         target = count_source_chars(config, ch)
         if target > 0:
             body_lines = lines[1:] if lines and lines[0].startswith('第') else lines
             body_text = '\n'.join(body_lines)
             chars = len(re.sub(r'\s', '', body_text))
-            if chars > target * 1.15:
+            if chars > target * 1.25:  # 超过25%才触发（原15%太敏感）
                 i = len(lines) - 1
                 cut = 0
-                while chars > target * 1.15 and i >= 0:
+                max_cut = 10  # 上限10段，防砍残
+                while chars > target * 1.20 and i >= 0 and cut < max_cut:
                     stripped = lines[i].strip()
                     if stripped and len(stripped) < 30 and not stripped.startswith('第'):
                         del lines[i]
@@ -729,6 +812,9 @@ def main():
 
     t0 = time.time()
     phases = set(args.phase.split(","))
+
+    if "all" in phases or "prep" in phases or "open-book" in phases:
+        phase_prep(config)
 
     if "all" in phases or "open-book" in phases:
         concept_path = Path(config["rewrites_dir"]) / "concept.md"
