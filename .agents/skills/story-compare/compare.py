@@ -141,8 +141,23 @@ def avg_sentence_len(text):
     words = [len(re.sub(r'[\s\n\r]', '', s)) for s in sents]
     return round(sum(words) / len(words), 1)
 
-def find_source_chapter(chapter_num, source_override=None):
+def find_source_chapter(chapter_num, source_override=None, base_dir=None):
     results = []
+    
+    # 0. 优先检查仿写目录下的源文章节（最可靠）
+    if base_dir:
+        local_src = os.path.join(base_dir, '源文章节')
+        if os.path.isdir(local_src):
+            pattern = os.path.join(local_src, f'第{chapter_num:03d}章*.txt')
+            for f in sorted(glob.glob(pattern)):
+                results.append(f)
+            if not results:
+                pattern = os.path.join(local_src, f'第{chapter_num}章*.txt')
+                for f in sorted(glob.glob(pattern)):
+                    results.append(f)
+            if results:
+                return results
+    
     if source_override:
         src_dir = os.path.join(NOVEL_DB, source_override)
         if os.path.isdir(src_dir):
@@ -167,17 +182,21 @@ def find_source_chapter(chapter_num, source_override=None):
                             results.append(path)
     if results:
         return results
-    # 4. 全局搜索（兜底）
-    pattern = os.path.join(NOVEL_DB, '*', '*', '源文', f'第{chapter_num}章*.txt')
-    for f in sorted(glob.glob(pattern)):
-        results.append(f)
-    pattern = os.path.join(NOVEL_DB, '*', '*', f'第{chapter_num}章*.txt')
-    for f in sorted(glob.glob(pattern)):
-        if f not in results:
-            results.append(f)
-    pattern2 = os.path.join(NOVEL_DB, '*', f'第{chapter_num}章*.txt')
-    for f in sorted(glob.glob(pattern2)):
-        if f not in results:
+    # 5. 全局搜索（兜底，但限制在同作者目录下）
+    if source_override:
+        author = source_override.split('/')[0] if '/' in source_override else None
+        if author:
+            pattern = os.path.join(NOVEL_DB, author, '*', '源文', f'第{chapter_num}章*.txt')
+            for f in sorted(glob.glob(pattern)):
+                results.append(f)
+            pattern = os.path.join(NOVEL_DB, author, '*', f'第{chapter_num}章*.txt')
+            for f in sorted(glob.glob(pattern)):
+                if f not in results:
+                    results.append(f)
+    # 6. 最后才全局搜索（可能匹配到错误的书）
+    if not results:
+        pattern = os.path.join(NOVEL_DB, '*', '*', '源文', f'第{chapter_num}章*.txt')
+        for f in sorted(glob.glob(pattern)):
             results.append(f)
     return results
 
@@ -216,8 +235,8 @@ def extract_from_combined(file_path, chapter_num):
 def strip_title_line(text):
     lines = text.split('\n')
     if lines and re.match(r'^第\d+章', lines[0].strip()):
-        lines = lines[1:]
-    return '\n'.join(lines).strip()
+        return '\n'.join(lines[1:]).strip(), lines[0].strip()
+    return text, ''
 
 # ── 数据收集 ──────────────────────
 
@@ -239,9 +258,9 @@ def collect_data(base_dir, start, end, source_override):
         new_dialog = calc_dialog_ratio(new_text)
         new_avg_len = avg_sentence_len(new_text)
         new_profile = analyze_style(new_text)
-        new_chapters[ch] = strip_title_line(new_text)
+        new_chapters[ch] = strip_title_line(new_text)  # (content, title)
 
-        source_files = find_source_chapter(ch, source_override)
+        source_files = find_source_chapter(ch, source_override, base_dir)
         src_text = None
         src_author = None
 
@@ -267,7 +286,7 @@ def collect_data(base_dir, start, end, source_override):
             all_stats.append((ch, src_words, src_paras, src_sents, src_dialog, src_avg_len,
                               new_words, new_paras, new_sents, new_dialog, new_avg_len))
             all_profiles.append((ch, src_profile, new_profile))
-            src_chapters[ch] = strip_title_line(src_text)
+            src_chapters[ch] = strip_title_line(src_text)  # (content, title)
 
     return all_stats, all_profiles, src_chapters, new_chapters
 
@@ -425,9 +444,10 @@ def generate_ai_analysis(start, end, all_stats, all_profiles, src_chapters, new_
     output.append('# 版本A（源文）')
     output.append('')
     for ch in sorted(src_chapters.keys()):
-        output.append(f'## 第{ch}章')
+        content, title = src_chapters[ch]
+        output.append(f'## {title}' if title else f'## 第{ch}章')
         output.append('')
-        output.append(src_chapters[ch])
+        output.append(content)
         output.append('')
     output.append('---')
     output.append('')
@@ -436,9 +456,10 @@ def generate_ai_analysis(start, end, all_stats, all_profiles, src_chapters, new_
     output.append('# 版本B（新书）')
     output.append('')
     for ch in sorted(new_chapters.keys()):
-        output.append(f'## 第{ch}章')
+        content, title = new_chapters[ch]
+        output.append(f'## {title}' if title else f'## 第{ch}章')
         output.append('')
-        output.append(new_chapters[ch])
+        output.append(content)
         output.append('')
     
     return '\n'.join(output)
@@ -495,7 +516,9 @@ def main():
         src_txt_path = os.path.join(out_dir, f'源文_{start}-{end}.txt')
         with open(src_txt_path, 'w', encoding='utf-8') as f:
             for ch in sorted(src_chapters.keys()):
-                f.write(src_chapters[ch])
+                content, title = src_chapters[ch]
+                f.write(f'{title}\n\n' if title else f'第{ch}章\n\n')
+                f.write(content)
                 f.write('\n\n')
         print(f'源文合成版已生成: {src_txt_path}')
 
@@ -503,7 +526,9 @@ def main():
         new_txt_path = os.path.join(out_dir, f'新书_{start}-{end}.txt')
         with open(new_txt_path, 'w', encoding='utf-8') as f:
             for ch in sorted(new_chapters.keys()):
-                f.write(new_chapters[ch])
+                content, title = new_chapters[ch]
+                f.write(f'{title}\n\n' if title else f'第{ch}章\n\n')
+                f.write(content)
                 f.write('\n\n')
         print(f'新书合成版已生成: {new_txt_path}')
 

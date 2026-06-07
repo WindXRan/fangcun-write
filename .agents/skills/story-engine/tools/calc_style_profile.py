@@ -11,14 +11,12 @@ def count_sentences(text):
     return [s.strip() for s in raw if len(s.strip()) > 2]
 
 def dialogue_ratio(text):
-    in_q = False
-    chars = 0
-    for ch in text:
-        if ch in '\u201c\u201d\u300c\u300e"':
-            in_q = not in_q
-        elif in_q:
-            chars += 1
-    return chars / len(text) if text else 0
+    """对话行占比：含引号的行数 / 总行数"""
+    lines = [l for l in text.split('\n') if l.strip()]
+    if not lines:
+        return 0
+    dialogue_lines = [l for l in lines if '\u201c' in l or '\u201d' in l or '\u300c' in l or '"' in l]
+    return len(dialogue_lines) / len(lines)
 
 def colloquial_index(text):
     particles = set('啊吧吗呢嘛哦呀啦哟嗯哈噢')
