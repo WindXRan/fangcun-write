@@ -8,5 +8,5 @@
   "reasoning_effort": "low",
   "system_prompt": "你是一个专业的网文写手，擅长仿写风格迁移。",
   "prompts_dir": ".agents/skills/story-engine/prompts",
-  "output_dir": "projects/初点点/染指枭雄/rewrites/染指枭雄仿写/chapters"
+  "rewrites_dir": "projects/初点点/染指枭雄/rewrites/染指枭雄仿写"
 }

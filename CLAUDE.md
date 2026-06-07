@@ -1,85 +1,82 @@
 # AI网文小说项目 — 仿写引擎
 
-## 项目定位
+## 核心原则
 
-**独立项目**，基于自研仿写流程引擎，不依赖上游 oh-story-claudecode。
+**任何优化针对 workflow，不针对产出内容。** 不修单章，只修 pipeline。每次抽卡自动出稿，0 人工。
 
-## 架构
+防线在流程里：
+- 冲突类型强制换（身份→利益/信息差/道德，不可相同）
+- 台词 0 重合（6 字以上连续匹配视为违规）
+- 换皮检验：剥掉人名地名，认不出源文→合格
+- 题材不变，血肉全换
+
+## Pipeline
 
 ```
-story-engine（guide模式）
-├── Phase 1：一键pipeline（拆章+风格分析+创建目录）
-├── Phase 2：开书（新书设定 + 全书弧线）
-├── Phase 3：Guide生成（1 agent，20个文件）
-├── Phase 4：写章（10 agents×N批，guide驱动，一次出稿）
-└── Phase 5：批后（分层Critic + 冲突检测 + 分布一致性）
+Phase 1:   开书 (pro, 1 call)        → concept.md（3书名+3简介+固定角色名+弧线）
+Phase 1.5: 风格画像 (pro, 1 call)    → style-profile.md（全局参数，注入 system prompt）
+Phase 2:   Guides (flash, 2N 并行)   → plot_{N}.md + style_{N}.md
+Phase 3:   写章 (flash, N 并行)      → ch_{N}.txt（章名自生成）
+Phase 3.5: Trim (flash)              → 超字数 20% 的章自动精简
+Phase 3.6: 衔接修复 (flash, N-1 并行) → 修章间重叠
+Phase 4:   对比 (本地)                → compare/报告
 ```
-
-## Skill 路由表
-
-| 命令 | Skill | 说明 |
-|------|-------|------|
-| `/仿写`、`/vPlan` | story-engine | 仿写引擎（guide模式） |
-| `/分析风格` | story-style | 源文分析（插件式：style+hook+...） |
-| `/story-scan`、`/番茄扫描` | story-scan | 番茄小说排行榜分析 |
-| `/story-cover`、`/封面` | story-cover | 小说封面生成 |
-| `/story-compare`、`/对比` | story-compare | 仿写书与源文逐章对比 |
-| `/novel-download`、`/下载小说` | novel-download | 番茄小说下载 |
 
 ## 文件结构
 
 ```
-AI网文小说项目/
-├── .agents/
-│   ├── skills/
-│   │   ├── story-engine/             # 仿写引擎（主入口）
-│   │   ├── story-style/              # 源文分析
-│   │   ├── story-compare/            # 对比文件生成
-│   │   ├── story-scan/               # 番茄排行榜分析
-│   │   ├── story-cover/              # 封面生成
-│   │   ├── novel-download/           # 小说下载
-│   │   ├── story-author-query/       # 作者查询
-│   │   └── _archived/                # 归档旧版 skill
-│   └── hooks/
-├── projects/                        # 项目数据（源文 + 仿写）
-│   └── {作者名}/{书名}/
-│       ├── original.txt             # 原始下载
-│       ├── _cache/                  # 脚本缓存
-│       │   ├── chapters/            # 拆章后章节
-│       │   └── analysis/            # 风格分析缓存
-│       └── rewrites/{新书名}/       # 仿写项目
-│           ├── concept.md           # 新书设定
-│           ├── arc.md               # 全书弧线
-│           ├── truth.md             # 真相追踪
-│           ├── guides/              # 写作 guide
-│           │   ├── plot_001.md
-│           │   └── style_001.md
-│           ├── chapters/            # 正文
-│           │   └── ch_001.txt
-│           ├── compare/             # 对比报告
-│           └── export/              # 合并导出
-│               └── {新书名}.txt
+projects/{作者}/{书名}/
+├── _cache/chapters/第N章.txt        # 拆章缓存
+└── rewrites/{新书名}/
+    ├── concept.md                    # 设定+弧线+角色名
+    ├── style-profile.md             # 全局风格画像
+    ├── guides/plot_{N}.md           # 章纲（节拍映射+高光+台词原创性）
+    ├── guides/style_{N}.md          # 风格速查（定量锚点+执行规则）
+    ├── chapters/ch_{N}.txt          # 正文
+    └── compare/                      # 对比报告
 ```
 
-## 运行模式
+## 模型策略
 
-触发 `/仿写` 或 `/vPlan` 时，**全权代理**，自动执行以下决策无需问用户：
-- 新书名：分析源文后自动给出候选并选定
-- 仿写方向：自动判断
-- 仿写体量：全集仿写
+| 阶段 | 模型 | 原因 |
+|------|------|------|
+| 开书 | pro (reasoning=high) | 需要深度分析源文模式 |
+| 风格画像 | pro (reasoning=high) | 需要精准量化 |
+| Guides | flash | 够用，速度快 |
+| 写章 | flash | 字数听话，指令执行好 |
+| Trim/衔接 | flash | 简单任务 |
 
-## 仿写项目识别
+**pro 写章更好看但字数失控（+50%），flash 听话但偶有随机失效（~10%）。**
+**字数控制：max_tokens = 目标字数 × 1.6，prompt 中用 ±10% 区间。**
 
-用户说"继续""续写"时，检测项目目录下是否有 concept.md 和 arc.md：
-- 存在 → 仿写项目，路由到 vPlan 续写
-- 不存在 → 新项目，从 Phase 1 开始
+## 角色命名反 AI
 
-## Compact 后恢复
+AI 默认起名三大通病：全员诗意双名（沈砚辞、林知意）、古风生僻字、统一格式。
+破解：混搭单名双名、配角用常见姓（王李张刘陈）、允许外号、同辈字合理（姐弟可同辈字）。
 
-写作中的关键上下文：
-1. 当前写作项目名称和进度
-2. 最近讨论的角色设定变更
-3. 未完成的伏笔列表
-4. 当前章节的情绪/节奏目标
+## Prompt 设计原则
 
-如果存在 `rewrites/{书名}/truth.md`，compact 后首先读取恢复。
+- **极简 write-chapter**：只写步骤，不写规则。规则归位到 style_guide 和 style-profile
+- **style_guide 每条可 grep**：不写"描写细腻"，写"用了'心中涌起'→ 违规"
+- **plot_guide 显式映射**：源文列 vs 新书列，冲突类型不同，动作反应全换
+- **高光时刻**：每章至少一个甜/虐/笑/反差/细节场景
+
+## Flash 已知天花板
+
+- 单章字数 ±20% 波动（60-70% 章达标）
+- ~10% 随机失效（角色漂移、偶抄源文、过短）→ 重跑即可
+- 并行无跨章感知 → 靠衔接修复补
+- 句长偏短、对话偏多是模型特征，非 AI 痕迹
+
+## 使用
+
+```bash
+# 完整 188 章
+python tools/rewrite_chapters.py --config configs/xxx.json --start 1 --end 188 --workers 30
+
+# 分步（concept 保护：已存在则自动跳过）
+python tools/rewrite_chapters.py --config configs/xxx.json --phase open-book,style-profile
+python tools/rewrite_chapters.py --config configs/xxx.json --phase guides,write,trim,continuity,compare
+```
+
+> ⚠️ `api_key` 为 null 时从 `$env:API_KEY` 读取。不要将 key 写入配置文件。
