@@ -113,7 +113,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     if prompt_type == "write-chapter" and chapter_num:
         target = int(replacements.get("目标字数", 0))
         if target > 0:
-            max_tokens = int(target * 1.6)  # 给足空间防截断
+            max_tokens = int(target * 1.3)  # 刚好覆盖±10%浮动
 
     # 合并额外替换变量（如串行模式的上一章摘要）
     if extra_replacements:
@@ -129,7 +129,17 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         if profile:
             sys_prompt = profile + "\n\n---\n\n" + sys_prompt
 
-    return call_api(api_key, model, user_prompt, reasoning_effort, max_tokens, sys_prompt)
+    label = f"ch{chapter_num or '?'} {prompt_type}"
+    t_req = time.time()
+    try:
+        result = call_api(api_key, model, user_prompt, reasoning_effort, max_tokens, sys_prompt)
+        elapsed = time.time() - t_req
+        print(f"  [OK] {label} ({elapsed:.0f}s)")
+        return result
+    except Exception as e:
+        elapsed = time.time() - t_req
+        print(f"  [FAIL] {label} ({elapsed:.0f}s): {e}")
+        raise
 
 
 def save_file(dir_path, filename, content):
@@ -329,34 +339,34 @@ def phase_guides(config, start, end, workers=5, serial=False):
 
     # plot-guide
     print(f"\n{'=' * 50}")
-    print(f"Phase 2: plot_guide (flash, ch{start}-{end}, {'串行' if serial else '并行'})")
+    print(f"Phase 2: plot_guide (flash, ch{start}-{end}, {'串行(质量)' if serial else '并行(速度)'})")
     print("=" * 50)
 
-    prev_summary = ""  # 上一章的新书剧情摘要
-    ok, fail = {}, {}
-    for ch in range(start, end + 1):
-        try:
-            # 串行模式下，把上一章的摘要注入 prompt
-            overrides = {}
-            if serial and prev_summary:
-                overrides["上一章摘要"] = prev_summary
-            result = run_one(flash, "plot-guide", ch, extra_replacements=overrides)
-            path = save_file(guides_dir, f"plot_{ch}.md", result)
-            ok[ch] = path
-
-            if serial:
-                # 从生成的 plot-guide 中提取新书剧情摘要（取最后300字）
-                prev_summary = result[-300:] if len(result) > 300 else result
-                # 优先提取包含"新书"关键词的节拍
+    if serial:
+        # 串行模式：每章带上章摘要，保持连贯
+        prev_summary = ""
+        ok, fail = {}, {}
+        for ch in range(start, end + 1):
+            try:
+                overrides = {}
+                if prev_summary:
+                    overrides["上一章摘要"] = prev_summary
+                result = run_one(flash, "plot-guide", ch, extra_replacements=overrides)
+                path = save_file(guides_dir, f"plot_{ch}.md", result)
+                ok[ch] = path
+                # 提取摘要：优先取新书节拍
                 import re as re_p
                 beats = re_p.findall(r'新书[：:].*?(?=\n|$)', result)
                 if not beats:
                     beats = re_p.findall(r'节拍\d+[：:].*?(?=\n|$)', result)
-                if beats:
-                    prev_summary = '；'.join(beats[-3:])  # 最后3个节拍
-        except Exception as e:
-            fail[ch] = str(e)
-            print(f"  [FAIL] ch{ch}: {e}")
+                prev_summary = '；'.join(beats[-3:]) if beats else result[-300:]
+                print(f"  [OK] ch{ch} plot-guide")
+            except Exception as e:
+                fail[ch] = str(e)
+                print(f"  [FAIL] ch{ch}: {e}")
+    else:
+        # 并行模式：独立生成，速度快
+        ok, fail = batch_run(flash, "plot-guide", start, end, workers, guides_dir, "plot_{ch}.md")
 
     print(f"plot_guide: OK={len(ok)} FAIL={len(fail)}")
 
@@ -366,7 +376,8 @@ def phase_guides(config, start, end, workers=5, serial=False):
 # ============================================================
 
 def phase_write(config, start, end, workers=10):
-    """并行写章（flash 速度快、字数听话）。"""
+    """并行写章 + 异常章自动重跑（<1500字或>3000字触发）。"""
+    import re as re2
     chapters_dir = f"{config['rewrites_dir']}/chapters"
     flash = {**config, "model": "deepseek-v4-flash", "reasoning_effort": "low"}
 
@@ -374,18 +385,43 @@ def phase_write(config, start, end, workers=10):
     print(f"Phase 3: 写章 (flash, ch{start}-{end}, {workers}w)")
     print("=" * 50)
 
+    MIN_CHARS, MAX_CHARS = 1500, 3000
+    t0 = time.time()
+
+    # 第一轮
     ok, fail = batch_run(flash, "write-chapter", start, end, workers, chapters_dir, "ch_{ch:03d}.txt", skip_existing=True)
 
-    total = 0
-    for ch, path in ok.items():
-        try:
-            chars = len(Path(path).read_text(encoding='utf-8').replace('\n','').replace(' ','').replace('\r',''))
-            total += chars
-            print(f"[OK] ch{ch} ({chars}字)")
-        except:
-            pass
+    # 重跑异常章（最多2轮）
+    for retry_round in range(1, 3):
+        retry_list = []
+        for ch in range(start, end + 1):
+            ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+            if not ch_file.exists():
+                continue
+            text = ch_file.read_text(encoding='utf-8')
+            chars = len(re2.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text))
+            if chars < MIN_CHARS or chars > MAX_CHARS:
+                retry_list.append((ch, chars))
 
-    print(f"\n总: OK={len(ok)} FAIL={len(fail)} 字数≈{total}")
+        if not retry_list:
+            break
+
+        print(f"  [RETRY R{retry_round}] {len(retry_list)}章异常: {[(c, w) for c,w in retry_list]}")
+        for ch, _ in retry_list:
+            ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+            ch_file.unlink(missing_ok=True)
+
+        ok2, fail2 = batch_run(flash, "write-chapter",
+            min(c for c, _ in retry_list), max(c for c, _ in retry_list),
+            workers, chapters_dir, "ch_{ch:03d}.txt", skip_existing=False)
+        ok.update(ok2)
+        fail.update(fail2)
+
+    total = sum(
+        len(Path(path).read_text(encoding='utf-8').replace('\n','').replace(' ','').replace('\r',''))
+        for path in ok.values()
+    )
+    print(f"  完成: OK={len(ok)} FAIL={len(fail)} 总字数≈{total} | 耗时 {time.time()-t0:.0f}s")
     return ok, fail
 
 
@@ -413,6 +449,8 @@ def batch_run(config, prompt_type, start, end, workers, output_dir, filename_fmt
         return results, errors
 
     print(f"  待处理: {len(todo)}章")
+    done, total = 0, len(todo)
+    t_start = time.time()
     with ThreadPoolExecutor(max_workers=workers) as executor:
         futures = {executor.submit(run_one, config, prompt_type, ch): ch for ch in todo}
         for future in as_completed(futures):
@@ -424,7 +462,15 @@ def batch_run(config, prompt_type, start, end, workers, output_dir, filename_fmt
                 results[ch] = path
             except Exception as e:
                 errors[ch] = str(e)
-                print(f"[FAIL] ch{ch}: {e}")
+            done += 1
+            # 实时进度+ETA：每5%或最后一章打印
+            if done % max(1, total // 20) == 0 or done == total:
+                elapsed = time.time() - t_start
+                speed = elapsed / done  # 秒/章
+                eta = speed * (total - done)  # 剩余秒
+                pct = done * 100 // total
+                bar = '=' * (pct // 5) + '>' + ' ' * (20 - pct // 5)
+                print(f"  [{done}/{total}] [{bar}] {pct}% | {elapsed:.0f}s | ETA {eta:.0f}s")
     return results, errors
 
 
@@ -527,7 +573,7 @@ def validate_one(config, ch):
 
     # 4. AI 路标词（源文水平+2以内）
     if src:
-        limit = max(src["ai_markers"] + 2, 2)
+        limit = max(src["ai_markers"] + 1, 1)  # 收紧AI痕迹
         if metrics["ai_markers"] > limit:
             issues.append(f"AI路标词 {metrics['ai_markers']}处 (源文{src['ai_markers']}, 上限{limit})")
 
@@ -625,33 +671,20 @@ def phase_postfix(config, start, end):
         lines = text.strip().split('\n')
         fixed = 0
 
-        # 1. 去标题 # 号
+        # 1. 去标题 # 号；过滤源文标题；删重复标题行
         if lines and lines[0].startswith('# '):
             lines[0] = lines[0][2:]
             fixed += 1
-
-        # 2. 字数超标则轻度削减（上限10段，防误伤）
-        target = count_source_chars(config, ch)
-        if target > 0:
-            body_lines = lines[1:] if lines and lines[0].startswith('第') else lines
-            body_text = '\n'.join(body_lines)
-            chars = len(re.sub(r'\s', '', body_text))
-            if chars > target * 1.25:  # 超过25%才触发（原15%太敏感）
-                i = len(lines) - 1
-                cut = 0
-                max_cut = 10  # 上限10段，防砍残
-                while chars > target * 1.20 and i >= 0 and cut < max_cut:
-                    stripped = lines[i].strip()
-                    if stripped and len(stripped) < 30 and not stripped.startswith('第'):
-                        del lines[i]
-                        cut += 1
-                        chars = len(re.sub(r'\s', '', '\n'.join(
-                            lines[1:] if lines and lines[0].startswith('第') else lines
-                        )))
-                    i -= 1
-                if cut > 0:
-                    print(f"  ch{ch:03d}: 砍{cut}段, {chars}字")
-                    fixed += cut
+        src_title = get_source_title(config, ch)
+        if src_title and lines and lines[0].strip() == src_title.strip():
+            lines[0] = f"第{ch}章"  # 替换为通用标题
+            fixed += 1
+        # 删除紧跟标题后的重复标题行（如 line 0 和 line 2 都是"第N章"）
+        if len(lines) >= 3 and lines[2].startswith('第') and '章' in lines[2][:10]:
+            del lines[2]  # 删掉重复标题
+            if len(lines) > 2 and lines[2].strip() == '':
+                del lines[2]  # 顺便删空行
+            fixed += 1
 
         if fixed > 0:
             ch_file.write_text('\n'.join(lines) + '\n', encoding='utf-8')
@@ -732,7 +765,14 @@ def phase_continuity(config, start, end, workers=30):
             return None
 
         try:
+            import re as re_c
             result = run_one(flash, "continuity-fix", prev_ch)
+            # 安全校验：输出不得短于源文50%
+            target = count_source_chars(config, curr_ch)
+            result_chars = len(re_c.sub(r'\s', '', result))
+            if target > 0 and result_chars < target * 0.5:
+                print(f"  [SKIP] ch{prev_ch}->ch{curr_ch}: 输出过短({result_chars}字), 保留原章")
+                return None
             # 保留原标题
             orig_lines = curr_file.read_text(encoding='utf-8').strip().split('\n')
             title = orig_lines[0] if orig_lines and orig_lines[0].startswith('第') else f"第{curr_ch}章"
@@ -790,11 +830,11 @@ def main():
     parser.add_argument("--config", required=True)
     parser.add_argument("--start", type=int, default=1)
     parser.add_argument("--end", type=int, default=10)
-    parser.add_argument("--workers", type=int, default=10)
+    parser.add_argument("--workers", type=int, default=30)
     parser.add_argument("--serial", action="store_true",
                         help="plot-guide 串行生成，保持章间连贯（质量模式）")
     parser.add_argument("--phase", default="all",
-                        help="all | open-book | style-profile | guides | write | validate | trim | continuity | compare")
+                        help="all | open-book | style-profile | guides | write | validate | trim | compare（外加: continuity）")
 
     args = parser.parse_args()
 
@@ -839,7 +879,7 @@ def main():
     if "all" in phases or "trim" in phases:
         phase_trim(config, args.start, args.end)
 
-    if "all" in phases or "continuity" in phases:
+    if "continuity" in phases:
         phase_continuity(config, args.start, args.end, args.workers)
 
     if "all" in phases or "compare" in phases:
