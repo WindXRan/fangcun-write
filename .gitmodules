@@ -1,9 +1,0 @@
-[submodule "inkos"]
-	path = inkos
-	url = https://github.com/Narcooo/inkos.git
-[submodule "harnessNovel"]
-	path = harnessNovel
-	url = https://github.com/XTmingyue/harnessNovel.git
-[submodule "novel-rewriter"]
-	path = novel-rewriter
-	url = https://github.com/qscwzby7t6-svg/novel-rewriter.git
