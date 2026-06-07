@@ -1,4 +1,4 @@
-写《{新书名}》第{N}章。字数：{目标字数}字（±10%）。正文第一行写"第{N}章 XXX"（不加#）。
+写《{新书名}》第{N}章。字数：{目标字数}字（±10%）。正文第一行写"第{N}章 XXX"（XXX必填，从本章提炼，不加#）。
 
 【plot_guide】projects/{作者名}/{源书名}/rewrites/{新书名}/guides/plot_{N}.md
 【style_guide】projects/{作者名}/{源书名}/rewrites/{新书名}/guides/style_{N}.md
