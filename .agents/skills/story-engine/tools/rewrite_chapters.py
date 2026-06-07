@@ -108,12 +108,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         replacements["目标字数_min"] = str(int(target_chars * 0.9))
         replacements["目标字数_max"] = str(int(target_chars * 1.1))
 
-    # 写章时根据目标字数限制 max_tokens
-    max_tokens = 8192
-    if prompt_type == "write-chapter" and chapter_num:
-        target = int(replacements.get("目标字数", 0))
-        if target > 0:
-            max_tokens = int(target * 1.3)  # 刚好覆盖±10%浮动
+    max_tokens = 8192  # 不限制，靠重跑兜底
 
     # 合并额外替换变量（如串行模式的上一章摘要）
     if extra_replacements:
