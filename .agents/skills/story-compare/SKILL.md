@@ -24,8 +24,17 @@ trigger:
 ## 执行
 
 ```bash
-python .agents/skills/story-compare/compare.py "{书名}" [起始章] [结束章]
+python .agents/skills/story-compare/compare.py "{书名}" [起始章] [结束章] [--source {作者名}/{源书名}]
 ```
+
+**源文查找优先级**：
+1. 仿写目录下的`源文章节/`子目录（最可靠）
+2. `新书概念.md`中的`源文路径`字段
+3. `--source`参数指定的`novel-download-authors/{作者名}/{源书名}/源文/`目录
+4. 同作者目录下搜索
+5. 全局搜索（兜底，可能匹配到错误的书）
+
+**建议**：始终使用`--source`参数指定源文路径，避免全局搜索匹配错误。
 
 ## 输出
 

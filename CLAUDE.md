@@ -7,19 +7,19 @@
 ## 架构
 
 ```
-story-engine（全书规划先行引擎）
-├── Phase 0：源文分析（可缓存，独立skill可并行）
-│   ├── phase0-style：拆章+风格指纹+inkos 8维度
-│   └── phase0-strategy：排除项+节奏骨架+叙事策略
-├── Phase 1：全书规划（弧线骨架+章纲+映射）
-└── Phase 2：纯写作出稿（10 agents并行，无后处理）
+story-engine（guide模式）
+├── Phase 1：一键pipeline（拆章+风格分析+创建目录）
+├── Phase 2：开书（新书设定 + 全书弧线）
+├── Phase 3：Guide生成（1 agent，20个文件）
+├── Phase 4：写章（10 agents×N批，guide驱动，一次出稿）
+└── Phase 5：批后（分层Critic + 冲突检测 + 分布一致性）
 ```
 
 ## Skill 路由表
 
 | 命令 | Skill | 说明 |
 |------|-------|------|
-| `/仿写`、`/vPlan` | story-engine | 仿写引擎（全书规划先行） |
+| `/仿写`、`/vPlan` | story-engine | 仿写引擎（guide模式） |
 | `/分析风格` | story-style | 源文分析（插件式：style+hook+...） |
 | `/story-scan`、`/番茄扫描` | story-scan | 番茄小说排行榜分析 |
 | `/story-cover`、`/封面` | story-cover | 小说封面生成 |
@@ -32,24 +32,29 @@ story-engine（全书规划先行引擎）
 AI网文小说项目/
 ├── .agents/
 │   ├── skills/
-│   │   ├── story-engine/             # 仿写引擎（主入口，共享工具+prompt）
-│   │   ├── story-style/              # 源文分析（插件式，引用story-engine）
-│   │   ├── story-compare/             # 对比文件生成
-│   │   ├── story-scan/                # 番茄排行榜分析
-│   │   ├── story-cover/               # 封面生成
-│   │   ├── novel-download/            # 小说下载
-│   │   ├── story-author-query/        # 作者查询
-│   │   └── _archived/                 # 归档旧版 skill
+│   │   ├── story-engine/             # 仿写引擎（主入口）
+│   │   ├── story-style/              # 源文分析
+│   │   ├── story-compare/            # 对比文件生成
+│   │   ├── story-scan/               # 番茄排行榜分析
+│   │   ├── story-cover/              # 封面生成
+│   │   ├── novel-download/           # 小说下载
+│   │   ├── story-author-query/       # 作者查询
+│   │   └── _archived/                # 归档旧版 skill
 │   └── hooks/
-├── novel-download-authors/            # 源文缓存（只读）
+├── novel-download-authors/           # 源文 + 仿写（同一目录）
 │   └── {作者名}/{书名}/
-│       ├── 源文/                      # 拆章后章节
-│       └── 蒸馏/mode-b/              # 风格分析缓存
-└── 仿写/                              # 所有仿写产出
-    └── {新书名}/
-        ├── 设定/
-        ├── 大纲/
-        └── 正文/
+│       ├── 源文/                     # 拆章后章节
+│       ├── 蒸馏/mode-b/             # 风格分析缓存
+│       └── 仿写/{新书名}_仿写/
+│           ├── 设定/
+│           │   ├── 新书设定.md
+│           │   ├── 全书弧线.md
+│           │   └── guides/
+│           │       ├── plot_guide_N.md
+│           │       └── style_guide_N.md
+│           ├── 追踪/
+│           │   └── 真相.md
+│           └── 正文/第N章.txt
 ```
 
 ## 运行模式
@@ -63,7 +68,7 @@ AI网文小说项目/
 
 用户说"继续""续写"时，检测项目目录下是否有设定和大纲文件：
 - 存在 → 仿写项目，路由到 vPlan 续写
-- 不存在 → 新项目，从 Phase 0 开始
+- 不存在 → 新项目，从 Phase 1 开始
 
 ## Compact 后恢复
 
