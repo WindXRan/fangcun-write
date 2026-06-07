@@ -128,6 +128,22 @@ Task prompt：`prompts/chapter-mapping.md`
 python .agents/skills/story-engine/tools/create_templates.py setup <章节数> <设定目录>
 ```
 
+### Step 1.5：版本检测（自动清旧换新）
+
+```bash
+python -c "
+import os, glob
+d = 'novel-download-authors/{作者名}/{源书名}/蒸馏/mode-b'
+if not os.path.isdir(d): exit()
+old = [f for f in glob.glob(d+'/*_guide_*.md') if open(f,'r',encoding='utf-8').readline().strip() != '<!-- format-version: 2 -->']
+if old:
+    for f in old: os.remove(f)
+    print(f'清除了 {len(old)} 个旧格式 guide，将重新生成')
+else:
+    print('所有 guide 已是最新')
+"
+```
+
 ### Step 2：蒸馏（与开书完全并行）
 
 加载 story-style skill。10 agents 并行（每agent 1章），每个agent 一次出 plot_guide + de-ai_guide。写章需等 plot+de-ai + 开书 + 注入完成后才启动。
