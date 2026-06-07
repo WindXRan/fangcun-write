@@ -1,10 +1,18 @@
 """创建仿写项目目录结构。"""
 import sys, os
 
+REWRITE_SUBDIRS = ['guides', 'chapters', 'compare', 'export']
+
 def setup(count, project_dir):
     os.makedirs(project_dir, exist_ok=True)
-    for sub in ['设定', '设定/guides', '追踪', '正文']:
+    for sub in REWRITE_SUBDIRS:
         os.makedirs(os.path.join(project_dir, sub), exist_ok=True)
+    # 创建顶层设定文件空模板
+    for name in ['concept.md', 'arc.md', 'truth.md']:
+        path = os.path.join(project_dir, name)
+        if not os.path.exists(path):
+            with open(path, 'w', encoding='utf-8') as f:
+                f.write('')
     print(f"Created: {project_dir}")
 
 if __name__ == '__main__':

@@ -159,7 +159,7 @@ while ($true) {
 # Step 6: 归档
 # ============================================================
 Write-Step "归档下载文件"
-$authorDir = "$SkillDir\novel-download-authors\$Author"
+$authorDir = "$SkillDir\projects\$Author"
 New-Item -ItemType Directory -Path $authorDir -Force | Out-Null
 
 $downloadedFiles = Get-ChildItem "$SkillDir\downloads\*.txt" -ErrorAction SilentlyContinue

@@ -16,16 +16,27 @@ shell: powershell
 ## 文件结构
 
 ```
-novel-download-authors/{作者名}/{源书名}/仿写/{新书名}_仿写/
-├── 设定/
-│   ├── 新书设定.md
-│   ├── 全书弧线.md
-│   └── guides/
-│       ├── plot_guide_N.md
-│       └── style_guide_N.md
-├── 追踪/
-│   └── 真相.md
-└── 正文/第N章.txt
+projects/{作者名}/{源书名}/
+├── original.txt                  # 原始下载
+├── _cache/                       # 脚本缓存（可删除重建）
+│   ├── chapters/                 # 拆章结果
+│   │   └── ch_001.txt
+│   └── analysis/                 # 源文分析（story-style 输出）
+│       ├── style_profile_001.json
+│       ├── plot_001.md
+│       └── style_001.md
+└── rewrites/{新书名}/            # 每个仿写项目
+    ├── concept.md                # 新书设定
+    ├── arc.md                    # 全书弧线
+    ├── truth.md                  # 真相追踪
+    ├── guides/                   # 写作 guide
+    │   ├── plot_001.md
+    │   └── style_001.md
+    ├── chapters/                 # 正文
+    │   └── ch_001.txt
+    ├── compare/                  # 对比报告
+    └── export/                   # 合并导出
+        └── {新书名}.txt
 ```
 
 ## 工具
@@ -50,14 +61,14 @@ novel-download-authors/{作者名}/{源书名}/仿写/{新书名}_仿写/
 
 | 顺序 | Agent | Prompt | 输出 |
 |------|-------|--------|------|
-| 1 | A1：新书设定 | `prompts/arc-concept.md` | `设定/新书设定.md` |
-| 2 | A2：全书弧线 | `prompts/arc-skeleton-core.md` | `设定/全书弧线.md` + `追踪/真相.md` |
+| 1 | A1：新书设定 | `prompts/arc-concept.md` | `concept.md` |
+| 2 | A2：全书弧线 | `prompts/arc-skeleton-core.md` | `arc.md` + `truth.md` |
 
 ## Guide 生成（1 agent，出20个文件）
 
-1个agent读源文第1-10章 + 弧线 + 设定 + style_profile_1~10，一次性生成全部guide：
-- `设定/guides/plot_guide_1.md` ~ `plot_guide_10.md`
-- `设定/guides/style_guide_1.md` ~ `style_guide_10.md`
+1个agent读源文第1-10章 + 弧线 + 设定 + style_profile，一次性生成全部guide：
+- `guides/plot_001.md` ~ `plot_010.md`
+- `guides/style_001.md` ~ `style_010.md`
 
 ### Guide 模板
 
@@ -72,8 +83,8 @@ novel-download-authors/{作者名}/{源书名}/仿写/{新书名}_仿写/
 ## 写章（10 agents × N批）
 
 每批10章并行。每个写章 agent 只读2个文件：
-1. `plot_guide_N.md`（写什么）
-2. `style_guide_N.md`（怎么写）
+1. `guides/plot_NNN.md`（写什么）
+2. `guides/style_NNN.md`（怎么写）
 
 ⛔ **一次出稿。不出中间产物，不重写。**
 
@@ -91,15 +102,15 @@ python .agents/skills/story-engine/tools/api_batch_generate.py --config config.j
 
 ```bash
 # 开书（pro模型，高质量）
-python .agents/skills/story-engine/tools/api_batch_generate.py --config .agents/skills/story-engine/config_deepseek_pro.json --start 1 --end 2 --workers 2
+python .agents/skills/story-engine/tools/api_batch_generate.py --config .agents/skills/story-engine/configs/config_deepseek_pro.json --start 1 --end 2 --workers 2
 
 # 写正文（flash模型，高速度）
-python .agents/skills/story-engine/tools/api_batch_generate.py --config .agents/skills/story-engine/config_deepseek_flash.json --start 1 --end 10 --workers 10
+python .agents/skills/story-engine/tools/api_batch_generate.py --config .agents/skills/story-engine/configs/config_deepseek_flash.json --start 1 --end 10 --workers 10
 ```
 
 配置文件：
-- `config_deepseek_pro.json`：开书用（deepseek-v4-pro，reasoning_effort=high）
-- `config_deepseek_flash.json`：写正文用（deepseek-v4-flash，reasoning_effort=low）
+- `configs/config_deepseek_pro.json`：开书用（deepseek-v4-pro，reasoning_effort=high）
+- `configs/config_deepseek_flash.json`：写正文用（deepseek-v4-flash，reasoning_effort=low）
 
 #### 其他API配置
 
@@ -114,7 +125,7 @@ python .agents/skills/story-engine/tools/api_batch_generate.py --config .agents/
   "base_url": null,
   "system_prompt": "你是一个专业的网文写手，擅长仿写风格迁移。",
   "prompts_dir": ".agents/skills/story-engine/prompts",
-  "output_dir": "仿写/染指枭雄仿写/正文"
+  "output_dir": "rewrites/染指枭雄仿写/chapters"
 }
 ```
 
@@ -143,7 +154,7 @@ python .agents/skills/story-compare/compare.py "<项目目录>" <起始章> <结
 
 示例（第1批1-10章）：
 ```bash
-python .agents/skills/story-compare/compare.py "novel-download-authors/初点点/染指枭雄/仿写/染指枭雄仿写" 1 10
+python .agents/skills/story-compare/compare.py "projects/初点点/染指枭雄/rewrites/染指枭雄仿写" 1 10
 ```
 
 对比报告用于：
@@ -156,32 +167,34 @@ python .agents/skills/story-compare/compare.py "novel-download-authors/初点点
 一次性跑完一整本书（走标准流程）：
 
 ```bash
-python .agents/skills/story-engine/tools/generate_book.py --config .agents/skills/story-engine/config_full_book.json --source "novel-download-authors/闻栖/女配一睁眼，失忆男主冷脸洗床单.txt" --chapters 188
+python .agents/skills/story-engine/tools/generate_book.py --config .agents/skills/story-engine/configs/config_full_book.json --source "projects/闻栖/女配一睁眼，失忆男主冷脸洗床单/original.txt" --chapters 188
 ```
 
-配置文件：`config_full_book.json`
+配置文件：`configs/config_full_book.json`
 
 ```json
 {
   "book_name": "女配一睁眼失忆男主冷脸洗床单仿写",
   "author": "闻栖",
   "source_book": "女配一睁眼，失忆男主冷脸洗床单",
-  "api_key": "sk-f04fa725c7c54f3bb42d19e4cad50871",
+  "api_key": null,
   "system_prompt": "你是一个专业的网文写手，擅长仿写风格迁移。",
   "prompts_dir": ".agents/skills/story-engine/prompts",
-  "output_dir": "novel-download-authors/闻栖/女配一睁眼，失忆男主冷脸洗床单/仿写/女配一睁眼失忆男主冷脸洗床单仿写"
+  "output_dir": "projects/闻栖/女配一睁眼，失忆男主冷脸洗床单/rewrites/女配一睁眼失忆男主冷脸洗床单仿写"
 }
+
+> ⚠️ `api_key` 设为 null 时自动从环境变量 `$env:API_KEY` 读取。不要将真实 key 写入配置文件。
 ```
 
 **标准流程（9步）：**
 1. 拆章：源文.txt → 源文章节/第N章.txt
 2. 风格分析：源文 → 风格数据.json
-3. 创建项目目录：设定/ + 追踪/ + 正文/
-4. 开书（pro模型）：生成新书设定.md + 全书弧线.md + 真相.md
-5. 生成guide（flash模型）：生成plot_guide_N.md + style_guide_N.md
+3. 创建项目目录：guides/ + chapters/ + compare/ + export/
+4. 开书（pro模型）：生成 concept.md + arc.md + truth.md
+5. 生成guide（flash模型）：生成 plot_NNN.md + style_NNN.md
 6. 写章（flash模型）：读guide，按guide写正文
 7. 修复章节标题：从源文提取标题，修复生成的章节文件
-8. 合并导出：正文/第N章.txt → 新书.txt
+8. 合并导出：chapters/ch_NNN.txt → export/新书.txt
 9. 对比：生成对比报告
 
 预计时间：
@@ -199,5 +212,5 @@ python .agents/skills/story-engine/tools/generate_book.py --config .agents/skill
 ## 导出
 
 ```bash
-python .agents/skills/story-engine/tools/merge_chapters.py <项目目录>/正文/ <项目目录>/<新书名>.txt
+python .agents/skills/story-engine/tools/merge_chapters.py <项目目录>/chapters/ <项目目录>/export/<新书名>.txt
 ```

@@ -30,7 +30,7 @@ python .agents/skills/story-compare/compare.py "{书名}" [起始章] [结束章
 **源文查找优先级**：
 1. 仿写目录下的`源文章节/`子目录（最可靠）
 2. `新书概念.md`中的`源文路径`字段
-3. `--source`参数指定的`novel-download-authors/{作者名}/{源书名}/源文/`目录
+3. `--source`参数指定的`projects/{作者名}/{源书名}/_cache/chapters/`目录
 4. 同作者目录下搜索
 5. 全局搜索（兜底，可能匹配到错误的书）
 
@@ -51,6 +51,6 @@ python .agents/skills/story-compare/compare.py "{书名}" [起始章] [结束章
 ## 注意事项
 
 1. 默认只比黄金三章，如需全书加 `1 9999`
-2. 源文自动检测：优先从新书概念.md 的 `源文路径` 字段读取，未找到则搜索 `novel-download-authors/`
+2. 源文自动检测：优先从 concept.md 的 `源文路径` 字段读取，未找到则搜索 `projects/` 目录（兼容旧 `novel-download-authors/`）
 3. 只对比有正文的章节
-4. 新书目录结构：`仿写/{新书名}/正文/第N章.txt`
+4. 新书目录结构：`rewrites/{新书名}/chapters/ch_NNN.txt`

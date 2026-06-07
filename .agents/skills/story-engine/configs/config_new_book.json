@@ -1,0 +1,9 @@
+{
+  "book_name": "女配一睁眼失忆男主冷脸洗床单仿写",
+  "author": "闻栖",
+  "source_book": "女配一睁眼，失忆男主冷脸洗床单",
+  "api_key": null,
+  "system_prompt": "你是一个专业的网文写手，擅长仿写风格迁移。根据提供的guide，严格按照要求写章。",
+  "prompts_dir": ".agents/skills/story-engine/prompts",
+  "output_dir": "projects/闻栖/女配一睁眼，失忆男主冷脸洗床单/rewrites/女配一睁眼失忆男主冷脸洗床单仿写"
+}

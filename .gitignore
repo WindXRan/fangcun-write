@@ -51,7 +51,14 @@ plan_*.md
 穿成假冒失忆大佬女友后我只想跑路/
 穿成假冒失忆大佬女友后，我只想跑路/
 
-# === 源文章节（按作者归档）===
+# === 项目数据（按作者归档）===
+projects/*/*.txt
+projects/*/*/*.txt
+projects/*/_cache/
+!projects/*/.gitkeep
+projects/*/rewrites/
+projects/*/_cache/
+# 兼容旧目录
 novel-download-authors/*/*.txt
 novel-download-authors/*/*/*.txt
 !novel-download-authors/*/.gitkeep

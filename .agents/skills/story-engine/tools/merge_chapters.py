@@ -9,10 +9,13 @@ def natural_sort_key(s):
 
 def merge_chapters(input_dir, output_file, encoding='utf-8'):
     """合并章节文件。"""
-    # 获取所有章节文件
+    # 获取所有章节文件（支持新旧两种命名）
     chapter_files = []
     for filename in os.listdir(input_dir):
-        if filename.endswith('.txt') and re.match(r'第\d+章\.txt', filename):
+        if filename.endswith('.txt') and (
+            re.match(r'第\d+章\.txt', filename) or
+            re.match(r'ch_\d+\.txt', filename)
+        ):
             chapter_files.append(filename)
     
     # 自然排序
@@ -50,7 +53,7 @@ def merge_chapters(input_dir, output_file, encoding='utf-8'):
 def main():
     if len(sys.argv) < 3:
         print("用法: python merge_chapters.py <章节目录> <输出文件> [编码]")
-        print("示例: python merge_chapters.py 正文/ 新书.txt utf-8")
+        print("示例: python merge_chapters.py chapters/ export/新书.txt utf-8")
         sys.exit(1)
     
     input_dir = sys.argv[1]

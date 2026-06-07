@@ -41,20 +41,24 @@ AI网文小说项目/
 │   │   ├── story-author-query/       # 作者查询
 │   │   └── _archived/                # 归档旧版 skill
 │   └── hooks/
-├── novel-download-authors/           # 源文 + 仿写（同一目录）
+├── projects/                        # 项目数据（源文 + 仿写）
 │   └── {作者名}/{书名}/
-│       ├── 源文/                     # 拆章后章节
-│       ├── 蒸馏/mode-b/             # 风格分析缓存
-│       └── 仿写/{新书名}_仿写/
-│           ├── 设定/
-│           │   ├── 新书设定.md
-│           │   ├── 全书弧线.md
-│           │   └── guides/
-│           │       ├── plot_guide_N.md
-│           │       └── style_guide_N.md
-│           ├── 追踪/
-│           │   └── 真相.md
-│           └── 正文/第N章.txt
+│       ├── original.txt             # 原始下载
+│       ├── _cache/                  # 脚本缓存
+│       │   ├── chapters/            # 拆章后章节
+│       │   └── analysis/            # 风格分析缓存
+│       └── rewrites/{新书名}/       # 仿写项目
+│           ├── concept.md           # 新书设定
+│           ├── arc.md               # 全书弧线
+│           ├── truth.md             # 真相追踪
+│           ├── guides/              # 写作 guide
+│           │   ├── plot_001.md
+│           │   └── style_001.md
+│           ├── chapters/            # 正文
+│           │   └── ch_001.txt
+│           ├── compare/             # 对比报告
+│           └── export/              # 合并导出
+│               └── {新书名}.txt
 ```
 
 ## 运行模式
@@ -66,7 +70,7 @@ AI网文小说项目/
 
 ## 仿写项目识别
 
-用户说"继续""续写"时，检测项目目录下是否有设定和大纲文件：
+用户说"继续""续写"时，检测项目目录下是否有 concept.md 和 arc.md：
 - 存在 → 仿写项目，路由到 vPlan 续写
 - 不存在 → 新项目，从 Phase 1 开始
 
@@ -78,4 +82,4 @@ AI网文小说项目/
 3. 未完成的伏笔列表
 4. 当前章节的情绪/节奏目标
 
-如果存在 `{书名}/追踪/上下文.md`，compact 后首先读取恢复。
+如果存在 `rewrites/{书名}/truth.md`，compact 后首先读取恢复。

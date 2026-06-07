@@ -1,8 +1,8 @@
 为《{新书名}》第{N}章生成写章指南。
 
-【源文】novel-download-authors/{作者名}/{源书名}/源文/第{N}章.txt
-【弧线】novel-download-authors/{作者名}/{源书名}/仿写/{新书名}_仿写/设定/全书弧线.md
-【设定】novel-download-authors/{作者名}/{源书名}/仿写/{新书名}_仿写/设定/新书设定.md
+【源文】projects/{作者名}/{源书名}/_cache/chapters/第{N}章.txt
+【弧线】projects/{作者名}/{源书名}/rewrites/{新书名}/arc.md
+【设定】projects/{作者名}/{源书名}/rewrites/{新书名}/concept.md
 
 ### 任务
 
@@ -36,4 +36,4 @@
 2. 新书字数必须按源文比例分配
 3. 不写正文，只写指南
 
-【输出】仿写/{新书名}_仿写/设定/guides/plot_guide_{N}.md
+【输出】projects/{作者名}/{源书名}/rewrites/{新书名}/guides/plot_{N}.md

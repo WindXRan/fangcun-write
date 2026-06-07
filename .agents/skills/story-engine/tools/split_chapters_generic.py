@@ -72,7 +72,7 @@ def split_chapters(input_file, output_dir, encoding='utf-8'):
 def main():
     if len(sys.argv) < 3:
         print("用法: python split_chapters_generic.py <输入文件> <输出目录> [编码]")
-        print("示例: python split_chapters_generic.py 源文.txt 源文章节/ utf-8")
+        print("示例: python split_chapters_generic.py original.txt _cache/chapters/ utf-8")
         sys.exit(1)
     
     input_file = sys.argv[1]

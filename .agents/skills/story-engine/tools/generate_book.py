@@ -108,8 +108,8 @@ def step5_generate_guides(config, chapter_count):
     flash_config = config.copy()
     flash_config["model"] = "deepseek-v4-flash"
     flash_config["reasoning_effort"] = "low"
-    # guide输出到设定/guides/目录
-    flash_config["output_dir"] = f"{config['output_dir']}/设定/guides"
+    # guide输出到 guides/ 目录
+    flash_config["output_dir"] = f"{config['output_dir']}/guides"
     
     api_script = ".agents/skills/story-engine/tools/api_batch_generate.py"
     
@@ -149,8 +149,8 @@ def step6_write_chapters(config, chapter_count):
     flash_config = config.copy()
     flash_config["model"] = "deepseek-v4-flash"
     flash_config["reasoning_effort"] = "low"
-    # 写章输出到正文目录
-    flash_config["output_dir"] = f"{config['output_dir']}/正文"
+    # 写章输出到 chapters/ 目录
+    flash_config["output_dir"] = f"{config['output_dir']}/chapters"
     
     api_script = ".agents/skills/story-engine/tools/api_batch_generate.py"
     
@@ -174,7 +174,7 @@ def step7_fix_titles(project_dir, source_path):
     print("=" * 50)
     
     fix_script = ".agents/skills/story-engine/tools/fix_chapter_titles.py"
-    cmd = f'python "{fix_script}" "{project_dir}/正文" "{source_path}"'
+    cmd = f'python "{fix_script}" "{project_dir}/chapters" "{source_path}"'
     return run_cmd(cmd)
 
 
@@ -185,8 +185,10 @@ def step8_merge(project_dir, book_name):
     print("=" * 50)
     
     merge_script = ".agents/skills/story-engine/tools/merge_chapters.py"
-    output_file = f"{project_dir}/{book_name}.txt"
-    cmd = f'python "{merge_script}" "{project_dir}/正文" "{output_file}"'
+    export_dir = f"{project_dir}/export"
+    os.makedirs(export_dir, exist_ok=True)
+    output_file = f"{export_dir}/{book_name}.txt"
+    cmd = f'python "{merge_script}" "{project_dir}/chapters" "{output_file}"'
     return run_cmd(cmd)
 
 
@@ -213,13 +215,16 @@ def generate_book(config, source_path, chapter_count):
     
     start_time = time.time()
     
-    # Step 1: 拆章
-    split_dir = f"{project_dir}/源文章节"
-    if not os.path.exists(split_dir):
+    # Step 1: 拆章 → source book _cache/chapters/
+    source_book_dir = os.path.dirname(source_path)
+    split_dir = os.path.join(source_book_dir, "_cache", "chapters")
+    if not os.path.exists(split_dir) or not os.listdir(split_dir):
         step1_split(source_path, split_dir)
-    
-    # Step 2: 风格分析
-    style_file = f"{project_dir}/风格数据.json"
+
+    # Step 2: 风格分析 → source book _cache/analysis/
+    cache_analysis_dir = os.path.join(source_book_dir, "_cache", "analysis")
+    os.makedirs(cache_analysis_dir, exist_ok=True)
+    style_file = os.path.join(cache_analysis_dir, "style_profile.json")
     if not os.path.exists(style_file):
         step2_style(source_path, style_file)
     
@@ -250,8 +255,8 @@ def generate_book(config, source_path, chapter_count):
     print("生成完成!")
     print("=" * 50)
     print(f"总耗时: {end_time - start_time:.1f}秒")
-    print(f"输出文件: {project_dir}/{book_name}.txt")
-    print(f"对比报告: {project_dir}/对比/")
+    print(f"输出文件: {export_dir}/{book_name}.txt")
+    print(f"对比报告: {project_dir}/compare/")
 
 
 def main():

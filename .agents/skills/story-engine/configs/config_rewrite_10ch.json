@@ -1,0 +1,11 @@
+{
+  "book_name": "女配一睁眼失忆男主冷脸洗床单仿写",
+  "author": "闻栖",
+  "source_book": "女配一睁眼，失忆男主冷脸洗床单",
+  "api_key": null,
+  "model": "deepseek-v4-flash",
+  "reasoning_effort": "low",
+  "base_dir": ".",
+  "prompts_dir": ".agents/skills/story-engine/prompts",
+  "rewrites_dir": "projects/闻栖/女配一睁眼，失忆男主冷脸洗床单/rewrites/女配一睁眼失忆男主冷脸洗床单仿写"
+}

@@ -1,7 +1,7 @@
 为《{新书名}》第{N}章生成去AI指南。
 
-【源文】仿写/{新书名}/源文/第{N}章.txt
-【风格数据】仿写/{新书名}/风格分析/style_profile_{N}.json
+【源文】projects/{作者名}/{源书名}/_cache/chapters/第{N}章.txt
+【风格数据】projects/{作者名}/{源书名}/_cache/analysis/style_profile_{N}.json
 【模板】.agents/skills/story-engine/templates/style_guide.md
 
 ---
@@ -72,6 +72,6 @@
      - 2个长句（30字以上）
    - 这样写章agent才能模仿源文的长短交替
 
-【输出】仿写/{新书名}/设定/guides/style_guide_{N}.md
+【输出】projects/{作者名}/{源书名}/rewrites/{新书名}/guides/style_{N}.md
 
 【回传】✅ style_guide 第{N}章

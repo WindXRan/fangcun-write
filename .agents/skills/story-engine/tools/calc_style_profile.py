@@ -107,7 +107,7 @@ def calc(text):
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print('Usage: python calc_style_profile.py <源文第N章.txt> [-o output.json]')
+        print('Usage: python calc_style_profile.py <chapter.txt> [-o output.json]')
         sys.exit(1)
     
     txt = load_text(sys.argv[1])

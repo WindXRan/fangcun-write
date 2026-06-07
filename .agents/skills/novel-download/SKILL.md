@@ -1,7 +1,7 @@
 ﻿---
 name: novel-download
 description: |
-  小说下载工具。通过 TomatoNovelDownloader server 模式 + CDP 浏览器自动化下载番茄小说，按作者名自动归档到 novel-download-authors/ 目录。
+  小说下载工具。通过 TomatoNovelDownloader server 模式 + CDP 浏览器自动化下载番茄小说，按作者名自动归档到 projects/ 目录。
   触发方式：/novel-download、/下载小说、「下载这本小说」「帮我下载XX」
 ---
 
@@ -17,24 +17,21 @@ description: |
 │   ├── archive_novel.py
 │   └── download_by_author.ps1
 ├── downloads/                    # 下载临时目录（用完可清理）
-├── novel-download-authors/       # 归档目录（永久，公共缓存）
+├── projects/                     # 归档目录（永久，公共缓存）
 │   └── {作者名}/
 │       ├── {书名}.txt            # 原始小说文件
-│       ├── {书名}/               # 拆章缓存（公共，多次仿写共用）
-│       │   ├── 第1章.txt
-│       │   ├── 第2章.txt
-│       │   ├── ...
-│       │   ├── 统计指纹.md
-│       │   ├── 卷结构.md
-│       │   ├── 源文分析_{x-y}.md
-│       │   └── 蒸馏_{x-y}.md
+│       └── {书名}/
+│           ├── original.txt      # 原始文件
+│           └── _cache/           # 拆章和分析缓存
+│               ├── chapters/     # 第1章.txt ...
+│               └── analysis/     # 源文分析_{x-y}.md ...
 │       └── ...
 └── SKILL.md
 ```
 
 ## 公共缓存机制
 
-**核心思想**：源文拆章和分析结果放在 `novel-download-authors/{作者名}/{书名}/` 目录下，多个仿写项目共用。
+**核心思想**：源文拆章和分析结果放在 `projects/{作者名}/{书名}/_cache/` 目录下，多个仿写项目共用。
 
 **好处**：
 - 同一本书多次仿写时，不用重复拆章和扫描
@@ -42,7 +39,7 @@ description: |
 - 仿写书目录只放新书内容，干净整洁
 
 **与 test-rewrite 集成**：
-- test-rewrite 的 Phase 1 会检查 `novel-download-authors/{作者名}/{书名}/` 是否已有拆章缓存
+- test-rewrite 的 Phase 1 会检查 `projects/{作者名}/{书名}/` 是否已有拆章缓存
 - 如果有，直接使用；如果没有，执行拆章并保存到公共缓存
 - Phase 2 从公共缓存提取本区间源文，分析结果也保存到公共缓存
 
@@ -129,7 +126,7 @@ agent-browser --cdp 9222 snapshot -i
 
 ```powershell
 $skillDir = "C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\.agents\skills\novel-download"
-$authorDir = "$skillDir\novel-download-authors\初点点"
+$authorDir = "$skillDir\projects\初点点"
 New-Item -ItemType Directory -Path $authorDir -Force | Out-Null
 
 # 移动 txt 文件
@@ -152,7 +149,7 @@ Remove-Item -Recurse -Force "$skillDir\logs" -ErrorAction SilentlyContinue
 ## 编码验证
 
 ```powershell
-$path = "novel-download-authors/初点点/惊华庭.txt"
+$path = "projects/初点点/惊华庭.txt"
 $content = [System.IO.File]::ReadAllText($path, [System.Text.Encoding]::UTF8)
 $head = $content.Substring(0, [Math]::Min(100, $content.Length))
 if ($head -match '[锛€浠涔﹀悕鐩綍]') { "编码损坏" } else { "编码正常" }

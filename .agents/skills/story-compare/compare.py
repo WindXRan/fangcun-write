@@ -1,7 +1,8 @@
 import os, re, sys, glob, json
 from collections import Counter
 
-NOVEL_DB = 'novel-download-authors'
+NOVEL_DB = 'projects'
+LEGACY_DB = 'novel-download-authors'  # 向后兼容旧目录
 
 # ── 风格指纹分析 ──────────────────────
 
@@ -101,14 +102,25 @@ def analyze_style(text):
 # ── 原有功能 ──────────────────────
 
 def read_source_path_from_concept(book_dir):
-    concept_file = os.path.join(book_dir, '设定', '新书概念.md')
-    if not os.path.exists(concept_file):
-        return None
-    with open(concept_file, encoding='utf-8') as f:
-        content = f.read()
-    match = re.search(r'\*?\*?源文路径\*?\*?[：:]\s*(.+)', content)
-    if match:
-        return match.group(1).strip()
+    # 新路径: concept.md
+    for fname in ['concept.md', '设定/新书设定.md', '设定/新书概念.md']:
+        concept_file = os.path.join(book_dir, fname)
+        if os.path.exists(concept_file):
+            with open(concept_file, encoding='utf-8') as f:
+                content = f.read()
+            match = re.search(r'\*?\*?源文路径\*?\*?[：:]\s*(.+)', content)
+            if match:
+                return match.group(1).strip()
+        # 对新结构，也尝试从 concept.md 推断
+        if fname == 'concept.md' and os.path.exists(concept_file):
+            # 源文路径通常在 projects/{作者}/{书名}/ 下
+            parts = book_dir.replace('\\', '/').split('/')
+            if 'rewrites' in parts:
+                idx = parts.index('rewrites')
+                if idx >= 2:
+                    source_path = '/'.join(parts[:idx])
+                    if os.path.isdir(source_path):
+                        return source_path
     return None
 
 def read_chapter(path):
@@ -143,36 +155,55 @@ def avg_sentence_len(text):
 
 def find_source_chapter(chapter_num, source_override=None, base_dir=None):
     results = []
-    
-    # 0. 优先检查仿写目录下的源文章节（最可靠）
+
+    # 0. 优先检查源书目录下的缓存拆章（最可靠）
+    # 新结构: projects/{作者}/{书名}/_cache/chapters/
     if base_dir:
-        local_src = os.path.join(base_dir, '源文章节')
-        if os.path.isdir(local_src):
-            pattern = os.path.join(local_src, f'第{chapter_num:03d}章*.txt')
-            for f in sorted(glob.glob(pattern)):
-                results.append(f)
-            if not results:
-                pattern = os.path.join(local_src, f'第{chapter_num}章*.txt')
-                for f in sorted(glob.glob(pattern)):
-                    results.append(f)
-            if results:
-                return results
-    
+        # 从 rewrite 项目路径推导源书路径
+        parts = base_dir.replace('\\', '/').split('/')
+        if 'rewrites' in parts:
+            idx = parts.index('rewrites')
+            source_book = '/'.join(parts[:idx])
+            # 新路径
+            for cache_dir in ['_cache/chapters', '源文章节', '源文']:
+                local_src = os.path.join(source_book, cache_dir)
+                if os.path.isdir(local_src):
+                    for fmt in [f'ch_{chapter_num:03d}', f'第{chapter_num:03d}章', f'第{chapter_num}章']:
+                        for f in sorted(glob.glob(os.path.join(local_src, f'{fmt}*.txt'))):
+                            results.append(f)
+                    if results:
+                        return results
+        # 旧结构 fallback
+        for cache_dir in ['源文章节', '源文', '_cache/chapters']:
+            local_src = os.path.join(base_dir, cache_dir)
+            if os.path.isdir(local_src):
+                for fmt in [f'ch_{chapter_num:03d}', f'第{chapter_num:03d}章', f'第{chapter_num}章']:
+                    for f in sorted(glob.glob(os.path.join(local_src, f'{fmt}*.txt'))):
+                        results.append(f)
+                if results:
+                    return results
+
     if source_override:
         src_dir = os.path.join(NOVEL_DB, source_override)
+        if not os.path.isdir(src_dir):
+            src_dir = os.path.join(LEGACY_DB, source_override)
         if os.path.isdir(src_dir):
-            # 1. 先搜 源文/ 子目录（拆章后的章节文件）
-            split_dir = os.path.join(src_dir, '源文')
-            if os.path.isdir(split_dir):
-                pattern = os.path.join(split_dir, f'第{chapter_num}章*.txt')
-                for f in sorted(glob.glob(pattern)):
-                    results.append(f)
+            # 1. 先搜 _cache/chapters/ 或 源文/ 子目录
+            for cache_dir in ['_cache/chapters', '源文', '源文章节']:
+                split_dir = os.path.join(src_dir, cache_dir)
+                if os.path.isdir(split_dir):
+                    for fmt in [f'ch_{chapter_num:03d}', f'第{chapter_num:03d}章', f'第{chapter_num}章']:
+                        for f in sorted(glob.glob(os.path.join(split_dir, f'{fmt}*.txt'))):
+                            results.append(f)
+                    if results:
+                        break
             # 2. 搜根目录下的拆章文件
-            pattern = os.path.join(src_dir, f'第{chapter_num}章*.txt')
-            for f in sorted(glob.glob(pattern)):
-                if f not in results:
-                    results.append(f)
-            # 3. 搜根目录下的合并文件（在文件内容中匹配章节）
+            if not results:
+                for fmt in [f'ch_{chapter_num:03d}', f'第{chapter_num:03d}章', f'第{chapter_num}章']:
+                    for f in sorted(glob.glob(os.path.join(src_dir, f'{fmt}*.txt'))):
+                        if f not in results:
+                            results.append(f)
+            # 3. 搜合并文件
             if not results:
                 for f in os.listdir(src_dir):
                     if f.endswith('.txt') and os.path.isfile(os.path.join(src_dir, f)):
@@ -186,18 +217,22 @@ def find_source_chapter(chapter_num, source_override=None, base_dir=None):
     if source_override:
         author = source_override.split('/')[0] if '/' in source_override else None
         if author:
-            pattern = os.path.join(NOVEL_DB, author, '*', '源文', f'第{chapter_num}章*.txt')
-            for f in sorted(glob.glob(pattern)):
-                results.append(f)
-            pattern = os.path.join(NOVEL_DB, author, '*', f'第{chapter_num}章*.txt')
-            for f in sorted(glob.glob(pattern)):
-                if f not in results:
-                    results.append(f)
-    # 6. 最后才全局搜索（可能匹配到错误的书）
+            for db in [NOVEL_DB, LEGACY_DB]:
+                for cache_dir in ['_cache/chapters', '源文']:
+                    pattern = os.path.join(db, author, '*', cache_dir, f'第{chapter_num}章*.txt')
+                    for f in sorted(glob.glob(pattern)):
+                        results.append(f)
+                pattern = os.path.join(db, author, '*', f'第{chapter_num}章*.txt')
+                for f in sorted(glob.glob(pattern)):
+                    if f not in results:
+                        results.append(f)
+    # 6. 最后才全局搜索
     if not results:
-        pattern = os.path.join(NOVEL_DB, '*', '*', '源文', f'第{chapter_num}章*.txt')
-        for f in sorted(glob.glob(pattern)):
-            results.append(f)
+        for db in [NOVEL_DB, LEGACY_DB]:
+            for cache_dir in ['_cache/chapters', '源文']:
+                pattern = os.path.join(db, '*', '*', cache_dir, f'第{chapter_num}章*.txt')
+                for f in sorted(glob.glob(pattern)):
+                    results.append(f)
     return results
 
 def parse_source_path(full_path):
@@ -247,8 +282,17 @@ def collect_data(base_dir, start, end, source_override):
     new_chapters = {}
 
     for ch in range(start, end + 1):
-        new_path = os.path.join(base_dir, '正文', f'第{ch}章.txt')
-        if not os.path.exists(new_path):
+        # 支持新旧两种命名
+        new_path = None
+        for chapters_dir in ['chapters', '正文']:
+            for fmt in [f'ch_{ch:03d}.txt', f'第{ch}章.txt']:
+                candidate = os.path.join(base_dir, chapters_dir, fmt)
+                if os.path.exists(candidate):
+                    new_path = candidate
+                    break
+            if new_path:
+                break
+        if not new_path:
             continue
 
         new_text = read_chapter(new_path)
@@ -491,7 +535,7 @@ def main():
                 source_path = source_path[len(NOVEL_DB) + 1:]
             source_override = source_path
 
-    out_dir = os.path.join(base_dir, '对比')
+    out_dir = os.path.join(base_dir, 'compare')
     os.makedirs(out_dir, exist_ok=True)
 
     # 收集数据
