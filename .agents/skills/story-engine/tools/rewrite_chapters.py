@@ -102,7 +102,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     # 需要源文字数时，脚本计算（API 无法跑 PowerShell）
     if prompt_type in ("plot-guide", "style-guide", "write-chapter", "trim-chapter") and chapter_num:
         src_chars = count_source_chars(config, chapter_num)
-        target_chars = src_chars  # 1:1 对标源文字数
+        target_chars = 2000  # 番茄标准统一2000字
         replacements["源文字数"] = str(src_chars)
         replacements["目标字数"] = str(target_chars)
         replacements["目标字数_min"] = str(int(target_chars * 0.9))
@@ -385,13 +385,12 @@ def phase_write(config, start, end, workers=10):
     print(f"Phase 3: 写章 (flash, ch{start}-{end}, {workers}w)")
     print("=" * 50)
 
-    MIN_CHARS, MAX_CHARS = 1500, 3000
     t0 = time.time()
 
     # 第一轮
     ok, fail = batch_run(flash, "write-chapter", start, end, workers, chapters_dir, "ch_{ch:03d}.txt", skip_existing=True)
 
-    # 重跑异常章（最多2轮）
+    # 重跑异常章（最多2轮，按源文字数 ±50% 触发）
     for retry_round in range(1, 3):
         retry_list = []
         for ch in range(start, end + 1):
@@ -400,7 +399,8 @@ def phase_write(config, start, end, workers=10):
                 continue
             text = ch_file.read_text(encoding='utf-8')
             chars = len(re2.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text))
-            if chars < MIN_CHARS or chars > MAX_CHARS:
+            target = count_source_chars(config, ch)
+            if target > 0 and (chars < target * 0.5 or chars > target * 1.5):
                 retry_list.append((ch, chars))
 
         if not retry_list:
