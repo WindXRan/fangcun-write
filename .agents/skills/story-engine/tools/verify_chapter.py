@@ -193,6 +193,7 @@ def gen_guide(source_path: str, output_path: str):
     first_rate = f"{first_uniq / max(first_total, 1) * 100:.0f}%"
 
     lines = [
+        "<!-- format-version: 2 -->",
         "## 源文写作特征（写章时对齐此节奏）",
         "",
         f"### 篇幅",
