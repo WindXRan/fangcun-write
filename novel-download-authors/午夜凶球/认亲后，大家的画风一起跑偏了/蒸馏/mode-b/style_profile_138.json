@@ -1,40 +1,42 @@
 ﻿{
-  "source_name": "第135章.txt",
-  "total_chars": 2321,
-  "total_words": 1737,
-  "total_sentences": 75,
-  "total_paragraphs": 63,
+  "source_name": "第138章.txt",
+  "total_chars": 2398,
+  "total_words": 1729,
+  "total_sentences": 83,
+  "total_paragraphs": 67,
   "sentence_length": {
-    "avg": 23.2,
-    "stddev": 14.6
+    "avg": 20.8,
+    "stddev": 15.2
   },
   "paragraph_length": {
-    "avg": 27.6,
-    "stddev": 13.1,
+    "avg": 25.8,
+    "stddev": 19.4,
     "min": 0,
-    "max": 57
+    "max": 94
   },
-  "vocabulary_ttr": 0.262,
-  "dialogue_ratio": 0.173,
+  "vocabulary_ttr": 0.263,
+  "dialogue_ratio": 0.392,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.32,
-    "long_ratio_gt60": 0.013
+    "short_ratio_lt15": 0.41,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.952,
-    "medium_50_200": 0.048,
+    "short_lt50": 0.881,
+    "medium_50_200": 0.119,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.587
+    "single_sentence_ratio": 0.328
   },
   "top_opening_patterns": [
-    "” ...(13次)",
-    "”，...(9次)",
-    "刘淑...(4次)",
-    "张自...(3次)",
-    "希望...(3次)"
+    "” ...(33次)",
+    "”，...(5次)",
+    "谢震...(4次)",
+    "李观...(4次)",
+    "沈景...(3次)"
   ],
   "rhetorical_features": [
     "短句节奏(5处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "路标词(1处)"
+  ]
 }

@@ -1,40 +1,38 @@
 ﻿{
-  "source_name": "第91章.txt",
-  "total_chars": 2400,
-  "total_words": 1690,
-  "total_sentences": 105,
-  "total_paragraphs": 77,
+  "source_name": "第94章.txt",
+  "total_chars": 2304,
+  "total_words": 1826,
+  "total_sentences": 73,
+  "total_paragraphs": 49,
   "sentence_length": {
-    "avg": 16.1,
-    "stddev": 12.2
+    "avg": 25.0,
+    "stddev": 16.6
   },
   "paragraph_length": {
-    "avg": 21.9,
-    "stddev": 16.7,
+    "avg": 37.3,
+    "stddev": 29.4,
     "min": 0,
-    "max": 71
+    "max": 122
   },
-  "vocabulary_ttr": 0.245,
-  "dialogue_ratio": 0.407,
+  "vocabulary_ttr": 0.262,
+  "dialogue_ratio": 0.33,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.59,
-    "long_ratio_gt60": 0.0
+    "short_ratio_lt15": 0.329,
+    "long_ratio_gt60": 0.041
   },
   "paragraph_distribution": {
-    "short_lt50": 0.922,
-    "medium_50_200": 0.078,
+    "short_lt50": 0.714,
+    "medium_50_200": 0.286,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.442
+    "single_sentence_ratio": 0.469
   },
   "top_opening_patterns": [
-    "” ...(30次)",
-    "”，...(5次)",
-    "江流...(5次)",
-    "林霆...(5次)",
-    "谢玉...(5次)"
+    "” ...(12次)",
+    "”，...(7次)",
+    "顾伟...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(10处)"
+    "短句节奏(5处)"
   ],
   "ai_tells": []
 }

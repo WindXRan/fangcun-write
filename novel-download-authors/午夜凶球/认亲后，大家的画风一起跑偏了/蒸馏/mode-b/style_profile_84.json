@@ -1,42 +1,43 @@
 ﻿{
-  "source_name": "第81章.txt",
-  "total_chars": 2315,
-  "total_words": 1803,
+  "source_name": "第84章.txt",
+  "total_chars": 2448,
+  "total_words": 1890,
   "total_sentences": 77,
-  "total_paragraphs": 47,
+  "total_paragraphs": 49,
   "sentence_length": {
-    "avg": 23.4,
-    "stddev": 15.0
+    "avg": 24.5,
+    "stddev": 17.3
   },
   "paragraph_length": {
-    "avg": 38.4,
-    "stddev": 28.0,
+    "avg": 38.6,
+    "stddev": 23.1,
     "min": 0,
-    "max": 98
+    "max": 91
   },
-  "vocabulary_ttr": 0.271,
-  "dialogue_ratio": 0.39,
+  "vocabulary_ttr": 0.246,
+  "dialogue_ratio": 0.486,
   "sentence_distribution": {
     "short_ratio_lt15": 0.325,
-    "long_ratio_gt60": 0.0
+    "long_ratio_gt60": 0.039
   },
   "paragraph_distribution": {
-    "short_lt50": 0.617,
-    "medium_50_200": 0.383,
+    "short_lt50": 0.653,
+    "medium_50_200": 0.347,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.277
+    "single_sentence_ratio": 0.265
   },
   "top_opening_patterns": [
-    "” ...(18次)",
-    "”，...(8次)",
-    "张自...(4次)",
-    "李观...(3次)"
+    "” ...(23次)",
+    "”，...(16次)",
+    "“我...(3次)",
+    "“你...(3次)",
+    "李卫...(3次)"
   ],
   "rhetorical_features": [
     "反问(2处)",
-    "短句节奏(5处)"
+    "短句节奏(7处)"
   ],
   "ai_tells": [
-    "路标词(1处)"
+    "路标词(2处)"
   ]
 }

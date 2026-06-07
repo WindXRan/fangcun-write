@@ -1,39 +1,42 @@
 ﻿{
-  "source_name": "第59章.txt",
-  "total_chars": 2218,
-  "total_words": 1758,
-  "total_sentences": 69,
-  "total_paragraphs": 40,
+  "source_name": "第62章.txt",
+  "total_chars": 2418,
+  "total_words": 1876,
+  "total_sentences": 82,
+  "total_paragraphs": 54,
   "sentence_length": {
-    "avg": 25.5,
-    "stddev": 16.1
+    "avg": 22.9,
+    "stddev": 16.8
   },
   "paragraph_length": {
-    "avg": 44.0,
-    "stddev": 25.0,
+    "avg": 34.7,
+    "stddev": 23.6,
     "min": 0,
-    "max": 108
+    "max": 88
   },
-  "vocabulary_ttr": 0.258,
-  "dialogue_ratio": 0.226,
+  "vocabulary_ttr": 0.275,
+  "dialogue_ratio": 0.229,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.29,
-    "long_ratio_gt60": 0.029
+    "short_ratio_lt15": 0.39,
+    "long_ratio_gt60": 0.049
   },
   "paragraph_distribution": {
-    "short_lt50": 0.6,
-    "medium_50_200": 0.4,
+    "short_lt50": 0.704,
+    "medium_50_200": 0.296,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.275
+    "single_sentence_ratio": 0.37
   },
   "top_opening_patterns": [
-    "” ...(13次)",
-    "”，...(11次)"
+    "” ...(18次)",
+    "”，...(11次)",
+    "马强...(4次)"
   ],
   "rhetorical_features": [
     "短句节奏(4处)"
   ],
   "ai_tells": [
-    "路标词(2处)"
+    "路标词(1处)",
+    "协作口吻(1处)",
+    "高频副词(1处)"
   ]
 }

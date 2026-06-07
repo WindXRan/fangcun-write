@@ -1,0 +1,105 @@
+{
+  "book_name": "源文",
+  "chapters_analyzed": 10,
+  "average_scores": {
+    "ai_score": 11.27,
+    "perplexity": 1.0,
+    "burstiness": 0.8792,
+    "vocabulary_diversity": 0.9694,
+    "connective_density": 0.3188,
+    "syntax_regularity": 0.25630000000000003
+  },
+  "chapter_details": [
+    {
+      "chapter": 1,
+      "ai_score": 15.4,
+      "perplexity": 1.0,
+      "burstiness": 0.719,
+      "vocabulary_diversity": 0.969,
+      "connective_density": 0.39,
+      "syntax_regularity": 0.165
+    },
+    {
+      "chapter": 2,
+      "ai_score": 10.8,
+      "perplexity": 1.0,
+      "burstiness": 0.889,
+      "vocabulary_diversity": 0.968,
+      "connective_density": 0.3,
+      "syntax_regularity": 0.255
+    },
+    {
+      "chapter": 3,
+      "ai_score": 11.2,
+      "perplexity": 1.0,
+      "burstiness": 0.847,
+      "vocabulary_diversity": 0.983,
+      "connective_density": 0.3,
+      "syntax_regularity": 0.215
+    },
+    {
+      "chapter": 4,
+      "ai_score": 8.8,
+      "perplexity": 1.0,
+      "burstiness": 1.0,
+      "vocabulary_diversity": 0.974,
+      "connective_density": 0.3,
+      "syntax_regularity": 0.353
+    },
+    {
+      "chapter": 5,
+      "ai_score": 10.6,
+      "perplexity": 1.0,
+      "burstiness": 0.928,
+      "vocabulary_diversity": 0.965,
+      "connective_density": 0.398,
+      "syntax_regularity": 0.253
+    },
+    {
+      "chapter": 6,
+      "ai_score": 11.8,
+      "perplexity": 1.0,
+      "burstiness": 0.88,
+      "vocabulary_diversity": 0.966,
+      "connective_density": 0.3,
+      "syntax_regularity": 0.298
+    },
+    {
+      "chapter": 7,
+      "ai_score": 11.9,
+      "perplexity": 1.0,
+      "burstiness": 0.846,
+      "vocabulary_diversity": 0.971,
+      "connective_density": 0.3,
+      "syntax_regularity": 0.248
+    },
+    {
+      "chapter": 8,
+      "ai_score": 9.1,
+      "perplexity": 1.0,
+      "burstiness": 1.0,
+      "vocabulary_diversity": 0.963,
+      "connective_density": 0.3,
+      "syntax_regularity": 0.357
+    },
+    {
+      "chapter": 9,
+      "ai_score": 12.3,
+      "perplexity": 1.0,
+      "burstiness": 0.817,
+      "vocabulary_diversity": 0.952,
+      "connective_density": 0.3,
+      "syntax_regularity": 0.191
+    },
+    {
+      "chapter": 10,
+      "ai_score": 10.8,
+      "perplexity": 1.0,
+      "burstiness": 0.866,
+      "vocabulary_diversity": 0.983,
+      "connective_density": 0.3,
+      "syntax_regularity": 0.228
+    }
+  ],
+  "timestamp": "20260606_162649"
+}

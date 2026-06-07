@@ -1,40 +1,41 @@
 ﻿{
-  "source_name": "第20章.txt",
-  "total_chars": 2528,
-  "total_words": 1881,
-  "total_sentences": 113,
-  "total_paragraphs": 60,
+  "source_name": "第23章.txt",
+  "total_chars": 2623,
+  "total_words": 2033,
+  "total_sentences": 86,
+  "total_paragraphs": 58,
   "sentence_length": {
-    "avg": 16.6,
-    "stddev": 11.7
+    "avg": 23.6,
+    "stddev": 14.6
   },
   "paragraph_length": {
-    "avg": 31.4,
-    "stddev": 21.5,
+    "avg": 35.1,
+    "stddev": 23.6,
     "min": 0,
-    "max": 139
+    "max": 120
   },
-  "vocabulary_ttr": 0.246,
-  "dialogue_ratio": 0.35,
+  "vocabulary_ttr": 0.258,
+  "dialogue_ratio": 0.297,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.504,
-    "long_ratio_gt60": 0.0
+    "short_ratio_lt15": 0.36,
+    "long_ratio_gt60": 0.023
   },
   "paragraph_distribution": {
-    "short_lt50": 0.883,
-    "medium_50_200": 0.117,
+    "short_lt50": 0.759,
+    "medium_50_200": 0.241,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.25
+    "single_sentence_ratio": 0.241
   },
   "top_opening_patterns": [
     "” ...(21次)",
-    "”，...(19次)",
-    "李建...(5次)",
-    "李观...(5次)",
-    "“那...(3次)"
+    "”，...(15次)",
+    "李观...(4次)",
+    "李萱...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(16处)"
+    "短句节奏(3处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "高频副词(3处)"
+  ]
 }

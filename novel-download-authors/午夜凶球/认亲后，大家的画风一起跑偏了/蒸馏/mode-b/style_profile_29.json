@@ -1,42 +1,39 @@
 ﻿{
-  "source_name": "第26章.txt",
-  "total_chars": 2491,
-  "total_words": 1860,
-  "total_sentences": 99,
-  "total_paragraphs": 64,
+  "source_name": "第29章.txt",
+  "total_chars": 2512,
+  "total_words": 1835,
+  "total_sentences": 92,
+  "total_paragraphs": 81,
   "sentence_length": {
-    "avg": 18.8,
-    "stddev": 12.5
+    "avg": 19.9,
+    "stddev": 13.5
   },
   "paragraph_length": {
-    "avg": 29.1,
-    "stddev": 20.0,
+    "avg": 22.7,
+    "stddev": 18.7,
     "min": 0,
-    "max": 76
+    "max": 87
   },
-  "vocabulary_ttr": 0.261,
+  "vocabulary_ttr": 0.287,
   "dialogue_ratio": 0.254,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.465,
+    "short_ratio_lt15": 0.413,
     "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.844,
-    "medium_50_200": 0.156,
+    "short_lt50": 0.901,
+    "medium_50_200": 0.099,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.281
+    "single_sentence_ratio": 0.543
   },
   "top_opening_patterns": [
-    "” ...(20次)",
-    "”，...(13次)",
-    "李观...(7次)",
-    "江流...(6次)",
-    "李萱...(6次)"
+    "” ...(25次)",
+    "李观...(8次)",
+    "”，...(5次)",
+    "谢玉...(4次)"
   ],
   "rhetorical_features": [
-    "短句节奏(12处)"
+    "短句节奏(7处)"
   ],
-  "ai_tells": [
-    "路标词(2处)"
-  ]
+  "ai_tells": []
 }

@@ -1,35 +1,37 @@
 ﻿{
-  "source_name": "第5章.txt",
-  "total_chars": 2341,
-  "total_words": 1769,
-  "total_sentences": 99,
-  "total_paragraphs": 57,
+  "source_name": "第8章.txt",
+  "total_chars": 2665,
+  "total_words": 2028,
+  "total_sentences": 113,
+  "total_paragraphs": 61,
   "sentence_length": {
     "avg": 17.9,
-    "stddev": 13.6
+    "stddev": 12.4
   },
   "paragraph_length": {
-    "avg": 31.0,
-    "stddev": 24.4,
+    "avg": 33.2,
+    "stddev": 23.6,
     "min": 0,
-    "max": 104
+    "max": 148
   },
-  "vocabulary_ttr": 0.276,
-  "dialogue_ratio": 0.322,
+  "vocabulary_ttr": 0.262,
+  "dialogue_ratio": 0.316,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.455,
-    "long_ratio_gt60": 0.02
+    "short_ratio_lt15": 0.504,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.772,
-    "medium_50_200": 0.228,
+    "short_lt50": 0.803,
+    "medium_50_200": 0.197,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.281
+    "single_sentence_ratio": 0.23
   },
   "top_opening_patterns": [
-    "” ...(26次)",
-    "李观...(5次)",
-    "老班...(3次)"
+    "” ...(21次)",
+    "”李...(6次)",
+    "”，...(6次)",
+    "”谢...(3次)",
+    "谢玉...(3次)"
   ],
   "rhetorical_features": [
     "短句节奏(16处)"

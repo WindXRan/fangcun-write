@@ -1,40 +1,40 @@
-﻿{
-  "source_name": "第115章.txt",
-  "total_chars": 2341,
-  "total_words": 1815,
-  "total_sentences": 76,
-  "total_paragraphs": 50,
+{
+  "source_name": "第118章.txt",
+  "total_chars": 2383,
+  "total_words": 1806,
+  "total_sentences": 87,
+  "total_paragraphs": 61,
   "sentence_length": {
-    "avg": 23.9,
-    "stddev": 16.2
+    "avg": 20.8,
+    "stddev": 12.0
   },
   "paragraph_length": {
-    "avg": 36.3,
-    "stddev": 19.7,
+    "avg": 29.6,
+    "stddev": 14.4,
     "min": 0,
-    "max": 83
+    "max": 61
   },
-  "vocabulary_ttr": 0.25,
-  "dialogue_ratio": 0.21,
+  "vocabulary_ttr": 0.266,
+  "dialogue_ratio": 0.179,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.329,
-    "long_ratio_gt60": 0.013
+    "short_ratio_lt15": 0.333,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.76,
-    "medium_50_200": 0.24,
+    "short_lt50": 0.902,
+    "medium_50_200": 0.098,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.38
+    "single_sentence_ratio": 0.426
   },
   "top_opening_patterns": [
-    "” ...(16次)",
-    "”，...(10次)",
-    "黄毛...(7次)",
-    "李昭...(4次)"
+    "” ...(13次)",
+    "”，...(9次)",
+    "李观...(3次)",
+    "李昭...(3次)"
   ],
   "rhetorical_features": [
-    "反问(2处)",
-    "短句节奏(8处)"
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(5处)"
   ],
   "ai_tells": []
 }

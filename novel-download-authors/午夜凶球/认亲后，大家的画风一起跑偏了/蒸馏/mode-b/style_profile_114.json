@@ -1,41 +1,42 @@
 ﻿{
-  "source_name": "第111章.txt",
-  "total_chars": 2696,
-  "total_words": 1872,
-  "total_sentences": 101,
-  "total_paragraphs": 89,
+  "source_name": "第110章.txt",
+  "total_chars": 2208,
+  "total_words": 1628,
+  "total_sentences": 83,
+  "total_paragraphs": 62,
   "sentence_length": {
-    "avg": 18.5,
-    "stddev": 14.4
+    "avg": 19.6,
+    "stddev": 14.0
   },
   "paragraph_length": {
-    "avg": 21.0,
-    "stddev": 15.7,
+    "avg": 26.3,
+    "stddev": 19.1,
     "min": 0,
-    "max": 85
+    "max": 86
   },
-  "vocabulary_ttr": 0.257,
-  "dialogue_ratio": 0.304,
+  "vocabulary_ttr": 0.286,
+  "dialogue_ratio": 0.345,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.485,
-    "long_ratio_gt60": 0.01
+    "short_ratio_lt15": 0.41,
+    "long_ratio_gt60": 0.012
   },
   "paragraph_distribution": {
-    "short_lt50": 0.966,
-    "medium_50_200": 0.034,
+    "short_lt50": 0.887,
+    "medium_50_200": 0.113,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.461
+    "single_sentence_ratio": 0.371
   },
   "top_opening_patterns": [
-    "” ...(28次)",
-    "”，...(14次)",
-    "李观...(4次)",
-    "林秋...(4次)"
+    "” ...(24次)",
+    "”，...(13次)",
+    "李观...(5次)",
+    "李建...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(10处)"
+    "短句节奏(9处)"
   ],
   "ai_tells": [
-    "路标词(1处)"
+    "路标词(1处)",
+    "高频副词(1处)"
   ]
 }

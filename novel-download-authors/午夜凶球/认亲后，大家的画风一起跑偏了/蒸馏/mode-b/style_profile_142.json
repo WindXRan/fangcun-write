@@ -1,39 +1,40 @@
 ﻿{
-  "source_name": "第139章.txt",
-  "total_chars": 2380,
-  "total_words": 1823,
-  "total_sentences": 89,
-  "total_paragraphs": 57,
+  "source_name": "第142章.txt",
+  "total_chars": 2346,
+  "total_words": 1825,
+  "total_sentences": 67,
+  "total_paragraphs": 52,
   "sentence_length": {
-    "avg": 20.5,
-    "stddev": 14.7
+    "avg": 27.2,
+    "stddev": 15.3
   },
   "paragraph_length": {
-    "avg": 32.0,
-    "stddev": 18.9,
+    "avg": 35.1,
+    "stddev": 20.6,
     "min": 0,
-    "max": 77
+    "max": 92
   },
-  "vocabulary_ttr": 0.269,
-  "dialogue_ratio": 0.404,
+  "vocabulary_ttr": 0.275,
+  "dialogue_ratio": 0.243,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.404,
-    "long_ratio_gt60": 0.011
+    "short_ratio_lt15": 0.209,
+    "long_ratio_gt60": 0.03
   },
   "paragraph_distribution": {
-    "short_lt50": 0.877,
-    "medium_50_200": 0.123,
+    "short_lt50": 0.788,
+    "medium_50_200": 0.212,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.368
+    "single_sentence_ratio": 0.538
   },
   "top_opening_patterns": [
-    "”，...(17次)",
-    "” ...(11次)",
-    "“不...(3次)",
-    "谢震...(3次)"
+    "”，...(9次)",
+    "” ...(8次)",
+    "李观...(4次)",
+    "张自...(3次)",
+    "张总...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(7处)"
+    "短句节奏(3处)"
   ],
   "ai_tells": []
 }

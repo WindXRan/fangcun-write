@@ -1,0 +1,38 @@
+﻿{
+  "source_name": "第4章.txt",
+  "total_chars": 2377,
+  "total_words": 1718,
+  "total_sentences": 72,
+  "total_paragraphs": 68,
+  "sentence_length": {
+    "avg": 23.9,
+    "stddev": 16.4
+  },
+  "paragraph_length": {
+    "avg": 25.3,
+    "stddev": 16.1,
+    "min": 0,
+    "max": 56
+  },
+  "vocabulary_ttr": 0.247,
+  "dialogue_ratio": 0.51,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.347,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.882,
+    "medium_50_200": 0.118,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.324
+  },
+  "top_opening_patterns": [
+    "” ...(42次)",
+    "老爷...(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(3处)",
+    "短句节奏(5处)"
+  ],
+  "ai_tells": []
+}

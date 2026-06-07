@@ -1,40 +1,41 @@
 ﻿{
-  "source_name": "第126章.txt",
-  "total_chars": 2392,
-  "total_words": 1799,
-  "total_sentences": 85,
-  "total_paragraphs": 58,
+  "source_name": "第129章.txt",
+  "total_chars": 2341,
+  "total_words": 1720,
+  "total_sentences": 75,
+  "total_paragraphs": 61,
   "sentence_length": {
-    "avg": 21.2,
-    "stddev": 13.7
+    "avg": 22.9,
+    "stddev": 15.4
   },
   "paragraph_length": {
-    "avg": 31.0,
-    "stddev": 21.0,
+    "avg": 28.2,
+    "stddev": 18.2,
     "min": 0,
-    "max": 105
+    "max": 71
   },
-  "vocabulary_ttr": 0.268,
-  "dialogue_ratio": 0.338,
+  "vocabulary_ttr": 0.279,
+  "dialogue_ratio": 0.153,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.388,
-    "long_ratio_gt60": 0.0
+    "short_ratio_lt15": 0.373,
+    "long_ratio_gt60": 0.027
   },
   "paragraph_distribution": {
-    "short_lt50": 0.845,
-    "medium_50_200": 0.155,
+    "short_lt50": 0.82,
+    "medium_50_200": 0.18,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.397
+    "single_sentence_ratio": 0.574
   },
   "top_opening_patterns": [
-    "” ...(18次)",
-    "”，...(17次)",
-    "李观...(7次)"
+    "”，...(10次)",
+    "李观...(7次)",
+    "江流...(6次)",
+    "” ...(6次)",
+    "’ ...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(6处)"
+    "反问(2处)",
+    "短句节奏(3处)"
   ],
-  "ai_tells": [
-    "路标词(1处)"
-  ]
+  "ai_tells": []
 }

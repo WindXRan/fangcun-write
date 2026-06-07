@@ -1,46 +1,40 @@
-﻿{
-  "source_name": "第148章.txt",
-  "total_chars": 49231,
-  "total_words": 36249,
-  "total_sentences": 1746,
-  "total_paragraphs": 1374,
+{
+  "source_name": "第151章.txt",
+  "total_chars": 2333,
+  "total_words": 1776,
+  "total_sentences": 86,
+  "total_paragraphs": 58,
   "sentence_length": {
-    "avg": 20.8,
-    "stddev": 15.4
+    "avg": 20.7,
+    "stddev": 14.2
   },
   "paragraph_length": {
-    "avg": 26.4,
-    "stddev": 18.1,
+    "avg": 30.6,
+    "stddev": 27.2,
     "min": 0,
-    "max": 117
+    "max": 194
   },
-  "vocabulary_ttr": 0.055,
-  "dialogue_ratio": 0.737,
+  "vocabulary_ttr": 0.292,
+  "dialogue_ratio": 0.31,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.413,
-    "long_ratio_gt60": 0.022
+    "short_ratio_lt15": 0.36,
+    "long_ratio_gt60": 0.012
   },
   "paragraph_distribution": {
-    "short_lt50": 0.898,
-    "medium_50_200": 0.102,
+    "short_lt50": 0.879,
+    "medium_50_200": 0.121,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.504
+    "single_sentence_ratio": 0.569
   },
   "top_opening_patterns": [
-    "” ...(323次)",
-    "”，...(174次)",
-    "李观...(46次)",
-    "林霆...(32次)",
-    "网友...(32次)"
+    "” ...(11次)",
+    "”，...(9次)",
+    "谢玉...(4次)",
+    "沈景...(3次)",
+    "） ...(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(5处)",
-    "排比(2处)",
-    "反问(6处)",
-    "短句节奏(169处)"
+    "短句节奏(8处)"
   ],
-  "ai_tells": [
-    "路标词(16处)",
-    "高频副词(12处)"
-  ]
+  "ai_tells": []
 }

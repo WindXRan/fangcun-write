@@ -1,41 +1,42 @@
 ﻿{
-  "source_name": "第23章.txt",
-  "total_chars": 2623,
-  "total_words": 2033,
-  "total_sentences": 86,
-  "total_paragraphs": 58,
+  "source_name": "第26章.txt",
+  "total_chars": 2491,
+  "total_words": 1860,
+  "total_sentences": 99,
+  "total_paragraphs": 64,
   "sentence_length": {
-    "avg": 23.6,
-    "stddev": 14.6
+    "avg": 18.8,
+    "stddev": 12.5
   },
   "paragraph_length": {
-    "avg": 35.1,
-    "stddev": 23.6,
+    "avg": 29.1,
+    "stddev": 20.0,
     "min": 0,
-    "max": 120
+    "max": 76
   },
-  "vocabulary_ttr": 0.258,
-  "dialogue_ratio": 0.297,
+  "vocabulary_ttr": 0.261,
+  "dialogue_ratio": 0.254,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.36,
-    "long_ratio_gt60": 0.023
+    "short_ratio_lt15": 0.465,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.759,
-    "medium_50_200": 0.241,
+    "short_lt50": 0.844,
+    "medium_50_200": 0.156,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.241
+    "single_sentence_ratio": 0.281
   },
   "top_opening_patterns": [
-    "” ...(21次)",
-    "”，...(15次)",
-    "李观...(4次)",
-    "李萱...(3次)"
+    "” ...(20次)",
+    "”，...(13次)",
+    "李观...(7次)",
+    "江流...(6次)",
+    "李萱...(6次)"
   ],
   "rhetorical_features": [
-    "短句节奏(3处)"
+    "短句节奏(12处)"
   ],
   "ai_tells": [
-    "高频副词(3处)"
+    "路标词(2处)"
   ]
 }

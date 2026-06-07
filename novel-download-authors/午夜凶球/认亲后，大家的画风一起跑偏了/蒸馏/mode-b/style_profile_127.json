@@ -1,38 +1,41 @@
 ﻿{
-  "source_name": "第124章.txt",
-  "total_chars": 2345,
-  "total_words": 1779,
-  "total_sentences": 91,
-  "total_paragraphs": 57,
+  "source_name": "第127章.txt",
+  "total_chars": 2259,
+  "total_words": 1601,
+  "total_sentences": 102,
+  "total_paragraphs": 66,
   "sentence_length": {
-    "avg": 19.5,
-    "stddev": 13.3
+    "avg": 15.7,
+    "stddev": 11.8
   },
   "paragraph_length": {
-    "avg": 31.2,
-    "stddev": 19.9,
+    "avg": 24.3,
+    "stddev": 18.2,
     "min": 0,
-    "max": 70
+    "max": 84
   },
-  "vocabulary_ttr": 0.274,
-  "dialogue_ratio": 0.281,
+  "vocabulary_ttr": 0.249,
+  "dialogue_ratio": 0.392,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.407,
-    "long_ratio_gt60": 0.011
+    "short_ratio_lt15": 0.588,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.754,
-    "medium_50_200": 0.246,
+    "short_lt50": 0.924,
+    "medium_50_200": 0.076,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.333
+    "single_sentence_ratio": 0.303
   },
   "top_opening_patterns": [
+    "” ...(29次)",
     "”，...(19次)",
-    "” ...(16次)",
-    "运营...(3次)"
+    "高慧...(3次)",
+    "李观...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(6处)"
+    "短句节奏(14处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "路标词(1处)"
+  ]
 }

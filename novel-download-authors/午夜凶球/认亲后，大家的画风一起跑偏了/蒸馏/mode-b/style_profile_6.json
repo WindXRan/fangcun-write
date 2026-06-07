@@ -1,40 +1,40 @@
 ﻿{
-  "source_name": "第3章.txt",
-  "total_chars": 2707,
-  "total_words": 2050,
+  "source_name": "第6章.txt",
+  "total_chars": 2267,
+  "total_words": 1714,
   "total_sentences": 96,
-  "total_paragraphs": 67,
+  "total_paragraphs": 55,
   "sentence_length": {
-    "avg": 21.4,
-    "stddev": 18.9
+    "avg": 17.9,
+    "stddev": 13.8
   },
   "paragraph_length": {
-    "avg": 30.6,
-    "stddev": 25.1,
+    "avg": 31.2,
+    "stddev": 33.1,
     "min": 0,
-    "max": 140
+    "max": 189
   },
-  "vocabulary_ttr": 0.254,
-  "dialogue_ratio": 0.444,
+  "vocabulary_ttr": 0.291,
+  "dialogue_ratio": 0.516,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.438,
-    "long_ratio_gt60": 0.073
+    "short_ratio_lt15": 0.562,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.821,
-    "medium_50_200": 0.179,
+    "short_lt50": 0.836,
+    "medium_50_200": 0.164,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.343
+    "single_sentence_ratio": 0.364
   },
   "top_opening_patterns": [
-    "” ...(31次)",
-    "”徐...(6次)",
-    "张凡...(3次)"
+    "” ...(24次)",
+    "”，...(4次)",
+    "李观...(3次)",
+    "不过...(3次)",
+    "“你...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(13处)"
+    "短句节奏(9处)"
   ],
-  "ai_tells": [
-    "高频副词(1处)"
-  ]
+  "ai_tells": []
 }

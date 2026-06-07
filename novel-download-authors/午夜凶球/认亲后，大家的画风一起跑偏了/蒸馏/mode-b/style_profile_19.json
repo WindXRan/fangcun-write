@@ -1,40 +1,43 @@
 ﻿{
-  "source_name": "第16章.txt",
-  "total_chars": 2470,
-  "total_words": 1837,
-  "total_sentences": 101,
-  "total_paragraphs": 62,
+  "source_name": "第19章.txt",
+  "total_chars": 2656,
+  "total_words": 2091,
+  "total_sentences": 105,
+  "total_paragraphs": 49,
   "sentence_length": {
-    "avg": 18.2,
-    "stddev": 12.8
+    "avg": 19.9,
+    "stddev": 13.6
   },
   "paragraph_length": {
-    "avg": 29.6,
-    "stddev": 23.1,
+    "avg": 42.7,
+    "stddev": 35.3,
     "min": 0,
-    "max": 94
+    "max": 177
   },
-  "vocabulary_ttr": 0.248,
-  "dialogue_ratio": 0.409,
+  "vocabulary_ttr": 0.216,
+  "dialogue_ratio": 0.639,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.416,
+    "short_ratio_lt15": 0.41,
     "long_ratio_gt60": 0.01
   },
   "paragraph_distribution": {
-    "short_lt50": 0.855,
-    "medium_50_200": 0.145,
+    "short_lt50": 0.653,
+    "medium_50_200": 0.347,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.242
+    "single_sentence_ratio": 0.245
   },
   "top_opening_patterns": [
-    "” ...(28次)",
+    "” ...(23次)",
     "李建...(4次)",
-    "”李...(3次)"
+    "”李...(4次)",
+    "”张...(4次)",
+    "如果...(3次)"
   ],
   "rhetorical_features": [
     "短句节奏(14处)"
   ],
   "ai_tells": [
-    "路标词(4处)"
+    "路标词(1处)",
+    "高频副词(3处)"
   ]
 }

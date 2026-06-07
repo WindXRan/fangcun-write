@@ -1,39 +1,39 @@
 ﻿{
-  "source_name": "第75章.txt",
-  "total_chars": 2322,
-  "total_words": 1783,
-  "total_sentences": 70,
-  "total_paragraphs": 51,
+  "source_name": "第78章.txt",
+  "total_chars": 2262,
+  "total_words": 1750,
+  "total_sentences": 78,
+  "total_paragraphs": 48,
   "sentence_length": {
-    "avg": 25.5,
-    "stddev": 14.7
+    "avg": 22.4,
+    "stddev": 15.5
   },
   "paragraph_length": {
-    "avg": 35.0,
-    "stddev": 18.6,
+    "avg": 36.5,
+    "stddev": 23.9,
     "min": 0,
-    "max": 92
+    "max": 97
   },
-  "vocabulary_ttr": 0.25,
-  "dialogue_ratio": 0.379,
+  "vocabulary_ttr": 0.249,
+  "dialogue_ratio": 0.523,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.186,
-    "long_ratio_gt60": 0.029
+    "short_ratio_lt15": 0.397,
+    "long_ratio_gt60": 0.026
   },
   "paragraph_distribution": {
-    "short_lt50": 0.824,
-    "medium_50_200": 0.176,
+    "short_lt50": 0.75,
+    "medium_50_200": 0.25,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.373
+    "single_sentence_ratio": 0.375
   },
   "top_opening_patterns": [
-    "” ...(20次)",
-    "”，...(10次)",
+    "” ...(18次)",
+    "”，...(15次)",
     "李观...(5次)",
-    "李昭...(3次)"
+    "朱文...(4次)"
   ],
   "rhetorical_features": [
-    "短句节奏(2处)"
+    "短句节奏(7处)"
   ],
   "ai_tells": [
     "路标词(1处)"

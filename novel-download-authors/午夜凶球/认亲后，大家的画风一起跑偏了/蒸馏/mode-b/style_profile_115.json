@@ -1,38 +1,40 @@
 ﻿{
-  "source_name": "第112章.txt",
-  "total_chars": 2044,
-  "total_words": 1567,
-  "total_sentences": 72,
-  "total_paragraphs": 42,
+  "source_name": "第115章.txt",
+  "total_chars": 2341,
+  "total_words": 1815,
+  "total_sentences": 76,
+  "total_paragraphs": 50,
   "sentence_length": {
-    "avg": 21.8,
-    "stddev": 11.5
+    "avg": 23.9,
+    "stddev": 16.2
   },
   "paragraph_length": {
-    "avg": 37.3,
-    "stddev": 19.1,
+    "avg": 36.3,
+    "stddev": 19.7,
     "min": 0,
-    "max": 96
+    "max": 83
   },
-  "vocabulary_ttr": 0.268,
-  "dialogue_ratio": 0.341,
+  "vocabulary_ttr": 0.25,
+  "dialogue_ratio": 0.21,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.292,
-    "long_ratio_gt60": 0.0
+    "short_ratio_lt15": 0.329,
+    "long_ratio_gt60": 0.013
   },
   "paragraph_distribution": {
-    "short_lt50": 0.714,
-    "medium_50_200": 0.286,
+    "short_lt50": 0.76,
+    "medium_50_200": 0.24,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.31
+    "single_sentence_ratio": 0.38
   },
   "top_opening_patterns": [
-    "”，...(20次)",
-    "” ...(8次)",
-    "“你...(3次)"
+    "” ...(16次)",
+    "”，...(10次)",
+    "黄毛...(7次)",
+    "李昭...(4次)"
   ],
   "rhetorical_features": [
-    "短句节奏(4处)"
+    "反问(2处)",
+    "短句节奏(8处)"
   ],
   "ai_tells": []
 }

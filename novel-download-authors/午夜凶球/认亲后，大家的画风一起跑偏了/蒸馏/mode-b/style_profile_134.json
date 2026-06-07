@@ -1,39 +1,39 @@
 ﻿{
-  "source_name": "第131章.txt",
-  "total_chars": 2377,
-  "total_words": 1889,
+  "source_name": "第134章.txt",
+  "total_chars": 2284,
+  "total_words": 1718,
   "total_sentences": 75,
-  "total_paragraphs": 43,
+  "total_paragraphs": 55,
   "sentence_length": {
-    "avg": 25.2,
-    "stddev": 16.8
+    "avg": 22.9,
+    "stddev": 14.7
   },
   "paragraph_length": {
-    "avg": 43.9,
-    "stddev": 27.0,
+    "avg": 31.2,
+    "stddev": 19.8,
     "min": 0,
-    "max": 102
+    "max": 82
   },
-  "vocabulary_ttr": 0.249,
-  "dialogue_ratio": 0.265,
+  "vocabulary_ttr": 0.256,
+  "dialogue_ratio": 0.35,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.347,
-    "long_ratio_gt60": 0.053
+    "short_ratio_lt15": 0.293,
+    "long_ratio_gt60": 0.013
   },
   "paragraph_distribution": {
-    "short_lt50": 0.628,
-    "medium_50_200": 0.372,
+    "short_lt50": 0.818,
+    "medium_50_200": 0.182,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.326
+    "single_sentence_ratio": 0.364
   },
   "top_opening_patterns": [
-    "”，...(12次)",
-    "” ...(10次)",
+    "” ...(24次)",
+    "”，...(11次)",
     "张自...(4次)",
-    "李萱...(3次)"
+    "林秋...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(5处)"
+    "短句节奏(6处)"
   ],
   "ai_tells": []
 }

@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第8章.txt",
+  "total_chars": 2981,
+  "total_words": 2108,
+  "total_sentences": 96,
+  "total_paragraphs": 96,
+  "sentence_length": {
+    "avg": 22.0,
+    "stddev": 13.3
+  },
+  "paragraph_length": {
+    "avg": 22.0,
+    "stddev": 13.4,
+    "min": 0,
+    "max": 75
+  },
+  "vocabulary_ttr": 0.228,
+  "dialogue_ratio": 0.69,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.323,
+    "long_ratio_gt60": 0.021
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.979,
+    "medium_50_200": 0.021,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.417
+  },
+  "top_opening_patterns": [
+    "” ...(55次)",
+    "秦钰...(8次)",
+    "”秦...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "ai_tells": [
+    "路标词(3处)",
+    "高频副词(2处)"
+  ]
+}

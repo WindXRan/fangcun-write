@@ -1,0 +1,39 @@
+﻿{
+  "source_name": "第5章.txt",
+  "total_chars": 2358,
+  "total_words": 1805,
+  "total_sentences": 65,
+  "total_paragraphs": 58,
+  "sentence_length": {
+    "avg": 27.8,
+    "stddev": 14.6
+  },
+  "paragraph_length": {
+    "avg": 31.1,
+    "stddev": 17.0,
+    "min": 0,
+    "max": 80
+  },
+  "vocabulary_ttr": 0.247,
+  "dialogue_ratio": 0.367,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.169,
+    "long_ratio_gt60": 0.015
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.828,
+    "medium_50_200": 0.172,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.586
+  },
+  "top_opening_patterns": [
+    "” ...(23次)",
+    "姜霖...(4次)",
+    "秦钰...(3次)",
+    "莫洋...(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(4处)"
+  ],
+  "ai_tells": []
+}

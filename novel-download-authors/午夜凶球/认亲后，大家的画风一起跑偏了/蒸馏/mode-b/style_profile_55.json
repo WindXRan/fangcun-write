@@ -1,41 +1,38 @@
 ﻿{
-  "source_name": "第52章.txt",
-  "total_chars": 2241,
-  "total_words": 1734,
-  "total_sentences": 79,
-  "total_paragraphs": 40,
+  "source_name": "第55章.txt",
+  "total_chars": 2448,
+  "total_words": 2012,
+  "total_sentences": 75,
+  "total_paragraphs": 39,
   "sentence_length": {
-    "avg": 21.9,
-    "stddev": 14.3
+    "avg": 26.8,
+    "stddev": 14.5
   },
   "paragraph_length": {
-    "avg": 43.4,
-    "stddev": 35.2,
+    "avg": 51.6,
+    "stddev": 42.7,
     "min": 0,
-    "max": 153
+    "max": 168
   },
-  "vocabulary_ttr": 0.235,
-  "dialogue_ratio": 0.487,
+  "vocabulary_ttr": 0.258,
+  "dialogue_ratio": 0.101,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.38,
-    "long_ratio_gt60": 0.0
+    "short_ratio_lt15": 0.267,
+    "long_ratio_gt60": 0.013
   },
   "paragraph_distribution": {
-    "short_lt50": 0.7,
-    "medium_50_200": 0.3,
+    "short_lt50": 0.641,
+    "medium_50_200": 0.359,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.2
+    "single_sentence_ratio": 0.41
   },
   "top_opening_patterns": [
-    "”，...(22次)",
-    "” ...(9次)",
-    "“你...(4次)",
-    "“不...(3次)"
+    "”，...(9次)",
+    "” ...(6次)",
+    "孙晓...(4次)"
   ],
   "rhetorical_features": [
-    "短句节奏(5处)"
+    "短句节奏(3处)"
   ],
-  "ai_tells": [
-    "高频副词(2处)"
-  ]
+  "ai_tells": []
 }

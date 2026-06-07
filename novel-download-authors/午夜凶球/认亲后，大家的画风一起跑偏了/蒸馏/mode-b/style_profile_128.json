@@ -1,41 +1,39 @@
 ﻿{
-  "source_name": "第125章.txt",
-  "total_chars": 2447,
-  "total_words": 1827,
-  "total_sentences": 94,
-  "total_paragraphs": 63,
+  "source_name": "第131章.txt",
+  "total_chars": 2377,
+  "total_words": 1889,
+  "total_sentences": 75,
+  "total_paragraphs": 43,
   "sentence_length": {
-    "avg": 19.4,
-    "stddev": 13.7
+    "avg": 25.2,
+    "stddev": 16.8
   },
   "paragraph_length": {
-    "avg": 29.0,
-    "stddev": 15.3,
+    "avg": 43.9,
+    "stddev": 27.0,
     "min": 0,
-    "max": 65
+    "max": 102
   },
-  "vocabulary_ttr": 0.255,
-  "dialogue_ratio": 0.267,
+  "vocabulary_ttr": 0.249,
+  "dialogue_ratio": 0.265,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.457,
-    "long_ratio_gt60": 0.011
+    "short_ratio_lt15": 0.347,
+    "long_ratio_gt60": 0.053
   },
   "paragraph_distribution": {
-    "short_lt50": 0.889,
-    "medium_50_200": 0.111,
+    "short_lt50": 0.628,
+    "medium_50_200": 0.372,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.444
+    "single_sentence_ratio": 0.326
   },
   "top_opening_patterns": [
-    "”，...(20次)",
+    "”，...(12次)",
     "” ...(10次)",
-    "老太...(9次)",
-    "“我...(3次)"
+    "张自...(4次)",
+    "李萱...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(9处)"
+    "短句节奏(5处)"
   ],
-  "ai_tells": [
-    "高频副词(1处)"
-  ]
+  "ai_tells": []
 }

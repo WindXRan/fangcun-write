@@ -1,42 +1,44 @@
 ﻿{
-  "source_name": "第138章.txt",
-  "total_chars": 2398,
-  "total_words": 1729,
-  "total_sentences": 83,
-  "total_paragraphs": 67,
+  "source_name": "第141章.txt",
+  "total_chars": 20099,
+  "total_words": 15021,
+  "total_sentences": 724,
+  "total_paragraphs": 513,
   "sentence_length": {
-    "avg": 20.8,
-    "stddev": 15.2
+    "avg": 20.7,
+    "stddev": 13.9
   },
   "paragraph_length": {
-    "avg": 25.8,
-    "stddev": 19.4,
+    "avg": 29.3,
+    "stddev": 18.3,
     "min": 0,
-    "max": 94
+    "max": 113
   },
-  "vocabulary_ttr": 0.263,
-  "dialogue_ratio": 0.392,
+  "vocabulary_ttr": 0.089,
+  "dialogue_ratio": 0.337,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.41,
-    "long_ratio_gt60": 0.0
+    "short_ratio_lt15": 0.384,
+    "long_ratio_gt60": 0.012
   },
   "paragraph_distribution": {
-    "short_lt50": 0.881,
-    "medium_50_200": 0.119,
+    "short_lt50": 0.864,
+    "medium_50_200": 0.136,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.328
+    "single_sentence_ratio": 0.37
   },
   "top_opening_patterns": [
-    "” ...(33次)",
-    "”，...(5次)",
-    "谢震...(4次)",
-    "李观...(4次)",
-    "沈景...(3次)"
+    "” ...(185次)",
+    "”，...(128次)",
+    "林秋...(13次)",
+    "李建...(12次)",
+    "“我...(11次)"
   ],
   "rhetorical_features": [
-    "短句节奏(5处)"
+    "短句节奏(66处)"
   ],
   "ai_tells": [
-    "路标词(1处)"
+    "路标词(2处)",
+    "高频副词(4处)",
+    "说道(2处)"
   ]
 }

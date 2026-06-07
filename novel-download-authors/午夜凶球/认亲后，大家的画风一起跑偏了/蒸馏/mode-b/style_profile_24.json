@@ -1,43 +1,40 @@
 ﻿{
-  "source_name": "第21章.txt",
-  "total_chars": 2497,
-  "total_words": 1993,
-  "total_sentences": 77,
-  "total_paragraphs": 46,
+  "source_name": "第24章.txt",
+  "total_chars": 2567,
+  "total_words": 1910,
+  "total_sentences": 100,
+  "total_paragraphs": 67,
   "sentence_length": {
-    "avg": 25.9,
-    "stddev": 16.2
+    "avg": 19.1,
+    "stddev": 13.8
   },
   "paragraph_length": {
-    "avg": 43.3,
-    "stddev": 28.2,
+    "avg": 28.5,
+    "stddev": 22.5,
     "min": 0,
-    "max": 143
+    "max": 126
   },
-  "vocabulary_ttr": 0.26,
-  "dialogue_ratio": 0.245,
+  "vocabulary_ttr": 0.244,
+  "dialogue_ratio": 0.485,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.234,
-    "long_ratio_gt60": 0.026
+    "short_ratio_lt15": 0.46,
+    "long_ratio_gt60": 0.01
   },
   "paragraph_distribution": {
-    "short_lt50": 0.652,
-    "medium_50_200": 0.348,
+    "short_lt50": 0.866,
+    "medium_50_200": 0.134,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.326
+    "single_sentence_ratio": 0.299
   },
   "top_opening_patterns": [
-    "” ...(16次)",
-    "”，...(6次)",
-    "李观...(5次)",
-    "李建...(3次)",
-    "张自...(3次)"
+    "” ...(32次)",
+    "”，...(12次)",
+    "“你...(5次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(2处)",
-    "短句节奏(5处)"
+    "短句节奏(9处)"
   ],
   "ai_tells": [
-    "高频副词(2处)"
+    "高频副词(1处)"
   ]
 }

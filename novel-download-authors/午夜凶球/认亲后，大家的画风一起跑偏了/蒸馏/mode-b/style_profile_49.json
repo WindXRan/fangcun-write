@@ -1,38 +1,39 @@
 ﻿{
-  "source_name": "第46章.txt",
-  "total_chars": 2554,
-  "total_words": 2039,
-  "total_sentences": 80,
+  "source_name": "第49章.txt",
+  "total_chars": 2524,
+  "total_words": 2031,
+  "total_sentences": 86,
   "total_paragraphs": 45,
   "sentence_length": {
-    "avg": 25.5,
-    "stddev": 16.2
+    "avg": 23.6,
+    "stddev": 16.0
   },
   "paragraph_length": {
-    "avg": 45.3,
-    "stddev": 35.2,
+    "avg": 45.1,
+    "stddev": 32.9,
     "min": 0,
-    "max": 132
+    "max": 142
   },
-  "vocabulary_ttr": 0.243,
-  "dialogue_ratio": 0.301,
+  "vocabulary_ttr": 0.25,
+  "dialogue_ratio": 0.199,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.287,
-    "long_ratio_gt60": 0.025
+    "short_ratio_lt15": 0.349,
+    "long_ratio_gt60": 0.023
   },
   "paragraph_distribution": {
-    "short_lt50": 0.6,
-    "medium_50_200": 0.4,
+    "short_lt50": 0.622,
+    "medium_50_200": 0.378,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.244
+    "single_sentence_ratio": 0.267
   },
   "top_opening_patterns": [
-    "” ...(18次)",
-    "”，...(9次)",
-    "卫骁...(3次)"
+    "” ...(17次)",
+    "”，...(10次)",
+    "李萱...(5次)",
+    "韩宁...(4次)"
   ],
   "rhetorical_features": [
-    "短句节奏(3处)"
+    "短句节奏(5处)"
   ],
   "ai_tells": [
     "路标词(1处)"

@@ -1,0 +1,150 @@
+{
+  "aigc_score": 0.0437,
+  "features": {
+    "perplexity": 1.0,
+    "burstiness": 0.776,
+    "ngram_repetition": 0.34,
+    "vocabulary_diversity": 0.949,
+    "syntax_regularity": 0.016,
+    "connective_density": 0.621,
+    "emotion_naturalness": 0.906,
+    "ai_score": 65.4,
+    "details": {
+      "perplexity": {
+        "char_entropy": 8.264,
+        "word_entropy": 12.154,
+        "bigram_entropy": 12.176,
+        "combined": 10.994
+      },
+      "burstiness": {
+        "length_cv": 0.533,
+        "avg_length": 27.4,
+        "length_std": 14.6,
+        "avg_diff": 16.1,
+        "complexity_variance": 0.046
+      },
+      "ngram_repetition": {
+        "bigram_repetition": 0.67,
+        "trigram_repetition": 0.331,
+        "fourgram_repetition": 0.148,
+        "high_freq_ratio": 0.276
+      },
+      "vocabulary_diversity": {
+        "ttr": 0.938,
+        "hapax_ratio": 0.893,
+        "yules_k": 0.412,
+        "simpsons_d": 1.0,
+        "vocabulary_size": 4732
+      },
+      "syntax_pattern": {
+        "pattern_repetition": 0.008,
+        "start_repetition": 0.002,
+        "length_repetition": 0.04,
+        "unique_patterns": 751
+      },
+      "connective_density": {
+        "density": 0.175,
+        "uniformity": 0.86,
+        "total_count": 144,
+        "by_category": {
+          "因果": 25,
+          "转折": 43,
+          "递进": 20,
+          "总结": 0,
+          "顺序": 15,
+          "举例": 33,
+          "解释": 8
+        }
+      },
+      "emotion_naturalness": {
+        "change_rate": 0.069,
+        "diversity": 0.118,
+        "distribution": {
+          "positive_mild": 0.02187120291616039,
+          "neutral": 0.9623329283110571,
+          "negative_mild": 0.014580801944106925,
+          "negative_strong": 0.001215066828675577
+        },
+        "dominant_emotion": "neutral"
+      }
+    }
+  },
+  "llm_analysis": {
+    "aigc_score": 0.0437,
+    "judgment": "人工撰写",
+    "confidence": "高",
+    "chunks": [
+      {
+        "chunk_index": 0,
+        "aigc_score": 0.05,
+        "judgment": "人工撰写",
+        "confidence": "高",
+        "features": {
+          "naturalness": "中",
+          "emotion": "高",
+          "creativity": "高",
+          "logic": "高",
+          "style": "中"
+        },
+        "ai_indicators": [],
+        "human_indicators": [
+          "口语化对话和俚语使用",
+          "情感描写有真实层次波动",
+          "个性化细节如星星比喻和情书情节",
+          "逻辑连接自然无过度连接词",
+          "网络小说典型风格但具独特性"
+        ],
+        "summary": "文本语言自然，情感表达真实有层次，细节创意丰富，逻辑结构清晰，写作风格符合网络小说特征但具个性化，整体呈现人工撰写特征，AI生成可能性低。"
+      },
+      {
+        "chunk_index": 1,
+        "aigc_score": 0.001,
+        "judgment": "人工撰写",
+        "confidence": "高",
+        "features": {
+          "naturalness": "高",
+          "emotion": "高",
+          "creativity": "高",
+          "logic": "高",
+          "style": "高"
+        },
+        "ai_indicators": [],
+        "human_indicators": [
+          "口语化表达生动自然，如'CPU都快烧了''丫是故意气我呢吧'",
+          "情感层次丰富，林蓁从惊讶到数落的情绪变化真实",
+          "细节描写独特，如'结婚证翻快烂了''九块'回应",
+          "人物对话个性化，符合各自性格",
+          "情节推进自然，场景转换流畅"
+        ],
+        "summary": "文本语言自然口语化，情感表达真实有层次，细节描写生动独特，逻辑连接自然，写作风格有个人特色，整体呈现明显的人工创作特征。"
+      },
+      {
+        "chunk_index": 2,
+        "aigc_score": 0.08,
+        "judgment": "人工撰写",
+        "confidence": "高",
+        "features": {
+          "naturalness": "高",
+          "emotion": "中",
+          "creativity": "中",
+          "logic": "高",
+          "style": "中"
+        },
+        "ai_indicators": [
+          "部分描写略显套路化，如'微风撩动她耳边细碎的发丝，在白皙的脸颊上轻轻萦绕'",
+          "'目光恍惚'出现两次，用词重复",
+          "部分形容词有模板感，如'高大的背影''眉梢不着痕迹的扬了扬'"
+        ],
+        "human_indicators": [
+          "对话高度口语化且有个性：'没憋好屁''玩脱了''你钱多不如直接转给我'",
+          "有网络小说特有的表达风格，如'秦大少看都不会看一眼'",
+          "细节有生活气息：'姜霖求婚戒指才五千块''钻石又不值钱'",
+          "作者信息与写作风格一致，是连续产出的网文作者",
+          "情节转折自然，店员心理描写接地气：'玩脱了，以为来了个大客户，没想到来了个装逼的'"
+        ],
+        "summary": "该文本为典型网文言情风格，对话驱动情节，口语化程度高且有个人特色。虽然存在部分套路化描写（霸道总裁买戒指桥段），但整体表达自然，细节有生活感，'钻石不值钱'等反套路表达体现作者思考。AI生成可能性低。"
+      }
+    ],
+    "overall_summary": "文本整体呈现明显的人工撰写特征。三个片段的AIGC值分别为0.05、0.001、0.08，平均值0.0437，远低于AI生成阈值0.5。文本具有口语化对话、情感层次丰富、细节独特等人工创作特征。"
+  }
+}

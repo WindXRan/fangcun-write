@@ -1,42 +1,42 @@
-﻿{
-  "source_name": "第147章.txt",
-  "total_chars": 2350,
-  "total_words": 1665,
-  "total_sentences": 99,
-  "total_paragraphs": 70,
+{
+  "source_name": "第150章.txt",
+  "total_chars": 2385,
+  "total_words": 1888,
+  "total_sentences": 77,
+  "total_paragraphs": 55,
   "sentence_length": {
-    "avg": 16.8,
-    "stddev": 13.3
+    "avg": 24.5,
+    "stddev": 12.3
   },
   "paragraph_length": {
-    "avg": 23.8,
-    "stddev": 17.2,
+    "avg": 34.3,
+    "stddev": 22.2,
     "min": 0,
-    "max": 90
+    "max": 119
   },
-  "vocabulary_ttr": 0.271,
-  "dialogue_ratio": 0.333,
+  "vocabulary_ttr": 0.291,
+  "dialogue_ratio": 0.086,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.525,
-    "long_ratio_gt60": 0.01
+    "short_ratio_lt15": 0.195,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.929,
-    "medium_50_200": 0.071,
+    "short_lt50": 0.836,
+    "medium_50_200": 0.164,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.443
+    "single_sentence_ratio": 0.582
   },
   "top_opening_patterns": [
-    "”，...(23次)",
-    "” ...(16次)",
-    "李观...(4次)",
-    "“还...(3次)",
-    "“你...(3次)"
+    "” ...(7次)",
+    "江流...(5次)",
+    "朱文...(4次)",
+    "林霆...(3次)",
+    "”，...(3次)"
   ],
   "rhetorical_features": [
-    "短句节奏(10处)"
+    "短句节奏(3处)"
   ],
   "ai_tells": [
-    "路标词(1处)"
+    "路标词(2处)"
   ]
 }

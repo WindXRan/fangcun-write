@@ -1,40 +1,42 @@
 ﻿{
-  "source_name": "第142章.txt",
-  "total_chars": 2346,
-  "total_words": 1825,
-  "total_sentences": 67,
-  "total_paragraphs": 52,
+  "source_name": "第145章.txt",
+  "total_chars": 2385,
+  "total_words": 1888,
+  "total_sentences": 77,
+  "total_paragraphs": 55,
   "sentence_length": {
-    "avg": 27.2,
-    "stddev": 15.3
+    "avg": 24.5,
+    "stddev": 12.3
   },
   "paragraph_length": {
-    "avg": 35.1,
-    "stddev": 20.6,
+    "avg": 34.3,
+    "stddev": 22.2,
     "min": 0,
-    "max": 92
+    "max": 119
   },
-  "vocabulary_ttr": 0.275,
-  "dialogue_ratio": 0.243,
+  "vocabulary_ttr": 0.291,
+  "dialogue_ratio": 0.086,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.209,
-    "long_ratio_gt60": 0.03
+    "short_ratio_lt15": 0.195,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.788,
-    "medium_50_200": 0.212,
+    "short_lt50": 0.836,
+    "medium_50_200": 0.164,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.538
+    "single_sentence_ratio": 0.582
   },
   "top_opening_patterns": [
-    "”，...(9次)",
-    "” ...(8次)",
-    "李观...(4次)",
-    "张自...(3次)",
-    "张总...(3次)"
+    "” ...(7次)",
+    "江流...(5次)",
+    "朱文...(4次)",
+    "林霆...(3次)",
+    "”，...(3次)"
   ],
   "rhetorical_features": [
     "短句节奏(3处)"
   ],
-  "ai_tells": []
+  "ai_tells": [
+    "路标词(2处)"
+  ]
 }

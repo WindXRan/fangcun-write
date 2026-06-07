@@ -1,0 +1,44 @@
+﻿{
+  "source_name": "第9章.txt",
+  "total_chars": 3680,
+  "total_words": 2732,
+  "total_sentences": 122,
+  "total_paragraphs": 113,
+  "sentence_length": {
+    "avg": 22.4,
+    "stddev": 12.8
+  },
+  "paragraph_length": {
+    "avg": 24.2,
+    "stddev": 13.7,
+    "min": 0,
+    "max": 75
+  },
+  "vocabulary_ttr": 0.217,
+  "dialogue_ratio": 0.214,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.303,
+    "long_ratio_gt60": 0.008
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.973,
+    "medium_50_200": 0.027,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.699
+  },
+  "top_opening_patterns": [
+    "” ...(30次)",
+    "姜霖...(12次)",
+    "盛惜...(9次)",
+    "秦钰...(7次)",
+    "“你...(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "ai_tells": [
+    "路标词(1处)",
+    "协作口吻(1处)",
+    "高频副词(1处)"
+  ]
+}

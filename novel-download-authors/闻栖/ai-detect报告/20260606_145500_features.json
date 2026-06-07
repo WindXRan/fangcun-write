@@ -1,0 +1,32 @@
+{
+  "text_stats": {
+    "char_count": 0,
+    "chinese_char_count": 0,
+    "paragraph_count": 0,
+    "sentence_count": 0
+  },
+  "features": {
+    "perplexity": 0.5,
+    "burstiness": 0.5,
+    "ngram_repetition": 0.0,
+    "vocabulary_diversity": 0.5,
+    "syntax_regularity": 0.5,
+    "connective_density": 0.5,
+    "emotion_naturalness": 0.5,
+    "ai_score": 42.5,
+    "details": {
+      "perplexity": {},
+      "burstiness": {},
+      "ngram_repetition": {
+        "bigram_repetition": 0,
+        "trigram_repetition": 0,
+        "fourgram_repetition": 0,
+        "high_freq_ratio": 0.0
+      },
+      "vocabulary_diversity": {},
+      "syntax_pattern": {},
+      "connective_density": {},
+      "emotion_naturalness": {}
+    }
+  }
+}

@@ -1,41 +1,41 @@
 ﻿{
-  "source_name": "第49章.txt",
-  "total_chars": 2524,
-  "total_words": 2031,
-  "total_sentences": 86,
-  "total_paragraphs": 45,
+  "source_name": "第52章.txt",
+  "total_chars": 2241,
+  "total_words": 1734,
+  "total_sentences": 79,
+  "total_paragraphs": 40,
   "sentence_length": {
-    "avg": 23.6,
-    "stddev": 16.0
+    "avg": 21.9,
+    "stddev": 14.3
   },
   "paragraph_length": {
-    "avg": 45.1,
-    "stddev": 32.9,
+    "avg": 43.4,
+    "stddev": 35.2,
     "min": 0,
-    "max": 142
+    "max": 153
   },
-  "vocabulary_ttr": 0.25,
-  "dialogue_ratio": 0.199,
+  "vocabulary_ttr": 0.235,
+  "dialogue_ratio": 0.487,
   "sentence_distribution": {
-    "short_ratio_lt15": 0.349,
-    "long_ratio_gt60": 0.023
+    "short_ratio_lt15": 0.38,
+    "long_ratio_gt60": 0.0
   },
   "paragraph_distribution": {
-    "short_lt50": 0.622,
-    "medium_50_200": 0.378,
+    "short_lt50": 0.7,
+    "medium_50_200": 0.3,
     "long_gt200": 0.0,
-    "single_sentence_ratio": 0.267
+    "single_sentence_ratio": 0.2
   },
   "top_opening_patterns": [
-    "” ...(17次)",
-    "”，...(10次)",
-    "李萱...(5次)",
-    "韩宁...(4次)"
+    "”，...(22次)",
+    "” ...(9次)",
+    "“你...(4次)",
+    "“不...(3次)"
   ],
   "rhetorical_features": [
     "短句节奏(5处)"
   ],
   "ai_tells": [
-    "路标词(1处)"
+    "高频副词(2处)"
   ]
 }
