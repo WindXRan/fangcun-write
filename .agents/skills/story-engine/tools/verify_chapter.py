@@ -232,8 +232,32 @@ def main():
     if len(sys.argv) < 2:
         print("用法:")
         print("  python verify_chapter.py <章节.txt> [de-ai_guide.md]    # 检查质量")
-        print("  python verify_chapter.py --gen-guide <源文.txt> -o <输出.md>   # 生成指纹")
+        print("  python verify_chapter.py --gen-guide <源文.txt> -o <输出.md>   # 生成单章指纹")
+        print("  python verify_chapter.py --batch-all <源文目录> -o <输出目录>   # 批量生成所有guide")
         sys.exit(1)
+
+    # --batch-all 批量模式
+    if sys.argv[1] == "--batch-all":
+        if len(sys.argv) < 4 or sys.argv[3] != "-o":
+            print("用法: python verify_chapter.py --batch-all <源文目录> -o <输出目录>")
+            sys.exit(1)
+        src_dir = sys.argv[2]
+        out_dir = sys.argv[4]
+        os.makedirs(out_dir, exist_ok=True)
+        import glob
+        chapters = sorted(glob.glob(os.path.join(src_dir, "第*.txt")))
+        if not chapters:
+            print(f"错误: {src_dir} 下没有找到章节文件")
+            sys.exit(1)
+        for ch in chapters:
+            fname = os.path.basename(ch)
+            # 提取章节号
+            nums = re.findall(r'\d+', fname)
+            num = nums[0] if nums else "0"
+            out_path = os.path.join(out_dir, f"de-ai_guide_{num}.md")
+            gen_guide(ch, out_path)
+        print(f"\n批量完成: {len(chapters)}章 → {out_dir}")
+        return
 
     # --gen-guide 模式
     if sys.argv[1] == "--gen-guide":
