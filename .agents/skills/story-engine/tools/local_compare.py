@@ -72,7 +72,6 @@ def llm_analyze_chapter(api_key, src_text, new_text, ch):
 
     return {
         "chars": len(clean),
-        "ellipsis": body.count('……'),
         "dash": body.count('——'),
         "metaphor": len(re.findall(metaphor_pattern, body)),
         "ai_markers": len(re.findall(r'(?:首先|其次|然后|最后|与此同时|值得注意的是|此外|综上所述|总而言之)', body)),
@@ -150,7 +149,7 @@ def generate_report(config, start, end, output_path=None, api_key=None):
             results.append({
                 "ch": ch, "status": "无源文",
                 "new_chars": new_metrics["chars"],
-                "new_ellipsis": new_metrics["ellipsis"],
+
             })
             continue
 
@@ -168,8 +167,6 @@ def generate_report(config, start, end, output_path=None, api_key=None):
 
         if char_ratio > 20:
             issues.append(f"字数偏差{char_ratio:.0f}%")
-        if new_metrics["ellipsis"] > src_metrics["ellipsis"] * 1.5 + 2:
-            issues.append(f"省略号过多({new_metrics['ellipsis']}个)")
         if new_metrics["ai_markers"] > src_metrics["ai_markers"] + 2:
             issues.append(f"AI痕迹({new_metrics['ai_markers']}处)")
         if overlap_rate > 10:
@@ -183,8 +180,6 @@ def generate_report(config, start, end, output_path=None, api_key=None):
             "src_chars": src_metrics["chars"],
             "new_chars": new_metrics["chars"],
             "char_diff": new_metrics["chars"] - src_metrics["chars"],
-            "src_ellipsis": src_metrics["ellipsis"],
-            "new_ellipsis": new_metrics["ellipsis"],
             "src_ai": src_metrics["ai_markers"],
             "new_ai": new_metrics["ai_markers"],
             "overlap_rate": overlap_rate,
@@ -229,8 +224,8 @@ def generate_report(config, start, end, output_path=None, api_key=None):
 
     # 详细表格
     lines.append(f"## 详细数据\n")
-    lines.append(f"| 章 | 状态 | 源文字数 | 新书字数 | 差值 | 省略号(源/新) | AI(源/新) | 台词重复 | 问题 |")
-    lines.append(f"|---|------|---------|---------|------|-------------|----------|---------|------|")
+    lines.append(f"| 章 | 状态 | 源文字数 | 新书字数 | 差值 | AI(源/新) | 台词重复 | 问题 |")
+    lines.append(f"|---|------|---------|---------|------|----------|---------|------|")
 
     for r in results:
         ch = r["ch"]
@@ -240,7 +235,7 @@ def generate_report(config, start, end, output_path=None, api_key=None):
         else:
             issues_str = "；".join(r.get("issues", [])) or "无"
             overlap = f"{r['overlap_rate']}%" if r.get('overlap_rate', 0) > 0 else "0%"
-            lines.append(f"| {ch} | {status} | {r['src_chars']} | {r['new_chars']} | {r['char_diff']:+d} | {r['src_ellipsis']}/{r['new_ellipsis']} | {r['src_ai']}/{r['new_ai']} | {overlap} | {issues_str} |")
+            lines.append(f"| {ch} | {status} | {r['src_chars']} | {r['new_chars']} | {r['char_diff']:+d} | {r['src_ai']}/{r['new_ai']} | {overlap} | {issues_str} |")
 
     lines.append("")
 
