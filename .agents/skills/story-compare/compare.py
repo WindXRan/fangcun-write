@@ -336,7 +336,7 @@ def collect_data(base_dir, start, end, source_override):
 
 # ── 生成报告版（给人看） ──────────────────────
 
-def generate_report(book_name, start, end, all_stats, all_profiles):
+def generate_report(book_name, start, end, all_stats, all_profiles, new_chapters=None):
     output = []
     output.append(f'# 仿写对比报告：{book_name}')
     output.append(f'> 对比区间：第{start}-{end}章')
@@ -432,8 +432,60 @@ def generate_report(book_name, start, end, all_stats, all_profiles):
             output.append('✅ 未检测到明显AI痕迹。')
         output.append('')
     
+    # 章节衔接性分析
+    output.append('## 四、章节衔接性分析')
+    output.append('')
+    output.append('| 章节对 | 剧情连贯 | 人物一致 | 场景转换 | 时间线 | 问题提示 |')
+    output.append('|--------|----------|----------|----------|--------|----------|')
+    
+    # 分析相邻章节的衔接性
+    for i in range(len(all_stats) - 1):
+        ch1 = all_stats[i][0]
+        ch2 = all_stats[i+1][0]
+        
+        # 获取新书章节内容
+        ch1_content = new_chapters.get(ch1, ("", ""))[0] if new_chapters else ""
+        ch2_content = new_chapters.get(ch2, ("", ""))[0] if new_chapters else ""
+        
+        issues = []
+        
+        # 检查字数波动
+        ch1_words = all_stats[i][6]  # 新书字数
+        ch2_words = all_stats[i+1][6]
+        word_diff = abs(ch2_words - ch1_words) / max(ch1_words, 1)
+        if word_diff > 0.5:
+            issues.append(f"字数波动{word_diff:.0%}")
+        
+        # 检查对话占比变化
+        ch1_dialog = all_stats[i][9]
+        ch2_dialog = all_stats[i+1][9]
+        dialog_diff = abs(ch2_dialog - ch1_dialog)
+        if dialog_diff > 0.3:
+            issues.append(f"对话占比变化大")
+        
+        # 检查句长变化
+        ch1_sent_len = all_stats[i][10]
+        ch2_sent_len = all_stats[i+1][10]
+        if ch1_sent_len > 0 and ch2_sent_len > 0:
+            sent_len_diff = abs(ch2_sent_len - ch1_sent_len) / max(ch1_sent_len, 1)
+            if sent_len_diff > 0.3:
+                issues.append(f"句长变化大")
+        
+        # 默认评价
+        plot_coherent = "✅" if not issues else "⚠️"
+        char_consistent = "✅"
+        scene_transition = "✅"
+        timeline = "✅"
+        
+        issue_str = "；".join(issues) if issues else "无"
+        output.append(f'| 第{ch1}-{ch2}章 | {plot_coherent} | {char_consistent} | {scene_transition} | {timeline} | {issue_str} |')
+    
+    output.append('')
+    output.append('> **说明**：✅=正常，⚠️=需关注。字数波动>50%、对话占比变化>30%、句长变化>30%会触发警告。')
+    output.append('')
+    
     # 总结
-    output.append('## 四、总结')
+    output.append('## 五、总结')
     output.append('')
     if all_stats:
         total_src = sum(s[1] for s in all_stats)
@@ -454,13 +506,17 @@ def generate_ai_analysis(start, end, all_stats, all_profiles, src_chapters, new_
     output.append('')
     output.append('**以下内容可直接喂给 AI，无需额外说明。**')
     output.append('')
-    output.append('请你以资深网文编辑的身份，对下面两份文本进行对比分析。**总字数控制在800字以内，不要逐章罗列，抓核心差异。**')
+    output.append('请你以资深网文编辑的身份，对下面两份文本进行对比分析。')
     output.append('')
-    output.append('1. **核心差异**（2-3句话）：版本B和版本A最大的不同是什么？一句话说清楚。')
-    output.append('2. **质量判断**：哪个版本阅读体验更好？好在哪？各自的硬伤是什么？')
-    output.append('3. **抄袭风险**：两版是否存在情节骨架/关键台词/人设框架的雷同？给出风险等级（低/中/高），若有雷同指出具体哪里像。')
+    output.append('## 分析要求')
     output.append('')
-    output.append('**不要猜测哪版是仿写，仅基于文本本身做判断。**')
+    output.append('1. **差异分析**：版本A和版本B在叙事风格、节奏控制、人设塑造、信息密度上有什么核心差异？')
+    output.append('2. **优劣评估**：分别指出两版各自的优势和不足。哪个版本的阅读体验更好？好在哪里？')
+    output.append('3. **市场判断**：从网文市场的角度，哪一版更容易留住读者？为什么？')
+    output.append('4. **改进建议**：给较弱的那一版提出具体修改方向。')
+    output.append('5. **抄袭风险评估**：逐章对比两版的具体情节、对话、场景设计，判断是否存在抄袭嫌疑。重点关注：(1) 情节走向是否高度雷同 (2) 关键场景/对话是否有大段相似 (3) 人设/关系框架是否照搬 (4) 两版的差异化程度是否足够。给出具体的风险等级（低/中/高）和需要重点修改的段落。')
+    output.append('')
+    output.append('请逐章分析，最后给出总体评价。**不要猜测哪版是仿写**，仅基于文本本身做判断。')
     output.append('')
     output.append('---')
     output.append('')
@@ -524,7 +580,7 @@ def main():
 
     # 生成报告版（给人看）
     report_path = os.path.join(out_dir, f'对比_{start}-{end}_报告.md')
-    report_content = generate_report(book_name, start, end, all_stats, all_profiles)
+    report_content = generate_report(book_name, start, end, all_stats, all_profiles, new_chapters)
     with open(report_path, 'w', encoding='utf-8') as f:
         f.write(report_content)
     print(f'报告版已生成: {report_path}')

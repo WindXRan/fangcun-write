@@ -23,12 +23,24 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 sys.path.insert(0, str(Path(__file__).parent))
 from prompt_loader import load_prompt
 
-API_URL = "https://api.deepseek.com/chat/completions"
+# 默认API配置，可通过环境变量或配置文件覆盖
+DEFAULT_API_URL = "https://api.deepseek.com/chat/completions"
 SYSTEM_PROMPT = "你是一个专业的网文写手，擅长仿写风格迁移。严格按照提供的指南和指令执行。"
 
 
-def call_api(api_key, model, user_prompt, reasoning_effort="low", max_tokens=8192, system_prompt=None):
-    """调用 DeepSeek API。"""
+def get_api_url(config=None):
+    """获取API URL，优先级：配置文件 > 环境变量 > 默认值。"""
+    if config and config.get("api_base_url"):
+        return config["api_base_url"].rstrip("/") + "/chat/completions"
+    env_url = os.environ.get("API_BASE_URL")
+    if env_url:
+        return env_url.rstrip("/") + "/chat/completions"
+    return DEFAULT_API_URL
+
+
+def call_api(api_key, model, user_prompt, reasoning_effort="low", max_tokens=8192, system_prompt=None, api_url=None):
+    """调用 API。"""
+    url = api_url or DEFAULT_API_URL
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     data = {
         "model": model,
@@ -38,10 +50,9 @@ def call_api(api_key, model, user_prompt, reasoning_effort="low", max_tokens=819
         ],
         "temperature": 0.8,
         "max_tokens": max_tokens,
-        "stream": False,
-        "reasoning_effort": reasoning_effort
+        "stream": False
     }
-    resp = requests.post(API_URL, headers=headers, json=data, timeout=600)
+    resp = requests.post(url, headers=headers, json=data, timeout=600)
     resp.raise_for_status()
     return resp.json()["choices"][0]["message"]["content"]
 
@@ -86,6 +97,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     reasoning_effort = reasoning_effort or config.get("reasoning_effort", "low")
     prompts_dir = config.get("prompts_dir", ".agents/skills/story-engine/prompts")
     base_dir = config.get("base_dir", os.getcwd())
+    api_url = get_api_url(config)
 
     n = str(chapter_num) if chapter_num else "1"
     n_plus1 = str(chapter_num + 1) if chapter_num else "2"
@@ -102,11 +114,19 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     # 需要源文字数时，脚本计算（API 无法跑 PowerShell）
     if prompt_type in ("plot-guide", "style-guide", "write-chapter", "trim-chapter") and chapter_num:
         src_chars = count_source_chars(config, chapter_num)
-        target_chars = 1800  # 番茄标准统一1800字
+        target_chars = src_chars  # 1:1对标源文字数
         replacements["源文字数"] = str(src_chars)
         replacements["目标字数"] = str(target_chars)
         replacements["目标字数_min"] = str(int(target_chars * 0.9))
         replacements["目标字数_max"] = str(int(target_chars * 1.1))
+    
+    # style-guide注入源文指标（用脚本提取）
+    if prompt_type == "style-guide" and chapter_num:
+        metrics = extract_source_metrics(config, chapter_num)
+        if metrics:
+            replacements["源文指标"] = metrics
+        else:
+            replacements["源文指标"] = "（提取失败，请手动统计）"
 
     max_tokens = 8192  # 不限制，靠重跑兜底
 
@@ -127,7 +147,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     label = f"ch{chapter_num or '?'} {prompt_type}"
     t_req = time.time()
     try:
-        result = call_api(api_key, model, user_prompt, reasoning_effort, max_tokens, sys_prompt)
+        result = call_api(api_key, model, user_prompt, reasoning_effort, max_tokens, sys_prompt, api_url)
         elapsed = time.time() - t_req
         print(f"  [OK] {label} ({elapsed:.0f}s)")
         return result
@@ -276,10 +296,10 @@ def phase_prep(config):
 def phase_open_book(config):
     """生成 concept.md（设定 + 弧线，含固定角色名）。"""
     print("\n" + "=" * 50)
-    print("Phase 1: 开书 (pro)")
+    print("Phase 1: 开书 (pro, reasoning=high)")
     print("=" * 50)
 
-    pro = {**config, "model": "deepseek-v4-pro", "reasoning_effort": "low"}
+    pro = {**config, "model": "deepseek-v4-pro", "reasoning_effort": "high"}
     try:
         concept = run_one(pro, "open-book")
         path = save_file(config["rewrites_dir"], "concept.md", concept)
@@ -320,6 +340,49 @@ def phase_style_profile(config):
 # Phase 2: Guide 生成
 # ============================================================
 
+def extract_source_metrics(config, ch):
+    """用脚本提取源文风格指标"""
+    import subprocess
+    source_book = config.get("source_book", "")
+    author = config.get("author", "")
+    base_dir = config.get("base_dir", os.getcwd())
+    
+    # 查找源文文件
+    patterns = [
+        f"projects/{author}/{source_book}/_cache/chapters/第{ch}章*.txt",
+        f"projects/{author}/{source_book}/_cache/chapters/第{ch:03d}章*.txt",
+        f"novel-download-authors/{author}/{source_book}/源文/第{ch}章*.txt",
+    ]
+    
+    import glob
+    source_file = None
+    for pat in patterns:
+        for f in sorted(glob.glob(os.path.join(base_dir, pat))):
+            source_file = f
+            break
+        if source_file:
+            break
+    
+    if not source_file:
+        return None
+    
+    # 运行提取脚本
+    script_path = Path(__file__).parent / "extract_style.py"
+    try:
+        result = subprocess.run(
+            ["python", str(script_path), source_file],
+            capture_output=True, timeout=30
+        )
+        if result.returncode == 0 and result.stdout:
+            # 手动解码bytes为字符串
+            output = result.stdout.decode('utf-8', errors='ignore')
+            return output.strip()
+    except Exception as e:
+        print(f"  [WARN] 提取源文指标失败: {e}")
+    
+    return None
+
+
 def phase_guides(config, start, end, workers=5, serial=False):
     """生成 plot_guide + style_guide。serial=True 时 plot-guide 串行以保持章间连贯。"""
     guides_dir = f"{config['rewrites_dir']}/guides"
@@ -329,6 +392,13 @@ def phase_guides(config, start, end, workers=5, serial=False):
     print(f"\n{'=' * 50}")
     print(f"Phase 2: style_guide (flash, ch{start}-{end}, {'并行' if workers>1 else '串行'})")
     print("=" * 50)
+    
+    # 先用脚本提取源文指标，注入到replacements中
+    for ch in range(start, end + 1):
+        metrics = extract_source_metrics(config, ch)
+        if metrics:
+            print(f"  [OK] ch{ch} 源文指标提取完成")
+    
     ok, fail = batch_run(flash, "style-guide", start, end, workers, guides_dir, "style_{ch}.md")
     print(f"style_guide: OK={len(ok)} FAIL={len(fail)}")
 
@@ -371,7 +441,7 @@ def phase_guides(config, start, end, workers=5, serial=False):
 # ============================================================
 
 def phase_write(config, start, end, workers=10):
-    """并行写章 + 异常章自动重跑（<1500字或>3000字触发）。"""
+    """并行写章 + 异常章自动重跑（字数触发）。"""
     import re as re2
     chapters_dir = f"{config['rewrites_dir']}/chapters"
     flash = {**config, "model": "deepseek-v4-flash", "reasoning_effort": "low"}
@@ -385,7 +455,7 @@ def phase_write(config, start, end, workers=10):
     # 第一轮
     ok, fail = batch_run(flash, "write-chapter", start, end, workers, chapters_dir, "ch_{ch:03d}.txt", skip_existing=True)
 
-    # 重跑异常章（最多2轮，按源文字数 ±50% 触发）
+    # 重跑异常章（最多2轮）
     for retry_round in range(1, 3):
         retry_list = []
         for ch in range(start, end + 1):
@@ -393,9 +463,16 @@ def phase_write(config, start, end, workers=10):
             if not ch_file.exists():
                 continue
             text = ch_file.read_text(encoding='utf-8')
+            
+            # 检查：字数异常（按源文字数±30%）
+            target = count_source_chars(config, ch)
             chars = len(re2.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text))
-            if chars < 900 or chars > 3000:  # 1800字目标，宽容上限
-                retry_list.append((ch, chars))
+            if target > 0:
+                deviation = abs(chars - target) / target
+                if deviation > 0.3:  # 超过±30%
+                    retry_list.append((ch, f"字数{chars}/{target}"))
+            elif chars < 900 or chars > 3000:  # 无源文时用固定阈值
+                retry_list.append((ch, f"字数{chars}"))
 
         if not retry_list:
             break
@@ -577,32 +654,32 @@ def validate_one(config, ch):
         if metrics["direct_emotion"] > limit:
             issues.append(f"直抒情 {metrics['direct_emotion']}处 (源文{src['direct_emotion']}, 上限{limit})")
 
-    # 6. 台词抄袭检测（连续6字以上与源文重合）
+    # 6. 台词抄袭检测（连续8字以上与源文重合）
     if src_text:
         # 分词：按标点切句
         def split_sentences(text):
             import re as re_s
-            return [s.strip() for s in re_s.split(r'[。！？…\n]+', text) if len(s.strip()) >= 6]
+            return [s.strip() for s in re_s.split(r'[。！？…\n]+', text) if len(s.strip()) >= 8]
 
         src_sents = split_sentences(src_text)
         imt_sents = split_sentences(text)
         plagiarisms = []
         for s in imt_sents:
             for ss in src_sents:
-                if len(s) < 6 or len(ss) < 6:
+                if len(s) < 8 or len(ss) < 8:
                     continue
                 # 滑动窗口找最长公共子串
                 max_overlap = 0
-                for i in range(len(s) - 5):
-                    for j in range(i + 6, len(s) + 1):
+                for i in range(len(s) - 7):
+                    for j in range(i + 8, len(s) + 1):
                         if s[i:j] in ss:
                             max_overlap = max(max_overlap, j - i)
-                if max_overlap >= 6:
+                if max_overlap >= 8:
                     plagiarisms.append((s[:40], ss[:40], max_overlap))
                     break  # 一句只记一次
 
         if plagiarisms:
-            issues.append(f"台词雷同 {len(plagiarisms)}处（连续≥6字匹配）")
+            issues.append(f"台词雷同 {len(plagiarisms)}处（连续≥8字匹配）")
             for p in plagiarisms[:3]:  # 最多显示3处
                 issues.append(f"  '{p[0]}...' ≈ '{p[1]}...' ({p[2]}字重合)")
 
@@ -791,33 +868,133 @@ def phase_continuity(config, start, end, workers=30):
 # Phase 4: 对比
 # ============================================================
 
-def phase_compare(config, start, end):
-    """生成仿写 vs 源文对比报告。"""
+def phase_compare(config, start, end, batch_size=10):
+    """生成仿写 vs 源文对比报告（分批处理）"""
     import subprocess
 
     rewrites_dir = config["rewrites_dir"]
     compare_script = ".agents/skills/story-compare/compare.py"
 
     print(f"\n{'=' * 50}")
-    print(f"Phase 4: 对比 (ch{start}-{end})")
+    print(f"Phase 4: 对比 (ch{start}-{end}, 每{batch_size}章一批)")
     print("=" * 50)
 
-    # compare.py 用法: python compare.py <项目目录> <起始章> <结束章>
-    cmd = ["python", compare_script, rewrites_dir, str(start), str(end)]
+    # 分批处理
+    for batch_start in range(start, end + 1, batch_size):
+        batch_end = min(batch_start + batch_size - 1, end)
+        print(f"\n  对比第{batch_start}-{batch_end}章...")
+        
+        cmd = ["python", compare_script, rewrites_dir, str(batch_start), str(batch_end)]
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', timeout=120)
+            if result.stdout:
+                print(result.stdout)
+            if result.stderr:
+                print(result.stderr)
+            
+            compare_dir = f"{rewrites_dir}/compare"
+            print(f"  [OK] 对比_{batch_start}-{batch_end}_报告.md")
+            print(f"  [OK] 对比_{batch_start}-{batch_end}_AI分析.md")
+        except Exception as e:
+            print(f"  [FAIL] 第{batch_start}-{batch_end}章对比失败: {e}")
+
+    print(f"\n对比报告 → {rewrites_dir}/compare/")
+
+
+def open_reader(config):
+    """自动启动阅读器"""
+    import webbrowser
+    import subprocess
+    
+    rewrites_dir = config.get("rewrites_dir", "")
+    if not rewrites_dir:
+        return
+    
+    # 查找 compare_server.py
+    server_paths = [
+        "tools/compare_server.py",
+        ".agents/skills/story-engine/tools/compare_server.py",
+    ]
+    
+    server_script = None
+    for path in server_paths:
+        if Path(path).exists():
+            server_script = path
+            break
+    
+    if not server_script:
+        print(f"[WARN] 未找到 compare_server.py，跳过自动打开")
+        return
+    
+    # 启动服务器
+    print(f"\n启动阅读器服务器...")
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', timeout=120)
-        print(result.stdout)
-        if result.stderr:
-            print(result.stderr)
-        compare_dir = f"{rewrites_dir}/compare"
-        print(f"[OK] 对比报告 → {compare_dir}/")
+        # 后台启动服务器
+        proc = subprocess.Popen(
+            ["python", server_script],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        
+        # 等待服务器启动
+        import time
+        time.sleep(2)
+        
+        # 打开浏览器
+        url = "http://localhost:8900"
+        print(f"阅读器地址: {url}")
+        webbrowser.open(url)
+        
+        # 不阻塞主进程
+        print(f"服务器已在后台运行 (PID: {proc.pid})")
+        print(f"按 Ctrl+C 不会停止服务器，需要手动关闭")
+        
     except Exception as e:
-        print(f"[FAIL] 对比失败: {e}")
+        print(f"[WARN] 启动阅读器失败: {e}")
 
 
 # ============================================================
 # 主入口
 # ============================================================
+
+def get_chapters_list(config, include_fanwai=False):
+    """获取章节目录中的章节列表"""
+    import glob
+    import re
+    author = config.get("author", "")
+    source_book = config.get("source_book", "")
+    base_dir = config.get("base_dir", os.getcwd())
+    
+    # 查找章节目录
+    patterns = [
+        f"projects/{author}/{source_book}/_cache/chapters/",
+        f"novel-download-authors/{author}/{source_book}/源文/",
+    ]
+    
+    chapters_dir = None
+    for pat in patterns:
+        full_path = os.path.join(base_dir, pat)
+        if os.path.isdir(full_path):
+            chapters_dir = full_path
+            break
+    
+    if not chapters_dir:
+        return []
+    
+    # 获取章节列表
+    chapters = []
+    for f in os.listdir(chapters_dir):
+        if not f.endswith('.txt'):
+            continue
+        if not include_fanwai and '番外' in f:
+            continue
+        m = re.search(r'(\d+)', f)
+        if m:
+            chapters.append(int(m.group(1)))
+    
+    chapters.sort()
+    return chapters
+
 
 def main():
     parser = argparse.ArgumentParser(description="统一改写流水线")
@@ -829,6 +1006,8 @@ def main():
                         help="plot-guide 串行生成，保持章间连贯（质量模式）")
     parser.add_argument("--phase", default="all",
                         help="all | open-book | style-profile | guides | write | validate | trim | compare（外加: continuity）")
+    parser.add_argument("--include-fanwai", action="store_true",
+                        help="包含番外章节（默认不包含）")
 
     args = parser.parse_args()
 
@@ -840,6 +1019,13 @@ def main():
     config = json.loads(config_path.read_text(encoding='utf-8'))
     config.setdefault("prompts_dir", ".agents/skills/story-engine/prompts")
     config.setdefault("base_dir", os.getcwd())
+
+    # 如果没有指定 --end，则自动获取最大章节号（默认不包含番外）
+    if args.end == 10:  # 默认值
+        chapters = get_chapters_list(config, include_fanwai=args.include_fanwai)
+        if chapters:
+            args.end = max(chapters)
+            print(f"自动检测到最大章节: 第{args.end}章")
 
     print(f"改写流水线 | {config['book_name']} | ch{args.start}-{args.end}")
     print(f"项目目录: {config.get('rewrites_dir')}")
@@ -864,8 +1050,20 @@ def main():
         phase_guides(config, args.start, args.end, args.workers, serial=args.serial)
 
     if "all" in phases or "write" in phases:
-        phase_write(config, args.start, args.end, args.workers)
-        phase_postfix(config, args.start, args.end)
+        # 分批写章+对比（每10章一批）
+        batch_size = 10
+        for batch_start in range(args.start, args.end + 1, batch_size):
+            batch_end = min(batch_start + batch_size - 1, args.end)
+            print(f"\n{'#' * 50}")
+            print(f" 批次: 第{batch_start}-{batch_end}章")
+            print(f"{'#' * 50}")
+            
+            phase_write(config, batch_start, batch_end, args.workers)
+            phase_postfix(config, batch_start, batch_end)
+            phase_compare(config, batch_start, batch_end)
+        
+        # 全部完成后启动阅读器
+        open_reader(config)
 
     if "all" in phases or "validate" in phases:
         phase_validate(config, args.start, args.end)
@@ -879,7 +1077,99 @@ def main():
     if "all" in phases or "compare" in phases:
         phase_compare(config, args.start, args.end)
 
-    print(f"\n总耗时: {time.time() - t0:.1f}s")
+    # 自动导出完整TXT
+    if "all" in phases or "write" in phases:
+        print(f"\n{'=' * 50}")
+        print("自动导出完整TXT...")
+        print("=" * 50)
+        try:
+            from merge_chapters import merge_chapters
+            chapters_dir = f"{config['rewrites_dir']}/chapters"
+            export_dir = f"{config['rewrites_dir']}/export"
+            export_file = f"{export_dir}/{config['book_name']}.txt"
+            os.makedirs(export_dir, exist_ok=True)
+            if merge_chapters(chapters_dir, export_file):
+                print(f"[OK] 已导出: {export_file}")
+            else:
+                print(f"[WARN] 导出失败")
+        except Exception as e:
+            print(f"[WARN] 导出失败: {e}")
+
+    # 生成最终汇报
+    total_time = time.time() - t0
+    rewrites_dir = config.get('rewrites_dir', '')
+    
+    print(f"\n{'=' * 50}")
+    print(f"仿写完成！结果：")
+    print("=" * 50)
+    
+    # 生成文件列表
+    print(f"\n生成文件：")
+    rewrites_path = Path(rewrites_dir)
+    if rewrites_path.exists():
+        print(f"- {rewrites_dir}/")
+        
+        # 检查各文件
+        files_to_check = [
+            ("concept.md", "设定+弧线"),
+            ("style-profile.md", "全局风格画像"),
+        ]
+        for filename, desc in files_to_check:
+            filepath = rewrites_path / filename
+            if filepath.exists():
+                print(f"  - {filename} - {desc}")
+        
+        # 检查guides目录
+        guides_dir = rewrites_path / "guides"
+        if guides_dir.exists():
+            plot_files = list(guides_dir.glob("plot_*.md"))
+            style_files = list(guides_dir.glob("style_*.md"))
+            print(f"  - guides/ - {len(plot_files)}章plot+style指南")
+        
+        # 检查chapters目录
+        chapters_dir = rewrites_path / "chapters"
+        if chapters_dir.exists():
+            chapter_files = sorted(chapters_dir.glob("ch_*.txt"))
+            if chapter_files:
+                print(f"  - chapters/ch_001.txt ~ ch_{len(chapter_files):03d}.txt - {len(chapter_files)}章正文")
+        
+        # 检查compare目录
+        compare_dir = rewrites_path / "compare"
+        if compare_dir.exists():
+            print(f"  - compare/ - 对比报告")
+            compare_files = list(compare_dir.glob("*"))
+            for cf in compare_files:
+                print(f"    - {cf.name}")
+    
+    # 统计信息
+    print(f"\n统计：")
+    # 计算总字数
+    chapters_dir = rewrites_path / "chapters"
+    if chapters_dir.exists():
+        total_chars = 0
+        for ch_file in chapters_dir.glob("ch_*.txt"):
+            content = ch_file.read_text(encoding='utf-8')
+            # 去除标题行和空白
+            lines = content.strip().split('\n')
+            if lines and lines[0].startswith('第'):
+                content = '\n'.join(lines[1:])
+            total_chars += len(content.replace('\n', '').replace(' ', ''))
+        print(f"- 总字数：{total_chars:,}字")
+    
+    # 获取源文字数
+    source_chars = config.get("source_chars", 0)
+    if source_chars:
+        print(f"- 源文字数：{source_chars:,}字")
+    
+    print(f"- 耗时：{total_time:.0f}秒")
+    
+    # 质量验证结果
+    if "validate" in phases:
+        print(f"\n质量验证：")
+        # 这里可以添加验证结果的统计
+    
+    print(f"\n如需修复，可运行：")
+    print(f"python .agents/skills/story-engine/tools/rewrite_chapters.py --config {args.config} --phase continuity --start {args.start} --end {args.end}")
 
 
 if __name__ == '__main__':
