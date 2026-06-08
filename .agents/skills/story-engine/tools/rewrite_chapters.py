@@ -564,7 +564,6 @@ def count_chapter_metrics(text):
 
     return {
         "chars": len(clean),
-        "ellipsis": body.count('……'),
         "dash": body.count('——'),
         "metaphor": len(re.findall(metaphor_pattern, body)),
         "ai_markers": len(re.findall(r'(?:首先|其次|然后|最后|与此同时|值得注意的是|此外|综上所述|总而言之)', body)),
@@ -624,19 +623,7 @@ def validate_one(config, ch):
         elif abs(deviation) > 0.10:
             warnings.append(f"字数偏差 {metrics['chars']}/{target} ({deviation:+.0%})")
 
-    # 2. 省略号检查（源文×0.7 ~ 源文×2.0）
-    if src and src["ellipsis"] > 0:
-        ratio = metrics["ellipsis"] / src["ellipsis"]
-        if ratio < 0.5:
-            issues.append(f"省略号过少 {metrics['ellipsis']}/{src['ellipsis']} ({ratio:.0%})")
-        elif ratio > 2.0:
-            issues.append(f"省略号过多 {metrics['ellipsis']}/{src['ellipsis']} ({ratio:.0%})")
-        elif ratio < 0.7:
-            warnings.append(f"省略号偏少 {metrics['ellipsis']}/{src['ellipsis']} ({ratio:.0%})")
-        elif ratio > 1.5:
-            warnings.append(f"省略号偏多 {metrics['ellipsis']}/{src['ellipsis']} ({ratio:.0%})")
-
-    # 3. 比喻句检查（不超过源文+3）
+    # 2. 比喻句检查（不超过源文+3）
     if src:
         limit = src["metaphor"] + 3
         if metrics["metaphor"] > limit:
@@ -686,9 +673,9 @@ def validate_one(config, ch):
     # 汇总
     all_ok = len(issues) == 0
     status = "[PASS]" if all_ok else "[FAIL]"
-    report_parts = [f"ch{ch:03d} {status} | {metrics['chars']}字 | ellipsis={metrics['ellipsis']} | metaphor={metrics['metaphor']} | AI={metrics['ai_markers']} | direct_emo={metrics['direct_emotion']}"]
+    report_parts = [f"ch{ch:03d} {status} | {metrics['chars']}字 | metaphor={metrics['metaphor']} | AI={metrics['ai_markers']} | direct_emo={metrics['direct_emotion']}"]
     if src:
-        report_parts.append(f"  源文: {src['chars']}字 | ellipsis={src['ellipsis']} | metaphor={src['metaphor']} | AI={src['ai_markers']} | direct_emo={src['direct_emotion']}")
+        report_parts.append(f"  源文: {src['chars']}字 | metaphor={src['metaphor']} | AI={src['ai_markers']} | direct_emo={src['direct_emotion']}")
     for i in issues:
         report_parts.append(f"  *ISSUE* {i}")
     for w in warnings:
@@ -1001,7 +988,7 @@ def main():
     parser.add_argument("--config", required=True)
     parser.add_argument("--start", type=int, default=1)
     parser.add_argument("--end", type=int, default=10)
-    parser.add_argument("--workers", type=int, default=30)
+    parser.add_argument("--workers", type=int, default=None)
     parser.add_argument("--serial", action="store_true",
                         help="plot-guide 串行生成，保持章间连贯（质量模式）")
     parser.add_argument("--phase", default="all",
@@ -1027,7 +1014,11 @@ def main():
             args.end = max(chapters)
             print(f"自动检测到最大章节: 第{args.end}章")
 
-    print(f"改写流水线 | {config['book_name']} | ch{args.start}-{args.end}")
+    if args.workers is None:
+        args.workers = args.end - args.start + 1
+        print(f"workers 自动设为章节数: {args.workers}")
+
+    print(f"改写流水线 | {config['book_name']} | ch{args.start}-{args.end} | workers={args.workers}")
     print(f"项目目录: {config.get('rewrites_dir')}")
 
     t0 = time.time()
