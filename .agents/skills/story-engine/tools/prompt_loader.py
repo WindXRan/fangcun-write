@@ -84,7 +84,7 @@ def embed_files(prompt_text, base_dir, extra_replacements=None):
     # 从后往前替换，避免位置偏移
     result = prompt_text
     for tag, path, start, end in reversed(refs):
-        if tag in EMBED_TAGS:
+        if tag in EMBED_TAGS or any(tag.startswith(p) for p in EMBED_TAGS):
             abs_path = resolve_path(base_dir, path)
             content = load_file_content(abs_path)
 

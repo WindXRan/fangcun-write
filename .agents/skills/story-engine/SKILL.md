@@ -89,7 +89,7 @@ python tools/rewrite_chapters.py --config configs/xxx.json --phase write,compare
 
 | Prompt | 用途 | 输入 | 输出 |
 |--------|------|------|------|
-| `open-book.md` | 开书 | 源文前3章 | concept.md（设定+弧线+角色名） |
+| `open-book.md` | 开书 | 源文样本（首/前/25%/50%/75%/尾，覆盖全书弧线） | concept.md（设定+弧线+角色名） |
 | `plot-guide.md` | 章纲 | 源文第N章 + concept | 节拍映射表 + 换皮检验 |
 | `style-guide.md` | 风格 | 源文第N章 | 定量锚点 + 去AI指令 |
 | `write-chapter.md` | 写章 | plot_guide + style_guide | ch_{N}.txt |

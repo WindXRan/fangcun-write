@@ -57,6 +57,25 @@ def call_api(api_key, model, user_prompt, reasoning_effort="low", max_tokens=819
     return resp.json()["choices"][0]["message"]["content"]
 
 
+def get_total_chapters(config):
+    """获取源文总章数。"""
+    import re
+    base_dir = config.get("base_dir", os.getcwd())
+    author = config.get("author", "")
+    source_book = config.get("source_book", "")
+
+    patterns = [
+        f"projects/{author}/{source_book}/_cache/chapters/",
+        f"novel-download-authors/{author}/{source_book}/源文/",
+    ]
+    for pat in patterns:
+        full = os.path.join(base_dir, pat)
+        if os.path.isdir(full):
+            files = sorted(os.listdir(full), key=lambda f: int(re.search(r'(\d+)', f).group(1)) if re.search(r'(\d+)', f) else 0)
+            return len(files)
+    return 0
+
+
 def load_style_profile(config):
     """加载全局风格画像（如果存在）。"""
     profile_path = Path(config["rewrites_dir"]) / "style-profile.md"
@@ -101,6 +120,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
 
     n = str(chapter_num) if chapter_num else "1"
     n_plus1 = str(chapter_num + 1) if chapter_num else "2"
+    total_ch = get_total_chapters(config)
     replacements = {
         "新书名": config["book_name"],
         "N": n,
@@ -109,7 +129,34 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         "N03d_plus1": f"{chapter_num+1:03d}" if chapter_num else "002",
         "作者名": config.get("author", ""),
         "源书名": config.get("source_book", ""),
+        "总章数": str(total_ch),
     }
+
+    # open-book 需要动态样本章节（开局5章+中间3章+最后5章）
+    if prompt_type == "open-book" and total_ch > 0:
+        # 开局5章
+        replacements["章号_开篇1"] = "1"
+        replacements["章号_开篇2"] = "2"
+        replacements["章号_开篇3"] = "3"
+        replacements["章号_开篇4"] = "4"
+        replacements["章号_开篇5"] = "5"
+        # 中间3章（25%/50%/75%位置）
+        replacements["章号_中段1"] = str(max(1, int(total_ch * 0.25)))
+        replacements["章号_中段2"] = str(max(1, int(total_ch * 0.50)))
+        replacements["章号_中段3"] = str(max(1, int(total_ch * 0.75)))
+        # 最后5章（跳过番外）
+        import re as re_tail
+        tail_chs = []
+        for c in range(total_ch, 0, -1):
+            tail_title = get_source_title(config, c)
+            if '番外' in tail_title:
+                continue
+            tail_chs.append(str(c))
+            if len(tail_chs) >= 5:
+                break
+        tail_chs.reverse()
+        for i in range(5):
+            replacements[f"章号_结尾{i+1}"] = tail_chs[i] if i < len(tail_chs) else str(total_ch)
 
     # 需要源文字数时，脚本计算（API 无法跑 PowerShell）
     if prompt_type in ("plot-guide", "style-guide", "write-chapter", "trim-chapter") and chapter_num:
@@ -281,10 +328,17 @@ def phase_prep(config):
 
         if chapter_files:
             toc_lines = [f"总章数: {len(chapter_files)}\n\n"]
+            import re as re_title
             for cf in chapter_files:
-                toc_lines.append(cf.stem)
+                try:
+                    first_line = cf.read_text(encoding='utf-8').strip().split('\n')[0]
+                    # 只取前60字（标题行），去掉空白
+                    title = first_line.strip()[:60]
+                    toc_lines.append(title)
+                except:
+                    toc_lines.append(cf.stem)
             toc_file.write_text('\n'.join(toc_lines), encoding='utf-8')
-            print(f"[OK] _toc.txt ({len(chapter_files)}章)")
+            print(f"[OK] _toc.txt ({len(chapter_files)}章，含完整标题)")
         else:
             print(f"[WARN] 未找到拆分章节，_toc.txt 跳过")
 
@@ -399,7 +453,7 @@ def phase_guides(config, start, end, workers=5, serial=False):
         if metrics:
             print(f"  [OK] ch{ch} 源文指标提取完成")
     
-    ok, fail = batch_run(flash, "style-guide", start, end, workers, guides_dir, "style_{ch}.md")
+    ok, fail = batch_run(flash, "style-guide", start, end, workers, guides_dir, "style_{ch}.md", skip_existing=True)
     print(f"style_guide: OK={len(ok)} FAIL={len(fail)}")
 
     # plot-guide
@@ -430,8 +484,8 @@ def phase_guides(config, start, end, workers=5, serial=False):
                 fail[ch] = str(e)
                 print(f"  [FAIL] ch{ch}: {e}")
     else:
-        # 并行模式：独立生成，速度快
-        ok, fail = batch_run(flash, "plot-guide", start, end, workers, guides_dir, "plot_{ch}.md")
+        # 并行模式：独立生成，速度快。已有文件跳过
+        ok, fail = batch_run(flash, "plot-guide", start, end, workers, guides_dir, "plot_{ch}.md", skip_existing=True)
 
     print(f"plot_guide: OK={len(ok)} FAIL={len(fail)}")
 
