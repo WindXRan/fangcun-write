@@ -1,0 +1,10 @@
+{
+  "book_name": "斗破苍穹之星辰再起",
+  "author": "天蚕土豆",
+  "source_book": "斗破苍穹",
+  "api_key": null,
+  "model": "deepseek-v4-flash",
+  "reasoning_effort": "low",
+  "prompts_dir": ".agents/skills/story-engine/prompts",
+  "rewrites_dir": "projects/天蚕土豆/斗破苍穹/rewrites/斗破苍穹之星辰再起"
+}

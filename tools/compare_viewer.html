@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>对比阅读器</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f5f0e8;color:#333;font-family:"PingFang SC","Microsoft YaHei",sans-serif;min-height:100vh}
+.header{background:#fff;border-bottom:1px solid #e0d8c8;padding:20px 0;text-align:center}
+.header h1{font-size:22px;color:#c0392b}
+.list{max-width:720px;margin:24px auto;padding:0 16px;display:flex;flex-direction:column;gap:14px}
+.card{background:#fff;border:1px solid #e0d8c8;border-radius:10px;padding:20px;cursor:pointer;display:flex;gap:16px;align-items:center;transition:box-shadow .15s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.cover{width:64px;height:88px;border-radius:6px;background:linear-gradient(135deg,#c0392b,#8e44ad);display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:700;flex-shrink:0}
+.info h2{font-size:17px;margin-bottom:4px}
+.info .meta{font-size:12px;color:#888}
+.info .hint{font-size:13px;color:#c0392b;margin-top:6px}
+.empty-msg{text-align:center;padding:60px;color:#888;font-size:14px}
+.topbar{background:#fff;border-bottom:1px solid #e0d8c8;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.topbar button{border:1px solid #ddd;border-radius:4px;padding:6px 14px;cursor:pointer;background:#fff;font-size:13px}
+.topbar button:hover{background:#f5f0e8}
+.topbar b{font-size:15px}
+.cols{max-width:960px;margin:0 auto;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cols.single{grid-template-columns:1fr}
+.panel{background:#fff;border:1px solid #e0d8c8;border-radius:6px;overflow:hidden}
+.panel-hd{padding:10px 16px;font-size:13px;font-weight:600;border-bottom:1px solid #e0d8c8;display:flex;align-items:center;gap:8px}
+.tag{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500}
+.tag.a{background:rgba(192,57,43,.1);color:#c0392b}
+.tag.b{background:rgba(39,174,96,.1);color:#27ae60}
+.body{padding:20px;line-height:2;font-size:15px;letter-spacing:.3px;max-height:75vh;overflow-y:auto}
+.para{margin-bottom:6px;white-space:pre-wrap;word-break:break-all}
+.para.removed{background:rgba(192,57,43,.08);border-left:3px solid #c0392b;padding-left:10px;border-radius:0 4px 4px 0;opacity:.75}
+.para.added{background:rgba(39,174,96,.08);border-left:3px solid #27ae60;padding-left:10px;border-radius:0 4px 4px 0}
+.para.same{border-left:3px solid transparent;padding-left:10px}
+.stats{background:#fff;border-bottom:1px solid #e0d8c8;padding:6px 16px;font-size:12px;color:#888;display:flex;gap:14px;flex-wrap:wrap}
+.stats b{color:#333;font-weight:500}
+.mode-btn{border:1px solid #ddd;border-radius:4px;padding:4px 10px;cursor:pointer;background:#fff;font-size:12px;color:#888}
+.mode-btn.on{background:#c0392b;color:#fff;border-color:#c0392b}
+#page-home,#page-read{display:none}
+#page-home.active,#page-read.active{display:block}
+</style>
+</head>
+<body>
+
+<div id="page-home" class="active">
+  <div class="header"><h1>对比阅读器</h1></div>
+  <div class="list" id="book-list"><div class="empty-msg">加载中...</div></div>
+</div>
+
+<div id="page-read">
+  <div class="topbar">
+    <button onclick="goHome()">← 返回</button>
+    <b id="title"></b>
+    <div style="flex:1"></div>
+    <button onclick="goChapter(-1)">上一章</button>
+    <select id="ch-sel" onchange="goChapterTo(parseInt(this.value))"></select>
+    <button onclick="goChapter(1)">下一章</button>
+    <div style="flex:1"></div>
+    <button class="mode-btn on" id="m-both" onclick="setView('both')">双栏</button>
+    <button class="mode-btn" id="m-a" onclick="setView('a')">只看A</button>
+    <button class="mode-btn" id="m-b" onclick="setView('b')">只看B</button>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="cols" id="cols">
+    <div class="panel" id="p-a">
+      <div class="panel-hd"><span class="tag a">A</span> 源文</div>
+      <div class="body" id="body-a"><div class="empty-msg">请选择章节</div></div>
+    </div>
+    <div class="panel" id="p-b">
+      <div class="panel-hd"><span class="tag b">B</span> 新文</div>
+      <div class="body" id="body-b"><div class="empty-msg">请选择章节</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var books = [], curBook = null, allChapters = [], currentChapter = 0;
+
+function goHome(){
+  document.getElementById('page-home').className='active';
+  document.getElementById('page-read').className='';
+}
+
+function goRead(idx){
+  document.getElementById('page-home').className='';
+  document.getElementById('page-read').className='active';
+  loadBook(idx);
+}
+
+function setView(m){
+  var c=document.getElementById('cols');
+  document.getElementById('p-a').style.display='';
+  document.getElementById('p-b').style.display='';
+  document.getElementById('m-both').className='mode-btn'+(m==='both'?' on':'');
+  document.getElementById('m-a').className='mode-btn'+(m==='a'?' on':'');
+  document.getElementById('m-b').className='mode-btn'+(m==='b'?' on':'');
+  if(m==='a'){document.getElementById('p-b').style.display='none';c.className='cols single'}
+  else if(m==='b'){document.getElementById('p-a').style.display='none';c.className='cols single'}
+  else{c.className='cols'}
+}
+
+function goChapter(delta){
+  if(!allChapters.length)return;
+  var idx = allChapters.indexOf(currentChapter);
+  if(idx === -1)return;
+  var newIdx = idx + delta;
+  if(newIdx < 0 || newIdx >= allChapters.length)return;
+  goChapterTo(allChapters[newIdx]);
+}
+
+function goChapterTo(num){
+  if(!allChapters.includes(num))return;
+  currentChapter = num;
+  document.getElementById('ch-sel').value = num;
+  loadDiff(num);
+}
+
+function updateChapterSel(){
+  var sel = document.getElementById('ch-sel');
+  sel.innerHTML = '';
+  for(var i=0;i<allChapters.length;i++){
+    var o = document.createElement('option');
+    o.value = allChapters[i];
+    o.textContent = '第'+allChapters[i]+'章';
+    if(allChapters[i] === currentChapter) o.selected = true;
+    sel.appendChild(o);
+  }
+}
+
+// 加载书籍列表
+fetch('/api/books').then(function(r){return r.json()}).then(function(data){
+  console.log('books loaded:',data.length);
+  books=data;
+  var list=document.getElementById('book-list');
+  if(!books.length){list.innerHTML='<div class="empty-msg">暂无可对比的书籍</div>';return}
+  var h='';
+  for(var i=0;i<books.length;i++){
+    var b=books[i];
+    console.log('book',i,':',b.source_book,'src_dir:',b.source_chapters_dir);
+    h+='<div class="card" onclick="goRead('+i+')">'+
+      '<div class="cover">'+b.source_book.charAt(0)+'</div>'+
+      '<div class="info"><h2>'+b.source_book+'</h2>'+
+      '<div class="meta">作者: '+b.author+' / 仿写: '+b.rewrite_book+'</div>'+
+      '<div class="hint">点击进入对比阅读 →</div></div></div>';
+  }
+  list.innerHTML=h;
+}).catch(function(e){
+  console.error('books load error:',e);
+  document.getElementById('book-list').innerHTML='<div class="empty-msg">加载失败: '+e.message+'</div>';
+});
+
+// 加载某本书
+function loadBook(idx){
+  curBook=books[idx];
+  if(!curBook){console.log('no book at idx',idx);return}
+  console.log('loading book:',curBook.source_book);
+  document.getElementById('title').textContent=curBook.source_book+' → '+curBook.rewrite_book;
+  document.getElementById('body-a').innerHTML='<div class="empty-msg">加载中...</div>';
+  document.getElementById('body-b').innerHTML='<div class="empty-msg">加载中...</div>';
+  document.getElementById('stats').innerHTML='加载中...';
+
+  var url='/api/chapters?source_dir='+encodeURIComponent(curBook.source_chapters_dir)+'&new_dir='+encodeURIComponent(curBook.new_chapters_dir);
+  console.log('fetching chapters:',url);
+  fetch(url).then(function(r){return r.json()}).then(function(d){
+    console.log('chapters data:',d);
+    var srcChs=d.source_chapters||[];
+    var newChs=d.new_chapters||[];
+    allChapters=[].concat(srcChs);
+    for(var i=0;i<newChs.length;i++){if(allChapters.indexOf(newChs[i])===-1)allChapters.push(newChs[i])}
+    allChapters.sort(function(a,b){return a-b});
+    console.log('all chapters:',allChapters.length,'first:',allChapters[0]);
+    if(allChapters.length>0){
+      currentChapter=allChapters[0];
+      updateChapterSel();
+      loadDiff(currentChapter);
+    }
+    document.getElementById('stats').innerHTML='<span>A: '+srcChs.length+'章</span><span>B: '+newChs.length+'章</span><span>共'+allChapters.length+'章</span>';
+  }).catch(function(e){
+    console.error('chapters error:',e);
+  });
+}
+
+function loadDiff(num){
+  if(!curBook){console.log('no curBook');return}
+  document.getElementById('body-a').innerHTML='<div class="empty-msg">加载第'+num+'章...</div>';
+  document.getElementById('body-b').innerHTML='<div class="empty-msg">加载第'+num+'章...</div>';
+
+  var url='/api/diff?source_dir='+encodeURIComponent(curBook.source_chapters_dir)+'&new_dir='+encodeURIComponent(curBook.new_chapters_dir)+'&num='+num;
+  console.log('fetching:',url);
+  fetch(url).then(function(r){
+    console.log('response status:',r.status);
+    return r.json()
+  }).then(function(d){
+    console.log('diff data keys:',Object.keys(d));
+    console.log('src length:',d.src?d.src.length:'undefined');
+    console.log('new length:',d.new?d.new.length:'undefined');
+    if(d.error)console.log('diff error:',d.error);
+    // 显示标题
+    var titleA = d.src_title ? '<div style="font-weight:bold;margin-bottom:10px;text-align:center">'+esc(d.src_title)+'</div>' : '';
+    var titleB = d.new_title ? '<div style="font-weight:bold;margin-bottom:10px;text-align:center">'+esc(d.new_title)+'</div>' : '';
+    render('body-a',d.src||[],titleA);
+    render('body-b',d.new||[],titleB);
+    var dc=(d.new_chars||0)-(d.src_chars||0);
+    var dcStr=(dc>=0?'+':'')+dc;
+    document.getElementById('stats').innerHTML=
+      '<span>A字数: <b>'+(d.src_chars||0)+'</b></span>'+
+      '<span>B字数: <b>'+(d.new_chars||0)+'</b></span>'+
+      '<span>差: <b>'+dcStr+'</b></span>';
+  }).catch(function(e){
+    console.error('fetch error:',e);
+    document.getElementById('body-a').innerHTML='<div class="empty-msg">加载失败: '+e.message+'</div>';
+    document.getElementById('body-b').innerHTML='<div class="empty-msg">加载失败: '+e.message+'</div>';
+  });
+}
+
+function render(id,paras,title){
+  var el=document.getElementById(id);
+  if(!paras||!paras.length){el.innerHTML='<div class="empty-msg">无内容</div>';return}
+  var h='';
+  if(title)h+=title;
+  for(var i=0;i<paras.length;i++){
+    h+='<div class="para '+paras[i].type+'">'+esc(paras[i].text)+'</div>';
+  }
+  el.innerHTML=h;
+  el.scrollTop=0;
+}
+
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+// 同步滚动 + 快捷键
+document.addEventListener('DOMContentLoaded',function(){
+  var a=document.getElementById('body-a'),b=document.getElementById('body-b'),lock=false;
+  a.addEventListener('scroll',function(){if(!lock){lock=true;b.scrollTop=a.scrollTop;lock=false}});
+  b.addEventListener('scroll',function(){if(!lock){lock=true;a.scrollTop=b.scrollTop;lock=false}});
+  
+  // 快捷键：左右箭头切换章节
+  document.addEventListener('keydown',function(e){
+    if(e.target.tagName==='SELECT'||e.target.tagName==='INPUT')return;
+    if(document.getElementById('page-read').className!=='active')return;
+    if(e.key==='ArrowLeft'){e.preventDefault();goChapter(-1)}
+    if(e.key==='ArrowRight'){e.preventDefault();goChapter(1)}
+  });
+});
+</script>
+</body>
+</html>

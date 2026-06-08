@@ -1,0 +1,10 @@
+{
+  "book_name": "替嫁后，冷面老公他不对劲",
+  "author": "闻栖",
+  "source_book": "女配一睁眼，失忆男主冷脸洗床单",
+  "api_key": "sk-db692f2841ee47c1b2afec0a0cb016f5",
+  "model": "deepseek-chat",
+  "reasoning_effort": "low",
+  "prompts_dir": ".agents/skills/story-engine/prompts",
+  "rewrites_dir": "projects/闻栖/女配一睁眼，失忆男主冷脸洗床单/rewrites/女配一睁眼，失忆男主冷脸洗床单"
+}

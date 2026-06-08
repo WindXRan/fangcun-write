@@ -1,0 +1,10 @@
+{
+  "book_name": "惹金枝",
+  "author": "空留",
+  "source_book": "惹金枝",
+  "api_key": "sk-db692f2841ee47c1b2afec0a0cb016f5",
+  "model": "deepseek-chat",
+  "reasoning_effort": "low",
+  "prompts_dir": ".agents/skills/story-engine/prompts",
+  "rewrites_dir": "novel-download-authors/空留/惹金枝/rewrites/惹金枝仿写"
+}

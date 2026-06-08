@@ -10,6 +10,13 @@
 - 换皮检验：剥掉人名地名，认不出源文→合格
 - 题材不变，血肉全换
 
+## Skill/Prompt 修改原则
+
+- **通用性**：prompt 和 skill 里不加针对化内容（如具体套路列表），保持通用
+- **职责分离**：write 只管写，检查逻辑放 validate 或 compare 阶段
+- **CLAUDE.md 定位**：放 agent 交互原则，不放内容规则
+- **内容规则归属**：换皮检验、撞梗检查等放到 plot-guide.md 或 writing-techniques-*.md
+
 ## Pipeline
 
 ```
