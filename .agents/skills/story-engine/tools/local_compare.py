@@ -59,6 +59,9 @@ def llm_analyze_chapter(api_key, src_text, new_text, ch):
         return result
     except Exception as e:
         return f"分析失败：{e}"
+
+
+def count_metrics(text):
     """统计章节的量化指标。"""
     body = text.strip()
     lines = body.split('\n')
@@ -114,7 +117,7 @@ def get_source_file(base_dir, author, source_book, ch):
     patterns = [
         f"projects/{author}/{source_book}/_cache/chapters/第{ch}章*.txt",
         f"projects/{author}/{source_book}/_cache/chapters/第{ch:03d}章*.txt",
-        f"novel-download-authors/{author}/{source_book}/源文/第{ch}章*.txt",
+        f"projects/{author}/{source_book}/源文/第{ch}章*.txt",
     ]
     for pat in patterns:
         for f in sorted(glob.glob(os.path.join(base_dir, pat))):
@@ -124,7 +127,10 @@ def get_source_file(base_dir, author, source_book, ch):
 
 def generate_report(config, start, end, output_path=None, api_key=None):
     """生成本地对比报告"""
+    # base_dir 应该是项目根目录，不是 configs 目录
     base_dir = config.get("base_dir", os.getcwd())
+    if base_dir.endswith("configs"):
+        base_dir = os.path.dirname(base_dir)
     author = config.get("author", "")
     source_book = config.get("source_book", "")
     rewrites_dir = config.get("rewrites_dir", "")
