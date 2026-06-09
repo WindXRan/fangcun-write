@@ -1,50 +1,58 @@
 ---
 name: story-optimize
 description: |
-    根据审稿反馈或对比报告，自动优化prompt。
-    触发条件：用户说「优化prompt」「根据审稿优化」「prompt不好使」。
+    根据审稿反馈提取通用优化规则，沉淀到prompt里，让每次生成都更好。
+    触发条件：用户说「优化prompt」「根据审稿优化」「沉淀规则」。
 allowed-tools: Bash(python *) Bash(cat *) Bash(ls *) Bash(cp *) Bash(mkdir *)
 shell: powershell
 ---
 
-# story-optimize（prompt优化器）
+# story-optimize（规则沉淀器）
 
-> 根据审稿反馈或对比报告，自动分析问题并优化prompt。
+> 把审稿反馈变成通用规则，加到prompt里，让每次生成都更好。
 
 ## 流程
 
 ```
 输入：审稿反馈 / 对比报告 / 用户描述的问题
 ↓
-分析：定位问题属于哪个prompt（open-book/plot-guide/style-guide/write-chapter）
+分析：这个问题是个例还是通用？
 ↓
-优化：修改对应prompt，强化规则
+提取：如果通用，提取成一条可执行规则
 ↓
-验证：跑3章测试效果
+沉淀：加到对应prompt里（plot-guide/style-guide/open-book）
+↓
+效果：后续每次生成都自动应用这条规则
 ```
 
-## 问题分类
+## 规则沉淀原则
 
-| 问题类型 | 对应prompt | 优化方向 |
-|---------|-----------|---------|
-| 开篇无吸引力 | open-book | 强化简介要求、第一章钩子 |
-| 节奏太慢 | plot-guide | 禁止纯日常、每章必须有冲突 |
-| 人设无记忆点 | plot-guide | 男主钩子人设、女主主动性 |
-| 撞梗/抄袭风险 | plot-guide | 换皮检验、桥段检查 |
-| 省略号/AI味太多 | style-guide | 防AI检测规则 |
-| 字数偏差大 | style-guide | 字数控制规则 |
-| 人名不对 | rewrite_chapters | 角色名注入逻辑 |
-| 简介质量差 | open-book | 简介结构要求 |
+1. **只沉淀通用规则**：个例问题不沉淀，通用问题才沉淀
+2. **规则必须可执行**：不说"节奏要快"，说"禁止连续2章纯日常"
+3. **规则必须可验证**：写完能对着正文逐条打勾
+4. **规则必须有正反例**：✅ 怎么做 / ❌ 不能做
+
+## 问题→规则映射
+
+| 审稿反馈 | 通用规则 | 沉淀到 |
+|---------|---------|-------|
+| 节奏太慢 | 禁止连续2章纯日常 | plot-guide |
+| 人设无记忆点 | 男主必须有钩子人设 | plot-guide |
+| 开篇无吸引力 | 前3章必须完成核心悬念 | plot-guide |
+| 省略号太多 | 省略号≤3个/章 | style-guide |
+| AI味太重 | 禁止直抒情词/AI路标词 | style-guide |
+| 简介质量差 | 简介必须有悬念+情感张力 | open-book |
+| 人名不对 | 禁用字清单 | open-book |
 
 ## 使用方式
 
 用户说「优化prompt」时：
 1. 读取最近的审稿反馈或对比报告
-2. 分析问题属于哪个prompt
-3. 修改对应prompt
-4. 跑3章验证效果
-5. 如果效果不好，继续优化
+2. 判断哪些问题是通用的
+3. 提取成可执行规则
+4. 沉淀到对应prompt
+5. 提交git
 
 ## 输出
 
-修改对应的prompt文件，并提交到git。
+修改对应的prompt文件，提交到git。
