@@ -196,6 +196,15 @@ def main():
     compare_dir = f"{rewrites_dir}/compare"
     os.makedirs(compare_dir, exist_ok=True)
     
+    # 清理旧的审稿报告
+    for old_file in Path(compare_dir).glob("审稿_*.md"):
+        old_file.unlink()
+    for old_file in Path(compare_dir).glob("全文审稿*.md"):
+        old_file.unlink()
+    for old_file in Path(compare_dir).glob("全文审稿*.json"):
+        old_file.unlink()
+    print("已清理旧审稿报告")
+    
     # 读取concept.md
     concept_path = Path(rewrites_dir) / 'concept.md'
     concept_text = ""

@@ -140,6 +140,11 @@ def main():
     chapters_dir = f"{rewrites_dir}/chapters"
     compare_dir = f"{rewrites_dir}/compare"
     
+    # 清理旧的修复报告
+    for old_file in Path(compare_dir).glob("修复结果*.json"):
+        old_file.unlink()
+    print("已清理旧修复报告")
+    
     # 读取concept.md
     concept_path = Path(rewrites_dir) / 'concept.md'
     concept_text = ""

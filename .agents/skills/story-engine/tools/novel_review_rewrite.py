@@ -553,6 +553,15 @@ def full_review_and_rewrite(config, start, end, batch_size=20, workers=5, max_ro
     compare_dir = f"{rewrites_dir}/compare"
     os.makedirs(compare_dir, exist_ok=True)
     
+    # 清理所有旧报告
+    for old_file in Path(compare_dir).glob("*.md"):
+        old_file.unlink()
+    for old_file in Path(compare_dir).glob("*.json"):
+        old_file.unlink()
+    for old_file in Path(compare_dir).glob("*.txt"):
+        old_file.unlink()
+    print("已清理所有旧报告")
+    
     # API配置
     api_key = config.get("api_key") or os.environ.get("API_KEY")
     api_url = config.get("api_base_url", "https://api.deepseek.com/v1") + "/chat/completions"
