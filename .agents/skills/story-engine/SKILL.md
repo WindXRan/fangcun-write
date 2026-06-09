@@ -13,6 +13,28 @@ shell: powershell
 
 > 开书→生成guide→写章→对比。只仿骨架，不仿血肉。
 
+## 执行模式（必须遵守）
+
+**禁止自行读取源文并生成内容！必须通过脚本调用API。**
+
+正确的执行方式：
+```bash
+# 设置API密钥
+$env:API_KEY = "sk-xxx"
+
+# 运行脚本
+python .agents/skills/story-engine/tools/rewrite_chapters.py --config configs/xxx.json --phase open-book
+python .agents/skills/story-engine/tools/rewrite_chapters.py --config configs/xxx.json --phase guides --start 1 --end 3
+python .agents/skills/story-engine/tools/rewrite_chapters.py --config configs/xxx.json --phase write --start 1 --end 3
+```
+
+错误的执行方式（禁止）：
+- 自己读取源文文件
+- 自己分析内容并生成plot_guide/style_guide
+- 自己调用prompt_loader.py
+
+**原因**：Agent模式生成的质量不稳定，API模式通过脚本有更好的错误处理、重试机制和质量验证。
+
 ## 文件结构
 
 ```
@@ -44,11 +66,22 @@ Phase 1:   开书 (pro, 1 call)        → concept.md
 Phase 1.5: 风格分析 (脚本)            → style_analysis/style_{N}.json + style_{N}.md（模板）
 Phase 2:   Guides (flash, 2N 并行)   → plot_{N}.md + style_{N}.md（引用模板）
 Phase 3:   写章 (flash, N 并行)      → ch_{N}.txt（章名自生成）
+Phase 3.1: 质量验证                    → 字数/比喻/AI路标词/台词抄袭检测
+Phase 3.2: 后处理                      → 去#号/修标题/补省略号
 Phase 3.5: Trim (flash)              → 超字数 20% 的章自动精简
 Phase 3.6: 衔接修复 (flash, N-1 并行) → 修章间重叠
 Phase 4:   对比 (本地)                → compare/报告
 Phase 5:   自动导出                    → export/{书名}.txt（写章完成后自动执行）
 ```
+
+## 鲁棒性特性
+
+- **API 重试**：429限流/5xx错误/超时 自动指数退避重试（最多3次）
+- **超时自适应**：超时后自动翻倍超时时间（600→1200s）
+- **配置校验**：启动时校验必填字段和API_KEY
+- **源文缓存**：读取过的源文自动缓存，避免重复IO
+- **损坏检测**：跳过已有文件时检查"抱歉"/"无法生成"等AI拒绝特征
+- **抄袭检测**：基于8-gram集合匹配，O(n)复杂度
 
 ## Agent/API 双模式
 
