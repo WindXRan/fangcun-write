@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>对比阅读器</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .compare-container {
+            display: flex;
+            height: calc(100vh - 60px);
+        }
+        
+        .compare-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border);
+        }
+        
+        .compare-panel:last-child {
+            border-right: none;
+        }
+        
+        .panel-header {
+            padding: 15px 20px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .panel-header select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+        }
+        
+        .panel-chapters {
+            padding: 10px 15px;
+            background: var(--surface-soft);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .panel-chapters select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+        }
+        
+        .panel-controls {
+            padding: 10px 15px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .panel-controls button {
+            padding: 6px 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 13px;
+        }
+        
+        .panel-controls button:hover {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+        }
+        
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        
+        .panel-content p {
+            margin-bottom: 1em;
+            text-indent: 2em;
+        }
+        
+        .empty-hint {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav" id="top-nav"></nav>
+    
+    <div class="compare-container">
+        <div class="compare-panel">
+            <div class="panel-header">
+                <select id="book1Select" onchange="loadBookChapters(1)">
+                    <option value="">选择源文...</option>
+                </select>
+            </div>
+            <div class="panel-chapters">
+                <select id="chapter1Select" onchange="loadChapter(1)">
+                    <option value="">选择章节...</option>
+                </select>
+            </div>
+            <div class="panel-controls">
+                <button onclick="changeFont(1, -2)">A-</button>
+                <button onclick="changeFont(1, 2)">A+</button>
+            </div>
+            <div class="panel-content" id="content1">
+                <div class="empty-hint">请选择书籍和章节</div>
+            </div>
+        </div>
+        
+        <div class="compare-panel">
+            <div class="panel-header">
+                <select id="book2Select" onchange="loadBookChapters(2)">
+                    <option value="">选择新书...</option>
+                </select>
+            </div>
+            <div class="panel-chapters">
+                <select id="chapter2Select" onchange="loadChapter(2)">
+                    <option value="">选择章节...</option>
+                </select>
+            </div>
+            <div class="panel-controls">
+                <button onclick="changeFont(2, -2)">A-</button>
+                <button onclick="changeFont(2, 2)">A+</button>
+            </div>
+            <div class="panel-content" id="content2">
+                <div class="empty-hint">请选择书籍和章节</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        let bookData = { books: [] };
+        let chapters = { 1: [], 2: [] };
+        let fontSizes = { 1: 16, 2: 16 };
+        
+        // 加载书库数据
+        async function loadBookLibrary() {
+            try {
+                const response = await fetch('data/book_library.json');
+                bookData = await response.json();
+                populateBookSelects();
+            } catch (error) {
+                console.error('加载书库失败:', error);
+            }
+        }
+        
+        // 填充书籍下拉框
+        function populateBookSelects() {
+            const books = bookData.books || [];
+            const options = books.map(b => 
+                `<option value="${b.file.replace(/\\/g, '/')}">${b.author} - ${b.title}</option>`
+            ).join('');
+            
+            document.getElementById('book1Select').innerHTML = '<option value="">选择源文...</option>' + options;
+            document.getElementById('book2Select').innerHTML = '<option value="">选择新书...</option>' + options;
+        }
+        
+        // 加载书籍章节
+        async function loadBookChapters(panel) {
+            const select = document.getElementById(`book${panel}Select`);
+            const file = select.value;
+            
+            if (!file) return;
+            
+            try {
+                const response = await fetch(`http://localhost:8001/api/book_content?file=${encodeURIComponent(file)}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    alert('加载失败: ' + data.error);
+                    return;
+                }
+                
+                chapters[panel] = data.chapters || [];
+                
+                // 填充章节下拉框
+                const chapterSelect = document.getElementById(`chapter${panel}Select`);
+                chapterSelect.innerHTML = '<option value="">选择章节...</option>' +
+                    chapters[panel].map((ch, i) => 
+                        `<option value="${i}">${ch.title} (${ch.char_count}字)</option>`
+                    ).join('');
+            } catch (error) {
+                alert('加载失败: ' + error.message);
+            }
+        }
+        
+        // 加载章节内容
+        function loadChapter(panel) {
+            const chapterSelect = document.getElementById(`chapter${panel}Select`);
+            const index = parseInt(chapterSelect.value);
+            
+            if (isNaN(index) || !chapters[panel][index]) return;
+            
+            const chapter = chapters[panel][index];
+            const contentDiv = document.getElementById(`content${panel}`);
+            
+            contentDiv.innerHTML = chapter.content.split('\n')
+                .filter(p => p.trim())
+                .map(p => `<p>${p}</p>`)
+                .join('');
+        }
+        
+        // 调整字体大小
+        function changeFont(panel, delta) {
+            fontSizes[panel] = Math.max(12, Math.min(24, fontSizes[panel] + delta));
+            document.getElementById(`content${panel}`).style.fontSize = fontSizes[panel] + 'px';
+        }
+        
+        // 初始化
+        loadBookLibrary();
+    </script>
+</body>
+</html>

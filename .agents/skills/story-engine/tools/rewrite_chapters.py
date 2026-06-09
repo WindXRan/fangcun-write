@@ -38,8 +38,99 @@ def get_api_url(config=None):
     return DEFAULT_API_URL
 
 
-def call_api(api_key, model, user_prompt, reasoning_effort="low", max_tokens=8192, system_prompt=None, api_url=None):
-    """调用 API。"""
+def validate_config(config):
+    """校验配置完整性，返回错误列表。"""
+    errors = []
+    required = ["book_name", "author", "source_book", "rewrites_dir"]
+    for key in required:
+        if not config.get(key):
+            errors.append(f"缺少必填字段: {key}")
+    
+    api_key = config.get("api_key") or os.environ.get("API_KEY")
+    if not api_key:
+        errors.append("未配置 API_KEY（config.api_key 或 $env:API_KEY）")
+    
+    return errors
+
+
+def get_source_dir(config):
+    """统一获取源文章节目录。"""
+    base_dir = config.get("base_dir", os.getcwd())
+    author = config.get("author", "")
+    source_book = config.get("source_book", "")
+    
+    patterns = [
+        f"projects/{author}/{source_book}/_cache/chapters/",
+        f"novel-download-authors/{author}/{source_book}/源文/",
+        f"projects/{author}/{source_book}/源文/",
+    ]
+    for pat in patterns:
+        full = os.path.join(base_dir, pat)
+        if os.path.isdir(full):
+            return full
+    return None
+
+
+def find_source_chapter(config, chapter_num):
+    """统一查找源文章节文件路径。返回 Path 或 None。"""
+    import glob as g
+    base_dir = config.get("base_dir", os.getcwd())
+    author = config.get("author", "")
+    source_book = config.get("source_book", "")
+    
+    patterns = [
+        f"projects/{author}/{source_book}/_cache/chapters/第{chapter_num}章*.txt",
+        f"projects/{author}/{source_book}/_cache/chapters/第{chapter_num:03d}章*.txt",
+        f"novel-download-authors/{author}/{source_book}/源文/第{chapter_num}章*.txt",
+        f"projects/{author}/{source_book}/源文/第{chapter_num}章*.txt",
+    ]
+    for pat in patterns:
+        matches = sorted(g.glob(os.path.join(base_dir, pat)))
+        if matches:
+            return Path(matches[0])
+    return None
+
+
+# 源文缓存（避免重复读取文件）
+_source_cache = {}
+
+def get_source_text(config, ch):
+    """读取源文章节原始文本（带缓存）。"""
+    cache_key = (config.get("author", ""), config.get("source_book", ""), ch)
+    if cache_key in _source_cache:
+        return _source_cache[cache_key]
+    
+    f = find_source_chapter(config, ch)
+    if f:
+        try:
+            text = f.read_text(encoding='utf-8')
+            _source_cache[cache_key] = text
+            return text
+        except Exception:
+            pass
+    _source_cache[cache_key] = None
+    return None
+
+
+def get_total_chapters(config):
+    """获取源文总章数。"""
+    import re
+    src_dir = get_source_dir(config)
+    if not src_dir:
+        return 0
+    files = [f for f in os.listdir(src_dir) if f.endswith('.txt')]
+    return len(files)
+
+
+def call_api(api_key, model, user_prompt, reasoning_effort="low", max_tokens=8192, system_prompt=None, api_url=None, max_retries=3):
+    """调用 API，带指数退避重试。
+    
+    重试策略：
+    - 429 (限流): 指数退避 10/20/40 秒
+    - 5xx (服务端错误): 指数退避 5/10/20 秒
+    - 超时: 重试，超时时间翻倍
+    - 其他错误: 不重试
+    """
     url = api_url or DEFAULT_API_URL
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     data = {
@@ -52,9 +143,55 @@ def call_api(api_key, model, user_prompt, reasoning_effort="low", max_tokens=819
         "max_tokens": max_tokens,
         "stream": False
     }
-    resp = requests.post(url, headers=headers, json=data, timeout=600)
-    resp.raise_for_status()
-    return resp.json()["choices"][0]["message"]["content"]
+    
+    last_error = None
+    timeout = 600
+    
+    for attempt in range(max_retries):
+        try:
+            resp = requests.post(url, headers=headers, json=data, timeout=timeout)
+            
+            # 限流处理
+            if resp.status_code == 429:
+                retry_after = int(resp.headers.get('Retry-After', 10 * (2 ** attempt)))
+                print(f"    [RATE LIMIT] 等待 {retry_after}s 后重试 (attempt {attempt+1}/{max_retries})")
+                time.sleep(retry_after)
+                continue
+            
+            # 服务端错误，可重试
+            if resp.status_code >= 500:
+                wait = 5 * (2 ** attempt)
+                print(f"    [RETRY] 服务端错误 {resp.status_code}，等待 {wait}s (attempt {attempt+1}/{max_retries})")
+                time.sleep(wait)
+                continue
+            
+            resp.raise_for_status()
+            return resp.json()["choices"][0]["message"]["content"]
+            
+        except requests.exceptions.Timeout:
+            last_error = "超时"
+            timeout = min(timeout * 2, 1200)  # 超时翻倍，最大20分钟
+            print(f"    [RETRY] 超时，增大超时到 {timeout}s (attempt {attempt+1}/{max_retries})")
+            continue
+            
+        except requests.exceptions.HTTPError as e:
+            if e.response is not None and e.response.status_code < 500:
+                raise  # 4xx 客户端错误（非429）不重试
+            last_error = str(e)
+            wait = 5 * (2 ** attempt)
+            print(f"    [RETRY] {e}，等待 {wait}s (attempt {attempt+1}/{max_retries})")
+            time.sleep(wait)
+            
+        except requests.exceptions.ConnectionError as e:
+            last_error = str(e)
+            wait = 5 * (2 ** attempt)
+            print(f"    [RETRY] 连接错误，等待 {wait}s (attempt {attempt+1}/{max_retries})")
+            time.sleep(wait)
+            
+        except Exception as e:
+            raise  # 其他异常直接抛出
+    
+    raise RuntimeError(f"API 调用失败（{max_retries}次重试后）: {last_error}")
 
 
 def get_total_chapters(config):
@@ -77,25 +214,15 @@ def get_total_chapters(config):
 
 
 def count_source_chars(config, chapter_num):
-    """统计源文章节的中文字数（去空白）。"""
+    """统计源文章节的中文字数（去空白）。使用缓存。"""
     import re
-    author = config.get("author", "")
-    source_book = config.get("source_book", "")
-    base_dir = config.get("base_dir", os.getcwd())
-
-    patterns = [
-        f"projects/{author}/{source_book}/_cache/chapters/第{chapter_num}章*.txt",
-        f"projects/{author}/{source_book}/源文/第{chapter_num}章*.txt",
-    ]
-    import glob as g
-    for pat in patterns:
-        for f in sorted(g.glob(os.path.join(base_dir, pat))):
-            text = Path(f).read_text(encoding='utf-8')
-            lines = text.strip().split('\n')
-            if lines and lines[0].startswith('第'):
-                text = '\n'.join(lines[1:])
-            return len(re.sub(r'\s', '', text))
-    return 0
+    text = get_source_text(config, chapter_num)
+    if not text:
+        return 0
+    lines = text.strip().split('\n')
+    if lines and lines[0].startswith('第'):
+        text = '\n'.join(lines[1:])
+    return len(re.sub(r'\s', '', text))
 
 
 def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=None, system_prompt=None, extra_replacements=None):
@@ -220,32 +347,22 @@ def save_file(dir_path, filename, content):
 
 def get_source_title(config, chapter_num):
     """从源文章节提取标题（如 第1章 穿、穿书了？）。"""
-    source_book = config.get("source_book", "")
-    author = config.get("author", "")
-    base_dir = config.get("base_dir", os.getcwd())
-
-    # projects/{作者}/{书名}/_cache/chapters/第N章*.txt
-    patterns = [
-        f"projects/{author}/{source_book}/_cache/chapters/第{chapter_num}章*.txt",
-        f"projects/{author}/{source_book}/_cache/chapters/第{chapter_num:03d}章*.txt",
-        f"projects/{author}/{source_book}/源文/第{chapter_num}章*.txt",
-        f"projects/{author}/{source_book}/第{chapter_num}章*.txt",
-    ]
-
-    import glob
-    for pat in patterns:
-        for f in sorted(glob.glob(os.path.join(base_dir, pat))):
-            try:
-                first_line = Path(f).read_text(encoding='utf-8').strip().split('\n')[0]
-                if first_line.startswith(f"第{chapter_num}章") or first_line.startswith(f"第{chapter_num:03d}章"):
-                    return first_line.strip()
-            except:
-                pass
-            # fallback: from filename
-            stem = Path(f).stem
-            if stem.startswith(f"第{chapter_num}章"):
-                return stem.strip()
-
+    f = find_source_chapter(config, chapter_num)
+    if not f:
+        return f"第{chapter_num}章"
+    
+    try:
+        first_line = f.read_text(encoding='utf-8').strip().split('\n')[0]
+        if first_line.startswith(f"第{chapter_num}章") or first_line.startswith(f"第{chapter_num:03d}章"):
+            return first_line.strip()
+    except Exception:
+        pass
+    
+    # fallback: from filename
+    stem = f.stem
+    if stem.startswith(f"第{chapter_num}章"):
+        return stem.strip()
+    
     return f"第{chapter_num}章"
 
 
@@ -553,15 +670,26 @@ def batch_run(config, prompt_type, start, end, workers, output_dir, filename_fmt
     """并行批量调用。"""
     results, errors = {}, {}
     todo = []
+    
+    # 损坏文件特征词（扩展列表）
+    CORRUPT_MARKERS = ['抱歉', '无法读取', '无法生成', '对不起', '作为AI', '作为语言模型', '我无法']
+    
     for ch in range(start, end + 1):
         if skip_existing:
             filename = filename_fmt.format(ch=ch)
             filepath = Path(output_dir) / filename
             if filepath.exists():
-                # 检查不是损坏文件（致歉内容等）
-                text = filepath.read_text(encoding='utf-8')
-                if '抱歉' not in text[:300] and '无法读取' not in text[:300] and len(text) > 500:
-                    continue  # 跳过已有健康文件
+                try:
+                    text = filepath.read_text(encoding='utf-8')
+                    # 多重健康检查
+                    if len(text) < 500:
+                        pass  # 太短，重写
+                    elif any(marker in text[:500] for marker in CORRUPT_MARKERS):
+                        pass  # 包含损坏特征
+                    else:
+                        continue  # 跳过健康文件
+                except Exception:
+                    pass  # 读取失败，重写
         todo.append(ch)
 
     if not todo:
@@ -620,23 +748,6 @@ def count_chapter_metrics(text):
     }
 
 
-def get_source_text(config, ch):
-    """读取源文章节原始文本。"""
-    author = config.get("author", "")
-    source_book = config.get("source_book", "")
-    base_dir = config.get("base_dir", os.getcwd())
-
-    patterns = [
-        f"projects/{author}/{source_book}/_cache/chapters/第{ch}章*.txt",
-        f"projects/{author}/{source_book}/源文/第{ch}章*.txt",
-    ]
-    import glob as g
-    for pat in patterns:
-        for f in sorted(g.glob(os.path.join(base_dir, pat))):
-            return Path(f).read_text(encoding='utf-8')
-    return None
-
-
 def get_source_metrics(config, ch):
     """直接从源文章节计算锚点指标（不依赖 LLM 填写的 style_guide）。"""
     text = get_source_text(config, ch)
@@ -692,32 +803,38 @@ def validate_one(config, ch):
 
     # 6. 台词抄袭检测（连续8字以上与源文重合）
     if src_text:
-        # 分词：按标点切句
-        def split_sentences(text):
-            import re as re_s
-            return [s.strip() for s in re_s.split(r'[。！？…\n]+', text) if len(s.strip()) >= 8]
-
-        src_sents = split_sentences(src_text)
-        imt_sents = split_sentences(text)
+        import re as re_s
+        # 构建源文所有8-gram集合（O(n)）
+        src_clean = re_s.sub(r'[。！？…\n\s]+', '', src_text)
+        src_grams = set()
+        for i in range(len(src_clean) - 7):
+            src_grams.add(src_clean[i:i+8])
+        
+        # 检测仿写文中的8-gram匹配
+        imt_clean = re_s.sub(r'[。！？…\n\s]+', '', text)
         plagiarisms = []
-        for s in imt_sents:
-            for ss in src_sents:
-                if len(s) < 8 or len(ss) < 8:
-                    continue
-                # 滑动窗口找最长公共子串
-                max_overlap = 0
-                for i in range(len(s) - 7):
-                    for j in range(i + 8, len(s) + 1):
-                        if s[i:j] in ss:
-                            max_overlap = max(max_overlap, j - i)
-                if max_overlap >= 8:
-                    plagiarisms.append((s[:40], ss[:40], max_overlap))
-                    break  # 一句只记一次
-
-        if plagiarisms:
+        matched_ranges = []
+        i = 0
+        while i < len(imt_clean) - 7:
+            gram = imt_clean[i:i+8]
+            if gram in src_grams:
+                # 找到匹配，扩展找最长匹配
+                j = i + 8
+                while j < len(imt_clean) and imt_clean[i:j+1] in src_grams:
+                    j += 1
+                match_len = j - i
+                # 避免重叠计数
+                if not matched_ranges or i >= matched_ranges[-1][1]:
+                    plagiarisms.append((imt_clean[max(0,i-5):i+20], match_len))
+                    matched_ranges.append((i, j))
+                i = j
+            else:
+                i += 1
+        
+        if len(plagiarisms) > 0:
             issues.append(f"台词雷同 {len(plagiarisms)}处（连续≥8字匹配）")
-            for p in plagiarisms[:3]:  # 最多显示3处
-                issues.append(f"  '{p[0]}...' ≈ '{p[1]}...' ({p[2]}字重合)")
+            for p in plagiarisms[:3]:
+                issues.append(f"  '{p[0]}...' ({p[1]}字重合)")
 
     # 汇总
     all_ok = len(issues) == 0
@@ -938,55 +1055,54 @@ def phase_compare(config, start, end, batch_size=10):
 
 
 def open_reader(config):
-    """自动启动阅读器"""
+    """自动启动新版阅读器（story-scan）"""
     import webbrowser
     import subprocess
+    import glob
     
     rewrites_dir = config.get("rewrites_dir", "")
     if not rewrites_dir:
         return
     
-    # 查找 compare_server.py
-    server_paths = [
-        "tools/compare_server.py",
-        ".agents/skills/story-engine/tools/compare_server.py",
-    ]
+    # story-scan目录
+    scan_dir = ".agents/skills/story-scan"
     
-    server_script = None
-    for path in server_paths:
-        if Path(path).exists():
-            server_script = path
-            break
-    
-    if not server_script:
-        print(f"[WARN] 未找到 compare_server.py，跳过自动打开")
+    # 查找书籍文件
+    book_files = glob.glob(f"{rewrites_dir}/chapters/ch_*.txt")
+    if not book_files:
+        print("[WARN] 未找到章节文件，跳过自动打开")
         return
     
-    # 启动服务器
-    print(f"\n启动阅读器服务器...")
+    # 获取第一本书的路径（相对于项目根目录）
+    first_book = book_files[0].replace("\\", "/")
+    
+    # 检查story-scan服务器是否已运行
     try:
-        # 后台启动服务器
-        proc = subprocess.Popen(
-            ["python", server_script],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        
-        # 等待服务器启动
-        import time
-        time.sleep(2)
-        
-        # 打开浏览器
-        url = "http://localhost:8900"
+        import urllib.request
+        urllib.request.urlopen("http://localhost:8000", timeout=2)
+        # 服务器已运行，直接打开
+        url = f"http://localhost:8000/book.html?file={first_book}"
         print(f"阅读器地址: {url}")
         webbrowser.open(url)
-        
-        # 不阻塞主进程
-        print(f"服务器已在后台运行 (PID: {proc.pid})")
-        print(f"按 Ctrl+C 不会停止服务器，需要手动关闭")
-        
-    except Exception as e:
-        print(f"[WARN] 启动阅读器失败: {e}")
+    except:
+        # 服务器未运行，启动它
+        print("启动story-scan服务器...")
+        try:
+            proc = subprocess.Popen(
+                ["python", "-m", "http.server", "8000"],
+                cwd=scan_dir,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            import time
+            time.sleep(2)
+            
+            url = f"http://localhost:8000/book.html?file={first_book}"
+            print(f"阅读器地址: {url}")
+            webbrowser.open(url)
+            print(f"服务器已在后台运行")
+        except Exception as e:
+            print(f"[WARN] 启动阅读器失败: {e}")
 
 
 # ============================================================
@@ -1055,6 +1171,14 @@ def main():
     config = json.loads(config_path.read_text(encoding='utf-8'))
     config.setdefault("prompts_dir", ".agents/skills/story-engine/prompts")
     config.setdefault("base_dir", os.getcwd())
+    
+    # 配置校验
+    errors = validate_config(config)
+    if errors:
+        print("配置错误:")
+        for e in errors:
+            print(f"  - {e}")
+        sys.exit(1)
 
     # 如果没有指定 --end，则自动获取最大章节号（默认不包含番外）
     # 只有用户没传 --end 时才自动检测

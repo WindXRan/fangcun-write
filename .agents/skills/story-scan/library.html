@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI网文书库</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .book-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-card);
+            cursor: pointer;
+        }
+        .book-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        .book-title { font-weight: 600; margin-bottom: 8px; }
+        .book-author { color: var(--text-muted); font-size: 14px; margin-bottom: 8px; }
+        .book-meta { display: flex; gap: 15px; font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; }
+        .book-synopsis { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+        .nav-links { padding: 15px 20px; background: var(--surface); border-bottom: 1px solid var(--border); }
+        .nav-links a { margin-right: 15px; color: var(--accent); text-decoration: none; }
+        .search-bar { padding: 15px 20px; display: flex; gap: 10px; }
+        .search-bar input { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-md); }
+        .search-bar select { padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-md); }
+        .status { padding: 10px 20px; background: #f0f0f0; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="nav-links">
+        <a href="library.html">📚 书库</a>
+        <a href="index.html">📊 扫榜</a>
+        <a href="trend.html">📈 趋势</a>
+        <a href="author.html">✍️ 作者</a>
+    </div>
+    
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="搜索书名、作者、简介...">
+        <select id="genreFilter">
+            <option value="">全部题材</option>
+        </select>
+    </div>
+    
+    <div class="status" id="status">加载中...</div>
+    
+    <div class="books-grid" id="booksGrid"></div>
+
+    <script>
+        let bookData = { books: [] };
+        
+        async function loadBooks() {
+            const status = document.getElementById('status');
+            try {
+                status.textContent = '正在加载书库数据...';
+                const response = await fetch('data/book_library.json');
+                bookData = await response.json();
+                status.textContent = '共 ' + bookData.books.length + ' 本书';
+                renderBooks();
+                updateGenreFilter();
+            } catch (error) {
+                status.textContent = '加载失败: ' + error.message;
+                console.error(error);
+            }
+        }
+        
+        function renderBooks() {
+            const grid = document.getElementById('booksGrid');
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const genre = document.getElementById('genreFilter').value;
+            
+            let books = bookData.books || [];
+            
+            if (search) {
+                books = books.filter(b => 
+                    b.title.toLowerCase().includes(search) ||
+                    b.author.toLowerCase().includes(search)
+                );
+            }
+            
+            if (genre) {
+                books = books.filter(b => b.genre === genre);
+            }
+            
+            grid.innerHTML = books.map(b => `
+                <div class="book-card" onclick="openBook('${b.file.replace(/\\/g, '/')}')">
+                    <div class="book-title">${b.title}</div>
+                    <div class="book-author">${b.author}</div>
+                    <div class="book-meta">
+                        <span>${b.genre || '其他'}</span>
+                        <span>${b.char_count.toLocaleString()}字</span>
+                        <span>${b.chapter_count || 0}章</span>
+                    </div>
+                    <div class="book-synopsis">${(b.synopsis || '').substring(0, 100)}...</div>
+                </div>
+            `).join('');
+        }
+        
+        function updateGenreFilter() {
+            const select = document.getElementById('genreFilter');
+            const genres = {};
+            (bookData.books || []).forEach(b => {
+                const g = b.genre || '其他';
+                genres[g] = (genres[g] || 0) + 1;
+            });
+            
+            select.innerHTML = '<option value="">全部题材 (' + bookData.books.length + ')</option>' +
+                Object.entries(genres).map(([g, c]) => `<option value="${g}">${g} (${c})</option>`).join('');
+        }
+        
+        function openBook(filePath) {
+            window.open('book.html?file=' + encodeURIComponent(filePath), '_blank');
+        }
+        
+        document.getElementById('searchInput').addEventListener('input', renderBooks);
+        document.getElementById('genreFilter').addEventListener('change', renderBooks);
+        
+        loadBooks();
+    </script>
+</body>
+</html>
