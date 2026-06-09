@@ -1,6 +1,5 @@
 {
   "total_chars": 2055,
-  "total_sentences": 106,
   "avg_sentence_len": 18.1,
   "sentence_len_std": 13.3,
   "avg_paragraph_len": 26,
@@ -8,23 +7,29 @@
     "min": 6,
     "max": 68
   },
-  "single_para_ratio": 73.1,
-  "dialogue_ratio": 18.5,
-  "short_ratio": 50.9,
-  "long_ratio": 19.8,
   "vocabulary_diversity": 0.305,
   "top_patterns": [
-    "蒲雨...(14次)",
-    "原溯...(9次)",
-    "“你...(4次)",
-    "”原...(4次)",
-    "”蒲...(4次)"
+    "蒲雨(14次)",
+    "原溯(9次)",
+    "“你(4次)",
+    "”原(4次)",
+    "”蒲(4次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(18处)"
+  ],
   "simile_count": 1,
   "ai_marker_count": 2,
   "direct_emotion_count": 0,
   "ellipsis_count": 7,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 45,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 104,
   "file": "第104章.txt"
 }

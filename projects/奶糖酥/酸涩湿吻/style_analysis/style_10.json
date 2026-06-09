@@ -1,6 +1,5 @@
 {
   "total_chars": 1940,
-  "total_sentences": 98,
   "avg_sentence_len": 18.7,
   "sentence_len_std": 12.6,
   "avg_paragraph_len": 23,
@@ -8,22 +7,28 @@
     "min": 6,
     "max": 66
   },
-  "single_para_ratio": 93.9,
-  "dialogue_ratio": 13.6,
-  "short_ratio": 48.0,
-  "long_ratio": 19.4,
   "vocabulary_diversity": 0.326,
   "top_patterns": [
-    "原溯...(9次)",
-    "蒲雨...(8次)",
-    "王老...(5次)",
-    "最后...(3次)"
+    "原溯(9次)",
+    "蒲雨(8次)",
+    "王老(5次)",
+    "最后(3次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
   "simile_count": 1,
   "ai_marker_count": 8,
   "direct_emotion_count": 0,
   "ellipsis_count": 7,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 61,
+    "问号": 0,
+    "叹号": 3,
+    "引号": 0
+  },
   "chapter": 10,
   "file": "第10章.txt"
 }

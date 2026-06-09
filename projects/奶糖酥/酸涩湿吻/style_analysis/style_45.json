@@ -1,6 +1,5 @@
 {
   "total_chars": 2166,
-  "total_sentences": 123,
   "avg_sentence_len": 16.4,
   "sentence_len_std": 11.1,
   "avg_paragraph_len": 21,
@@ -8,23 +7,29 @@
     "min": 6,
     "max": 73
   },
-  "single_para_ratio": 86.3,
-  "dialogue_ratio": 19.2,
-  "short_ratio": 52.0,
-  "long_ratio": 15.4,
   "vocabulary_diversity": 0.283,
   "top_patterns": [
-    "蒲雨...(14次)",
-    "原溯...(10次)",
-    "”蒲...(5次)",
-    "“你...(4次)",
-    "”他...(4次)"
+    "蒲雨(14次)",
+    "原溯(10次)",
+    "”蒲(5次)",
+    "“你(4次)",
+    "”他(4次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(16处)"
+  ],
   "simile_count": 5,
   "ai_marker_count": 0,
   "direct_emotion_count": 0,
   "ellipsis_count": 8,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 68,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 45,
   "file": "第45章.txt"
 }

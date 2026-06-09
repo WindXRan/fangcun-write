@@ -1,6 +1,5 @@
 {
   "total_chars": 2130,
-  "total_sentences": 98,
   "avg_sentence_len": 20.3,
   "sentence_len_std": 14.2,
   "avg_paragraph_len": 25,
@@ -8,22 +7,28 @@
     "min": 6,
     "max": 67
   },
-  "single_para_ratio": 89.4,
-  "dialogue_ratio": 31.3,
-  "short_ratio": 46.9,
-  "long_ratio": 25.5,
   "vocabulary_diversity": 0.299,
   "top_patterns": [
-    "蒲雨...(15次)",
-    "原溯...(8次)",
-    "许岁...(5次)",
-    "修理...(3次)"
+    "蒲雨(15次)",
+    "原溯(8次)",
+    "许岁(5次)",
+    "修理(3次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(10处)"
+  ],
   "simile_count": 3,
   "ai_marker_count": 2,
   "direct_emotion_count": 0,
   "ellipsis_count": 8,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 43,
+    "问号": 1,
+    "叹号": 1,
+    "引号": 0
+  },
   "chapter": 37,
   "file": "第37章.txt"
 }

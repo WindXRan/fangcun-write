@@ -1,6 +1,5 @@
 {
   "total_chars": 2019,
-  "total_sentences": 96,
   "avg_sentence_len": 19.8,
   "sentence_len_std": 13.8,
   "avg_paragraph_len": 27,
@@ -8,25 +7,30 @@
     "min": 6,
     "max": 82
   },
-  "single_para_ratio": 78.4,
-  "dialogue_ratio": 20.5,
-  "short_ratio": 46.9,
-  "long_ratio": 24.0,
   "vocabulary_diversity": 0.307,
   "top_patterns": [
-    "蒲雨...(13次)",
-    "“我...(4次)",
-    "陈姐...(4次)",
-    "侍应...(3次)",
-    "”蒲...(3次)"
+    "蒲雨(13次)",
+    "“我(4次)",
+    "陈姐(4次)",
+    "侍应(3次)",
+    "”蒲(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(3处)"
+    "比喻(像/如/仿佛)(3处)",
+    "短句节奏(8处)"
   ],
   "simile_count": 6,
   "ai_marker_count": 0,
   "direct_emotion_count": 0,
   "ellipsis_count": 2,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 51,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 132,
   "file": "第132章.txt"
 }

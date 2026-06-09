@@ -1,6 +1,5 @@
 {
   "total_chars": 2149,
-  "total_sentences": 107,
   "avg_sentence_len": 18.7,
   "sentence_len_std": 11.6,
   "avg_paragraph_len": 22,
@@ -8,22 +7,28 @@
     "min": 6,
     "max": 93
   },
-  "single_para_ratio": 90.6,
-  "dialogue_ratio": 25.5,
-  "short_ratio": 43.9,
-  "long_ratio": 15.9,
   "vocabulary_diversity": 0.309,
   "top_patterns": [
-    "蒲雨...(13次)",
-    "原溯...(9次)",
-    "许岁...(3次)",
-    "”蒲...(3次)"
+    "蒲雨(13次)",
+    "原溯(9次)",
+    "许岁(3次)",
+    "”蒲(3次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
   "simile_count": 2,
   "ai_marker_count": 1,
   "direct_emotion_count": 0,
   "ellipsis_count": 7,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 60,
+    "问号": 4,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 11,
   "file": "第11章.txt"
 }

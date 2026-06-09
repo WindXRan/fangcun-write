@@ -1,6 +1,5 @@
 {
   "total_chars": 2559,
-  "total_sentences": 106,
   "avg_sentence_len": 22.8,
   "sentence_len_std": 15.7,
   "avg_paragraph_len": 29,
@@ -8,23 +7,29 @@
     "min": 6,
     "max": 71
   },
-  "single_para_ratio": 85.2,
-  "dialogue_ratio": 36.6,
-  "short_ratio": 37.7,
-  "long_ratio": 30.2,
   "vocabulary_diversity": 0.253,
   "top_patterns": [
-    "原溯...(16次)",
-    "李素...(14次)",
-    "蒲雨...(6次)",
-    "“奶...(3次)",
-    "“小...(3次)"
+    "原溯(16次)",
+    "李素(14次)",
+    "蒲雨(6次)",
+    "“奶(3次)",
+    "“小(3次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
   "simile_count": 0,
   "ai_marker_count": 2,
   "direct_emotion_count": 0,
   "ellipsis_count": 7,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 40,
+    "问号": 3,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 163,
   "file": "第163章.txt"
 }

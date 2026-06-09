@@ -1,6 +1,5 @@
 {
   "total_chars": 1835,
-  "total_sentences": 104,
   "avg_sentence_len": 16.4,
   "sentence_len_std": 12.1,
   "avg_paragraph_len": 23,
@@ -8,20 +7,26 @@
     "min": 6,
     "max": 96
   },
-  "single_para_ratio": 78.8,
-  "dialogue_ratio": 36.0,
-  "short_ratio": 59.6,
-  "long_ratio": 11.5,
   "vocabulary_diversity": 0.34,
   "top_patterns": [
-    "蒲雨...(13次)",
-    "”蒲...(3次)"
+    "蒲雨(13次)",
+    "”蒲(3次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
   "simile_count": 2,
   "ai_marker_count": 1,
   "direct_emotion_count": 0,
   "ellipsis_count": 4,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 46,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 86,
   "file": "第86章.txt"
 }

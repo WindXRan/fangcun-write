@@ -1,6 +1,5 @@
 {
   "total_chars": 2053,
-  "total_sentences": 101,
   "avg_sentence_len": 19.2,
   "sentence_len_std": 13.0,
   "avg_paragraph_len": 22,
@@ -8,25 +7,30 @@
     "min": 6,
     "max": 59
   },
-  "single_para_ratio": 96.8,
-  "dialogue_ratio": 13.9,
-  "short_ratio": 48.5,
-  "long_ratio": 22.8,
   "vocabulary_diversity": 0.328,
   "top_patterns": [
-    "蒲雨...(18次)",
-    "“原...(6次)",
-    "原溯...(6次)",
-    "“你...(3次)",
-    "他的...(3次)"
+    "蒲雨(18次)",
+    "“原(6次)",
+    "原溯(6次)",
+    "“你(3次)",
+    "他的(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(4处)"
+    "比喻(像/如/仿佛)(4处)",
+    "短句节奏(9处)"
   ],
   "simile_count": 6,
   "ai_marker_count": 1,
   "direct_emotion_count": 0,
   "ellipsis_count": 12,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 63,
+    "问号": 2,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 33,
   "file": "第33章.txt"
 }

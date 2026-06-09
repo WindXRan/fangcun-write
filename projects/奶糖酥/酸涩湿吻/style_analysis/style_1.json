@@ -1,6 +1,5 @@
 {
   "total_chars": 2202,
-  "total_sentences": 106,
   "avg_sentence_len": 19.6,
   "sentence_len_std": 12.8,
   "avg_paragraph_len": 26,
@@ -8,24 +7,29 @@
     "min": 6,
     "max": 108
   },
-  "single_para_ratio": 83.3,
-  "dialogue_ratio": 21.7,
-  "short_ratio": 40.6,
-  "long_ratio": 19.8,
   "vocabulary_diversity": 0.35,
   "top_patterns": [
-    "蒲雨...(11次)",
-    "“我...(4次)",
-    "”蒲...(3次)",
-    "蒲志...(3次)"
+    "蒲雨(11次)",
+    "“我(4次)",
+    "”蒲(3次)",
+    "蒲志(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(3处)"
+    "比喻(像/如/仿佛)(3处)",
+    "短句节奏(7处)"
   ],
   "simile_count": 7,
   "ai_marker_count": 1,
   "direct_emotion_count": 0,
   "ellipsis_count": 5,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 60,
+    "问号": 1,
+    "叹号": 1,
+    "引号": 0
+  },
   "chapter": 1,
   "file": "第1章.txt"
 }

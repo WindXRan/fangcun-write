@@ -76,14 +76,6 @@ def get_total_chapters(config):
     return 0
 
 
-def load_style_profile(config):
-    """加载全局风格画像（如果存在）。"""
-    profile_path = Path(config["rewrites_dir"]) / "style-profile.md"
-    if profile_path.exists():
-        return profile_path.read_text(encoding='utf-8')
-    return None
-
-
 def count_source_chars(config, chapter_num):
     """统计源文章节的中文字数（去空白）。"""
     import re
@@ -184,12 +176,8 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     prompt_path = f"{prompts_dir}/{prompt_type}.md"
     user_prompt = load_prompt(prompt_path, base_dir, replacements, mode="api")
 
-    # 写章时注入全局风格画像到 system prompt
+    # 写章时使用每章独立的 style_guide（通过 prompt 中的【style_guide】标签引用）
     sys_prompt = system_prompt or SYSTEM_PROMPT
-    if prompt_type == "write-chapter":
-        profile = load_style_profile(config)
-        if profile:
-            sys_prompt = profile + "\n\n---\n\n" + sys_prompt
 
     label = f"ch{chapter_num or '?'} {prompt_type}"
     t_req = time.time()
@@ -365,28 +353,64 @@ def phase_open_book(config):
 
 
 # ============================================================
-# Phase 1.5: 全局风格画像
+# Phase 1.5: 风格分析（每章独立）
 # ============================================================
 
-def phase_style_profile(config):
-    """生成全局风格画像（跑一次，全章共用）。"""
-    profile_path = Path(config["rewrites_dir"]) / "style-profile.md"
-    if profile_path.exists():
-        print(f"style-profile.md 已存在，跳过")
-        return True
-
-    print("\n" + "=" * 50)
-    print("Phase 1.5: 全局风格画像 (pro)")
+def phase_style_analysis(config):
+    """用 style_analyzer.py 生成每章的 style_guide。"""
+    import subprocess
+    
+    author = config.get("author", "")
+    source_book = config.get("source_book", "")
+    base_dir = config.get("base_dir", os.getcwd())
+    rewrites_dir = config["rewrites_dir"]
+    
+    # 查找源文目录
+    src_patterns = [
+        f"projects/{author}/{source_book}/_cache/chapters/",
+        f"projects/{author}/{source_book}/源文/",
+    ]
+    
+    src_dir = None
+    for pat in src_patterns:
+        full = os.path.join(base_dir, pat)
+        if os.path.isdir(full):
+            src_dir = full
+            break
+    
+    if not src_dir:
+        print("[FAIL] 未找到源文目录")
+        return False
+    
+    # 输出目录
+    guides_dir = os.path.join(rewrites_dir, "guides")
+    os.makedirs(guides_dir, exist_ok=True)
+    
+    # 运行 style_analyzer.py
+    script_path = os.path.join(base_dir, "tools/style_analyzer.py")
+    if not os.path.exists(script_path):
+        # 尝试从 story-engine tools 目录查找
+        script_path = Path(__file__).parent.parent.parent / "tools/style_analyzer.py"
+    
+    print(f"\n{'=' * 50}")
+    print(f"Phase 1.5: 风格分析 (脚本)")
     print("=" * 50)
-
-    pro = {**config, "model": "deepseek-v4-pro", "reasoning_effort": "high"}
+    
     try:
-        profile = run_one(pro, "style-profile")
-        save_file(config["rewrites_dir"], "style-profile.md", profile)
-        print(f"[OK] style-profile.md 生成成功")
-        return True
+        result = subprocess.run(
+            ["python", str(script_path), src_dir, guides_dir],
+            capture_output=True,
+            timeout=300,
+            cwd=base_dir
+        )
+        if result.returncode == 0:
+            print(f"[OK] 风格分析完成")
+            return True
+        else:
+            print(f"[FAIL] 风格分析失败: {result.stderr.decode('utf-8', errors='ignore')}")
+            return False
     except Exception as e:
-        print(f"[FAIL] style-profile: {e}")
+        print(f"[FAIL] 风格分析: {e}")
         return False
 
 
@@ -394,67 +418,20 @@ def phase_style_profile(config):
 # Phase 2: Guide 生成
 # ============================================================
 
-def extract_source_metrics(config, ch):
-    """用脚本提取源文风格指标"""
-    import subprocess
-    source_book = config.get("source_book", "")
-    author = config.get("author", "")
-    base_dir = config.get("base_dir", os.getcwd())
-    
-    # 查找源文文件
-    patterns = [
-        f"projects/{author}/{source_book}/_cache/chapters/第{ch}章*.txt",
-        f"projects/{author}/{source_book}/_cache/chapters/第{ch:03d}章*.txt",
-        f"projects/{author}/{source_book}/源文/第{ch}章*.txt",
-    ]
-    
-    import glob
-    source_file = None
-    for pat in patterns:
-        for f in sorted(glob.glob(os.path.join(base_dir, pat))):
-            source_file = f
-            break
-        if source_file:
-            break
-    
-    if not source_file:
-        return None
-    
-    # 运行提取脚本
-    script_path = Path(__file__).parent / "extract_style.py"
-    try:
-        result = subprocess.run(
-            ["python", str(script_path), source_file],
-            capture_output=True, timeout=30
-        )
-        if result.returncode == 0 and result.stdout:
-            # 手动解码bytes为字符串
-            output = result.stdout.decode('utf-8', errors='ignore')
-            return output.strip()
-    except Exception as e:
-        print(f"  [WARN] 提取源文指标失败: {e}")
-    
-    return None
-
 
 def phase_guides(config, start, end, workers=5, serial=False):
-    """生成 plot_guide + style_guide。serial=True 时 plot-guide 串行以保持章间连贯。"""
+    """生成 plot_guide + style_guide（引用 templates）。"""
     guides_dir = f"{config['rewrites_dir']}/guides"
+    style_analysis_dir = config.get("style_analysis_dir", f"{config['rewrites_dir']}/../style_analysis")
     flash = {**config, "model": "deepseek-v4-flash", "reasoning_effort": "low"}
 
-    # style-guide 始终并行（章间独立）
+    # style-guide（引用 templates）
     print(f"\n{'=' * 50}")
-    print(f"Phase 2: style_guide (flash, ch{start}-{end}, {'并行' if workers>1 else '串行'})")
+    print(f"Phase 2: style_guide (flash, ch{start}-{end}, 引用 templates)")
     print("=" * 50)
     
-    # 先用脚本提取源文指标，注入到replacements中
-    for ch in range(start, end + 1):
-        metrics = extract_source_metrics(config, ch)
-        if metrics:
-            print(f"  [OK] ch{ch} 源文指标提取完成")
-    
-    ok, fail = batch_run(flash, "style-guide", start, end, workers, guides_dir, "style_{ch}.md", skip_existing=True)
-    print(f"style_guide: OK={len(ok)} FAIL={len(fail)}")
+    ok_style, fail_style = batch_run(flash, "style-guide", start, end, workers, guides_dir, "style_{ch}.md", skip_existing=True)
+    print(f"style_guide: OK={len(ok_style)} FAIL={len(fail_style)}")
 
     # plot-guide
     print(f"\n{'=' * 50}")
@@ -1046,7 +1023,7 @@ def main():
     parser.add_argument("--serial", action="store_true",
                         help="plot-guide 串行生成，保持章间连贯（质量模式）")
     parser.add_argument("--phase", default="all",
-                        help="all | open-book | style-profile | guides | write | validate | trim | compare（外加: continuity）")
+                        help="all | open-book | style-analysis | guides | write | validate | trim | compare（外加: continuity）")
     parser.add_argument("--include-fanwai", action="store_true",
                         help="包含番外章节（默认不包含）")
 
@@ -1087,9 +1064,6 @@ def main():
             print(f"concept.md 已存在，跳过开书")
         else:
             phase_open_book(config)
-
-    if "all" in phases or "style-profile" in phases:
-        phase_style_profile(config)
 
     if "all" in phases or "guides" in phases:
         phase_guides(config, args.start, args.end, args.workers, serial=args.serial)
@@ -1157,7 +1131,6 @@ def main():
         # 检查各文件
         files_to_check = [
             ("concept.md", "设定+弧线"),
-            ("style-profile.md", "全局风格画像"),
         ]
         for filename, desc in files_to_check:
             filepath = rewrites_path / filename

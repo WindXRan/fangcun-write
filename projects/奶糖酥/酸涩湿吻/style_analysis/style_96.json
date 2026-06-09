@@ -1,6 +1,5 @@
 {
   "total_chars": 2088,
-  "total_sentences": 95,
   "avg_sentence_len": 20.8,
   "sentence_len_std": 17.2,
   "avg_paragraph_len": 26,
@@ -8,23 +7,28 @@
     "min": 6,
     "max": 100
   },
-  "single_para_ratio": 88.6,
-  "dialogue_ratio": 19.4,
-  "short_ratio": 48.4,
-  "long_ratio": 25.3,
   "vocabulary_diversity": 0.316,
   "top_patterns": [
-    "原溯...(15次)",
-    "蒲雨...(8次)",
-    "看着...(3次)"
+    "原溯(15次)",
+    "蒲雨(8次)",
+    "看着(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(3处)"
+    "比喻(像/如/仿佛)(3处)",
+    "短句节奏(7处)"
   ],
   "simile_count": 5,
   "ai_marker_count": 3,
   "direct_emotion_count": 0,
   "ellipsis_count": 5,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 65,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 96,
   "file": "第96章.txt"
 }

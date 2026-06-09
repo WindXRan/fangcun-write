@@ -1,6 +1,5 @@
 {
   "total_chars": 2330,
-  "total_sentences": 123,
   "avg_sentence_len": 17.7,
   "sentence_len_std": 10.8,
   "avg_paragraph_len": 27,
@@ -8,23 +7,29 @@
     "min": 6,
     "max": 69
   },
-  "single_para_ratio": 69.0,
-  "dialogue_ratio": 18.5,
-  "short_ratio": 48.8,
-  "long_ratio": 15.4,
   "vocabulary_diversity": 0.28,
   "top_patterns": [
-    "宋津...(9次)",
-    "蒲雨...(6次)",
-    "许岁...(5次)",
-    "”许...(5次)",
-    "”一...(3次)"
+    "宋津(9次)",
+    "蒲雨(6次)",
+    "许岁(5次)",
+    "”许(5次)",
+    "”一(3次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(12处)"
+  ],
   "simile_count": 3,
   "ai_marker_count": 3,
   "direct_emotion_count": 0,
   "ellipsis_count": 1,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 51,
+    "问号": 0,
+    "叹号": 6,
+    "引号": 0
+  },
   "chapter": 83,
   "file": "第83章.txt"
 }

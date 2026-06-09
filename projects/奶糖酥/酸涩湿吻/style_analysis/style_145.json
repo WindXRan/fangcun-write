@@ -1,6 +1,5 @@
 {
   "total_chars": 1741,
-  "total_sentences": 69,
   "avg_sentence_len": 24.0,
   "sentence_len_std": 13.3,
   "avg_paragraph_len": 28,
@@ -8,22 +7,27 @@
     "min": 6,
     "max": 69
   },
-  "single_para_ratio": 88.7,
-  "dialogue_ratio": 10.9,
-  "short_ratio": 30.4,
-  "long_ratio": 36.2,
   "vocabulary_diversity": 0.335,
   "top_patterns": [
-    "蒲雨...(10次)",
-    "原溯...(10次)"
+    "蒲雨(10次)",
+    "原溯(10次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(2处)"
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(6处)"
   ],
   "simile_count": 8,
   "ai_marker_count": 1,
   "direct_emotion_count": 0,
   "ellipsis_count": 3,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 40,
+    "问号": 0,
+    "叹号": 2,
+    "引号": 0
+  },
   "chapter": 145,
   "file": "第145章.txt"
 }

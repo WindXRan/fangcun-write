@@ -1,6 +1,5 @@
 {
   "total_chars": 1852,
-  "total_sentences": 97,
   "avg_sentence_len": 17.8,
   "sentence_len_std": 12.8,
   "avg_paragraph_len": 24,
@@ -8,21 +7,27 @@
     "min": 6,
     "max": 62
   },
-  "single_para_ratio": 84.2,
-  "dialogue_ratio": 29.8,
-  "short_ratio": 51.5,
-  "long_ratio": 20.6,
   "vocabulary_diversity": 0.31,
   "top_patterns": [
-    "蒲雨...(7次)",
-    "原溯...(7次)",
-    "许岁...(6次)"
+    "蒲雨(7次)",
+    "原溯(7次)",
+    "许岁(6次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(12处)"
+  ],
   "simile_count": 1,
   "ai_marker_count": 3,
   "direct_emotion_count": 0,
   "ellipsis_count": 5,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 39,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 19,
   "file": "第19章.txt"
 }

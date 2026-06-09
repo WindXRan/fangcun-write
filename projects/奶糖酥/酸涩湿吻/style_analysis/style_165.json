@@ -1,6 +1,5 @@
 {
   "total_chars": 1663,
-  "total_sentences": 84,
   "avg_sentence_len": 18.3,
   "sentence_len_std": 14.8,
   "avg_paragraph_len": 23,
@@ -8,23 +7,29 @@
     "min": 6,
     "max": 68
   },
-  "single_para_ratio": 88.6,
-  "dialogue_ratio": 27.2,
-  "short_ratio": 53.6,
-  "long_ratio": 16.7,
   "vocabulary_diversity": 0.307,
   "top_patterns": [
-    "李素...(10次)",
-    "蒲雨...(10次)",
-    "原溯...(6次)",
-    "【蒲...(5次)",
-    "陆蓁...(4次)"
+    "李素(10次)",
+    "蒲雨(10次)",
+    "原溯(6次)",
+    "【蒲(5次)",
+    "陆蓁(4次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
   "simile_count": 4,
   "ai_marker_count": 1,
   "direct_emotion_count": 0,
   "ellipsis_count": 7,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 30,
+    "问号": 2,
+    "叹号": 1,
+    "引号": 0
+  },
   "chapter": 165,
   "file": "第165章.txt"
 }

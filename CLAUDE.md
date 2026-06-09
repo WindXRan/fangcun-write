@@ -101,9 +101,9 @@ python tools/rewrite_chapters.py --config configs/xxx.json --start 1 --end 188 -
 python tools/rewrite_chapters.py --config configs/xxx.json --phase open-book
 python tools/rewrite_chapters.py --config configs/xxx.json --phase guides,write,trim,continuity,compare
 
-# 风格分析（每章独立，参考 inkos style-analyzer）
-python tools/batch_style_analysis.py <源文目录> <输出目录>
-python tools/batch_gen_style_guides_llm.py <style_analysis目录> <源文目录> <guides输出目录> <新书名> <作者名> <源书名> [api_key]
+# 风格分析（一键完成，参考 inkos style-analyzer）
+python tools/style_analyzer.py <源文目录> <输出目录>
+python tools/fill_style_guides.py <guides目录> <源文目录> [api_key]
 ```
 
 > ⚠️ `api_key` 为 null 时从 `$env:API_KEY` 读取。不要将 key 写入配置文件。

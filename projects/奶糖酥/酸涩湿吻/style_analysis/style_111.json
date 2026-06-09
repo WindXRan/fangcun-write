@@ -1,6 +1,5 @@
 {
   "total_chars": 1823,
-  "total_sentences": 109,
   "avg_sentence_len": 15.5,
   "sentence_len_std": 12.6,
   "avg_paragraph_len": 21,
@@ -8,23 +7,29 @@
     "min": 6,
     "max": 96
   },
-  "single_para_ratio": 89.5,
-  "dialogue_ratio": 28.5,
-  "short_ratio": 66.1,
-  "long_ratio": 13.8,
   "vocabulary_diversity": 0.293,
   "top_patterns": [
-    "蒲雨...(9次)",
-    "原溯...(6次)",
-    "“…...(5次)",
-    "“你...(4次)",
-    "然后...(4次)"
+    "蒲雨(9次)",
+    "原溯(6次)",
+    "“…(5次)",
+    "“你(4次)",
+    "然后(4次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(10处)"
+  ],
   "simile_count": 3,
   "ai_marker_count": 6,
   "direct_emotion_count": 0,
   "ellipsis_count": 10,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 48,
+    "问号": 0,
+    "叹号": 1,
+    "引号": 0
+  },
   "chapter": 111,
   "file": "第111章.txt"
 }

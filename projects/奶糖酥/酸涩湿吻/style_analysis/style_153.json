@@ -1,6 +1,5 @@
 {
   "total_chars": 2363,
-  "total_sentences": 104,
   "avg_sentence_len": 21.5,
   "sentence_len_std": 15.5,
   "avg_paragraph_len": 29,
@@ -8,25 +7,30 @@
     "min": 7,
     "max": 115
   },
-  "single_para_ratio": 76.2,
-  "dialogue_ratio": 28.0,
-  "short_ratio": 40.4,
-  "long_ratio": 24.0,
   "vocabulary_diversity": 0.298,
   "top_patterns": [
-    "蒲雨...(9次)",
-    "原溯...(5次)",
-    "【师...(3次)",
-    "程司...(3次)",
-    "“我...(3次)"
+    "蒲雨(9次)",
+    "原溯(5次)",
+    "【师(3次)",
+    "程司(3次)",
+    "“我(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(4处)"
+    "比喻(像/如/仿佛)(4处)",
+    "短句节奏(7处)"
   ],
   "simile_count": 6,
   "ai_marker_count": 5,
   "direct_emotion_count": 0,
   "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 35,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 153,
   "file": "第153章.txt"
 }

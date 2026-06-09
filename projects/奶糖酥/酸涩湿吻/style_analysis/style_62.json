@@ -1,6 +1,5 @@
 {
   "total_chars": 2810,
-  "total_sentences": 131,
   "avg_sentence_len": 20.2,
   "sentence_len_std": 12.4,
   "avg_paragraph_len": 26,
@@ -8,22 +7,28 @@
     "min": 6,
     "max": 81
   },
-  "single_para_ratio": 81.1,
-  "dialogue_ratio": 23.8,
-  "short_ratio": 38.9,
-  "long_ratio": 24.4,
   "vocabulary_diversity": 0.274,
   "top_patterns": [
-    "蒲雨...(15次)",
-    "原溯...(14次)",
-    "李素...(6次)",
-    "”原...(5次)"
+    "蒲雨(15次)",
+    "原溯(14次)",
+    "李素(6次)",
+    "”原(5次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
   "simile_count": 0,
   "ai_marker_count": 2,
   "direct_emotion_count": 0,
   "ellipsis_count": 9,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 62,
+    "问号": 1,
+    "叹号": 1,
+    "引号": 0
+  },
   "chapter": 62,
   "file": "第62章.txt"
 }

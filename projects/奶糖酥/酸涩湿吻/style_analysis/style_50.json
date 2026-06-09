@@ -1,6 +1,5 @@
 {
   "total_chars": 2216,
-  "total_sentences": 104,
   "avg_sentence_len": 20.1,
   "sentence_len_std": 14.1,
   "avg_paragraph_len": 24,
@@ -8,24 +7,29 @@
     "min": 6,
     "max": 71
   },
-  "single_para_ratio": 89.1,
-  "dialogue_ratio": 14.1,
-  "short_ratio": 42.3,
-  "long_ratio": 21.2,
   "vocabulary_diversity": 0.302,
   "top_patterns": [
-    "原溯...(15次)",
-    "蒲雨...(13次)",
-    "”蒲...(4次)",
-    "少年...(3次)"
+    "原溯(15次)",
+    "蒲雨(13次)",
+    "”蒲(4次)",
+    "少年(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(2处)"
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(8处)"
   ],
   "simile_count": 8,
   "ai_marker_count": 0,
   "direct_emotion_count": 1,
   "ellipsis_count": 5,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 64,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 50,
   "file": "第50章.txt"
 }

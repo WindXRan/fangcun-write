@@ -1,6 +1,5 @@
 {
   "total_chars": 2040,
-  "total_sentences": 86,
   "avg_sentence_len": 22.5,
   "sentence_len_std": 14.1,
   "avg_paragraph_len": 27,
@@ -8,22 +7,28 @@
     "min": 7,
     "max": 68
   },
-  "single_para_ratio": 90.8,
-  "dialogue_ratio": 15.1,
-  "short_ratio": 37.2,
-  "long_ratio": 29.1,
   "vocabulary_diversity": 0.299,
   "top_patterns": [
-    "蒲雨...(8次)",
-    "原溯...(8次)",
-    "李素...(7次)",
-    "”蒲...(3次)"
+    "蒲雨(8次)",
+    "原溯(8次)",
+    "李素(7次)",
+    "”蒲(3次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
   "simile_count": 5,
   "ai_marker_count": 1,
   "direct_emotion_count": 0,
   "ellipsis_count": 2,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 56,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 34,
   "file": "第34章.txt"
 }

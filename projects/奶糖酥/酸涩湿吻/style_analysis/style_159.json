@@ -1,6 +1,5 @@
 {
   "total_chars": 1771,
-  "total_sentences": 66,
   "avg_sentence_len": 25.6,
   "sentence_len_std": 18.7,
   "avg_paragraph_len": 34,
@@ -8,23 +7,28 @@
     "min": 8,
     "max": 84
   },
-  "single_para_ratio": 82.7,
-  "dialogue_ratio": 37.9,
-  "short_ratio": 39.4,
-  "long_ratio": 36.4,
   "vocabulary_diversity": 0.378,
   "top_patterns": [
-    "原溯...(5次)",
-    "“我...(3次)",
-    "蒲雨...(3次)"
+    "原溯(5次)",
+    "“我(3次)",
+    "蒲雨(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(2处)"
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(3处)"
   ],
   "simile_count": 5,
   "ai_marker_count": 1,
   "direct_emotion_count": 0,
   "ellipsis_count": 1,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 31,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 159,
   "file": "第159章.txt"
 }

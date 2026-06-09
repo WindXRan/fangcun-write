@@ -1,6 +1,5 @@
 {
   "total_chars": 2023,
-  "total_sentences": 90,
   "avg_sentence_len": 21.2,
   "sentence_len_std": 13.0,
   "avg_paragraph_len": 24,
@@ -8,21 +7,27 @@
     "min": 6,
     "max": 67
   },
-  "single_para_ratio": 96.5,
-  "dialogue_ratio": 20.9,
-  "short_ratio": 38.9,
-  "long_ratio": 25.6,
   "vocabulary_diversity": 0.31,
   "top_patterns": [
-    "蒲雨...(9次)",
-    "原溯...(8次)",
-    "“这...(4次)"
+    "蒲雨(9次)",
+    "原溯(8次)",
+    "“这(4次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
   "simile_count": 1,
   "ai_marker_count": 4,
   "direct_emotion_count": 0,
   "ellipsis_count": 7,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 56,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 36,
   "file": "第36章.txt"
 }

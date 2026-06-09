@@ -1,6 +1,5 @@
 {
   "total_chars": 2625,
-  "total_sentences": 136,
   "avg_sentence_len": 18.0,
   "sentence_len_std": 11.8,
   "avg_paragraph_len": 23,
@@ -8,23 +7,29 @@
     "min": 6,
     "max": 66
   },
-  "single_para_ratio": 83.2,
-  "dialogue_ratio": 31.7,
-  "short_ratio": 47.8,
-  "long_ratio": 15.4,
   "vocabulary_diversity": 0.28,
   "top_patterns": [
-    "许岁...(11次)",
-    "蒲雨...(11次)",
-    "”许...(5次)",
-    "老板...(5次)",
-    "“哎...(3次)"
+    "许岁(11次)",
+    "蒲雨(11次)",
+    "”许(5次)",
+    "老板(5次)",
+    "“哎(3次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(10处)"
+  ],
   "simile_count": 1,
   "ai_marker_count": 5,
   "direct_emotion_count": 0,
   "ellipsis_count": 3,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 65,
+    "问号": 0,
+    "叹号": 1,
+    "引号": 0
+  },
   "chapter": 18,
   "file": "第18章.txt"
 }

@@ -1,6 +1,5 @@
 {
   "total_chars": 1843,
-  "total_sentences": 86,
   "avg_sentence_len": 20.2,
   "sentence_len_std": 13.4,
   "avg_paragraph_len": 24,
@@ -8,25 +7,30 @@
     "min": 6,
     "max": 65
   },
-  "single_para_ratio": 90.9,
-  "dialogue_ratio": 24.5,
-  "short_ratio": 47.7,
-  "long_ratio": 23.3,
   "vocabulary_diversity": 0.31,
   "top_patterns": [
-    "蒲雨...(11次)",
-    "原溯...(9次)",
-    "“你...(3次)",
-    "“我...(3次)",
-    "因为...(3次)"
+    "蒲雨(11次)",
+    "原溯(9次)",
+    "“你(3次)",
+    "“我(3次)",
+    "因为(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(5处)"
+    "比喻(像/如/仿佛)(5处)",
+    "短句节奏(6处)"
   ],
   "simile_count": 7,
   "ai_marker_count": 2,
   "direct_emotion_count": 0,
   "ellipsis_count": 3,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 53,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 61,
   "file": "第61章.txt"
 }

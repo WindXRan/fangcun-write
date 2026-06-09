@@ -1,6 +1,5 @@
 {
   "total_chars": 2433,
-  "total_sentences": 122,
   "avg_sentence_len": 18.7,
   "sentence_len_std": 13.1,
   "avg_paragraph_len": 24,
@@ -8,25 +7,30 @@
     "min": 6,
     "max": 70
   },
-  "single_para_ratio": 86.3,
-  "dialogue_ratio": 24.0,
-  "short_ratio": 48.4,
-  "long_ratio": 18.9,
   "vocabulary_diversity": 0.286,
   "top_patterns": [
-    "蒲雨...(13次)",
-    "原溯...(7次)",
-    "”蒲...(4次)",
-    "”他...(3次)",
-    "屏幕...(3次)"
+    "蒲雨(13次)",
+    "原溯(7次)",
+    "”蒲(4次)",
+    "”他(3次)",
+    "屏幕(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(3处)"
+    "比喻(像/如/仿佛)(3处)",
+    "短句节奏(9处)"
   ],
   "simile_count": 7,
   "ai_marker_count": 5,
   "direct_emotion_count": 0,
   "ellipsis_count": 9,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 69,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 130,
   "file": "第130章.txt"
 }

@@ -1,6 +1,5 @@
 {
   "total_chars": 2094,
-  "total_sentences": 108,
   "avg_sentence_len": 18.3,
   "sentence_len_std": 13.9,
   "avg_paragraph_len": 22,
@@ -8,22 +7,27 @@
     "min": 6,
     "max": 77
   },
-  "single_para_ratio": 93.5,
-  "dialogue_ratio": 8.6,
-  "short_ratio": 52.8,
-  "long_ratio": 18.5,
   "vocabulary_diversity": 0.304,
   "top_patterns": [
-    "蒲雨...(11次)",
-    "原溯...(10次)"
+    "蒲雨(11次)",
+    "原溯(10次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(5处)"
+    "比喻(像/如/仿佛)(5处)",
+    "短句节奏(8处)"
   ],
   "simile_count": 20,
   "ai_marker_count": 4,
   "direct_emotion_count": 0,
   "ellipsis_count": 6,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 75,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 117,
   "file": "第117章.txt"
 }

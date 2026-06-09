@@ -1,7 +1,6 @@
 [
   {
     "total_chars": 2202,
-    "total_sentences": 106,
     "avg_sentence_len": 19.6,
     "sentence_len_std": 12.8,
     "avg_paragraph_len": 26,
@@ -9,30 +8,34 @@
       "min": 6,
       "max": 108
     },
-    "single_para_ratio": 83.3,
-    "dialogue_ratio": 21.7,
-    "short_ratio": 40.6,
-    "long_ratio": 19.8,
     "vocabulary_diversity": 0.35,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "“我...(4次)",
-      "”蒲...(3次)",
-      "蒲志...(3次)"
+      "蒲雨(11次)",
+      "“我(4次)",
+      "”蒲(3次)",
+      "蒲志(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(7处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 60,
+      "问号": 1,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 1,
     "file": "第1章.txt"
   },
   {
     "total_chars": 1818,
-    "total_sentences": 86,
     "avg_sentence_len": 20.1,
     "sentence_len_std": 13.4,
     "avg_paragraph_len": 24,
@@ -40,28 +43,32 @@
       "min": 6,
       "max": 63
     },
-    "single_para_ratio": 93.3,
-    "dialogue_ratio": 8.1,
-    "short_ratio": 39.5,
-    "long_ratio": 19.8,
     "vocabulary_diversity": 0.352,
     "top_patterns": [
-      "蒲雨...(10次)",
-      "原溯...(5次)"
+      "蒲雨(10次)",
+      "原溯(5次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(4处)"
     ],
     "simile_count": 10,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 51,
+      "问号": 2,
+      "叹号": 2,
+      "引号": 0
+    },
     "chapter": 2,
     "file": "第2章.txt"
   },
   {
     "total_chars": 2079,
-    "total_sentences": 82,
     "avg_sentence_len": 24.2,
     "sentence_len_std": 15.0,
     "avg_paragraph_len": 29,
@@ -69,29 +76,33 @@
       "min": 7,
       "max": 70
     },
-    "single_para_ratio": 87.5,
-    "dialogue_ratio": 29.3,
-    "short_ratio": 30.5,
-    "long_ratio": 30.5,
     "vocabulary_diversity": 0.314,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "李素...(8次)",
-      "“我...(3次)"
+      "蒲雨(11次)",
+      "李素(8次)",
+      "“我(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(5处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 12,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 39,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 3,
     "file": "第3章.txt"
   },
   {
     "total_chars": 2129,
-    "total_sentences": 91,
     "avg_sentence_len": 22.2,
     "sentence_len_std": 15.2,
     "avg_paragraph_len": 27,
@@ -99,27 +110,32 @@
       "min": 6,
       "max": 89
     },
-    "single_para_ratio": 87.3,
-    "dialogue_ratio": 22.9,
-    "short_ratio": 40.7,
-    "long_ratio": 25.3,
     "vocabulary_diversity": 0.334,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "李素...(4次)",
-      "”程...(3次)"
+      "蒲雨(11次)",
+      "李素(4次)",
+      "”程(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(5处)"
+    ],
     "simile_count": 1,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 2,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 59,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 4,
     "file": "第4章.txt"
   },
   {
     "total_chars": 2418,
-    "total_sentences": 92,
     "avg_sentence_len": 25.1,
     "sentence_len_std": 16.8,
     "avg_paragraph_len": 31,
@@ -127,27 +143,32 @@
       "min": 6,
       "max": 85
     },
-    "single_para_ratio": 85.7,
-    "dialogue_ratio": 39.8,
-    "short_ratio": 30.4,
-    "long_ratio": 31.5,
     "vocabulary_diversity": 0.275,
     "top_patterns": [
-      "蒲雨...(16次)",
-      "许岁...(7次)",
-      "”许...(6次)"
+      "蒲雨(16次)",
+      "许岁(7次)",
+      "”许(6次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(5处)"
+    ],
     "simile_count": 2,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 9,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 40,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 5,
     "file": "第5章.txt"
   },
   {
     "total_chars": 2006,
-    "total_sentences": 94,
     "avg_sentence_len": 20.1,
     "sentence_len_std": 13.8,
     "avg_paragraph_len": 26,
@@ -155,28 +176,33 @@
       "min": 6,
       "max": 81
     },
-    "single_para_ratio": 85.5,
-    "dialogue_ratio": 29.0,
-    "short_ratio": 41.5,
-    "long_ratio": 21.3,
     "vocabulary_diversity": 0.305,
     "top_patterns": [
-      "蒲雨...(10次)",
-      "许岁...(6次)",
-      "”蒲...(3次)",
-      "下午...(3次)"
+      "蒲雨(10次)",
+      "许岁(6次)",
+      "”蒲(3次)",
+      "下午(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(10处)"
+    ],
     "simile_count": 1,
     "ai_marker_count": 2,
     "direct_emotion_count": 1,
     "ellipsis_count": 9,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 45,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 6,
     "file": "第6章.txt"
   },
   {
     "total_chars": 2022,
-    "total_sentences": 107,
     "avg_sentence_len": 17.7,
     "sentence_len_std": 10.9,
     "avg_paragraph_len": 23,
@@ -184,28 +210,32 @@
       "min": 6,
       "max": 72
     },
-    "single_para_ratio": 86.0,
-    "dialogue_ratio": 26.8,
-    "short_ratio": 47.7,
-    "long_ratio": 17.8,
     "vocabulary_diversity": 0.332,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "李素...(7次)"
+      "蒲雨(11次)",
+      "李素(7次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(7处)"
     ],
     "simile_count": 3,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 10,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 60,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 7,
     "file": "第7章.txt"
   },
   {
     "total_chars": 2153,
-    "total_sentences": 86,
     "avg_sentence_len": 23.7,
     "sentence_len_std": 16.1,
     "avg_paragraph_len": 29,
@@ -213,28 +243,33 @@
       "min": 8,
       "max": 86
     },
-    "single_para_ratio": 83.6,
-    "dialogue_ratio": 41.2,
-    "short_ratio": 33.7,
-    "long_ratio": 27.9,
     "vocabulary_diversity": 0.307,
     "top_patterns": [
-      "蒲雨...(12次)",
-      "李素...(6次)",
-      "程司...(5次)",
-      "”蒲...(4次)"
+      "蒲雨(12次)",
+      "李素(6次)",
+      "程司(5次)",
+      "”蒲(4次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(7处)"
+    ],
     "simile_count": 3,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 40,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 8,
     "file": "第8章.txt"
   },
   {
     "total_chars": 2103,
-    "total_sentences": 96,
     "avg_sentence_len": 20.5,
     "sentence_len_std": 13.1,
     "avg_paragraph_len": 24,
@@ -242,30 +277,34 @@
       "min": 6,
       "max": 78
     },
-    "single_para_ratio": 86.0,
-    "dialogue_ratio": 27.9,
-    "short_ratio": 42.7,
-    "long_ratio": 20.8,
     "vocabulary_diversity": 0.29,
     "top_patterns": [
-      "蒲雨...(12次)",
-      "许岁...(8次)",
-      "”许...(5次)",
-      "有一...(3次)"
+      "蒲雨(12次)",
+      "许岁(8次)",
+      "”许(5次)",
+      "有一(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(8处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 56,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 9,
     "file": "第9章.txt"
   },
   {
     "total_chars": 1940,
-    "total_sentences": 98,
     "avg_sentence_len": 18.7,
     "sentence_len_std": 12.6,
     "avg_paragraph_len": 23,
@@ -273,28 +312,33 @@
       "min": 6,
       "max": 66
     },
-    "single_para_ratio": 93.9,
-    "dialogue_ratio": 13.6,
-    "short_ratio": 48.0,
-    "long_ratio": 19.4,
     "vocabulary_diversity": 0.326,
     "top_patterns": [
-      "原溯...(9次)",
-      "蒲雨...(8次)",
-      "王老...(5次)",
-      "最后...(3次)"
+      "原溯(9次)",
+      "蒲雨(8次)",
+      "王老(5次)",
+      "最后(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(7处)"
+    ],
     "simile_count": 1,
     "ai_marker_count": 8,
     "direct_emotion_count": 0,
     "ellipsis_count": 7,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 61,
+      "问号": 0,
+      "叹号": 3,
+      "引号": 0
+    },
     "chapter": 10,
     "file": "第10章.txt"
   },
   {
     "total_chars": 2149,
-    "total_sentences": 107,
     "avg_sentence_len": 18.7,
     "sentence_len_std": 11.6,
     "avg_paragraph_len": 22,
@@ -302,28 +346,33 @@
       "min": 6,
       "max": 93
     },
-    "single_para_ratio": 90.6,
-    "dialogue_ratio": 25.5,
-    "short_ratio": 43.9,
-    "long_ratio": 15.9,
     "vocabulary_diversity": 0.309,
     "top_patterns": [
-      "蒲雨...(13次)",
-      "原溯...(9次)",
-      "许岁...(3次)",
-      "”蒲...(3次)"
+      "蒲雨(13次)",
+      "原溯(9次)",
+      "许岁(3次)",
+      "”蒲(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(7处)"
+    ],
     "simile_count": 2,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 7,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 60,
+      "问号": 4,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 11,
     "file": "第11章.txt"
   },
   {
     "total_chars": 2212,
-    "total_sentences": 121,
     "avg_sentence_len": 17.0,
     "sentence_len_std": 12.7,
     "avg_paragraph_len": 22,
@@ -331,29 +380,34 @@
       "min": 6,
       "max": 77
     },
-    "single_para_ratio": 86.0,
-    "dialogue_ratio": 20.5,
-    "short_ratio": 51.2,
-    "long_ratio": 14.0,
     "vocabulary_diversity": 0.296,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "原溯...(11次)",
-      "”蒲...(4次)",
-      "”他...(3次)",
-      "“那...(3次)"
+      "蒲雨(11次)",
+      "原溯(11次)",
+      "”蒲(4次)",
+      "”他(3次)",
+      "“那(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(16处)"
+    ],
     "simile_count": 6,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 78,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 12,
     "file": "第12章.txt"
   },
   {
     "total_chars": 2092,
-    "total_sentences": 118,
     "avg_sentence_len": 16.5,
     "sentence_len_std": 9.8,
     "avg_paragraph_len": 19,
@@ -361,27 +415,32 @@
       "min": 6,
       "max": 61
     },
-    "single_para_ratio": 93.4,
-    "dialogue_ratio": 11.2,
-    "short_ratio": 49.2,
-    "long_ratio": 11.0,
     "vocabulary_diversity": 0.304,
     "top_patterns": [
-      "蒲雨...(15次)",
-      "原溯...(10次)",
-      "许岁...(7次)"
+      "蒲雨(15次)",
+      "原溯(10次)",
+      "许岁(7次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(10处)"
+    ],
     "simile_count": 2,
     "ai_marker_count": 1,
     "direct_emotion_count": 1,
     "ellipsis_count": 4,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 79,
+      "问号": 2,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 13,
     "file": "第13章.txt"
   },
   {
     "total_chars": 1877,
-    "total_sentences": 82,
     "avg_sentence_len": 21.4,
     "sentence_len_std": 14.4,
     "avg_paragraph_len": 28,
@@ -389,30 +448,34 @@
       "min": 6,
       "max": 81
     },
-    "single_para_ratio": 83.3,
-    "dialogue_ratio": 44.5,
-    "short_ratio": 41.5,
-    "long_ratio": 25.6,
     "vocabulary_diversity": 0.299,
     "top_patterns": [
-      "蒲雨...(8次)",
-      "许岁...(5次)",
-      "王老...(4次)",
-      "“我...(3次)"
+      "蒲雨(8次)",
+      "许岁(5次)",
+      "王老(4次)",
+      "“我(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(7处)"
     ],
     "simile_count": 3,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 32,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 14,
     "file": "第14章.txt"
   },
   {
     "total_chars": 2206,
-    "total_sentences": 109,
     "avg_sentence_len": 18.9,
     "sentence_len_std": 13.5,
     "avg_paragraph_len": 26,
@@ -420,32 +483,36 @@
       "min": 8,
       "max": 69
     },
-    "single_para_ratio": 86.7,
-    "dialogue_ratio": 31.8,
-    "short_ratio": 47.7,
-    "long_ratio": 22.9,
     "vocabulary_diversity": 0.297,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "“我...(6次)",
-      "原溯...(6次)",
-      "许岁...(4次)",
-      "黄毛...(4次)"
+      "蒲雨(11次)",
+      "“我(6次)",
+      "原溯(6次)",
+      "许岁(4次)",
+      "黄毛(4次)"
     ],
     "rhetorical_features": [
       "比喻(像/如/仿佛)(4处)",
-      "反问(2处)"
+      "反问(2处)",
+      "短句节奏(10处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 6,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 41,
+      "问号": 2,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 15,
     "file": "第15章.txt"
   },
   {
     "total_chars": 2745,
-    "total_sentences": 144,
     "avg_sentence_len": 17.9,
     "sentence_len_std": 12.2,
     "avg_paragraph_len": 23,
@@ -453,31 +520,35 @@
       "min": 6,
       "max": 87
     },
-    "single_para_ratio": 87.6,
-    "dialogue_ratio": 27.7,
-    "short_ratio": 48.6,
-    "long_ratio": 18.1,
     "vocabulary_diversity": 0.275,
     "top_patterns": [
-      "原溯...(13次)",
-      "“我...(7次)",
-      "蒲雨...(7次)",
-      "许岁...(5次)",
-      "”原...(4次)"
+      "原溯(13次)",
+      "“我(7次)",
+      "蒲雨(7次)",
+      "许岁(5次)",
+      "”原(4次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(12处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 10,
+    "has_said_tag": false,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 74,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 16,
     "file": "第16章.txt"
   },
   {
     "total_chars": 2095,
-    "total_sentences": 112,
     "avg_sentence_len": 17.6,
     "sentence_len_std": 11.1,
     "avg_paragraph_len": 21,
@@ -485,28 +556,33 @@
       "min": 6,
       "max": 65
     },
-    "single_para_ratio": 91.8,
-    "dialogue_ratio": 16.3,
-    "short_ratio": 48.2,
-    "long_ratio": 14.3,
     "vocabulary_diversity": 0.316,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "原溯...(7次)",
-      "王老...(3次)",
-      "赵强...(3次)"
+      "蒲雨(11次)",
+      "原溯(7次)",
+      "王老(3次)",
+      "赵强(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(7处)"
+    ],
     "simile_count": 2,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 78,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 17,
     "file": "第17章.txt"
   },
   {
     "total_chars": 2625,
-    "total_sentences": 136,
     "avg_sentence_len": 18.0,
     "sentence_len_std": 11.8,
     "avg_paragraph_len": 23,
@@ -514,29 +590,34 @@
       "min": 6,
       "max": 66
     },
-    "single_para_ratio": 83.2,
-    "dialogue_ratio": 31.7,
-    "short_ratio": 47.8,
-    "long_ratio": 15.4,
     "vocabulary_diversity": 0.28,
     "top_patterns": [
-      "许岁...(11次)",
-      "蒲雨...(11次)",
-      "”许...(5次)",
-      "老板...(5次)",
-      "“哎...(3次)"
+      "许岁(11次)",
+      "蒲雨(11次)",
+      "”许(5次)",
+      "老板(5次)",
+      "“哎(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(10处)"
+    ],
     "simile_count": 1,
     "ai_marker_count": 5,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 65,
+      "问号": 0,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 18,
     "file": "第18章.txt"
   },
   {
     "total_chars": 1852,
-    "total_sentences": 97,
     "avg_sentence_len": 17.8,
     "sentence_len_std": 12.8,
     "avg_paragraph_len": 24,
@@ -544,27 +625,32 @@
       "min": 6,
       "max": 62
     },
-    "single_para_ratio": 84.2,
-    "dialogue_ratio": 29.8,
-    "short_ratio": 51.5,
-    "long_ratio": 20.6,
     "vocabulary_diversity": 0.31,
     "top_patterns": [
-      "蒲雨...(7次)",
-      "原溯...(7次)",
-      "许岁...(6次)"
+      "蒲雨(7次)",
+      "原溯(7次)",
+      "许岁(6次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(12处)"
+    ],
     "simile_count": 1,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 39,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 19,
     "file": "第19章.txt"
   },
   {
     "total_chars": 2514,
-    "total_sentences": 138,
     "avg_sentence_len": 17.1,
     "sentence_len_std": 10.3,
     "avg_paragraph_len": 20,
@@ -572,28 +658,33 @@
       "min": 6,
       "max": 47
     },
-    "single_para_ratio": 95.2,
-    "dialogue_ratio": 9.1,
-    "short_ratio": 55.1,
-    "long_ratio": 14.5,
     "vocabulary_diversity": 0.291,
     "top_patterns": [
-      "蒲雨...(13次)",
-      "原溯...(10次)",
-      "许岁...(7次)",
-      "少年...(5次)"
+      "蒲雨(13次)",
+      "原溯(10次)",
+      "许岁(7次)",
+      "少年(5次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(9处)"
+    ],
     "simile_count": 4,
     "ai_marker_count": 5,
     "direct_emotion_count": 0,
     "ellipsis_count": 8,
+    "has_said_tag": false,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 93,
+      "问号": 3,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 20,
     "file": "第20章.txt"
   },
   {
     "total_chars": 2504,
-    "total_sentences": 111,
     "avg_sentence_len": 21.3,
     "sentence_len_std": 15.2,
     "avg_paragraph_len": 26,
@@ -601,27 +692,32 @@
       "min": 6,
       "max": 73
     },
-    "single_para_ratio": 89.4,
-    "dialogue_ratio": 38.1,
-    "short_ratio": 37.8,
-    "long_ratio": 22.5,
     "vocabulary_diversity": 0.26,
     "top_patterns": [
-      "程司...(12次)",
-      "蒲雨...(11次)",
-      "原溯...(8次)"
+      "程司(12次)",
+      "蒲雨(11次)",
+      "原溯(8次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(8处)"
+    ],
     "simile_count": 2,
     "ai_marker_count": 5,
     "direct_emotion_count": 0,
     "ellipsis_count": 6,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 51,
+      "问号": 1,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 21,
     "file": "第21章.txt"
   },
   {
     "total_chars": 2215,
-    "total_sentences": 100,
     "avg_sentence_len": 20.8,
     "sentence_len_std": 14.4,
     "avg_paragraph_len": 27,
@@ -629,28 +725,33 @@
       "min": 7,
       "max": 89
     },
-    "single_para_ratio": 80.2,
-    "dialogue_ratio": 27.3,
-    "short_ratio": 42.0,
-    "long_ratio": 24.0,
     "vocabulary_diversity": 0.323,
     "top_patterns": [
-      "蒲雨...(7次)",
-      "原溯...(5次)",
-      "许岁...(4次)",
-      "“我...(3次)"
+      "蒲雨(7次)",
+      "原溯(5次)",
+      "许岁(4次)",
+      "“我(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(7处)"
+    ],
     "simile_count": 5,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 1,
+    "has_said_tag": false,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 52,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 22,
     "file": "第22章.txt"
   },
   {
     "total_chars": 2531,
-    "total_sentences": 126,
     "avg_sentence_len": 19.0,
     "sentence_len_std": 13.1,
     "avg_paragraph_len": 24,
@@ -658,30 +759,34 @@
       "min": 6,
       "max": 65
     },
-    "single_para_ratio": 90.5,
-    "dialogue_ratio": 21.3,
-    "short_ratio": 48.4,
-    "long_ratio": 21.4,
     "vocabulary_diversity": 0.266,
     "top_patterns": [
-      "原溯...(14次)",
-      "程司...(10次)",
-      "蒲雨...(4次)",
-      "“我...(4次)"
+      "原溯(14次)",
+      "程司(10次)",
+      "蒲雨(4次)",
+      "“我(4次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(10处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 7,
     "direct_emotion_count": 0,
     "ellipsis_count": 10,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 68,
+      "问号": 10,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 23,
     "file": "第23章.txt"
   },
   {
     "total_chars": 2093,
-    "total_sentences": 91,
     "avg_sentence_len": 21.7,
     "sentence_len_std": 13.5,
     "avg_paragraph_len": 27,
@@ -689,30 +794,34 @@
       "min": 6,
       "max": 72
     },
-    "single_para_ratio": 89.7,
-    "dialogue_ratio": 34.5,
-    "short_ratio": 39.6,
-    "long_ratio": 24.2,
     "vocabulary_diversity": 0.302,
     "top_patterns": [
-      "蒲雨...(9次)",
-      "原溯...(6次)",
-      "程司...(5次)",
-      "”许...(3次)"
+      "蒲雨(9次)",
+      "原溯(6次)",
+      "程司(5次)",
+      "”许(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(4处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 43,
+      "问号": 2,
+      "叹号": 2,
+      "引号": 0
+    },
     "chapter": 24,
     "file": "第24章.txt"
   },
   {
     "total_chars": 1862,
-    "total_sentences": 81,
     "avg_sentence_len": 21.9,
     "sentence_len_std": 14.0,
     "avg_paragraph_len": 24,
@@ -720,27 +829,32 @@
       "min": 6,
       "max": 63
     },
-    "single_para_ratio": 97.4,
-    "dialogue_ratio": 14.3,
-    "short_ratio": 35.8,
-    "long_ratio": 28.4,
     "vocabulary_diversity": 0.341,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "原溯...(4次)",
-      "“不...(3次)"
+      "蒲雨(11次)",
+      "原溯(4次)",
+      "“不(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(3处)"
+    ],
     "simile_count": 1,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 54,
+      "问号": 4,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 25,
     "file": "第25章.txt"
   },
   {
     "total_chars": 2192,
-    "total_sentences": 94,
     "avg_sentence_len": 21.9,
     "sentence_len_std": 15.3,
     "avg_paragraph_len": 26,
@@ -748,29 +862,33 @@
       "min": 6,
       "max": 74
     },
-    "single_para_ratio": 93.9,
-    "dialogue_ratio": 20.9,
-    "short_ratio": 43.6,
-    "long_ratio": 29.8,
     "vocabulary_diversity": 0.308,
     "top_patterns": [
-      "原溯...(10次)",
-      "蒲雨...(8次)",
-      "陆蓁...(7次)"
+      "原溯(10次)",
+      "蒲雨(8次)",
+      "陆蓁(7次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(8处)"
     ],
     "simile_count": 4,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 46,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 26,
     "file": "第26章.txt"
   },
   {
     "total_chars": 2065,
-    "total_sentences": 93,
     "avg_sentence_len": 21.0,
     "sentence_len_std": 15.2,
     "avg_paragraph_len": 26,
@@ -778,28 +896,33 @@
       "min": 6,
       "max": 99
     },
-    "single_para_ratio": 89.7,
-    "dialogue_ratio": 29.7,
-    "short_ratio": 43.0,
-    "long_ratio": 26.9,
     "vocabulary_diversity": 0.322,
     "top_patterns": [
-      "蒲雨...(9次)",
-      "原溯...(7次)",
-      "“我...(5次)",
-      "”许...(3次)"
+      "蒲雨(9次)",
+      "原溯(7次)",
+      "“我(5次)",
+      "”许(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(7处)"
+    ],
     "simile_count": 3,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 7,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 48,
+      "问号": 5,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 27,
     "file": "第27章.txt"
   },
   {
     "total_chars": 2108,
-    "total_sentences": 94,
     "avg_sentence_len": 21.1,
     "sentence_len_std": 12.7,
     "avg_paragraph_len": 25,
@@ -807,28 +930,33 @@
       "min": 6,
       "max": 67
     },
-    "single_para_ratio": 91.8,
-    "dialogue_ratio": 28.6,
-    "short_ratio": 42.6,
-    "long_ratio": 26.6,
     "vocabulary_diversity": 0.298,
     "top_patterns": [
-      "蒲雨...(14次)",
-      "原溯...(11次)",
-      "“我...(4次)",
-      "许岁...(3次)"
+      "蒲雨(14次)",
+      "原溯(11次)",
+      "“我(4次)",
+      "许岁(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(5处)"
+    ],
     "simile_count": 3,
     "ai_marker_count": 5,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 47,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 28,
     "file": "第28章.txt"
   },
   {
     "total_chars": 2141,
-    "total_sentences": 109,
     "avg_sentence_len": 18.3,
     "sentence_len_std": 12.9,
     "avg_paragraph_len": 22,
@@ -836,29 +964,33 @@
       "min": 6,
       "max": 65
     },
-    "single_para_ratio": 91.8,
-    "dialogue_ratio": 24.1,
-    "short_ratio": 48.6,
-    "long_ratio": 17.4,
     "vocabulary_diversity": 0.304,
     "top_patterns": [
-      "蒲雨...(15次)",
-      "原溯...(13次)",
-      "”他...(3次)"
+      "蒲雨(15次)",
+      "原溯(13次)",
+      "”他(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(8处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 6,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 57,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 29,
     "file": "第29章.txt"
   },
   {
     "total_chars": 2046,
-    "total_sentences": 103,
     "avg_sentence_len": 18.6,
     "sentence_len_std": 13.1,
     "avg_paragraph_len": 23,
@@ -866,27 +998,32 @@
       "min": 6,
       "max": 81
     },
-    "single_para_ratio": 89.5,
-    "dialogue_ratio": 17.8,
-    "short_ratio": 46.6,
-    "long_ratio": 18.4,
     "vocabulary_diversity": 0.287,
     "top_patterns": [
-      "蒲雨...(17次)",
-      "原溯...(6次)",
-      "”他...(3次)"
+      "蒲雨(17次)",
+      "原溯(6次)",
+      "”他(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(10处)"
+    ],
     "simile_count": 3,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 9,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 64,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 30,
     "file": "第30章.txt"
   },
   {
     "total_chars": 2330,
-    "total_sentences": 122,
     "avg_sentence_len": 17.9,
     "sentence_len_std": 12.7,
     "avg_paragraph_len": 22,
@@ -894,31 +1031,35 @@
       "min": 6,
       "max": 74
     },
-    "single_para_ratio": 91.3,
-    "dialogue_ratio": 17.3,
-    "short_ratio": 50.8,
-    "long_ratio": 18.9,
     "vocabulary_diversity": 0.267,
     "top_patterns": [
-      "原溯...(17次)",
-      "蒲雨...(13次)",
-      "“原...(6次)",
-      "“你...(4次)",
-      "”他...(3次)"
+      "原溯(17次)",
+      "蒲雨(13次)",
+      "“原(6次)",
+      "“你(4次)",
+      "”他(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(5处)"
+      "比喻(像/如/仿佛)(5处)",
+      "短句节奏(16处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 6,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 70,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 31,
     "file": "第31章.txt"
   },
   {
     "total_chars": 1932,
-    "total_sentences": 89,
     "avg_sentence_len": 20.4,
     "sentence_len_std": 14.5,
     "avg_paragraph_len": 25,
@@ -926,28 +1067,33 @@
       "min": 6,
       "max": 66
     },
-    "single_para_ratio": 89.7,
-    "dialogue_ratio": 25.9,
-    "short_ratio": 42.7,
-    "long_ratio": 22.5,
     "vocabulary_diversity": 0.305,
     "top_patterns": [
-      "蒲雨...(13次)",
-      "原溯...(3次)",
-      "许岁...(3次)",
-      "程司...(3次)"
+      "蒲雨(13次)",
+      "原溯(3次)",
+      "许岁(3次)",
+      "程司(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(6处)"
+    ],
     "simile_count": 4,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 6,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 45,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 32,
     "file": "第32章.txt"
   },
   {
     "total_chars": 2053,
-    "total_sentences": 101,
     "avg_sentence_len": 19.2,
     "sentence_len_std": 13.0,
     "avg_paragraph_len": 22,
@@ -955,31 +1101,35 @@
       "min": 6,
       "max": 59
     },
-    "single_para_ratio": 96.8,
-    "dialogue_ratio": 13.9,
-    "short_ratio": 48.5,
-    "long_ratio": 22.8,
     "vocabulary_diversity": 0.328,
     "top_patterns": [
-      "蒲雨...(18次)",
-      "“原...(6次)",
-      "原溯...(6次)",
-      "“你...(3次)",
-      "他的...(3次)"
+      "蒲雨(18次)",
+      "“原(6次)",
+      "原溯(6次)",
+      "“你(3次)",
+      "他的(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(9处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 12,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 63,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 33,
     "file": "第33章.txt"
   },
   {
     "total_chars": 2040,
-    "total_sentences": 86,
     "avg_sentence_len": 22.5,
     "sentence_len_std": 14.1,
     "avg_paragraph_len": 27,
@@ -987,28 +1137,33 @@
       "min": 7,
       "max": 68
     },
-    "single_para_ratio": 90.8,
-    "dialogue_ratio": 15.1,
-    "short_ratio": 37.2,
-    "long_ratio": 29.1,
     "vocabulary_diversity": 0.299,
     "top_patterns": [
-      "蒲雨...(8次)",
-      "原溯...(8次)",
-      "李素...(7次)",
-      "”蒲...(3次)"
+      "蒲雨(8次)",
+      "原溯(8次)",
+      "李素(7次)",
+      "”蒲(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(5处)"
+    ],
     "simile_count": 5,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 2,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 56,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 34,
     "file": "第34章.txt"
   },
   {
     "total_chars": 2120,
-    "total_sentences": 97,
     "avg_sentence_len": 20.5,
     "sentence_len_std": 17.3,
     "avg_paragraph_len": 26,
@@ -1016,31 +1171,35 @@
       "min": 6,
       "max": 75
     },
-    "single_para_ratio": 87.7,
-    "dialogue_ratio": 28.4,
-    "short_ratio": 50.5,
-    "long_ratio": 24.7,
     "vocabulary_diversity": 0.295,
     "top_patterns": [
-      "原溯...(15次)",
-      "蒲雨...(13次)",
-      "”她...(3次)",
-      "“奶...(3次)",
-      "”蒲...(3次)"
+      "原溯(15次)",
+      "蒲雨(13次)",
+      "”她(3次)",
+      "“奶(3次)",
+      "”蒲(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(6处)"
+      "比喻(像/如/仿佛)(6处)",
+      "短句节奏(10处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 6,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 46,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 35,
     "file": "第35章.txt"
   },
   {
     "total_chars": 2023,
-    "total_sentences": 90,
     "avg_sentence_len": 21.2,
     "sentence_len_std": 13.0,
     "avg_paragraph_len": 24,
@@ -1048,27 +1207,32 @@
       "min": 6,
       "max": 67
     },
-    "single_para_ratio": 96.5,
-    "dialogue_ratio": 20.9,
-    "short_ratio": 38.9,
-    "long_ratio": 25.6,
     "vocabulary_diversity": 0.31,
     "top_patterns": [
-      "蒲雨...(9次)",
-      "原溯...(8次)",
-      "“这...(4次)"
+      "蒲雨(9次)",
+      "原溯(8次)",
+      "“这(4次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(5处)"
+    ],
     "simile_count": 1,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 7,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 56,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 36,
     "file": "第36章.txt"
   },
   {
     "total_chars": 2130,
-    "total_sentences": 98,
     "avg_sentence_len": 20.3,
     "sentence_len_std": 14.2,
     "avg_paragraph_len": 25,
@@ -1076,28 +1240,33 @@
       "min": 6,
       "max": 67
     },
-    "single_para_ratio": 89.4,
-    "dialogue_ratio": 31.3,
-    "short_ratio": 46.9,
-    "long_ratio": 25.5,
     "vocabulary_diversity": 0.299,
     "top_patterns": [
-      "蒲雨...(15次)",
-      "原溯...(8次)",
-      "许岁...(5次)",
-      "修理...(3次)"
+      "蒲雨(15次)",
+      "原溯(8次)",
+      "许岁(5次)",
+      "修理(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(10处)"
+    ],
     "simile_count": 3,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 8,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 43,
+      "问号": 1,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 37,
     "file": "第37章.txt"
   },
   {
     "total_chars": 1961,
-    "total_sentences": 89,
     "avg_sentence_len": 20.7,
     "sentence_len_std": 14.9,
     "avg_paragraph_len": 25,
@@ -1105,31 +1274,35 @@
       "min": 6,
       "max": 70
     },
-    "single_para_ratio": 93.6,
-    "dialogue_ratio": 23.2,
-    "short_ratio": 49.4,
-    "long_ratio": 29.2,
     "vocabulary_diversity": 0.304,
     "top_patterns": [
-      "蒲雨...(9次)",
-      "陆蓁...(9次)",
-      "原溯...(6次)",
-      "“你...(3次)",
-      "“阿...(3次)"
+      "蒲雨(9次)",
+      "陆蓁(9次)",
+      "原溯(6次)",
+      "“你(3次)",
+      "“阿(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(8处)"
+      "比喻(像/如/仿佛)(8处)",
+      "短句节奏(9处)"
     ],
     "simile_count": 15,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 17,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 49,
+      "问号": 0,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 38,
     "file": "第38章.txt"
   },
   {
     "total_chars": 2498,
-    "total_sentences": 128,
     "avg_sentence_len": 18.3,
     "sentence_len_std": 13.9,
     "avg_paragraph_len": 23,
@@ -1137,31 +1310,35 @@
       "min": 6,
       "max": 81
     },
-    "single_para_ratio": 91.6,
-    "dialogue_ratio": 23.6,
-    "short_ratio": 48.4,
-    "long_ratio": 20.3,
     "vocabulary_diversity": 0.267,
     "top_patterns": [
-      "蒲雨...(17次)",
-      "原溯...(16次)",
-      "“好...(4次)",
-      "“那...(4次)",
-      "“阿...(3次)"
+      "蒲雨(17次)",
+      "原溯(16次)",
+      "“好(4次)",
+      "“那(4次)",
+      "“阿(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(13处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 8,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 67,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 39,
     "file": "第39章.txt"
   },
   {
     "total_chars": 1855,
-    "total_sentences": 78,
     "avg_sentence_len": 22.4,
     "sentence_len_std": 14.6,
     "avg_paragraph_len": 26,
@@ -1169,28 +1346,33 @@
       "min": 6,
       "max": 70
     },
-    "single_para_ratio": 93.1,
-    "dialogue_ratio": 32.4,
-    "short_ratio": 37.2,
-    "long_ratio": 34.6,
     "vocabulary_diversity": 0.33,
     "top_patterns": [
-      "原溯...(10次)",
-      "蒲雨...(8次)",
-      "陆蓁...(4次)",
-      "“那...(3次)"
+      "原溯(10次)",
+      "蒲雨(8次)",
+      "陆蓁(4次)",
+      "“那(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(4处)"
+    ],
     "simile_count": 2,
     "ai_marker_count": 0,
     "direct_emotion_count": 1,
     "ellipsis_count": 4,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 36,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 40,
     "file": "第40章.txt"
   },
   {
     "total_chars": 2221,
-    "total_sentences": 106,
     "avg_sentence_len": 19.6,
     "sentence_len_std": 12.3,
     "avg_paragraph_len": 24,
@@ -1198,29 +1380,34 @@
       "min": 6,
       "max": 74
     },
-    "single_para_ratio": 87.0,
-    "dialogue_ratio": 23.4,
-    "short_ratio": 46.2,
-    "long_ratio": 24.5,
     "vocabulary_diversity": 0.3,
     "top_patterns": [
-      "原溯...(17次)",
-      "蒲雨...(10次)",
-      "“我...(3次)",
-      "”蒲...(3次)",
-      "“哎...(3次)"
+      "原溯(17次)",
+      "蒲雨(10次)",
+      "“我(3次)",
+      "”蒲(3次)",
+      "“哎(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(11处)"
+    ],
     "simile_count": 3,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 7,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 54,
+      "问号": 2,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 41,
     "file": "第41章.txt"
   },
   {
     "total_chars": 1829,
-    "total_sentences": 90,
     "avg_sentence_len": 19.1,
     "sentence_len_std": 13.3,
     "avg_paragraph_len": 26,
@@ -1228,28 +1415,33 @@
       "min": 6,
       "max": 63
     },
-    "single_para_ratio": 84.1,
-    "dialogue_ratio": 16.5,
-    "short_ratio": 48.9,
-    "long_ratio": 24.4,
     "vocabulary_diversity": 0.321,
     "top_patterns": [
-      "蒲雨...(8次)",
-      "原溯...(6次)",
-      "”陈...(5次)",
-      "摊主...(3次)"
+      "蒲雨(8次)",
+      "原溯(6次)",
+      "”陈(5次)",
+      "摊主(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(12处)"
+    ],
     "simile_count": 4,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 10,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 52,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 42,
     "file": "第42章.txt"
   },
   {
     "total_chars": 2258,
-    "total_sentences": 107,
     "avg_sentence_len": 19.6,
     "sentence_len_std": 11.7,
     "avg_paragraph_len": 24,
@@ -1257,30 +1449,34 @@
       "min": 6,
       "max": 60
     },
-    "single_para_ratio": 87.2,
-    "dialogue_ratio": 20.9,
-    "short_ratio": 40.2,
-    "long_ratio": 23.4,
     "vocabulary_diversity": 0.267,
     "top_patterns": [
-      "蒲雨...(18次)",
-      "原溯...(13次)",
-      "”原...(4次)",
-      "”他...(3次)"
+      "蒲雨(18次)",
+      "原溯(13次)",
+      "”原(4次)",
+      "”他(3次)"
     ],
     "rhetorical_features": [
-      "排比(2处)"
+      "排比(2处)",
+      "短句节奏(13处)"
     ],
     "simile_count": 1,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 14,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 57,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 43,
     "file": "第43章.txt"
   },
   {
     "total_chars": 1812,
-    "total_sentences": 102,
     "avg_sentence_len": 16.4,
     "sentence_len_std": 9.9,
     "avg_paragraph_len": 21,
@@ -1288,31 +1484,35 @@
       "min": 6,
       "max": 46
     },
-    "single_para_ratio": 81.2,
-    "dialogue_ratio": 15.9,
-    "short_ratio": 48.0,
-    "long_ratio": 11.8,
     "vocabulary_diversity": 0.297,
     "top_patterns": [
-      "原溯...(13次)",
-      "蒲雨...(11次)",
-      "”蒲...(6次)",
-      "“你...(5次)",
-      "”他...(4次)"
+      "原溯(13次)",
+      "蒲雨(11次)",
+      "”蒲(6次)",
+      "“你(5次)",
+      "”他(4次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(13处)"
     ],
     "simile_count": 4,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 57,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 44,
     "file": "第44章.txt"
   },
   {
     "total_chars": 2166,
-    "total_sentences": 123,
     "avg_sentence_len": 16.4,
     "sentence_len_std": 11.1,
     "avg_paragraph_len": 21,
@@ -1320,29 +1520,34 @@
       "min": 6,
       "max": 73
     },
-    "single_para_ratio": 86.3,
-    "dialogue_ratio": 19.2,
-    "short_ratio": 52.0,
-    "long_ratio": 15.4,
     "vocabulary_diversity": 0.283,
     "top_patterns": [
-      "蒲雨...(14次)",
-      "原溯...(10次)",
-      "”蒲...(5次)",
-      "“你...(4次)",
-      "”他...(4次)"
+      "蒲雨(14次)",
+      "原溯(10次)",
+      "”蒲(5次)",
+      "“你(4次)",
+      "”他(4次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(16处)"
+    ],
     "simile_count": 5,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 8,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 68,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 45,
     "file": "第45章.txt"
   },
   {
     "total_chars": 1993,
-    "total_sentences": 94,
     "avg_sentence_len": 19.9,
     "sentence_len_std": 13.2,
     "avg_paragraph_len": 24,
@@ -1350,29 +1555,33 @@
       "min": 6,
       "max": 67
     },
-    "single_para_ratio": 87.8,
-    "dialogue_ratio": 11.2,
-    "short_ratio": 37.2,
-    "long_ratio": 22.3,
     "vocabulary_diversity": 0.302,
     "top_patterns": [
-      "原溯...(13次)",
-      "蒲雨...(6次)",
-      "”他...(3次)"
+      "原溯(13次)",
+      "蒲雨(6次)",
+      "”他(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(14处)"
     ],
     "simile_count": 8,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 63,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 46,
     "file": "第46章.txt"
   },
   {
     "total_chars": 4371,
-    "total_sentences": 206,
     "avg_sentence_len": 19.9,
     "sentence_len_std": 12.6,
     "avg_paragraph_len": 26,
@@ -1380,31 +1589,35 @@
       "min": 6,
       "max": 108
     },
-    "single_para_ratio": 81.5,
-    "dialogue_ratio": 27.8,
-    "short_ratio": 40.8,
-    "long_ratio": 21.8,
     "vocabulary_diversity": 0.21,
     "top_patterns": [
-      "蒲雨...(23次)",
-      "原溯...(10次)",
-      "宋津...(7次)",
-      "”许...(6次)",
-      "”蒲...(5次)"
+      "蒲雨(23次)",
+      "原溯(10次)",
+      "宋津(7次)",
+      "”许(6次)",
+      "”蒲(5次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(16处)"
     ],
     "simile_count": 8,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 10,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 110,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 47,
     "file": "第47章.txt"
   },
   {
     "total_chars": 2433,
-    "total_sentences": 110,
     "avg_sentence_len": 20.8,
     "sentence_len_std": 15.0,
     "avg_paragraph_len": 27,
@@ -1412,29 +1625,34 @@
       "min": 6,
       "max": 123
     },
-    "single_para_ratio": 78.9,
-    "dialogue_ratio": 31.3,
-    "short_ratio": 45.5,
-    "long_ratio": 25.5,
     "vocabulary_diversity": 0.282,
     "top_patterns": [
-      "蒲雨...(12次)",
-      "”蒲...(4次)",
-      "”许...(4次)",
-      "”程...(3次)",
-      "原溯...(3次)"
+      "蒲雨(12次)",
+      "”蒲(4次)",
+      "”许(4次)",
+      "”程(3次)",
+      "原溯(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(10处)"
+    ],
     "simile_count": 5,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 49,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 48,
     "file": "第48章.txt"
   },
   {
     "total_chars": 1587,
-    "total_sentences": 81,
     "avg_sentence_len": 18.5,
     "sentence_len_std": 12.3,
     "avg_paragraph_len": 24,
@@ -1442,30 +1660,34 @@
       "min": 7,
       "max": 74
     },
-    "single_para_ratio": 84.4,
-    "dialogue_ratio": 19.4,
-    "short_ratio": 46.9,
-    "long_ratio": 13.6,
     "vocabulary_diversity": 0.331,
     "top_patterns": [
-      "蒲雨...(10次)",
-      "原溯...(8次)",
-      "”蒲...(4次)",
-      "两人...(3次)"
+      "蒲雨(10次)",
+      "原溯(8次)",
+      "”蒲(4次)",
+      "两人(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(6处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 10,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 46,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 49,
     "file": "第49章.txt"
   },
   {
     "total_chars": 2216,
-    "total_sentences": 104,
     "avg_sentence_len": 20.1,
     "sentence_len_std": 14.1,
     "avg_paragraph_len": 24,
@@ -1473,30 +1695,34 @@
       "min": 6,
       "max": 71
     },
-    "single_para_ratio": 89.1,
-    "dialogue_ratio": 14.1,
-    "short_ratio": 42.3,
-    "long_ratio": 21.2,
     "vocabulary_diversity": 0.302,
     "top_patterns": [
-      "原溯...(15次)",
-      "蒲雨...(13次)",
-      "”蒲...(4次)",
-      "少年...(3次)"
+      "原溯(15次)",
+      "蒲雨(13次)",
+      "”蒲(4次)",
+      "少年(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(8处)"
     ],
     "simile_count": 8,
     "ai_marker_count": 0,
     "direct_emotion_count": 1,
     "ellipsis_count": 5,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 64,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 50,
     "file": "第50章.txt"
   },
   {
     "total_chars": 1940,
-    "total_sentences": 95,
     "avg_sentence_len": 19.1,
     "sentence_len_std": 12.7,
     "avg_paragraph_len": 25,
@@ -1504,29 +1730,33 @@
       "min": 6,
       "max": 69
     },
-    "single_para_ratio": 80.3,
-    "dialogue_ratio": 20.3,
-    "short_ratio": 45.3,
-    "long_ratio": 22.1,
     "vocabulary_diversity": 0.314,
     "top_patterns": [
-      "原溯...(14次)",
-      "蒲雨...(10次)",
-      "”蒲...(5次)"
+      "原溯(14次)",
+      "蒲雨(10次)",
+      "”蒲(5次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(9处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 46,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 51,
     "file": "第51章.txt"
   },
   {
     "total_chars": 2089,
-    "total_sentences": 115,
     "avg_sentence_len": 16.9,
     "sentence_len_std": 12.4,
     "avg_paragraph_len": 23,
@@ -1534,29 +1764,34 @@
       "min": 6,
       "max": 75
     },
-    "single_para_ratio": 78.0,
-    "dialogue_ratio": 19.9,
-    "short_ratio": 53.9,
-    "long_ratio": 16.5,
     "vocabulary_diversity": 0.283,
     "top_patterns": [
-      "原溯...(17次)",
-      "蒲雨...(8次)",
-      "”蒲...(7次)",
-      "”原...(5次)",
-      "“那...(4次)"
+      "原溯(17次)",
+      "蒲雨(8次)",
+      "”蒲(7次)",
+      "”原(5次)",
+      "“那(4次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(17处)"
+    ],
     "simile_count": 3,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 8,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 55,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 52,
     "file": "第52章.txt"
   },
   {
     "total_chars": 2247,
-    "total_sentences": 115,
     "avg_sentence_len": 18.3,
     "sentence_len_std": 13.6,
     "avg_paragraph_len": 27,
@@ -1564,31 +1799,35 @@
       "min": 6,
       "max": 94
     },
-    "single_para_ratio": 84.5,
-    "dialogue_ratio": 28.9,
-    "short_ratio": 52.2,
-    "long_ratio": 22.6,
     "vocabulary_diversity": 0.295,
     "top_patterns": [
-      "原鸿...(12次)",
-      "原溯...(9次)",
-      "“阿...(4次)",
-      "少年...(3次)",
-      "”原...(3次)"
+      "原鸿(12次)",
+      "原溯(9次)",
+      "“阿(4次)",
+      "少年(3次)",
+      "”原(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(5处)"
+      "比喻(像/如/仿佛)(5处)",
+      "短句节奏(21处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 15,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 48,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 53,
     "file": "第53章.txt"
   },
   {
     "total_chars": 2301,
-    "total_sentences": 110,
     "avg_sentence_len": 19.8,
     "sentence_len_std": 14.8,
     "avg_paragraph_len": 24,
@@ -1596,31 +1835,35 @@
       "min": 6,
       "max": 83
     },
-    "single_para_ratio": 89.7,
-    "dialogue_ratio": 21.6,
-    "short_ratio": 46.4,
-    "long_ratio": 23.6,
     "vocabulary_diversity": 0.288,
     "top_patterns": [
-      "原溯...(10次)",
-      "蒲雨...(6次)",
-      "“原...(4次)",
-      "原鸿...(3次)",
-      "刀哥...(3次)"
+      "原溯(10次)",
+      "蒲雨(6次)",
+      "“原(4次)",
+      "原鸿(3次)",
+      "刀哥(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(6处)"
+      "比喻(像/如/仿佛)(6处)",
+      "短句节奏(11处)"
     ],
     "simile_count": 9,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 16,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 63,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 54,
     "file": "第54章.txt"
   },
   {
     "total_chars": 2657,
-    "total_sentences": 132,
     "avg_sentence_len": 18.9,
     "sentence_len_std": 12.3,
     "avg_paragraph_len": 23,
@@ -1628,31 +1871,35 @@
       "min": 6,
       "max": 70
     },
-    "single_para_ratio": 90.2,
-    "dialogue_ratio": 18.5,
-    "short_ratio": 45.5,
-    "long_ratio": 18.9,
     "vocabulary_diversity": 0.271,
     "top_patterns": [
-      "蒲雨...(22次)",
-      "原溯...(15次)",
-      "“我...(6次)",
-      "“你...(4次)",
-      "”蒲...(3次)"
+      "蒲雨(22次)",
+      "原溯(15次)",
+      "“我(6次)",
+      "“你(4次)",
+      "”蒲(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(12处)"
     ],
     "simile_count": 10,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 8,
+    "has_said_tag": false,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 74,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 55,
     "file": "第55章.txt"
   },
   {
     "total_chars": 1430,
-    "total_sentences": 67,
     "avg_sentence_len": 20.1,
     "sentence_len_std": 13.4,
     "avg_paragraph_len": 27,
@@ -1660,27 +1907,32 @@
       "min": 9,
       "max": 99
     },
-    "single_para_ratio": 80.8,
-    "dialogue_ratio": 33.5,
-    "short_ratio": 44.8,
-    "long_ratio": 23.9,
     "vocabulary_diversity": 0.372,
     "top_patterns": [
-      "李素...(8次)",
-      "蒲雨...(5次)",
-      "原溯...(5次)"
+      "李素(8次)",
+      "蒲雨(5次)",
+      "原溯(5次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(7处)"
+    ],
     "simile_count": 3,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 33,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 56,
     "file": "第56章.txt"
   },
   {
     "total_chars": 2816,
-    "total_sentences": 135,
     "avg_sentence_len": 19.7,
     "sentence_len_std": 14.1,
     "avg_paragraph_len": 24,
@@ -1688,28 +1940,32 @@
       "min": 6,
       "max": 86
     },
-    "single_para_ratio": 91.5,
-    "dialogue_ratio": 15.5,
-    "short_ratio": 47.4,
-    "long_ratio": 25.2,
     "vocabulary_diversity": 0.29,
     "top_patterns": [
-      "蒲雨...(10次)",
-      "原溯...(9次)"
+      "蒲雨(10次)",
+      "原溯(9次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(13处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 14,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 80,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 57,
     "file": "第57章.txt"
   },
   {
     "total_chars": 1470,
-    "total_sentences": 69,
     "avg_sentence_len": 20.1,
     "sentence_len_std": 17.6,
     "avg_paragraph_len": 30,
@@ -1717,27 +1973,32 @@
       "min": 6,
       "max": 94
     },
-    "single_para_ratio": 77.1,
-    "dialogue_ratio": 36.0,
-    "short_ratio": 52.2,
-    "long_ratio": 20.3,
     "vocabulary_diversity": 0.342,
     "top_patterns": [
-      "蒲雨...(10次)",
-      "”许...(4次)",
-      "”岁...(3次)"
+      "蒲雨(10次)",
+      "”许(4次)",
+      "”岁(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(12处)"
+    ],
     "simile_count": 1,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 9,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 25,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 58,
     "file": "第58章.txt"
   },
   {
     "total_chars": 2045,
-    "total_sentences": 110,
     "avg_sentence_len": 17.4,
     "sentence_len_std": 13.0,
     "avg_paragraph_len": 22,
@@ -1745,31 +2006,35 @@
       "min": 6,
       "max": 75
     },
-    "single_para_ratio": 91.3,
-    "dialogue_ratio": 14.3,
-    "short_ratio": 49.1,
-    "long_ratio": 17.3,
     "vocabulary_diversity": 0.293,
     "top_patterns": [
-      "蒲雨...(13次)",
-      "原溯...(11次)",
-      "他的...(5次)",
-      "“我...(3次)",
-      "”原...(3次)"
+      "蒲雨(13次)",
+      "原溯(11次)",
+      "他的(5次)",
+      "“我(3次)",
+      "”原(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(11处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 15,
+    "has_said_tag": false,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 57,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 59,
     "file": "第59章.txt"
   },
   {
     "total_chars": 2050,
-    "total_sentences": 117,
     "avg_sentence_len": 16.3,
     "sentence_len_std": 11.0,
     "avg_paragraph_len": 24,
@@ -1777,31 +2042,35 @@
       "min": 6,
       "max": 69
     },
-    "single_para_ratio": 81.2,
-    "dialogue_ratio": 23.4,
-    "short_ratio": 53.0,
-    "long_ratio": 14.5,
     "vocabulary_diversity": 0.315,
     "top_patterns": [
-      "原溯...(10次)",
-      "蒲雨...(8次)",
-      "“你...(6次)",
-      "”二...(3次)",
-      "二麻...(3次)"
+      "原溯(10次)",
+      "蒲雨(8次)",
+      "“你(6次)",
+      "”二(3次)",
+      "二麻(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(6处)"
+      "比喻(像/如/仿佛)(6处)",
+      "短句节奏(13处)"
     ],
     "simile_count": 12,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 6,
+    "has_said_tag": false,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 56,
+      "问号": 0,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 60,
     "file": "第60章.txt"
   },
   {
     "total_chars": 1843,
-    "total_sentences": 86,
     "avg_sentence_len": 20.2,
     "sentence_len_std": 13.4,
     "avg_paragraph_len": 24,
@@ -1809,31 +2078,35 @@
       "min": 6,
       "max": 65
     },
-    "single_para_ratio": 90.9,
-    "dialogue_ratio": 24.5,
-    "short_ratio": 47.7,
-    "long_ratio": 23.3,
     "vocabulary_diversity": 0.31,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "原溯...(9次)",
-      "“你...(3次)",
-      "“我...(3次)",
-      "因为...(3次)"
+      "蒲雨(11次)",
+      "原溯(9次)",
+      "“你(3次)",
+      "“我(3次)",
+      "因为(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(5处)"
+      "比喻(像/如/仿佛)(5处)",
+      "短句节奏(6处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 53,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 61,
     "file": "第61章.txt"
   },
   {
     "total_chars": 2810,
-    "total_sentences": 131,
     "avg_sentence_len": 20.2,
     "sentence_len_std": 12.4,
     "avg_paragraph_len": 26,
@@ -1841,28 +2114,33 @@
       "min": 6,
       "max": 81
     },
-    "single_para_ratio": 81.1,
-    "dialogue_ratio": 23.8,
-    "short_ratio": 38.9,
-    "long_ratio": 24.4,
     "vocabulary_diversity": 0.274,
     "top_patterns": [
-      "蒲雨...(15次)",
-      "原溯...(14次)",
-      "李素...(6次)",
-      "”原...(5次)"
+      "蒲雨(15次)",
+      "原溯(14次)",
+      "李素(6次)",
+      "”原(5次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(11处)"
+    ],
     "simile_count": 0,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 9,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 62,
+      "问号": 1,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 62,
     "file": "第62章.txt"
   },
   {
     "total_chars": 1962,
-    "total_sentences": 102,
     "avg_sentence_len": 17.9,
     "sentence_len_std": 11.5,
     "avg_paragraph_len": 21,
@@ -1870,30 +2148,34 @@
       "min": 6,
       "max": 74
     },
-    "single_para_ratio": 92.2,
-    "dialogue_ratio": 16.4,
-    "short_ratio": 45.1,
-    "long_ratio": 13.7,
     "vocabulary_diversity": 0.311,
     "top_patterns": [
-      "蒲雨...(12次)",
-      "原溯...(6次)",
-      "陆蓁...(4次)",
-      "“新...(3次)"
+      "蒲雨(12次)",
+      "原溯(6次)",
+      "陆蓁(4次)",
+      "“新(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(8处)"
     ],
     "simile_count": 3,
     "ai_marker_count": 2,
     "direct_emotion_count": 1,
     "ellipsis_count": 4,
+    "has_said_tag": false,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 61,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 63,
     "file": "第63章.txt"
   },
   {
     "total_chars": 2297,
-    "total_sentences": 132,
     "avg_sentence_len": 16.3,
     "sentence_len_std": 10.4,
     "avg_paragraph_len": 20,
@@ -1901,30 +2183,34 @@
       "min": 6,
       "max": 50
     },
-    "single_para_ratio": 92.2,
-    "dialogue_ratio": 9.7,
-    "short_ratio": 54.5,
-    "long_ratio": 15.2,
     "vocabulary_diversity": 0.279,
     "top_patterns": [
-      "原溯...(14次)",
-      "蒲雨...(12次)",
-      "”蒲...(3次)",
-      "因为...(3次)"
+      "原溯(14次)",
+      "蒲雨(12次)",
+      "”蒲(3次)",
+      "因为(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(12处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 11,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 91,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 64,
     "file": "第64章.txt"
   },
   {
     "total_chars": 1955,
-    "total_sentences": 95,
     "avg_sentence_len": 19.3,
     "sentence_len_std": 12.0,
     "avg_paragraph_len": 25,
@@ -1932,27 +2218,32 @@
       "min": 6,
       "max": 81
     },
-    "single_para_ratio": 83.3,
-    "dialogue_ratio": 30.4,
-    "short_ratio": 46.3,
-    "long_ratio": 21.1,
     "vocabulary_diversity": 0.286,
     "top_patterns": [
-      "蒲雨...(14次)",
-      "李素...(6次)",
-      "”程...(3次)"
+      "蒲雨(14次)",
+      "李素(6次)",
+      "”程(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(8处)"
+    ],
     "simile_count": 1,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 43,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 65,
     "file": "第65章.txt"
   },
   {
     "total_chars": 2154,
-    "total_sentences": 115,
     "avg_sentence_len": 17.5,
     "sentence_len_std": 10.9,
     "avg_paragraph_len": 22,
@@ -1960,28 +2251,33 @@
       "min": 6,
       "max": 67
     },
-    "single_para_ratio": 87.6,
-    "dialogue_ratio": 18.4,
-    "short_ratio": 52.2,
-    "long_ratio": 13.9,
     "vocabulary_diversity": 0.281,
     "top_patterns": [
-      "原溯...(11次)",
-      "蒲雨...(9次)",
-      "阳光...(3次)",
-      "宋津...(3次)"
+      "原溯(11次)",
+      "蒲雨(9次)",
+      "阳光(3次)",
+      "宋津(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(9处)"
+    ],
     "simile_count": 2,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 68,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 66,
     "file": "第66章.txt"
   },
   {
     "total_chars": 1999,
-    "total_sentences": 88,
     "avg_sentence_len": 21.4,
     "sentence_len_std": 14.0,
     "avg_paragraph_len": 30,
@@ -1989,28 +2285,33 @@
       "min": 7,
       "max": 91
     },
-    "single_para_ratio": 77.6,
-    "dialogue_ratio": 44.6,
-    "short_ratio": 42.0,
-    "long_ratio": 25.0,
     "vocabulary_diversity": 0.293,
     "top_patterns": [
-      "李素...(6次)",
-      "程司...(3次)",
-      "教室...(3次)",
-      "”李...(3次)"
+      "李素(6次)",
+      "程司(3次)",
+      "教室(3次)",
+      "”李(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(9处)"
+    ],
     "simile_count": 2,
     "ai_marker_count": 5,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 43,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 67,
     "file": "第67章.txt"
   },
   {
     "total_chars": 2259,
-    "total_sentences": 122,
     "avg_sentence_len": 17.2,
     "sentence_len_std": 12.4,
     "avg_paragraph_len": 27,
@@ -2018,31 +2319,35 @@
       "min": 6,
       "max": 84
     },
-    "single_para_ratio": 70.2,
-    "dialogue_ratio": 42.6,
-    "short_ratio": 53.3,
-    "long_ratio": 16.4,
     "vocabulary_diversity": 0.28,
     "top_patterns": [
-      "蒲雨...(9次)",
-      "原溯...(8次)",
-      "”蒲...(6次)",
-      "”李...(6次)",
-      "李素...(5次)"
+      "蒲雨(9次)",
+      "原溯(8次)",
+      "”蒲(6次)",
+      "”李(6次)",
+      "李素(5次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(16处)"
     ],
     "simile_count": 4,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 14,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 40,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 68,
     "file": "第68章.txt"
   },
   {
     "total_chars": 2066,
-    "total_sentences": 90,
     "avg_sentence_len": 22.0,
     "sentence_len_std": 14.3,
     "avg_paragraph_len": 25,
@@ -2050,29 +2355,34 @@
       "min": 7,
       "max": 83
     },
-    "single_para_ratio": 91.4,
-    "dialogue_ratio": 36.5,
-    "short_ratio": 40.0,
-    "long_ratio": 25.6,
     "vocabulary_diversity": 0.262,
     "top_patterns": [
-      "原溯...(12次)",
-      "李素...(11次)",
-      "蒲雨...(7次)",
-      "“我...(5次)",
-      "“您...(4次)"
+      "原溯(12次)",
+      "李素(11次)",
+      "蒲雨(7次)",
+      "“我(5次)",
+      "“您(4次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(3处)"
+    ],
     "simile_count": 5,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 28,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 40,
+      "问号": 0,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 69,
     "file": "第69章.txt"
   },
   {
     "total_chars": 2009,
-    "total_sentences": 93,
     "avg_sentence_len": 20.4,
     "sentence_len_std": 14.8,
     "avg_paragraph_len": 26,
@@ -2080,31 +2390,35 @@
       "min": 6,
       "max": 86
     },
-    "single_para_ratio": 88.5,
-    "dialogue_ratio": 34.2,
-    "short_ratio": 44.1,
-    "long_ratio": 20.4,
     "vocabulary_diversity": 0.282,
     "top_patterns": [
-      "蒲雨...(14次)",
-      "原溯...(10次)",
-      "”原...(6次)",
-      "“我...(5次)",
-      "“不...(4次)"
+      "蒲雨(14次)",
+      "原溯(10次)",
+      "”原(6次)",
+      "“我(5次)",
+      "“不(4次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(3处)"
     ],
     "simile_count": 3,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 12,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 41,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 70,
     "file": "第70章.txt"
   },
   {
     "total_chars": 2433,
-    "total_sentences": 113,
     "avg_sentence_len": 20.0,
     "sentence_len_std": 14.2,
     "avg_paragraph_len": 26,
@@ -2112,31 +2426,35 @@
       "min": 6,
       "max": 87
     },
-    "single_para_ratio": 81.7,
-    "dialogue_ratio": 34.7,
-    "short_ratio": 47.8,
-    "long_ratio": 23.9,
     "vocabulary_diversity": 0.29,
     "top_patterns": [
-      "蒲雨...(15次)",
-      "原溯...(5次)",
-      "”蒲...(4次)",
-      "李素...(3次)",
-      "“你...(3次)"
+      "蒲雨(15次)",
+      "原溯(5次)",
+      "”蒲(4次)",
+      "李素(3次)",
+      "“你(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(14处)"
     ],
     "simile_count": 3,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 53,
+      "问号": 0,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 71,
     "file": "第71章.txt"
   },
   {
     "total_chars": 1681,
-    "total_sentences": 85,
     "avg_sentence_len": 18.4,
     "sentence_len_std": 13.2,
     "avg_paragraph_len": 22,
@@ -2144,27 +2462,32 @@
       "min": 6,
       "max": 61
     },
-    "single_para_ratio": 85.1,
-    "dialogue_ratio": 20.1,
-    "short_ratio": 55.3,
-    "long_ratio": 25.9,
     "vocabulary_diversity": 0.31,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "蒲志...(5次)",
-      "原溯...(5次)"
+      "蒲雨(11次)",
+      "蒲志(5次)",
+      "原溯(5次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(13处)"
+    ],
     "simile_count": 4,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 7,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 50,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 72,
     "file": "第72章.txt"
   },
   {
     "total_chars": 2334,
-    "total_sentences": 126,
     "avg_sentence_len": 17.3,
     "sentence_len_std": 12.0,
     "avg_paragraph_len": 21,
@@ -2172,31 +2495,35 @@
       "min": 6,
       "max": 66
     },
-    "single_para_ratio": 90.1,
-    "dialogue_ratio": 19.0,
-    "short_ratio": 50.8,
-    "long_ratio": 18.3,
     "vocabulary_diversity": 0.262,
     "top_patterns": [
-      "蒲雨...(19次)",
-      "原溯...(17次)",
-      "少年...(3次)",
-      "“你...(3次)",
-      "“我...(3次)"
+      "蒲雨(19次)",
+      "原溯(17次)",
+      "少年(3次)",
+      "“你(3次)",
+      "“我(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(6处)"
+      "比喻(像/如/仿佛)(6处)",
+      "短句节奏(13处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 5,
     "direct_emotion_count": 0,
     "ellipsis_count": 9,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 70,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 73,
     "file": "第73章.txt"
   },
   {
     "total_chars": 1834,
-    "total_sentences": 93,
     "avg_sentence_len": 18.4,
     "sentence_len_std": 12.7,
     "avg_paragraph_len": 25,
@@ -2204,30 +2531,34 @@
       "min": 6,
       "max": 69
     },
-    "single_para_ratio": 84.9,
-    "dialogue_ratio": 25.8,
-    "short_ratio": 49.5,
-    "long_ratio": 18.3,
     "vocabulary_diversity": 0.302,
     "top_patterns": [
-      "原溯...(12次)",
-      "蒲雨...(11次)",
-      "“我...(5次)",
-      "”蒲...(3次)"
+      "原溯(12次)",
+      "蒲雨(11次)",
+      "“我(5次)",
+      "”蒲(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(13处)"
     ],
     "simile_count": 4,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 8,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 40,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 74,
     "file": "第74章.txt"
   },
   {
     "total_chars": 1933,
-    "total_sentences": 90,
     "avg_sentence_len": 20.2,
     "sentence_len_std": 14.0,
     "avg_paragraph_len": 25,
@@ -2235,29 +2566,34 @@
       "min": 6,
       "max": 73
     },
-    "single_para_ratio": 84.2,
-    "dialogue_ratio": 35.7,
-    "short_ratio": 44.4,
-    "long_ratio": 23.3,
     "vocabulary_diversity": 0.284,
     "top_patterns": [
-      "蒲雨...(12次)",
-      "原溯...(8次)",
-      "李素...(7次)",
-      "“你...(4次)",
-      "”李...(3次)"
+      "蒲雨(12次)",
+      "原溯(8次)",
+      "李素(7次)",
+      "“你(4次)",
+      "”李(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(6处)"
+    ],
     "simile_count": 1,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 9,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 37,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 75,
     "file": "第75章.txt"
   },
   {
     "total_chars": 2355,
-    "total_sentences": 110,
     "avg_sentence_len": 20.1,
     "sentence_len_std": 13.5,
     "avg_paragraph_len": 26,
@@ -2265,30 +2601,34 @@
       "min": 6,
       "max": 68
     },
-    "single_para_ratio": 86.8,
-    "dialogue_ratio": 27.9,
-    "short_ratio": 38.2,
-    "long_ratio": 20.9,
     "vocabulary_diversity": 0.297,
     "top_patterns": [
-      "蒲雨...(10次)",
-      "原溯...(6次)",
-      "那些...(3次)",
-      "“原...(3次)"
+      "蒲雨(10次)",
+      "原溯(6次)",
+      "那些(3次)",
+      "“原(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(11处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 8,
+    "has_said_tag": false,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 58,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 76,
     "file": "第76章.txt"
   },
   {
     "total_chars": 2098,
-    "total_sentences": 102,
     "avg_sentence_len": 19.3,
     "sentence_len_std": 12.2,
     "avg_paragraph_len": 23,
@@ -2296,29 +2636,33 @@
       "min": 6,
       "max": 77
     },
-    "single_para_ratio": 92.4,
-    "dialogue_ratio": 19.4,
-    "short_ratio": 41.2,
-    "long_ratio": 15.7,
     "vocabulary_diversity": 0.302,
     "top_patterns": [
-      "蒲雨...(10次)",
-      "原溯...(8次)",
-      "“我...(3次)"
+      "蒲雨(10次)",
+      "原溯(8次)",
+      "“我(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(7处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 9,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 63,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 77,
     "file": "第77章.txt"
   },
   {
     "total_chars": 2170,
-    "total_sentences": 111,
     "avg_sentence_len": 18.3,
     "sentence_len_std": 13.6,
     "avg_paragraph_len": 23,
@@ -2326,29 +2670,33 @@
       "min": 6,
       "max": 97
     },
-    "single_para_ratio": 89.4,
-    "dialogue_ratio": 22.7,
-    "short_ratio": 48.6,
-    "long_ratio": 17.1,
     "vocabulary_diversity": 0.297,
     "top_patterns": [
-      "原溯...(10次)",
-      "“我...(6次)",
-      "蒲雨...(6次)"
+      "原溯(10次)",
+      "“我(6次)",
+      "蒲雨(6次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(12处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 6,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 68,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 78,
     "file": "第78章.txt"
   },
   {
     "total_chars": 2573,
-    "total_sentences": 133,
     "avg_sentence_len": 18.2,
     "sentence_len_std": 12.7,
     "avg_paragraph_len": 21,
@@ -2356,28 +2704,32 @@
       "min": 6,
       "max": 92
     },
-    "single_para_ratio": 91.6,
-    "dialogue_ratio": 13.1,
-    "short_ratio": 42.1,
-    "long_ratio": 13.5,
     "vocabulary_diversity": 0.284,
     "top_patterns": [
-      "蒲雨...(13次)",
-      "原溯...(7次)"
+      "蒲雨(13次)",
+      "原溯(7次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(5处)"
+      "比喻(像/如/仿佛)(5处)",
+      "短句节奏(8处)"
     ],
     "simile_count": 12,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 6,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 89,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 79,
     "file": "第79章.txt"
   },
   {
     "total_chars": 1705,
-    "total_sentences": 89,
     "avg_sentence_len": 18.2,
     "sentence_len_std": 11.8,
     "avg_paragraph_len": 22,
@@ -2385,28 +2737,32 @@
       "min": 6,
       "max": 64
     },
-    "single_para_ratio": 96.1,
-    "dialogue_ratio": 6.6,
-    "short_ratio": 49.4,
-    "long_ratio": 15.7,
     "vocabulary_diversity": 0.33,
     "top_patterns": [
-      "蒲雨...(4次)",
-      "李素...(3次)"
+      "蒲雨(4次)",
+      "李素(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(7处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 14,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 67,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 80,
     "file": "第80章.txt"
   },
   {
     "total_chars": 2288,
-    "total_sentences": 132,
     "avg_sentence_len": 16.2,
     "sentence_len_std": 10.7,
     "avg_paragraph_len": 19,
@@ -2414,29 +2770,34 @@
       "min": 6,
       "max": 66
     },
-    "single_para_ratio": 94.1,
-    "dialogue_ratio": 14.3,
-    "short_ratio": 56.8,
-    "long_ratio": 12.9,
     "vocabulary_diversity": 0.291,
     "top_patterns": [
-      "蒲雨...(16次)",
-      "李素...(7次)",
-      "“小...(4次)",
-      "有时...(3次)",
-      "没有...(3次)"
+      "蒲雨(16次)",
+      "李素(7次)",
+      "“小(4次)",
+      "有时(3次)",
+      "没有(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(9处)"
+    ],
     "simile_count": 4,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 10,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 85,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 81,
     "file": "第81章.txt"
   },
   {
     "total_chars": 2114,
-    "total_sentences": 112,
     "avg_sentence_len": 17.6,
     "sentence_len_std": 11.7,
     "avg_paragraph_len": 23,
@@ -2444,29 +2805,34 @@
       "min": 6,
       "max": 92
     },
-    "single_para_ratio": 82.2,
-    "dialogue_ratio": 36.8,
-    "short_ratio": 45.5,
-    "long_ratio": 12.5,
     "vocabulary_diversity": 0.265,
     "top_patterns": [
-      "蒲雨...(10次)",
-      "程司...(5次)",
-      "李素...(3次)",
-      "“可...(3次)",
-      "“这...(3次)"
+      "蒲雨(10次)",
+      "程司(5次)",
+      "李素(3次)",
+      "“可(3次)",
+      "“这(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(9处)"
+    ],
     "simile_count": 5,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 11,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 47,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 82,
     "file": "第82章.txt"
   },
   {
     "total_chars": 2330,
-    "total_sentences": 123,
     "avg_sentence_len": 17.7,
     "sentence_len_std": 10.8,
     "avg_paragraph_len": 27,
@@ -2474,29 +2840,34 @@
       "min": 6,
       "max": 69
     },
-    "single_para_ratio": 69.0,
-    "dialogue_ratio": 18.5,
-    "short_ratio": 48.8,
-    "long_ratio": 15.4,
     "vocabulary_diversity": 0.28,
     "top_patterns": [
-      "宋津...(9次)",
-      "蒲雨...(6次)",
-      "许岁...(5次)",
-      "”许...(5次)",
-      "”一...(3次)"
+      "宋津(9次)",
+      "蒲雨(6次)",
+      "许岁(5次)",
+      "”许(5次)",
+      "”一(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(12处)"
+    ],
     "simile_count": 3,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 1,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 51,
+      "问号": 0,
+      "叹号": 6,
+      "引号": 0
+    },
     "chapter": 83,
     "file": "第83章.txt"
   },
   {
     "total_chars": 2137,
-    "total_sentences": 120,
     "avg_sentence_len": 16.6,
     "sentence_len_std": 10.5,
     "avg_paragraph_len": 21,
@@ -2504,31 +2875,35 @@
       "min": 6,
       "max": 72
     },
-    "single_para_ratio": 88.9,
-    "dialogue_ratio": 19.7,
-    "short_ratio": 53.3,
-    "long_ratio": 13.3,
     "vocabulary_diversity": 0.314,
     "top_patterns": [
-      "蒲雨...(14次)",
-      "李素...(5次)",
-      "“奶...(3次)",
-      "”李...(3次)",
-      "耳机...(3次)"
+      "蒲雨(14次)",
+      "李素(5次)",
+      "“奶(3次)",
+      "”李(3次)",
+      "耳机(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(13处)"
     ],
     "simile_count": 9,
     "ai_marker_count": 5,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 67,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 84,
     "file": "第84章.txt"
   },
   {
     "total_chars": 2326,
-    "total_sentences": 134,
     "avg_sentence_len": 16.0,
     "sentence_len_std": 9.5,
     "avg_paragraph_len": 21,
@@ -2536,28 +2911,33 @@
       "min": 6,
       "max": 73
     },
-    "single_para_ratio": 81.1,
-    "dialogue_ratio": 21.2,
-    "short_ratio": 53.7,
-    "long_ratio": 10.4,
     "vocabulary_diversity": 0.288,
     "top_patterns": [
-      "蒲雨...(20次)",
-      "“你...(6次)",
-      "”蒲...(5次)",
-      "“我...(3次)"
+      "蒲雨(20次)",
+      "“你(6次)",
+      "”蒲(5次)",
+      "“我(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(11处)"
+    ],
     "simile_count": 6,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 76,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 85,
     "file": "第85章.txt"
   },
   {
     "total_chars": 1835,
-    "total_sentences": 104,
     "avg_sentence_len": 16.4,
     "sentence_len_std": 12.1,
     "avg_paragraph_len": 23,
@@ -2565,26 +2945,31 @@
       "min": 6,
       "max": 96
     },
-    "single_para_ratio": 78.8,
-    "dialogue_ratio": 36.0,
-    "short_ratio": 59.6,
-    "long_ratio": 11.5,
     "vocabulary_diversity": 0.34,
     "top_patterns": [
-      "蒲雨...(13次)",
-      "”蒲...(3次)"
+      "蒲雨(13次)",
+      "”蒲(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(11处)"
+    ],
     "simile_count": 2,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 46,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 86,
     "file": "第86章.txt"
   },
   {
     "total_chars": 2386,
-    "total_sentences": 132,
     "avg_sentence_len": 16.8,
     "sentence_len_std": 12.1,
     "avg_paragraph_len": 24,
@@ -2592,31 +2977,35 @@
       "min": 6,
       "max": 113
     },
-    "single_para_ratio": 75.3,
-    "dialogue_ratio": 32.2,
-    "short_ratio": 50.8,
-    "long_ratio": 13.6,
     "vocabulary_diversity": 0.295,
     "top_patterns": [
-      "蒲雨...(7次)",
-      "”蒲...(5次)",
-      "许岁...(5次)",
-      "“你...(4次)",
-      "宋津...(4次)"
+      "蒲雨(7次)",
+      "”蒲(5次)",
+      "许岁(5次)",
+      "“你(4次)",
+      "宋津(4次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(15处)"
     ],
     "simile_count": 3,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 58,
+      "问号": 4,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 87,
     "file": "第87章.txt"
   },
   {
     "total_chars": 1882,
-    "total_sentences": 101,
     "avg_sentence_len": 17.5,
     "sentence_len_std": 10.8,
     "avg_paragraph_len": 20,
@@ -2624,28 +3013,32 @@
       "min": 6,
       "max": 63
     },
-    "single_para_ratio": 93.6,
-    "dialogue_ratio": 15.1,
-    "short_ratio": 51.5,
-    "long_ratio": 13.9,
     "vocabulary_diversity": 0.312,
     "top_patterns": [
-      "蒲雨...(10次)",
-      "“这...(3次)"
+      "蒲雨(10次)",
+      "“这(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(5处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 2,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 64,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 88,
     "file": "第88章.txt"
   },
   {
     "total_chars": 2519,
-    "total_sentences": 138,
     "avg_sentence_len": 17.1,
     "sentence_len_std": 12.4,
     "avg_paragraph_len": 21,
@@ -2653,29 +3046,33 @@
       "min": 6,
       "max": 82
     },
-    "single_para_ratio": 91.7,
-    "dialogue_ratio": 17.9,
-    "short_ratio": 55.8,
-    "long_ratio": 13.8,
     "vocabulary_diversity": 0.289,
     "top_patterns": [
-      "原溯...(15次)",
-      "陆蓁...(12次)",
-      "少年...(3次)"
+      "原溯(15次)",
+      "陆蓁(12次)",
+      "少年(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(5处)"
+      "比喻(像/如/仿佛)(5处)",
+      "短句节奏(11处)"
     ],
     "simile_count": 12,
     "ai_marker_count": 5,
     "direct_emotion_count": 0,
     "ellipsis_count": 9,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 84,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 89,
     "file": "第89章.txt"
   },
   {
     "total_chars": 1989,
-    "total_sentences": 106,
     "avg_sentence_len": 17.5,
     "sentence_len_std": 12.2,
     "avg_paragraph_len": 23,
@@ -2683,26 +3080,31 @@
       "min": 6,
       "max": 93
     },
-    "single_para_ratio": 86.0,
-    "dialogue_ratio": 22.6,
-    "short_ratio": 52.8,
-    "long_ratio": 17.0,
     "vocabulary_diversity": 0.339,
     "top_patterns": [
-      "蒲雨...(12次)",
-      "李素...(3次)"
+      "蒲雨(12次)",
+      "李素(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(9处)"
+    ],
     "simile_count": 4,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 2,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 58,
+      "问号": 3,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 90,
     "file": "第90章.txt"
   },
   {
     "total_chars": 2283,
-    "total_sentences": 127,
     "avg_sentence_len": 16.7,
     "sentence_len_std": 11.5,
     "avg_paragraph_len": 24,
@@ -2710,27 +3112,32 @@
       "min": 6,
       "max": 95
     },
-    "single_para_ratio": 74.2,
-    "dialogue_ratio": 36.2,
-    "short_ratio": 53.5,
-    "long_ratio": 13.4,
     "vocabulary_diversity": 0.31,
     "top_patterns": [
-      "蒲雨...(21次)",
-      "“小...(4次)",
-      "“你...(3次)"
+      "蒲雨(21次)",
+      "“小(4次)",
+      "“你(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(13处)"
+    ],
     "simile_count": 0,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 55,
+      "问号": 1,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 91,
     "file": "第91章.txt"
   },
   {
     "total_chars": 2345,
-    "total_sentences": 114,
     "avg_sentence_len": 19.3,
     "sentence_len_std": 14.3,
     "avg_paragraph_len": 29,
@@ -2738,29 +3145,34 @@
       "min": 6,
       "max": 92
     },
-    "single_para_ratio": 75.3,
-    "dialogue_ratio": 42.5,
-    "short_ratio": 43.9,
-    "long_ratio": 20.2,
     "vocabulary_diversity": 0.291,
     "top_patterns": [
-      "蒲雨...(15次)",
-      "”蒲...(6次)",
-      "梁砚...(6次)",
-      "“我...(4次)",
-      "林佳...(4次)"
+      "蒲雨(15次)",
+      "”蒲(6次)",
+      "梁砚(6次)",
+      "“我(4次)",
+      "林佳(4次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(6处)"
+    ],
     "simile_count": 2,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 13,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 42,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 92,
     "file": "第92章.txt"
   },
   {
     "total_chars": 4147,
-    "total_sentences": 204,
     "avg_sentence_len": 19.1,
     "sentence_len_std": 15.2,
     "avg_paragraph_len": 24,
@@ -2768,31 +3180,35 @@
       "min": 6,
       "max": 96
     },
-    "single_para_ratio": 91.0,
-    "dialogue_ratio": 35.1,
-    "short_ratio": 51.5,
-    "long_ratio": 22.1,
     "vocabulary_diversity": 0.22,
     "top_patterns": [
-      "蒲雨...(20次)",
-      "20...(5次)",
-      "金额...(5次)",
-      "为什...(5次)",
-      "程司...(5次)"
+      "蒲雨(20次)",
+      "20(5次)",
+      "金额(5次)",
+      "为什(5次)",
+      "程司(5次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(5处)"
+      "比喻(像/如/仿佛)(5处)",
+      "短句节奏(15处)"
     ],
     "simile_count": 9,
     "ai_marker_count": 5,
     "direct_emotion_count": 0,
     "ellipsis_count": 16,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 101,
+      "问号": 4,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 93,
     "file": "第93章.txt"
   },
   {
     "total_chars": 2168,
-    "total_sentences": 111,
     "avg_sentence_len": 18.3,
     "sentence_len_std": 13.4,
     "avg_paragraph_len": 23,
@@ -2800,27 +3216,31 @@
       "min": 6,
       "max": 92
     },
-    "single_para_ratio": 89.2,
-    "dialogue_ratio": 17.1,
-    "short_ratio": 48.6,
-    "long_ratio": 18.0,
     "vocabulary_diversity": 0.323,
     "top_patterns": [
-      "蒲雨...(12次)"
+      "蒲雨(12次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(13处)"
     ],
     "simile_count": 3,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 73,
+      "问号": 3,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 94,
     "file": "第94章.txt"
   },
   {
     "total_chars": 1917,
-    "total_sentences": 100,
     "avg_sentence_len": 17.9,
     "sentence_len_std": 11.9,
     "avg_paragraph_len": 22,
@@ -2828,28 +3248,32 @@
       "min": 6,
       "max": 87
     },
-    "single_para_ratio": 89.4,
-    "dialogue_ratio": 25.7,
-    "short_ratio": 50.0,
-    "long_ratio": 20.0,
     "vocabulary_diversity": 0.329,
     "top_patterns": [
-      "蒲雨...(10次)",
-      "也许...(3次)"
+      "蒲雨(10次)",
+      "也许(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(8处)"
     ],
     "simile_count": 4,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 2,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 57,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 95,
     "file": "第95章.txt"
   },
   {
     "total_chars": 2088,
-    "total_sentences": 95,
     "avg_sentence_len": 20.8,
     "sentence_len_std": 17.2,
     "avg_paragraph_len": 26,
@@ -2857,29 +3281,33 @@
       "min": 6,
       "max": 100
     },
-    "single_para_ratio": 88.6,
-    "dialogue_ratio": 19.4,
-    "short_ratio": 48.4,
-    "long_ratio": 25.3,
     "vocabulary_diversity": 0.316,
     "top_patterns": [
-      "原溯...(15次)",
-      "蒲雨...(8次)",
-      "看着...(3次)"
+      "原溯(15次)",
+      "蒲雨(8次)",
+      "看着(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(7处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 65,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 96,
     "file": "第96章.txt"
   },
   {
     "total_chars": 2437,
-    "total_sentences": 109,
     "avg_sentence_len": 21.1,
     "sentence_len_std": 15.9,
     "avg_paragraph_len": 27,
@@ -2887,31 +3315,35 @@
       "min": 6,
       "max": 123
     },
-    "single_para_ratio": 82.2,
-    "dialogue_ratio": 34.5,
-    "short_ratio": 44.0,
-    "long_ratio": 27.5,
     "vocabulary_diversity": 0.28,
     "top_patterns": [
-      "蒲雨...(17次)",
-      "原溯...(14次)",
-      "“你...(5次)",
-      "“我...(4次)",
-      "”他...(4次)"
+      "蒲雨(17次)",
+      "原溯(14次)",
+      "“你(5次)",
+      "“我(4次)",
+      "”他(4次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(10处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 10,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 53,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 97,
     "file": "第97章.txt"
   },
   {
     "total_chars": 2242,
-    "total_sentences": 112,
     "avg_sentence_len": 18.7,
     "sentence_len_std": 14.3,
     "avg_paragraph_len": 25,
@@ -2919,31 +3351,35 @@
       "min": 6,
       "max": 73
     },
-    "single_para_ratio": 85.2,
-    "dialogue_ratio": 27.3,
-    "short_ratio": 49.1,
-    "long_ratio": 20.5,
     "vocabulary_diversity": 0.287,
     "top_patterns": [
-      "原溯...(18次)",
-      "蒲雨...(16次)",
-      "”他...(4次)",
-      "“我...(4次)",
-      "“不...(4次)"
+      "原溯(18次)",
+      "蒲雨(16次)",
+      "”他(4次)",
+      "“我(4次)",
+      "“不(4次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(5处)"
+      "比喻(像/如/仿佛)(5处)",
+      "短句节奏(15处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 2,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 57,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 98,
     "file": "第98章.txt"
   },
   {
     "total_chars": 2109,
-    "total_sentences": 104,
     "avg_sentence_len": 19.1,
     "sentence_len_std": 12.2,
     "avg_paragraph_len": 22,
@@ -2951,29 +3387,33 @@
       "min": 6,
       "max": 75
     },
-    "single_para_ratio": 92.5,
-    "dialogue_ratio": 13.7,
-    "short_ratio": 43.3,
-    "long_ratio": 21.2,
     "vocabulary_diversity": 0.296,
     "top_patterns": [
-      "原溯...(11次)",
-      "蒲雨...(10次)",
-      "他的...(3次)"
+      "原溯(11次)",
+      "蒲雨(10次)",
+      "他的(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(8处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 72,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 99,
     "file": "第99章.txt"
   },
   {
     "total_chars": 2242,
-    "total_sentences": 125,
     "avg_sentence_len": 16.7,
     "sentence_len_std": 14.6,
     "avg_paragraph_len": 24,
@@ -2981,29 +3421,34 @@
       "min": 6,
       "max": 119
     },
-    "single_para_ratio": 76.6,
-    "dialogue_ratio": 26.9,
-    "short_ratio": 54.4,
-    "long_ratio": 14.4,
     "vocabulary_diversity": 0.295,
     "top_patterns": [
-      "蒲雨...(12次)",
-      "原溯...(11次)",
-      "”原...(5次)",
-      "”蒲...(5次)",
-      "“不...(4次)"
+      "蒲雨(12次)",
+      "原溯(11次)",
+      "”原(5次)",
+      "”蒲(5次)",
+      "“不(4次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(18处)"
+    ],
     "simile_count": 4,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 6,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 60,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 100,
     "file": "第100章.txt"
   },
   {
     "total_chars": 2707,
-    "total_sentences": 135,
     "avg_sentence_len": 18.7,
     "sentence_len_std": 14.0,
     "avg_paragraph_len": 23,
@@ -3011,31 +3456,35 @@
       "min": 6,
       "max": 72
     },
-    "single_para_ratio": 87.8,
-    "dialogue_ratio": 17.9,
-    "short_ratio": 48.1,
-    "long_ratio": 20.0,
     "vocabulary_diversity": 0.266,
     "top_patterns": [
-      "蒲雨...(19次)",
-      "原溯...(18次)",
-      "”她...(3次)",
-      "”原...(3次)",
-      "”蒲...(3次)"
+      "蒲雨(19次)",
+      "原溯(18次)",
+      "”她(3次)",
+      "”原(3次)",
+      "”蒲(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(15处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 78,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 101,
     "file": "第101章.txt"
   },
   {
     "total_chars": 2406,
-    "total_sentences": 104,
     "avg_sentence_len": 21.9,
     "sentence_len_std": 15.1,
     "avg_paragraph_len": 27,
@@ -3043,30 +3492,34 @@
       "min": 6,
       "max": 87
     },
-    "single_para_ratio": 87.6,
-    "dialogue_ratio": 21.9,
-    "short_ratio": 38.5,
-    "long_ratio": 26.9,
     "vocabulary_diversity": 0.279,
     "top_patterns": [
-      "原溯...(13次)",
-      "蒲雨...(10次)",
-      "“…...(3次)",
-      "“不...(3次)"
+      "原溯(13次)",
+      "蒲雨(10次)",
+      "“…(3次)",
+      "“不(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(7处)"
     ],
     "simile_count": 4,
     "ai_marker_count": 1,
     "direct_emotion_count": 1,
     "ellipsis_count": 8,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 50,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 102,
     "file": "第102章.txt"
   },
   {
     "total_chars": 1915,
-    "total_sentences": 84,
     "avg_sentence_len": 21.7,
     "sentence_len_std": 15.0,
     "avg_paragraph_len": 25,
@@ -3074,29 +3527,33 @@
       "min": 6,
       "max": 76
     },
-    "single_para_ratio": 93.4,
-    "dialogue_ratio": 13.7,
-    "short_ratio": 44.0,
-    "long_ratio": 31.0,
     "vocabulary_diversity": 0.339,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "原溯...(6次)",
-      "那是...(3次)"
+      "蒲雨(11次)",
+      "原溯(6次)",
+      "那是(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(3处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 2,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 57,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 103,
     "file": "第103章.txt"
   },
   {
     "total_chars": 2055,
-    "total_sentences": 106,
     "avg_sentence_len": 18.1,
     "sentence_len_std": 13.3,
     "avg_paragraph_len": 26,
@@ -3104,29 +3561,34 @@
       "min": 6,
       "max": 68
     },
-    "single_para_ratio": 73.1,
-    "dialogue_ratio": 18.5,
-    "short_ratio": 50.9,
-    "long_ratio": 19.8,
     "vocabulary_diversity": 0.305,
     "top_patterns": [
-      "蒲雨...(14次)",
-      "原溯...(9次)",
-      "“你...(4次)",
-      "”原...(4次)",
-      "”蒲...(4次)"
+      "蒲雨(14次)",
+      "原溯(9次)",
+      "“你(4次)",
+      "”原(4次)",
+      "”蒲(4次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(18处)"
+    ],
     "simile_count": 1,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 7,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 45,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 104,
     "file": "第104章.txt"
   },
   {
     "total_chars": 2105,
-    "total_sentences": 110,
     "avg_sentence_len": 17.9,
     "sentence_len_std": 12.6,
     "avg_paragraph_len": 23,
@@ -3134,31 +3596,35 @@
       "min": 7,
       "max": 92
     },
-    "single_para_ratio": 85.4,
-    "dialogue_ratio": 28.8,
-    "short_ratio": 49.1,
-    "long_ratio": 20.9,
     "vocabulary_diversity": 0.274,
     "top_patterns": [
-      "原溯...(21次)",
-      "蒲雨...(12次)",
-      "”蒲...(8次)",
-      "“我...(7次)",
-      "“蒲...(3次)"
+      "原溯(21次)",
+      "蒲雨(12次)",
+      "”蒲(8次)",
+      "“我(7次)",
+      "“蒲(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(8处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 6,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 57,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 105,
     "file": "第105章.txt"
   },
   {
     "total_chars": 2301,
-    "total_sentences": 135,
     "avg_sentence_len": 15.8,
     "sentence_len_std": 12.2,
     "avg_paragraph_len": 21,
@@ -3166,31 +3632,35 @@
       "min": 6,
       "max": 70
     },
-    "single_para_ratio": 87.3,
-    "dialogue_ratio": 21.5,
-    "short_ratio": 57.8,
-    "long_ratio": 14.8,
     "vocabulary_diversity": 0.257,
     "top_patterns": [
-      "原溯...(17次)",
-      "蒲雨...(14次)",
-      "“不...(5次)",
-      "”蒲...(5次)",
-      "“那...(4次)"
+      "原溯(17次)",
+      "蒲雨(14次)",
+      "“不(5次)",
+      "”蒲(5次)",
+      "“那(4次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(20处)"
     ],
     "simile_count": 4,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 9,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 63,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 106,
     "file": "第106章.txt"
   },
   {
     "total_chars": 2377,
-    "total_sentences": 102,
     "avg_sentence_len": 22.2,
     "sentence_len_std": 16.6,
     "avg_paragraph_len": 26,
@@ -3198,31 +3668,35 @@
       "min": 6,
       "max": 80
     },
-    "single_para_ratio": 95.6,
-    "dialogue_ratio": 11.1,
-    "short_ratio": 43.1,
-    "long_ratio": 26.5,
     "vocabulary_diversity": 0.294,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "原溯...(10次)",
-      "相信...(4次)",
-      "那种...(3次)",
-      "“我...(3次)"
+      "蒲雨(11次)",
+      "原溯(10次)",
+      "相信(4次)",
+      "那种(3次)",
+      "“我(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(8处)"
+      "比喻(像/如/仿佛)(8处)",
+      "短句节奏(4处)"
     ],
     "simile_count": 9,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 11,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 67,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 107,
     "file": "第107章.txt"
   },
   {
     "total_chars": 2235,
-    "total_sentences": 112,
     "avg_sentence_len": 18.7,
     "sentence_len_std": 12.4,
     "avg_paragraph_len": 23,
@@ -3230,31 +3704,35 @@
       "min": 6,
       "max": 64
     },
-    "single_para_ratio": 90.7,
-    "dialogue_ratio": 9.8,
-    "short_ratio": 50.0,
-    "long_ratio": 20.5,
     "vocabulary_diversity": 0.3,
     "top_patterns": [
-      "原溯...(14次)",
-      "蒲雨...(10次)",
-      "”他...(4次)",
-      "“…...(3次)",
-      "“不...(3次)"
+      "原溯(14次)",
+      "蒲雨(10次)",
+      "”他(4次)",
+      "“…(3次)",
+      "“不(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(5处)"
+      "比喻(像/如/仿佛)(5处)",
+      "短句节奏(14处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 6,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 80,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 108,
     "file": "第108章.txt"
   },
   {
     "total_chars": 1910,
-    "total_sentences": 104,
     "avg_sentence_len": 17.1,
     "sentence_len_std": 12.0,
     "avg_paragraph_len": 20,
@@ -3262,30 +3740,34 @@
       "min": 6,
       "max": 71
     },
-    "single_para_ratio": 94.7,
-    "dialogue_ratio": 11.5,
-    "short_ratio": 52.9,
-    "long_ratio": 19.2,
     "vocabulary_diversity": 0.31,
     "top_patterns": [
-      "原溯...(10次)",
-      "蒲雨...(8次)",
-      "“不...(3次)",
-      "像是...(3次)"
+      "原溯(10次)",
+      "蒲雨(8次)",
+      "“不(3次)",
+      "像是(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(6处)"
+      "比喻(像/如/仿佛)(6处)",
+      "短句节奏(7处)"
     ],
     "simile_count": 9,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 1,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 73,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 109,
     "file": "第109章.txt"
   },
   {
     "total_chars": 2290,
-    "total_sentences": 126,
     "avg_sentence_len": 17.1,
     "sentence_len_std": 12.1,
     "avg_paragraph_len": 19,
@@ -3293,29 +3775,34 @@
       "min": 6,
       "max": 72
     },
-    "single_para_ratio": 97.4,
-    "dialogue_ratio": 4.4,
-    "short_ratio": 51.6,
-    "long_ratio": 18.3,
     "vocabulary_diversity": 0.28,
     "top_patterns": [
-      "蒲雨...(13次)",
-      "原溯...(6次)",
-      "她甚...(4次)",
-      "不想...(3次)",
-      "“我...(3次)"
+      "蒲雨(13次)",
+      "原溯(6次)",
+      "她甚(4次)",
+      "不想(3次)",
+      "“我(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(7处)"
+    ],
     "simile_count": 9,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 7,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 93,
+      "问号": 5,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 110,
     "file": "第110章.txt"
   },
   {
     "total_chars": 1823,
-    "total_sentences": 109,
     "avg_sentence_len": 15.5,
     "sentence_len_std": 12.6,
     "avg_paragraph_len": 21,
@@ -3323,29 +3810,34 @@
       "min": 6,
       "max": 96
     },
-    "single_para_ratio": 89.5,
-    "dialogue_ratio": 28.5,
-    "short_ratio": 66.1,
-    "long_ratio": 13.8,
     "vocabulary_diversity": 0.293,
     "top_patterns": [
-      "蒲雨...(9次)",
-      "原溯...(6次)",
-      "“…...(5次)",
-      "“你...(4次)",
-      "然后...(4次)"
+      "蒲雨(9次)",
+      "原溯(6次)",
+      "“…(5次)",
+      "“你(4次)",
+      "然后(4次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(10处)"
+    ],
     "simile_count": 3,
     "ai_marker_count": 6,
     "direct_emotion_count": 0,
     "ellipsis_count": 10,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 48,
+      "问号": 0,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 111,
     "file": "第111章.txt"
   },
   {
     "total_chars": 2121,
-    "total_sentences": 116,
     "avg_sentence_len": 16.9,
     "sentence_len_std": 12.8,
     "avg_paragraph_len": 22,
@@ -3353,29 +3845,34 @@
       "min": 6,
       "max": 75
     },
-    "single_para_ratio": 82.5,
-    "dialogue_ratio": 22.7,
-    "short_ratio": 58.6,
-    "long_ratio": 19.0,
     "vocabulary_diversity": 0.296,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "原溯...(4次)",
-      "“你...(4次)",
-      "林佳...(4次)",
-      "“他...(4次)"
+      "蒲雨(11次)",
+      "原溯(4次)",
+      "“你(4次)",
+      "林佳(4次)",
+      "“他(4次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(12处)"
+    ],
     "simile_count": 3,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 55,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 112,
     "file": "第112章.txt"
   },
   {
     "total_chars": 2314,
-    "total_sentences": 133,
     "avg_sentence_len": 16.1,
     "sentence_len_std": 11.0,
     "avg_paragraph_len": 19,
@@ -3383,31 +3880,35 @@
       "min": 6,
       "max": 73
     },
-    "single_para_ratio": 89.0,
-    "dialogue_ratio": 16.0,
-    "short_ratio": 57.9,
-    "long_ratio": 15.0,
     "vocabulary_diversity": 0.272,
     "top_patterns": [
-      "蒲雨...(16次)",
-      "原溯...(6次)",
-      "“我...(6次)",
-      "”他...(5次)",
-      "那边...(4次)"
+      "蒲雨(16次)",
+      "原溯(6次)",
+      "“我(6次)",
+      "”他(5次)",
+      "那边(4次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(6处)"
+      "比喻(像/如/仿佛)(6处)",
+      "短句节奏(12处)"
     ],
     "simile_count": 8,
     "ai_marker_count": 5,
     "direct_emotion_count": 1,
     "ellipsis_count": 7,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 74,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 113,
     "file": "第113章.txt"
   },
   {
     "total_chars": 2252,
-    "total_sentences": 105,
     "avg_sentence_len": 20.2,
     "sentence_len_std": 14.2,
     "avg_paragraph_len": 24,
@@ -3415,31 +3916,35 @@
       "min": 6,
       "max": 63
     },
-    "single_para_ratio": 94.7,
-    "dialogue_ratio": 15.4,
-    "short_ratio": 41.9,
-    "long_ratio": 25.7,
     "vocabulary_diversity": 0.311,
     "top_patterns": [
-      "蒲雨...(9次)",
-      "原溯...(8次)",
-      "林佳...(4次)",
-      "“不...(3次)",
-      "“你...(3次)"
+      "蒲雨(9次)",
+      "原溯(8次)",
+      "林佳(4次)",
+      "“不(3次)",
+      "“你(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(9处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 6,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 57,
+      "问号": 0,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 114,
     "file": "第114章.txt"
   },
   {
     "total_chars": 2219,
-    "total_sentences": 126,
     "avg_sentence_len": 16.4,
     "sentence_len_std": 13.2,
     "avg_paragraph_len": 20,
@@ -3447,31 +3952,35 @@
       "min": 6,
       "max": 74
     },
-    "single_para_ratio": 86.9,
-    "dialogue_ratio": 15.6,
-    "short_ratio": 58.7,
-    "long_ratio": 17.5,
     "vocabulary_diversity": 0.29,
     "top_patterns": [
-      "蒲雨...(15次)",
-      "原溯...(13次)",
-      "”他...(4次)",
-      "“去...(3次)",
-      "“你...(3次)"
+      "蒲雨(15次)",
+      "原溯(13次)",
+      "”他(4次)",
+      "“去(3次)",
+      "“你(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(12处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 75,
+      "问号": 0,
+      "叹号": 2,
+      "引号": 0
+    },
     "chapter": 115,
     "file": "第115章.txt"
   },
   {
     "total_chars": 2103,
-    "total_sentences": 107,
     "avg_sentence_len": 18.4,
     "sentence_len_std": 12.6,
     "avg_paragraph_len": 23,
@@ -3479,30 +3988,34 @@
       "min": 6,
       "max": 74
     },
-    "single_para_ratio": 88.9,
-    "dialogue_ratio": 15.2,
-    "short_ratio": 50.5,
-    "long_ratio": 17.8,
     "vocabulary_diversity": 0.302,
     "top_patterns": [
-      "蒲雨...(14次)",
-      "原溯...(12次)",
-      "足够...(3次)",
-      "”蒲...(3次)"
+      "蒲雨(14次)",
+      "原溯(12次)",
+      "足够(3次)",
+      "”蒲(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(5处)"
+      "比喻(像/如/仿佛)(5处)",
+      "短句节奏(12处)"
     ],
     "simile_count": 9,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 65,
+      "问号": 2,
+      "叹号": 2,
+      "引号": 0
+    },
     "chapter": 116,
     "file": "第116章.txt"
   },
   {
     "total_chars": 2094,
-    "total_sentences": 108,
     "avg_sentence_len": 18.3,
     "sentence_len_std": 13.9,
     "avg_paragraph_len": 22,
@@ -3510,28 +4023,32 @@
       "min": 6,
       "max": 77
     },
-    "single_para_ratio": 93.5,
-    "dialogue_ratio": 8.6,
-    "short_ratio": 52.8,
-    "long_ratio": 18.5,
     "vocabulary_diversity": 0.304,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "原溯...(10次)"
+      "蒲雨(11次)",
+      "原溯(10次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(5处)"
+      "比喻(像/如/仿佛)(5处)",
+      "短句节奏(8处)"
     ],
     "simile_count": 20,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 6,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 75,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 117,
     "file": "第117章.txt"
   },
   {
     "total_chars": 2067,
-    "total_sentences": 87,
     "avg_sentence_len": 22.7,
     "sentence_len_std": 15.7,
     "avg_paragraph_len": 28,
@@ -3539,28 +4056,32 @@
       "min": 6,
       "max": 81
     },
-    "single_para_ratio": 90.3,
-    "dialogue_ratio": 1.5,
-    "short_ratio": 41.4,
-    "long_ratio": 28.7,
     "vocabulary_diversity": 0.329,
     "top_patterns": [
-      "蒲雨...(9次)",
-      "原溯...(7次)"
+      "蒲雨(9次)",
+      "原溯(7次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(5处)"
+      "比喻(像/如/仿佛)(5处)",
+      "短句节奏(8处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 3,
     "direct_emotion_count": 1,
     "ellipsis_count": 5,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 60,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 118,
     "file": "第118章.txt"
   },
   {
     "total_chars": 2064,
-    "total_sentences": 103,
     "avg_sentence_len": 18.8,
     "sentence_len_std": 12.2,
     "avg_paragraph_len": 23,
@@ -3568,28 +4089,32 @@
       "min": 6,
       "max": 77
     },
-    "single_para_ratio": 92.0,
-    "dialogue_ratio": 14.5,
-    "short_ratio": 45.6,
-    "long_ratio": 18.4,
     "vocabulary_diversity": 0.316,
     "top_patterns": [
-      "原溯...(11次)",
-      "蒲雨...(4次)"
+      "原溯(11次)",
+      "蒲雨(4次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(11处)"
     ],
     "simile_count": 4,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 2,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 64,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 119,
     "file": "第119章.txt"
   },
   {
     "total_chars": 2235,
-    "total_sentences": 113,
     "avg_sentence_len": 18.4,
     "sentence_len_std": 13.2,
     "avg_paragraph_len": 26,
@@ -3597,31 +4122,35 @@
       "min": 6,
       "max": 112
     },
-    "single_para_ratio": 79.8,
-    "dialogue_ratio": 30.8,
-    "short_ratio": 53.1,
-    "long_ratio": 20.4,
     "vocabulary_diversity": 0.289,
     "top_patterns": [
-      "原溯...(12次)",
-      "宋津...(8次)",
-      "蒲雨...(7次)",
-      "“你...(4次)",
-      "他看...(3次)"
+      "原溯(12次)",
+      "宋津(8次)",
+      "蒲雨(7次)",
+      "“你(4次)",
+      "他看(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(13处)"
     ],
     "simile_count": 4,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 46,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 120,
     "file": "第120章.txt"
   },
   {
     "total_chars": 2114,
-    "total_sentences": 103,
     "avg_sentence_len": 19.4,
     "sentence_len_std": 14.4,
     "avg_paragraph_len": 23,
@@ -3629,29 +4158,33 @@
       "min": 6,
       "max": 72
     },
-    "single_para_ratio": 93.3,
-    "dialogue_ratio": 5.6,
-    "short_ratio": 50.5,
-    "long_ratio": 26.2,
     "vocabulary_diversity": 0.327,
     "top_patterns": [
-      "蒲雨...(10次)",
-      "原溯...(5次)",
-      "他的...(3次)"
+      "蒲雨(10次)",
+      "原溯(5次)",
+      "他的(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(5处)"
+      "比喻(像/如/仿佛)(5处)",
+      "短句节奏(10处)"
     ],
     "simile_count": 8,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 7,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 69,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 121,
     "file": "第121章.txt"
   },
   {
     "total_chars": 2415,
-    "total_sentences": 140,
     "avg_sentence_len": 16.0,
     "sentence_len_std": 11.1,
     "avg_paragraph_len": 21,
@@ -3659,31 +4192,35 @@
       "min": 6,
       "max": 60
     },
-    "single_para_ratio": 84.2,
-    "dialogue_ratio": 18.2,
-    "short_ratio": 55.7,
-    "long_ratio": 14.3,
     "vocabulary_diversity": 0.266,
     "top_patterns": [
-      "蒲雨...(23次)",
-      "原溯...(21次)",
-      "”他...(7次)",
-      "“原...(3次)",
-      "“我...(3次)"
+      "蒲雨(23次)",
+      "原溯(21次)",
+      "”他(7次)",
+      "“原(3次)",
+      "“我(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(15处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 9,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 78,
+      "问号": 1,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 122,
     "file": "第122章.txt"
   },
   {
     "total_chars": 1812,
-    "total_sentences": 85,
     "avg_sentence_len": 20.0,
     "sentence_len_std": 14.5,
     "avg_paragraph_len": 27,
@@ -3691,31 +4228,35 @@
       "min": 7,
       "max": 101
     },
-    "single_para_ratio": 80.6,
-    "dialogue_ratio": 36.1,
-    "short_ratio": 50.6,
-    "long_ratio": 20.0,
     "vocabulary_diversity": 0.318,
     "top_patterns": [
-      "原溯...(11次)",
-      "“那...(4次)",
-      "”她...(4次)",
-      "蒲雨...(4次)",
-      "“这...(3次)"
+      "原溯(11次)",
+      "“那(4次)",
+      "”她(4次)",
+      "蒲雨(4次)",
+      "“这(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(5处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 2,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 37,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 123,
     "file": "第123章.txt"
   },
   {
     "total_chars": 2285,
-    "total_sentences": 127,
     "avg_sentence_len": 16.8,
     "sentence_len_std": 12.5,
     "avg_paragraph_len": 21,
@@ -3723,31 +4264,35 @@
       "min": 6,
       "max": 73
     },
-    "single_para_ratio": 88.8,
-    "dialogue_ratio": 19.9,
-    "short_ratio": 55.1,
-    "long_ratio": 15.0,
     "vocabulary_diversity": 0.261,
     "top_patterns": [
-      "蒲雨...(10次)",
-      "原溯...(9次)",
-      "”她...(7次)",
-      "看着...(3次)",
-      "她的...(3次)"
+      "蒲雨(10次)",
+      "原溯(9次)",
+      "”她(7次)",
+      "看着(3次)",
+      "她的(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(12处)"
     ],
     "simile_count": 11,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 75,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 124,
     "file": "第124章.txt"
   },
   {
     "total_chars": 2129,
-    "total_sentences": 110,
     "avg_sentence_len": 18.2,
     "sentence_len_std": 14.3,
     "avg_paragraph_len": 22,
@@ -3755,31 +4300,35 @@
       "min": 6,
       "max": 77
     },
-    "single_para_ratio": 88.4,
-    "dialogue_ratio": 16.1,
-    "short_ratio": 53.6,
-    "long_ratio": 16.4,
     "vocabulary_diversity": 0.267,
     "top_patterns": [
-      "原溯...(16次)",
-      "蒲雨...(11次)",
-      "”他...(5次)",
-      "”蒲...(3次)",
-      "“好...(3次)"
+      "原溯(16次)",
+      "蒲雨(11次)",
+      "”他(5次)",
+      "”蒲(3次)",
+      "“好(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(5处)"
+      "比喻(像/如/仿佛)(5处)",
+      "短句节奏(14处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 80,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 125,
     "file": "第125章.txt"
   },
   {
     "total_chars": 2708,
-    "total_sentences": 136,
     "avg_sentence_len": 18.6,
     "sentence_len_std": 17.4,
     "avg_paragraph_len": 26,
@@ -3787,31 +4336,35 @@
       "min": 6,
       "max": 128
     },
-    "single_para_ratio": 77.2,
-    "dialogue_ratio": 32.7,
-    "short_ratio": 60.3,
-    "long_ratio": 18.4,
     "vocabulary_diversity": 0.267,
     "top_patterns": [
-      "原溯...(18次)",
-      "周律...(8次)",
-      "”他...(7次)",
-      "”周...(5次)",
-      "原鸿...(3次)"
+      "原溯(18次)",
+      "周律(8次)",
+      "”他(7次)",
+      "”周(5次)",
+      "原鸿(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(17处)"
     ],
     "simile_count": 3,
     "ai_marker_count": 5,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 69,
+      "问号": 8,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 126,
     "file": "第126章.txt"
   },
   {
     "total_chars": 1957,
-    "total_sentences": 99,
     "avg_sentence_len": 18.5,
     "sentence_len_std": 14.6,
     "avg_paragraph_len": 26,
@@ -3819,28 +4372,33 @@
       "min": 6,
       "max": 103
     },
-    "single_para_ratio": 81.1,
-    "dialogue_ratio": 37.6,
-    "short_ratio": 54.5,
-    "long_ratio": 19.2,
     "vocabulary_diversity": 0.312,
     "top_patterns": [
-      "原溯...(16次)",
-      "陈律...(4次)",
-      "律师...(3次)",
-      "他想...(3次)"
+      "原溯(16次)",
+      "陈律(4次)",
+      "律师(3次)",
+      "他想(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(11处)"
+    ],
     "simile_count": 4,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 44,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 127,
     "file": "第127章.txt"
   },
   {
     "total_chars": 2367,
-    "total_sentences": 105,
     "avg_sentence_len": 21.4,
     "sentence_len_std": 15.7,
     "avg_paragraph_len": 30,
@@ -3848,31 +4406,35 @@
       "min": 6,
       "max": 145
     },
-    "single_para_ratio": 81.0,
-    "dialogue_ratio": 26.4,
-    "short_ratio": 40.0,
-    "long_ratio": 24.8,
     "vocabulary_diversity": 0.291,
     "top_patterns": [
-      "蒲雨...(9次)",
-      "聂阳...(6次)",
-      "那个...(3次)",
-      "如果...(3次)",
-      "原来...(3次)"
+      "蒲雨(9次)",
+      "聂阳(6次)",
+      "那个(3次)",
+      "如果(3次)",
+      "原来(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(12处)"
     ],
     "simile_count": 9,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 10,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 55,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 128,
     "file": "第128章.txt"
   },
   {
     "total_chars": 1801,
-    "total_sentences": 86,
     "avg_sentence_len": 19.7,
     "sentence_len_std": 15.9,
     "avg_paragraph_len": 25,
@@ -3880,26 +4442,31 @@
       "min": 6,
       "max": 84
     },
-    "single_para_ratio": 88.7,
-    "dialogue_ratio": 19.0,
-    "short_ratio": 47.7,
-    "long_ratio": 19.8,
     "vocabulary_diversity": 0.34,
     "top_patterns": [
-      "原溯...(7次)",
-      "聂阳...(6次)"
+      "原溯(7次)",
+      "聂阳(6次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(9处)"
+    ],
     "simile_count": 2,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": false,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 45,
+      "问号": 5,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 129,
     "file": "第129章.txt"
   },
   {
     "total_chars": 2433,
-    "total_sentences": 122,
     "avg_sentence_len": 18.7,
     "sentence_len_std": 13.1,
     "avg_paragraph_len": 24,
@@ -3907,31 +4474,35 @@
       "min": 6,
       "max": 70
     },
-    "single_para_ratio": 86.3,
-    "dialogue_ratio": 24.0,
-    "short_ratio": 48.4,
-    "long_ratio": 18.9,
     "vocabulary_diversity": 0.286,
     "top_patterns": [
-      "蒲雨...(13次)",
-      "原溯...(7次)",
-      "”蒲...(4次)",
-      "”他...(3次)",
-      "屏幕...(3次)"
+      "蒲雨(13次)",
+      "原溯(7次)",
+      "”蒲(4次)",
+      "”他(3次)",
+      "屏幕(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(9处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 5,
     "direct_emotion_count": 0,
     "ellipsis_count": 9,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 69,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 130,
     "file": "第130章.txt"
   },
   {
     "total_chars": 1937,
-    "total_sentences": 91,
     "avg_sentence_len": 20.1,
     "sentence_len_std": 14.7,
     "avg_paragraph_len": 25,
@@ -3939,29 +4510,33 @@
       "min": 6,
       "max": 84
     },
-    "single_para_ratio": 89.5,
-    "dialogue_ratio": 18.3,
-    "short_ratio": 44.0,
-    "long_ratio": 22.0,
     "vocabulary_diversity": 0.332,
     "top_patterns": [
-      "蒲雨...(9次)",
-      "司机...(4次)",
-      "李素...(3次)"
+      "蒲雨(9次)",
+      "司机(4次)",
+      "李素(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(6处)"
     ],
     "simile_count": 4,
     "ai_marker_count": 5,
     "direct_emotion_count": 0,
     "ellipsis_count": 2,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 58,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 131,
     "file": "第131章.txt"
   },
   {
     "total_chars": 2019,
-    "total_sentences": 96,
     "avg_sentence_len": 19.8,
     "sentence_len_std": 13.8,
     "avg_paragraph_len": 27,
@@ -3969,31 +4544,35 @@
       "min": 6,
       "max": 82
     },
-    "single_para_ratio": 78.4,
-    "dialogue_ratio": 20.5,
-    "short_ratio": 46.9,
-    "long_ratio": 24.0,
     "vocabulary_diversity": 0.307,
     "top_patterns": [
-      "蒲雨...(13次)",
-      "“我...(4次)",
-      "陈姐...(4次)",
-      "侍应...(3次)",
-      "”蒲...(3次)"
+      "蒲雨(13次)",
+      "“我(4次)",
+      "陈姐(4次)",
+      "侍应(3次)",
+      "”蒲(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(8处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 2,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 51,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 132,
     "file": "第132章.txt"
   },
   {
     "total_chars": 2147,
-    "total_sentences": 105,
     "avg_sentence_len": 19.2,
     "sentence_len_std": 12.8,
     "avg_paragraph_len": 26,
@@ -4001,31 +4580,35 @@
       "min": 6,
       "max": 82
     },
-    "single_para_ratio": 79.5,
-    "dialogue_ratio": 29.1,
-    "short_ratio": 45.7,
-    "long_ratio": 21.0,
     "vocabulary_diversity": 0.311,
     "top_patterns": [
-      "蒲雨...(13次)",
-      "陈姐...(9次)",
-      "”陈...(4次)",
-      "”蒲...(4次)",
-      "“苏...(4次)"
+      "蒲雨(13次)",
+      "陈姐(9次)",
+      "”陈(4次)",
+      "”蒲(4次)",
+      "“苏(4次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(9处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 57,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 133,
     "file": "第133章.txt"
   },
   {
     "total_chars": 2298,
-    "total_sentences": 118,
     "avg_sentence_len": 18.2,
     "sentence_len_std": 11.4,
     "avg_paragraph_len": 25,
@@ -4033,31 +4616,35 @@
       "min": 6,
       "max": 75
     },
-    "single_para_ratio": 79.6,
-    "dialogue_ratio": 34.5,
-    "short_ratio": 48.3,
-    "long_ratio": 17.8,
     "vocabulary_diversity": 0.276,
     "top_patterns": [
-      "赵老...(13次)",
-      "蒲雨...(12次)",
-      "“我...(5次)",
-      "“苏...(4次)",
-      "”蒲...(3次)"
+      "赵老(13次)",
+      "蒲雨(12次)",
+      "“我(5次)",
+      "“苏(4次)",
+      "”蒲(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(13处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 58,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 134,
     "file": "第134章.txt"
   },
   {
     "total_chars": 2647,
-    "total_sentences": 139,
     "avg_sentence_len": 17.6,
     "sentence_len_std": 13.7,
     "avg_paragraph_len": 23,
@@ -4065,31 +4652,35 @@
       "min": 6,
       "max": 69
     },
-    "single_para_ratio": 84.7,
-    "dialogue_ratio": 16.4,
-    "short_ratio": 58.3,
-    "long_ratio": 20.9,
     "vocabulary_diversity": 0.281,
     "top_patterns": [
-      "蒲雨...(12次)",
-      "原溯...(11次)",
-      "“我...(5次)",
-      "”原...(3次)",
-      "”蒲...(3次)"
+      "蒲雨(12次)",
+      "原溯(11次)",
+      "“我(5次)",
+      "”原(3次)",
+      "”蒲(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(19处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 8,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 74,
+      "问号": 4,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 135,
     "file": "第135章.txt"
   },
   {
     "total_chars": 2209,
-    "total_sentences": 111,
     "avg_sentence_len": 18.6,
     "sentence_len_std": 14.0,
     "avg_paragraph_len": 25,
@@ -4097,30 +4688,34 @@
       "min": 6,
       "max": 83
     },
-    "single_para_ratio": 84.1,
-    "dialogue_ratio": 29.0,
-    "short_ratio": 50.5,
-    "long_ratio": 15.3,
     "vocabulary_diversity": 0.268,
     "top_patterns": [
-      "蒲雨...(13次)",
-      "赵老...(9次)",
-      "原鸿...(6次)",
-      "”他...(3次)"
+      "蒲雨(13次)",
+      "赵老(9次)",
+      "原鸿(6次)",
+      "”他(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(7处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 56,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 136,
     "file": "第136章.txt"
   },
   {
     "total_chars": 2443,
-    "total_sentences": 144,
     "avg_sentence_len": 15.8,
     "sentence_len_std": 12.0,
     "avg_paragraph_len": 21,
@@ -4128,31 +4723,35 @@
       "min": 6,
       "max": 126
     },
-    "single_para_ratio": 85.8,
-    "dialogue_ratio": 20.8,
-    "short_ratio": 57.6,
-    "long_ratio": 10.4,
     "vocabulary_diversity": 0.287,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "原鸿...(6次)",
-      "“苏...(3次)",
-      "“警...(3次)",
-      "如果...(3次)"
+      "蒲雨(11次)",
+      "原鸿(6次)",
+      "“苏(3次)",
+      "“警(3次)",
+      "如果(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(21处)"
     ],
     "simile_count": 4,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 11,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 71,
+      "问号": 7,
+      "叹号": 2,
+      "引号": 0
+    },
     "chapter": 137,
     "file": "第137章.txt"
   },
   {
     "total_chars": 3010,
-    "total_sentences": 146,
     "avg_sentence_len": 19.5,
     "sentence_len_std": 15.2,
     "avg_paragraph_len": 23,
@@ -4160,31 +4759,35 @@
       "min": 6,
       "max": 90
     },
-    "single_para_ratio": 91.5,
-    "dialogue_ratio": 8.4,
-    "short_ratio": 50.7,
-    "long_ratio": 19.2,
     "vocabulary_diversity": 0.276,
     "top_patterns": [
-      "原溯...(12次)",
-      "他想...(4次)",
-      "蒲雨...(4次)",
-      "飞机...(3次)",
-      "那个...(3次)"
+      "原溯(12次)",
+      "他想(4次)",
+      "蒲雨(4次)",
+      "飞机(3次)",
+      "那个(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(8处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 7,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 106,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 138,
     "file": "第138章.txt"
   },
   {
     "total_chars": 1381,
-    "total_sentences": 66,
     "avg_sentence_len": 19.6,
     "sentence_len_std": 14.0,
     "avg_paragraph_len": 25,
@@ -4192,28 +4795,32 @@
       "min": 6,
       "max": 66
     },
-    "single_para_ratio": 90.9,
-    "dialogue_ratio": 17.9,
-    "short_ratio": 42.4,
-    "long_ratio": 24.2,
     "vocabulary_diversity": 0.409,
     "top_patterns": [
-      "原溯...(7次)",
-      "“我...(4次)"
+      "原溯(7次)",
+      "“我(4次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(5处)"
+      "比喻(像/如/仿佛)(5处)",
+      "短句节奏(9处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 7,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 32,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 139,
     "file": "第139章.txt"
   },
   {
     "total_chars": 2583,
-    "total_sentences": 135,
     "avg_sentence_len": 17.9,
     "sentence_len_std": 12.2,
     "avg_paragraph_len": 23,
@@ -4221,31 +4828,35 @@
       "min": 6,
       "max": 75
     },
-    "single_para_ratio": 90.0,
-    "dialogue_ratio": 27.6,
-    "short_ratio": 48.1,
-    "long_ratio": 19.3,
     "vocabulary_diversity": 0.273,
     "top_patterns": [
-      "原溯...(16次)",
-      "蒲雨...(12次)",
-      "“那...(4次)",
-      "”医...(3次)",
-      "“我...(3次)"
+      "原溯(16次)",
+      "蒲雨(12次)",
+      "“那(4次)",
+      "”医(3次)",
+      "“我(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(5处)"
+      "比喻(像/如/仿佛)(5处)",
+      "短句节奏(9处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 13,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 64,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 140,
     "file": "第140章.txt"
   },
   {
     "total_chars": 1712,
-    "total_sentences": 92,
     "avg_sentence_len": 17.6,
     "sentence_len_std": 11.5,
     "avg_paragraph_len": 21,
@@ -4253,31 +4864,35 @@
       "min": 6,
       "max": 48
     },
-    "single_para_ratio": 96.3,
-    "dialogue_ratio": 14.9,
-    "short_ratio": 51.1,
-    "long_ratio": 17.4,
     "vocabulary_diversity": 0.319,
     "top_patterns": [
-      "原溯...(4次)",
-      "那时...(4次)",
-      "真的...(4次)",
-      "“那...(3次)",
-      "不是...(3次)"
+      "原溯(4次)",
+      "那时(4次)",
+      "真的(4次)",
+      "“那(3次)",
+      "不是(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(6处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 57,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 141,
     "file": "第141章.txt"
   },
   {
     "total_chars": 2033,
-    "total_sentences": 107,
     "avg_sentence_len": 17.7,
     "sentence_len_std": 14.8,
     "avg_paragraph_len": 22,
@@ -4285,31 +4900,35 @@
       "min": 6,
       "max": 92
     },
-    "single_para_ratio": 84.6,
-    "dialogue_ratio": 28.5,
-    "short_ratio": 56.1,
-    "long_ratio": 16.8,
     "vocabulary_diversity": 0.292,
     "top_patterns": [
-      "蒲雨...(16次)",
-      "原溯...(13次)",
-      "李佑...(6次)",
-      "”他...(6次)",
-      "”李...(3次)"
+      "蒲雨(16次)",
+      "原溯(13次)",
+      "李佑(6次)",
+      "”他(6次)",
+      "”李(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(9处)"
     ],
     "simile_count": 4,
     "ai_marker_count": 6,
     "direct_emotion_count": 0,
     "ellipsis_count": 2,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 60,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 142,
     "file": "第142章.txt"
   },
   {
     "total_chars": 2328,
-    "total_sentences": 124,
     "avg_sentence_len": 17.5,
     "sentence_len_std": 14.1,
     "avg_paragraph_len": 25,
@@ -4317,31 +4936,35 @@
       "min": 6,
       "max": 123
     },
-    "single_para_ratio": 76.6,
-    "dialogue_ratio": 36.3,
-    "short_ratio": 55.6,
-    "long_ratio": 16.9,
     "vocabulary_diversity": 0.272,
     "top_patterns": [
-      "蒲雨...(9次)",
-      "原溯...(7次)",
-      "宋津...(6次)",
-      "岁岁...(4次)",
-      "“蒲...(3次)"
+      "蒲雨(9次)",
+      "原溯(7次)",
+      "宋津(6次)",
+      "岁岁(4次)",
+      "“蒲(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(15处)"
     ],
     "simile_count": 3,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 6,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 57,
+      "问号": 0,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 143,
     "file": "第143章.txt"
   },
   {
     "total_chars": 2873,
-    "total_sentences": 124,
     "avg_sentence_len": 21.8,
     "sentence_len_std": 16.1,
     "avg_paragraph_len": 28,
@@ -4349,31 +4972,35 @@
       "min": 6,
       "max": 91
     },
-    "single_para_ratio": 80.4,
-    "dialogue_ratio": 36.4,
-    "short_ratio": 43.5,
-    "long_ratio": 26.6,
     "vocabulary_diversity": 0.27,
     "top_patterns": [
-      "原溯...(11次)",
-      "蒲雨...(8次)",
-      "宋津...(6次)",
-      "“我...(3次)",
-      "”她...(3次)"
+      "原溯(11次)",
+      "蒲雨(8次)",
+      "宋津(6次)",
+      "“我(3次)",
+      "”她(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(5处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 52,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 144,
     "file": "第144章.txt"
   },
   {
     "total_chars": 1741,
-    "total_sentences": 69,
     "avg_sentence_len": 24.0,
     "sentence_len_std": 13.3,
     "avg_paragraph_len": 28,
@@ -4381,28 +5008,32 @@
       "min": 6,
       "max": 69
     },
-    "single_para_ratio": 88.7,
-    "dialogue_ratio": 10.9,
-    "short_ratio": 30.4,
-    "long_ratio": 36.2,
     "vocabulary_diversity": 0.335,
     "top_patterns": [
-      "蒲雨...(10次)",
-      "原溯...(10次)"
+      "蒲雨(10次)",
+      "原溯(10次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(6处)"
     ],
     "simile_count": 8,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 40,
+      "问号": 0,
+      "叹号": 2,
+      "引号": 0
+    },
     "chapter": 145,
     "file": "第145章.txt"
   },
   {
     "total_chars": 2231,
-    "total_sentences": 126,
     "avg_sentence_len": 16.5,
     "sentence_len_std": 11.8,
     "avg_paragraph_len": 23,
@@ -4410,31 +5041,35 @@
       "min": 6,
       "max": 112
     },
-    "single_para_ratio": 80.4,
-    "dialogue_ratio": 21.2,
-    "short_ratio": 55.6,
-    "long_ratio": 13.5,
     "vocabulary_diversity": 0.289,
     "top_patterns": [
-      "蒲雨...(18次)",
-      "李素...(5次)",
-      "原溯...(4次)",
-      "”她...(3次)",
-      "宋津...(3次)"
+      "蒲雨(18次)",
+      "李素(5次)",
+      "原溯(4次)",
+      "”她(3次)",
+      "宋津(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(17处)"
     ],
     "simile_count": 4,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 70,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 146,
     "file": "第146章.txt"
   },
   {
     "total_chars": 2206,
-    "total_sentences": 107,
     "avg_sentence_len": 19.4,
     "sentence_len_std": 15.3,
     "avg_paragraph_len": 25,
@@ -4442,31 +5077,35 @@
       "min": 6,
       "max": 80
     },
-    "single_para_ratio": 87.4,
-    "dialogue_ratio": 26.4,
-    "short_ratio": 54.2,
-    "long_ratio": 26.2,
     "vocabulary_diversity": 0.283,
     "top_patterns": [
-      "李素...(10次)",
-      "蒲雨...(10次)",
-      "原溯...(7次)",
-      "“那...(5次)",
-      "”蒲...(4次)"
+      "李素(10次)",
+      "蒲雨(10次)",
+      "原溯(7次)",
+      "“那(5次)",
+      "”蒲(4次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(9处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 11,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 50,
+      "问号": 2,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 147,
     "file": "第147章.txt"
   },
   {
     "total_chars": 2773,
-    "total_sentences": 122,
     "avg_sentence_len": 21.5,
     "sentence_len_std": 14.0,
     "avg_paragraph_len": 25,
@@ -4474,29 +5113,34 @@
       "min": 7,
       "max": 79
     },
-    "single_para_ratio": 93.6,
-    "dialogue_ratio": 10.0,
-    "short_ratio": 42.6,
-    "long_ratio": 26.2,
     "vocabulary_diversity": 0.297,
     "top_patterns": [
-      "原溯...(10次)",
-      "蒲雨...(4次)",
-      "【师...(4次)",
-      "那些...(3次)",
-      "群里...(3次)"
+      "原溯(10次)",
+      "蒲雨(4次)",
+      "【师(4次)",
+      "那些(3次)",
+      "群里(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(5处)"
+    ],
     "simile_count": 3,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 78,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 148,
     "file": "第148章.txt"
   },
   {
     "total_chars": 2165,
-    "total_sentences": 113,
     "avg_sentence_len": 17.9,
     "sentence_len_std": 14.0,
     "avg_paragraph_len": 23,
@@ -4504,31 +5148,35 @@
       "min": 6,
       "max": 96
     },
-    "single_para_ratio": 89.1,
-    "dialogue_ratio": 15.9,
-    "short_ratio": 53.1,
-    "long_ratio": 16.8,
     "vocabulary_diversity": 0.303,
     "top_patterns": [
-      "原溯...(12次)",
-      "“我...(4次)",
-      "这是...(3次)",
-      "第二...(3次)",
-      "他想...(3次)"
+      "原溯(12次)",
+      "“我(4次)",
+      "这是(3次)",
+      "第二(3次)",
+      "他想(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(10处)"
     ],
     "simile_count": 3,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 60,
+      "问号": 2,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 149,
     "file": "第149章.txt"
   },
   {
     "total_chars": 3034,
-    "total_sentences": 134,
     "avg_sentence_len": 21.5,
     "sentence_len_std": 13.9,
     "avg_paragraph_len": 24,
@@ -4536,30 +5184,34 @@
       "min": 6,
       "max": 89
     },
-    "single_para_ratio": 93.5,
-    "dialogue_ratio": 7.5,
-    "short_ratio": 41.8,
-    "long_ratio": 23.1,
     "vocabulary_diversity": 0.263,
     "top_patterns": [
-      "原溯...(17次)",
-      "蒲雨...(15次)",
-      "那一...(3次)",
-      "“我...(3次)"
+      "原溯(17次)",
+      "蒲雨(15次)",
+      "那一(3次)",
+      "“我(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(7处)"
     ],
     "simile_count": 10,
     "ai_marker_count": 5,
     "direct_emotion_count": 0,
     "ellipsis_count": 8,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 99,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 150,
     "file": "第150章.txt"
   },
   {
     "total_chars": 1856,
-    "total_sentences": 90,
     "avg_sentence_len": 19.7,
     "sentence_len_std": 13.4,
     "avg_paragraph_len": 23,
@@ -4567,29 +5219,33 @@
       "min": 6,
       "max": 75
     },
-    "single_para_ratio": 93.7,
-    "dialogue_ratio": 3.2,
-    "short_ratio": 48.9,
-    "long_ratio": 25.6,
     "vocabulary_diversity": 0.346,
     "top_patterns": [
-      "蒲雨...(8次)",
-      "原溯...(7次)",
-      "“我...(3次)"
+      "蒲雨(8次)",
+      "原溯(7次)",
+      "“我(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(5处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 64,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 151,
     "file": "第151章.txt"
   },
   {
     "total_chars": 2059,
-    "total_sentences": 88,
     "avg_sentence_len": 22.2,
     "sentence_len_std": 13.7,
     "avg_paragraph_len": 26,
@@ -4597,30 +5253,34 @@
       "min": 6,
       "max": 71
     },
-    "single_para_ratio": 96.2,
-    "dialogue_ratio": 10.4,
-    "short_ratio": 40.9,
-    "long_ratio": 33.0,
     "vocabulary_diversity": 0.327,
     "top_patterns": [
-      "蒲雨...(12次)",
-      "原溯...(9次)",
-      "——...(3次)",
-      "“我...(3次)"
+      "蒲雨(12次)",
+      "原溯(9次)",
+      "——(3次)",
+      "“我(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(5处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 8,
+    "has_said_tag": false,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 52,
+      "问号": 1,
+      "叹号": 2,
+      "引号": 0
+    },
     "chapter": 152,
     "file": "第152章.txt"
   },
   {
     "total_chars": 2363,
-    "total_sentences": 104,
     "avg_sentence_len": 21.5,
     "sentence_len_std": 15.5,
     "avg_paragraph_len": 29,
@@ -4628,31 +5288,35 @@
       "min": 7,
       "max": 115
     },
-    "single_para_ratio": 76.2,
-    "dialogue_ratio": 28.0,
-    "short_ratio": 40.4,
-    "long_ratio": 24.0,
     "vocabulary_diversity": 0.298,
     "top_patterns": [
-      "蒲雨...(9次)",
-      "原溯...(5次)",
-      "【师...(3次)",
-      "程司...(3次)",
-      "“我...(3次)"
+      "蒲雨(9次)",
+      "原溯(5次)",
+      "【师(3次)",
+      "程司(3次)",
+      "“我(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(7处)"
     ],
     "simile_count": 6,
     "ai_marker_count": 5,
     "direct_emotion_count": 0,
     "ellipsis_count": 10,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 35,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 153,
     "file": "第153章.txt"
   },
   {
     "total_chars": 3126,
-    "total_sentences": 128,
     "avg_sentence_len": 23.4,
     "sentence_len_std": 15.1,
     "avg_paragraph_len": 27,
@@ -4660,28 +5324,32 @@
       "min": 6,
       "max": 85
     },
-    "single_para_ratio": 93.0,
-    "dialogue_ratio": 12.5,
-    "short_ratio": 35.9,
-    "long_ratio": 35.2,
     "vocabulary_diversity": 0.263,
     "top_patterns": [
-      "蒲雨...(15次)",
-      "原溯...(13次)"
+      "蒲雨(15次)",
+      "原溯(13次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(6处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 18,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 80,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 154,
     "file": "第154章.txt"
   },
   {
     "total_chars": 2670,
-    "total_sentences": 116,
     "avg_sentence_len": 21.7,
     "sentence_len_std": 13.6,
     "avg_paragraph_len": 28,
@@ -4689,31 +5357,35 @@
       "min": 6,
       "max": 92
     },
-    "single_para_ratio": 81.7,
-    "dialogue_ratio": 26.6,
-    "short_ratio": 39.7,
-    "long_ratio": 25.0,
     "vocabulary_diversity": 0.307,
     "top_patterns": [
-      "原溯...(17次)",
-      "陆蓁...(5次)",
-      "蒲雨...(4次)",
-      "”蒲...(3次)",
-      "这几...(3次)"
+      "原溯(17次)",
+      "陆蓁(5次)",
+      "蒲雨(4次)",
+      "”蒲(3次)",
+      "这几(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(4处)"
+      "比喻(像/如/仿佛)(4处)",
+      "短句节奏(6处)"
     ],
     "simile_count": 7,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 11,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 58,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 155,
     "file": "第155章.txt"
   },
   {
     "total_chars": 2049,
-    "total_sentences": 100,
     "avg_sentence_len": 19.2,
     "sentence_len_std": 11.9,
     "avg_paragraph_len": 24,
@@ -4721,31 +5393,35 @@
       "min": 6,
       "max": 70
     },
-    "single_para_ratio": 88.1,
-    "dialogue_ratio": 22.8,
-    "short_ratio": 47.0,
-    "long_ratio": 24.0,
     "vocabulary_diversity": 0.343,
     "top_patterns": [
-      "原溯...(15次)",
-      "蒲雨...(10次)",
-      "“这...(3次)",
-      "”她...(3次)",
-      "“那...(3次)"
+      "原溯(15次)",
+      "蒲雨(10次)",
+      "“这(3次)",
+      "”她(3次)",
+      "“那(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(4处)"
     ],
     "simile_count": 3,
     "ai_marker_count": 0,
     "direct_emotion_count": 1,
     "ellipsis_count": 7,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 53,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 156,
     "file": "第156章.txt"
   },
   {
     "total_chars": 1894,
-    "total_sentences": 96,
     "avg_sentence_len": 18.4,
     "sentence_len_std": 15.1,
     "avg_paragraph_len": 25,
@@ -4753,28 +5429,33 @@
       "min": 6,
       "max": 71
     },
-    "single_para_ratio": 81.3,
-    "dialogue_ratio": 34.7,
-    "short_ratio": 53.1,
-    "long_ratio": 20.8,
     "vocabulary_diversity": 0.33,
     "top_patterns": [
-      "蒲雨...(7次)",
-      "原溯...(5次)",
-      "宋津...(3次)",
-      "“不...(3次)"
+      "蒲雨(7次)",
+      "原溯(5次)",
+      "宋津(3次)",
+      "“不(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(14处)"
+    ],
     "simile_count": 2,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 9,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 30,
+      "问号": 0,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 157,
     "file": "第157章.txt"
   },
   {
     "total_chars": 1227,
-    "total_sentences": 51,
     "avg_sentence_len": 22.8,
     "sentence_len_std": 12.9,
     "avg_paragraph_len": 30,
@@ -4782,28 +5463,32 @@
       "min": 6,
       "max": 87
     },
-    "single_para_ratio": 85.4,
-    "dialogue_ratio": 18.4,
-    "short_ratio": 31.4,
-    "long_ratio": 31.4,
     "vocabulary_diversity": 0.391,
     "top_patterns": [
-      "原溯...(8次)",
-      "蒲雨...(5次)"
+      "原溯(8次)",
+      "蒲雨(5次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(6处)"
     ],
     "simile_count": 2,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 3,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 25,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 158,
     "file": "第158章.txt"
   },
   {
     "total_chars": 1771,
-    "total_sentences": 66,
     "avg_sentence_len": 25.6,
     "sentence_len_std": 18.7,
     "avg_paragraph_len": 34,
@@ -4811,29 +5496,33 @@
       "min": 8,
       "max": 84
     },
-    "single_para_ratio": 82.7,
-    "dialogue_ratio": 37.9,
-    "short_ratio": 39.4,
-    "long_ratio": 36.4,
     "vocabulary_diversity": 0.378,
     "top_patterns": [
-      "原溯...(5次)",
-      "“我...(3次)",
-      "蒲雨...(3次)"
+      "原溯(5次)",
+      "“我(3次)",
+      "蒲雨(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(3处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 1,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 31,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 159,
     "file": "第159章.txt"
   },
   {
     "total_chars": 3346,
-    "total_sentences": 149,
     "avg_sentence_len": 21.3,
     "sentence_len_std": 16.4,
     "avg_paragraph_len": 27,
@@ -4841,29 +5530,34 @@
       "min": 6,
       "max": 94
     },
-    "single_para_ratio": 86.8,
-    "dialogue_ratio": 14.4,
-    "short_ratio": 45.0,
-    "long_ratio": 22.8,
     "vocabulary_diversity": 0.241,
     "top_patterns": [
-      "”我...(3次)",
-      "陆蓁...(3次)",
-      "“她...(3次)",
-      "”她...(3次)",
-      "后来...(3次)"
+      "”我(3次)",
+      "陆蓁(3次)",
+      "“她(3次)",
+      "”她(3次)",
+      "后来(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(14处)"
+    ],
     "simile_count": 10,
     "ai_marker_count": 3,
     "direct_emotion_count": 0,
     "ellipsis_count": 4,
+    "has_said_tag": true,
+    "has_emotion_words": true,
+    "end_punctuations": {
+      "句号": 95,
+      "问号": 3,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 160,
     "file": "第160章.txt"
   },
   {
     "total_chars": 3658,
-    "total_sentences": 174,
     "avg_sentence_len": 20.0,
     "sentence_len_std": 14.8,
     "avg_paragraph_len": 26,
@@ -4871,27 +5565,32 @@
       "min": 6,
       "max": 98
     },
-    "single_para_ratio": 90.5,
-    "dialogue_ratio": 4.7,
-    "short_ratio": 43.1,
-    "long_ratio": 21.3,
     "vocabulary_diversity": 0.243,
     "top_patterns": [
-      "我没...(4次)",
-      "我走...(3次)",
-      "明明...(3次)"
+      "我没(4次)",
+      "我走(3次)",
+      "明明(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(17处)"
+    ],
     "simile_count": 7,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 121,
+      "问号": 4,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 161,
     "file": "第161章.txt"
   },
   {
     "total_chars": 3595,
-    "total_sentences": 151,
     "avg_sentence_len": 22.6,
     "sentence_len_std": 17.4,
     "avg_paragraph_len": 27,
@@ -4899,29 +5598,34 @@
       "min": 6,
       "max": 99
     },
-    "single_para_ratio": 86.4,
-    "dialogue_ratio": 17.1,
-    "short_ratio": 43.7,
-    "long_ratio": 26.5,
     "vocabulary_diversity": 0.244,
     "top_patterns": [
-      "原溯...(28次)",
-      "蒲雨...(22次)",
-      "导购...(3次)",
-      "”蒲...(3次)",
-      "”原...(3次)"
+      "原溯(28次)",
+      "蒲雨(22次)",
+      "导购(3次)",
+      "”蒲(3次)",
+      "”原(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(14处)"
+    ],
     "simile_count": 2,
     "ai_marker_count": 6,
     "direct_emotion_count": 0,
     "ellipsis_count": 12,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 89,
+      "问号": 0,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 162,
     "file": "第162章.txt"
   },
   {
     "total_chars": 2559,
-    "total_sentences": 106,
     "avg_sentence_len": 22.8,
     "sentence_len_std": 15.7,
     "avg_paragraph_len": 29,
@@ -4929,29 +5633,34 @@
       "min": 6,
       "max": 71
     },
-    "single_para_ratio": 85.2,
-    "dialogue_ratio": 36.6,
-    "short_ratio": 37.7,
-    "long_ratio": 30.2,
     "vocabulary_diversity": 0.253,
     "top_patterns": [
-      "原溯...(16次)",
-      "李素...(14次)",
-      "蒲雨...(6次)",
-      "“奶...(3次)",
-      "“小...(3次)"
+      "原溯(16次)",
+      "李素(14次)",
+      "蒲雨(6次)",
+      "“奶(3次)",
+      "“小(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(8处)"
+    ],
     "simile_count": 0,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 7,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 40,
+      "问号": 3,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 163,
     "file": "第163章.txt"
   },
   {
     "total_chars": 2001,
-    "total_sentences": 68,
     "avg_sentence_len": 28.1,
     "sentence_len_std": 21.4,
     "avg_paragraph_len": 35,
@@ -4959,31 +5668,35 @@
       "min": 7,
       "max": 121
     },
-    "single_para_ratio": 84.2,
-    "dialogue_ratio": 36.6,
-    "short_ratio": 33.8,
-    "long_ratio": 39.7,
     "vocabulary_diversity": 0.282,
     "top_patterns": [
-      "原溯...(12次)",
-      "李素...(11次)",
-      "“我...(3次)",
-      "“你...(3次)",
-      "蒲志...(3次)"
+      "原溯(12次)",
+      "李素(11次)",
+      "“我(3次)",
+      "“你(3次)",
+      "蒲志(3次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(2处)"
+      "比喻(像/如/仿佛)(2处)",
+      "短句节奏(4处)"
     ],
     "simile_count": 2,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 7,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 32,
+      "问号": 1,
+      "叹号": 0,
+      "引号": 0
+    },
     "chapter": 164,
     "file": "第164章.txt"
   },
   {
     "total_chars": 1663,
-    "total_sentences": 84,
     "avg_sentence_len": 18.3,
     "sentence_len_std": 14.8,
     "avg_paragraph_len": 23,
@@ -4991,29 +5704,34 @@
       "min": 6,
       "max": 68
     },
-    "single_para_ratio": 88.6,
-    "dialogue_ratio": 27.2,
-    "short_ratio": 53.6,
-    "long_ratio": 16.7,
     "vocabulary_diversity": 0.307,
     "top_patterns": [
-      "李素...(10次)",
-      "蒲雨...(10次)",
-      "原溯...(6次)",
-      "【蒲...(5次)",
-      "陆蓁...(4次)"
+      "李素(10次)",
+      "蒲雨(10次)",
+      "原溯(6次)",
+      "【蒲(5次)",
+      "陆蓁(4次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(8处)"
+    ],
     "simile_count": 4,
     "ai_marker_count": 1,
     "direct_emotion_count": 0,
     "ellipsis_count": 7,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 30,
+      "问号": 2,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 165,
     "file": "第165章.txt"
   },
   {
     "total_chars": 2316,
-    "total_sentences": 99,
     "avg_sentence_len": 22.1,
     "sentence_len_std": 16.7,
     "avg_paragraph_len": 31,
@@ -5021,29 +5739,34 @@
       "min": 7,
       "max": 126
     },
-    "single_para_ratio": 73.0,
-    "dialogue_ratio": 32.5,
-    "short_ratio": 44.4,
-    "long_ratio": 28.3,
     "vocabulary_diversity": 0.304,
     "top_patterns": [
-      "原溯...(11次)",
-      "戴教...(5次)",
-      "【原...(5次)",
-      "林皓...(5次)",
-      "蒲雨...(4次)"
+      "原溯(11次)",
+      "戴教(5次)",
+      "【原(5次)",
+      "林皓(5次)",
+      "蒲雨(4次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(9处)"
+    ],
     "simile_count": 2,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 5,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 31,
+      "问号": 1,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 166,
     "file": "第166章.txt"
   },
   {
     "total_chars": 1724,
-    "total_sentences": 64,
     "avg_sentence_len": 25.8,
     "sentence_len_std": 15.8,
     "avg_paragraph_len": 30,
@@ -5051,26 +5774,31 @@
       "min": 7,
       "max": 68
     },
-    "single_para_ratio": 89.5,
-    "dialogue_ratio": 6.6,
-    "short_ratio": 32.8,
-    "long_ratio": 37.5,
     "vocabulary_diversity": 0.365,
     "top_patterns": [
-      "蒲雨...(8次)",
-      "原溯...(3次)"
+      "蒲雨(8次)",
+      "原溯(3次)"
     ],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(3处)"
+    ],
     "simile_count": 0,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 1,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 43,
+      "问号": 0,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 167,
     "file": "第167章.txt"
   },
   {
     "total_chars": 1854,
-    "total_sentences": 115,
     "avg_sentence_len": 14.8,
     "sentence_len_std": 9.3,
     "avg_paragraph_len": 22,
@@ -5078,23 +5806,28 @@
       "min": 6,
       "max": 61
     },
-    "single_para_ratio": 65.9,
-    "dialogue_ratio": 0.5,
-    "short_ratio": 65.2,
-    "long_ratio": 6.1,
     "vocabulary_diversity": 0.266,
     "top_patterns": [],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(16处)"
+    ],
     "simile_count": 0,
     "ai_marker_count": 0,
     "direct_emotion_count": 0,
     "ellipsis_count": 18,
+    "has_said_tag": true,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 29,
+      "问号": 15,
+      "叹号": 24,
+      "引号": 0
+    },
     "chapter": 168,
     "file": "第168章.txt"
   },
   {
     "total_chars": 2396,
-    "total_sentences": 104,
     "avg_sentence_len": 21.8,
     "sentence_len_std": 15.7,
     "avg_paragraph_len": 28,
@@ -5102,30 +5835,34 @@
       "min": 6,
       "max": 86
     },
-    "single_para_ratio": 83.7,
-    "dialogue_ratio": 18.9,
-    "short_ratio": 41.3,
-    "long_ratio": 26.0,
     "vocabulary_diversity": 0.292,
     "top_patterns": [
-      "蒲雨...(11次)",
-      "原溯...(5次)",
-      "许岁...(5次)",
-      "宋津...(4次)"
+      "蒲雨(11次)",
+      "原溯(5次)",
+      "许岁(5次)",
+      "宋津(4次)"
     ],
     "rhetorical_features": [
-      "比喻(像/如/仿佛)(3处)"
+      "比喻(像/如/仿佛)(3处)",
+      "短句节奏(5处)"
     ],
     "simile_count": 5,
     "ai_marker_count": 2,
     "direct_emotion_count": 0,
     "ellipsis_count": 2,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 52,
+      "问号": 0,
+      "叹号": 1,
+      "引号": 0
+    },
     "chapter": 169,
     "file": "第169章.txt"
   },
   {
     "total_chars": 1357,
-    "total_sentences": 59,
     "avg_sentence_len": 22.1,
     "sentence_len_std": 15.9,
     "avg_paragraph_len": 27,
@@ -5133,17 +5870,23 @@
       "min": 6,
       "max": 92
     },
-    "single_para_ratio": 88.2,
-    "dialogue_ratio": 2.4,
-    "short_ratio": 40.7,
-    "long_ratio": 23.7,
     "vocabulary_diversity": 0.358,
     "top_patterns": [],
-    "rhetorical_features": [],
+    "rhetorical_features": [
+      "短句节奏(2处)"
+    ],
     "simile_count": 6,
     "ai_marker_count": 4,
     "direct_emotion_count": 0,
     "ellipsis_count": 0,
+    "has_said_tag": false,
+    "has_emotion_words": false,
+    "end_punctuations": {
+      "句号": 35,
+      "问号": 5,
+      "叹号": 3,
+      "引号": 0
+    },
     "chapter": 170,
     "file": "第170章.txt"
   }

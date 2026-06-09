@@ -1,6 +1,5 @@
 {
   "total_chars": 2707,
-  "total_sentences": 135,
   "avg_sentence_len": 18.7,
   "sentence_len_std": 14.0,
   "avg_paragraph_len": 23,
@@ -8,25 +7,30 @@
     "min": 6,
     "max": 72
   },
-  "single_para_ratio": 87.8,
-  "dialogue_ratio": 17.9,
-  "short_ratio": 48.1,
-  "long_ratio": 20.0,
   "vocabulary_diversity": 0.266,
   "top_patterns": [
-    "蒲雨...(19次)",
-    "原溯...(18次)",
-    "”她...(3次)",
-    "”原...(3次)",
-    "”蒲...(3次)"
+    "蒲雨(19次)",
+    "原溯(18次)",
+    "”她(3次)",
+    "”原(3次)",
+    "”蒲(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(4处)"
+    "比喻(像/如/仿佛)(4处)",
+    "短句节奏(15处)"
   ],
   "simile_count": 7,
   "ai_marker_count": 2,
   "direct_emotion_count": 0,
   "ellipsis_count": 3,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 78,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 101,
   "file": "第101章.txt"
 }

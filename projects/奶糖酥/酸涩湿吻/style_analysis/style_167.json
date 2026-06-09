@@ -1,6 +1,5 @@
 {
   "total_chars": 1724,
-  "total_sentences": 64,
   "avg_sentence_len": 25.8,
   "sentence_len_std": 15.8,
   "avg_paragraph_len": 30,
@@ -8,20 +7,26 @@
     "min": 7,
     "max": 68
   },
-  "single_para_ratio": 89.5,
-  "dialogue_ratio": 6.6,
-  "short_ratio": 32.8,
-  "long_ratio": 37.5,
   "vocabulary_diversity": 0.365,
   "top_patterns": [
-    "蒲雨...(8次)",
-    "原溯...(3次)"
+    "蒲雨(8次)",
+    "原溯(3次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
   "simile_count": 0,
   "ai_marker_count": 0,
   "direct_emotion_count": 0,
   "ellipsis_count": 1,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 43,
+    "问号": 0,
+    "叹号": 1,
+    "引号": 0
+  },
   "chapter": 167,
   "file": "第167章.txt"
 }

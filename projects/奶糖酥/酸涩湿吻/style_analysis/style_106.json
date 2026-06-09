@@ -1,6 +1,5 @@
 {
   "total_chars": 2301,
-  "total_sentences": 135,
   "avg_sentence_len": 15.8,
   "sentence_len_std": 12.2,
   "avg_paragraph_len": 21,
@@ -8,25 +7,30 @@
     "min": 6,
     "max": 70
   },
-  "single_para_ratio": 87.3,
-  "dialogue_ratio": 21.5,
-  "short_ratio": 57.8,
-  "long_ratio": 14.8,
   "vocabulary_diversity": 0.257,
   "top_patterns": [
-    "原溯...(17次)",
-    "蒲雨...(14次)",
-    "“不...(5次)",
-    "”蒲...(5次)",
-    "“那...(4次)"
+    "原溯(17次)",
+    "蒲雨(14次)",
+    "“不(5次)",
+    "”蒲(5次)",
+    "“那(4次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(2处)"
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(20处)"
   ],
   "simile_count": 4,
   "ai_marker_count": 2,
   "direct_emotion_count": 0,
   "ellipsis_count": 9,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 63,
+    "问号": 2,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 106,
   "file": "第106章.txt"
 }

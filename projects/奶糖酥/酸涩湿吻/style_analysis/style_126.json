@@ -1,6 +1,5 @@
 {
   "total_chars": 2708,
-  "total_sentences": 136,
   "avg_sentence_len": 18.6,
   "sentence_len_std": 17.4,
   "avg_paragraph_len": 26,
@@ -8,25 +7,30 @@
     "min": 6,
     "max": 128
   },
-  "single_para_ratio": 77.2,
-  "dialogue_ratio": 32.7,
-  "short_ratio": 60.3,
-  "long_ratio": 18.4,
   "vocabulary_diversity": 0.267,
   "top_patterns": [
-    "原溯...(18次)",
-    "周律...(8次)",
-    "”他...(7次)",
-    "”周...(5次)",
-    "原鸿...(3次)"
+    "原溯(18次)",
+    "周律(8次)",
+    "”他(7次)",
+    "”周(5次)",
+    "原鸿(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(2处)"
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(17处)"
   ],
   "simile_count": 3,
   "ai_marker_count": 5,
   "direct_emotion_count": 0,
   "ellipsis_count": 3,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 69,
+    "问号": 8,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 126,
   "file": "第126章.txt"
 }

@@ -1,6 +1,5 @@
 {
   "total_chars": 1829,
-  "total_sentences": 90,
   "avg_sentence_len": 19.1,
   "sentence_len_std": 13.3,
   "avg_paragraph_len": 26,
@@ -8,22 +7,28 @@
     "min": 6,
     "max": 63
   },
-  "single_para_ratio": 84.1,
-  "dialogue_ratio": 16.5,
-  "short_ratio": 48.9,
-  "long_ratio": 24.4,
   "vocabulary_diversity": 0.321,
   "top_patterns": [
-    "蒲雨...(8次)",
-    "原溯...(6次)",
-    "”陈...(5次)",
-    "摊主...(3次)"
+    "蒲雨(8次)",
+    "原溯(6次)",
+    "”陈(5次)",
+    "摊主(3次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(12处)"
+  ],
   "simile_count": 4,
   "ai_marker_count": 0,
   "direct_emotion_count": 0,
   "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 52,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 42,
   "file": "第42章.txt"
 }

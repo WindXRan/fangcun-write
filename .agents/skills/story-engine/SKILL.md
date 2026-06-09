@@ -41,8 +41,8 @@ projects/{作者名}/{源书名}/
 
 ```
 Phase 1:   开书 (pro, 1 call)        → concept.md
-Phase 1.5: 风格画像 (pro, 1 call)    → style-profile.md（全局参数，注入 system prompt）
-Phase 2:   Guides (flash, 2N 并行)   → plot_{N}.md + style_{N}.md
+Phase 1.5: 风格分析 (脚本)            → style_analysis/style_{N}.json + style_{N}.md（模板）
+Phase 2:   Guides (flash, 2N 并行)   → plot_{N}.md + style_{N}.md（引用模板）
 Phase 3:   写章 (flash, N 并行)      → ch_{N}.txt（章名自生成）
 Phase 3.5: Trim (flash)              → 超字数 20% 的章自动精简
 Phase 3.6: 衔接修复 (flash, N-1 并行) → 修章间重叠

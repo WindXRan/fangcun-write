@@ -1,6 +1,5 @@
 {
   "total_chars": 1894,
-  "total_sentences": 96,
   "avg_sentence_len": 18.4,
   "sentence_len_std": 15.1,
   "avg_paragraph_len": 25,
@@ -8,22 +7,28 @@
     "min": 6,
     "max": 71
   },
-  "single_para_ratio": 81.3,
-  "dialogue_ratio": 34.7,
-  "short_ratio": 53.1,
-  "long_ratio": 20.8,
   "vocabulary_diversity": 0.33,
   "top_patterns": [
-    "蒲雨...(7次)",
-    "原溯...(5次)",
-    "宋津...(3次)",
-    "“不...(3次)"
+    "蒲雨(7次)",
+    "原溯(5次)",
+    "宋津(3次)",
+    "“不(3次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(14处)"
+  ],
   "simile_count": 2,
   "ai_marker_count": 2,
   "direct_emotion_count": 0,
   "ellipsis_count": 9,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 30,
+    "问号": 0,
+    "叹号": 1,
+    "引号": 0
+  },
   "chapter": 157,
   "file": "第157章.txt"
 }

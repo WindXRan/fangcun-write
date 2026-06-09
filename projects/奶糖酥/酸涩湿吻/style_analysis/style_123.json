@@ -1,6 +1,5 @@
 {
   "total_chars": 1812,
-  "total_sentences": 85,
   "avg_sentence_len": 20.0,
   "sentence_len_std": 14.5,
   "avg_paragraph_len": 27,
@@ -8,25 +7,30 @@
     "min": 7,
     "max": 101
   },
-  "single_para_ratio": 80.6,
-  "dialogue_ratio": 36.1,
-  "short_ratio": 50.6,
-  "long_ratio": 20.0,
   "vocabulary_diversity": 0.318,
   "top_patterns": [
-    "原溯...(11次)",
-    "“那...(4次)",
-    "”她...(4次)",
-    "蒲雨...(4次)",
-    "“这...(3次)"
+    "原溯(11次)",
+    "“那(4次)",
+    "”她(4次)",
+    "蒲雨(4次)",
+    "“这(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(2处)"
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(5处)"
   ],
   "simile_count": 5,
   "ai_marker_count": 2,
   "direct_emotion_count": 0,
   "ellipsis_count": 2,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 37,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 123,
   "file": "第123章.txt"
 }

@@ -1,6 +1,5 @@
 {
   "total_chars": 1818,
-  "total_sentences": 86,
   "avg_sentence_len": 20.1,
   "sentence_len_std": 13.4,
   "avg_paragraph_len": 24,
@@ -8,22 +7,27 @@
     "min": 6,
     "max": 63
   },
-  "single_para_ratio": 93.3,
-  "dialogue_ratio": 8.1,
-  "short_ratio": 39.5,
-  "long_ratio": 19.8,
   "vocabulary_diversity": 0.352,
   "top_patterns": [
-    "蒲雨...(10次)",
-    "原溯...(5次)"
+    "蒲雨(10次)",
+    "原溯(5次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(4处)"
+    "比喻(像/如/仿佛)(4处)",
+    "短句节奏(4处)"
   ],
   "simile_count": 10,
   "ai_marker_count": 2,
   "direct_emotion_count": 0,
   "ellipsis_count": 5,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 51,
+    "问号": 2,
+    "叹号": 2,
+    "引号": 0
+  },
   "chapter": 2,
   "file": "第2章.txt"
 }

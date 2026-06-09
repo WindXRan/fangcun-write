@@ -1,6 +1,5 @@
 {
   "total_chars": 2209,
-  "total_sentences": 111,
   "avg_sentence_len": 18.6,
   "sentence_len_std": 14.0,
   "avg_paragraph_len": 25,
@@ -8,24 +7,29 @@
     "min": 6,
     "max": 83
   },
-  "single_para_ratio": 84.1,
-  "dialogue_ratio": 29.0,
-  "short_ratio": 50.5,
-  "long_ratio": 15.3,
   "vocabulary_diversity": 0.268,
   "top_patterns": [
-    "蒲雨...(13次)",
-    "赵老...(9次)",
-    "原鸿...(6次)",
-    "”他...(3次)"
+    "蒲雨(13次)",
+    "赵老(9次)",
+    "原鸿(6次)",
+    "”他(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(4处)"
+    "比喻(像/如/仿佛)(4处)",
+    "短句节奏(7处)"
   ],
   "simile_count": 5,
   "ai_marker_count": 1,
   "direct_emotion_count": 0,
   "ellipsis_count": 4,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 56,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 136,
   "file": "第136章.txt"
 }

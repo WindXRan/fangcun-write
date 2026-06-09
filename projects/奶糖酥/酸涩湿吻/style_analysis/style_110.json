@@ -1,6 +1,5 @@
 {
   "total_chars": 2290,
-  "total_sentences": 126,
   "avg_sentence_len": 17.1,
   "sentence_len_std": 12.1,
   "avg_paragraph_len": 19,
@@ -8,23 +7,29 @@
     "min": 6,
     "max": 72
   },
-  "single_para_ratio": 97.4,
-  "dialogue_ratio": 4.4,
-  "short_ratio": 51.6,
-  "long_ratio": 18.3,
   "vocabulary_diversity": 0.28,
   "top_patterns": [
-    "蒲雨...(13次)",
-    "原溯...(6次)",
-    "她甚...(4次)",
-    "不想...(3次)",
-    "“我...(3次)"
+    "蒲雨(13次)",
+    "原溯(6次)",
+    "她甚(4次)",
+    "不想(3次)",
+    "“我(3次)"
   ],
-  "rhetorical_features": [],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
   "simile_count": 9,
   "ai_marker_count": 3,
   "direct_emotion_count": 0,
   "ellipsis_count": 7,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 93,
+    "问号": 5,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 110,
   "file": "第110章.txt"
 }

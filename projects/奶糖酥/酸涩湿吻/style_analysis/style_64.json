@@ -1,6 +1,5 @@
 {
   "total_chars": 2297,
-  "total_sentences": 132,
   "avg_sentence_len": 16.3,
   "sentence_len_std": 10.4,
   "avg_paragraph_len": 20,
@@ -8,24 +7,29 @@
     "min": 6,
     "max": 50
   },
-  "single_para_ratio": 92.2,
-  "dialogue_ratio": 9.7,
-  "short_ratio": 54.5,
-  "long_ratio": 15.2,
   "vocabulary_diversity": 0.279,
   "top_patterns": [
-    "原溯...(14次)",
-    "蒲雨...(12次)",
-    "”蒲...(3次)",
-    "因为...(3次)"
+    "原溯(14次)",
+    "蒲雨(12次)",
+    "”蒲(3次)",
+    "因为(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(3处)"
+    "比喻(像/如/仿佛)(3处)",
+    "短句节奏(12处)"
   ],
   "simile_count": 5,
   "ai_marker_count": 3,
   "direct_emotion_count": 0,
   "ellipsis_count": 11,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 91,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 64,
   "file": "第64章.txt"
 }

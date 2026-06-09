@@ -1,6 +1,5 @@
 {
   "total_chars": 1915,
-  "total_sentences": 84,
   "avg_sentence_len": 21.7,
   "sentence_len_std": 15.0,
   "avg_paragraph_len": 25,
@@ -8,23 +7,28 @@
     "min": 6,
     "max": 76
   },
-  "single_para_ratio": 93.4,
-  "dialogue_ratio": 13.7,
-  "short_ratio": 44.0,
-  "long_ratio": 31.0,
   "vocabulary_diversity": 0.339,
   "top_patterns": [
-    "蒲雨...(11次)",
-    "原溯...(6次)",
-    "那是...(3次)"
+    "蒲雨(11次)",
+    "原溯(6次)",
+    "那是(3次)"
   ],
   "rhetorical_features": [
-    "比喻(像/如/仿佛)(2处)"
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(3处)"
   ],
   "simile_count": 6,
   "ai_marker_count": 1,
   "direct_emotion_count": 0,
   "ellipsis_count": 2,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 57,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
   "chapter": 103,
   "file": "第103章.txt"
 }
