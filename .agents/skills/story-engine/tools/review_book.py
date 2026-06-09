@@ -50,8 +50,11 @@ def read_chapters(source_dir, start, end):
     return chapters
 
 
-def review_chapters(config, start, end, batch_size=10):
-    """分批审核章节"""
+def review_chapters(config, start, end, batch_size=10, workers=5):
+    """分批审核章节（支持并行）"""
+    import requests
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    
     api_key = config.get("api_key") or os.environ.get("API_KEY")
     if not api_key:
         raise ValueError("未配置 API_KEY")
@@ -60,7 +63,6 @@ def review_chapters(config, start, end, batch_size=10):
     source_dir = config.get("source_dir", "")
     
     if not source_dir:
-        # 自动查找源文目录
         author = config.get("author", "")
         source_book = config.get("source_book", "")
         base_dir = config.get("base_dir", os.getcwd())
@@ -83,21 +85,23 @@ def review_chapters(config, start, end, batch_size=10):
     # 读取所有章节
     print(f"读取章节 {start}-{end}...")
     chapters = read_chapters(source_dir, start, end)
-    print(f"已读取 {len(chapters)} 章")
+    print(f"已读取 {len(chapters)} 章，共约 {sum(len(v) for v in chapters.values()) // 10000} 万字")
     
-    # 分批审核
-    all_reviews = []
+    # 分批
+    batches = []
     for batch_start in range(start, end + 1, batch_size):
         batch_end = min(batch_start + batch_size - 1, end)
-        print(f"\n审核第{batch_start}-{batch_end}章...")
-        
-        # 合并本批次章节内容
+        batches.append((batch_start, batch_end))
+    
+    print(f"分 {len(batches)} 批审核，每批约 {batch_size} 章")
+    
+    def review_batch(batch_start, batch_end):
+        """审核单批"""
         batch_content = ""
         for ch in range(batch_start, batch_end + 1):
             if ch in chapters:
-                batch_content += f"\n\n## 第{ch}章\n\n{chapters[ch][:3000]}..."  # 每章最多3000字
+                batch_content += f"\n\n## 第{ch}章\n\n{chapters[ch][:3000]}"
         
-        # 构建审核prompt
         user_prompt = f"""请审核以下小说章节（第{batch_start}-{batch_end}章）：
 
 {batch_content}
@@ -130,7 +134,6 @@ def review_chapters(config, start, end, batch_size=10):
 ```"""
         
         try:
-            import requests
             headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
             data = {
                 "model": model,
@@ -144,13 +147,26 @@ def review_chapters(config, start, end, batch_size=10):
             }
             resp = requests.post(API_URL, headers=headers, json=data, timeout=600)
             resp.raise_for_status()
-            result = resp.json()["choices"][0]["message"]["content"]
-            all_reviews.append(result)
-            print(f"  [OK] 第{batch_start}-{batch_end}章审核完成")
+            return resp.json()["choices"][0]["message"]["content"]
         except Exception as e:
-            print(f"  [FAIL] 第{batch_start}-{batch_end}章审核失败: {e}")
+            return f"[FAIL] 第{batch_start}-{batch_end}章审核失败: {e}"
     
-    return all_reviews
+    # 并行审核
+    all_reviews = []
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = {executor.submit(review_batch, bs, be): (bs, be) for bs, be in batches}
+        for future in as_completed(futures):
+            bs, be = futures[future]
+            try:
+                result = future.result()
+                all_reviews.append((bs, be, result))
+                print(f"  [OK] 第{bs}-{be}章审核完成")
+            except Exception as e:
+                print(f"  [FAIL] 第{bs}-{be}章审核失败: {e}")
+    
+    # 按章节顺序排序
+    all_reviews.sort(key=lambda x: x[0])
+    return [r[2] for r in all_reviews]
 
 
 def generate_report(reviews, book_name, start, end):
