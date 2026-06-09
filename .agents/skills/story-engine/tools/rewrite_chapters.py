@@ -990,6 +990,227 @@ def phase_trim(config, start, end):
 
 
 # ============================================================
+# Phase 3.6: 整章重写（人设崩塌、节奏失控时使用）
+# ============================================================
+
+def phase_rewrite(config, start, end, workers=5):
+    """整章重写：保留guide，从头重写正文。"""
+    chapters_dir = f"{config['rewrites_dir']}/chapters"
+    flash = {**config, "model": "deepseek-v4-flash", "reasoning_effort": "low"}
+
+    print(f"\n{'=' * 50}")
+    print(f"Phase 3.6: 整章重写 (ch{start}-{end}, {workers}w)")
+    print("=" * 50)
+
+    rewritten = 0
+    total_chapters = end - start + 1
+    done_chapters = 0
+    t_start = time.time()
+
+    for ch in range(start, end + 1):
+        ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+        if not ch_file.exists():
+            done_chapters += 1
+            continue
+
+        print(f"  [REWRITE] ch{ch:03d}")
+        try:
+            # 删除旧文件，重新生成
+            ch_file.unlink(missing_ok=True)
+            result = run_one(flash, "write-chapter", ch)
+            
+            # 生成标题
+            title = f"第{ch}章"
+            ch_file.write_text(title + '\n\n' + result.strip(), encoding='utf-8')
+            rewritten += 1
+        except Exception as e:
+            print(f"  [FAIL] rewrite ch{ch}: {e}")
+
+        # 更新进度
+        done_chapters += 1
+        if done_chapters % max(1, total_chapters // 20) == 0 or done_chapters == total_chapters:
+            elapsed = time.time() - t_start
+            speed = elapsed / done_chapters
+            eta = speed * (total_chapters - done_chapters)
+            pct = done_chapters * 100 // total_chapters
+            bar = '=' * (pct // 5) + '>' + ' ' * (20 - pct // 5)
+            print(f"  [{done_chapters}/{total_chapters}] [{bar}] {pct}% | {elapsed:.0f}s | ETA {eta:.0f}s")
+
+    if rewritten:
+        print(f"\n[OK] 重写了 {rewritten} 章")
+    return rewritten
+
+
+# ============================================================
+# Phase 3.7: 润色（只改文笔，不改内容）
+# ============================================================
+
+def phase_polish(config, start, end, workers=5):
+    """润色：只改文笔（删AI味、加细节、改对话），不改情节。"""
+    chapters_dir = f"{config['rewrites_dir']}/chapters"
+    flash = {**config, "model": "deepseek-v4-flash", "reasoning_effort": "low"}
+
+    print(f"\n{'=' * 50}")
+    print(f"Phase 3.7: 润色 (ch{start}-{end}, {workers}w)")
+    print("=" * 50)
+
+    polished = 0
+    total_chapters = end - start + 1
+    done_chapters = 0
+    t_start = time.time()
+
+    for ch in range(start, end + 1):
+        ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+        if not ch_file.exists():
+            done_chapters += 1
+            continue
+
+        original = ch_file.read_text(encoding='utf-8')
+        orig_chars = len(original.replace('\n', '').replace(' ', ''))
+
+        prompt = f"""你是专业网文写手。请润色以下章节，提升文笔质量。
+
+【润色要求】
+1. 不改变情节、人物、对话内容
+2. 删除AI痕迹（「仿佛」「似乎」「不禁」「心中涌起」等）
+3. 增加细节描写（五感、环境、动作）
+4. 优化句式，避免排比句连续超过3句
+5. 对话更自然，像真人说话
+6. 字数控制在原文±10%以内（{int(orig_chars*0.9)}~{int(orig_chars*1.1)}字）
+
+【原文】
+{original}
+
+【输出格式】
+直接输出润色后的完整章节，不要解释。"""
+
+        try:
+            result = call_api(
+                flash.get("api_key") or os.environ.get("API_KEY"),
+                get_api_url(flash),
+                flash.get("model", "deepseek-v4-flash"),
+                prompt,
+                system_prompt="你是专业网文写手，擅长润色文笔。保持情节不变，只改表达。",
+                max_tokens=8000,
+                temperature=0.7
+            )
+            
+            new_chars = len(result.replace('\n', '').replace(' ', ''))
+            
+            # 检查字数差异
+            if orig_chars > 0 and abs(new_chars - orig_chars) / orig_chars > 0.15:
+                print(f"  [SKIP] ch{ch:03d}: 字数差异过大 ({orig_chars}→{new_chars})")
+            else:
+                ch_file.write_text(result, encoding='utf-8')
+                polished += 1
+                print(f"  [POLISH] ch{ch:03d}: {orig_chars}→{new_chars}字")
+        except Exception as e:
+            print(f"  [FAIL] polish ch{ch}: {e}")
+
+        # 更新进度
+        done_chapters += 1
+        if done_chapters % max(1, total_chapters // 20) == 0 or done_chapters == total_chapters:
+            elapsed = time.time() - t_start
+            speed = elapsed / done_chapters
+            eta = speed * (total_chapters - done_chapters)
+            pct = done_chapters * 100 // total_chapters
+            bar = '=' * (pct // 5) + '>' + ' ' * (20 - pct // 5)
+            print(f"  [{done_chapters}/{total_chapters}] [{bar}] {pct}% | {elapsed:.0f}s | ETA {eta:.0f}s")
+
+    if polished:
+        print(f"\n[OK] 润色了 {polished} 章")
+    return polished
+
+
+# ============================================================
+# Phase 3.8: 扩写（增加内容扩充字数）
+# ============================================================
+
+def phase_expand(config, start, end, target_ratio=1.3, workers=5):
+    """扩写：增加内容扩充字数，默认扩充30%。"""
+    chapters_dir = f"{config['rewrites_dir']}/chapters"
+    flash = {**config, "model": "deepseek-v4-flash", "reasoning_effort": "low"}
+
+    print(f"\n{'=' * 50}")
+    print(f"Phase 3.8: 扩写 (ch{start}-{end}, 目标+{(target_ratio-1)*100:.0f}%, {workers}w)")
+    print("=" * 50)
+
+    expanded = 0
+    total_chapters = end - start + 1
+    done_chapters = 0
+    t_start = time.time()
+
+    for ch in range(start, end + 1):
+        ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+        if not ch_file.exists():
+            done_chapters += 1
+            continue
+
+        original = ch_file.read_text(encoding='utf-8')
+        orig_chars = len(original.replace('\n', '').replace(' ', ''))
+        target_chars = int(orig_chars * target_ratio)
+
+        # 检查是否需要扩写
+        source_chars = count_source_chars(config, ch)
+        if source_chars > 0 and orig_chars >= source_chars * 0.9:
+            done_chapters += 1
+            continue  # 字数已够，跳过
+
+        prompt = f"""你是专业网文写手。请扩写以下章节，增加内容使字数达到{target_chars}字左右。
+
+【扩写要求】
+1. 保持原有情节框架和人物关系
+2. 增加细节描写（环境、心理、动作）
+3. 增加对话互动
+4. 增加场景过渡
+5. 不要增加新的情节线
+6. 字数控制在{int(target_chars*0.9)}~{int(target_chars*1.1)}字
+
+【原文（{orig_chars}字）】
+{original}
+
+【输出格式】
+直接输出扩写后的完整章节，不要解释。"""
+
+        try:
+            result = call_api(
+                flash.get("api_key") or os.environ.get("API_KEY"),
+                get_api_url(flash),
+                flash.get("model", "deepseek-v4-flash"),
+                prompt,
+                system_prompt="你是专业网文写手，擅长扩写内容。保持情节不变，增加细节。",
+                max_tokens=10000,
+                temperature=0.8
+            )
+            
+            new_chars = len(result.replace('\n', '').replace(' ', ''))
+            
+            # 检查字数
+            if new_chars < orig_chars * 1.1:
+                print(f"  [SKIP] ch{ch:03d}: 扩写不足 ({orig_chars}→{new_chars})")
+            else:
+                ch_file.write_text(result, encoding='utf-8')
+                expanded += 1
+                print(f"  [EXPAND] ch{ch:03d}: {orig_chars}→{new_chars}字 (+{(new_chars/orig_chars-1)*100:.0f}%)")
+        except Exception as e:
+            print(f"  [FAIL] expand ch{ch}: {e}")
+
+        # 更新进度
+        done_chapters += 1
+        if done_chapters % max(1, total_chapters // 20) == 0 or done_chapters == total_chapters:
+            elapsed = time.time() - t_start
+            speed = elapsed / done_chapters
+            eta = speed * (total_chapters - done_chapters)
+            pct = done_chapters * 100 // total_chapters
+            bar = '=' * (pct // 5) + '>' + ' ' * (20 - pct // 5)
+            print(f"  [{done_chapters}/{total_chapters}] [{bar}] {pct}% | {elapsed:.0f}s | ETA {eta:.0f}s")
+
+    if expanded:
+        print(f"\n[OK] 扩写了 {expanded} 章")
+    return expanded
+
+
+# ============================================================
 # Phase 4.5: 全文审稿（调用full_review.py）
 # ============================================================
 
@@ -1061,11 +1282,21 @@ def phase_compare(config, start, end, batch_size=10):
     import subprocess
 
     rewrites_dir = config["rewrites_dir"]
+    compare_dir = f"{rewrites_dir}/compare"
     compare_script = ".agents/skills/story-compare/compare.py"
 
     print(f"\n{'=' * 50}")
     print(f"Phase 4: 对比 (ch{start}-{end}, 每{batch_size}章一批)")
     print("=" * 50)
+    
+    # 清理旧的对比报告
+    for old_file in Path(compare_dir).glob("对比_*.md"):
+        old_file.unlink()
+    for old_file in Path(compare_dir).glob("源文_*.txt"):
+        old_file.unlink()
+    for old_file in Path(compare_dir).glob("新书_*.txt"):
+        old_file.unlink()
+    print("已清理旧对比报告")
 
     # 分批处理
     for batch_start in range(start, end + 1, batch_size):
@@ -1439,7 +1670,7 @@ def main():
     parser.add_argument("--serial", action="store_true",
                         help="plot-guide 串行生成，保持章间连贯（质量模式）")
     parser.add_argument("--phase", default="all",
-                        help="all | all-with-fix | full-review | open-book | style-analysis | guides | write | validate | trim | compare | review | fix")
+                        help="all | all-with-fix | full-review | open-book | style-analysis | guides | write | validate | trim | rewrite | polish | expand | compare | review | fix")
     parser.add_argument("--include-fanwai", action="store_true",
                         help="包含番外章节（默认不包含）")
     parser.add_argument("--max-fix-rounds", type=int, default=3,
@@ -1516,6 +1747,15 @@ def main():
 
     if "all" in phases or "trim" in phases:
         phase_trim(config, args.start, args.end)
+
+    if "rewrite" in phases:
+        phase_rewrite(config, args.start, args.end, args.workers)
+
+    if "polish" in phases:
+        phase_polish(config, args.start, args.end, args.workers)
+
+    if "expand" in phases:
+        phase_expand(config, args.start, args.end, workers=args.workers)
 
     if "review" in phases:
         phase_review(config, args.start, args.end, args.workers)
