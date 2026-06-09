@@ -20,15 +20,8 @@
 ## Pipeline
 
 ```
-<<<<<<< Updated upstream
 Phase 1:   开书 (pro, 1 call)        → concept.md（设定+角色名+角色行为模式+全局节奏图+弧线）
-Phase 1.3: 全书弧线 (pro, 1 call)    → arc.md（情感曲线+读者爽点分布+角色成长线+伏笔清单）
-Phase 1.5: 风格画像 (pro, 1 call)    → style-profile.md（全局参数，注入 system prompt）
-Phase 2:   Guides (flash, 2N 并行)   → plot_{N}.md + style_{N}.md
-=======
-Phase 1:   开书 (pro, 1 call)        → concept.md（3书名+3简介+固定角色名+弧线）
 Phase 2:   Guides (flash, 2N 并行)   → plot_{N}.md + style_{N}.md（每章独立风格）
->>>>>>> Stashed changes
 Phase 3:   写章 (flash, N 并行)      → ch_{N}.txt（章名自生成）
 Phase 3.5: Trim (flash)              → 超字数 20% 的章自动精简
 Phase 3.6: 衔接修复 (flash, N-1 并行) → 修章间重叠
@@ -42,17 +35,9 @@ projects/{作者}/{书名}/
 ├── _cache/chapters/第N章.txt        # 拆章缓存
 ├── style_analysis/style_{N}.json    # 每章风格数据（脚本生成）
 └── rewrites/{新书名}/
-<<<<<<< Updated upstream
     ├── concept.md                    # 设定+弧线+角色名+行为模式+全局节奏图
-    ├── arc.md                       # 全书弧线图（情绪曲线+读者爽点矩阵+成长线）
-    ├── style-profile.md             # 全局风格画像
     ├── guides/plot_{N}.md           # 章纲（节拍映射+高光+角色模式+台词原创性）
     ├── guides/style_{N}.md          # 风格速查（定量锚点+执行规则）
-=======
-    ├── concept.md                    # 设定+弧线+角色名
-    ├── guides/plot_{N}.md           # 章纲（节拍映射+高光+台词原创性）
-    ├── guides/style_{N}.md          # 每章风格速查（定量锚点+执行规则）
->>>>>>> Stashed changes
     ├── chapters/ch_{N}.txt          # 正文
     └── compare/                      # 对比报告
 ```

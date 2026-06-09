@@ -36,13 +36,6 @@ def step_split(source_path, output_dir):
     return run(f'python "{SCRIPTS_DIR}/split_chapters_generic.py" "{source_path}" "{output_dir}"')
 
 
-def step_style(source_path, output_path):
-    print("\n" + "=" * 50)
-    print("Step 2: 风格分析")
-    print("=" * 50)
-    return run(f'python "{SCRIPTS_DIR}/calc_style_profile.py" "{source_path}" -o "{output_path}"')
-
-
 def step_setup(project_dir, chapter_count):
     print("\n" + "=" * 50)
     print("Step 3: 创建项目目录")
@@ -101,16 +94,10 @@ def generate_book(config, source_path, chapter_count):
     # 准备缓存路径
     source_book_dir = os.path.dirname(source_path)
     split_dir = os.path.join(source_book_dir, "_cache", "chapters")
-    cache_analysis_dir = os.path.join(source_book_dir, "_cache", "analysis")
-    style_file = os.path.join(cache_analysis_dir, "style_profile.json")
 
     # Step 1-3: 非 LLM 准备
     if not os.path.exists(split_dir) or not os.listdir(split_dir):
         step_split(source_path, split_dir)
-
-    os.makedirs(cache_analysis_dir, exist_ok=True)
-    if not os.path.exists(style_file):
-        step_style(source_path, style_file)
 
     step_setup(rewrites_dir, chapter_count)
 
