@@ -1213,10 +1213,8 @@ def main():
             print(f"自动检测到最大章节: 第{args.end}章")
 
     if args.workers is None:
-        chapter_count = args.end - args.start + 1
-        # workers = 章节数，但最大不超过30
-        args.workers = min(chapter_count, 30)
-        print(f"workers 自动设为: {args.workers} (章节数{chapter_count}, 上限30)")
+        args.workers = args.end - args.start + 1
+        print(f"workers 自动设为章节数: {args.workers}")
 
     print(f"改写流水线 | {config['book_name']} | ch{args.start}-{args.end} | workers={args.workers}")
     print(f"项目目录: {config.get('rewrites_dir')}")
