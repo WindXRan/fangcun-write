@@ -35,6 +35,14 @@
             margin: 10px 0;
         }
         
+        .chapter-sidebar-header select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+        }
+        
         .chapter-list {
             padding: 10px 0;
         }
@@ -98,11 +106,9 @@
             color: white;
         }
         
-        /* 进度条 */
         .progress-bar {
             height: 4px;
             background: var(--border);
-            position: relative;
         }
         
         .progress-fill {
@@ -124,13 +130,11 @@
             text-indent: 2em;
         }
         
-        /* 对比模式 */
         .compare-container {
             display: none;
             flex: 1;
             height: 100%;
             overflow: hidden;
-            position: relative;
         }
         
         .compare-container.active {
@@ -144,8 +148,6 @@
             overflow: hidden;
         }
         
-        .compare-panel:last-child { border-right: none; }
-        
         .panel-header {
             padding: 10px 15px;
             background: var(--surface-soft);
@@ -153,14 +155,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        
-        .panel-header select {
-            flex: 1;
-            margin-right: 10px;
-            padding: 8px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
         }
         
         .panel-content {
@@ -191,7 +185,10 @@
         <div class="chapter-sidebar">
             <div class="chapter-sidebar-header">
                 <a href="library.html">← 返回书库</a>
-                <h3 id="bookTitle">加载中...</h3>
+                <h3 id="bookTitle">选择书籍</h3>
+                <select id="bookSelect" onchange="loadBook()">
+                    <option value="">选择书籍...</option>
+                </select>
             </div>
             <div class="chapter-list" id="chapterList"></div>
         </div>
@@ -209,19 +206,16 @@
                 </div>
             </div>
             
-            <!-- 进度条 -->
             <div class="progress-bar" id="progressBar">
                 <div class="progress-fill" id="progressFill" style="width: 0%"></div>
             </div>
             
-            <!-- 单本模式 -->
             <div class="single-mode" id="singleMode">
                 <div class="reader-content" id="readerContent">
-                    <p>点击左侧章节开始阅读</p>
+                    <p>选择书籍开始阅读</p>
                 </div>
             </div>
             
-            <!-- 对比模式 -->
             <div class="compare-container" id="compareMode">
                 <div class="compare-panel">
                     <div class="panel-header">
@@ -244,14 +238,10 @@
     </div>
     
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const filePath = urlParams.get('file');
-        
+        let bookData = { books: [] };
         let chapters = [];
         let currentChapterIndex = 0;
         let isCompareMode = false;
-        let bookData = { books: [] };
-        let compareBookData = null;
         let compareChapters = [];
         
         // 加载书库数据
@@ -259,55 +249,52 @@
             try {
                 const response = await fetch('data/book_library.json');
                 bookData = await response.json();
-                populateCompareSelect();
+                populateBookSelect();
             } catch (error) {
                 console.error('加载书库失败:', error);
             }
         }
         
-        // 填充对比书籍下拉框（自动选择仿写书）
-        function populateCompareSelect() {
+        // 填充书籍下拉框
+        function populateBookSelect() {
             const books = bookData.books || [];
-            const select = document.getElementById('compareBookSelect');
+            const select = document.getElementById('bookSelect');
+            select.innerHTML = '<option value="">选择书籍...</option>' +
+                books.map(b => `<option value="${b.file.replace(/\\/g, '/')}">${b.author} - ${b.title}</option>`).join('');
             
-            // 生成选项
-            let options = '<option value="">选择对比书籍...</option>';
-            books.forEach(b => {
-                const isSelected = shouldAutoSelect(b);
-                options += `<option value="${b.file.replace(/\\/g, '/')}" ${isSelected ? 'selected' : ''}>${b.author} - ${b.title}</option>`;
-            });
-            select.innerHTML = options;
+            // 同时填充对比书籍下拉框
+            const compareSelect = document.getElementById('compareBookSelect');
+            compareSelect.innerHTML = '<option value="">选择对比书籍...</option>' +
+                books.map(b => `<option value="${b.file.replace(/\\/g, '/')}">${b.author} - ${b.title}</option>`).join('');
             
-            // 如果自动选中了，加载对比书籍
-            if (select.value) {
-                loadCompareBook();
+            // 如果URL中有file参数，自动选中
+            const urlParams = new URLSearchParams(window.location.search);
+            const file = urlParams.get('file');
+            if (file) {
+                select.value = file;
+                loadBook();
             }
         }
         
-        // 判断是否应该自动选中（根据书名或目录）
-        function shouldAutoSelect(book) {
-            if (!filePath) return false;
-            
-            const currentDir = filePath.split('/').slice(0, -1).join('/');
-            const bookDir = book.file.replace(/\\/g, '/').split('/').slice(0, -1).join('/');
-            
-            // 如果在同一目录下，可能是仿写书
-            return currentDir === bookDir && book.file !== filePath;
-        }
-        
-        // 加载当前书籍
+        // 加载书籍
         async function loadBook() {
-            if (!filePath) {
-                document.getElementById('bookTitle').textContent = '未指定书籍';
+            const select = document.getElementById('bookSelect');
+            const file = select.value;
+            
+            if (!file) {
+                document.getElementById('bookTitle').textContent = '选择书籍';
+                chapters = [];
+                document.getElementById('chapterList').innerHTML = '';
+                document.getElementById('readerContent').innerHTML = '<p>选择书籍开始阅读</p>';
                 return;
             }
             
             try {
-                const response = await fetch('http://localhost:8001/api/book_content?file=' + encodeURIComponent(filePath));
+                const response = await fetch(`http://localhost:8001/api/book_content?file=${encodeURIComponent(file)}`);
                 const data = await response.json();
                 
                 if (data.error) {
-                    document.getElementById('bookTitle').textContent = '加载失败: ' + data.error;
+                    alert('加载失败: ' + data.error);
                     return;
                 }
                 
@@ -327,18 +314,17 @@
                     loadChapter(0);
                 }
             } catch (error) {
-                document.getElementById('bookTitle').textContent = '加载失败: ' + error.message;
+                alert('加载失败: ' + error.message);
             }
         }
         
-        // 加载章节（同步更新所有面板）
+        // 加载章节
         function loadChapter(index) {
             currentChapterIndex = index;
             const chapter = chapters[index];
             
             document.getElementById('currentChapter').textContent = chapter.title;
             
-            // 更新章节列表高亮
             document.querySelectorAll('.chapter-item').forEach((item, i) => {
                 item.classList.toggle('active', i === index);
             });
@@ -349,20 +335,17 @@
             document.getElementById('progressText1').textContent = `${index + 1}/${chapters.length}`;
             document.getElementById('progressText2').textContent = `${index + 1}/${compareChapters.length || chapters.length}`;
             
-            // 显示内容
             const content = chapter.content || '暂无内容';
             const paragraphs = content.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
             
             document.getElementById('readerContent').innerHTML = paragraphs;
             document.getElementById('compareContent1').innerHTML = paragraphs;
             
-            // 同步对比书籍章节
             if (isCompareMode && compareChapters[index]) {
                 const compareContent = compareChapters[index].content || '暂无内容';
                 document.getElementById('compareContent2').innerHTML = compareContent.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
             }
             
-            // 滚动到顶部
             document.getElementById('readerContent').scrollTop = 0;
             document.getElementById('compareContent1').scrollTop = 0;
             document.getElementById('compareContent2').scrollTop = 0;
@@ -398,14 +381,13 @@
             const file = select.value;
             
             if (!file) {
-                compareBookData = null;
                 compareChapters = [];
                 document.getElementById('compareContent2').innerHTML = '<div class="empty-hint">请选择对比书籍</div>';
                 return;
             }
             
             try {
-                const response = await fetch('http://localhost:8001/api/book_content?file=' + encodeURIComponent(file));
+                const response = await fetch(`http://localhost:8001/api/book_content?file=${encodeURIComponent(file)}`);
                 const data = await response.json();
                 
                 if (data.error) {
@@ -413,16 +395,13 @@
                     return;
                 }
                 
-                compareBookData = data;
                 compareChapters = data.chapters || [];
                 
-                // 同步显示当前章节
                 if (compareChapters[currentChapterIndex]) {
                     const content = compareChapters[currentChapterIndex].content || '';
                     document.getElementById('compareContent2').innerHTML = content.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
                 }
                 
-                // 更新进度
                 document.getElementById('progressText2').textContent = `${currentChapterIndex + 1}/${compareChapters.length}`;
             } catch (error) {
                 document.getElementById('compareContent2').innerHTML = '<div class="empty-hint">加载失败: ' + error.message + '</div>';
@@ -430,49 +409,35 @@
         }
         
         function prevChapter() {
-            if (currentChapterIndex > 0) {
-                loadChapter(currentChapterIndex - 1);
-            }
+            if (currentChapterIndex > 0) loadChapter(currentChapterIndex - 1);
         }
         
         function nextChapter() {
-            if (currentChapterIndex < chapters.length - 1) {
-                loadChapter(currentChapterIndex + 1);
-            }
+            if (currentChapterIndex < chapters.length - 1) loadChapter(currentChapterIndex + 1);
         }
         
-        // 键盘快捷键
+        // 同步滚动
+        function initSyncScroll() {
+            const content1 = document.getElementById('compareContent1');
+            const content2 = document.getElementById('compareContent2');
+            content1.classList.add('sync-scroll');
+            content2.classList.add('no-scroll');
+            let isSyncing = false;
+            content1.addEventListener('scroll', () => {
+                if (isSyncing) return;
+                isSyncing = true;
+                const scrollRatio = content1.scrollTop / (content1.scrollHeight - content1.clientHeight);
+                content2.scrollTop = scrollRatio * (content2.scrollHeight - content2.clientHeight);
+                isSyncing = false;
+            });
+        }
+        
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft') prevChapter();
             if (e.key === 'ArrowRight') nextChapter();
         });
         
-        // 初始化同步滚动
-        function initSyncScroll() {
-            const content1 = document.getElementById('compareContent1');
-            const content2 = document.getElementById('compareContent2');
-            
-            // 只有第一个面板可以滚动
-            content1.classList.add('sync-scroll');
-            content2.classList.add('no-scroll');
-            
-            let isSyncing = false;
-            
-            content1.addEventListener('scroll', () => {
-                if (isSyncing) return;
-                isSyncing = true;
-                
-                // 计算滚动比例
-                const scrollRatio = content1.scrollTop / (content1.scrollHeight - content1.clientHeight);
-                content2.scrollTop = scrollRatio * (content2.scrollHeight - content2.clientHeight);
-                
-                isSyncing = false;
-            });
-        }
-        
-        // 初始化
         loadBookLibrary();
-        loadBook();
         initSyncScroll();
     </script>
 </body>

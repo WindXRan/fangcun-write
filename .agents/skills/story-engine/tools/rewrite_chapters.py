@@ -851,26 +851,29 @@ def validate_one(config, ch):
 
 
 def phase_validate(config, start, end):
-    """验证章节质量，报告不达标指标。"""
+    """验证章节质量，报告不达标指标。返回详细结果列表。"""
     print(f"\n{'=' * 50}")
     print(f"Phase 3.1: 质量验证 (ch{start}-{end})")
     print("=" * 50)
 
+    results = []
     ok_count, fail_count = 0, 0
     for ch in range(start, end + 1):
         passed, report = validate_one(config, ch)
         print(report)
         if passed:
             ok_count += 1
+            results.append({'ch': ch, 'status': 'PASS'})
         else:
             fail_count += 1
+            results.append({'ch': ch, 'status': 'FAIL'})
 
     if fail_count > 0:
         print(f"\n[WARN] {fail_count}章不达标，建议手动修改或重写。")
     else:
         print(f"\n[OK] 全部通过")
 
-    return ok_count, fail_count
+    return results
 
 
 # ============================================================
@@ -929,10 +932,19 @@ def phase_trim(config, start, end):
     chapters_dir = f"{config['rewrites_dir']}/chapters"
     flash = {**config, "model": "deepseek-v4-flash", "reasoning_effort": "low"}
 
+    print(f"\n{'=' * 50}")
+    print(f"Phase 3.5: 字数精简 (ch{start}-{end})")
+    print("=" * 50)
+
     trimmed = 0
+    total_chapters = end - start + 1
+    done_chapters = 0
+    t_start = time.time()
+
     for ch in range(start, end + 1):
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         if not ch_file.exists():
+            done_chapters += 1
             continue
 
         text = ch_file.read_text(encoding='utf-8')
@@ -942,13 +954,15 @@ def phase_trim(config, start, end):
         target = count_source_chars(config, ch)
 
         if target == 0:
+            done_chapters += 1
             continue
 
         over = (chars - target) / target
         if over <= 0.2:
+            done_chapters += 1
             continue  # 在 ±20% 内，跳过
 
-        print(f"[TRIM] ch{ch:03d}: {chars}->{target} ({over:+.0%})")
+        print(f"  [TRIM] ch{ch:03d}: {chars}->{target} ({over:+.0%})")
         try:
             result = run_one(flash, "trim-chapter", ch)
             # 保留原标题
@@ -958,63 +972,585 @@ def phase_trim(config, start, end):
         except Exception as e:
             print(f"  [FAIL] trim ch{ch}: {e}")
 
+        # 更新进度
+        done_chapters += 1
+        if done_chapters % max(1, total_chapters // 20) == 0 or done_chapters == total_chapters:
+            elapsed = time.time() - t_start
+            speed = elapsed / done_chapters
+            eta = speed * (total_chapters - done_chapters)
+            pct = done_chapters * 100 // total_chapters
+            bar = '=' * (pct // 5) + '>' + ' ' * (20 - pct // 5)
+            print(f"  [{done_chapters}/{total_chapters}] [{bar}] {pct}% | {elapsed:.0f}s | ETA {eta:.0f}s")
+
     if trimmed:
-        print(f"[OK] 精简了 {trimmed} 章")
+        print(f"\n[OK] 精简了 {trimmed} 章")
     else:
-        print(f"所有章节在 ±20% 内，无需精简")
+        print(f"\n所有章节在 ±20% 内，无需精简")
     return trimmed
 
 
 # ============================================================
 # Phase 3.6: 跨章衔接修复
 # ============================================================
+# Phase 4.5: 审稿+自动修复
+# ============================================================
 
-def phase_continuity(config, start, end, workers=30):
-    """修复相邻章节的衔接问题（并行）。"""
+def review_one(config, ch):
+    """审稿单章，返回 (issues, fixed_text)。
+    
+    issues: list of dict, 每个包含 {type, severity, description, fixed}
+    """
+    import re
     chapters_dir = f"{config['rewrites_dir']}/chapters"
-    flash = {**config, "model": "deepseek-v4-flash", "reasoning_effort": "low"}
+    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+    
+    if not ch_file.exists():
+        return [], None
+    
+    text = ch_file.read_text(encoding='utf-8')
+    issues = []
+    fixed_text = text
+    
+    # 1. 检测视角混乱（第一人称→第三人称）
+    # 获取女主名
+    concept_path = Path(config['rewrites_dir']) / 'concept.md'
+    female_name = '宋知渺'  # 默认值
+    if concept_path.exists():
+        concept_text = concept_path.read_text(encoding='utf-8')
+        name_match = re.search(r'女主[：:]\s*(\S+)', concept_text)
+        if name_match:
+            female_name = name_match.group(1)
+    
+    # 统计非引号内的"我"出现次数
+    def count_first_person_outside_quotes(text):
+        count = 0
+        in_quote = False
+        for char in text:
+            if char in '""「」':
+                in_quote = not in_quote
+            elif not in_quote and char == '我':
+                count += 1
+        return count
+    
+    first_person_count = count_first_person_outside_quotes(text)
+    
+    # 如果非引号内的"我"出现超过5次，视为视角混乱
+    if first_person_count > 5:
+        # 替换非引号内的"我"为女主名
+        result = []
+        in_quote = False
+        i = 0
+        while i < len(text):
+            char = text[i]
+            if char in '""「」':
+                in_quote = not in_quote
+                result.append(char)
+            elif not in_quote and char == '我':
+                # 检查是否是"我们""我家"等，如果是则不替换
+                next_char = text[i+1] if i+1 < len(text) else ''
+                if next_char in '们家的':
+                    result.append(char)
+                else:
+                    result.append(female_name)
+            else:
+                result.append(char)
+            i += 1
+        fixed_text = ''.join(result)
+        issues.append({
+            'type': 'viewpoint',
+            'severity': 'high',
+            'description': f'视角混乱：第一人称"我"出现{first_person_count}次，已替换为"{female_name}"',
+            'fixed': True
+        })
+    
+    # 2. 检测AI路标词/预告内容
+    ai_markers = [
+        r'本章定量锚点检测',
+        r'情绪关键词总数',
+        r'感官锚点密度',
+        r'对话字数比例',
+        r'章节总字数',
+        r'第\d+章预告[：:]',
+        r'【附[：:].*检测】',
+    ]
+    
+    for pattern in ai_markers:
+        matches = re.findall(pattern, fixed_text)
+        if matches:
+            # 删除包含AI路标词的行
+            lines = fixed_text.split('\n')
+            new_lines = [line for line in lines if not re.search(pattern, line)]
+            fixed_text = '\n'.join(new_lines)
+            issues.append({
+                'type': 'ai_marker',
+                'severity': 'medium',
+                'description': f'AI路标词：{matches[0]}',
+                'fixed': True
+            })
+    
+    # 3. 检测预告内容（章末的预告段落）
+    preview_pattern = r'第\d+章预告[：:].*?(?=\n\n|\Z)'
+    if re.search(preview_pattern, fixed_text, re.DOTALL):
+        fixed_text = re.sub(preview_pattern, '', fixed_text, flags=re.DOTALL)
+        issues.append({
+            'type': 'preview',
+            'severity': 'medium',
+            'description': '包含章节预告内容',
+            'fixed': True
+        })
+    
+    # 4. 检测重复段落（连续3行以上完全相同）
+    lines = fixed_text.split('\n')
+    duplicate_lines = []
+    for i in range(len(lines) - 3):
+        if lines[i] and lines[i] == lines[i+1] == lines[i+2]:
+            duplicate_lines.append(i)
+    if duplicate_lines:
+        # 删除重复行
+        new_lines = []
+        skip = set()
+        for idx in duplicate_lines:
+            for j in range(idx+1, min(idx+3, len(lines))):
+                skip.add(j)
+        for i, line in enumerate(lines):
+            if i not in skip:
+                new_lines.append(line)
+        fixed_text = '\n'.join(new_lines)
+        issues.append({
+            'type': 'duplicate',
+            'severity': 'low',
+            'description': f'检测到{len(duplicate_lines)}处重复段落',
+            'fixed': True
+        })
+    
+    # 清理多余空行
+    fixed_text = re.sub(r'\n{3,}', '\n\n', fixed_text)
+    
+    return issues, fixed_text
 
+
+def phase_review_and_fix(config, start, end, workers=10):
+    """审稿+自动修复：检测问题并自动修复低风险问题。"""
+    chapters_dir = f"{config['rewrites_dir']}/chapters"
+    
     print(f"\n{'=' * 50}")
-    print(f"Phase 3.6: 跨章衔接修复 (ch{start}-{end})")
+    print(f"Phase 4.5: 审稿+自动修复 (ch{start}-{end})")
     print("=" * 50)
+    
+    total_issues = 0
+    fixed_count = 0
+    total_chapters = end - start + 1
+    done_chapters = 0
+    t_start = time.time()
+    
+    for ch in range(start, end + 1):
+        issues, fixed_text = review_one(config, ch)
+        
+        if issues:
+            total_issues += len(issues)
+            fixed_count += 1
+            
+            # 保存修复后的文件
+            if fixed_text:
+                ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+                ch_file.write_text(fixed_text, encoding='utf-8')
+            
+            # 打印修复报告
+            for issue in issues:
+                status = "[FIXED]" if issue['fixed'] else "[WARN]"
+                print(f"  ch{ch:03d}: {status} {issue['description']}")
+        else:
+            print(f"  ch{ch:03d}: [OK]")
+        
+        # 更新进度
+        done_chapters += 1
+        if done_chapters % max(1, total_chapters // 20) == 0 or done_chapters == total_chapters:
+            elapsed = time.time() - t_start
+            speed = elapsed / done_chapters
+            eta = speed * (total_chapters - done_chapters)
+            pct = done_chapters * 100 // total_chapters
+            bar = '=' * (pct // 5) + '>' + ' ' * (20 - pct // 5)
+            print(f"  [{done_chapters}/{total_chapters}] [{bar}] {pct}% | {elapsed:.0f}s | ETA {eta:.0f}s")
+    
+    print(f"\n审稿完成：{fixed_count}章有问题，共{total_issues}处问题")
+    return total_issues, fixed_count
 
-    fixed = 0
-    # 只处理相邻对，从 start+1 开始（修下一章的开头）
-    pairs = [(ch - 1, ch) for ch in range(start + 1, end + 1)]
 
-    def fix_pair(prev_ch, curr_ch):
-        prev_file = Path(chapters_dir) / f"ch_{prev_ch:03d}.txt"
-        curr_file = Path(chapters_dir) / f"ch_{curr_ch:03d}.txt"
-        if not prev_file.exists() or not curr_file.exists():
-            return None
+# ============================================================
+# Phase 5: 编辑审稿+自动修改
+# ============================================================
 
+def phase_editor_review(config, start, end, batch_size=10, auto_fix=True):
+    """编辑审稿：每batch_size章生成一份审稿报告，评估故事质量。
+    
+    Args:
+        config: 配置
+        start: 起始章
+        end: 结束章
+        batch_size: 每批审稿章数
+        auto_fix: 是否根据审稿建议自动修复
+    """
+    import re
+    
+    rewrites_dir = config['rewrites_dir']
+    chapters_dir = f"{rewrites_dir}/chapters"
+    compare_dir = f"{rewrites_dir}/compare"
+    os.makedirs(compare_dir, exist_ok=True)
+    
+    # 使用配置中的模型进行审稿
+    review_config = {**config}
+    
+    print(f"\n{'=' * 50}")
+    print(f"Phase 5: 编辑审稿 (ch{start}-{end}, 每{batch_size}章)")
+    print("=" * 50)
+    
+    # 读取concept.md获取基本信息
+    concept_path = Path(rewrites_dir) / 'concept.md'
+    concept_text = ""
+    if concept_path.exists():
+        concept_text = concept_path.read_text(encoding='utf-8')
+    
+    all_reviews = []
+    
+    # 计算总批次数
+    total_batches = (end - start + batch_size) // batch_size
+    done_batches = 0
+    t_start = time.time()
+    
+    # 分批审稿
+    for batch_start in range(start, end + 1, batch_size):
+        batch_end = min(batch_start + batch_size - 1, end)
+        batch_num = (batch_start - start) // batch_size + 1
+        
+        # 合并本批章节内容
+        batch_content = []
+        for ch in range(batch_start, batch_end + 1):
+            ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+            if ch_file.exists():
+                content = ch_file.read_text(encoding='utf-8')
+                batch_content.append(content)
+        
+        if not batch_content:
+            print(f"  [SKIP] 第{batch_start}-{batch_end}章无内容")
+            done_batches += 1
+            continue
+        
+        # 合并内容，限制长度（避免上下文溢出）
+        merged = '\n\n---\n\n'.join(batch_content)
+        if len(merged) > 50000:  # 限制5万字
+            merged = merged[:50000] + '\n\n[内容截断...]'
+        
+        # 构建审稿prompt
+        review_prompt = f"""你是资深女频网文编辑，请从商业化角度审稿这篇小说。
+
+【小说设定】
+{concept_text[:2000]}
+
+【审稿内容】
+{merged}
+
+【审稿要求】
+1. 判断题材定位是否清晰
+2. 分析开篇是否有抓力
+3. 分析主角人设是否鲜明
+4. 分析剧情节奏是否流畅
+5. 分析感情线推进是否自然
+6. 指出最影响签约率的关键问题
+7. 给出具体修改建议（能直接落地）
+8. 按照"优点、问题、修改建议、签约潜力判断"输出
+9. 最后打分，满分100分
+
+【输出格式】
+## 一句话总结
+## 核心卖点
+## 最大优点
+## 主要问题（按严重程度排序）
+## 详细审稿意见
+## 修改建议（具体到章节和段落）
+## 签约潜力评分：XX/100
+"""
+        
+        # 调用API审稿
         try:
-            import re as re_c
-            result = run_one(flash, "continuity-fix", prev_ch)
-            # 安全校验：输出不得短于源文50%
-            target = count_source_chars(config, curr_ch)
-            result_chars = len(re_c.sub(r'\s', '', result))
-            if target > 0 and result_chars < target * 0.5:
-                print(f"  [SKIP] ch{prev_ch}->ch{curr_ch}: 输出过短({result_chars}字), 保留原章")
-                return None
-            # 保留原标题
-            orig_lines = curr_file.read_text(encoding='utf-8').strip().split('\n')
-            title = orig_lines[0] if orig_lines and orig_lines[0].startswith('第') else f"第{curr_ch}章"
-            curr_file.write_text(title + '\n\n' + result.strip(), encoding='utf-8')
-            return curr_ch
+            api_key = config.get("api_key") or os.environ.get("API_KEY")
+            api_url = get_api_url(config)
+            
+            response = requests.post(
+                api_url,
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": review_config.get("model", "deepseek-chat"),
+                    "messages": [
+                        {"role": "system", "content": "你是资深女频网文编辑，擅长从商业化角度审稿。"},
+                        {"role": "user", "content": review_prompt}
+                    ],
+                    "temperature": 0.7,
+                    "max_tokens": 4000
+                },
+                timeout=120
+            )
+            
+            if response.status_code == 200:
+                review_result = response.json()["choices"][0]["message"]["content"]
+                
+                # 保存审稿报告
+                review_file = Path(compare_dir) / f"审稿_{batch_start}-{batch_end}.md"
+                review_file.write_text(f"# 审稿报告：第{batch_start}-{batch_end}章\n\n{review_result}", encoding='utf-8')
+                
+                # 提取评分
+                score_match = re.search(r'(\d+)/100', review_result)
+                if score_match:
+                    score = int(score_match.group(1))
+                    all_reviews.append({
+                        'batch': f"{batch_start}-{batch_end}",
+                        'score': score,
+                        'content': review_result,
+                        'start': batch_start,
+                        'end': batch_end
+                    })
+                
+                # 如果启用自动修复，根据审稿建议进行修复
+                if auto_fix:
+                    fix_suggestions = extract_fix_suggestions(review_result)
+                    if fix_suggestions:
+                        print(f"\n  自动修复建议：")
+                        for suggestion in fix_suggestions[:3]:  # 只处理前3个建议
+                            print(f"    - {suggestion}")
+            else:
+                print(f"  [FAIL] API错误: {response.status_code}")
+                
         except Exception as e:
-            print(f"  [FAIL] ch{prev_ch}->ch{curr_ch}: {e}")
-            return None
+            print(f"  [FAIL] 审稿失败: {e}")
+        
+        # 更新进度
+        done_batches += 1
+        elapsed = time.time() - t_start
+        speed = elapsed / done_batches
+        eta = speed * (total_batches - done_batches)
+        pct = done_batches * 100 // total_batches
+        bar = '=' * (pct // 5) + '>' + ' ' * (20 - pct // 5)
+        print(f"  [{done_batches}/{total_batches}] [{bar}] {pct}% | {elapsed:.0f}s | ETA {eta:.0f}s")
+    
+    # 生成总结报告
+    if all_reviews:
+        summary_file = Path(compare_dir) / "审稿总结.md"
+        summary = "# 全书审稿总结\n\n"
+        summary += "| 章节 | 评分 |\n|------|------|\n"
+        for review in all_reviews:
+            summary += f"| 第{review['batch']}章 | {review['score']}/100 |\n"
+        
+        avg_score = sum(r['score'] for r in all_reviews) / len(all_reviews)
+        summary += f"\n## 平均评分：{avg_score:.1f}/100\n"
+        
+        summary_file.write_text(summary, encoding='utf-8')
+        print(f"\n  总结报告已保存: {summary_file.name}")
+        print(f"  平均评分：{avg_score:.1f}/100")
+    
+    return all_reviews
 
-    with ThreadPoolExecutor(max_workers=workers) as executor:
-        futures = {executor.submit(fix_pair, p, c): (p, c) for p, c in pairs}
-        for future in as_completed(futures):
-            r = future.result()
-            if r:
-                fixed += 1
 
-    print(f"[OK] 修复了 {fixed} 处衔接")
-    return fixed
+def extract_fix_suggestions(review_text):
+    """从审稿报告中提取修改建议。"""
+    import re
+    
+    suggestions = []
+    
+    # 查找"修改建议"部分（支持多种格式，包括全角括号）
+    # 使用更宽松的匹配，找到"修改建议"标题后，提取到下一个##标题或文件末尾
+    
+    # 首先找到"修改建议"的位置
+    idx = review_text.find('修改建议')
+    if idx < 0:
+        return suggestions
+    
+    # 从"修改建议"位置开始，提取到下一个##标题或文件末尾
+    remaining_text = review_text[idx:]
+    
+    # 找到下一个"##"标题的位置（不包括"###"）
+    next_section = re.search(r'\n##[^#]', remaining_text)
+    if next_section:
+        fix_section = remaining_text[:next_section.start()]
+    else:
+        fix_section = remaining_text
+    
+    # 提取每个建议块（以###开头的标题）
+    suggestion_blocks = re.split(r'(?=###)', fix_section)
+    
+    for block in suggestion_blocks:
+        block = block.strip()
+        if block.startswith('###'):
+            # 提取标题和内容
+            lines = block.split('\n')
+            if lines:
+                title = lines[0].strip()
+                # 提取关键内容
+                content_lines = []
+                for line in lines[1:]:
+                    line = line.strip()
+                    if line.startswith('**') or line.startswith('>'):
+                        content_lines.append(line)
+                
+                if content_lines:
+                    suggestions.append({
+                        'title': title,
+                        'content': '\n'.join(content_lines[:5])  # 只取前5行
+                    })
+    
+    return suggestions
+
+
+def apply_fix_rules(text, ch, female_name, suggestions):
+    """应用修复规则到文本。"""
+    import re
+    
+    # 1. 清理多余空行
+    text = re.sub(r'\n{3,}', '\n\n', text)
+    
+    # 2. 确保章节标题格式正确
+    lines = text.strip().split('\n')
+    if lines and not lines[0].startswith('第'):
+        # 如果第一行不是章节标题，添加标题
+        text = f"第{ch}章\n\n{text}"
+    
+    return text
+
+
+def phase_auto_fix(config, start, end, all_reviews):
+    """根据审稿建议自动修复章节（调用AI重写）。
+    
+    Args:
+        config: 配置
+        start: 起始章
+        end: 结束章
+        all_reviews: 审稿结果列表
+    """
+    import re
+    
+    rewrites_dir = config['rewrites_dir']
+    chapters_dir = f"{rewrites_dir}/chapters"
+    
+    print(f"\n{'=' * 50}")
+    print(f"Phase 6: 根据审稿建议自动修复 (ch{start}-{end})")
+    print("=" * 50)
+    
+    # 读取concept.md获取角色名和设定
+    concept_path = Path(rewrites_dir) / 'concept.md'
+    concept_text = ""
+    if concept_path.exists():
+        concept_text = concept_path.read_text(encoding='utf-8')
+    
+    fixed_count = 0
+    
+    # 计算总章节数
+    total_chapters = sum(review['end'] - review['start'] + 1 for review in all_reviews)
+    done_chapters = 0
+    t_start = time.time()
+    
+    for review in all_reviews:
+        batch_start = review['start']
+        batch_end = review['end']
+        review_content = review['content']
+        
+        # 直接使用完整的审稿结果作为修改建议
+        suggestions_text = review_content
+        
+        # 对本批每章进行修复
+        for ch in range(batch_start, batch_end + 1):
+            ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+            if not ch_file.exists():
+                done_chapters += 1
+                continue
+            
+            original_text = ch_file.read_text(encoding='utf-8')
+            orig_chars = len(original_text.replace('\n', '').replace(' ', ''))
+            
+            # 构建重写prompt
+            rewrite_prompt = f"""你是专业网文写手。请根据编辑审稿建议，修改以下章节内容。
+
+【小说设定】
+{concept_text[:1000]}
+
+【编辑审稿建议】
+{suggestions_text[:3000]}
+
+【原始章节路径】
+{ch_file}
+
+【原始章节内容】
+{original_text}
+
+【修改要求】
+1. 保持原有的故事框架和人物关系
+2. 根据编辑建议强化钩子、冲突、悬念
+3. 保持文风一致
+4. 字数必须控制在原文±10%以内（{int(orig_chars*0.9)}~{int(orig_chars*1.1)}字）
+5. 直接输出修改后的完整章节，不要解释
+
+【输出格式】
+第{ch}章 [章节标题]
+
+[修改后的完整正文]
+"""
+            
+            # 调用API重写
+            try:
+                api_key = config.get("api_key") or os.environ.get("API_KEY")
+                api_url = get_api_url(config)
+                
+                response = requests.post(
+                    api_url,
+                    headers={
+                        "Authorization": f"Bearer {api_key}",
+                        "Content-Type": "application/json"
+                    },
+                    json={
+                        "model": config.get("model", "deepseek-chat"),
+                        "messages": [
+                            {"role": "system", "content": "你是专业网文写手，擅长根据编辑建议修改章节。字数必须控制在原文±10%以内。"},
+                            {"role": "user", "content": rewrite_prompt}
+                        ],
+                        "temperature": 0.8,
+                        "max_tokens": 8000
+                    },
+                    timeout=180
+                )
+                
+                if response.status_code == 200:
+                    new_text = response.json()["choices"][0]["message"]["content"]
+                    
+                    # 验证输出质量
+                    new_chars = len(new_text.replace('\n', '').replace(' ', ''))
+                    
+                    # 如果字数差异超过20%，跳过
+                    if orig_chars > 0 and abs(new_chars - orig_chars) / orig_chars > 0.2:
+                        print(f"    ch{ch:03d}: [SKIP] 字数差异过大 ({orig_chars}→{new_chars}, {abs(new_chars-orig_chars)/orig_chars:.0%})")
+                        done_chapters += 1
+                        continue
+                    
+                    # 保存修改后的章节
+                    ch_file.write_text(new_text, encoding='utf-8')
+                    fixed_count += 1
+                    print(f"    ch{ch:03d}: [FIXED] ({orig_chars}→{new_chars}字, {(new_chars-orig_chars)/orig_chars:+.0%})")
+                else:
+                    print(f"    ch{ch:03d}: [FAIL] API错误: {response.status_code}")
+                    
+            except Exception as e:
+                print(f"    ch{ch:03d}: [FAIL] {e}")
+            
+            # 更新进度
+            done_chapters += 1
+            elapsed = time.time() - t_start
+            speed = elapsed / done_chapters
+            eta = speed * (total_chapters - done_chapters)
+            pct = done_chapters * 100 // total_chapters
+            bar = '=' * (pct // 5) + '>' + ' ' * (20 - pct // 5)
+            print(f"  [{done_chapters}/{total_chapters}] [{bar}] {pct}% | {elapsed:.0f}s | ETA {eta:.0f}s")
+    
+    print(f"\n修复完成：{fixed_count}章被修改")
+    return fixed_count
 
 
 # ============================================================
@@ -1172,6 +1708,229 @@ def get_chapters_list(config, include_fanwai=False):
     return chapters
 
 
+def all_with_fix(config, start, end, workers=10, max_rounds=3):
+    """一键完成：生成→验证→审稿→修复→重新验证→输出报告。
+    
+    Args:
+        config: 配置
+        start: 起始章
+        end: 结束章
+        workers: 并行数
+        max_rounds: 最大修复轮数
+    """
+    print(f"\n{'=' * 60}")
+    print(f"一键完成流程 (ch{start}-{end}, 最多{max_rounds}轮修复)")
+    print("=" * 60)
+    
+    # 记录开始时间
+    import time
+    start_time = time.time()
+    
+    # 记录每轮结果
+    all_rounds = []
+    
+    # ============ 第1步：生成章节 ============
+    print(f"\n{'=' * 50}")
+    print(f"第1步：生成章节")
+    print("=" * 50)
+    
+    # 生成guides
+    phase_guides(config, start, end, workers)
+    
+    # 写章节（分批）
+    batch_size = 10
+    for batch_start in range(start, end + 1, batch_size):
+        batch_end = min(batch_start + batch_size - 1, end)
+        phase_write(config, batch_start, batch_end, workers)
+        phase_postfix(config, batch_start, batch_end)
+    
+    # ============ 第2步：验证+修复循环 ============
+    for round_num in range(1, max_rounds + 1):
+        print(f"\n{'=' * 50}")
+        print(f"第2步：第{round_num}轮验证+修复")
+        print("=" * 50)
+        
+        # 验证
+        validate_result = phase_validate(config, start, end)
+        
+        # 统计问题
+        pass_count = sum(1 for r in validate_result if r.get('status') == 'PASS')
+        fail_count = sum(1 for r in validate_result if r.get('status') == 'FAIL')
+        
+        round_info = {
+            'round': round_num,
+            'pass': pass_count,
+            'fail': fail_count,
+            'fixes': []
+        }
+        
+        print(f"\n验证结果：{pass_count}章通过，{fail_count}章有问题")
+        
+        # 如果全部通过，跳过修复
+        if fail_count == 0:
+            print("全部通过，无需修复！")
+            all_rounds.append(round_info)
+            break
+        
+        # 修复字数问题
+        print("\n修复字数问题...")
+        trim_result = phase_trim(config, start, end)
+        round_info['fixes'].append(f"字数修复：{trim_result}章")
+        
+        # 审稿+修复
+        print("\n审稿+修复...")
+        total_issues, fixed_count = phase_review_and_fix(config, start, end, workers)
+        round_info['fixes'].append(f"审稿修复：{fixed_count}章，{total_issues}处问题")
+        
+        # 编辑审稿+自动修复（只在第一轮运行）
+        if round_num == 1:
+            print("\n编辑审稿...")
+            all_reviews = phase_editor_review(config, start, end, batch_size=10, auto_fix=True)
+            if all_reviews:
+                auto_fixed = phase_auto_fix(config, start, end, all_reviews)
+                round_info['fixes'].append(f"编辑修复：{auto_fixed}章")
+        
+        all_rounds.append(round_info)
+        
+        # 如果通过率>=80%，停止修复
+        if pass_count / (pass_count + fail_count) >= 0.8:
+            print(f"\n通过率>=80%，停止修复")
+            break
+    
+    # ============ 第3步：生成报告 ============
+    print(f"\n{'=' * 50}")
+    print(f"第3步：生成完本报告")
+    print("=" * 50)
+    
+    # 最终验证
+    final_validate = phase_validate(config, start, end)
+    final_pass = sum(1 for r in final_validate if r.get('status') == 'PASS')
+    final_fail = sum(1 for r in final_validate if r.get('status') == 'FAIL')
+    
+    # 生成报告
+    report = generate_completion_report(config, start, end, all_rounds, final_pass, final_fail, start_time)
+    
+    # 导出TXT
+    print("\n导出完整TXT...")
+    try:
+        from merge_chapters import merge_chapters
+        chapters_dir = f"{config['rewrites_dir']}/chapters"
+        export_dir = f"{config['rewrites_dir']}/export"
+        export_file = f"{export_dir}/{config['book_name']}.txt"
+        os.makedirs(export_dir, exist_ok=True)
+        if merge_chapters(chapters_dir, export_file):
+            print(f"[OK] 已导出: {export_file}")
+    except Exception as e:
+        print(f"[WARN] 导出失败: {e}")
+    
+    # 打印总结
+    total_time = time.time() - start_time
+    print(f"\n{'=' * 60}")
+    print(f"一键完成！")
+    print("=" * 60)
+    print(f"总章节：{end - start + 1}章")
+    print(f"最终通过率：{final_pass}/{final_pass + final_fail} ({final_pass/(final_pass+final_fail)*100:.1f}%)")
+    print(f"修复轮数：{len(all_rounds)}轮")
+    print(f"总耗时：{total_time:.0f}秒")
+    print(f"\n报告位置：{config['rewrites_dir']}/完本报告.md")
+    
+    return report
+
+
+def generate_completion_report(config, start, end, all_rounds, final_pass, final_fail, start_time):
+    """生成完本报告。"""
+    import time
+    
+    rewrites_dir = config['rewrites_dir']
+    report_file = Path(rewrites_dir) / "完本报告.md"
+    
+    # 计算总字数
+    chapters_dir = Path(rewrites_dir) / "chapters"
+    total_chars = 0
+    chapter_count = 0
+    if chapters_dir.exists():
+        for ch_file in sorted(chapters_dir.glob("ch_*.txt")):
+            content = ch_file.read_text(encoding='utf-8')
+            lines = content.strip().split('\n')
+            if lines and lines[0].startswith('第'):
+                content = '\n'.join(lines[1:])
+            total_chars += len(content.replace('\n', '').replace(' ', ''))
+            chapter_count += 1
+    
+    # 生成报告
+    report = f"""# 完本报告
+
+## 项目信息
+
+| 项目 | 内容 |
+|------|------|
+| 书名 | {config.get('book_name', '未知')} |
+| 作者 | {config.get('author', '未知')} |
+| 总章节 | {chapter_count}章 |
+| 总字数 | {total_chars:,}字 |
+| 平均每章 | {total_chars//chapter_count if chapter_count else 0:,}字 |
+
+## 修复历史
+
+| 轮次 | 通过 | 未通过 | 修复操作 |
+|------|------|--------|----------|
+"""
+    
+    for round_info in all_rounds:
+        fixes = '、'.join(round_info.get('fixes', []))
+        report += f"| 第{round_info['round']}轮 | {round_info['pass']}章 | {round_info['fail']}章 | {fixes} |\n"
+    
+    report += f"""
+## 最终质量
+
+| 指标 | 数值 |
+|------|------|
+| 通过章节 | {final_pass}章 |
+| 未通过章节 | {final_fail}章 |
+| 通过率 | {final_pass/(final_pass+final_fail)*100:.1f}% |
+
+## 文件清单
+
+```
+{rewrites_dir}/
+├── concept.md
+├── guides/
+│   ├── plot_*.md
+│   └── style_*.md
+├── chapters/
+│   └── ch_*.txt
+├── compare/
+│   └── *.md
+├── export/
+│   └── {config.get('book_name', '书名')}.txt
+└── 完本报告.md
+```
+
+## 后续建议
+
+"""
+    
+    if final_fail > 0:
+        report += f"""仍有{final_fail}章未通过验证，建议：
+1. 手动检查未通过章节
+2. 运行 `python tools/rewrite_chapters.py --config {config.get('config_file', 'configs/xxx.json')} --phase review --start {start} --end {end}` 进行审稿修复
+"""
+    else:
+        report += """所有章节已通过验证！可以进行投稿。
+"""
+    
+    report += f"""
+---
+*报告生成时间：{time.strftime('%Y-%m-%d %H:%M:%S')}*
+"""
+    
+    # 保存报告
+    report_file.write_text(report, encoding='utf-8')
+    print(f"报告已保存：{report_file}")
+    
+    return report
+
+
 def main():
     parser = argparse.ArgumentParser(description="统一改写流水线")
     parser.add_argument("--config", required=True)
@@ -1181,9 +1940,11 @@ def main():
     parser.add_argument("--serial", action="store_true",
                         help="plot-guide 串行生成，保持章间连贯（质量模式）")
     parser.add_argument("--phase", default="all",
-                        help="all | open-book | style-analysis | guides | write | validate | trim | compare（外加: continuity）")
+                        help="all | all-with-fix | open-book | style-analysis | guides | write | validate | trim | compare | review | editor-review")
     parser.add_argument("--include-fanwai", action="store_true",
                         help="包含番外章节（默认不包含）")
+    parser.add_argument("--max-fix-rounds", type=int, default=3,
+                        help="最大修复轮数（默认3轮）")
 
     args = parser.parse_args()
 
@@ -1257,11 +2018,41 @@ def main():
     if "all" in phases or "trim" in phases:
         phase_trim(config, args.start, args.end)
 
-    if "continuity" in phases:
-        phase_continuity(config, args.start, args.end, args.workers)
+    if "review" in phases:
+        phase_review_and_fix(config, args.start, args.end, args.workers)
+
+    if "editor-review" in phases:
+        all_reviews = phase_editor_review(config, args.start, args.end, batch_size=10, auto_fix=True)
+        # 自动修复
+        if all_reviews:
+            phase_auto_fix(config, args.start, args.end, all_reviews)
 
     if "all" in phases or "compare" in phases:
         phase_compare(config, args.start, args.end)
+    
+    # 自动运行审核（如果配置了review）
+    if "all" in phases or "review" in phases:
+        try:
+            from review_book import review_chapters, generate_report
+            print(f"\n{'=' * 50}")
+            print(f"Phase 5: 审核 (ch{args.start}-{args.end})")
+            print("=" * 50)
+            
+            reviews = review_chapters(config, args.start, args.end, batch_size=10)
+            if reviews:
+                report = generate_report(reviews, config.get('book_name', ''), args.start, args.end)
+                review_dir = os.path.join(config.get("rewrites_dir", ""), "review")
+                os.makedirs(review_dir, exist_ok=True)
+                report_file = os.path.join(review_dir, f"review_{args.start}-{args.end}.md")
+                with open(report_file, 'w', encoding='utf-8') as f:
+                    f.write(report)
+                print(f"[OK] 审核报告 → {report_file}")
+        except Exception as e:
+            print(f"[WARN] 审核失败: {e}")
+
+    # all-with-fix：一键完成生成→验证→审稿→修复→重新验证→输出报告
+    if "all-with-fix" in phases:
+        all_with_fix(config, args.start, args.end, args.workers, args.max_fix_rounds)
 
     # 自动导出完整TXT
     if "all" in phases or "write" in phases:
@@ -1353,8 +2144,8 @@ def main():
         print(f"\n质量验证：")
         # 这里可以添加验证结果的统计
     
-    print(f"\n如需修复，可运行：")
-    print(f"python .agents/skills/story-engine/tools/rewrite_chapters.py --config {args.config} --phase continuity --start {args.start} --end {args.end}")
+    print(f"\n如需审稿修复，可运行：")
+    print(f"python .agents/skills/story-engine/tools/rewrite_chapters.py --config {args.config} --phase review --start {args.start} --end {args.end}")
 
 
 if __name__ == '__main__':
