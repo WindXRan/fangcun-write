@@ -161,7 +161,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     
     # style-guide注入源文指标（用脚本提取）
     if prompt_type == "style-guide" and chapter_num:
-        metrics = extract_source_metrics(config, chapter_num)
+        metrics = get_source_metrics(config, chapter_num)
         if metrics:
             replacements["源文指标"] = metrics
         else:
