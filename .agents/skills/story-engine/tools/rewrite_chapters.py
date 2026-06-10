@@ -29,7 +29,7 @@ story_tools_dir = str(Path(__file__).parent.parent.parent / 'story-tools')
 sys.path.insert(0, current_dir)
 sys.path.insert(0, story_tools_dir)
 
-from prompt_loader import load_prompt
+from prompt_loader import load_prompt, load_book_data, make_book_data_replacements
 
 # 共享模块
 from lib.constants import AI_MARKERS, CORRUPT_MARKERS, METAPHOR_PATTERN, AI_MARKER_PATTERN, DIRECT_EMOTION_PATTERN
@@ -460,23 +460,6 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         else:
             replacements["源文指标"] = "（提取失败，请手动统计）"
 
-    # plot-guide和write-chapter注入角色名（从settings/characters.md提取）
-    if prompt_type in ("plot-guide", "write-chapter") and chapter_num:
-        import re as re_char
-        char_path = Path(config["rewrites_dir"]) / "settings" / "characters.md"
-        # fallback: concept.md
-        if not char_path.exists():
-            char_path = Path(config["rewrites_dir"]) / "concept.md"
-        if char_path.exists():
-            char_text = char_path.read_text(encoding='utf-8')
-            # settings/characters.md 格式: "### 男主角：陆昭白" 或 "**男主**：陆昭白"
-            male = re_char.search(r'(?:男主角|男主)\s*[：:]\s*(\S+?)[\s）\)]', char_text)
-            female = re_char.search(r'(?:女主角|女主)\s*[：:]\s*(\S+?)[\s）\)]', char_text)
-            if male:
-                replacements["男主名"] = male.group(1)
-            if female:
-                replacements["女主名"] = female.group(1)
-
     max_tokens = 8192  # 不限制，靠重跑兜底
 
     # 合并额外替换变量（如串行模式的上一章摘要）
@@ -484,7 +467,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         replacements.update(extra_replacements)
 
     prompt_path = f"{prompts_dir}/{prompt_type}.md"
-    user_prompt = load_prompt(prompt_path, base_dir, replacements, mode="api")
+    user_prompt = load_prompt(prompt_path, base_dir, replacements, mode="api", rewrites_dir=config.get("rewrites_dir"))
 
     # 写章时使用每章独立的 style_guide（通过 prompt 中的【style_guide】标签引用）
     sys_prompt = system_prompt or SYSTEM_PROMPT
@@ -758,6 +741,120 @@ def phase_style_analysis(config):
     except Exception as e:
         print(f"[FAIL] 风格分析: {e}")
         return False
+
+
+# ============================================================
+# Phase 2.5: Guide 衔接修复（分批滑动窗口）
+# ============================================================
+
+def phase_guide_continuity_fix(config, start, end, batch_size=40):
+    """修复 plot_guide 的章间断裂。
+    
+    分批滑动窗口处理，保证跨章连贯：
+    - 首批覆盖 start ~ start+batch_size-1
+    - 后续每批步进 batch_size-1（前后各 1 章重叠，防止批间断裂）
+    """
+    api_key = config.get("api_key") or os.environ.get("API_KEY")
+    if not api_key:
+        print("[FAIL] 未配置 API_KEY")
+        return
+
+    guides_dir = Path(config["rewrites_dir"]) / "guides"
+    if not guides_dir.exists():
+        print("[FAIL] guides 目录不存在")
+        return
+
+    model = config.get("model", "deepseek-v4-flash")
+    api_url = get_api_url(config)
+
+    print(f"\n{'=' * 50}")
+    print(f"Phase 2.5: Guide 衔接修复 (ch{start}-{end}, batch={batch_size})")
+    print("=" * 50)
+
+    total = end - start + 1
+    # 滑动窗口计算批次数
+    if total <= batch_size:
+        batches = [(start, end)]
+    else:
+        batches = [(start, start + batch_size - 1)]
+        cur = start + batch_size - 1
+        while cur < end:
+            nxt = min(cur + batch_size - 1, end)
+            batches.append((cur, nxt))
+            cur = nxt
+
+    t0 = time.time()
+    for b_idx, (b_start, b_end) in enumerate(batches):
+        batch_chs = list(range(b_start, b_end + 1))
+        print(f"\n  批 {b_idx+1}/{len(batches)}: 第{b_start}-{b_end}章 ({len(batch_chs)}份guide)")
+
+        # 收集本批所有 plot_guide
+        guides = {}
+        for ch in batch_chs:
+            pf = guides_dir / f"plot_{ch}.md"
+            if pf.exists():
+                guides[str(ch)] = pf.read_text(encoding='utf-8')
+
+        if not guides:
+            print(f"    [SKIP] 无 plot_guide")
+            continue
+
+        # 组织 prompt
+        parts = ["# Guide 衔接修复\n",
+                 "以下为同一部小说的多章章纲（plot_guide），请检查相邻章之间的衔接问题。\n",
+                 "## 检查项\n",
+                 "1. **角色名一致性**：各章使用的角色名是否完全一致（注意：第一部可能有配角名变化是因为角色正常登场，只要不冲突即可）\n",
+                 "2. **人设一致性**：角色的身份、性格、行为模式在跨章时是否连贯\n",
+                 "3. **时间线连贯性**：相邻章的时间顺序是否合理，有无跳跃或回溯\n",
+                 "4. **场景连续性**：章与章之间的场景转换是否有交代\n",
+                 "5. **主线一致性**：各章是否在同一条主线/冲突线上推进，有无另起新线\n",
+                 "6. **钩子呼应**：上一章结尾的悬念/约定/未完成事件，下一章是否有回应\n",
+                 "\n## 修复要求\n",
+                 "- 对**有断裂**的章节，重写其角色列表和节拍映射表中的事件，使其与前后章连贯\n",
+                 "- 对**无断裂**的章节，保持原样不动\n",
+                 "- **必须保持各章节拍数量、结构功能、情绪曲线与源文的对应关系不变**（这是仿写骨架）\n",
+                 "- 只改情节事件、角色名、场景名，不改字数分配、冲突类型标签\n",
+                 "- 禁止引入新角色（除非已在本批其他 guide 中出现）\n",
+                 "\n## 各章章纲\n"]
+
+        for ch_str in sorted(guides.keys(), key=int):
+            parts.append(f"---\n### 第{ch_str}章\n\n{guides[ch_str]}\n")
+
+        parts.append("\n## 输出格式\n")
+        parts.append("对每章输出修复后的完整 guide，格式不变。仅对有问题的章做修改，**无问题的章原样输出**。\n")
+        parts.append("用分隔符 `===章: N===` 隔开各章输出。\n")
+
+        user_prompt = "".join(parts)
+
+        try:
+            result = call_api(api_key, model, user_prompt,
+                              reasoning_effort="low", max_tokens=16000,
+                              system_prompt="你是专业网文编辑，擅长检查小说章纲的衔接连贯性。只改有问题的部分，不要动没问题的地方。",
+                              api_url=api_url)
+
+            # 解析输出
+            import re as re_fix
+            fixed = 0
+            for m in re_fix.finditer(r'===章:\s*(\d+)===', result):
+                ch_str = m.group(1)
+                start_idx = m.end()
+                next_m = re_fix.search(r'===章:\s*\d+===', result[start_idx:])
+                content = result[start_idx:start_idx + next_m.start()] if next_m else result[start_idx:]
+                content = content.strip()
+
+                out_path = guides_dir / f"plot_{ch_str}.md"
+                old_content = out_path.read_text(encoding='utf-8') if out_path.exists() else ""
+                if content and content != old_content:
+                    out_path.write_text(content, encoding='utf-8')
+                    fixed += 1
+
+            elapsed = time.time() - t0
+            print(f"    [OK] 修复 {fixed}/{len(guides)} 份 guide ({elapsed:.0f}s)")
+
+        except Exception as e:
+            print(f"    [FAIL] 批 {b_idx+1}: {e}")
+
+    print(f"\n[OK] Guide 衔接修复完成 (总耗时 {time.time()-t0:.0f}s)")
 
 
 # ============================================================
@@ -1964,7 +2061,7 @@ def main():
     parser.add_argument("--serial", action="store_true",
                         help="plot-guide 串行生成，保持章间连贯（质量模式）")
     parser.add_argument("--phase", default="all",
-                        help="all | all-with-fix | unified | unified-check | unified-fix | full-review | open-book | guides | write | validate | trim | rewrite | polish | expand | compare | review | fix")
+                        help="all | all-with-fix | unified | unified-check | unified-fix | full-review | open-book | extract | guides | guide-fix | write | validate | trim | rewrite | polish | expand | compare | review | fix")
     parser.add_argument("--include-fanwai", action="store_true",
                         help="包含番外章节（默认不包含）")
     parser.add_argument("--max-fix-rounds", type=int, default=3,
@@ -2043,8 +2140,26 @@ def main():
     if "all" in phases or "open-book" in phases:
         phase_open_book(config, state_mgr=state_mgr)
 
+    # open-book 后自动提取 book_data.json（为后续阶段提供结构化设定）
+    if "all" in phases or "open-book" in phases or "extract" in phases:
+        import importlib
+        extract_mod = importlib.import_module("extract_book_data")
+        bd_data = extract_mod.extract(config)
+        if bd_data:
+            cv = bd_data.get("meta", {}).get("character_variables", {})
+            print(f"  [OK] book_data.json: {len(cv)} 变量"
+                  f" (男主={cv.get('男主名','?')}, 女主={cv.get('女主名','?')})")
+        else:
+            print("  [FAIL] book_data.json 提取失败，角色变量将不可用")
+            if "open-book" in phases:
+                sys.exit(1)
+
     if "all" in phases or "guides" in phases:
         phase_guides(config, args.start, args.end, args.workers, serial=args.serial, state_mgr=state_mgr)
+
+    # guide 衔接修复：在 guide 生成后、写章前，修复章间断裂
+    if "guide-fix" in phases:
+        phase_guide_continuity_fix(config, args.start, args.end, batch_size=40)
 
     if "all" in phases or "write" in phases:
         batch_size = 10

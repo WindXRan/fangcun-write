@@ -5,15 +5,17 @@
 - 同一套 prompt 文件，两种模式通用
 - Agent 模式：prompt 原样返回，Agent 自行 Read 文件
 - API 模式：自动解析 prompt 中的【标签】路径引用，将文件内容嵌入 prompt
+- book_data.json: 如果 rewrites_dir 中存在，自动从中提取 {变量} 用于替换
 
 文件引用规范（prompt 中使用）：
-  【标签】相对/路径/文件.md    →  输入文件（会被嵌入）
+  【标签】相对/路径/文件.md   →  输入文件（会被嵌入）
   【输出】路径/文件.md         →  输出文件（保留路径，不嵌入）
   【模板】路径/模板.md         →  模板文件（会被嵌入）
 """
 
 import re
 import os
+import json
 from pathlib import Path
 
 
@@ -58,6 +60,51 @@ def load_file_content(file_path):
         return f"[读取失败: {file_path} — {e}]"
 
 
+def load_book_data(rewrites_dir):
+    """加载 book_data.json，返回 dict 或 None。
+    
+    book_data.json 由 extract_book_data.py 从 settings/*.md 提取生成。
+    包含 meta.character_variables 等可直接用于 prompt 替换的数据。
+    """
+    if not rewrites_dir:
+        return None
+    path = Path(rewrites_dir) / "book_data.json"
+    if not path.exists():
+        return None
+    try:
+        return json.loads(path.read_text(encoding='utf-8'))
+    except (json.JSONDecodeError, OSError) as e:
+        print(f"  [WARN] book_data.json 读取失败: {e}")
+        return None
+
+
+def make_book_data_replacements(book_data):
+    """从 book_data.json 构建 {变量} → 值 的替换映射。
+    
+    优先级：
+    1. meta.character_variables（{男主名}, {女主名} 等）
+    2. 后续可扩展（书名、作者等）
+    """
+    replacements = {}
+    if not book_data:
+        return replacements
+    
+    # 角色变量（最高优先级）
+    char_vars = book_data.get("meta", {}).get("character_variables", {})
+    replacements.update(char_vars)
+    
+    # book_info 字段（低优先级，不覆盖已有值）
+    book_info = book_data.get("book_info", {})
+    if book_info.get("name") and "新书名" not in replacements:
+        replacements["新书名"] = book_info["name"]
+    if book_info.get("author") and "作者名" not in replacements:
+        replacements["作者名"] = book_info["author"]
+    if book_info.get("genre") and "题材" not in replacements:
+        replacements["题材"] = book_info["genre"]
+    
+    return replacements
+
+
 def embed_files(prompt_text, base_dir, extra_replacements=None):
     """
     将 prompt 中引用的文件内容嵌入。
@@ -100,7 +147,7 @@ def embed_files(prompt_text, base_dir, extra_replacements=None):
     return result
 
 
-def load_prompt(prompt_path, base_dir, replacements=None, mode="agent"):
+def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites_dir=None):
     """
     统一入口：加载 prompt，支持 agent/api 双模式。
 
@@ -109,6 +156,7 @@ def load_prompt(prompt_path, base_dir, replacements=None, mode="agent"):
         base_dir: 项目根目录
         replacements: {变量名: 值} 字典
         mode: "agent" | "api"
+        rewrites_dir: 仿写项目目录，用于自动加载 book_data.json 中的变量
 
     Returns:
         (system_prompt, user_prompt) 元组
@@ -123,14 +171,22 @@ def load_prompt(prompt_path, base_dir, replacements=None, mode="agent"):
 
     raw_text = prompt_file.read_text(encoding='utf-8')
 
+    # 合并 book_data.json 的变量（低优先级，不覆盖传入的 replacements）
+    merged = {}
+    if rewrites_dir:
+        book_data = load_book_data(rewrites_dir)
+        merged = make_book_data_replacements(book_data)
+    if replacements:
+        merged.update(replacements)
+
     if mode == "api":
         # API 模式：嵌入文件内容
-        user_prompt = embed_files(raw_text, base_dir, replacements)
+        user_prompt = embed_files(raw_text, base_dir, merged)
     else:
         # Agent 模式：只做变量替换
         user_prompt = raw_text
-        if replacements:
-            for key, value in replacements.items():
+        if merged:
+            for key, value in merged.items():
                 user_prompt = user_prompt.replace(f'{{{key}}}', str(value))
 
     # system prompt 由调用方提供，或从 prompt 中分离
