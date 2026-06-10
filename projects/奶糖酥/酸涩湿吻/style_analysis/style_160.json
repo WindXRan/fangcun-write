@@ -1,0 +1,35 @@
+{
+  "total_chars": 3346,
+  "avg_sentence_len": 21.3,
+  "sentence_len_std": 16.4,
+  "avg_paragraph_len": 27,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 94
+  },
+  "vocabulary_diversity": 0.241,
+  "top_patterns": [
+    "”我(3次)",
+    "陆蓁(3次)",
+    "“她(3次)",
+    "”她(3次)",
+    "后来(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(14处)"
+  ],
+  "simile_count": 10,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 4,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 95,
+    "问号": 3,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 160,
+  "file": "第160章.txt"
+}

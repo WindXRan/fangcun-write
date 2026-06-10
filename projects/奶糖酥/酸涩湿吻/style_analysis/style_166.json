@@ -1,0 +1,35 @@
+{
+  "total_chars": 2316,
+  "avg_sentence_len": 22.1,
+  "sentence_len_std": 16.7,
+  "avg_paragraph_len": 31,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 126
+  },
+  "vocabulary_diversity": 0.304,
+  "top_patterns": [
+    "原溯(11次)",
+    "戴教(5次)",
+    "【原(5次)",
+    "林皓(5次)",
+    "蒲雨(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 31,
+    "问号": 1,
+    "叹号": 1,
+    "引号": 0
+  },
+  "chapter": 166,
+  "file": "第166章.txt"
+}

@@ -1,0 +1,36 @@
+{
+  "total_chars": 2165,
+  "avg_sentence_len": 17.9,
+  "sentence_len_std": 14.0,
+  "avg_paragraph_len": 23,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 96
+  },
+  "vocabulary_diversity": 0.303,
+  "top_patterns": [
+    "原溯(12次)",
+    "“我(4次)",
+    "这是(3次)",
+    "第二(3次)",
+    "他想(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(3处)",
+    "短句节奏(10处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 60,
+    "问号": 2,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 149,
+  "file": "第149章.txt"
+}

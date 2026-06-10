@@ -1,0 +1,34 @@
+{
+  "total_chars": 1993,
+  "avg_sentence_len": 19.9,
+  "sentence_len_std": 13.2,
+  "avg_paragraph_len": 24,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 67
+  },
+  "vocabulary_diversity": 0.302,
+  "top_patterns": [
+    "原溯(13次)",
+    "蒲雨(6次)",
+    "”他(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(14处)"
+  ],
+  "simile_count": 8,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 63,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 46,
+  "file": "第46章.txt"
+}

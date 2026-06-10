@@ -1,6 +1,7 @@
 为《{新书名}》设计全书弧线，并初始化真相。
 
-【新书设定】projects/{作者名}/{源书名}/rewrites/{新书名}/concept.md
+【新书设定】projects/{作者名}/{源书名}/rewrites/{新书名}/settings/characters.md
+【剧情设定】projects/{作者名}/{源书名}/rewrites/{新书名}/settings/plot.md
 【源文】projects/{作者名}/{源书名}/_cache/chapters/第1章.txt
 用 Read 读前500行（offset=0, limit=500）了解开头，再读最后200行了解结局。不要逐章读。
 

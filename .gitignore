@@ -19,6 +19,8 @@ logs/
 # === 个人配置 ===
 config.yml
 eggy.json
+configs/*.json
+.env
 
 # === 临时文件 ===
 temp_*

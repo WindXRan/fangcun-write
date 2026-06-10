@@ -1,0 +1,33 @@
+{
+  "total_chars": 2573,
+  "avg_sentence_len": 18.2,
+  "sentence_len_std": 12.7,
+  "avg_paragraph_len": 21,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 92
+  },
+  "vocabulary_diversity": 0.284,
+  "top_patterns": [
+    "蒲雨(13次)",
+    "原溯(7次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(5处)",
+    "短句节奏(8处)"
+  ],
+  "simile_count": 12,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 6,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 89,
+    "问号": 2,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 79,
+  "file": "第79章.txt"
+}

@@ -1,0 +1,42 @@
+﻿{
+  "source_name": "第2章.txt",
+  "total_chars": 3634,
+  "total_words": 2457,
+  "total_sentences": 143,
+  "total_paragraphs": 166,
+  "sentence_length": {
+    "avg": 17.2,
+    "stddev": 11.4
+  },
+  "paragraph_length": {
+    "avg": 14.8,
+    "stddev": 10.9,
+    "min": 0,
+    "max": 50
+  },
+  "vocabulary_ttr": 0.218,
+  "dialogue_ratio": 0.158,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.462,
+    "long_ratio_gt60": 0.0
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.994,
+    "medium_50_200": 0.006,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.825
+  },
+  "top_opening_patterns": [
+    "” ...(27次)",
+    "洛野...(14次)",
+    "苏白...(8次)",
+    "学姐...(4次)",
+    "这个...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
+  "ai_tells": [
+    "高频副词(2处)"
+  ]
+}

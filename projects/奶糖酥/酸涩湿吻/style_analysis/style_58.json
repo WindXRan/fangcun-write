@@ -1,0 +1,33 @@
+{
+  "total_chars": 1470,
+  "avg_sentence_len": 20.1,
+  "sentence_len_std": 17.6,
+  "avg_paragraph_len": 30,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 94
+  },
+  "vocabulary_diversity": 0.342,
+  "top_patterns": [
+    "蒲雨(10次)",
+    "”许(4次)",
+    "”岁(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(12处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 9,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 25,
+    "问号": 2,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 58,
+  "file": "第58章.txt"
+}

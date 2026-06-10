@@ -1,0 +1,35 @@
+{
+  "total_chars": 1587,
+  "avg_sentence_len": 18.5,
+  "sentence_len_std": 12.3,
+  "avg_paragraph_len": 24,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 74
+  },
+  "vocabulary_diversity": 0.331,
+  "top_patterns": [
+    "蒲雨(10次)",
+    "原溯(8次)",
+    "”蒲(4次)",
+    "两人(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(6处)"
+  ],
+  "simile_count": 5,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 10,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 46,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 49,
+  "file": "第49章.txt"
+}

@@ -20,6 +20,34 @@ shell: powershell
 3. 毒舌版 — 尖锐真实、不鼓励不客气
 4. 平台编辑口吻版 — 模拟平台责编
 5. 万能公式 — 可组合的模块化审稿
+6. **衔接性审稿** — 专项检查章间衔接、情节因果、人物状态、时间线、设定一致性
+
+## 工具
+
+本 skill 自带以下脚本，负责长篇审稿的批处理、汇总和修复：
+
+| 脚本 | 用途 |
+|------|------|
+| `tools/full_fix.py` | 根据审稿报告并行修复章节 |
+| `tools/novel_review_rewrite.py` | 审稿→DAG规划→波次修复→验证闭环 |
+
+> 批量审稿已统一到 `story-engine/tools/unified_reviewer.py`（算法+LLM 并行，15章/批）。
+
+### CLI 用法
+
+```bash
+# 批量审稿（推荐，算法+LLM，默认 LLM 开启）
+python .agents/skills/story-engine/tools/unified_reviewer.py --config configs/xxx.json
+
+# 只用算法（不开 LLM）
+python .agents/skills/story-engine/tools/unified_reviewer.py --config configs/xxx.json --no-llm
+
+# 根据审稿报告修复
+python .agents/skills/story-review/tools/full_fix.py --config configs/xxx.json --start 1 --end 100
+
+# 完整审改流程（审稿→DAG规划→波次修复→验证）
+python .agents/skills/story-review/tools/novel_review_rewrite.py --config configs/xxx.json --start 1 --end 100 --max-rounds 3
+```
 
 ## 使用方式
 
@@ -30,7 +58,7 @@ shell: powershell
 ### 参数
 
 - **内容类型**：`正文` / `大纲` / `开篇`（默认正文）
-- **审稿风格**：`通用` / `女频` / `毒舌` / `编辑`（默认通用）
+- **审稿风格**：`通用` / `女频` / `毒舌` / `编辑` / `衔接`（默认通用）
 
 ### 示例
 
@@ -39,6 +67,8 @@ shell: powershell
 帮我审一下，女频版
 审稿这篇大纲，毒舌版
 review this chapter
+审一下衔接性
+帮我检查这几章的衔接
 ```
 
 ## 审稿模板

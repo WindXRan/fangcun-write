@@ -1,0 +1,33 @@
+{
+  "total_chars": 2418,
+  "avg_sentence_len": 25.1,
+  "sentence_len_std": 16.8,
+  "avg_paragraph_len": 31,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 85
+  },
+  "vocabulary_diversity": 0.275,
+  "top_patterns": [
+    "蒲雨(16次)",
+    "许岁(7次)",
+    "”许(6次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 9,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 40,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 5,
+  "file": "第5章.txt"
+}

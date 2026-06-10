@@ -123,7 +123,7 @@ def calc_similarity(src_text, new_text):
 
 def ai_analyze(src_text, new_text, book_name, chapter):
     """调用AI分析仿写质量"""
-    api_key = os.environ.get('API_KEY', 'sk-db692f2841ee47c1b2afec0a0cb016f5')
+    api_key = os.environ.get('API_KEY', '')
     api_base = os.environ.get('API_BASE_URL', 'https://api.deepseek.com')
     api_model = os.environ.get('API_MODEL', 'deepseek-chat')
     

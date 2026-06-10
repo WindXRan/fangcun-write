@@ -1,0 +1,2062 @@
+{
+  "timestamp": "2026-06-10 18:07:09",
+  "range": [
+    1,
+    101
+  ],
+  "results": {
+    "11": {
+      "ch": 11,
+      "status": "unchanged"
+    },
+    "2": {
+      "ch": 2,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1799,
+      "new_chars": 1814
+    },
+    "17": {
+      "ch": 17,
+      "status": "unchanged"
+    },
+    "7": {
+      "ch": 7,
+      "status": "unchanged"
+    },
+    "12": {
+      "ch": 12,
+      "status": "unchanged"
+    },
+    "5": {
+      "ch": 5,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2494,
+      "new_chars": 2481
+    },
+    "4": {
+      "ch": 4,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 3014,
+      "new_chars": 2455
+    },
+    "18": {
+      "ch": 18,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1504,
+      "new_chars": 2382
+    },
+    "6": {
+      "ch": 6,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1737,
+      "new_chars": 2581
+    },
+    "9": {
+      "ch": 9,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 3815,
+      "new_chars": 3781
+    },
+    "24": {
+      "ch": 24,
+      "status": "unchanged"
+    },
+    "28": {
+      "ch": 28,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2313,
+      "new_chars": 2314
+    },
+    "23": {
+      "ch": 23,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2573,
+      "new_chars": 2472
+    },
+    "20": {
+      "ch": 20,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 3032,
+      "new_chars": 2560
+    },
+    "32": {
+      "ch": 32,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1784,
+      "new_chars": 1766
+    },
+    "27": {
+      "ch": 27,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1922,
+      "new_chars": 2412
+    },
+    "34": {
+      "ch": 34,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2489,
+      "new_chars": 2442
+    },
+    "33": {
+      "ch": 33,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1711,
+      "new_chars": 2327
+    },
+    "30": {
+      "ch": 30,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1684,
+      "new_chars": 2481
+    },
+    "42": {
+      "ch": 42,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1911,
+      "new_chars": 1895
+    },
+    "40": {
+      "ch": 40,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2452,
+      "new_chars": 2402
+    },
+    "35": {
+      "ch": 35,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2690,
+      "new_chars": 2655
+    },
+    "31": {
+      "ch": 31,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1727,
+      "new_chars": 2891
+    },
+    "50": {
+      "ch": 50,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1713,
+      "new_chars": 1580
+    },
+    "46": {
+      "ch": 46,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1699,
+      "new_chars": 1765
+    },
+    "43": {
+      "ch": 43,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1542,
+      "new_chars": 1953
+    },
+    "55": {
+      "ch": 55,
+      "status": "unchanged"
+    },
+    "54": {
+      "ch": 54,
+      "status": "unchanged"
+    },
+    "39": {
+      "ch": 39,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2725,
+      "new_chars": 2241
+    },
+    "56": {
+      "ch": 56,
+      "status": "unchanged"
+    },
+    "41": {
+      "ch": 41,
+      "status": "unchanged"
+    },
+    "53": {
+      "ch": 53,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1723,
+      "new_chars": 2045
+    },
+    "58": {
+      "ch": 58,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2570,
+      "new_chars": 2531
+    },
+    "52": {
+      "ch": 52,
+      "status": "unchanged"
+    },
+    "61": {
+      "ch": 61,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1335,
+      "new_chars": 2111
+    },
+    "66": {
+      "ch": 66,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2600,
+      "new_chars": 2504
+    },
+    "64": {
+      "ch": 64,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1609,
+      "new_chars": 2267
+    },
+    "69": {
+      "ch": 69,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2601,
+      "new_chars": 2526
+    },
+    "75": {
+      "ch": 75,
+      "status": "unchanged"
+    },
+    "62": {
+      "ch": 62,
+      "status": "unchanged"
+    },
+    "71": {
+      "ch": 71,
+      "status": "unchanged"
+    },
+    "77": {
+      "ch": 77,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2571,
+      "new_chars": 2510
+    },
+    "78": {
+      "ch": 78,
+      "status": "unchanged"
+    },
+    "80": {
+      "ch": 80,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1530,
+      "new_chars": 1766
+    },
+    "83": {
+      "ch": 83,
+      "status": "unchanged"
+    },
+    "81": {
+      "ch": 81,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2483,
+      "new_chars": 2381
+    },
+    "85": {
+      "ch": 85,
+      "status": "unchanged"
+    },
+    "86": {
+      "ch": 86,
+      "status": "unchanged"
+    },
+    "89": {
+      "ch": 89,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1711,
+      "new_chars": 2161
+    },
+    "84": {
+      "ch": 84,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2490,
+      "new_chars": 2596
+    },
+    "87": {
+      "ch": 87,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 1078,
+      "new_chars": 2261
+    },
+    "94": {
+      "ch": 94,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2149,
+      "new_chars": 2678
+    },
+    "100": {
+      "ch": 100,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2917,
+      "new_chars": 2888
+    },
+    "99": {
+      "ch": 99,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2532,
+      "new_chars": 2798
+    },
+    "97": {
+      "ch": 97,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2642,
+      "new_chars": 2631
+    },
+    "70": {
+      "ch": 70,
+      "status": "unchanged"
+    },
+    "101": {
+      "ch": 101,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 3900,
+      "new_chars": 4255
+    },
+    "98": {
+      "ch": 98,
+      "status": "fixed",
+      "mechanical": 0,
+      "llm": true,
+      "orig_chars": 2391,
+      "new_chars": 2549
+    }
+  },
+  "merged_report": {
+    "3": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "1": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "4": {
+      "score": 70,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 5处 (源文1)",
+          "fix": "删除多余的路标词"
+        },
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 3014/2097 (+44%)",
+          "fix": "目标1887~2306字"
+        },
+        {
+          "type": "ai_marker",
+          "severity": "medium",
+          "desc": "多处使用'深吸一口气''深吸一口气'等路标词，如'唐柠深吸一口气''林柚深吸一口气'，显得机械重复。",
+          "fix": "替换为更自然的动作描写，如'唐柠缓了缓''林柚定了定神'。"
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "desc": "情绪转折略显生硬，如林柚从愤怒到冷静的过渡缺乏细腻铺垫。",
+          "fix": "增加内心独白或细微动作，如'她攥紧文件，指尖泛白，但声音依旧平稳'。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 体检报告线索在第4章和第5章重复提及，但第6章未延续，导致线索断裂。",
+          "fix": "在第6章中增加林柚对体检的思考或行动，如'她想起那份报告，手指微微颤抖'。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 林柚从明德离职的细节在第2章和第4章不一致：第2章说'明天我递辞呈'，第4章说'违约金的事还在走流程'，第5章又说'手续今天办完'，时间线混乱。",
+          "fix": "统一时间线，如设定第2章为提出辞职，第4章为走流程，第5章为办完手续。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 赵靖北在第4章中已知林柚的体检报告，但第5章中林柚的体检线索被重复提及，显得冗余。",
+          "fix": "在第5章中仅提及一次，或通过林柚的内心活动深化，避免重复。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 程屿的剽窃行为在第2章、第4章和第5章中反复描述，但缺乏新信息，导致读者疲劳。",
+          "fix": "在第5章后减少直接描述，改为通过他人反应或后果来体现。"
+        },
+        {
+          "type": "metaphor",
+          "severity": "low",
+          "desc": "比喻使用较少，但'每个字都像钉子一样钉在那人面前'略显刻意，与整体风格不搭。",
+          "fix": "改为更简洁的表达，如'语气冷硬'。"
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "desc": "章节结尾钩子较弱，'明天，等合同签完，一切才算正式开始'缺乏悬念。",
+          "fix": "强化悬念，如'她不知道，这份合同背后，还有更大的陷阱等着她'。"
+        }
+      ],
+      "sources": [
+        "algo",
+        "llm"
+      ]
+    },
+    "2": {
+      "score": 75,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1789/2105 (-15%)",
+          "fix": "目标1894~2315字"
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "大量使用'深吸一口气''深吸一口气'等路标词，如'林柚深吸一口气''唐柠深吸一口气'，出现3次以上。",
+          "fix": "替换为'她缓了口气''她定了定神'等。"
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "desc": "情绪描写过于直白，如'气得发抖''愤怒到极致'，缺乏含蓄。",
+          "fix": "通过动作或环境烘托，如'她手指攥紧，指甲掐进掌心'。"
+        },
+        {
+          "type": "hook",
+          "severity": "medium",
+          "desc": "章节结尾'现在，该换条路走了'略显平淡，缺乏悬念。",
+          "fix": "增加暗示，如'但她不知道，这条路通向的，是更深的深渊'。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 林柚从明德离职的细节在第2章和第4章不一致：第2章说'明天我递辞呈'，第4章说'违约金的事还在走流程'，第5章又说'手续今天办完'，时间线混乱。",
+          "fix": "统一时间线，如设定第2章为提出辞职，第4章为走流程，第5章为办完手续。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 程屿的剽窃行为在第2章、第4章和第5章中反复描述，但缺乏新信息，导致读者疲劳。",
+          "fix": "在第5章后减少直接描述，改为通过他人反应或后果来体现。"
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "desc": "对话节奏稍快，部分对话缺乏停顿，显得急促。",
+          "fix": "在关键对话间插入简短动作或环境描写，如'她顿了顿，看向窗外'。"
+        }
+      ],
+      "sources": [
+        "algo",
+        "llm"
+      ]
+    },
+    "5": {
+      "score": 70,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 2处 (源文0)",
+          "fix": "删除多余的路标词"
+        },
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2494/2114 (+18%)",
+          "fix": "目标1902~2325字"
+        },
+        {
+          "type": "ai_marker",
+          "severity": "medium",
+          "desc": "使用'深吸一口气'等路标词，如'唐柠吸了口气'。",
+          "fix": "替换为'唐柠缓了缓'。"
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "desc": "林柚的情绪转折略显突兀，从愤怒到冷静的过渡不够自然。",
+          "fix": "增加内心活动，如'她压下翻涌的怒意，声音却异常平静'。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 体检报告线索在第4章和第5章重复提及，但第6章未延续，导致线索断裂。",
+          "fix": "在第6章中增加林柚对体检的思考或行动，如'她想起那份报告，手指微微颤抖'。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 林柚从明德离职的细节在第2章和第4章不一致：第2章说'明天我递辞呈'，第4章说'违约金的事还在走流程'，第5章又说'手续今天办完'，时间线混乱。",
+          "fix": "统一时间线，如设定第2章为提出辞职，第4章为走流程，第5章为办完手续。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 赵靖北在第4章中已知林柚的体检报告，但第5章中林柚的体检线索被重复提及，显得冗余。",
+          "fix": "在第5章中仅提及一次，或通过林柚的内心活动深化，避免重复。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 程屿的剽窃行为在第2章、第4章和第5章中反复描述，但缺乏新信息，导致读者疲劳。",
+          "fix": "在第5章后减少直接描述，改为通过他人反应或后果来体现。"
+        },
+        {
+          "type": "metaphor",
+          "severity": "low",
+          "desc": "比喻使用较少，但'像在聊天气'略显刻意。",
+          "fix": "改为'语气随意'。"
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "desc": "章节结尾'该还了'略显直白，缺乏悬念。",
+          "fix": "改为'这只是第一步，她还有更长的路要走'。"
+        }
+      ],
+      "sources": [
+        "algo",
+        "llm"
+      ]
+    },
+    "6": {
+      "score": 60,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 2处 (源文0)",
+          "fix": "删除多余的路标词"
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "章节内容不完整，仅开头部分，且出现'赵靖北'重复，疑似AI生成中断。",
+          "fix": "补全章节内容，确保逻辑连贯。"
+        },
+        {
+          "type": "continuity",
+          "severity": "high",
+          "desc": "章节内容与第5章结尾衔接不自然，第5章结尾林柚离开酒会，第6章突然跳到赵靖北办公室。",
+          "fix": "增加过渡段落，如'第二天，林柚准时来到成峰资本'。"
+        },
+        {
+          "type": "plagiarism",
+          "severity": "medium",
+          "desc": "源文第4章为完全不同的故事（盛惜与秦钰），但本章内容与源文无关，需确认是否原创。",
+          "fix": "确保所有章节为原创，避免与源文混淆。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 体检报告线索在第4章和第5章重复提及，但第6章未延续，导致线索断裂。",
+          "fix": "在第6章中增加林柚对体检的思考或行动，如'她想起那份报告，手指微微颤抖'。"
+        }
+      ],
+      "sources": [
+        "algo",
+        "llm"
+      ]
+    },
+    "7": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 6处 (源文1)",
+          "fix": "删除多余的路标词"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "8": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "9": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 3815/3218 (+19%)",
+          "fix": "目标2896~3539字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "10": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "12": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 2处 (源文0)",
+          "fix": "删除多余的路标词"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "13": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "15": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "11": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 3处 (源文0)",
+          "fix": "删除多余的路标词"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "16": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "17": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 2处 (源文0)",
+          "fix": "删除多余的路标词"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "18": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1496/2096 (-29%)",
+          "fix": "目标1886~2305字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "19": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "14": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "20": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 3032/2333 (+30%)",
+          "fix": "目标2099~2566字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "22": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "24": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2960/2490 (+19%)",
+          "fix": "目标2241~2739字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "21": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "25": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "23": {
+      "score": 70,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 5处 (源文0)",
+          "fix": "删除多余的路标词"
+        },
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2573/2064 (+25%)",
+          "fix": "目标1857~2270字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "26": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "27": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1922/2326 (-17%)",
+          "fix": "目标2093~2558字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "30": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1675/2249 (-26%)",
+          "fix": "目标2024~2473字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "28": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 2处 (源文0)",
+          "fix": "删除多余的路标词"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "29": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "33": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1711/2302 (-26%)",
+          "fix": "目标2071~2532字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "31": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1719/2327 (-26%)",
+          "fix": "目标2094~2559字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "32": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 6处 (源文2)",
+          "fix": "删除多余的路标词"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "34": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2489/2138 (+16%)",
+          "fix": "目标1924~2351字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "35": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2690/2105 (+28%)",
+          "fix": "目标1894~2315字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "36": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "37": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "42": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 4处 (源文0)",
+          "fix": "删除多余的路标词"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "40": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2452/2090 (+17%)",
+          "fix": "目标1881~2299字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "38": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "41": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1782/2376 (-25%)",
+          "fix": "目标2138~2613字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "39": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2719/2282 (+19%)",
+          "fix": "目标2053~2510字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "43": {
+      "score": 72,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1542/2116 (-27%)",
+          "fix": "目标1904~2327字"
+        },
+        {
+          "type": "character",
+          "severity": "high",
+          "desc": "林柚人设前后不一致：前文她冷静理智，但本章中她偷拍程屿并主动联系赵靖北“告密”，与之前“我跟他没关系了”的洒脱矛盾，显得心机过重。",
+          "fix": "调整林柚的行为动机，让她更被动或更隐晦地反击，如将偷拍改为无意中看到，将发送消息改为犹豫后删除。"
+        },
+        {
+          "type": "ai_marker",
+          "severity": "medium",
+          "desc": "多处出现AI路标词，如“夜色降临，街灯亮起来”、“手机微微震动”、“屏幕亮了又暗”等，属于典型AI过渡句，缺乏自然衔接。",
+          "fix": "删除或替换这些路标词，改为更自然的动作或环境描写，如直接写“街灯亮了”或“手机震动了一下”即可。"
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "desc": "情绪描写过于直白，如“她的手在发抖。不是害怕，是从未有过的清醒”，直接点明情绪，缺乏含蓄和留白。",
+          "fix": "改为通过动作或细节暗示情绪，如“她按了发送键，指尖冰凉”或“她盯着屏幕，呼吸轻了”。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] AI路标词泛滥：四章中大量出现“她打开”、“她回复”、“她看了一眼”、“她端起杯子”等路标词，严重破坏自然感，属于典型AI生成痕迹。",
+          "fix": "全局删除或替换路标词，改为更简洁的动作描写或直接叙述，如“她打开文件”改为“文件翻开”，“她回复‘好’”改为“她回了个‘好’”。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 情绪描写过于直白：四章中多处直接点明角色情绪（如“她忽然觉得很累”、“她心里升起一种奇怪的感觉”），缺乏含蓄和留白，属于AI常见问题。",
+          "fix": "全局改为通过动作、环境或细节暗示情绪，如“她闭上眼睛，肩膀塌下来”暗示疲惫，“她攥紧手机，指节发白”暗示紧张。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 林柚人设不一致：第43章她果断“清算”，第46章依赖赵靖北，第50章对程屿心软，第55章被动接受信息，缺乏统一的行为逻辑。",
+          "fix": "统一林柚的人设，让她在面对程屿时保持冷静理智，面对赵靖北时保持独立，面对朋友时保持主动。"
+        },
+        {
+          "type": "metaphor",
+          "severity": "low",
+          "desc": "比喻堆砌不明显，但“那通电话，比今天饭桌上任何一道菜都让人反胃”略显刻意，有AI痕迹。",
+          "fix": "简化比喻，如直接写“那通电话让他反胃”或删除。"
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "desc": "章节结尾钩子较弱，程屿打电话被赵靖北接听，冲突感不足。",
+          "fix": "增强结尾张力，如让程屿听到林柚和赵靖北的对话片段，或让电话那头传来暧昧声音。"
+        }
+      ],
+      "sources": [
+        "algo",
+        "llm"
+      ]
+    },
+    "44": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "45": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "46": {
+      "score": 75,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1690/2151 (-21%)",
+          "fix": "目标1935~2366字"
+        },
+        {
+          "type": "ai_marker",
+          "severity": "medium",
+          "desc": "多处AI路标词，如“手机屏幕的光映在她脸上”、“她深吸一口气”、“她洗了个澡，躺在床上刷手机”等，属于典型AI过渡句。",
+          "fix": "删除或替换这些路标词，改为更自然的动作或环境描写，如直接写“她盯着手机”或“她洗完澡躺下”。"
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "desc": "情绪描写过于直白，如“她忽然觉得很累”、“但她不能认输”、“她心里升起一种奇怪的感觉”，直接点明情绪，缺乏含蓄。",
+          "fix": "改为通过动作或细节暗示情绪，如“她闭上眼睛，肩膀塌下来”或“她攥紧手机，指节发白”。"
+        },
+        {
+          "type": "character",
+          "severity": "medium",
+          "desc": "林柚人设略显单薄：她面对程屿的阴招时，反应过于依赖赵靖北（接受律师费、资金支持），缺乏独立解决问题的主动性。",
+          "fix": "增加林柚自己的应对策略，如她主动联系其他投资人，或利用自己的行业人脉反击，而不是完全依赖赵靖北。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] AI路标词泛滥：四章中大量出现“她打开”、“她回复”、“她看了一眼”、“她端起杯子”等路标词，严重破坏自然感，属于典型AI生成痕迹。",
+          "fix": "全局删除或替换路标词，改为更简洁的动作描写或直接叙述，如“她打开文件”改为“文件翻开”，“她回复‘好’”改为“她回了个‘好’”。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 情绪描写过于直白：四章中多处直接点明角色情绪（如“她忽然觉得很累”、“她心里升起一种奇怪的感觉”），缺乏含蓄和留白，属于AI常见问题。",
+          "fix": "全局改为通过动作、环境或细节暗示情绪，如“她闭上眼睛，肩膀塌下来”暗示疲惫，“她攥紧手机，指节发白”暗示紧张。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 林柚人设不一致：第43章她果断“清算”，第46章依赖赵靖北，第50章对程屿心软，第55章被动接受信息，缺乏统一的行为逻辑。",
+          "fix": "统一林柚的人设，让她在面对程屿时保持冷静理智，面对赵靖北时保持独立，面对朋友时保持主动。"
+        },
+        {
+          "type": "continuity",
+          "severity": "low",
+          "desc": "唐柠发消息的节奏略显突兀：她突然提到孟婉宁去医院，与上一章林柚和赵靖北的互动衔接不够自然。",
+          "fix": "在唐柠发消息前加一句过渡，如“林柚刚放下手机，唐柠的消息又弹了出来”。"
+        }
+      ],
+      "sources": [
+        "algo",
+        "llm"
+      ]
+    },
+    "50": {
+      "score": 70,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1713/2084 (-18%)",
+          "fix": "目标1875~2292字"
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "大量AI路标词，如“她打开”、“她回复”、“她看了一眼”、“她低头给唐柠发消息”、“她赶紧又夹了一筷子肉”等，几乎每句都有，严重破坏自然感。",
+          "fix": "删除或替换大部分路标词，改为更简洁的动作描写，如直接写“她打开文件”、“她回复‘好’”、“她看了一眼时间”等。"
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "desc": "程屿和孟婉宁的对话与源文第43章中姜霖和袁月的对话高度雷同：都是男方质问女方抄袭/能力不足，女方撒娇求开后门，男方拒绝。台词结构、情绪走向几乎一致。",
+          "fix": "重写程屿和孟婉宁的对话，改变冲突焦点，如让孟婉宁用其他方式施压（如利用程屿的愧疚感），或让程屿的拒绝更果断，避免与源文雷同。"
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "desc": "情绪描写过于直白，如“她发现自己竟然有点心软”、“但很快清醒过来——心软是病，得治”，直接点明内心活动，缺乏含蓄。",
+          "fix": "改为通过动作或细节暗示情绪，如“她脚步顿了顿，又加快”或“她咬住嘴唇，别开脸”。"
+        },
+        {
+          "type": "character",
+          "severity": "medium",
+          "desc": "林柚人设略显矛盾：她嘴上说“心软是病，得治”，但行动上仍对程屿心软（从后视镜看他），且对赵靖北的暧昧态度模糊（“吃肉吃肉”逃避话题），显得不够坚定。",
+          "fix": "统一林柚的内心和行动，如让她彻底无视程屿，或对赵靖北的暧昧明确拒绝。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] AI路标词泛滥：四章中大量出现“她打开”、“她回复”、“她看了一眼”、“她端起杯子”等路标词，严重破坏自然感，属于典型AI生成痕迹。",
+          "fix": "全局删除或替换路标词，改为更简洁的动作描写或直接叙述，如“她打开文件”改为“文件翻开”，“她回复‘好’”改为“她回了个‘好’”。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 情绪描写过于直白：四章中多处直接点明角色情绪（如“她忽然觉得很累”、“她心里升起一种奇怪的感觉”），缺乏含蓄和留白，属于AI常见问题。",
+          "fix": "全局改为通过动作、环境或细节暗示情绪，如“她闭上眼睛，肩膀塌下来”暗示疲惫，“她攥紧手机，指节发白”暗示紧张。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 台词与源文雷同：第50章程屿和孟婉宁的对话与源文第43章姜霖和袁月的对话高度雷同；第55章唐柠和林柚的聊天与源文第43章盛惜和秦钰的聊天结构一致。",
+          "fix": "重写雷同台词，改变冲突焦点或对话节奏，避免与源文结构一致。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 林柚人设不一致：第43章她果断“清算”，第46章依赖赵靖北，第50章对程屿心软，第55章被动接受信息，缺乏统一的行为逻辑。",
+          "fix": "统一林柚的人设，让她在面对程屿时保持冷静理智，面对赵靖北时保持独立，面对朋友时保持主动。"
+        }
+      ],
+      "sources": [
+        "algo",
+        "llm"
+      ]
+    },
+    "48": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "55": {
+      "score": 65,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2741/2060 (+33%)",
+          "fix": "目标1854~2266字"
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "大量AI路标词，如“她站在路边，低头看手机”、“她抬头，左右看了看”、“她端起杯子，喝了一口”、“她拿起手机，开始在屏幕上打字”等，几乎每句都有，严重破坏自然感。",
+          "fix": "删除或替换大部分路标词，改为更简洁的动作描写，如直接写“她站在路边看手机”、“她抬头环顾四周”、“她喝了一口水”等。"
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "desc": "本章与源文第43章结构高度雷同：都是女主和闺蜜在甜品店/会所聊天，闺蜜提到男主打听女主，女主反应平淡。对话节奏、情绪走向几乎一致。",
+          "fix": "重写本章结构，改变聊天场景或冲突焦点，如让唐柠直接带林柚去见盛瑶，或让盛瑶主动透露更多信息，避免与源文雷同。"
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "desc": "情绪描写过于直白，如“她感觉味道还是苦”、“她心里升起一种奇怪的感觉”，直接点明内心活动，缺乏含蓄。",
+          "fix": "改为通过动作或细节暗示情绪，如“她放下杯子，指尖摩挲杯沿”或“她攥紧手机，指节发白”。"
+        },
+        {
+          "type": "character",
+          "severity": "medium",
+          "desc": "林柚人设略显被动：她全程被唐柠和盛瑶牵着走，缺乏主动性，与之前“清算”的果断形象不符。",
+          "fix": "增加林柚的主动反应，如她主动追问盛瑶程屿的细节，或直接联系程屿质问。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] AI路标词泛滥：四章中大量出现“她打开”、“她回复”、“她看了一眼”、“她端起杯子”等路标词，严重破坏自然感，属于典型AI生成痕迹。",
+          "fix": "全局删除或替换路标词，改为更简洁的动作描写或直接叙述，如“她打开文件”改为“文件翻开”，“她回复‘好’”改为“她回了个‘好’”。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 情绪描写过于直白：四章中多处直接点明角色情绪（如“她忽然觉得很累”、“她心里升起一种奇怪的感觉”），缺乏含蓄和留白，属于AI常见问题。",
+          "fix": "全局改为通过动作、环境或细节暗示情绪，如“她闭上眼睛，肩膀塌下来”暗示疲惫，“她攥紧手机，指节发白”暗示紧张。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 台词与源文雷同：第50章程屿和孟婉宁的对话与源文第43章姜霖和袁月的对话高度雷同；第55章唐柠和林柚的聊天与源文第43章盛惜和秦钰的聊天结构一致。",
+          "fix": "重写雷同台词，改变冲突焦点或对话节奏，避免与源文结构一致。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 林柚人设不一致：第43章她果断“清算”，第46章依赖赵靖北，第50章对程屿心软，第55章被动接受信息，缺乏统一的行为逻辑。",
+          "fix": "统一林柚的人设，让她在面对程屿时保持冷静理智，面对赵靖北时保持独立，面对朋友时保持主动。"
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "desc": "章节结尾钩子较弱，盛瑶说程屿打听林柚，但未展开，缺乏悬念。",
+          "fix": "增强结尾张力，如让盛瑶透露程屿的更多异常行为，或让林柚收到程屿的消息。"
+        }
+      ],
+      "sources": [
+        "algo",
+        "llm"
+      ]
+    },
+    "51": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "54": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2842/2149 (+32%)",
+          "fix": "目标1934~2363字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "47": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "49": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "56": {
+      "score": 70,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 4处 (源文1)",
+          "fix": "删除多余的路标词"
+        },
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2743/2053 (+34%)",
+          "fix": "目标1847~2258字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "52": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1709/2145 (-20%)",
+          "fix": "目标1930~2359字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "53": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1723/2077 (-17%)",
+          "fix": "目标1869~2284字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "57": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "59": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "58": {
+      "score": 70,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 2处 (源文0)",
+          "fix": "删除多余的路标词"
+        },
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2562/2087 (+23%)",
+          "fix": "目标1878~2295字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "61": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1335/2086 (-36%)",
+          "fix": "目标1877~2294字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "60": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "67": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "63": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "64": {
+      "score": 70,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 5处 (源文0)",
+          "fix": "删除多余的路标词"
+        },
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1601/2053 (-22%)",
+          "fix": "目标1847~2258字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "66": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2600/2121 (+23%)",
+          "fix": "目标1908~2333字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "62": {
+      "score": 70,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 3处 (源文1)",
+          "fix": "删除多余的路标词"
+        },
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2940/2219 (+32%)",
+          "fix": "目标1997~2440字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "69": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2601/2062 (+26%)",
+          "fix": "目标1855~2268字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "65": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "68": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "71": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 3203/2083 (+54%)",
+          "fix": "目标1874~2291字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "70": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 2198/3173 (-31%)",
+          "fix": "目标2855~3490字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "75": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 3处 (源文1)",
+          "fix": "删除多余的路标词"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "72": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "73": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "74": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "76": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "77": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2563/2121 (+21%)",
+          "fix": "目标1908~2333字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "78": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 2处 (源文0)",
+          "fix": "删除多余的路标词"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "79": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "80": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1517/2043 (-26%)",
+          "fix": "目标1838~2247字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "81": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2473/2046 (+21%)",
+          "fix": "目标1841~2250字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "83": {
+      "score": 70,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 3处 (源文0)",
+          "fix": "删除多余的路标词"
+        },
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2351/2037 (+15%)",
+          "fix": "目标1833~2240字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "82": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "85": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 3处 (源文0)",
+          "fix": "删除多余的路标词"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "87": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1078/2057 (-48%)",
+          "fix": "目标1851~2262字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "86": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 3处 (源文0)",
+          "fix": "删除多余的路标词"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "89": {
+      "score": 72,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 1705/2046 (-17%)",
+          "fix": "目标1841~2250字"
+        },
+        {
+          "type": "ai_marker",
+          "severity": "medium",
+          "desc": "多处使用AI常见路标词，如'阳光透过落地窗洒进办公室'、'手指触到纸张边缘，还有些发麻'等，缺乏真实触感细节。",
+          "fix": "替换为更具体的感官描写，如'阳光在桌面投下斜长的光斑'、'纸张边缘的刺痛从指尖传到手腕'。"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 人设一致性：林柚在89章和84章中表现坚强果断，但在94章和99章中情绪波动较大，缺乏过渡，导致人设略显分裂。",
+          "fix": "在89章和84章中增加林柚脆弱时刻的细节，如'她关上门，背靠着门板，手指颤抖着。'；在94章和99章中强化她的成长线，如'她深吸一口气，告诉自己不能再退缩。'"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 剧情连贯性：89章提到林柚签约后第二天，84章回忆发现证据，94章深夜加班，时间线跳跃较大，缺乏过渡。",
+          "fix": "在89章和84章之间增加过渡章节，如林柚整理文件时发现旧物；在84章和94章之间明确时间，如'一周后，林柚在成峰资本加班。'"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 风格统一性：89章和84章偏内敛细腻，94章和99章偏直白对话，风格不统一。",
+          "fix": "统一为内敛细腻风格，减少直白对话，增加心理描写和动作细节，如94章中林柚吃馄饨时'她低头喝汤，热气模糊了视线，也模糊了心里的不安。'"
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "desc": "情绪转折略显突兀，林柚从'手指不听使唤'到'嘴角扯了一下'的转变缺乏过渡。",
+          "fix": "增加内心独白或动作细节，如'她盯着纸张上的数字，视线模糊又清晰，反复几次'。"
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "desc": "章节结尾'清醒了很多'作为钩子力度不足，缺乏悬念。",
+          "fix": "强化结尾，如'她拿起手机，给赵靖北发了一条消息：明天见。'"
+        }
+      ],
+      "sources": [
+        "algo",
+        "llm"
+      ]
+    },
+    "84": {
+      "score": 78,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2490/2098 (+19%)",
+          "fix": "目标1888~2307字"
+        },
+        {
+          "type": "ai_marker",
+          "severity": "medium",
+          "desc": "开头'周末的阳光从窗帘缝隙漏进来'为AI常见场景描写，缺乏独特性。",
+          "fix": "改为'周末的午后，阳光像碎金一样洒在地板上，林柚蹲在书桌前，膝盖压得发麻。'"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 人设一致性：林柚在89章和84章中表现坚强果断，但在94章和99章中情绪波动较大，缺乏过渡，导致人设略显分裂。",
+          "fix": "在89章和84章中增加林柚脆弱时刻的细节，如'她关上门，背靠着门板，手指颤抖着。'；在94章和99章中强化她的成长线，如'她深吸一口气，告诉自己不能再退缩。'"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 剧情连贯性：89章提到林柚签约后第二天，84章回忆发现证据，94章深夜加班，时间线跳跃较大，缺乏过渡。",
+          "fix": "在89章和84章之间增加过渡章节，如林柚整理文件时发现旧物；在84章和94章之间明确时间，如'一周后，林柚在成峰资本加班。'"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 风格统一性：89章和84章偏内敛细腻，94章和99章偏直白对话，风格不统一。",
+          "fix": "统一为内敛细腻风格，减少直白对话，增加心理描写和动作细节，如94章中林柚吃馄饨时'她低头喝汤，热气模糊了视线，也模糊了心里的不安。'"
+        },
+        {
+          "type": "metaphor",
+          "severity": "low",
+          "desc": "比喻'眼眶先是热了，然后慢慢凉下来'略显刻意，可更自然。",
+          "fix": "改为'眼眶发热，她眨了眨眼，视线重新清晰。'"
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "desc": "发现证据后情绪爆发点稍弱，林柚的反应偏内敛，缺乏张力。",
+          "fix": "增加肢体动作，如'她猛地合上文件夹，纸张在手中发出脆响。'"
+        }
+      ],
+      "sources": [
+        "algo",
+        "llm"
+      ]
+    },
+    "88": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "90": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "91": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "92": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "93": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "94": {
+      "score": 75,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 2149/2570 (-16%)",
+          "fix": "目标2313~2827字"
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "多处AI路标词：'深夜二十三点'、'馄饨的热气扑在脸上'、'路灯一盏盏掠过'，缺乏真实生活质感。",
+          "fix": "改为'深夜十一点，办公室只剩键盘声'、'馄饨的热气模糊了视线'、'路灯的光在车内明灭交替'。"
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "desc": "林柚与赵靖北的对话中，情绪转变过快，从'苦笑'到'耳根发烫'缺乏铺垫。",
+          "fix": "增加内心活动，如'她低头喝汤，心跳却漏了一拍。'"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 人设一致性：林柚在89章和84章中表现坚强果断，但在94章和99章中情绪波动较大，缺乏过渡，导致人设略显分裂。",
+          "fix": "在89章和84章中增加林柚脆弱时刻的细节，如'她关上门，背靠着门板，手指颤抖着。'；在94章和99章中强化她的成长线，如'她深吸一口气，告诉自己不能再退缩。'"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 剧情连贯性：89章提到林柚签约后第二天，84章回忆发现证据，94章深夜加班，时间线跳跃较大，缺乏过渡。",
+          "fix": "在89章和84章之间增加过渡章节，如林柚整理文件时发现旧物；在84章和94章之间明确时间，如'一周后，林柚在成峰资本加班。'"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 风格统一性：89章和84章偏内敛细腻，94章和99章偏直白对话，风格不统一。",
+          "fix": "统一为内敛细腻风格，减少直白对话，增加心理描写和动作细节，如94章中林柚吃馄饨时'她低头喝汤，热气模糊了视线，也模糊了心里的不安。'"
+        },
+        {
+          "type": "plagiarism",
+          "severity": "low",
+          "desc": "台词'你的事，现在都关我的事'重复两次，略显刻意。",
+          "fix": "第二次出现时改为'你的事，我管定了。'"
+        }
+      ],
+      "sources": [
+        "algo",
+        "llm"
+      ]
+    },
+    "99": {
+      "score": 70,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 2处 (源文0)",
+          "fix": "删除多余的路标词"
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "开头'林柚下班回到公寓楼下'为AI常见场景，缺乏细节；母亲'穿一件洗得发白的棉外套'过于模板化。",
+          "fix": "改为'林柚拖着疲惫的脚步回到公寓，远远看见单元门口一个佝偻的身影——母亲穿着那件洗得发白的棉外套，手里拎着塑料袋。'"
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "desc": "母女对话中，林柚的质问过于直白，缺乏情感递进。",
+          "fix": "增加母亲的反应细节，如'母亲的手指攥得更紧了，指节泛白，嘴唇哆嗦着。'"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 人设一致性：林柚在89章和84章中表现坚强果断，但在94章和99章中情绪波动较大，缺乏过渡，导致人设略显分裂。",
+          "fix": "在89章和84章中增加林柚脆弱时刻的细节，如'她关上门，背靠着门板，手指颤抖着。'；在94章和99章中强化她的成长线，如'她深吸一口气，告诉自己不能再退缩。'"
+        },
+        {
+          "type": "continuity",
+          "severity": "medium",
+          "desc": "[跨章] 风格统一性：89章和84章偏内敛细腻，94章和99章偏直白对话，风格不统一。",
+          "fix": "统一为内敛细腻风格，减少直白对话，增加心理描写和动作细节，如94章中林柚吃馄饨时'她低头喝汤，热气模糊了视线，也模糊了心里的不安。'"
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "desc": "章节结尾'为我活'被截断，但缺乏悬念或情绪高潮。",
+          "fix": "补充完整句子，如'为我活了一辈子，可您自己呢？'并增加林柚的动作，如'她握住母亲的手，眼泪无声滑落。'"
+        }
+      ],
+      "sources": [
+        "algo",
+        "llm"
+      ]
+    },
+    "96": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "100": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2917/2343 (+24%)",
+          "fix": "目标2108~2577字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "95": {
+      "score": 100,
+      "issues": [],
+      "sources": [
+        "algo"
+      ]
+    },
+    "98": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "desc": "AI路标词 2处 (源文0)",
+          "fix": "删除多余的路标词"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "97": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数超标 2642/2192 (+21%)",
+          "fix": "目标1972~2411字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    },
+    "101": {
+      "score": 85,
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "desc": "字数不足 3900/4779 (-18%)",
+          "fix": "目标4301~5256字"
+        }
+      ],
+      "sources": [
+        "algo"
+      ]
+    }
+  }
+}

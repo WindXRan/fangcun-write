@@ -1,0 +1,33 @@
+{
+  "total_chars": 1955,
+  "avg_sentence_len": 19.3,
+  "sentence_len_std": 12.0,
+  "avg_paragraph_len": 25,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 81
+  },
+  "vocabulary_diversity": 0.286,
+  "top_patterns": [
+    "蒲雨(14次)",
+    "李素(6次)",
+    "”程(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 4,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 43,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 65,
+  "file": "第65章.txt"
+}

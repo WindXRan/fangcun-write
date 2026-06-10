@@ -1,0 +1,36 @@
+{
+  "total_chars": 2433,
+  "avg_sentence_len": 20.0,
+  "sentence_len_std": 14.2,
+  "avg_paragraph_len": 26,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 87
+  },
+  "vocabulary_diversity": 0.29,
+  "top_patterns": [
+    "蒲雨(15次)",
+    "原溯(5次)",
+    "”蒲(4次)",
+    "李素(3次)",
+    "“你(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(14处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 4,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 53,
+    "问号": 0,
+    "叹号": 1,
+    "引号": 0
+  },
+  "chapter": 71,
+  "file": "第71章.txt"
+}

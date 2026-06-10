@@ -2,7 +2,7 @@ import os, re, sys, glob, json
 from collections import Counter
 
 NOVEL_DB = 'projects'
-LEGACY_DB = 'novel-download-authors'  # 向后兼容旧目录
+LEGACY_DB = 'projects'  # 向后兼容旧目录
 
 # ── 风格指纹分析 ──────────────────────
 

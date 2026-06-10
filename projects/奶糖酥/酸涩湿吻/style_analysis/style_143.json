@@ -1,0 +1,36 @@
+{
+  "total_chars": 2328,
+  "avg_sentence_len": 17.5,
+  "sentence_len_std": 14.1,
+  "avg_paragraph_len": 25,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 123
+  },
+  "vocabulary_diversity": 0.272,
+  "top_patterns": [
+    "蒲雨(9次)",
+    "原溯(7次)",
+    "宋津(6次)",
+    "岁岁(4次)",
+    "“蒲(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(3处)",
+    "短句节奏(15处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 6,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 57,
+    "问号": 0,
+    "叹号": 1,
+    "引号": 0
+  },
+  "chapter": 143,
+  "file": "第143章.txt"
+}

@@ -1,0 +1,36 @@
+{
+  "total_chars": 4371,
+  "avg_sentence_len": 19.9,
+  "sentence_len_std": 12.6,
+  "avg_paragraph_len": 26,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 108
+  },
+  "vocabulary_diversity": 0.21,
+  "top_patterns": [
+    "蒲雨(23次)",
+    "原溯(10次)",
+    "宋津(7次)",
+    "”许(6次)",
+    "”蒲(5次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(3处)",
+    "短句节奏(16处)"
+  ],
+  "simile_count": 8,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 110,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 47,
+  "file": "第47章.txt"
+}

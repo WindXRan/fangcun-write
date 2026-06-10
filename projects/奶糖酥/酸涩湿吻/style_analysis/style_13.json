@@ -1,0 +1,33 @@
+{
+  "total_chars": 2092,
+  "avg_sentence_len": 16.5,
+  "sentence_len_std": 9.8,
+  "avg_paragraph_len": 19,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 61
+  },
+  "vocabulary_diversity": 0.304,
+  "top_patterns": [
+    "蒲雨(15次)",
+    "原溯(10次)",
+    "许岁(7次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(10处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 4,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 79,
+    "问号": 2,
+    "叹号": 1,
+    "引号": 0
+  },
+  "chapter": 13,
+  "file": "第13章.txt"
+}

@@ -1,0 +1,35 @@
+{
+  "total_chars": 1877,
+  "avg_sentence_len": 21.4,
+  "sentence_len_std": 14.4,
+  "avg_paragraph_len": 28,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 81
+  },
+  "vocabulary_diversity": 0.299,
+  "top_patterns": [
+    "蒲雨(8次)",
+    "许岁(5次)",
+    "王老(4次)",
+    "“我(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(7处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 32,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 14,
+  "file": "第14章.txt"
+}

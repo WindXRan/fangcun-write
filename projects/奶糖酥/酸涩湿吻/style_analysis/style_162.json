@@ -1,0 +1,35 @@
+{
+  "total_chars": 3595,
+  "avg_sentence_len": 22.6,
+  "sentence_len_std": 17.4,
+  "avg_paragraph_len": 27,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 99
+  },
+  "vocabulary_diversity": 0.244,
+  "top_patterns": [
+    "原溯(28次)",
+    "蒲雨(22次)",
+    "导购(3次)",
+    "”蒲(3次)",
+    "”原(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(14处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 6,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 12,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 89,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 162,
+  "file": "第162章.txt"
+}

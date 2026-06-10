@@ -1,0 +1,35 @@
+{
+  "total_chars": 2258,
+  "avg_sentence_len": 19.6,
+  "sentence_len_std": 11.7,
+  "avg_paragraph_len": 24,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 60
+  },
+  "vocabulary_diversity": 0.267,
+  "top_patterns": [
+    "蒲雨(18次)",
+    "原溯(13次)",
+    "”原(4次)",
+    "”他(3次)"
+  ],
+  "rhetorical_features": [
+    "排比(2处)",
+    "短句节奏(13处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 14,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 57,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 43,
+  "file": "第43章.txt"
+}

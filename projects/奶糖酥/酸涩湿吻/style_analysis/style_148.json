@@ -1,0 +1,35 @@
+{
+  "total_chars": 2773,
+  "avg_sentence_len": 21.5,
+  "sentence_len_std": 14.0,
+  "avg_paragraph_len": 25,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 79
+  },
+  "vocabulary_diversity": 0.297,
+  "top_patterns": [
+    "原溯(10次)",
+    "蒲雨(4次)",
+    "【师(4次)",
+    "那些(3次)",
+    "群里(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 78,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 148,
+  "file": "第148章.txt"
+}

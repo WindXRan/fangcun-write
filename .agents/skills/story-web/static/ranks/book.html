@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阅读器</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/nav.js"></script>
+    <script src="js/export.js"></script>
+    <style>
+        .app-container { display: flex; height: 100vh; }
+        
+        .sidebar {
+            width: 300px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        
+        .sidebar-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .sidebar-header a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .sidebar-header h3 {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        
+        .sidebar-header select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+        }
+        
+        .version-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface-soft);
+        }
+        
+        .version-tab {
+            flex: 1;
+            padding: 10px 8px;
+            text-align: center;
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        
+        .version-tab:hover { background: var(--surface); }
+        .version-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+        
+        .chapter-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+        
+        .chapter-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-soft);
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+        
+        .chapter-item:hover { background: var(--accent-soft); }
+        .chapter-item.active { background: var(--accent-soft); border-left: 3px solid var(--accent); }
+        
+        .reader-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .reader-header {
+            background: var(--surface);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .reader-header h2 { font-size: 18px; flex: 1; }
+        
+        .reader-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .reader-controls button, .reader-controls select {
+            padding: 8px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .reader-controls button:hover {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+        }
+        
+        .reader-controls button.active {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: var(--border);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+        
+        .reader-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+            line-height: 1.8;
+            font-size: 18px;
+        }
+        
+        .reader-content p {
+            margin-bottom: 1em;
+            text-indent: 2em;
+        }
+        
+        .compare-container {
+            display: none;
+            flex: 1;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .compare-container.active { display: flex; }
+        
+        .compare-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-right: 1px solid var(--border);
+        }
+        
+        .compare-panel:last-child { border-right: none; }
+        
+        .panel-header {
+            padding: 10px 15px;
+            background: var(--surface-soft);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .panel-header strong { font-size: 14px; }
+        .panel-header span { font-size: 12px; color: var(--text-muted); }
+        
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        
+        .panel-content p { margin-bottom: 1em; text-indent: 2em; }
+        
+        .single-mode { display: flex; flex-direction: column; flex: 1; }
+        .single-mode.hidden { display: none; }
+        .empty-hint { text-align: center; padding: 40px; color: var(--text-muted); }
+        
+        .font-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .font-controls button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: var(--shadow-card);
+            transition: all 0.2s;
+        }
+        
+        .font-controls button:hover {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+        }
+        
+        .night-mode { background: #1a1a2e; color: #e0e0e0; }
+        .night-mode .sidebar { background: #16213e; border-color: #2a2a4a; }
+        .night-mode .reader-header { background: #16213e; border-color: #2a2a4a; }
+        .night-mode .reader-content { color: #e0e0e0; }
+        .night-mode .chapter-item { color: #ccc; border-color: #2a2a4a; }
+        .night-mode .chapter-item:hover { background: #1a1a3e; }
+        .night-mode .chapter-item.active { background: #0f3460; }
+        .night-mode .reader-controls button { background: #16213e; color: #ccc; border-color: #2a2a4a; }
+        .night-mode .font-controls button { background: #16213e; color: #ccc; border-color: #2a2a4a; }
+        .night-mode .version-tabs { background: #0f3460; border-color: #2a2a4a; }
+        .night-mode .version-tab { color: #888; }
+        .night-mode .version-tab.active { color: var(--accent); }
+    </style>
+</head>
+<body>
+    <nav class="top-nav" id="top-nav"></nav>
+    
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <a href="library.html">← 返回书库</a>
+                <h3 id="bookTitle">选择书籍</h3>
+                <select id="bookSelect" onchange="loadBook()">
+                    <option value="">选择书籍...</option>
+                </select>
+            </div>
+            
+            <div class="version-tabs" id="versionTabs" style="display: none;"></div>
+            
+            <div class="chapter-list" id="chapterList"></div>
+        </div>
+        
+        <div class="reader-main">
+            <div class="reader-header">
+                <h2 id="currentChapter">请选择章节</h2>
+                <div class="reader-controls">
+                    <button id="modeBtn" onclick="toggleMode()">对比模式</button>
+                    <select id="compareBookSelect" style="display: none;" onchange="loadCompareBook()">
+                        <option value="">选择对比书籍...</option>
+                    </select>
+                    <button onclick="prevChapter()">上一章</button>
+                    <button onclick="nextChapter()">下一章</button>
+                    <button onclick="toggleNightMode()" id="nightModeBtn">夜间</button>
+                </div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            
+            <div class="single-mode" id="singleMode">
+                <div class="reader-content" id="readerContent">
+                    <p class="empty-hint">选择书籍开始阅读</p>
+                </div>
+            </div>
+            
+            <div class="compare-container" id="compareMode">
+                <div class="compare-panel">
+                    <div class="panel-header">
+                        <strong>源文</strong>
+                        <span id="progressText1">0/0</span>
+                    </div>
+                    <div class="panel-content" id="compareContent1"></div>
+                </div>
+                <div class="compare-panel">
+                    <div class="panel-header">
+                        <strong>仿写</strong>
+                        <span id="progressText2">0/0</span>
+                    </div>
+                    <div class="panel-content" id="compareContent2">
+                        <div class="empty-hint">请选择对比书籍</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="font-controls">
+        <button onclick="changeFontSize(2)">+</button>
+        <button onclick="changeFontSize(-2)">-</button>
+    </div>
+    
+    <script>
+        let bookData = { books: [] };
+        let chapters = [];
+        let currentChapterIndex = 0;
+        let isCompareMode = false;
+        let compareChapters = [];
+        let fontSize = 18;
+        let currentVersions = [];
+        let currentVersionIdx = 0;
+        
+        async function loadBookLibrary() {
+            try {
+                const response = await fetch('data/book_library.json');
+                bookData = await response.json();
+                populateBookSelect();
+            } catch (error) {
+                console.error('加载书库失败:', error);
+            }
+        }
+        
+        function populateBookSelect() {
+            const books = bookData.books || [];
+            const select = document.getElementById('bookSelect');
+            select.innerHTML = '<option value="">选择书籍...</option>' +
+                books.map((b, i) => `<option value="${i}">${b.author} - ${b.title}</option>`).join('');
+            
+            const compareSelect = document.getElementById('compareBookSelect');
+            compareSelect.innerHTML = '<option value="">选择对比书籍...</option>' +
+                books.map((b, i) => `<option value="${i}">${b.author} - ${b.title}</option>`).join('');
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const file = urlParams.get('file');
+            if (file) {
+                const idx = books.findIndex(b => (b.file || '').replace(/\\/g, '/') === file);
+                if (idx >= 0) {
+                    select.value = idx;
+                    loadBook();
+                }
+            }
+        }
+        
+        async function loadBook() {
+            const select = document.getElementById('bookSelect');
+            const bookIdx = parseInt(select.value);
+            
+            if (isNaN(bookIdx)) {
+                document.getElementById('bookTitle').textContent = '选择书籍';
+                chapters = [];
+                document.getElementById('chapterList').innerHTML = '';
+                document.getElementById('readerContent').innerHTML = '<p class="empty-hint">选择书籍开始阅读</p>';
+                document.getElementById('versionTabs').style.display = 'none';
+                return;
+            }
+            
+            const book = bookData.books[bookIdx];
+            if (!book) return;
+            
+            document.getElementById('bookTitle').textContent = book.title;
+            currentVersions = book.versions || [];
+            
+            // 渲染版本标签
+            const versionTabs = document.getElementById('versionTabs');
+            if (currentVersions.length > 1) {
+                versionTabs.style.display = 'flex';
+                versionTabs.innerHTML = currentVersions.map((v, i) => 
+                    `<button class="version-tab ${i === 0 ? 'active' : ''}" onclick="switchVersion(${i})">${v.name || '版本' + (i+1)}</button>`
+                ).join('');
+            } else {
+                versionTabs.style.display = 'none';
+            }
+            
+            // 加载第一个版本
+            await loadVersion(0);
+        }
+        
+        async function loadVersion(verIdx) {
+            currentVersionIdx = verIdx;
+            const ver = currentVersions[verIdx];
+            if (!ver) return;
+            
+            // 更新版本标签状态
+            document.querySelectorAll('.version-tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === verIdx);
+            });
+            
+            // 加载章节
+            try {
+                const file = (ver.file || '').replace(/\\/g, '/');
+                const response = await fetch(`http://localhost:8001/api/book_content?file=${encodeURIComponent(file)}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    alert('加载失败: ' + data.error);
+                    return;
+                }
+                
+                chapters = data.chapters || [];
+                
+                const chapterList = document.getElementById('chapterList');
+                chapterList.innerHTML = chapters.map((ch, i) => `
+                    <div class="chapter-item" onclick="loadChapter(${i})">
+                        <div class="chapter-title">${escapeHtml(ch.title)}</div>
+                        <div class="chapter-meta">${ch.char_count}字</div>
+                    </div>
+                `).join('');
+                
+                if (chapters.length > 0) {
+                    loadChapter(0);
+                }
+            } catch (error) {
+                alert('加载失败: ' + error.message);
+            }
+        }
+        
+        function switchVersion(verIdx) {
+            loadVersion(verIdx);
+        }
+        
+        function loadChapter(index) {
+            currentChapterIndex = index;
+            const chapter = chapters[index];
+            
+            document.getElementById('currentChapter').textContent = chapter.title;
+            
+            document.querySelectorAll('.chapter-item').forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+            
+            const progress = ((index + 1) / chapters.length * 100).toFixed(1);
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText1').textContent = `${index + 1}/${chapters.length}`;
+            document.getElementById('progressText2').textContent = `${index + 1}/${compareChapters.length || chapters.length}`;
+            
+            const content = chapter.content || '暂无内容';
+            const paragraphs = content.split('\n').filter(p => p.trim()).map(p => `<p>${escapeHtml(p)}</p>`).join('');
+            
+            document.getElementById('readerContent').innerHTML = paragraphs;
+            document.getElementById('compareContent1').innerHTML = paragraphs;
+            
+            if (isCompareMode && compareChapters[index]) {
+                const compareContent = compareChapters[index].content || '暂无内容';
+                document.getElementById('compareContent2').innerHTML = compareContent.split('\n').filter(p => p.trim()).map(p => `<p>${escapeHtml(p)}</p>`).join('');
+            }
+            
+            document.getElementById('readerContent').scrollTop = 0;
+            document.getElementById('compareContent1').scrollTop = 0;
+            document.getElementById('compareContent2').scrollTop = 0;
+        }
+        
+        function toggleMode() {
+            isCompareMode = !isCompareMode;
+            const btn = document.getElementById('modeBtn');
+            const select = document.getElementById('compareBookSelect');
+            const singleMode = document.getElementById('singleMode');
+            const compareMode = document.getElementById('compareMode');
+            
+            if (isCompareMode) {
+                btn.textContent = '单本模式';
+                btn.classList.add('active');
+                select.style.display = 'block';
+                singleMode.classList.add('hidden');
+                compareMode.classList.add('active');
+                loadCompareBook();
+            } else {
+                btn.textContent = '对比模式';
+                btn.classList.remove('active');
+                select.style.display = 'none';
+                singleMode.classList.remove('hidden');
+                compareMode.classList.remove('active');
+            }
+        }
+        
+        async function loadCompareBook() {
+            const select = document.getElementById('compareBookSelect');
+            const bookIdx = parseInt(select.value);
+            
+            if (isNaN(bookIdx)) {
+                compareChapters = [];
+                document.getElementById('compareContent2').innerHTML = '<div class="empty-hint">请选择对比书籍</div>';
+                return;
+            }
+            
+            const book = bookData.books[bookIdx];
+            if (!book) return;
+            
+            const versions = book.versions || [];
+            const ver = versions[0];
+            if (!ver) return;
+            
+            try {
+                const file = (ver.file || '').replace(/\\/g, '/');
+                const response = await fetch(`http://localhost:8001/api/book_content?file=${encodeURIComponent(file)}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    document.getElementById('compareContent2').innerHTML = '<div class="empty-hint">加载失败: ' + data.error + '</div>';
+                    return;
+                }
+                
+                compareChapters = data.chapters || [];
+                
+                if (compareChapters[currentChapterIndex]) {
+                    const content = compareChapters[currentChapterIndex].content || '';
+                    document.getElementById('compareContent2').innerHTML = content.split('\n').filter(p => p.trim()).map(p => `<p>${escapeHtml(p)}</p>`).join('');
+                }
+                
+                document.getElementById('progressText2').textContent = `${currentChapterIndex + 1}/${compareChapters.length}`;
+            } catch (error) {
+                document.getElementById('compareContent2').innerHTML = '<div class="empty-hint">加载失败: ' + error.message + '</div>';
+            }
+        }
+        
+        function prevChapter() { if (currentChapterIndex > 0) loadChapter(currentChapterIndex - 1); }
+        function nextChapter() { if (currentChapterIndex < chapters.length - 1) loadChapter(currentChapterIndex + 1); }
+        
+        function changeFontSize(delta) {
+            fontSize = Math.max(12, Math.min(24, fontSize + delta));
+            document.getElementById('readerContent').style.fontSize = fontSize + 'px';
+            document.getElementById('compareContent1').style.fontSize = fontSize + 'px';
+            document.getElementById('compareContent2').style.fontSize = fontSize + 'px';
+        }
+        
+        function toggleNightMode() {
+            document.body.classList.toggle('night-mode');
+            document.getElementById('nightModeBtn').classList.toggle('active');
+        }
+        
+        function escapeHtml(s) {
+            return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevChapter();
+            if (e.key === 'ArrowRight') nextChapter();
+        });
+        
+        loadBookLibrary();
+    </script>
+</body>
+</html>

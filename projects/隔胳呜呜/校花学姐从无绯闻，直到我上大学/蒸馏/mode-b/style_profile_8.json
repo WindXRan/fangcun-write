@@ -1,0 +1,41 @@
+﻿{
+  "source_name": "第8章.txt",
+  "total_chars": 2844,
+  "total_words": 1928,
+  "total_sentences": 123,
+  "total_paragraphs": 125,
+  "sentence_length": {
+    "avg": 15.7,
+    "stddev": 11.2
+  },
+  "paragraph_length": {
+    "avg": 15.4,
+    "stddev": 11.2,
+    "min": 0,
+    "max": 62
+  },
+  "vocabulary_ttr": 0.262,
+  "dialogue_ratio": 0.298,
+  "sentence_distribution": {
+    "short_ratio_lt15": 0.553,
+    "long_ratio_gt60": 0.008
+  },
+  "paragraph_distribution": {
+    "short_lt50": 0.992,
+    "medium_50_200": 0.008,
+    "long_gt200": 0.0,
+    "single_sentence_ratio": 0.608
+  },
+  "top_opening_patterns": [
+    "” ...(47次)",
+    "洛野...(5次)",
+    "观众...(3次)",
+    "主持...(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "ai_tells": [
+    "高频副词(4处)"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "total_chars": 2093,
+  "avg_sentence_len": 21.7,
+  "sentence_len_std": 13.5,
+  "avg_paragraph_len": 27,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 72
+  },
+  "vocabulary_diversity": 0.302,
+  "top_patterns": [
+    "蒲雨(9次)",
+    "原溯(6次)",
+    "程司(5次)",
+    "”许(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(3处)",
+    "短句节奏(4处)"
+  ],
+  "simile_count": 5,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 43,
+    "问号": 2,
+    "叹号": 2,
+    "引号": 0
+  },
+  "chapter": 24,
+  "file": "第24章.txt"
+}

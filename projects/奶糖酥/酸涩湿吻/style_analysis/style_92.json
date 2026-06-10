@@ -1,0 +1,35 @@
+{
+  "total_chars": 2345,
+  "avg_sentence_len": 19.3,
+  "sentence_len_std": 14.3,
+  "avg_paragraph_len": 29,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 92
+  },
+  "vocabulary_diversity": 0.291,
+  "top_patterns": [
+    "蒲雨(15次)",
+    "”蒲(6次)",
+    "梁砚(6次)",
+    "“我(4次)",
+    "林佳(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 13,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 42,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 92,
+  "file": "第92章.txt"
+}

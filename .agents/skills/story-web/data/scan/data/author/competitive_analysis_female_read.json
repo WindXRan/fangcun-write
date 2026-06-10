@@ -1,0 +1,172 @@
+{
+  "date": "2026-06-01",
+  "categories": {
+    "古风世情": {
+      "top10_books": [
+        {
+          "rank": 1,
+          "title": "惹金枝",
+          "reads": "44.1万",
+          "author": "空留"
+        },
+        {
+          "rank": 2,
+          "title": "掌上娇娇",
+          "reads": "28.7万",
+          "author": "支云"
+        },
+        {
+          "rank": 3,
+          "title": "攀高枝",
+          "reads": "28.4万",
+          "author": "白鹭成双"
+        },
+        {
+          "rank": 4,
+          "title": "何不同舟渡",
+          "reads": "26.9万",
+          "author": "羡鱼珂"
+        },
+        {
+          "rank": 5,
+          "title": "笨蛋美人替嫁后被疯批王爷宠上天",
+          "reads": "19.8万",
+          "author": "莫栖君"
+        },
+        {
+          "rank": 6,
+          "title": "阴差阳错，侯府庶子迎娶县主",
+          "reads": "17.1万",
+          "author": "啤酒蛋炒饭"
+        },
+        {
+          "rank": 7,
+          "title": "逢灯纪",
+          "reads": "14.1万",
+          "author": "空留"
+        },
+        {
+          "rank": 8,
+          "title": "指挥使的掌心谋妻",
+          "reads": "11.5万",
+          "author": "喜欢枸杞芽的阿菊"
+        },
+        {
+          "rank": 9,
+          "title": "穿乱世，疯癫公主她靠抢劫建国了",
+          "reads": "10.8万",
+          "author": "点墨成墨"
+        },
+        {
+          "rank": 10,
+          "title": "纨绔郡主得宠日常",
+          "reads": "10.9万",
+          "author": "赵骗"
+        }
+      ],
+      "shared_keywords": [
+        {
+          "keyword": "穿越",
+          "count": 5,
+          "presence": 0.5
+        },
+        {
+          "keyword": "重生",
+          "count": 3,
+          "presence": 0.3
+        },
+        {
+          "keyword": "先婚后爱",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "空间",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "基建",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "女配",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "和离",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "替嫁",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "逃荒",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "甜宠",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "双洁",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "无CP",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "战神",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "历史",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "架空",
+          "count": 1,
+          "presence": 0.1
+        }
+      ],
+      "title_patterns": {
+        "avg_length": 7.7,
+        "has_punctuation": 0.2,
+        "common_structures": [
+          "身份"
+        ]
+      },
+      "intro_patterns": {
+        "avg_length": 356,
+        "common_hooks": [
+          "权谋",
+          "甜",
+          "爽",
+          "养成"
+        ],
+        "common_settings": [
+          "架空古代"
+        ]
+      },
+      "reads_distribution": {
+        "min": "10.8万",
+        "max": "44.1万",
+        "median": "17.1万",
+        "top1_avg": "44.1万",
+        "top10_avg": "21.2万"
+      }
+    }
+  }
+}

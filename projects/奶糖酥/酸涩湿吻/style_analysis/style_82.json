@@ -1,0 +1,35 @@
+{
+  "total_chars": 2114,
+  "avg_sentence_len": 17.6,
+  "sentence_len_std": 11.7,
+  "avg_paragraph_len": 23,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 92
+  },
+  "vocabulary_diversity": 0.265,
+  "top_patterns": [
+    "蒲雨(10次)",
+    "程司(5次)",
+    "李素(3次)",
+    "“可(3次)",
+    "“这(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "simile_count": 5,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 11,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 47,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 82,
+  "file": "第82章.txt"
+}

@@ -1,0 +1,36 @@
+{
+  "total_chars": 2443,
+  "avg_sentence_len": 15.8,
+  "sentence_len_std": 12.0,
+  "avg_paragraph_len": 21,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 126
+  },
+  "vocabulary_diversity": 0.287,
+  "top_patterns": [
+    "蒲雨(11次)",
+    "原鸿(6次)",
+    "“苏(3次)",
+    "“警(3次)",
+    "如果(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(3处)",
+    "短句节奏(21处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 11,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 71,
+    "问号": 7,
+    "叹号": 2,
+    "引号": 0
+  },
+  "chapter": 137,
+  "file": "第137章.txt"
+}

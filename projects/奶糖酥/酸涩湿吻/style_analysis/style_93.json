@@ -1,0 +1,36 @@
+{
+  "total_chars": 4147,
+  "avg_sentence_len": 19.1,
+  "sentence_len_std": 15.2,
+  "avg_paragraph_len": 24,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 96
+  },
+  "vocabulary_diversity": 0.22,
+  "top_patterns": [
+    "蒲雨(20次)",
+    "20(5次)",
+    "金额(5次)",
+    "为什(5次)",
+    "程司(5次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(5处)",
+    "短句节奏(15处)"
+  ],
+  "simile_count": 9,
+  "ai_marker_count": 5,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 16,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 101,
+    "问号": 4,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 93,
+  "file": "第93章.txt"
+}

@@ -1,0 +1,1541 @@
+{
+  "date": "2026-06-09",
+  "period": "all",
+  "genre_profiles": {
+    "西方奇幻": {
+      "top_elements": [
+        {
+          "keyword": "穿越",
+          "weight": 9
+        },
+        {
+          "keyword": "种田",
+          "weight": 5
+        },
+        {
+          "keyword": "系统",
+          "weight": 4
+        },
+        {
+          "keyword": "强制爱",
+          "weight": 2
+        },
+        {
+          "keyword": "游戏",
+          "weight": 2
+        },
+        {
+          "keyword": "天灾",
+          "weight": 1
+        },
+        {
+          "keyword": "幼崽",
+          "weight": 1
+        },
+        {
+          "keyword": "逃荒",
+          "weight": 1
+        },
+        {
+          "keyword": "双洁",
+          "weight": 1
+        },
+        {
+          "keyword": "青梅竹马",
+          "weight": 1
+        },
+        {
+          "keyword": "逆袭",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.17,
+        "angst": 0.11,
+        "power_fantasy": 0.28,
+        "daily_life": 0.44
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 1.0
+        }
+      ],
+      "setting_preference": {
+        "末世科幻": 1.0
+      }
+    },
+    "东方仙侠": {
+      "top_elements": [
+        {
+          "keyword": "穿越",
+          "weight": 10
+        },
+        {
+          "keyword": "修仙",
+          "weight": 5
+        },
+        {
+          "keyword": "系统",
+          "weight": 3
+        },
+        {
+          "keyword": "重生",
+          "weight": 2
+        },
+        {
+          "keyword": "空间",
+          "weight": 1
+        },
+        {
+          "keyword": "仙侠",
+          "weight": 1
+        },
+        {
+          "keyword": "丹药",
+          "weight": 1
+        },
+        {
+          "keyword": "阵法",
+          "weight": 1
+        },
+        {
+          "keyword": "游戏",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.0,
+        "angst": 0.0,
+        "power_fantasy": 0.86,
+        "daily_life": 0.14
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.5
+        },
+        {
+          "type": "重生记忆",
+          "frequency": 0.33
+        },
+        {
+          "type": "空间",
+          "frequency": 0.17
+        }
+      ],
+      "setting_preference": {
+        "修仙玄幻": 1.0
+      }
+    },
+    "科幻末世": {
+      "top_elements": [
+        {
+          "keyword": "穿越",
+          "weight": 7
+        },
+        {
+          "keyword": "游戏",
+          "weight": 7
+        },
+        {
+          "keyword": "系统",
+          "weight": 6
+        },
+        {
+          "keyword": "末世",
+          "weight": 5
+        },
+        {
+          "keyword": "升级",
+          "weight": 5
+        },
+        {
+          "keyword": "星际",
+          "weight": 3
+        },
+        {
+          "keyword": "重生",
+          "weight": 2
+        },
+        {
+          "keyword": "空间",
+          "weight": 2
+        },
+        {
+          "keyword": "废土",
+          "weight": 2
+        },
+        {
+          "keyword": "天灾",
+          "weight": 2
+        },
+        {
+          "keyword": "无限流",
+          "weight": 2
+        },
+        {
+          "keyword": "种田",
+          "weight": 2
+        },
+        {
+          "keyword": "争霸",
+          "weight": 2
+        },
+        {
+          "keyword": "异能",
+          "weight": 1
+        },
+        {
+          "keyword": "修仙",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.0,
+        "angst": 0.0,
+        "power_fantasy": 0.8,
+        "daily_life": 0.2
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.55
+        },
+        {
+          "type": "重生记忆",
+          "frequency": 0.18
+        },
+        {
+          "type": "空间",
+          "frequency": 0.18
+        },
+        {
+          "type": "异能",
+          "frequency": 0.09
+        }
+      ],
+      "setting_preference": {
+        "末世科幻": 0.92,
+        "修仙玄幻": 0.08
+      }
+    },
+    "都市日常": {
+      "top_elements": [
+        {
+          "keyword": "重生",
+          "weight": 3
+        },
+        {
+          "keyword": "都市",
+          "weight": 3
+        },
+        {
+          "keyword": "直播",
+          "weight": 2
+        },
+        {
+          "keyword": "穿越",
+          "weight": 1
+        },
+        {
+          "keyword": "系统",
+          "weight": 1
+        },
+        {
+          "keyword": "年代",
+          "weight": 1
+        },
+        {
+          "keyword": "豪门",
+          "weight": 1
+        },
+        {
+          "keyword": "总裁",
+          "weight": 1
+        },
+        {
+          "keyword": "甜宠",
+          "weight": 1
+        },
+        {
+          "keyword": "强制爱",
+          "weight": 1
+        },
+        {
+          "keyword": "暗恋",
+          "weight": 1
+        },
+        {
+          "keyword": "青梅竹马",
+          "weight": 1
+        },
+        {
+          "keyword": "同人",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.2,
+        "angst": 0.07,
+        "power_fantasy": 0.27,
+        "daily_life": 0.47
+      },
+      "golden_finger_preference": [
+        {
+          "type": "重生记忆",
+          "frequency": 0.5
+        },
+        {
+          "type": "直播金手指",
+          "frequency": 0.33
+        },
+        {
+          "type": "系统",
+          "frequency": 0.17
+        }
+      ],
+      "setting_preference": {
+        "现代都市": 1.0
+      }
+    },
+    "都市修真": {
+      "top_elements": [
+        {
+          "keyword": "神医",
+          "weight": 6
+        },
+        {
+          "keyword": "修仙",
+          "weight": 5
+        },
+        {
+          "keyword": "逆袭",
+          "weight": 5
+        },
+        {
+          "keyword": "都市",
+          "weight": 5
+        },
+        {
+          "keyword": "系统",
+          "weight": 4
+        },
+        {
+          "keyword": "总裁",
+          "weight": 3
+        },
+        {
+          "keyword": "重生",
+          "weight": 2
+        },
+        {
+          "keyword": "豪门",
+          "weight": 2
+        },
+        {
+          "keyword": "穿越",
+          "weight": 1
+        },
+        {
+          "keyword": "悬疑",
+          "weight": 1
+        },
+        {
+          "keyword": "直播",
+          "weight": 1
+        },
+        {
+          "keyword": "种田",
+          "weight": 1
+        },
+        {
+          "keyword": "战神",
+          "weight": 1
+        },
+        {
+          "keyword": "高武",
+          "weight": 1
+        },
+        {
+          "keyword": "修真",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.0,
+        "angst": 0.08,
+        "power_fantasy": 0.85,
+        "daily_life": 0.08
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.57
+        },
+        {
+          "type": "重生记忆",
+          "frequency": 0.29
+        },
+        {
+          "type": "直播金手指",
+          "frequency": 0.14
+        }
+      ],
+      "setting_preference": {
+        "现代都市": 0.5,
+        "修仙玄幻": 0.5
+      }
+    },
+    "都市高武": {
+      "top_elements": [
+        {
+          "keyword": "穿越",
+          "weight": 10
+        },
+        {
+          "keyword": "系统",
+          "weight": 10
+        },
+        {
+          "keyword": "高武",
+          "weight": 6
+        },
+        {
+          "keyword": "重生",
+          "weight": 4
+        },
+        {
+          "keyword": "空间",
+          "weight": 2
+        },
+        {
+          "keyword": "异能",
+          "weight": 2
+        },
+        {
+          "keyword": "直播",
+          "weight": 2
+        },
+        {
+          "keyword": "战神",
+          "weight": 2
+        },
+        {
+          "keyword": "游戏",
+          "weight": 2
+        },
+        {
+          "keyword": "天灾",
+          "weight": 1
+        },
+        {
+          "keyword": "囤货",
+          "weight": 1
+        },
+        {
+          "keyword": "幼崽",
+          "weight": 1
+        },
+        {
+          "keyword": "反派",
+          "weight": 1
+        },
+        {
+          "keyword": "美食",
+          "weight": 1
+        },
+        {
+          "keyword": "无CP",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.04,
+        "angst": 0.12,
+        "power_fantasy": 0.76,
+        "daily_life": 0.08
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.5
+        },
+        {
+          "type": "重生记忆",
+          "frequency": 0.2
+        },
+        {
+          "type": "异能",
+          "frequency": 0.1
+        },
+        {
+          "type": "空间",
+          "frequency": 0.1
+        },
+        {
+          "type": "直播金手指",
+          "frequency": 0.1
+        }
+      ],
+      "setting_preference": {
+        "现代都市": 0.67,
+        "末世科幻": 0.33
+      }
+    },
+    "历史古代": {
+      "top_elements": [
+        {
+          "keyword": "穿越",
+          "weight": 10
+        },
+        {
+          "keyword": "系统",
+          "weight": 4
+        },
+        {
+          "keyword": "三国",
+          "weight": 4
+        },
+        {
+          "keyword": "历史",
+          "weight": 2
+        },
+        {
+          "keyword": "架空",
+          "weight": 2
+        },
+        {
+          "keyword": "重生",
+          "weight": 1
+        },
+        {
+          "keyword": "权臣",
+          "weight": 1
+        },
+        {
+          "keyword": "种田",
+          "weight": 1
+        },
+        {
+          "keyword": "逆袭",
+          "weight": 1
+        },
+        {
+          "keyword": "战神",
+          "weight": 1
+        },
+        {
+          "keyword": "玄幻",
+          "weight": 1
+        },
+        {
+          "keyword": "明朝",
+          "weight": 1
+        },
+        {
+          "keyword": "争霸",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.0,
+        "angst": 0.0,
+        "power_fantasy": 0.86,
+        "daily_life": 0.14
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.8
+        },
+        {
+          "type": "重生记忆",
+          "frequency": 0.2
+        }
+      ],
+      "setting_preference": {
+        "真实朝代": 0.56,
+        "架空古代": 0.33,
+        "修仙玄幻": 0.11
+      }
+    },
+    "战神赘婿": {
+      "top_elements": [
+        {
+          "keyword": "豪门",
+          "weight": 7
+        },
+        {
+          "keyword": "赘婿",
+          "weight": 6
+        },
+        {
+          "keyword": "总裁",
+          "weight": 5
+        },
+        {
+          "keyword": "系统",
+          "weight": 4
+        },
+        {
+          "keyword": "都市",
+          "weight": 4
+        },
+        {
+          "keyword": "穿越",
+          "weight": 3
+        },
+        {
+          "keyword": "兵王",
+          "weight": 3
+        },
+        {
+          "keyword": "战神",
+          "weight": 2
+        },
+        {
+          "keyword": "重生",
+          "weight": 1
+        },
+        {
+          "keyword": "反派",
+          "weight": 1
+        },
+        {
+          "keyword": "先婚后爱",
+          "weight": 1
+        },
+        {
+          "keyword": "青梅竹马",
+          "weight": 1
+        },
+        {
+          "keyword": "逆袭",
+          "weight": 1
+        },
+        {
+          "keyword": "神医",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.08,
+        "angst": 0.25,
+        "power_fantasy": 0.58,
+        "daily_life": 0.08
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.8
+        },
+        {
+          "type": "重生记忆",
+          "frequency": 0.2
+        }
+      ],
+      "setting_preference": {
+        "现代都市": 0.93,
+        "架空古代": 0.07
+      }
+    },
+    "都市种田": {
+      "top_elements": [
+        {
+          "keyword": "系统",
+          "weight": 11
+        },
+        {
+          "keyword": "年代",
+          "weight": 11
+        },
+        {
+          "keyword": "重生",
+          "weight": 9
+        },
+        {
+          "keyword": "穿越",
+          "weight": 7
+        },
+        {
+          "keyword": "空间",
+          "weight": 5
+        },
+        {
+          "keyword": "种田",
+          "weight": 5
+        },
+        {
+          "keyword": "基建",
+          "weight": 2
+        },
+        {
+          "keyword": "都市",
+          "weight": 2
+        },
+        {
+          "keyword": "直播",
+          "weight": 1
+        },
+        {
+          "keyword": "豪门",
+          "weight": 1
+        },
+        {
+          "keyword": "强制爱",
+          "weight": 1
+        },
+        {
+          "keyword": "青梅竹马",
+          "weight": 1
+        },
+        {
+          "keyword": "历史",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.02,
+        "angst": 0.04,
+        "power_fantasy": 0.52,
+        "daily_life": 0.42
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.42
+        },
+        {
+          "type": "重生记忆",
+          "frequency": 0.35
+        },
+        {
+          "type": "空间",
+          "frequency": 0.19
+        },
+        {
+          "type": "直播金手指",
+          "frequency": 0.04
+        }
+      ],
+      "setting_preference": {
+        "现代都市": 1.0
+      }
+    },
+    "传统玄幻": {
+      "top_elements": [
+        {
+          "keyword": "穿越",
+          "weight": 9
+        },
+        {
+          "keyword": "修仙",
+          "weight": 5
+        },
+        {
+          "keyword": "玄幻",
+          "weight": 3
+        },
+        {
+          "keyword": "系统",
+          "weight": 2
+        },
+        {
+          "keyword": "反派",
+          "weight": 2
+        },
+        {
+          "keyword": "重生",
+          "weight": 1
+        },
+        {
+          "keyword": "穿书",
+          "weight": 1
+        },
+        {
+          "keyword": "团宠",
+          "weight": 1
+        },
+        {
+          "keyword": "炮灰",
+          "weight": 1
+        },
+        {
+          "keyword": "年代",
+          "weight": 1
+        },
+        {
+          "keyword": "国运",
+          "weight": 1
+        },
+        {
+          "keyword": "赘婿",
+          "weight": 1
+        },
+        {
+          "keyword": "逆袭",
+          "weight": 1
+        },
+        {
+          "keyword": "兵王",
+          "weight": 1
+        },
+        {
+          "keyword": "高武",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.08,
+        "angst": 0.08,
+        "power_fantasy": 0.67,
+        "daily_life": 0.17
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.4
+        },
+        {
+          "type": "穿书预知",
+          "frequency": 0.2
+        },
+        {
+          "type": "团宠体质",
+          "frequency": 0.2
+        },
+        {
+          "type": "重生记忆",
+          "frequency": 0.2
+        }
+      ],
+      "setting_preference": {
+        "修仙玄幻": 0.73,
+        "架空古代": 0.27
+      }
+    },
+    "历史脑洞": {
+      "top_elements": [
+        {
+          "keyword": "穿越",
+          "weight": 14
+        },
+        {
+          "keyword": "系统",
+          "weight": 11
+        },
+        {
+          "keyword": "历史",
+          "weight": 3
+        },
+        {
+          "keyword": "架空",
+          "weight": 3
+        },
+        {
+          "keyword": "争霸",
+          "weight": 3
+        },
+        {
+          "keyword": "权臣",
+          "weight": 2
+        },
+        {
+          "keyword": "国运",
+          "weight": 2
+        },
+        {
+          "keyword": "升级",
+          "weight": 2
+        },
+        {
+          "keyword": "空间",
+          "weight": 1
+        },
+        {
+          "keyword": "直播",
+          "weight": 1
+        },
+        {
+          "keyword": "基建",
+          "weight": 1
+        },
+        {
+          "keyword": "种田",
+          "weight": 1
+        },
+        {
+          "keyword": "美食",
+          "weight": 1
+        },
+        {
+          "keyword": "战神",
+          "weight": 1
+        },
+        {
+          "keyword": "龙王",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.0,
+        "angst": 0.12,
+        "power_fantasy": 0.71,
+        "daily_life": 0.18
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.85
+        },
+        {
+          "type": "空间",
+          "frequency": 0.08
+        },
+        {
+          "type": "直播金手指",
+          "frequency": 0.08
+        }
+      ],
+      "setting_preference": {
+        "架空古代": 0.67,
+        "真实朝代": 0.33
+      }
+    },
+    "悬疑脑洞": {
+      "top_elements": [
+        {
+          "keyword": "穿越",
+          "weight": 10
+        },
+        {
+          "keyword": "系统",
+          "weight": 9
+        },
+        {
+          "keyword": "副本",
+          "weight": 5
+        },
+        {
+          "keyword": "游戏",
+          "weight": 4
+        },
+        {
+          "keyword": "重生",
+          "weight": 3
+        },
+        {
+          "keyword": "直播",
+          "weight": 3
+        },
+        {
+          "keyword": "末世",
+          "weight": 2
+        },
+        {
+          "keyword": "无限流",
+          "weight": 2
+        },
+        {
+          "keyword": "悬疑",
+          "weight": 2
+        },
+        {
+          "keyword": "异能",
+          "weight": 1
+        },
+        {
+          "keyword": "天灾",
+          "weight": 1
+        },
+        {
+          "keyword": "基建",
+          "weight": 1
+        },
+        {
+          "keyword": "穿书",
+          "weight": 1
+        },
+        {
+          "keyword": "种田",
+          "weight": 1
+        },
+        {
+          "keyword": "校园",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.0,
+        "angst": 0.0,
+        "power_fantasy": 0.88,
+        "daily_life": 0.12
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.53
+        },
+        {
+          "type": "直播金手指",
+          "frequency": 0.18
+        },
+        {
+          "type": "重生记忆",
+          "frequency": 0.18
+        },
+        {
+          "type": "异能",
+          "frequency": 0.06
+        },
+        {
+          "type": "穿书预知",
+          "frequency": 0.06
+        }
+      ],
+      "setting_preference": {
+        "末世科幻": 0.75,
+        "现代都市": 0.25
+      }
+    },
+    "都市脑洞": {
+      "top_elements": [
+        {
+          "keyword": "系统",
+          "weight": 10
+        },
+        {
+          "keyword": "穿越",
+          "weight": 6
+        },
+        {
+          "keyword": "直播",
+          "weight": 2
+        },
+        {
+          "keyword": "综艺",
+          "weight": 2
+        },
+        {
+          "keyword": "娱乐圈",
+          "weight": 2
+        },
+        {
+          "keyword": "反派",
+          "weight": 2
+        },
+        {
+          "keyword": "都市",
+          "weight": 2
+        },
+        {
+          "keyword": "重生",
+          "weight": 1
+        },
+        {
+          "keyword": "穿书",
+          "weight": 1
+        },
+        {
+          "keyword": "宅斗",
+          "weight": 1
+        },
+        {
+          "keyword": "年代",
+          "weight": 1
+        },
+        {
+          "keyword": "豪门",
+          "weight": 1
+        },
+        {
+          "keyword": "先婚后爱",
+          "weight": 1
+        },
+        {
+          "keyword": "神医",
+          "weight": 1
+        },
+        {
+          "keyword": "谍战",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.05,
+        "angst": 0.05,
+        "power_fantasy": 0.67,
+        "daily_life": 0.24
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.71
+        },
+        {
+          "type": "直播金手指",
+          "frequency": 0.14
+        },
+        {
+          "type": "穿书预知",
+          "frequency": 0.07
+        },
+        {
+          "type": "重生记忆",
+          "frequency": 0.07
+        }
+      ],
+      "setting_preference": {
+        "现代都市": 0.75,
+        "末世科幻": 0.25
+      }
+    },
+    "玄幻脑洞": {
+      "top_elements": [
+        {
+          "keyword": "系统",
+          "weight": 15
+        },
+        {
+          "keyword": "穿越",
+          "weight": 11
+        },
+        {
+          "keyword": "修仙",
+          "weight": 6
+        },
+        {
+          "keyword": "重生",
+          "weight": 5
+        },
+        {
+          "keyword": "玄幻",
+          "weight": 3
+        },
+        {
+          "keyword": "空间",
+          "weight": 1
+        },
+        {
+          "keyword": "幼崽",
+          "weight": 1
+        },
+        {
+          "keyword": "种田",
+          "weight": 1
+        },
+        {
+          "keyword": "年代",
+          "weight": 1
+        },
+        {
+          "keyword": "青梅竹马",
+          "weight": 1
+        },
+        {
+          "keyword": "高武",
+          "weight": 1
+        },
+        {
+          "keyword": "修真",
+          "weight": 1
+        },
+        {
+          "keyword": "仙侠",
+          "weight": 1
+        },
+        {
+          "keyword": "丹药",
+          "weight": 1
+        },
+        {
+          "keyword": "争霸",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.08,
+        "angst": 0.04,
+        "power_fantasy": 0.81,
+        "daily_life": 0.08
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.71
+        },
+        {
+          "type": "重生记忆",
+          "frequency": 0.24
+        },
+        {
+          "type": "空间",
+          "frequency": 0.05
+        }
+      ],
+      "setting_preference": {
+        "修仙玄幻": 1.0
+      }
+    },
+    "悬疑灵异": {
+      "top_elements": [
+        {
+          "keyword": "穿越",
+          "weight": 4
+        },
+        {
+          "keyword": "系统",
+          "weight": 2
+        },
+        {
+          "keyword": "悬疑",
+          "weight": 2
+        },
+        {
+          "keyword": "重生",
+          "weight": 1
+        },
+        {
+          "keyword": "空间",
+          "weight": 1
+        },
+        {
+          "keyword": "修仙",
+          "weight": 1
+        },
+        {
+          "keyword": "无CP",
+          "weight": 1
+        },
+        {
+          "keyword": "同人",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.0,
+        "angst": 0.0,
+        "power_fantasy": 0.57,
+        "daily_life": 0.43
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.5
+        },
+        {
+          "type": "空间",
+          "frequency": 0.25
+        },
+        {
+          "type": "重生记忆",
+          "frequency": 0.25
+        }
+      ],
+      "setting_preference": {
+        "架空古代": 0.5,
+        "修仙玄幻": 0.5
+      }
+    },
+    "抗战谍战": {
+      "top_elements": [
+        {
+          "keyword": "穿越",
+          "weight": 10
+        },
+        {
+          "keyword": "系统",
+          "weight": 7
+        },
+        {
+          "keyword": "抗战",
+          "weight": 7
+        },
+        {
+          "keyword": "民国",
+          "weight": 5
+        },
+        {
+          "keyword": "争霸",
+          "weight": 2
+        },
+        {
+          "keyword": "修仙",
+          "weight": 1
+        },
+        {
+          "keyword": "年代",
+          "weight": 1
+        },
+        {
+          "keyword": "豪门",
+          "weight": 1
+        },
+        {
+          "keyword": "兵王",
+          "weight": 1
+        },
+        {
+          "keyword": "历史",
+          "weight": 1
+        },
+        {
+          "keyword": "架空",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.0,
+        "angst": 0.1,
+        "power_fantasy": 0.7,
+        "daily_life": 0.2
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 1.0
+        }
+      ],
+      "setting_preference": {
+        "民国": 0.7,
+        "架空古代": 0.1,
+        "修仙玄幻": 0.1,
+        "现代都市": 0.1
+      }
+    },
+    "游戏体育": {
+      "top_elements": [
+        {
+          "keyword": "系统",
+          "weight": 11
+        },
+        {
+          "keyword": "穿越",
+          "weight": 6
+        },
+        {
+          "keyword": "直播",
+          "weight": 6
+        },
+        {
+          "keyword": "游戏",
+          "weight": 5
+        },
+        {
+          "keyword": "重生",
+          "weight": 3
+        },
+        {
+          "keyword": "团宠",
+          "weight": 2
+        },
+        {
+          "keyword": "修仙",
+          "weight": 1
+        },
+        {
+          "keyword": "基建",
+          "weight": 1
+        },
+        {
+          "keyword": "逆袭",
+          "weight": 1
+        },
+        {
+          "keyword": "都市",
+          "weight": 1
+        },
+        {
+          "keyword": "升级",
+          "weight": 1
+        },
+        {
+          "keyword": "副本",
+          "weight": 1
+        },
+        {
+          "keyword": "争霸",
+          "weight": 1
+        },
+        {
+          "keyword": "机甲",
+          "weight": 1
+        },
+        {
+          "keyword": "电竞",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.11,
+        "angst": 0.0,
+        "power_fantasy": 0.83,
+        "daily_life": 0.06
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.5
+        },
+        {
+          "type": "直播金手指",
+          "frequency": 0.27
+        },
+        {
+          "type": "重生记忆",
+          "frequency": 0.14
+        },
+        {
+          "type": "团宠体质",
+          "frequency": 0.09
+        }
+      ],
+      "setting_preference": {
+        "修仙玄幻": 0.5,
+        "现代都市": 0.5
+      }
+    },
+    "动漫衍生": {
+      "top_elements": [
+        {
+          "keyword": "穿越",
+          "weight": 13
+        },
+        {
+          "keyword": "系统",
+          "weight": 9
+        },
+        {
+          "keyword": "空间",
+          "weight": 1
+        },
+        {
+          "keyword": "快穿",
+          "weight": 1
+        },
+        {
+          "keyword": "幼崽",
+          "weight": 1
+        },
+        {
+          "keyword": "炮灰",
+          "weight": 1
+        },
+        {
+          "keyword": "豪门",
+          "weight": 1
+        },
+        {
+          "keyword": "龙王",
+          "weight": 1
+        },
+        {
+          "keyword": "游戏",
+          "weight": 1
+        },
+        {
+          "keyword": "同人",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.08,
+        "angst": 0.0,
+        "power_fantasy": 0.92,
+        "daily_life": 0.0
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.9
+        },
+        {
+          "type": "空间",
+          "frequency": 0.1
+        }
+      ],
+      "setting_preference": {
+        "现代都市": 0.5,
+        "架空古代": 0.5
+      }
+    },
+    "男频衍生": {
+      "top_elements": [
+        {
+          "keyword": "穿越",
+          "weight": 11
+        },
+        {
+          "keyword": "系统",
+          "weight": 9
+        },
+        {
+          "keyword": "年代",
+          "weight": 2
+        },
+        {
+          "keyword": "空间",
+          "weight": 1
+        },
+        {
+          "keyword": "修仙",
+          "weight": 1
+        },
+        {
+          "keyword": "逆袭",
+          "weight": 1
+        },
+        {
+          "keyword": "龙王",
+          "weight": 1
+        },
+        {
+          "keyword": "同人",
+          "weight": 1
+        }
+      ],
+      "emotional_preference": {
+        "sweet": 0.0,
+        "angst": 0.0,
+        "power_fantasy": 0.79,
+        "daily_life": 0.21
+      },
+      "golden_finger_preference": [
+        {
+          "type": "系统",
+          "frequency": 0.9
+        },
+        {
+          "type": "空间",
+          "frequency": 0.1
+        }
+      ],
+      "setting_preference": {
+        "修仙玄幻": 1.0
+      }
+    }
+  },
+  "overall_top3_golden_fingers": [
+    {
+      "type": "系统",
+      "frequency": 0.65
+    },
+    {
+      "type": "重生记忆",
+      "frequency": 0.18
+    },
+    {
+      "type": "直播金手指",
+      "frequency": 0.07
+    },
+    {
+      "type": "空间",
+      "frequency": 0.06
+    },
+    {
+      "type": "穿书预知",
+      "frequency": 0.02
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 为《{新书名}》的角色起名。
 
-【设定】projects/{作者名}/{源书名}/rewrites/{新书名}/concept.md
+【设定】projects/{作者名}/{源书名}/rewrites/{新书名}/settings/characters.md
 
 ---
 

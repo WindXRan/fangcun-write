@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阅读器</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .reader-container {
+            display: flex;
+            height: calc(100vh - 60px);
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        
+        .sidebar-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .sidebar-header h3 {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .book-select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+        }
+        
+        .chapter-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+        
+        .chapter-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-soft);
+        }
+        
+        .chapter-item:hover {
+            background: var(--accent-soft);
+        }
+        
+        .chapter-item.active {
+            background: var(--accent-soft);
+            border-left: 3px solid var(--accent);
+        }
+        
+        .main-reader {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .reader-toolbar {
+            padding: 10px 15px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .reader-toolbar button {
+            padding: 6px 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 13px;
+        }
+        
+        .reader-toolbar button:hover {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+        }
+        
+        .reader-toolbar button.active {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .reader-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        
+        .reader-content p {
+            margin-bottom: 1em;
+            text-indent: 2em;
+        }
+        
+        .compare-mode {
+            display: flex;
+        }
+        
+        .compare-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border);
+        }
+        
+        .compare-panel:last-child {
+            border-right: none;
+        }
+        
+        .panel-header {
+            padding: 10px 15px;
+            background: var(--surface-soft);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .panel-header select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+        }
+        
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        
+        .panel-content p {
+            margin-bottom: 1em;
+            text-indent: 2em;
+        }
+        
+        .empty-hint {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav" id="top-nav"></nav>
+    
+    <div class="reader-container" id="readerContainer">
+        <!-- 单本模式侧边栏 -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="library.html">← 返回书库</a>
+                <h3 id="bookTitle">选择书籍</h3>
+                <select class="book-select" id="bookSelect" onchange="loadBook()">
+                    <option value="">选择书籍...</option>
+                </select>
+            </div>
+            <div class="chapter-list" id="chapterList">
+                <!-- 章节列表 -->
+            </div>
+        </div>
+        
+        <!-- 主阅读区 -->
+        <div class="main-reader">
+            <div class="reader-toolbar">
+                <button id="modeBtn" onclick="toggleMode()">切换对比模式</button>
+                <button onclick="changeFont(-2)">A-</button>
+                <button onclick="changeFont(2)">A+</button>
+                <button onclick="prevChapter()">上一章</button>
+                <button onclick="nextChapter()">下一章</button>
+            </div>
+            
+            <!-- 单本内容 -->
+            <div class="reader-content" id="readerContent">
+                <div class="empty-hint">请选择书籍开始阅读</div>
+            </div>
+            
+            <!-- 对比内容（隐藏） -->
+            <div class="compare-mode" id="compareMode" style="display: none;">
+                <div class="compare-panel">
+                    <div class="panel-header">
+                        <select id="compareBook1" onchange="loadCompareBook(1)">
+                            <option value="">选择源文...</option>
+                        </select>
+                    </div>
+                    <div class="panel-content" id="compareContent1">
+                        <div class="empty-hint">请选择书籍</div>
+                    </div>
+                </div>
+                <div class="compare-panel">
+                    <div class="panel-header">
+                        <select id="compareBook2" onchange="loadCompareBook(2)">
+                            <option value="">选择新书...</option>
+                        </select>
+                    </div>
+                    <div class="panel-content" id="compareContent2">
+                        <div class="empty-hint">请选择书籍</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        let bookData = { books: [] };
+        let currentBook = null;
+        let chapters = [];
+        let currentChapterIndex = 0;
+        let isCompareMode = false;
+        let fontSize = 16;
+        
+        // 加载书库数据
+        async function loadBookLibrary() {
+            try {
+                const response = await fetch('data/book_library.json');
+                bookData = await response.json();
+                populateBookSelects();
+            } catch (error) {
+                console.error('加载书库失败:', error);
+            }
+        }
+        
+        // 填充书籍下拉框
+        function populateBookSelects() {
+            const books = bookData.books || [];
+            const options = books.map(b => 
+                `<option value="${b.file.replace(/\\/g, '/')}">${b.author} - ${b.title}</option>`
+            ).join('');
+            
+            document.getElementById('bookSelect').innerHTML = '<option value="">选择书籍...</option>' + options;
+            document.getElementById('compareBook1').innerHTML = '<option value="">选择源文...</option>' + options;
+            document.getElementById('compareBook2').innerHTML = '<option value="">选择新书...</option>' + options;
+        }
+        
+        // 加载书籍
+        async function loadBook() {
+            const select = document.getElementById('bookSelect');
+            const file = select.value;
+            
+            if (!file) {
+                currentBook = null;
+                chapters = [];
+                document.getElementById('chapterList').innerHTML = '';
+                document.getElementById('readerContent').innerHTML = '<div class="empty-hint">请选择书籍开始阅读</div>';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`http://localhost:8001/api/book_content?file=${encodeURIComponent(file)}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    alert('加载失败: ' + data.error);
+                    return;
+                }
+                
+                currentBook = data;
+                chapters = data.chapters || [];
+                document.getElementById('bookTitle').textContent = data.title || '书籍';
+                
+                // 渲染章节列表
+                const chapterList = document.getElementById('chapterList');
+                chapterList.innerHTML = chapters.map((ch, i) => `
+                    <div class="chapter-item" onclick="loadChapter(${i})">
+                        ${ch.title} (${ch.char_count}字)
+                    </div>
+                `).join('');
+                
+                // 加载第一章
+                if (chapters.length > 0) {
+                    loadChapter(0);
+                }
+            } catch (error) {
+                alert('加载失败: ' + error.message);
+            }
+        }
+        
+        // 加载章节
+        function loadChapter(index) {
+            currentChapterIndex = index;
+            const chapter = chapters[index];
+            
+            if (!chapter) return;
+            
+            // 更新章节列表高亮
+            document.querySelectorAll('.chapter-item').forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+            
+            // 显示内容
+            const contentDiv = document.getElementById('readerContent');
+            contentDiv.innerHTML = chapter.content.split('\n')
+                .filter(p => p.trim())
+                .map(p => `<p>${p}</p>`)
+                .join('');
+        }
+        
+        // 切换对比模式
+        function toggleMode() {
+            isCompareMode = !isCompareMode;
+            const btn = document.getElementById('modeBtn');
+            const sidebar = document.getElementById('sidebar');
+            const readerContent = document.getElementById('readerContent');
+            const compareMode = document.getElementById('compareMode');
+            
+            if (isCompareMode) {
+                btn.textContent = '切换单本模式';
+                btn.classList.add('active');
+                sidebar.style.display = 'none';
+                readerContent.style.display = 'none';
+                compareMode.style.display = 'flex';
+            } else {
+                btn.textContent = '切换对比模式';
+                btn.classList.remove('active');
+                sidebar.style.display = 'flex';
+                readerContent.style.display = 'block';
+                compareMode.style.display = 'none';
+            }
+        }
+        
+        // 加载对比书籍
+        async function loadCompareBook(panel) {
+            const select = document.getElementById(`compareBook${panel}`);
+            const file = select.value;
+            
+            if (!file) return;
+            
+            try {
+                const response = await fetch(`http://localhost:8001/api/book_content?file=${encodeURIComponent(file)}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    alert('加载失败: ' + data.error);
+                    return;
+                }
+                
+                // 显示所有章节内容
+                const contentDiv = document.getElementById(`compareContent${panel}`);
+                contentDiv.innerHTML = data.chapters.map(ch => `
+                    <h3 style="margin: 20px 0 10px; padding-bottom: 5px; border-bottom: 1px solid #ddd;">${ch.title}</h3>
+                    ${ch.content.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('')}
+                `).join('');
+            } catch (error) {
+                alert('加载失败: ' + error.message);
+            }
+        }
+        
+        // 调整字体
+        function changeFont(delta) {
+            fontSize = Math.max(12, Math.min(24, fontSize + delta));
+            document.querySelectorAll('.reader-content, .panel-content').forEach(el => {
+                el.style.fontSize = fontSize + 'px';
+            });
+        }
+        
+        // 上一章/下一章
+        function prevChapter() {
+            if (currentChapterIndex > 0) {
+                loadChapter(currentChapterIndex - 1);
+            }
+        }
+        
+        function nextChapter() {
+            if (currentChapterIndex < chapters.length - 1) {
+                loadChapter(currentChapterIndex + 1);
+            }
+        }
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevChapter();
+            if (e.key === 'ArrowRight') nextChapter();
+        });
+        
+        // 初始化
+        loadBookLibrary();
+    </script>
+</body>
+</html>

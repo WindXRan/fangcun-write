@@ -1,0 +1,35 @@
+{
+  "total_chars": 2059,
+  "avg_sentence_len": 22.2,
+  "sentence_len_std": 13.7,
+  "avg_paragraph_len": 26,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 71
+  },
+  "vocabulary_diversity": 0.327,
+  "top_patterns": [
+    "蒲雨(12次)",
+    "原溯(9次)",
+    "——(3次)",
+    "“我(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(5处)"
+  ],
+  "simile_count": 6,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 8,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 52,
+    "问号": 1,
+    "叹号": 2,
+    "引号": 0
+  },
+  "chapter": 152,
+  "file": "第152章.txt"
+}

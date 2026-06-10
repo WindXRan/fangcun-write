@@ -1,0 +1,33 @@
+{
+  "total_chars": 3126,
+  "avg_sentence_len": 23.4,
+  "sentence_len_std": 15.1,
+  "avg_paragraph_len": 27,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 85
+  },
+  "vocabulary_diversity": 0.263,
+  "top_patterns": [
+    "蒲雨(15次)",
+    "原溯(13次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(6处)"
+  ],
+  "simile_count": 7,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 18,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 80,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 154,
+  "file": "第154章.txt"
+}

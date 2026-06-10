@@ -1,0 +1,103 @@
+[
+  {
+    "wave": "设定统一",
+    "results": [
+      {
+        "id": "fix_name_1",
+        "status": "FIXED",
+        "fixed_count": 1
+      },
+      {
+        "id": "fix_name_2",
+        "status": "FIXED",
+        "fixed_count": 0
+      },
+      {
+        "id": "fix_age_1",
+        "status": "FIXED",
+        "fixed_count": 0
+      },
+      {
+        "id": "fix_time_1",
+        "status": "FIXED",
+        "fixed_count": 0
+      },
+      {
+        "id": "fix_location_1",
+        "status": "FIXED",
+        "fixed_count": 0
+      }
+    ],
+    "total_time": 0.011758804321289062
+  },
+  {
+    "wave": "结构修复",
+    "results": [
+      {
+        "id": "fix_flow_1",
+        "status": "FIXED",
+        "orig": 1368,
+        "new": 1438
+      },
+      {
+        "id": "fix_logic_2",
+        "status": "FIXED",
+        "orig": 1368,
+        "new": 1455
+      },
+      {
+        "id": "fix_logic_1",
+        "status": "SKIP",
+        "reason": "字数差异过大 (1478→2337)"
+      }
+    ],
+    "total_time": 32.84429669380188
+  },
+  {
+    "wave": "基建补建",
+    "results": [
+      {
+        "id": "build_outline_1",
+        "status": "SKIP",
+        "reason": "未知任务类型: infrastructure"
+      },
+      {
+        "id": "build_char_1",
+        "status": "SKIP",
+        "reason": "未知任务类型: infrastructure"
+      },
+      {
+        "id": "build_chapter_1",
+        "status": "SKIP",
+        "reason": "未知任务类型: infrastructure"
+      }
+    ],
+    "total_time": 0.0
+  },
+  {
+    "wave": "批量润色",
+    "results": [
+      {
+        "id": "polish_ai_1",
+        "status": "SKIP",
+        "reason": "未知任务类型: style"
+      },
+      {
+        "id": "polish_dialogue_1",
+        "status": "SKIP",
+        "reason": "未知任务类型: style"
+      },
+      {
+        "id": "polish_hook_1",
+        "status": "SKIP",
+        "reason": "未知任务类型: style"
+      },
+      {
+        "id": "polish_length_1",
+        "status": "SKIP",
+        "reason": "未知任务类型: style"
+      }
+    ],
+    "total_time": 0.0010004043579101562
+  }
+]

@@ -1,0 +1,34 @@
+{
+  "total_chars": 2079,
+  "avg_sentence_len": 24.2,
+  "sentence_len_std": 15.0,
+  "avg_paragraph_len": 29,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 70
+  },
+  "vocabulary_diversity": 0.314,
+  "top_patterns": [
+    "蒲雨(11次)",
+    "李素(8次)",
+    "“我(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(3处)",
+    "短句节奏(5处)"
+  ],
+  "simile_count": 7,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 12,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 39,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 3,
+  "file": "第3章.txt"
+}

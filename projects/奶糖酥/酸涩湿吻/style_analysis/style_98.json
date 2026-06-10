@@ -1,0 +1,36 @@
+{
+  "total_chars": 2242,
+  "avg_sentence_len": 18.7,
+  "sentence_len_std": 14.3,
+  "avg_paragraph_len": 25,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 73
+  },
+  "vocabulary_diversity": 0.287,
+  "top_patterns": [
+    "原溯(18次)",
+    "蒲雨(16次)",
+    "”他(4次)",
+    "“我(4次)",
+    "“不(4次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(5处)",
+    "短句节奏(15处)"
+  ],
+  "simile_count": 5,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 2,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 57,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 98,
+  "file": "第98章.txt"
+}

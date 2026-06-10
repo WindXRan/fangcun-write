@@ -82,7 +82,7 @@ agent-browser --cdp 9222 snapshot -i
 ### 5. 对比本地已下载
 
 ```powershell
-$authorDir = "C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\.claude\skills\novel-download\novel-download-authors\{作者名}"
+$authorDir = "C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\.claude\skills\novel-download\projects\{作者名}"
 Get-ChildItem "$authorDir\*.txt" -ErrorAction SilentlyContinue
 ```
 

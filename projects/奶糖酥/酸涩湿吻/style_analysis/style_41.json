@@ -1,0 +1,35 @@
+{
+  "total_chars": 2221,
+  "avg_sentence_len": 19.6,
+  "sentence_len_std": 12.3,
+  "avg_paragraph_len": 24,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 74
+  },
+  "vocabulary_diversity": 0.3,
+  "top_patterns": [
+    "原溯(17次)",
+    "蒲雨(10次)",
+    "“我(3次)",
+    "”蒲(3次)",
+    "“哎(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 7,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 54,
+    "问号": 2,
+    "叹号": 1,
+    "引号": 0
+  },
+  "chapter": 41,
+  "file": "第41章.txt"
+}

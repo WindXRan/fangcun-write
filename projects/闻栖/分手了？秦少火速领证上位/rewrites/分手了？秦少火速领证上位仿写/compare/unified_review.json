@@ -1,0 +1,4537 @@
+{
+  "version": 1,
+  "timestamp": "2026-06-10 18:14:48",
+  "summary": {
+    "total": 101,
+    "pass": 68,
+    "fail": 33,
+    "missing": 0,
+    "avg_score": 78.0,
+    "total_issues": 385,
+    "high_issues": 42
+  },
+  "chapters": {
+    "1": {
+      "ch": 1,
+      "status": "PASS",
+      "score": 79,
+      "metrics": {
+        "chars": 1833,
+        "dash": 7,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突足够，但悬念设置稍显常规（被屏蔽朋友圈、白月光回归），缺乏更强烈的意外感。",
+          "fix_instruction": "可在开篇增加一个更具冲击力的细节，比如程屿屏蔽林柚的同时，却给孟婉宁的每条朋友圈点赞，强化背叛感。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪起伏较好，从压抑到隐忍再到爆发边缘，但部分内心独白稍显直白，削弱了含蓄的张力。",
+          "fix_instruction": "减少直接的心理描写，多用动作和细节传递情绪，如‘她盯着咖啡渍，手指无意识地抠着杯沿’代替‘她很难过’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "medium",
+          "description": "林柚的隐忍和理性人设一致，但程屿的渣男形象略显脸谱化，缺乏更复杂的动机。",
+          "fix_instruction": "在程屿的对话或回忆中，加入一两个他曾对林柚好的细节，让他的背叛更有层次感，而非纯粹的恶人。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏整体流畅，但开篇信息量稍大（朋友圈、电话、回忆、体检报告），容易让读者疲劳。",
+          "fix_instruction": "将体检报告和缝针的回忆分散到后续章节，本章聚焦于‘被屏蔽’和‘白月光回归’的核心冲突。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "2": {
+      "ch": 2,
+      "status": "PASS",
+      "score": 72,
+      "metrics": {
+        "chars": 1814,
+        "dash": 2,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1814/2105 (-14%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "medium",
+          "description": "开篇冲突延续较好，但‘成峰资本邀约’的转折略显突兀，缺乏铺垫。",
+          "fix_instruction": "在唐柠骂程屿的对话中，提前埋下‘赵靖北曾关注过林柚’的伏笔，让邀约更自然。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪有起伏，但林柚的‘笑’和‘平静’出现频率过高，削弱了情绪的层次感。",
+          "fix_instruction": "在关键冲突（如程屿说‘你不是自愿的吗’）后，增加一个林柚独处时的脆弱瞬间，再转入冷静，形成对比。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "medium",
+          "description": "程屿的‘你不是自愿的吗’台词有力，但孟婉宁的形象仍显单薄，缺乏独立动机。",
+          "fix_instruction": "在孟婉宁的对话中，加入她对林柚的微妙敌意或嫉妒，让她不只是‘温柔白月光’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏紧凑，但‘辞职’和‘成峰邀约’两个事件挤在同一章，略显仓促。",
+          "fix_instruction": "将‘辞职’的细节（如收拾工位、退还项链）单独成章，让情绪有更多发酵空间。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "3": {
+      "ch": 3,
+      "status": "FAIL",
+      "score": 56,
+      "metrics": {
+        "chars": 2724,
+        "dash": 11,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2724/2423 (+12%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "high",
+          "description": "开篇冲突较弱，以‘加班’和‘程屿叫’开场，缺乏新悬念，且与前两章重复。",
+          "fix_instruction": "直接以‘程屿把方案转给孟婉宁’的冲突开场，删除加班细节，强化戏剧性。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "description": "情绪有起伏，但‘体检报告’的插入时机不佳，打断了‘被抢项目’的愤怒主线。",
+          "fix_instruction": "将体检报告移至本章结尾，作为‘林柚决定反击’的催化剂，而非中途插入。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "medium",
+          "description": "林柚的‘冷静’人设开始显得重复，缺乏新的情感突破。",
+          "fix_instruction": "在‘被抢项目’后，增加林柚一个失控的瞬间（如砸碎杯子），再迅速恢复冷静，展现她的成长弧光。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "medium",
+          "description": "节奏稍显拖沓，体检报告和赵靖北电话两个事件衔接生硬。",
+          "fix_instruction": "删除体检报告细节，直接以赵靖北电话作为本章结尾，保持悬念。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "4": {
+      "ch": 4,
+      "status": "FAIL",
+      "score": 64,
+      "metrics": {
+        "chars": 2455,
+        "dash": 8,
+        "metaphor": 0,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 3处 (源文1, 上限2)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2455/2097 (+17%)",
+          "fix_instruction": "目标字数: 1887~2306",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突较好（唐柠质问），但‘赵靖北的资本秃鹫人设’铺垫稍显说教。",
+          "fix_instruction": "将唐柠的警告改为更生动的例子，如‘去年那家房地产老板跳楼前，还给他打过电话’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪有起伏，但林柚的‘平静’再次出现，略显单调。",
+          "fix_instruction": "在‘程屿盗用数据框架’的揭露后，增加林柚一个短暂的愤怒或悲伤瞬间，再转入冷静。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "medium",
+          "description": "赵靖北的‘护短’行为（在同事面前维护林柚）略显突兀，缺乏前文铺垫。",
+          "fix_instruction": "在赵靖北维护林柚前，增加一个他观察林柚工作细节的镜头，如‘他注意到她改方案时的专注’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏较好，但‘密码M2023L’的揭秘略显刻意，削弱了悬念。",
+          "fix_instruction": "将密码的揭秘改为林柚直接展示文件时间戳，更自然。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "5": {
+      "ch": 5,
+      "status": "FAIL",
+      "score": 72,
+      "metrics": {
+        "chars": 2481,
+        "dash": 11,
+        "metaphor": 1,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2481/2114 (+17%)",
+          "fix_instruction": "目标字数: 1902~2325",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突有力（赵靖北发现方案被篡改），悬念设置巧妙。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪起伏较好，林柚在酒会上的‘笑’和‘平静’有层次感。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "low",
+          "description": "人设一致，林柚的隐忍和赵靖北的犀利都得到体现。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏紧凑，酒会冲突和证据揭露衔接自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "6": {
+      "ch": 6,
+      "status": "FAIL",
+      "score": 33,
+      "metrics": {
+        "chars": 2581,
+        "dash": 9,
+        "metaphor": 0,
+        "ai_markers": 4,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2581/2014 (+28%)",
+          "fix_instruction": "目标字数: 1812~2215",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 4处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "high",
+          "description": "开篇与第3章重复（凌晨加班、程屿要方案），缺乏新意。",
+          "fix_instruction": "直接以‘林柚看到程屿的合伙人邮件’开场，删除加班细节，避免重复。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "description": "情绪有起伏，但‘删除工牌’和‘离职’的转折略显平淡。",
+          "fix_instruction": "在‘删除工牌’前，增加林柚回忆一个程屿伤害她的细节，强化决绝感。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "medium",
+          "description": "赵靖北的‘关注你两年’设定略显突兀，缺乏前文铺垫。",
+          "fix_instruction": "在赵靖北的对话中，加入他具体关注林柚的细节，如‘你三年前那份盛恒方案，我看了五遍’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "medium",
+          "description": "节奏拖沓，离职和赵靖北邀约两个事件衔接生硬。",
+          "fix_instruction": "删除‘离职手续’的细节，直接以赵靖北的邀约电话作为本章结尾。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "7": {
+      "ch": 7,
+      "status": "FAIL",
+      "score": 41,
+      "metrics": {
+        "chars": 2417,
+        "dash": 7,
+        "metaphor": 0,
+        "ai_markers": 6,
+        "direct_emotion": 1
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 6处 (源文1, 上限2)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2417/2135 (+13%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "high",
+          "description": "开篇与第3章、第6章重复（凌晨加班、程屿要方案），读者容易疲劳。",
+          "fix_instruction": "直接以‘林柚看到程屿的合伙人邮件’开场，删除加班细节，避免重复。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "description": "情绪有起伏，但‘删除联系人’的转折略显仓促，缺乏情感铺垫。",
+          "fix_instruction": "在‘删除联系人’前，增加林柚回忆程屿一个温暖瞬间，再对比现在的背叛，强化决绝感。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "medium",
+          "description": "赵靖北的‘查程屿底细’行为略显突兀，缺乏前文铺垫。",
+          "fix_instruction": "在赵靖北的短信中，加入他解释‘为什么关注林柚’的细节，如‘你三年前那份方案，让我记住了你’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "medium",
+          "description": "节奏拖沓，加班、朋友圈、赵靖北短信三个事件衔接生硬。",
+          "fix_instruction": "删除加班细节，直接以‘程屿朋友圈’和‘赵靖北短信’作为本章主线。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "8": {
+      "ch": 8,
+      "status": "PASS",
+      "score": 72,
+      "metrics": {
+        "chars": 2829,
+        "dash": 11,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突较好（赵靖北试探文旅线），悬念设置自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "description": "情绪有起伏，但林柚的‘紧张’和‘决定坦白’的转折略显突兀。",
+          "fix_instruction": "在‘决定坦白’前，增加林柚一个内心挣扎的细节，如‘她想起程屿的威胁，又想起赵靖北的信任’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "medium",
+          "description": "林柚的‘参与造假’设定略显突兀，缺乏前文铺垫。",
+          "fix_instruction": "在回忆中，增加林柚当时‘被迫’的细节，如‘程屿说，你不做，项目就黄了’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏较好，但‘城郊项目’的插入略显突兀。",
+          "fix_instruction": "将‘城郊项目’的细节分散到后续章节，本章聚焦于‘文旅线’的冲突。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "9": {
+      "ch": 9,
+      "status": "PASS",
+      "score": 77,
+      "metrics": {
+        "chars": 3781,
+        "dash": 15,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 3781/3218 (+17%)",
+          "fix_instruction": "目标字数: 2896~3539",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突有力（程屿撞见林柚和赵靖北），悬念设置自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪起伏较好，林柚的‘挽手臂’和‘删除聊天记录’有层次感。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "low",
+          "description": "人设一致，林柚的决绝和程屿的不甘心都得到体现。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏紧凑，停车场冲突和超市细节衔接自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "10": {
+      "ch": 10,
+      "status": "PASS",
+      "score": 85,
+      "metrics": {
+        "chars": 2170,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突有力（程屿冲进办公室质问），悬念设置巧妙。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪起伏强烈，林柚的‘冷静’和‘眼泪’有层次感。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "low",
+          "description": "人设一致，林柚的隐忍和爆发都得到体现。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏紧凑，冲突和回忆穿插自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "11": {
+      "ch": 11,
+      "status": "FAIL",
+      "score": 72,
+      "metrics": {
+        "chars": 1980,
+        "dash": 7,
+        "metaphor": 0,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 3处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突较好（林柚删除方案），悬念设置自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪起伏较好，林柚的‘平静’和‘决绝’有层次感。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "low",
+          "description": "人设一致，林柚的成长弧光得到体现。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏紧凑，年会冲突和成峰邀约衔接自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "12": {
+      "ch": 12,
+      "status": "FAIL",
+      "score": 62,
+      "metrics": {
+        "chars": 2453,
+        "dash": 16,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2453/2192 (+12%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突较好（唐柠送体检单），悬念设置自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "description": "情绪有起伏，但‘重生’主题的插入略显刻意。",
+          "fix_instruction": "将‘重生’的隐喻改为更自然的细节，如‘林柚看着镜子，第一次觉得自己可以重新开始’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "medium",
+          "description": "赵靖北的‘突然出现’略显突兀，缺乏前文铺垫。",
+          "fix_instruction": "在赵靖北出现前，增加一个他观察林柚的镜头，如‘他在对面楼的窗户里，看到了她的背影’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏较好，但‘生日蛋糕’的细节略显多余。",
+          "fix_instruction": "删除‘生日蛋糕’的细节，直接以赵靖北的出现作为本章结尾。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "13": {
+      "ch": 13,
+      "status": "PASS",
+      "score": 85,
+      "metrics": {
+        "chars": 2019,
+        "dash": 8,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突有力（赵靖北揭露三年前真相），悬念设置巧妙。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪起伏强烈，林柚的‘震惊’和‘释然’有层次感。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "low",
+          "description": "人设一致，赵靖北的‘深谋远虑’和林柚的‘觉醒’都得到体现。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏紧凑，回忆和现实穿插自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "14": {
+      "ch": 14,
+      "status": "PASS",
+      "score": 80,
+      "metrics": {
+        "chars": 1968,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突较好（赵靖北提供供应商名单），悬念设置自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪起伏较好，林柚的‘眼泪’和‘决绝’有层次感。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "low",
+          "description": "人设一致，林柚的成长和赵靖北的信任都得到体现。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏紧凑，冲突和回忆穿插自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "15": {
+      "ch": 15,
+      "status": "PASS",
+      "score": 82,
+      "metrics": {
+        "chars": 2013,
+        "dash": 8,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突有力（程屿闯入办公室），悬念设置巧妙。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪起伏强烈，林柚的‘冷静’和‘反击’有层次感。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "low",
+          "description": "人设一致，林柚的觉醒和赵靖北的护短都得到体现。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏紧凑，冲突和对话穿插自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "16": {
+      "ch": 16,
+      "status": "PASS",
+      "score": 72,
+      "metrics": {
+        "chars": 2131,
+        "dash": 7,
+        "metaphor": 0,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突较好（程屿威胁林柚父亲），悬念设置自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "description": "情绪有起伏，但‘赵靖北买下优先股’的转折略显突兀。",
+          "fix_instruction": "在赵靖北透露买股前，增加他一个观察林柚的细节，如‘他看着她紧握的拳头，知道她在强撑’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "medium",
+          "description": "赵靖北的‘买股’行为略显突兀，缺乏前文铺垫。",
+          "fix_instruction": "在赵靖北的对话中，加入他解释‘为什么买股’的细节，如‘我早就知道程屿会拿你父亲威胁你’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏较好，但‘家宴’的插入略显突兀。",
+          "fix_instruction": "将‘家宴’的细节分散到后续章节，本章聚焦于‘优先股’的冲突。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "17": {
+      "ch": 17,
+      "status": "FAIL",
+      "score": 75,
+      "metrics": {
+        "chars": 2271,
+        "dash": 5,
+        "metaphor": 1,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突有力（程屿点名林柚参与谈判），悬念设置巧妙。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪起伏强烈，林柚的‘冷静’和‘反击’有层次感。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "low",
+          "description": "人设一致，林柚的成长和赵靖北的信任都得到体现。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏紧凑，冲突和对话穿插自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "18": {
+      "ch": 18,
+      "status": "FAIL",
+      "score": 67,
+      "metrics": {
+        "chars": 2382,
+        "dash": 3,
+        "metaphor": 1,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 3处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2382/2096 (+14%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突较好（林柚发现程屿的局），悬念设置自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪起伏较好，林柚的‘愤怒’和‘释然’有层次感。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "low",
+          "description": "人设一致，林柚的觉醒和赵靖北的深谋远虑都得到体现。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏紧凑，冲突和电话穿插自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "19": {
+      "ch": 19,
+      "status": "PASS",
+      "score": 82,
+      "metrics": {
+        "chars": 1907,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突有力（资源断供），悬念设置巧妙。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪起伏强烈，林柚的‘平静’和‘反击’有层次感。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "low",
+          "description": "人设一致，林柚的决绝和程屿的慌乱都得到体现。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏紧凑，冲突和回忆穿插自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "20": {
+      "ch": 20,
+      "status": "PASS",
+      "score": 72,
+      "metrics": {
+        "chars": 2560,
+        "dash": 6,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突较好（赵靖北带林柚回家），悬念设置自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "description": "情绪有起伏，但‘粉色杯子’的细节略显刻意。",
+          "fix_instruction": "将‘粉色杯子’改为更自然的细节，如‘洗手台上放着两套牙刷，一套灰色，一套白色’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "medium",
+          "description": "赵靖北的‘温柔’行为略显突兀，缺乏前文铺垫。",
+          "fix_instruction": "在赵靖北的对话中，加入他解释‘为什么准备杯子’的细节，如‘我助理准备的，她说你会需要’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏较好，但‘唐柠偶遇’的细节略显多余。",
+          "fix_instruction": "删除‘唐柠偶遇’的细节，直接以‘赵靖北家’作为本章主线。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "21": {
+      "ch": 21,
+      "status": "PASS",
+      "score": 85,
+      "metrics": {
+        "chars": 2130,
+        "dash": 9,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突有力（程屿的机密消息），悬念设置巧妙。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪起伏强烈，林柚的‘震惊’和‘决绝’有层次感。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "low",
+          "description": "人设一致，林柚的觉醒和赵靖北的深谋远虑都得到体现。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏紧凑，冲突和对话穿插自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "22": {
+      "ch": 22,
+      "status": "PASS",
+      "score": 80,
+      "metrics": {
+        "chars": 2094,
+        "dash": 4,
+        "metaphor": 2,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突较好（父亲突然到来），悬念设置自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪起伏较好，林柚的‘紧张’和‘释然’有层次感。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "low",
+          "description": "人设一致，林柚的脆弱和赵靖北的体贴都得到体现。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏紧凑，冲突和对话穿插自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "23": {
+      "ch": 23,
+      "status": "FAIL",
+      "score": 69,
+      "metrics": {
+        "chars": 2472,
+        "dash": 4,
+        "metaphor": 1,
+        "ai_markers": 5,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 5处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2472/2064 (+20%)",
+          "fix_instruction": "目标字数: 1857~2270",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突有力（停车场偶遇程屿），悬念设置巧妙。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪起伏强烈，林柚的‘平静’和‘反击’有层次感。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "low",
+          "description": "人设一致，林柚的成长和赵靖北的护短都得到体现。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏紧凑，冲突和对话穿插自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "24": {
+      "ch": 24,
+      "status": "PASS",
+      "score": 69,
+      "metrics": {
+        "chars": 2960,
+        "dash": 2,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 1
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2960/2490 (+19%)",
+          "fix_instruction": "目标字数: 2241~2739",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突较好（林柚回家见母亲），悬念设置自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "medium",
+          "description": "情绪有起伏，但‘父亲的信’的插入略显突兀。",
+          "fix_instruction": "在‘父亲的信’前，增加林柚回忆父亲一个细节，如‘她想起父亲总在书房里写毛笔字，背影很孤独’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "medium",
+          "description": "母亲的‘转变’略显突兀，缺乏前文铺垫。",
+          "fix_instruction": "在母亲的对话中，加入她解释‘为什么改变态度’的细节，如‘你爸走之前，让我一定要照顾好你’。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏较好，但‘改遗嘱’的细节略显多余。",
+          "fix_instruction": "将‘改遗嘱’的细节分散到后续章节，本章聚焦于‘母女和解’。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "25": {
+      "ch": 25,
+      "status": "PASS",
+      "score": 85,
+      "metrics": {
+        "chars": 2275,
+        "dash": 12,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇冲突有力（程屿停车场堵人），悬念设置巧妙。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotion",
+          "severity": "low",
+          "description": "情绪起伏强烈，林柚的‘冷静’和‘反击’有层次感。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character",
+          "severity": "low",
+          "description": "人设一致，林柚的觉醒和程屿的慌乱都得到体现。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pace",
+          "severity": "low",
+          "description": "节奏紧凑，冲突和回忆穿插自然。",
+          "fix_instruction": "无。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "26": {
+      "ch": 26,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1940,
+        "dash": 0,
+        "metaphor": 1,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "27": {
+      "ch": 27,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2412,
+        "dash": 14,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 1
+      },
+      "issues": []
+    },
+    "28": {
+      "ch": 28,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2314,
+        "dash": 7,
+        "metaphor": 2,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2314/2090 (+11%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "29": {
+      "ch": 29,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2038,
+        "dash": 5,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "30": {
+      "ch": 30,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2481,
+        "dash": 5,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2481/2249 (+10%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "31": {
+      "ch": 31,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 2891,
+        "dash": 15,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2891/2327 (+24%)",
+          "fix_instruction": "目标字数: 2094~2559",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "32": {
+      "ch": 32,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1766,
+        "dash": 1,
+        "metaphor": 0,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1766/2095 (-16%)",
+          "fix_instruction": "目标字数: 1885~2304",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "33": {
+      "ch": 33,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2327,
+        "dash": 5,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "34": {
+      "ch": 34,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2442,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2442/2138 (+14%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "35": {
+      "ch": 35,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2655,
+        "dash": 7,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2655/2105 (+26%)",
+          "fix_instruction": "目标字数: 1894~2315",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "36": {
+      "ch": 36,
+      "status": "PASS",
+      "score": 76,
+      "metrics": {
+        "chars": 1975,
+        "dash": 8,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1975/2196 (-10%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "medium",
+          "description": "开篇冲突设置较好，但悬念感稍弱。孟婉宁登场与程屿的对话揭开了部分真相，但冲突爆发点（录音曝光）在章节中段才出现，前500字情绪铺垫略长。",
+          "fix_instruction": "建议在开篇200字内强化冲突信号，例如将唐柠的警告消息提前，或直接以程屿与孟婉宁的对话片段切入，制造更强烈的悬念感。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏明显，从林柚的震惊、愤怒到最后的决绝，层次清晰。但部分内心独白（如‘原来在程屿眼里，自己就是个工具人’）略显直白，削弱了含蓄的张力。",
+          "fix_instruction": "可适当减少直接的心理描写，通过动作或环境细节（如手指发抖、咖啡杯的晃动）来传递情绪，增强画面感和代入感。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚从隐忍到爆发的转变合理，符合前期受压迫后觉醒的人设。唐柠的录音行为虽有铺垫，但‘十个月一直有备份’的设定稍显突兀，可提前暗示她对程屿的怀疑。",
+          "fix_instruction": "建议在之前章节中增加唐柠对程屿的质疑或观察细节，使录音行为更符合人物逻辑。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "medium",
+          "description": "节奏整体紧凑，但录音曝光后的情绪释放略显仓促。林柚的‘站起来，把项目书合上’到走出会议室的过程，缺乏足够的情绪缓冲，导致高潮后的收尾稍显平淡。",
+          "fix_instruction": "可在林柚合上项目书后增加一个停顿或细节描写（如她盯着封面上自己的名字），让读者更充分感受她的决绝与释然。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "37": {
+      "ch": 37,
+      "status": "FAIL",
+      "score": 62,
+      "metrics": {
+        "chars": 2894,
+        "dash": 9,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2894/3261 (-11%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "high",
+          "description": "开篇悬念不足。飞机场景和程屿的朋友圈内容作为过渡，缺乏直接冲突或新信息，读者容易失去追读兴趣。",
+          "fix_instruction": "建议以唐柠的电话或赵靖北的突然出现作为开篇，直接抛出新的矛盾点（如程屿的股权质押或孟婉宁的体检报告），增强紧迫感。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "情绪起伏较小，林柚的冷静和赵靖北的沉稳使章节整体偏平。虽然‘定时发送邮件’的设定有反击意味，但缺乏情感爆发点。",
+          "fix_instruction": "可增加林柚回忆与程屿的细节（如他从未看过她写的方案），与当前赵靖北的信任形成对比，强化情绪落差。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的冷静和果断符合觉醒后的人设，赵靖北的‘一堵不会说话却永远不会倒的墙’形象鲜明。但唐柠的体检报告调查请求略显突兀，与林柚前期‘不想再纠缠’的心态略有矛盾。",
+          "fix_instruction": "可增加林柚的内心挣扎（如‘我知道不该再查，但真相像一根刺’），使行为更合理。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "medium",
+          "description": "节奏较慢，飞机场景和咖啡厅对话占据了大量篇幅，缺乏紧张感。结尾的‘定时发送’虽有悬念，但整体推进力度不足。",
+          "fix_instruction": "可压缩飞机场景，将重点放在林柚与赵靖北的对话上，增加关于程屿阴谋的细节，提升信息密度。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "38": {
+      "ch": 38,
+      "status": "PASS",
+      "score": 82,
+      "metrics": {
+        "chars": 2214,
+        "dash": 5,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以赵靖北接电话和程屿的动作切入，冲突感强，悬念设置合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏自然，从林柚的紧张到发现赵靖北钱包里入职申请表的震惊，再到最后的感动，层次丰富。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "medium",
+          "description": "赵靖北的‘早有准备’设定合理，但楚正尧的出现略显工具化，其‘嫂子’称呼和大量信息透露稍显刻意。",
+          "fix_instruction": "可减少楚正尧的直接信息输出，改为通过林柚的观察或赵靖北的暗示来揭示背景，增强自然感。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "description": "节奏张弛有度，从车上的紧张到服务区的轻松，再到酒店发现入职申请表的情绪高潮，控制得当。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "39": {
+      "ch": 39,
+      "status": "PASS",
+      "score": 68,
+      "metrics": {
+        "chars": 2241,
+        "dash": 1,
+        "metaphor": 1,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 2处: 然后×2",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 2
+              }
+            ]
+          }
+        },
+        {
+          "type": "hook",
+          "severity": "medium",
+          "description": "开篇以唐柠的爆料切入，冲突直接，但‘程屿要换掉项目组’的信息在之前章节已有铺垫，新鲜感不足。",
+          "fix_instruction": "可增加具体细节（如新供应商的名称或报价单），使冲突更具象化。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "情绪起伏较小，林柚的‘无所谓’和‘算了’显得过于冷静，缺乏内心挣扎。与唐柠的对话偏信息传递，情感张力不足。",
+          "fix_instruction": "可增加林柚回忆前两次被调走的细节，通过对比强化她的疲惫和无奈，使‘算了’更有分量。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的果断和赵靖北的沉稳符合人设，但唐柠的‘录音’设定在之前章节已使用，重复略显刻意。",
+          "fix_instruction": "可改为唐柠通过其他方式（如聊天记录或证人）提供证据，避免重复。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "medium",
+          "description": "节奏偏平，咖啡厅对话和办公室场景缺乏起伏。结尾的‘穿正式一点’虽有暗示，但整体推进缓慢。",
+          "fix_instruction": "可压缩咖啡厅对话，增加林柚与赵靖北的互动细节，或提前引入饭局冲突，提升紧张感。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "40": {
+      "ch": 40,
+      "status": "FAIL",
+      "score": 50,
+      "metrics": {
+        "chars": 2402,
+        "dash": 1,
+        "metaphor": 2,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2402/2090 (+15%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "high",
+          "description": "开篇与第39章内容高度重复，缺乏新信息，读者容易产生疲劳感。",
+          "fix_instruction": "建议删除重复内容，直接以新场景（如林柚与赵靖北的饭局或科技园考察）开篇，避免冗余。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "情绪起伏较小，林柚的‘无所谓’和‘算了’与第39章一致，缺乏递进。唐柠的‘崇拜’话题略显突兀，与主线关联弱。",
+          "fix_instruction": "可增加林柚对程屿的愤怒或对未来的迷茫，使情绪更丰富。删除‘崇拜’等无关话题，聚焦主线。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "medium",
+          "description": "林柚的‘单身快乐’宣言与前期‘疲惫’状态略有矛盾，可增加内心独白解释。赵靖北的‘红枣栗子粥’细节虽暖心，但‘排了四十分钟队’的设定稍显刻意。",
+          "fix_instruction": "可改为赵靖北随口提到‘这家店我常去’，减少刻意感。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "high",
+          "description": "节奏拖沓，大量重复内容（如前两次被调走的回忆）和无关细节（如盛瑶的打架）拖慢进度。",
+          "fix_instruction": "建议删除第40章，或将关键信息（如赵靖北的粥）合并到第39章，避免重复。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "41": {
+      "ch": 41,
+      "status": "PASS",
+      "score": 85,
+      "metrics": {
+        "chars": 1782,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1782/2376 (-25%)",
+          "fix_instruction": "目标字数: 2138~2613",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以林柚在会议室直接摊牌切入，冲突强烈，悬念设置出色。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏明显，从林柚的冷静反击到程屿的慌乱，再到张明的绝望求助，层次丰富。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的果断和程屿的虚伪符合人设，张明的出现合理，为后续剧情埋下伏笔。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "description": "节奏紧凑，从会议室对峙到停车场接U盘，再到程屿的电话威胁，一气呵成。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "42": {
+      "ch": 42,
+      "status": "FAIL",
+      "score": 60,
+      "metrics": {
+        "chars": 1895,
+        "dash": 1,
+        "metaphor": 0,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 3处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "medium",
+          "description": "开篇以周衍舟的求助切入，冲突直接，但‘程屿的施舍’设定在之前章节已有类似情节，新鲜感不足。",
+          "fix_instruction": "可增加程屿施舍的具体条件（如要求林柚公开道歉），使冲突更具针对性。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "情绪起伏较小，林柚的冷静和拒绝显得过于理性，缺乏内心挣扎。周衍舟的‘对不起’略显突兀。",
+          "fix_instruction": "可增加林柚对周衍舟的失望或对程屿的愤怒，使情绪更饱满。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的独立和果断符合人设，但‘我认识一个投资人’的设定略显突兀，缺乏铺垫。",
+          "fix_instruction": "可提前暗示林柚在成峰资本的人脉，或改为她通过赵靖北联系投资人，增强逻辑性。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "medium",
+          "description": "节奏偏平，咖啡厅对话和车内场景缺乏起伏。结尾的‘电话那头的声音’虽有悬念，但整体推进缓慢。",
+          "fix_instruction": "可压缩咖啡厅对话，直接切入林柚与投资人的电话，提升紧张感。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "43": {
+      "ch": 43,
+      "status": "FAIL",
+      "score": 67,
+      "metrics": {
+        "chars": 1953,
+        "dash": 13,
+        "metaphor": 0,
+        "ai_markers": 4,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 4处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 2处: 然后×2",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 2
+              }
+            ]
+          }
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以林柚发现程屿与孟婉宁吃饭切入，冲突直接，悬念设置合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏明显，从林柚的震惊到冷静拍照，再到最后的‘清算’宣言，层次丰富。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的冷静和果断符合人设，程屿的虚伪和赵靖北的沉稳形象鲜明。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "medium",
+          "description": "节奏整体紧凑，但结尾程屿的内心独白略显冗长，可适当精简。",
+          "fix_instruction": "可减少程屿的回忆细节，聚焦于他对林柚离开的震惊和愤怒，增强情绪冲击。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "44": {
+      "ch": 44,
+      "status": "PASS",
+      "score": 78,
+      "metrics": {
+        "chars": 2324,
+        "dash": 16,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2324/2045 (+14%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以程屿的视角切入，冲突直接，悬念设置合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "情绪起伏明显，从程屿的烦躁到愤怒，再到最后的崩溃，层次丰富。但林柚的‘新的战场’朋友圈略显平淡。",
+          "fix_instruction": "可增加林柚发朋友圈时的内心独白，如‘这条朋友圈，是给过去十年的自己一个交代’，增强情感张力。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "程屿的暴躁和后悔符合人设，林柚的冷静和决绝形象鲜明。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "description": "节奏张弛有度，从办公室的压抑到酒会的轻松，再到程屿的崩溃，控制得当。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "45": {
+      "ch": 45,
+      "status": "PASS",
+      "score": 86,
+      "metrics": {
+        "chars": 1964,
+        "dash": 8,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以林柚加班和赵靖北的突然出现切入，悬念设置合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏自然，从林柚的疲惫到赵靖北的细心，再到发现U盘的悬念，层次丰富。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "赵靖北的细心和沉稳符合人设，林柚的独立和警惕形象鲜明。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "description": "节奏张弛有度，从办公室的紧张到早茶的轻松，再到U盘的悬念，控制得当。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "46": {
+      "ch": 46,
+      "status": "PASS",
+      "score": 81,
+      "metrics": {
+        "chars": 1765,
+        "dash": 6,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1765/2151 (-18%)",
+          "fix_instruction": "目标字数: 1935~2366",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以冯经理的消息和程屿的阴谋切入，冲突直接，悬念设置合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏明显，从林柚的紧张到赵靖北的支持，再到发现孟婉宁的秘密，层次丰富。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的果断和赵靖北的沉稳符合人设，唐柠的爆料合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "description": "节奏紧凑，从酒店到面馆再到医院消息，一气呵成。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "47": {
+      "ch": 47,
+      "status": "PASS",
+      "score": 87,
+      "metrics": {
+        "chars": 2345,
+        "dash": 1,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2345/2089 (+12%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以酒会场景和赵靖北的指令切入，冲突直接，悬念设置合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏自然，从林柚的紧张到成功套话的自信，再到吃面时的释然，层次丰富。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的观察力和赵靖北的沉稳符合人设，面馆老板的细节丰富了赵靖北的形象。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "description": "节奏张弛有度，从酒会的紧张到面馆的轻松，控制得当。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "48": {
+      "ch": 48,
+      "status": "PASS",
+      "score": 85,
+      "metrics": {
+        "chars": 1970,
+        "dash": 5,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以赵靖北发来的封面照片切入，悬念设置合理，情感冲击强。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏明显，从林柚的感动到唐柠的爆料，再到赵靖北的承诺，层次丰富。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "赵靖北的细心和尊重符合人设，林柚的感动和决心形象鲜明。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "description": "节奏张弛有度，从凌晨的感动到早上的会议，再到便利店台阶的对话，控制得当。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "49": {
+      "ch": 49,
+      "status": "PASS",
+      "score": 76,
+      "metrics": {
+        "chars": 2345,
+        "dash": 9,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以林柚在赵靖北房间醒来的场景切入，悬念设置合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "情绪起伏较小，从尴尬到轻松的早餐对话，再到程屿朋友圈的冲击，情感张力不足。",
+          "fix_instruction": "可增加林柚对程屿朋友圈的内心反应，如‘我原以为已经放下了，但看到这句话，心还是揪了一下’，强化情感。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的冷静和赵靖北的沉稳符合人设，陈述的搞笑形象鲜明。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "medium",
+          "description": "节奏偏平，早餐对话和车内场景缺乏起伏。结尾的‘愧疚和遗憾’对话虽有深度，但整体推进缓慢。",
+          "fix_instruction": "可压缩早餐场景，提前引入程屿朋友圈的冲突，提升紧张感。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "50": {
+      "ch": 50,
+      "status": "PASS",
+      "score": 80,
+      "metrics": {
+        "chars": 1580,
+        "dash": 7,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1580/2084 (-24%)",
+          "fix_instruction": "目标字数: 1875~2292",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以匿名邮件和程屿的拦截切入，冲突直接，悬念设置合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏明显，从林柚的冷静到程屿的愤怒，再到火锅店的轻松，层次丰富。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的果断和程屿的虚伪符合人设，唐柠的闺蜜形象鲜明。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "description": "节奏紧凑，从匿名邮件到程屿拦截，再到火锅店对话，一气呵成。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "51": {
+      "ch": 51,
+      "status": "PASS",
+      "score": 86,
+      "metrics": {
+        "chars": 2383,
+        "dash": 0,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2383/2120 (+12%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以匿名邮件和律师函切入，冲突直接，悬念设置合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏明显，从林柚的冷静到被跟踪的紧张，再到赵靖北的救援，层次丰富。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的警惕和赵靖北的沉稳符合人设，司机的威胁合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "description": "节奏紧凑，从办公室到被跟踪再到救援，一气呵成。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "52": {
+      "ch": 52,
+      "status": "PASS",
+      "score": 85,
+      "metrics": {
+        "chars": 1709,
+        "dash": 6,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1709/2145 (-20%)",
+          "fix_instruction": "目标字数: 1930~2359",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以程屿的拦截和威胁切入，冲突直接，悬念设置出色。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏明显，从林柚的紧张到赵靖北的救援，再到签下合作协议的释然，层次丰富。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的果断和赵靖北的沉稳符合人设，程屿的虚伪形象鲜明。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "description": "节奏紧凑，从停车场对峙到咖啡馆签约，一气呵成。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "53": {
+      "ch": 53,
+      "status": "FAIL",
+      "score": 74,
+      "metrics": {
+        "chars": 2045,
+        "dash": 5,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "林柚盯着他看了几秒，忽然笑了她收起手机，靠在座椅上",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以程屿的低估值报告切入，冲突直接，悬念设置合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏自然，从林柚的紧张到赵靖北的信任，再到见老李头的自信，层次丰富。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的专业和赵靖北的沉稳符合人设，老李头的形象鲜明。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "description": "节奏张弛有度，从办公室到见老李头，再到车上的对话，控制得当。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "54": {
+      "ch": 54,
+      "status": "FAIL",
+      "score": 61,
+      "metrics": {
+        "chars": 2842,
+        "dash": 5,
+        "metaphor": 2,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2842/2149 (+32%)",
+          "fix_instruction": "目标字数: 1934~2363",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "medium",
+          "description": "开篇以民宿场景切入，氛围营造较好，但缺乏直接冲突或悬念。",
+          "fix_instruction": "可增加一个细节（如林柚发现程屿的短信或赵靖北的异常举动），提升悬念。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "情绪起伏较小，从水边的平静到梦境的压抑，再到露台的发现，情感张力不足。",
+          "fix_instruction": "可增加林柚对梦境的内心反应，如‘那个梦像一根刺，扎在我心里’，强化情感。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的敏感和赵靖北的沉稳符合人设，但唐柠的‘度蜜月’调侃略显刻意。",
+          "fix_instruction": "可减少唐柠的调侃，改为更自然的闺蜜对话。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "medium",
+          "description": "节奏偏慢，民宿场景和梦境描写占比较大，缺乏紧张感。",
+          "fix_instruction": "可压缩梦境描写，提前引入明德交接问题的冲突，提升节奏。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "55": {
+      "ch": 55,
+      "status": "FAIL",
+      "score": 41,
+      "metrics": {
+        "chars": 2741,
+        "dash": 1,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2741/2060 (+33%)",
+          "fix_instruction": "目标字数: 1854~2266",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "high",
+          "description": "开篇以唐柠的求助切入，但‘帮我去学校’的设定与主线关联弱，缺乏悬念。",
+          "fix_instruction": "建议直接以程屿的新动作或孟婉宁的体检报告开篇，避免支线干扰主线。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "情绪起伏较小，从甜品店的轻松到盛瑶的出现，缺乏情感爆发点。",
+          "fix_instruction": "可增加林柚对程屿朋友圈的内心反应，或唐柠对程屿的试探，强化情感张力。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "medium",
+          "description": "林柚的冷静和唐柠的八卦符合人设，但盛瑶的‘不够’回复略显突兀，与主线无关。",
+          "fix_instruction": "建议删除盛瑶支线，或将其与主线关联（如盛瑶是程屿的亲戚）。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "high",
+          "description": "节奏拖沓，甜品店对话和盛瑶的支线占比较大，缺乏紧张感。",
+          "fix_instruction": "建议删除第55章，或将关键信息（如唐柠对程屿的试探）合并到其他章节。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "56": {
+      "ch": 56,
+      "status": "FAIL",
+      "score": 50,
+      "metrics": {
+        "chars": 2743,
+        "dash": 9,
+        "metaphor": 1,
+        "ai_markers": 4,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2743/2053 (+34%)",
+          "fix_instruction": "目标字数: 1847~2258",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 4处 (源文1, 上限2)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "medium",
+          "description": "开篇以唐柠的微信消息切入，冲突直接，但‘程屿加好友’的设定在之前章节已有类似情节，新鲜感不足。",
+          "fix_instruction": "可增加程屿加好友的具体原因（如通过孟婉宁的账号），提升悬念。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "情绪起伏较小，从餐厅的轻松到程屿的拦截，再到赵靖北的救援，情感张力不足。",
+          "fix_instruction": "可增加林柚对程屿的愤怒或对赵靖北的感动，使情绪更饱满。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的冷静和赵靖北的沉稳符合人设，程屿的虚伪形象鲜明。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "medium",
+          "description": "节奏偏平，餐厅对话和停车场对峙缺乏起伏。结尾的‘孟婉宁’出现虽有悬念，但整体推进缓慢。",
+          "fix_instruction": "可压缩餐厅对话，提前引入停车场冲突，提升紧张感。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "57": {
+      "ch": 57,
+      "status": "PASS",
+      "score": 85,
+      "metrics": {
+        "chars": 1859,
+        "dash": 4,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1859/2141 (-13%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以程屿的威胁消息切入，冲突直接，悬念设置合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏明显，从林柚的冷静到赵靖北的救援，再到发现错误数据的紧张，层次丰富。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的警惕和赵靖北的细心符合人设，程屿的阴谋合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "description": "节奏紧凑，从办公室到公寓再到发现错误数据，一气呵成。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "58": {
+      "ch": 58,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 2531,
+        "dash": 3,
+        "metaphor": 2,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2531/2087 (+21%)",
+          "fix_instruction": "目标字数: 1878~2295",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以唐柠的劝说切入，冲突直接，悬念设置合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏明显，从林柚的犹豫到汇报现场的自信，再到最后的后悔，层次丰富。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的专业和程屿的虚伪符合人设，孟婉宁的尴尬形象鲜明。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "description": "节奏紧凑，从咖啡厅到公司再到会议室，一气呵成。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "59": {
+      "ch": 59,
+      "status": "PASS",
+      "score": 86,
+      "metrics": {
+        "chars": 1795,
+        "dash": 2,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1795/2059 (-13%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以程屿的拒绝报价切入，冲突直接，悬念设置合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏自然，从林柚的紧张到赵靖北的信任，再到发现程屿的阴谋，层次丰富。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的独立和赵靖北的沉稳符合人设，程屿的虚伪形象鲜明。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "description": "节奏张弛有度，从办公室到湘菜馆再到酒会邀请，控制得当。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "60": {
+      "ch": 60,
+      "status": "PASS",
+      "score": 84,
+      "metrics": {
+        "chars": 2014,
+        "dash": 1,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇以程屿的朋友圈截图切入，冲突直接，悬念设置合理。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪起伏明显，从林柚的愤怒到赵靖北的告白，再到最后的犹豫，层次丰富。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的独立和赵靖北的深情符合人设，程屿的虚伪形象鲜明。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "low",
+          "description": "节奏紧凑，从办公室到公寓再到告白，一气呵成。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "61": {
+      "ch": 61,
+      "status": "FAIL",
+      "score": 62,
+      "metrics": {
+        "chars": 2111,
+        "dash": 7,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "high",
+          "description": "开篇以林柚加班和程屿的批评切入，冲突直接，但‘方案改了七版’的设定在之前章节已有类似情节，新鲜感不足。",
+          "fix_instruction": "可增加程屿批评的具体内容（如‘你的方案毫无价值’），提升冲突的尖锐性。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "情绪起伏较小，从林柚的疲惫到程屿的批评，再到走廊的空荡，情感张力不足。",
+          "fix_instruction": "可增加林柚对程屿的愤怒或对未来的迷茫，使情绪更饱满。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的隐忍和程屿的虚伪符合人设，但‘不够成熟’的批评略显重复。",
+          "fix_instruction": "可改为程屿提出更具体的刁难（如‘你的数据全是错的’），增强冲突。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "rhythm",
+          "severity": "medium",
+          "description": "节奏偏平，加班场景和走廊描写缺乏起伏。结尾的‘高跟鞋踩在地砖上’虽有氛围，但整体推进缓慢。",
+          "fix_instruction": "可压缩加班场景，提前引入新冲突（如程屿的下一步动作），提升紧张感。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "62": {
+      "ch": 62,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 2940,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2940/2219 (+32%)",
+          "fix_instruction": "目标字数: 1997~2440",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 3处 (源文1, 上限2)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        }
+      ]
+    },
+    "63": {
+      "ch": 63,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2055,
+        "dash": 4,
+        "metaphor": 2,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "64": {
+      "ch": 64,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2267,
+        "dash": 8,
+        "metaphor": 0,
+        "ai_markers": 6,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 6处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2267/2053 (+10%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "65": {
+      "ch": 65,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1778,
+        "dash": 6,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1778/2069 (-14%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "66": {
+      "ch": 66,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 2504,
+        "dash": 5,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2504/2121 (+18%)",
+          "fix_instruction": "目标字数: 1908~2333",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "67": {
+      "ch": 67,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2282,
+        "dash": 5,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2282/2068 (+10%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "68": {
+      "ch": 68,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2001,
+        "dash": 4,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "69": {
+      "ch": 69,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 2526,
+        "dash": 4,
+        "metaphor": 3,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2526/2062 (+23%)",
+          "fix_instruction": "目标字数: 1855~2268",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "70": {
+      "ch": 70,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2198,
+        "dash": 5,
+        "metaphor": 2,
+        "ai_markers": 0,
+        "direct_emotion": 1
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数不足 2198/3173 (-31%)",
+          "fix_instruction": "目标字数: 2855~3490",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "71": {
+      "ch": 71,
+      "status": "FAIL",
+      "score": 46,
+      "metrics": {
+        "chars": 3203,
+        "dash": 5,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 3203/2083 (+54%)",
+          "fix_instruction": "目标字数: 1874~2291",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "high",
+          "description": "开篇商务晚宴场景缺乏强冲突或悬念，林柚的内心活动较多，但外部事件推进缓慢，直到结尾林蓁的交易才出现转折，但前500字内钩子较弱。",
+          "fix_instruction": "建议在开篇前500字内加入一个更强烈的冲突点，例如楚正尧的挑衅更早、更尖锐，或林柚发现林蓁与黑西装男人的对话更早，以快速抓住读者注意力。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "情绪起伏较平，林柚的隐忍和内心挣扎描写较多，但缺乏爆发点，整体情绪线偏压抑。",
+          "fix_instruction": "可在林柚被楚正尧羞辱后，增加一个情绪释放的瞬间，例如她反击时语气更尖锐，或内心独白更激烈，以增强情绪张力。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的人设基本一致，但她在面对林蓁威胁时的反应略显被动，与之前职场上的果断形象略有出入。",
+          "fix_instruction": "可让林柚在拒绝林蓁时更坚定，例如直接点破林蓁的意图或给出一个更聪明的反击，以强化其成长后的独立人设。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "medium",
+          "description": "节奏偏慢，晚宴场景和后续走廊对话占据大量篇幅，情节推进较缓，缺乏张弛有度的变化。",
+          "fix_instruction": "可压缩晚宴场景的描写，加快林柚发现林蓁秘密的节奏，或插入一个更紧张的小高潮，如林柚险些被程屿发现跟踪，以改善节奏感。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "72": {
+      "ch": 72,
+      "status": "PASS",
+      "score": 75,
+      "metrics": {
+        "chars": 1925,
+        "dash": 1,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇赵靖北指出数据错误，冲突直接且有力，钩子较好。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "林柚的震惊和反思描写到位，但情绪转折略显生硬，从被质疑到被提拔的过渡稍快。",
+          "fix_instruction": "可在林柚拿出绿色文件夹后，增加一段内心挣扎或对程屿的回忆，让情绪积累更充分，再过渡到赵靖北的提拔，使情感曲线更自然。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的谨慎和成长人设一致，赵靖北的果断和洞察力也符合前文设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "low",
+          "description": "节奏紧凑，从发现问题到解决问题再到新机会，张弛有度。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "73": {
+      "ch": 73,
+      "status": "PASS",
+      "score": 85,
+      "metrics": {
+        "chars": 2060,
+        "dash": 7,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇林柚在咖啡厅蹲守程屿，悬念感强，钩子有力。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪浓度高，从林柚的执着到程屿的冷漠，再到最后的崩溃和唐柠的安慰，起伏明显，感染力强。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的痴情和觉醒过程自然，程屿的冷漠和自私符合前文设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "low",
+          "description": "节奏控制得当，从紧张的对峙到情感爆发，再到唐柠的安慰，张弛有度。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "74": {
+      "ch": 74,
+      "status": "PASS",
+      "score": 74,
+      "metrics": {
+        "chars": 2123,
+        "dash": 4,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇唐柠求助小鹿事件，悬念设置有效，钩子较好。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "林柚的犹豫和责任感描写到位，但赵靖北的介入略显工具化，情绪张力可更强。",
+          "fix_instruction": "可增加林柚在决定是否帮助小鹿时的内心挣扎，例如回忆自己22岁时的经历，以增强情感共鸣。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的善良和成长人设一致，赵靖北的冷静和掌控力符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "medium",
+          "description": "节奏较好，但赵靖北揭露孟婉宁和张明远勾结的部分信息量较大，可适当分散。",
+          "fix_instruction": "可将孟婉宁和张明远的通话记录等细节分散到后续章节，避免本章信息过载。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "75": {
+      "ch": 75,
+      "status": "FAIL",
+      "score": 72,
+      "metrics": {
+        "chars": 2003,
+        "dash": 2,
+        "metaphor": 3,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 3处 (源文1, 上限2)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇赵靖北与程屿对峙，冲突直接，钩子有力。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪浓度高，赵靖北为林柚受伤的桥段感人，林柚的感动和心疼描写到位。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "赵靖北的强势和保护欲符合人设，林柚的依赖和感激也自然。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "low",
+          "description": "节奏紧凑，从对峙到受伤再到归还U盘，张弛有度。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "76": {
+      "ch": 76,
+      "status": "PASS",
+      "score": 66,
+      "metrics": {
+        "chars": 2301,
+        "dash": 10,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2301/2054 (+12%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "medium",
+          "description": "开篇唐柠电话制造悬念，但后续林柚发现程屿和孟婉宁的亲密场景略显平淡，钩子强度一般。",
+          "fix_instruction": "可让林柚发现程屿和孟婉宁的互动更暧昧或更具冲击性，例如看到他们接吻或交换文件，以增强悬念。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "林柚的回忆和愤怒描写到位，但情绪转折略显突兀，从发现到回忆的过渡可更自然。",
+          "fix_instruction": "可在林柚看到孟婉宁后，增加一段更细腻的内心活动，如对比自己与孟婉宁的待遇，让愤怒积累更充分。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的隐忍和觉醒人设一致，程屿的虚伪符合前文设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "medium",
+          "description": "节奏较慢，林柚的回忆占据较大篇幅，可适当压缩。",
+          "fix_instruction": "可精简回忆部分，将重点放在林柚当下的反应和后续行动上，以加快节奏。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "77": {
+      "ch": 77,
+      "status": "PASS",
+      "score": 77,
+      "metrics": {
+        "chars": 2510,
+        "dash": 9,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2510/2121 (+18%)",
+          "fix_instruction": "目标字数: 1908~2333",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇唐柠电话制造悬念，钩子较好。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪浓度高，林柚的冷静和程屿的醉酒崩溃形成鲜明对比，感染力强。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和果断人设一致，程屿的虚伪和后悔符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "low",
+          "description": "节奏紧凑，从酒会到程屿醉酒再到林柚的拒绝，张弛有度。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "78": {
+      "ch": 78,
+      "status": "FAIL",
+      "score": 72,
+      "metrics": {
+        "chars": 1913,
+        "dash": 10,
+        "metaphor": 1,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1913/2213 (-14%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇程屿堵门，冲突直接，钩子有力。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪浓度高，林柚的冷静反击和程屿的恼羞成怒形成对比，感染力强。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和独立人设一致，程屿的虚伪和自私符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "low",
+          "description": "节奏紧凑，从对峙到赵靖北介入再到林柚上楼，张弛有度。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "79": {
+      "ch": 79,
+      "status": "PASS",
+      "score": 72,
+      "metrics": {
+        "chars": 2045,
+        "dash": 8,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇程屿的微信语音制造悬念，钩子较好。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "林柚的回忆和内心独白描写到位，但情绪起伏较平，缺乏爆发点。",
+          "fix_instruction": "可在林柚回忆两年前场景后，增加一个更强烈的情绪释放，例如她直接对程屿说出更多压抑已久的委屈，以增强情感张力。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的隐忍和觉醒人设一致，程屿的虚伪符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "medium",
+          "description": "节奏较慢，回忆和医院场景占据较大篇幅，可适当压缩。",
+          "fix_instruction": "可精简回忆部分，将重点放在林柚当下的反应和与程屿的对峙上，以加快节奏。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "80": {
+      "ch": 80,
+      "status": "PASS",
+      "score": 85,
+      "metrics": {
+        "chars": 1766,
+        "dash": 6,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1766/2043 (-14%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇唐柠语音制造悬念，钩子有力。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪浓度高，林柚的冷静和程屿的虚伪形成鲜明对比，感染力强。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和果断人设一致，程屿的虚伪符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "low",
+          "description": "节奏紧凑，从发现真相到保存证据再到赵靖北的邀约，张弛有度。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "81": {
+      "ch": 81,
+      "status": "PASS",
+      "score": 64,
+      "metrics": {
+        "chars": 2381,
+        "dash": 4,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2381/2046 (+16%)",
+          "fix_instruction": "目标字数: 1841~2250",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "medium",
+          "description": "开篇财经新闻和对话略显平淡，缺乏强冲突或悬念。",
+          "fix_instruction": "可在开篇加入一个更尖锐的冲突，例如林柚发现程屿的更多阴谋，或赵靖北透露一个更惊人的消息，以增强钩子。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "林柚和赵靖北的互动温馨但缺乏高潮，情绪起伏较平。",
+          "fix_instruction": "可在孟婉宁来电后，增加林柚更激烈的内心挣扎或与赵靖北的冲突，以增强情绪张力。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和独立人设一致，赵靖北的温柔和掌控力符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "medium",
+          "description": "节奏较慢，日常互动占据较大篇幅，可适当加快。",
+          "fix_instruction": "可压缩日常互动，将重点放在林柚对程屿事件的反应和后续行动上，以改善节奏。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "82": {
+      "ch": 82,
+      "status": "PASS",
+      "score": 80,
+      "metrics": {
+        "chars": 2098,
+        "dash": 1,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇程屿摔文档，冲突直接，钩子有力。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪浓度高，林柚的冷静和程屿的愤怒形成对比，感染力强。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和果断人设一致，程屿的虚伪符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "low",
+          "description": "节奏紧凑，从对峙到母亲出现再到林柚离开，张弛有度。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "83": {
+      "ch": 83,
+      "status": "FAIL",
+      "score": 69,
+      "metrics": {
+        "chars": 2351,
+        "dash": 8,
+        "metaphor": 0,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 3处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2351/2037 (+15%)",
+          "fix_instruction": "目标字数: 1833~2240",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇程屿约见，悬念设置有效，钩子较好。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪浓度高，林柚的冷静和程屿的崩溃形成鲜明对比，感染力强。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和果断人设一致，程屿的虚伪和后悔符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "low",
+          "description": "节奏紧凑，从对话到林柚离开再到赵靖北出现，张弛有度。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "84": {
+      "ch": 84,
+      "status": "PASS",
+      "score": 82,
+      "metrics": {
+        "chars": 2596,
+        "dash": 10,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2596/2098 (+24%)",
+          "fix_instruction": "目标字数: 1888~2307",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇林柚收拾抽屉发现证据，悬念设置巧妙，钩子有力。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪浓度高，从发现证据的震惊到回忆的酸楚，再到赵靖北照片的感动，起伏自然。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和觉醒人设一致，赵靖北的深情和关注符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "low",
+          "description": "节奏紧凑，从发现证据到回忆再到照片的揭示，张弛有度。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "85": {
+      "ch": 85,
+      "status": "FAIL",
+      "score": 59,
+      "metrics": {
+        "chars": 2306,
+        "dash": 2,
+        "metaphor": 0,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 3处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "medium",
+          "description": "开篇林柚偷听对话，悬念设置有效，但后续试探略显平淡。",
+          "fix_instruction": "可让林柚的试探更直接或更具攻击性，例如她直接质问赵靖北关于收购程屿公司的意图，以增强冲突。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "林柚的试探和赵靖北的回避描写到位，但情绪张力可更强。",
+          "fix_instruction": "可在赵靖北反问林柚是否还爱程屿时，增加林柚更激烈的内心挣扎或反驳，以增强情感冲突。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的谨慎和成长人设一致，赵靖北的敏锐和掌控力符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "medium",
+          "description": "节奏较慢，试探和对话占据较大篇幅，可适当加快。",
+          "fix_instruction": "可压缩试探过程，让赵靖北更早点破林柚的意图，以加快节奏。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "86": {
+      "ch": 86,
+      "status": "FAIL",
+      "score": 72,
+      "metrics": {
+        "chars": 2171,
+        "dash": 8,
+        "metaphor": 3,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 3处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇林柚的焦虑和唐柠的安慰，悬念设置有效，钩子较好。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪浓度高，赵靖北与程屿的对峙充满张力，林柚的感动和释然描写到位。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "赵靖北的强势和保护欲符合人设，程屿的后悔和痛苦符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "low",
+          "description": "节奏紧凑，从医院对峙到唐柠的安慰，张弛有度。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "87": {
+      "ch": 87,
+      "status": "PASS",
+      "score": 74,
+      "metrics": {
+        "chars": 2261,
+        "dash": 5,
+        "metaphor": 2,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇匿名截图制造悬念，钩子有力。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "林柚的震惊和回忆描写到位，但情绪转折略显突兀，从愤怒到冷静的过渡可更自然。",
+          "fix_instruction": "可在林柚看到截图后，增加一段更细腻的内心活动，如对比程屿的谎言和她的付出，让愤怒积累更充分。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和谨慎人设一致，程屿的虚伪符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "medium",
+          "description": "节奏较好，但车祸场景略显突兀，可更自然过渡。",
+          "fix_instruction": "可在车祸前增加林柚的预感或紧张情绪，让车祸场景更合理。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "88": {
+      "ch": 88,
+      "status": "PASS",
+      "score": 72,
+      "metrics": {
+        "chars": 2294,
+        "dash": 7,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇数据漏洞制造冲突，钩子有力。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "林柚的震惊和愤怒描写到位，但情绪转折略显生硬，从被质疑到赵靖北提供证据的过渡稍快。",
+          "fix_instruction": "可增加林柚在会议室被质疑时的内心挣扎，或赵靖北提供证据后的更强烈反应，以增强情感张力。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和谨慎人设一致，赵靖北的掌控力符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "medium",
+          "description": "节奏较好，但唐柠的假新闻桥段略显突兀，可更自然处理。",
+          "fix_instruction": "可让唐柠的假新闻桥段更合理，例如她看错新闻标题或误传消息，以增强可信度。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "89": {
+      "ch": 89,
+      "status": "PASS",
+      "score": 74,
+      "metrics": {
+        "chars": 2161,
+        "dash": 2,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇签约后日常，悬念设置较弱，但后续唐柠电话制造悬念，钩子较好。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "林柚的冷静和成长描写到位，但情绪起伏较平，缺乏高潮。",
+          "fix_instruction": "可在林柚决定参加饭局时，增加一段更激烈的内心挣扎或与赵靖北的冲突，以增强情感张力。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和果断人设一致，赵靖北的试探和掌控力符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "medium",
+          "description": "节奏较慢，日常互动和对话占据较大篇幅，可适当加快。",
+          "fix_instruction": "可压缩日常互动，将重点放在林柚对程屿事件的反应和后续行动上，以改善节奏。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "90": {
+      "ch": 90,
+      "status": "PASS",
+      "score": 82,
+      "metrics": {
+        "chars": 2257,
+        "dash": 8,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇林柚的焦虑和唐柠的安慰，悬念设置有效，钩子较好。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪浓度高，赵靖北点破林柚心软的桥段充满张力，林柚的感动和释然描写到位。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和谨慎人设一致，赵靖北的洞察力和温柔符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "low",
+          "description": "节奏紧凑，从焦虑到餐厅对话再到释然，张弛有度。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "91": {
+      "ch": 91,
+      "status": "PASS",
+      "score": 85,
+      "metrics": {
+        "chars": 2088,
+        "dash": 14,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇赵靖北电话制造悬念，钩子有力。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪浓度高，林柚在竞标会上的反击充满张力，程屿的尴尬和愤怒形成对比，感染力强。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和果断人设一致，赵靖北的掌控力符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "low",
+          "description": "节奏紧凑，从竞标到反击再到赵靖北提供证据，张弛有度。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "92": {
+      "ch": 92,
+      "status": "PASS",
+      "score": 74,
+      "metrics": {
+        "chars": 2246,
+        "dash": 9,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇程屿宣布林柚接手运营部，冲突直接，钩子有力。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "林柚的冷静和下属的试探描写到位，但情绪起伏较平，缺乏高潮。",
+          "fix_instruction": "可在林柚发现赵靖北截图时，增加一段更激烈的内心挣扎或与赵靖北的冲突，以增强情感张力。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和果断人设一致，赵靖北的掌控力符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "medium",
+          "description": "节奏较好，但下属试探和加班场景占据较大篇幅，可适当压缩。",
+          "fix_instruction": "可精简下属试探的细节，将重点放在林柚对赵靖北截图的反应上，以加快节奏。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "93": {
+      "ch": 93,
+      "status": "PASS",
+      "score": 69,
+      "metrics": {
+        "chars": 2101,
+        "dash": 4,
+        "metaphor": 1,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "medium",
+          "description": "开篇程屿消息制造悬念，但后续日常互动略显平淡，钩子强度一般。",
+          "fix_instruction": "可在开篇加入一个更尖锐的冲突，例如程屿直接威胁林柚，或赵靖北透露一个更惊人的消息，以增强钩子。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "林柚的冷静和赵靖北的温柔描写到位，但情绪起伏较平，缺乏高潮。",
+          "fix_instruction": "可在林柚询问U盘内容时，增加一段更激烈的内心挣扎或与赵靖北的冲突，以增强情感张力。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和谨慎人设一致，赵靖北的温柔和掌控力符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "medium",
+          "description": "节奏较慢，日常互动和对话占据较大篇幅，可适当加快。",
+          "fix_instruction": "可压缩日常互动，将重点放在林柚对程屿事件的反应和后续行动上，以改善节奏。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "94": {
+      "ch": 94,
+      "status": "PASS",
+      "score": 82,
+      "metrics": {
+        "chars": 2678,
+        "dash": 2,
+        "metaphor": 1,
+        "ai_markers": 2,
+        "direct_emotion": 1
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇深夜加班和程屿电话制造悬念，钩子较好。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "low",
+          "description": "情绪浓度高，林柚的疲惫和赵靖北的温柔形成对比，感染力强。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和独立人设一致，赵靖北的温柔和洞察力符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "low",
+          "description": "节奏紧凑，从加班到馄饨再到回家，张弛有度。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "95": {
+      "ch": 95,
+      "status": "PASS",
+      "score": 74,
+      "metrics": {
+        "chars": 1938,
+        "dash": 10,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "hook",
+          "severity": "low",
+          "description": "开篇林柚发现假账，悬念设置巧妙，钩子有力。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "emotional_intensity",
+          "severity": "medium",
+          "description": "林柚的震惊和愤怒描写到位，但情绪转折略显生硬，从发现假账到酒店对峙的过渡稍快。",
+          "fix_instruction": "可增加林柚在发现假账后的内心挣扎，或与赵靖北的沟通，让情绪积累更充分。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "character_consistency",
+          "severity": "low",
+          "description": "林柚的成长和果断人设一致，赵靖北的掌控力符合设定。",
+          "fix_instruction": "无需修改。",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "pacing",
+          "severity": "medium",
+          "description": "节奏较好，但酒店对峙场景略显仓促，可更详细描写。",
+          "fix_instruction": "可增加林柚与程屿、孟婉宁对峙时的细节，如对话和表情，以增强冲突张力。",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "96": {
+      "ch": 96,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1923,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "97": {
+      "ch": 97,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 2631,
+        "dash": 15,
+        "metaphor": 1,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2631/2192 (+20%)",
+          "fix_instruction": "目标字数: 1972~2411",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "98": {
+      "ch": 98,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 2549,
+        "dash": 4,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2549/2308 (+10%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "99": {
+      "ch": 99,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2798,
+        "dash": 11,
+        "metaphor": 2,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2798/2536 (+10%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "100": {
+      "ch": 100,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 2888,
+        "dash": 1,
+        "metaphor": 0,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2888/2343 (+23%)",
+          "fix_instruction": "目标字数: 2108~2577",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "101": {
+      "ch": 101,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 4255,
+        "dash": 10,
+        "metaphor": 1,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 4255/4779 (-11%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    }
+  }
+}
