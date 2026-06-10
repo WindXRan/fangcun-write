@@ -64,6 +64,7 @@ projects/{作者名}/{源书名}/
 ```
 Phase 0:   导入 (story-import)        → _cache/chapters/ + _header.txt + _toc.txt
 Phase 1:   开书 (pro, 1 call)        → concept.md                    [engine]
+Phase 1.1: Concept审查 (flash)        → 检查人设/冲突/情节是否换皮     [engine]
 Phase 1.5: 风格分析 (脚本)            → style_analysis/style_{N}.json [engine]
 Phase 2:   Guides (flash, 2N 并行)   → plot_{N}.md + style_{N}.md    [engine]
 Phase 3:   写章 (flash, N 并行)      → ch_{N}.txt                    [engine]
@@ -76,6 +77,13 @@ Phase 4.5: 审稿 (分批→汇总)          → 审稿报告 + 汇总报告    
 Phase 5:   修复 (根据审稿)            → 修复后章节                     [story-review]
 Phase 6:   自动导出                    → export/{书名}.txt             [story-export]
 ```
+
+**Phase 1.1 Concept审查**：
+- 检查人设模式是否与源文相同（纨绔vs病弱等）
+- 检查冲突类型组合是否与源文相同
+- 检查情感内核是否与源文相同
+- 检查配角名、地名是否与源文重复
+- 不通过则要求重新开书
 
 **engine 只做编排，具体逻辑归各 skill：**
 - `story-export`：导出为番茄格式txt
