@@ -8,7 +8,7 @@ import os, sys, subprocess, urllib.request, json
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECTS_DIR = os.path.join(ROOT, 'projects')
 
-API_KEY = os.environ.get('API_KEY', 'sk-db692f2841ee47c1b2afec0a0cb016f5')
+API_KEY = os.environ.get('API_KEY', '')
 API_BASE = os.environ.get('API_BASE_URL', 'https://api.deepseek.com')
 API_MODEL = os.environ.get('API_MODEL', 'deepseek-chat')
 

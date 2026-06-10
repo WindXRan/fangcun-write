@@ -178,8 +178,14 @@ def process_batch(batch_num, chapters_dir, output_dir):
 
 
 def main():
-    chapters_dir = r"C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\projects\闻栖\女配一睁眼，失忆男主冷脸洗床单\rewrites\女配一睁眼，失忆男主冷脸洗床单\chapters"
-    output_dir = r"C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\projects\闻栖\女配一睁眼，失忆男主冷脸洗床单\rewrites\女配一睁眼，失忆男主冷脸洗床单\edit_review"
+    import argparse
+    parser = argparse.ArgumentParser(description="批量对比分析")
+    parser.add_argument("--chapters-dir", required=True, help="章节目录")
+    parser.add_argument("--output-dir", default=None, help="输出目录（默认为 chapters_dir/edit_review）")
+    args = parser.parse_args()
+
+    chapters_dir = args.chapters_dir
+    output_dir = args.output_dir or os.path.join(chapters_dir, "edit_review")
     
     os.makedirs(output_dir, exist_ok=True)
     

@@ -1,0 +1,93 @@
+"""API 客户端：带指数退避重试的 DeepSeek API 调用。"""
+
+import os
+import time
+import requests
+
+DEFAULT_API_URL = "https://api.deepseek.com/v1/chat/completions"
+SYSTEM_PROMPT = "你是一个专业的网文写手，擅长仿写风格迁移。严格按照提供的指南和指令执行。"
+
+
+def get_api_url(config=None):
+    """获取 API URL，确保包含 /v1。"""
+    base = None
+    if config and config.get("api_base_url"):
+        base = config["api_base_url"].rstrip("/")
+    elif os.environ.get("API_BASE_URL"):
+        base = os.environ.get("API_BASE_URL").rstrip("/")
+    if base:
+        if not base.endswith("/v1"):
+            base = base + "/v1"
+        return base + "/chat/completions"
+    return DEFAULT_API_URL
+
+
+def get_api_key(config=None):
+    """获取 API Key。"""
+    if config and config.get("api_key"):
+        return config["api_key"]
+    return os.environ.get("API_KEY")
+
+
+def call_api(api_key, model, user_prompt, reasoning_effort="low",
+             max_tokens=8192, system_prompt=None, api_url=None, max_retries=3):
+    """调用 API，带指数退避重试。
+
+    重试策略：
+    - 429 (限流): 指数退避 10/20/40 秒
+    - 5xx (服务端错误): 指数退避 5/10/20 秒
+    - 超时: 重试，超时时间翻倍
+    - 其他错误: 不重试
+    """
+    url = api_url or DEFAULT_API_URL
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    data = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": system_prompt or SYSTEM_PROMPT},
+            {"role": "user", "content": user_prompt}
+        ],
+        "temperature": 0.8,
+        "max_tokens": max_tokens,
+    }
+
+    timeout = 120
+
+    for attempt in range(max_retries + 1):
+        try:
+            resp = requests.post(url, headers=headers, json=data, timeout=timeout)
+
+            if resp.status_code == 200:
+                return resp.json()["choices"][0]["message"]["content"]
+
+            if resp.status_code == 429:
+                wait = 10 * (2 ** attempt)
+                print(f"    [429] 限流，等待 {wait}s...")
+                time.sleep(wait)
+                continue
+
+            if resp.status_code >= 500:
+                wait = 5 * (2 ** attempt)
+                print(f"    [{resp.status_code}] 服务端错误，等待 {wait}s...")
+                time.sleep(wait)
+                continue
+
+            # 其他错误不重试
+            raise Exception(f"API 错误 {resp.status_code}: {resp.text[:200]}")
+
+        except requests.exceptions.Timeout:
+            if attempt < max_retries:
+                timeout *= 2
+                print(f"    [TIMEOUT] 超时，重试 (timeout={timeout}s)...")
+                continue
+            raise
+
+        except requests.exceptions.ConnectionError:
+            if attempt < max_retries:
+                wait = 5 * (2 ** attempt)
+                print(f"    [CONN] 连接失败，等待 {wait}s...")
+                time.sleep(wait)
+                continue
+            raise
+
+    raise Exception(f"API 调用失败，已重试 {max_retries} 次")

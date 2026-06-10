@@ -12,29 +12,334 @@
 """
 
 import os
+import re
 import sys
 import json
 import time
 import argparse
+import tempfile
 import requests
 from pathlib import Path
+from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-sys.path.insert(0, str(Path(__file__).parent))
+# 添加路径：当前目录（engine/tools）和 story-tools 目录
+current_dir = str(Path(__file__).parent)
+story_tools_dir = str(Path(__file__).parent.parent.parent / 'story-tools')
+sys.path.insert(0, current_dir)
+sys.path.insert(0, story_tools_dir)
+
 from prompt_loader import load_prompt
 
-# 默认API配置，可通过环境变量或配置文件覆盖
-DEFAULT_API_URL = "https://api.deepseek.com/chat/completions"
+# 共享模块
+from lib.constants import AI_MARKERS, CORRUPT_MARKERS, METAPHOR_PATTERN, AI_MARKER_PATTERN, DIRECT_EMOTION_PATTERN
+from lib.text_metrics import count_metrics, get_body_chars
+from lib.plagiarism import find_plagiarism
+from lib.source_locator import get_source_text as _lib_get_source_text, get_source_dir, get_total_chapters as _lib_get_total_chapters
+from lib.api_client import call_api as _lib_call_api, get_api_url
+
+# 兼容别名
+DEFAULT_API_URL = "https://api.deepseek.com/v1/chat/completions"
 SYSTEM_PROMPT = "你是一个专业的网文写手，擅长仿写风格迁移。严格按照提供的指南和指令执行。"
+
+# 源文缓存（进程内）
+_source_cache = {}
+
+
+# ============================================================
+# StateManager: 持久化状态管理
+# ============================================================
+
+class StateManager:
+    """管理 rewrite pipeline 的持久化状态。
+
+    状态文件 state.json 结构:
+    {
+        "version": 1,
+        "created": "ISO时间",
+        "updated": "ISO时间",
+        "phases": {
+            "open-book": {"status": "done|running|failed", "started": "...", "finished": "..."},
+            "guides":    {"status": "done", "completed_chapters": [1,2,...]},
+            "write":     {"status": "in_progress", "completed_chapters": [1,...,120], "failed_chapters": [121]}
+        },
+        "chapters": {
+            "5":   {"status": "completed|failed|writing", "retries": 1, "model": "...", "timestamp": "...", "error": "..."},
+            "121": {"status": "failed", "retries": 3, "error": "timeout"}
+        },
+        "runs": [
+            {"id": "uuid", "phase": "write", "started": "...", "finished": "...", "model": "...", "range": [1,188], "ok": 180, "fail": 8}
+        ]
+    }
+    """
+
+    CHAPTER_STATUS = {"pending", "writing", "completed", "failed", "approved"}
+    PHASE_STATUS = {"pending", "running", "done", "failed"}
+
+    def __init__(self, rewrites_dir):
+        self.state_path = Path(rewrites_dir) / "state.json"
+        self._state = None
+        self._lock = None  # 未来可加 threading.Lock
+
+    def _now(self):
+        return datetime.now().isoformat(timespec="seconds")
+
+    def load(self):
+        """加载 state.json，不存在则初始化。"""
+        if self.state_path.exists():
+            try:
+                self._state = json.loads(self.state_path.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError):
+                self._state = None
+        if self._state is None:
+            self._state = {
+                "version": 1,
+                "created": self._now(),
+                "updated": self._now(),
+                "phases": {},
+                "chapters": {},
+                "runs": [],
+            }
+        return self._state
+
+    def save(self):
+        """原子写入 state.json。"""
+        if self._state is None:
+            return
+        self._state["updated"] = self._now()
+        self.state_path.parent.mkdir(parents=True, exist_ok=True)
+        atomic_write_json(self.state_path, self._state)
+
+    @property
+    def state(self):
+        if self._state is None:
+            self.load()
+        return self._state
+
+    # ---- Phase 管理 ----
+
+    def phase_start(self, phase_name):
+        """标记 phase 开始。"""
+        self.state["phases"][phase_name] = {
+            "status": "running",
+            "started": self._now(),
+        }
+        self.save()
+
+    def phase_done(self, phase_name, extra=None):
+        """标记 phase 完成。"""
+        entry = self.state["phases"].get(phase_name, {})
+        entry["status"] = "done"
+        entry["finished"] = self._now()
+        if extra:
+            entry.update(extra)
+        self.state["phases"][phase_name] = entry
+        self.save()
+
+    def phase_failed(self, phase_name, error=""):
+        """标记 phase 失败。"""
+        entry = self.state["phases"].get(phase_name, {})
+        entry["status"] = "failed"
+        entry["finished"] = self._now()
+        entry["error"] = str(error)
+        self.state["phases"][phase_name] = entry
+        self.save()
+
+    def is_phase_done(self, phase_name):
+        """检查 phase 是否已完成。"""
+        return self.state["phases"].get(phase_name, {}).get("status") == "done"
+
+    # ---- Chapter 管理 ----
+
+    def chapter_writing(self, ch_num):
+        """标记章节开始写入。"""
+        key = str(ch_num)
+        self.state["chapters"][key] = {
+            "status": "writing",
+            "timestamp": self._now(),
+        }
+        # 不每次都 save，由 batch_run 统一 save
+
+    def chapter_completed(self, ch_num, model="", retries=0):
+        """标记章节完成。"""
+        key = str(ch_num)
+        entry = self.state["chapters"].get(key, {})
+        entry["status"] = "completed"
+        entry["timestamp"] = self._now()
+        entry["model"] = model
+        entry["retries"] = retries
+        self.state["chapters"][key] = entry
+
+    def chapter_failed(self, ch_num, error="", retries=0):
+        """标记章节失败。"""
+        key = str(ch_num)
+        entry = self.state["chapters"].get(key, {})
+        entry["status"] = "failed"
+        entry["timestamp"] = self._now()
+        entry["error"] = str(error)
+        entry["retries"] = retries
+        self.state["chapters"][key] = entry
+
+    def chapter_approve(self, ch_num):
+        """标记章节人工审核通过。"""
+        key = str(ch_num)
+        entry = self.state["chapters"].get(key, {})
+        entry["status"] = "approved"
+        entry["approved_at"] = self._now()
+        self.state["chapters"][key] = entry
+        self.save()
+
+    def save_review_result(self, ch_num, score, issues):
+        """保存审查结果到章节状态。"""
+        key = str(ch_num)
+        entry = self.state["chapters"].get(key, {})
+        entry["review_score"] = score
+        entry["review_issues"] = len(issues)
+        entry["review_high"] = sum(1 for i in issues if i.get("severity") == "high")
+        entry["review_at"] = self._now()
+        self.state["chapters"][key] = entry
+
+    def save_review_report(self, report):
+        """保存完整审查报告摘要到 state。"""
+        summary = report.get("summary", {})
+        self.state["last_review"] = {
+            "timestamp": self._now(),
+            "avg_score": summary.get("avg_score", 0),
+            "pass": summary.get("pass", 0),
+            "fail": summary.get("fail", 0),
+            "total_issues": summary.get("total_issues", 0),
+            "high_issues": summary.get("high_issues", 0),
+        }
+        # 保存每章的审查结果
+        for ch_str, ch_data in report.get("chapters", {}).items():
+            ch = int(ch_str)
+            self.save_review_result(ch, ch_data.get("score", 0), ch_data.get("issues", []))
+        self.save()
+
+    def get_chapter_status(self, ch_num):
+        """获取章节状态。"""
+        return self.state["chapters"].get(str(ch_num), {}).get("status", "pending")
+
+    def get_chapters_by_status(self, status):
+        """获取指定状态的所有章节号。"""
+        return sorted(
+            int(k) for k, v in self.state["chapters"].items()
+            if v.get("status") == status
+        )
+
+    def get_completed_chapters(self):
+        """获取所有已完成/已审核的章节号。"""
+        return sorted(
+            int(k) for k, v in self.state["chapters"].items()
+            if v.get("status") in ("completed", "approved")
+        )
+
+    def get_failed_chapters(self):
+        """获取所有失败的章节号。"""
+        return self.get_chapters_by_status("failed")
+
+    # ---- Run 历史 ----
+
+    def add_run(self, phase, start, end, model=""):
+        """记录一次运行，返回 run_id。"""
+        run_id = f"{phase}_{int(time.time())}"
+        entry = {
+            "id": run_id,
+            "phase": phase,
+            "started": self._now(),
+            "range": [start, end],
+            "model": model,
+        }
+        self.state["runs"].append(entry)
+        self.save()
+        return run_id
+
+    def finish_run(self, run_id, ok=0, fail=0):
+        """更新运行结果。"""
+        for run in self.state["runs"]:
+            if run["id"] == run_id:
+                run["finished"] = self._now()
+                run["ok"] = ok
+                run["fail"] = fail
+                break
+        self.save()
+
+    # ---- 健康检查 ----
+
+    def is_chapter_healthy(self, ch_num, filepath):
+        """综合检查章节是否健康：state.json + 文件内容。"""
+        status = self.get_chapter_status(ch_num)
+        if status in ("completed", "approved"):
+            # state 说完成，再验证文件存在
+            if filepath.exists():
+                return True
+        # state 说 pending/failed/writing，或文件不存在，都不健康
+        return False
+
+    # ---- 摘要 ----
+
+    def summary(self):
+        """返回可读的状态摘要。"""
+        s = self.state
+        phases = {k: v.get("status", "?") for k, v in s.get("phases", {}).items()}
+        total = len(s.get("chapters", {}))
+        completed = len(self.get_completed_chapters())
+        failed = len(self.get_failed_chapters())
+        runs = len(s.get("runs", []))
+        return f"phases={phases} chapters={completed}ok/{failed}fail/{total}total runs={runs}"
+
+
+def atomic_write_json(path, data):
+    """原子写入 JSON：先写临时文件，再 rename。"""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp_path = tempfile.mkstemp(
+        dir=str(path.parent), suffix=".tmp", prefix=".state_"
+    )
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        os.replace(tmp_path, str(path))  # 原子替换
+    except Exception:
+        # 清理临时文件
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
+        raise
+
+
+def atomic_write_text(path, content):
+    """原子写入文本文件：先写临时文件，再 rename。"""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp_path = tempfile.mkstemp(
+        dir=str(path.parent), suffix=".tmp", prefix=".ch_"
+    )
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(content)
+        os.replace(tmp_path, str(path))
+    except Exception:
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
+        raise
 
 
 def get_api_url(config=None):
-    """获取API URL，优先级：配置文件 > 环境变量 > 默认值。"""
+    """获取API URL，优先级：配置文件 > 环境变量 > 默认值。确保包含 /v1。"""
+    base = None
     if config and config.get("api_base_url"):
-        return config["api_base_url"].rstrip("/") + "/chat/completions"
-    env_url = os.environ.get("API_BASE_URL")
-    if env_url:
-        return env_url.rstrip("/") + "/chat/completions"
+        base = config["api_base_url"].rstrip("/")
+    elif os.environ.get("API_BASE_URL"):
+        base = os.environ.get("API_BASE_URL").rstrip("/")
+    if base:
+        # 确保包含 /v1
+        if not base.endswith("/v1"):
+            base = base + "/v1"
+        return base + "/chat/completions"
     return DEFAULT_API_URL
 
 
@@ -53,175 +358,36 @@ def validate_config(config):
     return errors
 
 
-def get_source_dir(config):
-    """统一获取源文章节目录。"""
-    base_dir = config.get("base_dir", os.getcwd())
-    author = config.get("author", "")
-    source_book = config.get("source_book", "")
-    
-    patterns = [
-        f"projects/{author}/{source_book}/_cache/chapters/",
-        f"novel-download-authors/{author}/{source_book}/源文/",
-        f"projects/{author}/{source_book}/源文/",
-    ]
-    for pat in patterns:
-        full = os.path.join(base_dir, pat)
-        if os.path.isdir(full):
-            return full
-    return None
-
-
 def find_source_chapter(config, chapter_num):
-    """统一查找源文章节文件路径。返回 Path 或 None。"""
-    import glob as g
-    base_dir = config.get("base_dir", os.getcwd())
-    author = config.get("author", "")
-    source_book = config.get("source_book", "")
-    
-    patterns = [
-        f"projects/{author}/{source_book}/_cache/chapters/第{chapter_num}章*.txt",
-        f"projects/{author}/{source_book}/_cache/chapters/第{chapter_num:03d}章*.txt",
-        f"novel-download-authors/{author}/{source_book}/源文/第{chapter_num}章*.txt",
-        f"projects/{author}/{source_book}/源文/第{chapter_num}章*.txt",
-    ]
-    for pat in patterns:
-        matches = sorted(g.glob(os.path.join(base_dir, pat)))
-        if matches:
-            return Path(matches[0])
-    return None
+    """查找源文章节文件路径。返回 Path 或 None。"""
+    from lib.source_locator import find_source_file
+    return find_source_file(config, chapter_num)
 
-
-# 源文缓存（避免重复读取文件）
-_source_cache = {}
 
 def get_source_text(config, ch):
     """读取源文章节原始文本（带缓存）。"""
     cache_key = (config.get("author", ""), config.get("source_book", ""), ch)
     if cache_key in _source_cache:
         return _source_cache[cache_key]
-    
-    f = find_source_chapter(config, ch)
-    if f:
-        try:
-            text = f.read_text(encoding='utf-8')
-            _source_cache[cache_key] = text
-            return text
-        except Exception:
-            pass
-    _source_cache[cache_key] = None
-    return None
-
-
-def get_total_chapters(config):
-    """获取源文总章数。"""
-    import re
-    src_dir = get_source_dir(config)
-    if not src_dir:
-        return 0
-    files = [f for f in os.listdir(src_dir) if f.endswith('.txt')]
-    return len(files)
+    text = _lib_get_source_text(config, ch)
+    _source_cache[cache_key] = text
+    return text
 
 
 def call_api(api_key, model, user_prompt, reasoning_effort="low", max_tokens=8192, system_prompt=None, api_url=None, max_retries=3):
-    """调用 API，带指数退避重试。
-    
-    重试策略：
-    - 429 (限流): 指数退避 10/20/40 秒
-    - 5xx (服务端错误): 指数退避 5/10/20 秒
-    - 超时: 重试，超时时间翻倍
-    - 其他错误: 不重试
-    """
-    url = api_url or DEFAULT_API_URL
-    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-    data = {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": system_prompt or SYSTEM_PROMPT},
-            {"role": "user", "content": user_prompt}
-        ],
-        "temperature": 0.8,
-        "max_tokens": max_tokens,
-        "stream": False
-    }
-    
-    last_error = None
-    timeout = 600
-    
-    for attempt in range(max_retries):
-        try:
-            resp = requests.post(url, headers=headers, json=data, timeout=timeout)
-            
-            # 限流处理
-            if resp.status_code == 429:
-                retry_after = int(resp.headers.get('Retry-After', 10 * (2 ** attempt)))
-                print(f"    [RATE LIMIT] 等待 {retry_after}s 后重试 (attempt {attempt+1}/{max_retries})")
-                time.sleep(retry_after)
-                continue
-            
-            # 服务端错误，可重试
-            if resp.status_code >= 500:
-                wait = 5 * (2 ** attempt)
-                print(f"    [RETRY] 服务端错误 {resp.status_code}，等待 {wait}s (attempt {attempt+1}/{max_retries})")
-                time.sleep(wait)
-                continue
-            
-            resp.raise_for_status()
-            return resp.json()["choices"][0]["message"]["content"]
-            
-        except requests.exceptions.Timeout:
-            last_error = "超时"
-            timeout = min(timeout * 2, 1200)  # 超时翻倍，最大20分钟
-            print(f"    [RETRY] 超时，增大超时到 {timeout}s (attempt {attempt+1}/{max_retries})")
-            continue
-            
-        except requests.exceptions.HTTPError as e:
-            if e.response is not None and e.response.status_code < 500:
-                raise  # 4xx 客户端错误（非429）不重试
-            last_error = str(e)
-            wait = 5 * (2 ** attempt)
-            print(f"    [RETRY] {e}，等待 {wait}s (attempt {attempt+1}/{max_retries})")
-            time.sleep(wait)
-            
-        except requests.exceptions.ConnectionError as e:
-            last_error = str(e)
-            wait = 5 * (2 ** attempt)
-            print(f"    [RETRY] 连接错误，等待 {wait}s (attempt {attempt+1}/{max_retries})")
-            time.sleep(wait)
-            
-        except Exception as e:
-            raise  # 其他异常直接抛出
-    
-    raise RuntimeError(f"API 调用失败（{max_retries}次重试后）: {last_error}")
+    """调用 API（委托给 lib 模块）。"""
+    return _lib_call_api(api_key, model, user_prompt, reasoning_effort, max_tokens, system_prompt, api_url, max_retries)
 
 
 def get_total_chapters(config):
     """获取源文总章数。"""
-    import re
-    base_dir = config.get("base_dir", os.getcwd())
-    author = config.get("author", "")
-    source_book = config.get("source_book", "")
-
-    patterns = [
-        f"projects/{author}/{source_book}/_cache/chapters/",
-        f"novel-download-authors/{author}/{source_book}/源文/",
-    ]
-    for pat in patterns:
-        full = os.path.join(base_dir, pat)
-        if os.path.isdir(full):
-            files = sorted(os.listdir(full), key=lambda f: int(re.search(r'(\d+)', f).group(1)) if re.search(r'(\d+)', f) else 0)
-            return len(files)
-    return 0
+    return _lib_get_total_chapters(config)
 
 
 def count_source_chars(config, chapter_num):
-    """统计源文章节的中文字数（去空白）。使用缓存。"""
-    import re
+    """统计源文章节的中文字数（去空白）。"""
     text = get_source_text(config, chapter_num)
-    if not text:
-        return 0
-    lines = text.strip().split('\n')
-    if lines and lines[0].startswith('第'):
-        text = '\n'.join(lines[1:])
+    return get_body_chars(text)
     return len(re.sub(r'\s', '', text))
 
 
@@ -338,10 +504,9 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
 
 
 def save_file(dir_path, filename, content):
-    """保存文件。"""
-    os.makedirs(dir_path, exist_ok=True)
+    """保存文件（原子写入）。"""
     path = Path(dir_path) / filename
-    path.write_text(content, encoding='utf-8')
+    atomic_write_text(path, content)
     return str(path)
 
 
@@ -470,20 +635,30 @@ def phase_prep(config):
 # Phase 1: 开书
 # ============================================================
 
-def phase_open_book(config):
+def phase_open_book(config, state_mgr=None):
     """生成 concept.md（设定 + 弧线，含固定角色名）。"""
     print("\n" + "=" * 50)
     print("Phase 1: 开书 (pro, reasoning=high)")
     print("=" * 50)
+
+    if state_mgr:
+        if state_mgr.is_phase_done("open-book"):
+            print("concept.md 已完成，跳过")
+            return True
+        state_mgr.phase_start("open-book")
 
     pro = {**config, "model": "deepseek-v4-pro", "reasoning_effort": "high"}
     try:
         concept = run_one(pro, "open-book")
         path = save_file(config["rewrites_dir"], "concept.md", concept)
         print(f"[OK] concept.md → {path}")
+        if state_mgr:
+            state_mgr.phase_done("open-book")
         return True
     except Exception as e:
         print(f"[FAIL] concept.md: {e}")
+        if state_mgr:
+            state_mgr.phase_failed("open-book", error=str(e))
         return False
 
 
@@ -554,18 +729,22 @@ def phase_style_analysis(config):
 # ============================================================
 
 
-def phase_guides(config, start, end, workers=5, serial=False):
+def phase_guides(config, start, end, workers=5, serial=False, state_mgr=None):
     """生成 plot_guide + style_guide（引用 templates）。"""
     guides_dir = f"{config['rewrites_dir']}/guides"
     style_analysis_dir = config.get("style_analysis_dir", f"{config['rewrites_dir']}/../style_analysis")
     flash = {**config, "model": "deepseek-v4-flash", "reasoning_effort": "low"}
 
+    if state_mgr:
+        state_mgr.phase_start("guides")
+
     # style-guide（引用 templates）
     print(f"\n{'=' * 50}")
     print(f"Phase 2: style_guide (flash, ch{start}-{end}, 引用 templates)")
     print("=" * 50)
-    
-    ok_style, fail_style = batch_run(flash, "style-guide", start, end, workers, guides_dir, "style_{ch}.md", skip_existing=True)
+
+    ok_style, fail_style = batch_run(flash, "style-guide", start, end, workers, guides_dir,
+                                     "style_{ch}.md", skip_existing=True, state_mgr=state_mgr)
     print(f"style_guide: OK={len(ok_style)} FAIL={len(fail_style)}")
 
     # plot-guide
@@ -574,7 +753,6 @@ def phase_guides(config, start, end, workers=5, serial=False):
     print("=" * 50)
 
     if serial:
-        # 串行模式：每章带上章摘要，保持连贯
         prev_summary = ""
         ok, fail = {}, {}
         for ch in range(start, end + 1):
@@ -585,7 +763,6 @@ def phase_guides(config, start, end, workers=5, serial=False):
                 result = run_one(flash, "plot-guide", ch, extra_replacements=overrides)
                 path = save_file(guides_dir, f"plot_{ch}.md", result)
                 ok[ch] = path
-                # 提取摘要：优先取新书节拍
                 import re as re_p
                 beats = re_p.findall(r'新书[：:].*?(?=\n|$)', result)
                 if not beats:
@@ -596,17 +773,23 @@ def phase_guides(config, start, end, workers=5, serial=False):
                 fail[ch] = str(e)
                 print(f"  [FAIL] ch{ch}: {e}")
     else:
-        # 并行模式：独立生成，速度快。已有文件跳过
-        ok, fail = batch_run(flash, "plot-guide", start, end, workers, guides_dir, "plot_{ch}.md", skip_existing=True)
+        ok, fail = batch_run(flash, "plot-guide", start, end, workers, guides_dir,
+                             "plot_{ch}.md", skip_existing=True, state_mgr=state_mgr)
 
     print(f"plot_guide: OK={len(ok)} FAIL={len(fail)}")
+
+    if state_mgr:
+        if fail or fail_style:
+            state_mgr.phase_failed("guides", error=f"plot:{len(fail)} fail, style:{len(fail_style)} fail")
+        else:
+            state_mgr.phase_done("guides")
 
 
 # ============================================================
 # Phase 3: 写章
 # ============================================================
 
-def phase_write(config, start, end, workers=10):
+def phase_write(config, start, end, workers=10, state_mgr=None):
     """并行写章 + 异常章自动重跑（字数触发）。"""
     import re as re2
     chapters_dir = f"{config['rewrites_dir']}/chapters"
@@ -616,10 +799,19 @@ def phase_write(config, start, end, workers=10):
     print(f"Phase 3: 写章 (flash, ch{start}-{end}, {workers}w)")
     print("=" * 50)
 
+    if state_mgr:
+        state_mgr.phase_start("write")
+
     t0 = time.time()
 
+    # 记录运行
+    run_id = None
+    if state_mgr:
+        run_id = state_mgr.add_run("write", start, end, model="deepseek-v4-flash")
+
     # 第一轮
-    ok, fail = batch_run(flash, "write-chapter", start, end, workers, chapters_dir, "ch_{ch:03d}.txt", skip_existing=True)
+    ok, fail = batch_run(flash, "write-chapter", start, end, workers, chapters_dir,
+                         "ch_{ch:03d}.txt", skip_existing=True, state_mgr=state_mgr)
 
     # 重跑异常章（最多2轮）
     for retry_round in range(1, 3):
@@ -629,15 +821,14 @@ def phase_write(config, start, end, workers=10):
             if not ch_file.exists():
                 continue
             text = ch_file.read_text(encoding='utf-8')
-            
-            # 检查：字数异常（按源文字数±30%）
+
             target = count_source_chars(config, ch)
             chars = len(re2.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text))
             if target > 0:
                 deviation = abs(chars - target) / target
-                if deviation > 0.3:  # 超过±30%
+                if deviation > 0.3:
                     retry_list.append((ch, f"字数{chars}/{target}"))
-            elif chars < 900 or chars > 3000:  # 无源文时用固定阈值
+            elif chars < 900 or chars > 3000:
                 retry_list.append((ch, f"字数{chars}"))
 
         if not retry_list:
@@ -647,10 +838,12 @@ def phase_write(config, start, end, workers=10):
         for ch, _ in retry_list:
             ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
             ch_file.unlink(missing_ok=True)
+            if state_mgr:
+                state_mgr.chapter_writing(ch)  # 重置为 writing
 
         ok2, fail2 = batch_run(flash, "write-chapter",
             min(c for c, _ in retry_list), max(c for c, _ in retry_list),
-            workers, chapters_dir, "ch_{ch:03d}.txt", skip_existing=False)
+            workers, chapters_dir, "ch_{ch:03d}.txt", skip_existing=False, state_mgr=state_mgr)
         ok.update(ok2)
         fail.update(fail2)
 
@@ -659,6 +852,15 @@ def phase_write(config, start, end, workers=10):
         for path in ok.values()
     )
     print(f"  完成: OK={len(ok)} FAIL={len(fail)} 总字数≈{total} | 耗时 {time.time()-t0:.0f}s")
+
+    if state_mgr:
+        if fail:
+            state_mgr.phase_failed("write", error=f"{len(fail)}章失败")
+        else:
+            state_mgr.phase_done("write", extra={"total_chars": total})
+        if run_id:
+            state_mgr.finish_run(run_id, ok=len(ok), fail=len(fail))
+
     return ok, fail
 
 
@@ -666,37 +868,49 @@ def phase_write(config, start, end, workers=10):
 # 批量并行
 # ============================================================
 
-def batch_run(config, prompt_type, start, end, workers, output_dir, filename_fmt, skip_existing=False):
-    """并行批量调用。"""
+def batch_run(config, prompt_type, start, end, workers, output_dir, filename_fmt, skip_existing=False, state_mgr=None):
+    """并行批量调用。支持 state_mgr 追踪章节状态。"""
     results, errors = {}, {}
     todo = []
-    
+
     # 损坏文件特征词（扩展列表）
     CORRUPT_MARKERS = ['抱歉', '无法读取', '无法生成', '对不起', '作为AI', '作为语言模型', '我无法']
-    
+
     for ch in range(start, end + 1):
         if skip_existing:
             filename = filename_fmt.format(ch=ch)
             filepath = Path(output_dir) / filename
+            # 优先用 state.json 判断
+            if state_mgr and state_mgr.is_chapter_healthy(ch, filepath):
+                continue
             if filepath.exists():
                 try:
                     text = filepath.read_text(encoding='utf-8')
-                    # 多重健康检查
                     if len(text) < 500:
-                        pass  # 太短，重写
+                        pass
                     elif any(marker in text[:500] for marker in CORRUPT_MARKERS):
-                        pass  # 包含损坏特征
+                        pass
                     else:
-                        continue  # 跳过健康文件
+                        # 文件健康但 state 未记录，补记
+                        if state_mgr:
+                            state_mgr.chapter_completed(ch)
+                        continue
                 except Exception:
-                    pass  # 读取失败，重写
+                    pass
         todo.append(ch)
 
     if not todo:
         print(f"  全部已存在，跳过")
+        if state_mgr:
+            state_mgr.save()
         return results, errors
 
     print(f"  待处理: {len(todo)}章")
+    if state_mgr:
+        for ch in todo:
+            state_mgr.chapter_writing(ch)
+        state_mgr.save()
+
     done, total = 0, len(todo)
     t_start = time.time()
     with ThreadPoolExecutor(max_workers=workers) as executor:
@@ -708,17 +922,24 @@ def batch_run(config, prompt_type, start, end, workers, output_dir, filename_fmt
                 filename = filename_fmt.format(ch=ch)
                 path = save_file(output_dir, filename, content)
                 results[ch] = path
+                if state_mgr:
+                    state_mgr.chapter_completed(ch, model=config.get("model", ""))
             except Exception as e:
                 errors[ch] = str(e)
+                if state_mgr:
+                    state_mgr.chapter_failed(ch, error=str(e))
             done += 1
-            # 实时进度+ETA：每5%或最后一章打印
             if done % max(1, total // 20) == 0 or done == total:
                 elapsed = time.time() - t_start
-                speed = elapsed / done  # 秒/章
-                eta = speed * (total - done)  # 剩余秒
+                speed = elapsed / done
+                eta = speed * (total - done)
                 pct = done * 100 // total
                 bar = '=' * (pct // 5) + '>' + ' ' * (20 - pct // 5)
                 print(f"  [{done}/{total}] [{bar}] {pct}% | {elapsed:.0f}s | ETA {eta:.0f}s")
+                if state_mgr:
+                    state_mgr.save()  # 每 5% 持久化一次
+    if state_mgr:
+        state_mgr.save()
     return results, errors
 
 
@@ -727,25 +948,8 @@ def batch_run(config, prompt_type, start, end, workers, output_dir, filename_fmt
 # ============================================================
 
 def count_chapter_metrics(text):
-    """统计章节的量化指标。"""
-    import re
-    body = text.strip()
-    lines = body.split('\n')
-    if lines and lines[0].startswith('第'):
-        body = '\n'.join(lines[1:])
-
-    clean = re.sub(r'\s', '', body)
-
-    # 比喻检测：只匹配明确比喻结构 (像X一样/仿佛X/犹如X)
-    metaphor_pattern = r'(?:就像|好像|像.{1,20}(?:一样|似的|般|一般)|仿佛.{1,20}(?:一样|似的|般|一般)?|犹如|恍如|宛如|好似)'
-
-    return {
-        "chars": len(clean),
-        "dash": body.count('——'),
-        "metaphor": len(re.findall(metaphor_pattern, body)),
-        "ai_markers": len(re.findall(r'(?:首先|其次|然后|最后|与此同时|值得注意的是|此外|综上所述|总而言之)', body)),
-        "direct_emotion": len(re.findall(r'(?:充满了|感到无比|心中涌起|不由得|不禁|忍不住)', body)),
-    }
+    """统计章节的量化指标（委托给 lib 模块）。"""
+    return count_metrics(text)
 
 
 def get_source_metrics(config, ch):
@@ -1087,12 +1291,12 @@ def phase_polish(config, start, end, workers=5):
         try:
             result = call_api(
                 flash.get("api_key") or os.environ.get("API_KEY"),
-                get_api_url(flash),
                 flash.get("model", "deepseek-v4-flash"),
                 prompt,
-                system_prompt="你是专业网文写手，擅长润色文笔。保持情节不变，只改表达。",
+                reasoning_effort="low",
                 max_tokens=8000,
-                temperature=0.7
+                system_prompt="你是专业网文写手，擅长润色文笔。保持情节不变，只改表达。",
+                api_url=get_api_url(flash)
             )
             
             new_chars = len(result.replace('\n', '').replace(' ', ''))
@@ -1175,12 +1379,12 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=5):
         try:
             result = call_api(
                 flash.get("api_key") or os.environ.get("API_KEY"),
-                get_api_url(flash),
                 flash.get("model", "deepseek-v4-flash"),
                 prompt,
-                system_prompt="你是专业网文写手，擅长扩写内容。保持情节不变，增加细节。",
+                reasoning_effort="low",
                 max_tokens=10000,
-                temperature=0.8
+                system_prompt="你是专业网文写手，擅长扩写内容。保持情节不变，增加细节。",
+                api_url=get_api_url(flash)
             )
             
             new_chars = len(result.replace('\n', '').replace(' ', ''))
@@ -1217,21 +1421,25 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=5):
 def phase_review(config, start, end, batch_size=20, workers=5):
     """全文审稿：调用full_review.py进行分批审稿+汇总分析。"""
     import subprocess
-    
+
     print(f"\n{'=' * 50}")
     print(f"Phase 4.5: 全文审稿 (ch{start}-{end})")
     print("=" * 50)
-    
-    config_file = config.get("config_file", "configs/config_fenshou_rewrite.json")
+
+    config_file = config.get("config_file")
+    if not config_file:
+        print("[FAIL] 未指定配置文件，请在配置中添加 config_file 字段")
+        return
+
     cmd = [
-        "python", ".agents/skills/story-engine/tools/full_review.py",
+        "python", ".agents/skills/story-review/tools/full_review.py",
         "--config", config_file,
         "--start", str(start),
         "--end", str(end),
         "--batch-size", str(batch_size),
         "--workers", str(workers)
     ]
-    
+
     try:
         result = subprocess.run(cmd, capture_output=False, text=True, encoding='utf-8', timeout=1800)
         if result.returncode == 0:
@@ -1249,20 +1457,24 @@ def phase_review(config, start, end, batch_size=20, workers=5):
 def phase_fix(config, start, end, workers=5):
     """全文修复：调用full_fix.py根据审稿报告并行修复章节。"""
     import subprocess
-    
+
     print(f"\n{'=' * 50}")
     print(f"Phase 5: 全文修复 (ch{start}-{end})")
     print("=" * 50)
-    
-    config_file = config.get("config_file", "configs/config_fenshou_rewrite.json")
+
+    config_file = config.get("config_file")
+    if not config_file:
+        print("[FAIL] 未指定配置文件，请在配置中添加 config_file 字段")
+        return
+
     cmd = [
-        "python", ".agents/skills/story-engine/tools/full_fix.py",
+        "python", ".agents/skills/story-review/tools/full_fix.py",
         "--config", config_file,
         "--start", str(start),
         "--end", str(end),
         "--workers", str(workers)
     ]
-    
+
     try:
         result = subprocess.run(cmd, capture_output=False, text=True, encoding='utf-8', timeout=1800)
         if result.returncode == 0:
@@ -1271,6 +1483,81 @@ def phase_fix(config, start, end, workers=5):
             print(f"[FAIL] 全文修复失败: {result.stderr}")
     except Exception as e:
         print(f"[FAIL] 全文修复失败: {e}")
+
+
+# ============================================================
+# Phase 6: 统一审查+修复（新系统）
+# ============================================================
+
+def phase_unified_check(config, start, end, workers=10, batch_size=25, state_mgr=None):
+    """统一检查：算法+LLM分批审核，只检查不修复。"""
+    print(f"\n{'=' * 50}")
+    print(f"统一检查 (ch{start}-{end})")
+    print("=" * 50)
+
+    from unified_fixer import run_pipeline
+
+    api_key = config.get("api_key") or os.environ.get("API_KEY")
+    api_url = config.get("api_base_url", "https://api.deepseek.com").rstrip("/") + "/v1/chat/completions"
+    model = config.get("model", "deepseek-chat")
+
+    results, merged = run_pipeline(
+        config, start, end, api_key, api_url, model,
+        batch_size=batch_size, workers=workers, dry_run=True,
+    )
+
+    if state_mgr and merged:
+        for ch, data in merged.items():
+            state_mgr.save_review_result(ch, data.get("score", 0), data.get("issues", []))
+        state_mgr.save()
+
+    return merged
+
+
+def phase_unified_fix(config, start, end, workers=10, batch_size=25, dry_run=False):
+    """统一审改：分批审核→合并→制定任务→执行修复。"""
+    print(f"\n{'=' * 50}")
+    print(f"统一审改 (ch{start}-{end}, dry_run={dry_run})")
+    print("=" * 50)
+
+    from unified_fixer import run_pipeline
+
+    api_key = config.get("api_key") or os.environ.get("API_KEY")
+    api_url = config.get("api_base_url", "https://api.deepseek.com").rstrip("/") + "/v1/chat/completions"
+    model = config.get("model", "deepseek-chat")
+
+    if not api_key:
+        print("[WARN] 未配置 API_KEY，将跳过 LLM 审核和修复")
+
+    results, merged = run_pipeline(
+        config, start, end, api_key, api_url, model,
+        batch_size=batch_size, workers=workers, dry_run=dry_run,
+    )
+
+    # 保存
+    output = os.path.join(config['rewrites_dir'], 'compare', 'unified_review_fix.json')
+    Path(output).parent.mkdir(parents=True, exist_ok=True)
+    Path(output).write_text(json.dumps({
+        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "results": {str(k): v for k, v in (results or {}).items()},
+        "merged": {str(k): v for k, v in (merged or {}).items()},
+    }, ensure_ascii=False, indent=2), encoding='utf-8')
+    print(f"  结果已保存: {output}")
+
+    return results
+
+
+def phase_unified_review_fix(config, start, end, workers=10, batch_size=25, state_mgr=None):
+    """统一审改（推荐）：分批审核→合并→制定任务→执行修复。"""
+    results = phase_unified_fix(config, start, end, workers=workers, batch_size=batch_size, dry_run=False)
+
+    if state_mgr and results:
+        for ch, r in (results or {}).items():
+            if isinstance(r, dict) and r.get("status") == "fixed":
+                state_mgr.chapter_completed(ch, model="mixed", retries=0)
+        state_mgr.save()
+
+    return results
 
 
 # ============================================================
@@ -1438,108 +1725,60 @@ def get_chapters_list(config, include_fanwai=False):
     return chapters
 
 
-def all_with_fix(config, start, end, workers=10, max_rounds=3):
-    """一键完成：生成→验证→审稿→修复→重新验证→输出报告。
-    
+def all_with_fix(config, start, end, workers=10, max_rounds=3, state_mgr=None):
+    """一键完成：生成→统一审查→统一修复→输出报告。
+
     Args:
         config: 配置
         start: 起始章
         end: 结束章
         workers: 并行数
         max_rounds: 最大修复轮数
+        state_mgr: StateManager 实例
     """
     print(f"\n{'=' * 60}")
     print(f"一键完成流程 (ch{start}-{end}, 最多{max_rounds}轮修复)")
     print("=" * 60)
-    
-    # 记录开始时间
-    import time
+
     start_time = time.time()
-    
-    # 记录每轮结果
-    all_rounds = []
-    
+
     # ============ 第1步：生成章节 ============
     print(f"\n{'=' * 50}")
     print(f"第1步：生成章节")
     print("=" * 50)
-    
-    # 生成guides
-    phase_guides(config, start, end, workers)
-    
-    # 写章节（分批）
+
+    phase_guides(config, start, end, workers, state_mgr=state_mgr)
+
     batch_size = 10
     for batch_start in range(start, end + 1, batch_size):
         batch_end = min(batch_start + batch_size - 1, end)
-        phase_write(config, batch_start, batch_end, workers)
+        phase_write(config, batch_start, batch_end, workers, state_mgr=state_mgr)
         phase_postfix(config, batch_start, batch_end)
-    
-    # ============ 第2步：验证+修复循环 ============
-    for round_num in range(1, max_rounds + 1):
-        print(f"\n{'=' * 50}")
-        print(f"第2步：第{round_num}轮验证+修复")
-        print("=" * 50)
-        
-        # 验证
-        validate_result = phase_validate(config, start, end)
-        
-        # 统计问题
-        pass_count = sum(1 for r in validate_result if r.get('status') == 'PASS')
-        fail_count = sum(1 for r in validate_result if r.get('status') == 'FAIL')
-        
-        round_info = {
-            'round': round_num,
-            'pass': pass_count,
-            'fail': fail_count,
-            'fixes': []
-        }
-        
-        print(f"\n验证结果：{pass_count}章通过，{fail_count}章有问题")
-        
-        # 如果全部通过，跳过修复
-        if fail_count == 0:
-            print("全部通过，无需修复！")
-            all_rounds.append(round_info)
-            break
-        
-        # 修复字数问题
-        print("\n修复字数问题...")
-        trim_result = phase_trim(config, start, end)
-        round_info['fixes'].append(f"字数修复：{trim_result}章")
-        
-        # 审稿+修复
-        print("\n审稿+修复...")
-        total_issues, fixed_count = phase_review_and_fix(config, start, end, workers)
-        round_info['fixes'].append(f"审稿修复：{fixed_count}章，{total_issues}处问题")
-        
-        # 编辑审稿+自动修复（只在第一轮运行）
-        if round_num == 1:
-            print("\n编辑审稿...")
-            all_reviews = phase_editor_review(config, start, end, batch_size=10, auto_fix=True)
-            if all_reviews:
-                auto_fixed = phase_auto_fix(config, start, end, all_reviews)
-                round_info['fixes'].append(f"编辑修复：{auto_fixed}章")
-        
-        all_rounds.append(round_info)
-        
-        # 如果通过率>=80%，停止修复
-        if pass_count / (pass_count + fail_count) >= 0.8:
-            print(f"\n通过率>=80%，停止修复")
-            break
-    
+
+    # ============ 第2步：统一审查+修复 ============
+    report = phase_unified_review_fix(config, start, end, workers=workers, state_mgr=state_mgr)
+
     # ============ 第3步：生成报告 ============
     print(f"\n{'=' * 50}")
     print(f"第3步：生成完本报告")
     print("=" * 50)
-    
-    # 最终验证
-    final_validate = phase_validate(config, start, end)
-    final_pass = sum(1 for r in final_validate if r.get('status') == 'PASS')
-    final_fail = sum(1 for r in final_validate if r.get('status') == 'FAIL')
-    
-    # 生成报告
-    report = generate_completion_report(config, start, end, all_rounds, final_pass, final_fail, start_time)
-    
+
+    summary = report.get("summary", {}) if report else {}
+    final_pass = summary.get("pass", 0)
+    final_fail = summary.get("fail", 0)
+
+    all_rounds = []
+    if report:
+        all_rounds.append({
+            "round": 1,
+            "pass": final_pass,
+            "fail": final_fail,
+            "avg_score": summary.get("avg_score", 0),
+            "total_issues": summary.get("total_issues", 0),
+        })
+
+    generate_completion_report(config, start, end, all_rounds, final_pass, final_fail, start_time)
+
     # 导出TXT
     print("\n导出完整TXT...")
     try:
@@ -1547,20 +1786,23 @@ def all_with_fix(config, start, end, workers=10, max_rounds=3):
         chapters_dir = f"{config['rewrites_dir']}/chapters"
         export_dir = f"{config['rewrites_dir']}/export"
         export_file = f"{export_dir}/{config['book_name']}.txt"
+        concept_path = f"{config['rewrites_dir']}/concept.md"
         os.makedirs(export_dir, exist_ok=True)
-        if merge_chapters(chapters_dir, export_file):
+        if merge_chapters(chapters_dir, export_file, 'utf-8', concept_path):
             print(f"[OK] 已导出: {export_file}")
     except Exception as e:
         print(f"[WARN] 导出失败: {e}")
-    
-    # 打印总结
+
     total_time = time.time() - start_time
     print(f"\n{'=' * 60}")
     print(f"一键完成！")
     print("=" * 60)
     print(f"总章节：{end - start + 1}章")
-    print(f"最终通过率：{final_pass}/{final_pass + final_fail} ({final_pass/(final_pass+final_fail)*100:.1f}%)")
-    print(f"修复轮数：{len(all_rounds)}轮")
+    total = final_pass + final_fail
+    if total > 0:
+        print(f"最终通过率：{final_pass}/{total} ({final_pass/total*100:.1f}%)")
+    print(f"平均分：{summary.get('avg_score', 0)}")
+    print(f"总问题数：{summary.get('total_issues', 0)}")
     print(f"总耗时：{total_time:.0f}秒")
     print(f"\n报告位置：{config['rewrites_dir']}/完本报告.md")
     
@@ -1670,11 +1912,13 @@ def main():
     parser.add_argument("--serial", action="store_true",
                         help="plot-guide 串行生成，保持章间连贯（质量模式）")
     parser.add_argument("--phase", default="all",
-                        help="all | all-with-fix | full-review | open-book | style-analysis | guides | write | validate | trim | rewrite | polish | expand | compare | review | fix")
+                        help="all | all-with-fix | unified | unified-check | unified-fix | full-review | open-book | guides | write | validate | trim | rewrite | polish | expand | compare | review | fix")
     parser.add_argument("--include-fanwai", action="store_true",
                         help="包含番外章节（默认不包含）")
     parser.add_argument("--max-fix-rounds", type=int, default=3,
                         help="最大修复轮数（默认3轮）")
+    parser.add_argument("--status", action="store_true",
+                        help="显示当前项目状态后退出")
 
     args = parser.parse_args()
 
@@ -1686,7 +1930,7 @@ def main():
     config = json.loads(config_path.read_text(encoding='utf-8'))
     config.setdefault("prompts_dir", ".agents/skills/story-engine/prompts")
     config.setdefault("base_dir", os.getcwd())
-    
+
     # 配置校验
     errors = validate_config(config)
     if errors:
@@ -1695,8 +1939,36 @@ def main():
             print(f"  - {e}")
         sys.exit(1)
 
+    # 初始化状态管理
+    rewrites_dir = config.get("rewrites_dir", "")
+    state_mgr = StateManager(rewrites_dir) if rewrites_dir else None
+    if state_mgr:
+        state_mgr.load()
+        print(f"[STATE] {state_mgr.summary()}")
+
+    # --status: 显示状态后退出
+    if args.status:
+        if state_mgr:
+            print(f"\n项目状态:")
+            print(f"  状态文件: {state_mgr.state_path}")
+            s = state_mgr.state
+            for phase, info in s.get("phases", {}).items():
+                print(f"  {phase}: {info.get('status', '?')}")
+            completed = state_mgr.get_completed_chapters()
+            failed = state_mgr.get_failed_chapters()
+            print(f"  章节: {len(completed)} 完成, {len(failed)} 失败")
+            if failed:
+                print(f"  失败章节: {failed}")
+            runs = s.get("runs", [])
+            if runs:
+                print(f"  运行记录: {len(runs)} 次")
+                last = runs[-1]
+                print(f"    最近: {last.get('phase')} {last.get('range')} ok={last.get('ok')} fail={last.get('fail')}")
+        else:
+            print("未初始化状态管理")
+        return
+
     # 如果没有指定 --end，则自动获取最大章节号（默认不包含番外）
-    # 只有用户没传 --end 时才自动检测
     if not any('--end' in arg for arg in sys.argv):
         chapters = get_chapters_list(config, include_fanwai=args.include_fanwai)
         if chapters:
@@ -1708,7 +1980,7 @@ def main():
         print(f"workers 自动设为章节数: {args.workers}")
 
     print(f"改写流水线 | {config['book_name']} | ch{args.start}-{args.end} | workers={args.workers}")
-    print(f"项目目录: {config.get('rewrites_dir')}")
+    print(f"项目目录: {rewrites_dir}")
 
     t0 = time.time()
     phases = set(args.phase.split(","))
@@ -1717,29 +1989,23 @@ def main():
         phase_prep(config)
 
     if "all" in phases or "open-book" in phases:
-        concept_path = Path(config["rewrites_dir"]) / "concept.md"
-        if concept_path.exists():
-            print(f"concept.md 已存在，跳过开书")
-        else:
-            phase_open_book(config)
+        phase_open_book(config, state_mgr=state_mgr)
 
     if "all" in phases or "guides" in phases:
-        phase_guides(config, args.start, args.end, args.workers, serial=args.serial)
+        phase_guides(config, args.start, args.end, args.workers, serial=args.serial, state_mgr=state_mgr)
 
     if "all" in phases or "write" in phases:
-        # 分批写章+对比（每10章一批）
         batch_size = 10
         for batch_start in range(args.start, args.end + 1, batch_size):
             batch_end = min(batch_start + batch_size - 1, args.end)
             print(f"\n{'#' * 50}")
             print(f" 批次: 第{batch_start}-{batch_end}章")
             print(f"{'#' * 50}")
-            
-            phase_write(config, batch_start, batch_end, args.workers)
+
+            phase_write(config, batch_start, batch_end, args.workers, state_mgr=state_mgr)
             phase_postfix(config, batch_start, batch_end)
             phase_compare(config, batch_start, batch_end)
-        
-        # 全部完成后启动阅读器
+
         open_reader(config)
 
     if "all" in phases or "validate" in phases:
@@ -1763,22 +2029,55 @@ def main():
     if "fix" in phases:
         phase_fix(config, args.start, args.end, args.workers)
 
+    # 统一检查（只检查不修复）
+    if "unified-check" in phases:
+        phase_unified_check(config, args.start, args.end, workers=args.workers, state_mgr=state_mgr)
+
+    # 统一修复（检查+修复一次搞定）
+    if "unified-fix" in phases:
+        phase_unified_fix(config, args.start, args.end, workers=args.workers)
+
+    # 统一审查+修复（推荐，一次搞定）
+    if "unified" in phases:
+        phase_unified_review_fix(config, args.start, args.end, workers=args.workers, state_mgr=state_mgr)
+
+    # 自动 Prompt 优化（审稿后自动运行，优化/精简/扩充 prompt）
+    if "optimize" in phases:
+        try:
+            from auto_prompt_optimize import run_optimize
+            run_optimize(config, args.start, args.end, mode="auto")
+        except ImportError:
+            print("[WARN] auto_prompt_optimize.py 未找到，跳过 prompt 优化")
+
     if "full-review" in phases:
-        # 完整审改流程：审核→规划→执行→验证
-        from novel_review_rewrite import full_review_and_rewrite
-        full_review_and_rewrite(
-            config, args.start, args.end,
-            batch_size=20,
-            workers=args.workers,
-            max_rounds=3
-        )
+        # 完整审改流程：审核→规划→执行→验证（委托 story-review）
+        import subprocess as _sp
+        config_file = config.get("config_file")
+        if not config_file:
+            print("[FAIL] 未指定配置文件，请在配置中添加 config_file 字段")
+        else:
+            cmd = [
+                "python", ".agents/skills/story-review/tools/novel_review_rewrite.py",
+                "--config", config_file,
+                "--start", str(args.start),
+                "--end", str(args.end),
+                "--workers", str(args.workers)
+            ]
+            try:
+                result = _sp.run(cmd, capture_output=False, text=True, encoding='utf-8', timeout=3600)
+                if result.returncode == 0:
+                    print("[OK] 完整审改流程完成")
+                else:
+                    print(f"[FAIL] 完整审改流程失败")
+            except Exception as e:
+                print(f"[FAIL] 完整审改流程失败: {e}")
 
     if "all" in phases or "compare" in phases:
         phase_compare(config, args.start, args.end)
 
     # all-with-fix：一键完成生成→验证→审稿→修复→重新验证→输出报告
     if "all-with-fix" in phases:
-        all_with_fix(config, args.start, args.end, args.workers, args.max_fix_rounds)
+        all_with_fix(config, args.start, args.end, args.workers, args.max_fix_rounds, state_mgr=state_mgr)
 
     # 自动导出完整TXT
     if "all" in phases or "write" in phases:
@@ -1790,8 +2089,9 @@ def main():
             chapters_dir = f"{config['rewrites_dir']}/chapters"
             export_dir = f"{config['rewrites_dir']}/export"
             export_file = f"{export_dir}/{config['book_name']}.txt"
+            concept_path = f"{config['rewrites_dir']}/concept.md"
             os.makedirs(export_dir, exist_ok=True)
-            if merge_chapters(chapters_dir, export_file):
+            if merge_chapters(chapters_dir, export_file, 'utf-8', concept_path):
                 print(f"[OK] 已导出: {export_file}")
             else:
                 print(f"[WARN] 导出失败")

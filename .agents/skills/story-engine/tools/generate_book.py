@@ -11,6 +11,7 @@ import subprocess
 from pathlib import Path
 
 SCRIPTS_DIR = ".agents/skills/story-engine/tools"
+TOOLS_DIR = ".agents/skills/story-tools"
 REWRITE_SCRIPT = f"{SCRIPTS_DIR}/rewrite_chapters.py"
 
 
@@ -33,21 +34,21 @@ def step_split(source_path, output_dir):
     print("\n" + "=" * 50)
     print("Step 1: 拆章")
     print("=" * 50)
-    return run(f'python "{SCRIPTS_DIR}/split_chapters_generic.py" "{source_path}" "{output_dir}"')
+    return run(f'python "{TOOLS_DIR}/split_chapters_generic.py" "{source_path}" "{output_dir}"')
 
 
 def step_setup(project_dir, chapter_count):
     print("\n" + "=" * 50)
     print("Step 3: 创建项目目录")
     print("=" * 50)
-    return run(f'python "{SCRIPTS_DIR}/create_templates.py" setup {chapter_count} "{project_dir}"')
+    return run(f'python "{TOOLS_DIR}/create_templates.py" setup {chapter_count} "{project_dir}"')
 
 
 def step_fix_titles(project_dir, source_path):
     print("\n" + "=" * 50)
     print("Step 7: 修复章节标题")
     print("=" * 50)
-    return run(f'python "{SCRIPTS_DIR}/fix_chapter_titles.py" "{project_dir}/chapters" "{source_path}"')
+    return run(f'python "{TOOLS_DIR}/fix_chapter_titles.py" "{project_dir}/chapters" "{source_path}"')
 
 
 def step_merge(project_dir, book_name):
@@ -55,8 +56,9 @@ def step_merge(project_dir, book_name):
     print("Step 8: 合并导出")
     print("=" * 50)
     export_dir = f"{project_dir}/export"
+    concept_path = f"{project_dir}/concept.md"
     os.makedirs(export_dir, exist_ok=True)
-    return run(f'python "{SCRIPTS_DIR}/merge_chapters.py" "{project_dir}/chapters" "{export_dir}/{book_name}.txt"')
+    return run(f'python "{TOOLS_DIR}/merge_chapters.py" "{project_dir}/chapters" "{export_dir}/{book_name}.txt" utf-8 "{concept_path}"')
 
 
 def step_compare(project_dir, chapter_count):
@@ -73,7 +75,7 @@ def step_compare(project_dir, chapter_count):
 
 def step_rewrite(config_path, start, end, workers, steps):
     """委托 rewrite_chapters.py 执行 LLM 步骤。"""
-    return run(f'python "{REWRITE_SCRIPT}" --config "{config_path}" --start {start} --end {end} --workers {workers} --steps {steps}')
+    return run(f'python "{REWRITE_SCRIPT}" --config "{config_path}" --start {start} --end {end} --workers {workers} --phase {steps}')
 
 
 # ============================================================

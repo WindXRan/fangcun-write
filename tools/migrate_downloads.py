@@ -6,7 +6,7 @@ import hashlib
 import sys
 from pathlib import Path
 
-BASE = Path(r"C:\Users\裴浩然\Desktop\AI网文项目\oh-novel-writer")
+BASE = Path(os.environ.get("PROJECT_ROOT", Path(__file__).parent.parent))
 SRC = BASE / "novel-download-authors"
 DST = BASE / "projects"
 

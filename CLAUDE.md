@@ -26,6 +26,35 @@ Phase 3:   写章 (flash, N 并行)      → ch_{N}.txt（章名自生成）
 Phase 3.5: Trim (flash)              → 超字数 20% 的章自动精简
 Phase 3.6: 衔接修复 (flash, N-1 并行) → 修章间重叠
 Phase 4:   对比 (本地)                → compare/报告
+Phase 6:   统一审查+修复              → unified_review.json + unified_fix.json
+```
+
+### 统一审改系统（Phase 6）
+
+合并所有检查项为一次排查，输出结构化 JSON 报告：
+
+| 检查项 | 类型 | auto_fixable |
+|--------|------|--------------|
+| 字数偏差 (±15%) | word_count | No |
+| 比喻过多 (源文+3) | metaphor | No |
+| AI路标词 (源文+1) | ai_marker | Yes |
+| 直抒情过多 (源文+2) | direct_emotion | No |
+| 台词雷同 (8字匹配) | plagiarism | No |
+| AI痕迹词 (句首) | ai_trace | Yes |
+| LLM审稿 (钩子/情绪/人设) | hook/emotion/character | No |
+
+```bash
+# 只审查（量化检查）
+python .agents/skills/story-engine/tools/unified_reviewer.py --config configs/xxx.json
+
+# 审查+LLM（更全面）
+python .agents/skills/story-engine/tools/unified_reviewer.py --config configs/xxx.json --llm
+
+# 修复
+python .agents/skills/story-engine/tools/unified_fixer.py --config configs/xxx.json
+
+# pipeline 集成
+python .agents/skills/story-engine/tools/rewrite_chapters.py --config configs/xxx.json --phase unified
 ```
 
 ## 文件结构
@@ -85,6 +114,12 @@ python tools/rewrite_chapters.py --config configs/xxx.json --start 1 --end 188 -
 # 分步（concept 保护：已存在则自动跳过）
 python tools/rewrite_chapters.py --config configs/xxx.json --phase open-book
 python tools/rewrite_chapters.py --config configs/xxx.json --phase guides,write,trim,continuity,compare
+
+# 统一审改（新系统：一次排查所有问题并修复）
+python tools/rewrite_chapters.py --config configs/xxx.json --phase unified
+
+# 查看项目状态
+python tools/rewrite_chapters.py --config configs/xxx.json --status
 
 # 风格分析（一键完成，参考 inkos style-analyzer）
 python tools/style_analyzer.py <源文目录> <输出目录>
