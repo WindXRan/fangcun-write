@@ -416,7 +416,7 @@ def main():
     parser.add_argument("--start", type=int, default=1, help="起始章")
     parser.add_argument("--end", type=int, default=None, help="结束章（默认自动检测）")
     parser.add_argument("--output", default=None, help="输出报告路径（默认 compare/unified_review.json）")
-    parser.add_argument("--llm", action="store_true", help="启用LLM审稿（较慢但更全面）")
+    parser.add_argument("--llm", action=argparse.BooleanOptionalAction, default=True, help="LLM审稿（默认开启，--no-llm 关闭）")
     parser.add_argument("--workers", type=int, default=5, help="LLM审稿并行数")
     args = parser.parse_args()
 

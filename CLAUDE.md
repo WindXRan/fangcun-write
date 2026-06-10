@@ -44,11 +44,11 @@ Phase 6:   统一审查+修复              → unified_review.json + unified_fi
 | LLM审稿 (钩子/情绪/人设) | hook/emotion/character | No |
 
 ```bash
-# 只审查（量化检查）
+# 审查（默认 LLM 模式，算法+LLM 全面检查）
 python .agents/skills/story-engine/tools/unified_reviewer.py --config configs/xxx.json
 
-# 审查+LLM（更全面）
-python .agents/skills/story-engine/tools/unified_reviewer.py --config configs/xxx.json --llm
+# 只用算法（不开 LLM，快但粗糙）
+python .agents/skills/story-engine/tools/unified_reviewer.py --config configs/xxx.json --no-llm
 
 # 修复
 python .agents/skills/story-engine/tools/unified_fixer.py --config configs/xxx.json
