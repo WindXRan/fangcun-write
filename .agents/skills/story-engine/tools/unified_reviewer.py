@@ -342,23 +342,36 @@ def review_all(config, start, end, get_source_text_fn, api_key=None, api_url=Non
                 ch_text = ch_file.read_text(encoding='utf-8')
                 chapters_data.append((ch, ch_text))
 
-        # 分批调用 LLM
-        print(f"  LLM 批量审稿 {len(chapters_data)} 章（{batch_size}章/批）...")
+        # 分批并行调用 LLM
+        print(f"  LLM 批量审稿 {len(chapters_data)} 章（{batch_size}章/批, {workers}并行）...")
+        batches = []
         for i in range(0, len(chapters_data), batch_size):
             batch = chapters_data[i:i+batch_size]
+            batches.append((i // batch_size + 1, batch))
+
+        def process_batch(batch_info):
+            batch_num, batch = batch_info
             batch_nums = [c[0] for c in batch]
-            print(f"    批次 {i//batch_size+1}: ch{batch_nums[0]:03d}-{batch_nums[-1]:03d}")
-            llm_results = review_batch_llm(api_key, api_url, model, batch)
-            for ch_num, (llm_issues, llm_score) in llm_results.items():
-                if ch_num in results:
-                    results[ch_num]["issues"].extend(llm_issues)
-                    # 重算分数
-                    all_issues = results[ch_num]["issues"]
-                    high_count = sum(1 for i2 in all_issues if i2["severity"] == "high")
-                    medium_count = sum(1 for i2 in all_issues if i2["severity"] == "medium")
-                    score = llm_score - high_count * 10 - medium_count * 3
-                    results[ch_num]["score"] = max(0, min(100, score))
-                    results[ch_num]["status"] = "FAIL" if high_count > 0 or results[ch_num]["score"] < 60 else "PASS"
+            print(f"    批次 {batch_num}: ch{batch_nums[0]:03d}-{batch_nums[-1]:03d}")
+            return review_batch_llm(api_key, api_url, model, batch)
+
+        with ThreadPoolExecutor(max_workers=workers) as ex:
+            futures = {ex.submit(process_batch, b): b[0] for b in batches}
+            for f in as_completed(futures):
+                batch_num = futures[f]
+                try:
+                    llm_results = f.result()
+                    for ch_num, (llm_issues, llm_score) in llm_results.items():
+                        if ch_num in results:
+                            results[ch_num]["issues"].extend(llm_issues)
+                            all_issues = results[ch_num]["issues"]
+                            high_count = sum(1 for i2 in all_issues if i2["severity"] == "high")
+                            medium_count = sum(1 for i2 in all_issues if i2["severity"] == "medium")
+                            score = llm_score - high_count * 10 - medium_count * 3
+                            results[ch_num]["score"] = max(0, min(100, score))
+                            results[ch_num]["status"] = "FAIL" if high_count > 0 or results[ch_num]["score"] < 60 else "PASS"
+                except Exception as e:
+                    print(f"    [FAIL] 批次 {batch_num}: {e}")
         print(f"  LLM 审稿完成")
     elif llm:
         print(f"  [SKIP] 未配置 API_KEY，跳过 LLM 审稿")
