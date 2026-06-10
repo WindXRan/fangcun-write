@@ -436,7 +436,7 @@ def main():
     parser.add_argument("--config", required=True, help="配置文件")
     parser.add_argument("--start", type=int, default=1, help="起始章")
     parser.add_argument("--end", type=int, default=None, help="结束章（默认自动检测）")
-    parser.add_argument("--output", default=None, help="输出报告路径（默认 compare/unified_review.json）")
+    parser.add_argument("--output", default=None, help="输出报告路径（默认 compare/unified_review_{llm|algo}.json）")
     parser.add_argument("--llm", action=argparse.BooleanOptionalAction, default=True, help="LLM审稿（默认开启，--no-llm 关闭）")
     parser.add_argument("--batch-size", type=int, default=35, help="LLM批量审稿每批章数（默认35）")
     parser.add_argument("--workers", type=int, default=10, help="并行数（默认10）")
@@ -489,8 +489,9 @@ def main():
             print("[WARN] 未配置 API_KEY，跳过 LLM 审稿")
             args.llm = False
 
-    # 输出路径
-    output = args.output or os.path.join(config['rewrites_dir'], 'compare', 'unified_review.json')
+    # 输出路径（LLM 和纯算法分开）
+    suffix = "llm" if args.llm else "algo"
+    output = args.output or os.path.join(config['rewrites_dir'], 'compare', f'unified_review_{suffix}.json')
 
     print(f"统一审查 | ch{args.start}-{args.end} | LLM={'on' if args.llm else 'off'}")
 

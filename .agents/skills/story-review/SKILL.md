@@ -28,34 +28,19 @@ shell: powershell
 
 | 脚本 | 用途 |
 |------|------|
-| `tools/full_review.py` | 分批审稿 + 汇总合并（长篇核心策略） |
 | `tools/full_fix.py` | 根据审稿报告并行修复章节 |
 | `tools/novel_review_rewrite.py` | 审稿→DAG规划→波次修复→验证闭环 |
 
-### 长篇审稿策略
-
-长篇小说（>20章）审稿采用 **分批→汇总** 两阶段策略：
-
-```
-第一阶段：分批审稿（并行）
-  每 batch_size 章一批 → 独立审稿 → 输出「审稿_第N批_X-Y.md」
-
-第二阶段：汇总分析
-  所有批次结果 → 跨章系统性问题分析 → 输出「全文审稿汇总报告.md」
-  - 致命逻辑矛盾（人物生死/身份/时间线）
-  - 人设漂移
-  - 重复桥段
-  - 债务/数值矛盾
-
-第三阶段（可选）：修复
-  读取审稿报告 → 并行修复章节 → 字数控制±10%
-```
+> 批量审稿已统一到 `story-engine/tools/unified_reviewer.py`（算法+LLM 并行，15章/批）。
 
 ### CLI 用法
 
 ```bash
-# 分批审稿 + 汇总
-python .agents/skills/story-review/tools/full_review.py --config configs/xxx.json --start 1 --end 100 --batch-size 20
+# 批量审稿（推荐，算法+LLM，默认 LLM 开启）
+python .agents/skills/story-engine/tools/unified_reviewer.py --config configs/xxx.json
+
+# 只用算法（不开 LLM）
+python .agents/skills/story-engine/tools/unified_reviewer.py --config configs/xxx.json --no-llm
 
 # 根据审稿报告修复
 python .agents/skills/story-review/tools/full_fix.py --config configs/xxx.json --start 1 --end 100
