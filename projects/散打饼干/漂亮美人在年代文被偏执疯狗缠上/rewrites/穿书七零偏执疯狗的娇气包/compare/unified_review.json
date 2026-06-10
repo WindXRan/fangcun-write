@@ -1,0 +1,4631 @@
+{
+  "version": 1,
+  "timestamp": "2026-06-10 17:13:19",
+  "summary": {
+    "total": 142,
+    "pass": 58,
+    "fail": 84,
+    "missing": 0,
+    "avg_score": 84.6,
+    "total_issues": 221,
+    "high_issues": 119
+  },
+  "chapters": {
+    "1": {
+      "ch": 1,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 1300,
+        "dash": 6,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "，想绕路车门开了一个男人从驾驶室跳下来高大，穿着运",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "2": {
+      "ch": 2,
+      "status": "FAIL",
+      "score": 65,
+      "metrics": {
+        "chars": 2243,
+        "dash": 6,
+        "metaphor": 1,
+        "ai_markers": 4,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2243/1384 (+62%)",
+          "fix_instruction": "目标字数: 1245~1522",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 4处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 最后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "最后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "3": {
+      "ch": 3,
+      "status": "FAIL",
+      "score": 65,
+      "metrics": {
+        "chars": 1516,
+        "dash": 13,
+        "metaphor": 0,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 1516/1198 (+27%)",
+          "fix_instruction": "目标字数: 1078~1317",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 3处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 最后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "最后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "4": {
+      "ch": 4,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 1324,
+        "dash": 0,
+        "metaphor": 1,
+        "ai_markers": 4,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 4处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "5": {
+      "ch": 5,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2923,
+        "dash": 9,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2923/1437 (+103%)",
+          "fix_instruction": "目标字数: 1293~1580",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "6": {
+      "ch": 6,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1539,
+        "dash": 1,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "7": {
+      "ch": 7,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2726,
+        "dash": 3,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2726/2151 (+27%)",
+          "fix_instruction": "目标字数: 1935~2366",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "8": {
+      "ch": 8,
+      "status": "FAIL",
+      "score": 75,
+      "metrics": {
+        "chars": 2348,
+        "dash": 4,
+        "metaphor": 1,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "动作干脆得像切豆腐一样轻松他回头看她一眼“过来，站",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2348/1965 (+19%)",
+          "fix_instruction": "目标字数: 1768~2161",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 2处: 然后×2",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 2
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "9": {
+      "ch": 9,
+      "status": "PASS",
+      "score": 90,
+      "metrics": {
+        "chars": 1676,
+        "dash": 12,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 1676/1431 (+17%)",
+          "fix_instruction": "目标字数: 1287~1574",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "10": {
+      "ch": 10,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1480,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1480/1767 (-16%)",
+          "fix_instruction": "目标字数: 1590~1943",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "11": {
+      "ch": 11,
+      "status": "PASS",
+      "score": 90,
+      "metrics": {
+        "chars": 2202,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2202/1904 (+16%)",
+          "fix_instruction": "目标字数: 1713~2094",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "12": {
+      "ch": 12,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1371,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 1371/1101 (+25%)",
+          "fix_instruction": "目标字数: 990~1211",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "13": {
+      "ch": 13,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1896,
+        "dash": 9,
+        "metaphor": 2,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "14": {
+      "ch": 14,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 2443,
+        "dash": 8,
+        "metaphor": 3,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2443/1785 (+37%)",
+          "fix_instruction": "目标字数: 1606~1963",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 2处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "口的事——他扣住她的后脑勺，吻了她她当时没有推开这",
+                "length": 8
+              },
+              {
+                "text": "白瓷碗里是黄澄澄的小米粥，码得齐整的腌萝卜条，两双",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "15": {
+      "ch": 15,
+      "status": "PASS",
+      "score": 90,
+      "metrics": {
+        "chars": 1280,
+        "dash": 1,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 1
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1280/1523 (-16%)",
+          "fix_instruction": "目标字数: 1370~1675",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "16": {
+      "ch": 16,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1570,
+        "dash": 3,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 1570/1295 (+21%)",
+          "fix_instruction": "目标字数: 1165~1424",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "17": {
+      "ch": 17,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1122,
+        "dash": 3,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1122/1400 (-20%)",
+          "fix_instruction": "目标字数: 1260~1540",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "18": {
+      "ch": 18,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1848,
+        "dash": 8,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1848/1646 (+12%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "19": {
+      "ch": 19,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1570,
+        "dash": 4,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 1570/1265 (+24%)",
+          "fix_instruction": "目标字数: 1138~1391",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "20": {
+      "ch": 20,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1419,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1419/1281 (+11%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "21": {
+      "ch": 21,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 1908,
+        "dash": 6,
+        "metaphor": 2,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 1908/1503 (+27%)",
+          "fix_instruction": "目标字数: 1352~1653",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "握紧了包里的户口本和存款单布料摩擦布料的声音在安静",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "22": {
+      "ch": 22,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1264,
+        "dash": 5,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1264/1466 (-14%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "23": {
+      "ch": 23,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 907,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 907/1173 (-23%)",
+          "fix_instruction": "目标字数: 1055~1290",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "24": {
+      "ch": 24,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2097,
+        "dash": 4,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2097/1463 (+43%)",
+          "fix_instruction": "目标字数: 1316~1609",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "25": {
+      "ch": 25,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1377,
+        "dash": 7,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "26": {
+      "ch": 26,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2191,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2191/1931 (+13%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "27": {
+      "ch": 27,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1286,
+        "dash": 5,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 1286/1044 (+23%)",
+          "fix_instruction": "目标字数: 939~1148",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "28": {
+      "ch": 28,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 1225,
+        "dash": 4,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 2处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "桌上又从兜里掏出两个黑色的、巴掌大的方形盒子“这东",
+                "length": 8
+              },
+              {
+                "text": "两个黑色的、巴掌大的方形盒子“这东西叫BP机”他把",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 1225/1060 (+16%)",
+          "fix_instruction": "目标字数: 954~1166",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "29": {
+      "ch": 29,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 2152,
+        "dash": 4,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2152/1150 (+87%)",
+          "fix_instruction": "目标字数: 1035~1265",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "30": {
+      "ch": 30,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 789,
+        "dash": 1,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数不足 789/1069 (-26%)",
+          "fix_instruction": "目标字数: 962~1175",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "31": {
+      "ch": 31,
+      "status": "PASS",
+      "score": 90,
+      "metrics": {
+        "chars": 1885,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 1885/1563 (+21%)",
+          "fix_instruction": "目标字数: 1406~1719",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "32": {
+      "ch": 32,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 1314,
+        "dash": 8,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 1314/1040 (+26%)",
+          "fix_instruction": "目标字数: 936~1144",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 3处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "装着一件事早上醒来的时候，窗外已经是白茫茫的一片大",
+                "length": 8
+              },
+              {
+                "text": "，窗外已经是白茫茫的一片大雪盖住了整个运输队家属院",
+                "length": 8
+              },
+              {
+                "text": "来他从厨房灌了一个热水袋，塞进她脚边的被窝里做完这",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "33": {
+      "ch": 33,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 2189,
+        "dash": 5,
+        "metaphor": 1,
+        "ai_markers": 5,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 5处 (源文2, 上限3)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 2处: 然后×2",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 2
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "34": {
+      "ch": 34,
+      "status": "PASS",
+      "score": 90,
+      "metrics": {
+        "chars": 2018,
+        "dash": 6,
+        "metaphor": 1,
+        "ai_markers": 5,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 2018/2653 (-24%)",
+          "fix_instruction": "目标字数: 2387~2918",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 2处: 然后×2",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 2
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "35": {
+      "ch": 35,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 2538,
+        "dash": 10,
+        "metaphor": 0,
+        "ai_markers": 4,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2538/2030 (+25%)",
+          "fix_instruction": "目标字数: 1827~2233",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 4处 (源文1, 上限2)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        }
+      ]
+    },
+    "36": {
+      "ch": 36,
+      "status": "FAIL",
+      "score": 65,
+      "metrics": {
+        "chars": 3321,
+        "dash": 12,
+        "metaphor": 0,
+        "ai_markers": 5,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 3321/2134 (+56%)",
+          "fix_instruction": "目标字数: 1920~2347",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 5处 (源文3, 上限4)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "37": {
+      "ch": 37,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2486,
+        "dash": 18,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "38": {
+      "ch": 38,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 2118,
+        "dash": 9,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 虽然×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "虽然",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "39": {
+      "ch": 39,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2797,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2797/2164 (+29%)",
+          "fix_instruction": "目标字数: 1947~2380",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "40": {
+      "ch": 40,
+      "status": "PASS",
+      "score": 90,
+      "metrics": {
+        "chars": 2303,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2303/1925 (+20%)",
+          "fix_instruction": "目标字数: 1732~2117",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "41": {
+      "ch": 41,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 1497,
+        "dash": 1,
+        "metaphor": 2,
+        "ai_markers": 1,
+        "direct_emotion": 1
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数不足 1497/2054 (-27%)",
+          "fix_instruction": "目标字数: 1848~2259",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 最后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "最后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "42": {
+      "ch": 42,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 2593,
+        "dash": 8,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2593/2123 (+22%)",
+          "fix_instruction": "目标字数: 1910~2335",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "43": {
+      "ch": 43,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1139,
+        "dash": 7,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "44": {
+      "ch": 44,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2456,
+        "dash": 13,
+        "metaphor": 1,
+        "ai_markers": 6,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 6处 (源文3, 上限4)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2456/2169 (+13%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "45": {
+      "ch": 45,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2303,
+        "dash": 4,
+        "metaphor": 1,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2303/2055 (+12%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "46": {
+      "ch": 46,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 1784,
+        "dash": 5,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 2处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "里抱着她，空气越来越稀薄，四周黑漆漆的，什么都看不",
+                "length": 8
+              },
+              {
+                "text": "他岔开话题：“中午想吃什么我去买”“你还没回答我”",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1784/2316 (-23%)",
+          "fix_instruction": "目标字数: 2084~2547",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "47": {
+      "ch": 47,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 1746,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 3,
+        "direct_emotion": 1
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 3处 (源文1, 上限2)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 最后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "最后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "48": {
+      "ch": 48,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1663,
+        "dash": 4,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1663/2041 (-19%)",
+          "fix_instruction": "目标字数: 1836~2245",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "49": {
+      "ch": 49,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2250,
+        "dash": 0,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "50": {
+      "ch": 50,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2011,
+        "dash": 14,
+        "metaphor": 0,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 3处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2011/1779 (+13%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "51": {
+      "ch": 51,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2921,
+        "dash": 5,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2921/2268 (+29%)",
+          "fix_instruction": "目标字数: 2041~2494",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "52": {
+      "ch": 52,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2362,
+        "dash": 5,
+        "metaphor": 2,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 2处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "“那落落，你觉得我去参加招干考试，能行吗”宋明锦转",
+                "length": 8
+              },
+              {
+                "text": "撇嘴：“你都没想就敷衍我”“我知道你有多聪明”宋明",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2362/2090 (+13%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "53": {
+      "ch": 53,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1567,
+        "dash": 2,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "54": {
+      "ch": 54,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2729,
+        "dash": 12,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2729/2385 (+14%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "55": {
+      "ch": 55,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2011,
+        "dash": 4,
+        "metaphor": 2,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "56": {
+      "ch": 56,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2012,
+        "dash": 1,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "57": {
+      "ch": 57,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2181,
+        "dash": 4,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2181/1065 (+105%)",
+          "fix_instruction": "目标字数: 958~1171",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "58": {
+      "ch": 58,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1733,
+        "dash": 0,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 1
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1733/2022 (-14%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "59": {
+      "ch": 59,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 1375,
+        "dash": 6,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 2处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "着她宋明锦看了一眼，拉长声音：“我不吃这个你天天清",
+                "length": 8
+              },
+              {
+                "text": "宋明锦愣住“你怎么知道”他没答，伸手替她拨开落在脸",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "60": {
+      "ch": 60,
+      "status": "FAIL",
+      "score": 65,
+      "metrics": {
+        "chars": 3110,
+        "dash": 1,
+        "metaphor": 0,
+        "ai_markers": 4,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 3110/2132 (+46%)",
+          "fix_instruction": "目标字数: 1918~2345",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 4处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "61": {
+      "ch": 61,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1513,
+        "dash": 2,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "62": {
+      "ch": 62,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1770,
+        "dash": 1,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "63": {
+      "ch": 63,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2563,
+        "dash": 5,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2563/2023 (+27%)",
+          "fix_instruction": "目标字数: 1820~2225",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "64": {
+      "ch": 64,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 2204,
+        "dash": 6,
+        "metaphor": 1,
+        "ai_markers": 4,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 4处 (源文1, 上限2)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 2处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "可察的笑意“你今天怎么这么高兴”她把衣服放在一边，",
+                "length": 8
+              },
+              {
+                "text": "工”宋明锦随口说：“当然想啊”她心里想的是自己设计",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "65": {
+      "ch": 65,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 2252,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "给钱就够了这么多年，你对我除了给钱还给了什么”郑红",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 但是×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "但是",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2252/2507 (-10%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "66": {
+      "ch": 66,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1917,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 1
+      },
+      "issues": []
+    },
+    "67": {
+      "ch": 67,
+      "status": "FAIL",
+      "score": 65,
+      "metrics": {
+        "chars": 3285,
+        "dash": 9,
+        "metaphor": 4,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 3285/2288 (+44%)",
+          "fix_instruction": "目标字数: 2059~2516",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "早晨宋明锦睁开眼的时候，阳光已经从窗帘缝隙里透进来",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "metaphor",
+          "severity": "medium",
+          "description": "比喻过多 4处 (源文0, 上限3)",
+          "fix_instruction": "删除或替换多余的比喻句",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "68": {
+      "ch": 68,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1574,
+        "dash": 2,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1574/2048 (-23%)",
+          "fix_instruction": "目标字数: 1843~2252",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "69": {
+      "ch": 69,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 2164,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 1
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2164/1877 (+15%)",
+          "fix_instruction": "目标字数: 1689~2064",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "70": {
+      "ch": 70,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 2044,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 2044/2448 (-17%)",
+          "fix_instruction": "目标字数: 2203~2692",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "71": {
+      "ch": 71,
+      "status": "FAIL",
+      "score": 65,
+      "metrics": {
+        "chars": 4143,
+        "dash": 10,
+        "metaphor": 1,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 4143/2069 (+100%)",
+          "fix_instruction": "目标字数: 1862~2275",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "来咬了一口鸭皮酥脆，鸭肉鲜嫩，酱的味道甜咸适中“好",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "72": {
+      "ch": 72,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2329,
+        "dash": 3,
+        "metaphor": 2,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2329/1805 (+29%)",
+          "fix_instruction": "目标字数: 1624~1985",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "73": {
+      "ch": 73,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2760,
+        "dash": 6,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2760/2446 (+13%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "74": {
+      "ch": 74,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1830,
+        "dash": 6,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1830/2051 (-11%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "75": {
+      "ch": 75,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2065,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 1
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "的手，低声说：“所以能娶到我，赚不赚”宋明锦愣了一",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "76": {
+      "ch": 76,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 2736,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2736/2004 (+37%)",
+          "fix_instruction": "目标字数: 1803~2204",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        }
+      ]
+    },
+    "77": {
+      "ch": 77,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2810,
+        "dash": 4,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2810/1866 (+51%)",
+          "fix_instruction": "目标字数: 1679~2052",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "78": {
+      "ch": 78,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1631,
+        "dash": 1,
+        "metaphor": 2,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1631/1848 (-12%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "79": {
+      "ch": 79,
+      "status": "FAIL",
+      "score": 65,
+      "metrics": {
+        "chars": 3080,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 3080/1943 (+59%)",
+          "fix_instruction": "目标字数: 1748~2137",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "不是这个价”裴爱华想了想：“你认真的”“认真的就是",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 2处: 而且×1, 虽然×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "而且",
+                "count": 1
+              },
+              {
+                "marker": "虽然",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "80": {
+      "ch": 80,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2427,
+        "dash": 5,
+        "metaphor": 0,
+        "ai_markers": 4,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "81": {
+      "ch": 81,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 1831,
+        "dash": 2,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1831/2116 (-13%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "82": {
+      "ch": 82,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2060,
+        "dash": 6,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "83": {
+      "ch": 83,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1706,
+        "dash": 2,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1706/1913 (-11%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "84": {
+      "ch": 84,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 2068,
+        "dash": 1,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 2处: 然后×2",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 2
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "85": {
+      "ch": 85,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 2142,
+        "dash": 8,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2142/1825 (+17%)",
+          "fix_instruction": "目标字数: 1642~2007",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "86": {
+      "ch": 86,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1265,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1265/1436 (-12%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "87": {
+      "ch": 87,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 1400,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1400/1692 (-17%)",
+          "fix_instruction": "目标字数: 1522~1861",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "88": {
+      "ch": 88,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 1554,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "边魏长河蜷缩在被子里，牙齿在打颤他整个人缩成一团，",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1554/1804 (-14%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "89": {
+      "ch": 89,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 2009,
+        "dash": 10,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "的面拉成长条，下到煮沸的水里面条翻滚着，他转身去翻",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2009/1729 (+16%)",
+          "fix_instruction": "目标字数: 1556~1901",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "90": {
+      "ch": 90,
+      "status": "PASS",
+      "score": 90,
+      "metrics": {
+        "chars": 1452,
+        "dash": 6,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1452/1810 (-20%)",
+          "fix_instruction": "目标字数: 1629~1991",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 所以×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "所以",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "91": {
+      "ch": 91,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 2315,
+        "dash": 3,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 1
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2315/1806 (+28%)",
+          "fix_instruction": "目标字数: 1625~1986",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "一直在转:结婚证，结婚证，到底在哪他记得清清楚楚，",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "92": {
+      "ch": 92,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 2618,
+        "dash": 8,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2618/1922 (+36%)",
+          "fix_instruction": "目标字数: 1729~2114",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "93": {
+      "ch": 93,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 1676,
+        "dash": 2,
+        "metaphor": 2,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "拿着热毛巾看到她醒了，他先摸了摸她的额头：“还疼吗",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1676/1895 (-12%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "94": {
+      "ch": 94,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1773,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1773/2122 (-16%)",
+          "fix_instruction": "目标字数: 1909~2334",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "95": {
+      "ch": 95,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 1764,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 1764/1351 (+31%)",
+          "fix_instruction": "目标字数: 1215~1486",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "96": {
+      "ch": 96,
+      "status": "FAIL",
+      "score": 65,
+      "metrics": {
+        "chars": 3304,
+        "dash": 11,
+        "metaphor": 2,
+        "ai_markers": 4,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 3304/1880 (+76%)",
+          "fix_instruction": "目标字数: 1692~2068",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 4处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "97": {
+      "ch": 97,
+      "status": "FAIL",
+      "score": 65,
+      "metrics": {
+        "chars": 2687,
+        "dash": 5,
+        "metaphor": 1,
+        "ai_markers": 5,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2687/2026 (+33%)",
+          "fix_instruction": "目标字数: 1823~2228",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 5处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 2处: 然后×2",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 2
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "98": {
+      "ch": 98,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2176,
+        "dash": 3,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2176/1678 (+30%)",
+          "fix_instruction": "目标字数: 1510~1845",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "99": {
+      "ch": 99,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1591,
+        "dash": 1,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1591/2117 (-25%)",
+          "fix_instruction": "目标字数: 1905~2328",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "100": {
+      "ch": 100,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1238,
+        "dash": 5,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1238/1082 (+14%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "101": {
+      "ch": 101,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 1489,
+        "dash": 4,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        }
+      ]
+    },
+    "102": {
+      "ch": 102,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 2291,
+        "dash": 5,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "103": {
+      "ch": 103,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1823,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 最后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "最后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "104": {
+      "ch": 104,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 1873,
+        "dash": 4,
+        "metaphor": 1,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "105": {
+      "ch": 105,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1223,
+        "dash": 2,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1223/1510 (-19%)",
+          "fix_instruction": "目标字数: 1359~1661",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "106": {
+      "ch": 106,
+      "status": "FAIL",
+      "score": 75,
+      "metrics": {
+        "chars": 1453,
+        "dash": 5,
+        "metaphor": 0,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 3处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1453/1770 (-18%)",
+          "fix_instruction": "目标字数: 1593~1947",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 2处: 然后×2",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 2
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "107": {
+      "ch": 107,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 3156,
+        "dash": 9,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 3156/1629 (+94%)",
+          "fix_instruction": "目标字数: 1466~1791",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "东愣在原地他想：好漂亮的女孩他认出她了纺织厂大院里",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "108": {
+      "ch": 108,
+      "status": "FAIL",
+      "score": 60,
+      "metrics": {
+        "chars": 1388,
+        "dash": 4,
+        "metaphor": 1,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 3处 (源文1, 上限2)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 2处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "宋明锦，你是不是巴不得我死了，好去找别人”这话一出",
+                "length": 8
+              },
+              {
+                "text": "巴不得我死了，好去找别人”这话一出，两个人都愣住了",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1388/1716 (-19%)",
+          "fix_instruction": "目标字数: 1544~1887",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "109": {
+      "ch": 109,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 1483,
+        "dash": 4,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 1483/1170 (+27%)",
+          "fix_instruction": "目标字数: 1053~1287",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 4处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "院子里没动院子里种的葡萄藤上硕果累累，紫的浓郁，绿",
+                "length": 8
+              },
+              {
+                "text": "种的葡萄藤上硕果累累，紫的浓郁，绿的透亮，一进院子",
+                "length": 8
+              },
+              {
+                "text": "累累，紫的浓郁，绿的透亮，一进院子就能闻到瓜果的清",
+                "length": 8
+              },
+              {
+                "text": "绿的透亮，一进院子就能闻到瓜果的清香她没心思看运输",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "110": {
+      "ch": 110,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 1665,
+        "dash": 3,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 1665/1297 (+28%)",
+          "fix_instruction": "目标字数: 1167~1426",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "111": {
+      "ch": 111,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 1269,
+        "dash": 2,
+        "metaphor": 3,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        }
+      ]
+    },
+    "112": {
+      "ch": 112,
+      "status": "FAIL",
+      "score": 60,
+      "metrics": {
+        "chars": 2660,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 2处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "，递过来：“我叫叶清砚，上海来的你妈让我找你”宋明",
+                "length": 8
+              },
+              {
+                "text": "了点头：“你好，我叫叶清砚”魏长河没回话，把扳手往",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2660/2140 (+24%)",
+          "fix_instruction": "目标字数: 1926~2354",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "113": {
+      "ch": 113,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 1715,
+        "dash": 3,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "清楚了：他要做那个狼心狗肺的人她不想下乡，靠他找关",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 1715/1428 (+20%)",
+          "fix_instruction": "目标字数: 1285~1570",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "114": {
+      "ch": 114,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 2122,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数超标 2122/1777 (+19%)",
+          "fix_instruction": "目标字数: 1599~1954",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "115": {
+      "ch": 115,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2916,
+        "dash": 7,
+        "metaphor": 2,
+        "ai_markers": 3,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2916/1579 (+85%)",
+          "fix_instruction": "目标字数: 1421~1736",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "116": {
+      "ch": 116,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 2129,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2129/1564 (+36%)",
+          "fix_instruction": "目标字数: 1407~1720",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 6处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "放着一盆水，他一边磨，一边往上浇水“醒了”林母从厨",
+                "length": 8
+              },
+              {
+                "text": "抬起头看她“又去小川家吃肉”“那是他自己愿意的，你",
+                "length": 8
+              },
+              {
+                "text": "川家吃肉”“那是他自己愿意的，你说我干嘛”“妈说你",
+                "length": 8
+              },
+              {
+                "text": "应该去了”“我不去，谁爱去谁去”她站起来往外走林母",
+                "length": 8
+              },
+              {
+                "text": "她的肩膀说：“坐好，不然等会儿自己走回去”宋明锦没",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "117": {
+      "ch": 117,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1049,
+        "dash": 7,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1049/1257 (-17%)",
+          "fix_instruction": "目标字数: 1131~1382",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "118": {
+      "ch": 118,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 2290,
+        "dash": 1,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2290/1822 (+26%)",
+          "fix_instruction": "目标字数: 1639~2004",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 6处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "刚开的桃花怎么会有人舍得伤害她她用手指描着桌面上那",
+                "length": 8
+              },
+              {
+                "text": "得小心翼翼都是一些小事情，他至于一直追着她不放吗宋",
+                "length": 8
+              },
+              {
+                "text": "些小事情，他至于一直追着她不放吗宋明锦咬着嘴唇想，",
+                "length": 8
+              },
+              {
+                "text": "衣柜衣柜里大半是她的衣服，有从家里带来的，也有魏长",
+                "length": 8
+              },
+              {
+                "text": "心还在狂跳她不坏，一点也不坏她只是想要原本应该属于",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "119": {
+      "ch": 119,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 1164,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数不足 1164/1835 (-37%)",
+          "fix_instruction": "目标字数: 1651~2018",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 2处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "掏出钥匙，打开柜板的锁，从里面取出一块玉佩玉佩颜色",
+                "length": 8
+              },
+              {
+                "text": "哭了，待会带你去城里吃好吃的”“真的”“真的”宋明",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "120": {
+      "ch": 120,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 2634,
+        "dash": 0,
+        "metaphor": 3,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2634/1644 (+60%)",
+          "fix_instruction": "目标字数: 1479~1808",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 2处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "个梦发愁她摸着脖子上的玉佩，心不在焉魏长河推门进来",
+                "length": 8
+              },
+              {
+                "text": "河推门进来：“怎么不去买东西钱不够吗”“不去”“昨",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "121": {
+      "ch": 121,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 1017,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        }
+      ]
+    },
+    "122": {
+      "ch": 122,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2319,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 1
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2319/1740 (+33%)",
+          "fix_instruction": "目标字数: 1566~1914",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "123": {
+      "ch": 123,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 1465,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "坐在魏长河腿上，白皙的手指不知何时压在他喉结上他低",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1465/1285 (+14%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "124": {
+      "ch": 124,
+      "status": "FAIL",
+      "score": 65,
+      "metrics": {
+        "chars": 2905,
+        "dash": 2,
+        "metaphor": 4,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2905/1306 (+122%)",
+          "fix_instruction": "目标字数: 1175~1436",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 7处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "浅他不敢动床不够宽敞，睡一个人绰绰有余，睡两个人却",
+                "length": 8
+              },
+              {
+                "text": "宽敞，睡一个人绰绰有余，睡两个人却有点拥挤然而此刻",
+                "length": 8
+              },
+              {
+                "text": "绰有余，睡两个人却有点拥挤然而此刻，他却一点也不想",
+                "length": 8
+              },
+              {
+                "text": "却有点拥挤然而此刻，他却一点也不想下去昨夜她靠在自",
+                "length": 8
+              },
+              {
+                "text": "里带了带：“我担心你睡觉掉下去，睡在你旁边给你挡住",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 8处: 虽然×1, 然而×7",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "虽然",
+                "count": 1
+              },
+              {
+                "marker": "然而",
+                "count": 7
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "125": {
+      "ch": 125,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 2102,
+        "dash": 2,
+        "metaphor": 1,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2102/1471 (+43%)",
+          "fix_instruction": "目标字数: 1323~1618",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 13处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "摆了个石桌二爷爷正在扫院子，见她来，把扫把往墙上一",
+                "length": 8
+              },
+              {
+                "text": "正在扫院子，见她来，把扫把往墙上一靠“长河来了”魏",
+                "length": 8
+              },
+              {
+                "text": "哪去二爷爷进屋给她倒了一碗白糖水“坐，慢点喝”宋明",
+                "length": 8
+              },
+              {
+                "text": "二爷爷笑道：“就算有，我们平头老百姓哪能遇到，一命",
+                "length": 8
+              },
+              {
+                "text": "算有，我们平头老百姓哪能遇到，一命二运三风水，四积",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "126": {
+      "ch": 126,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 2429,
+        "dash": 0,
+        "metaphor": 2,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 6处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "“没有”她的声音像是从嗓子眼挤出来一样低，“我自己",
+                "length": 8
+              },
+              {
+                "text": "怎么做”她不安地想要从他怀里出去，但他没松手“我不",
+                "length": 8
+              },
+              {
+                "text": "魏长河摇头“如果她没上火车”他顿了顿“村里人的可能",
+                "length": 8
+              },
+              {
+                "text": "他顿了顿“村里人的可能性很大”他声音很低，“至少有",
+                "length": 8
+              },
+              {
+                "text": "音很低，“至少有一个人，知道她要走，知道她不爱说话",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 2处: 然后×2",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 2
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 2429/2161 (+12%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "127": {
+      "ch": 127,
+      "status": "FAIL",
+      "score": 60,
+      "metrics": {
+        "chars": 2216,
+        "dash": 1,
+        "metaphor": 6,
+        "ai_markers": 3,
+        "direct_emotion": 1
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2216/1377 (+61%)",
+          "fix_instruction": "目标字数: 1239~1514",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 5处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "泥石流之梦煤油灯熄灭后，半梦半醒间，宋明锦又回到了",
+                "length": 8
+              },
+              {
+                "text": "头也是汗她又梦到那天泥石流爆发那是她穿过来的第一周",
+                "length": 8
+              },
+              {
+                "text": "才低声道歉：“下次不敢了”宋明锦刚要说不信，他又接",
+                "length": 8
+              },
+              {
+                "text": "她就在身边什么事情也不会发生，他对自己说可他还是睡",
+                "length": 8
+              },
+              {
+                "text": "她没有走她又梦到那天泥石流爆发大伯母的手在泥浆里挥",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "metaphor",
+          "severity": "medium",
+          "description": "比喻过多 6处 (源文2, 上限5)",
+          "fix_instruction": "删除或替换多余的比喻句",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 2处: 然后×2",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 2
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "128": {
+      "ch": 128,
+      "status": "PASS",
+      "score": 100,
+      "metrics": {
+        "chars": 1870,
+        "dash": 4,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": []
+    },
+    "129": {
+      "ch": 129,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 1216,
+        "dash": 0,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 10处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "话都听不清她没有继续思考她想翻身，被什么压住迷迷糊",
+                "length": 8
+              },
+              {
+                "text": "现自己哭了“你个乌龟王八蛋”她骂道他笑了她气得又扇",
+                "length": 8
+              },
+              {
+                "text": "”她没说话他肩膀上的牙印，半弧形，凹凸不平像狗链一",
+                "length": 8
+              },
+              {
+                "text": "上的牙印，半弧形，凹凸不平像狗链一样小时候，二爷爷",
+                "length": 8
+              },
+              {
+                "text": "像狗链一样小时候，二爷爷家有条土黄色的狗，温顺、毛",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "130": {
+      "ch": 130,
+      "status": "FAIL",
+      "score": 50,
+      "metrics": {
+        "chars": 2445,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 7,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2445/1795 (+36%)",
+          "fix_instruction": "目标字数: 1615~1974",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 7处 (源文1, 上限2)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "30章试探第二天是个好天气，阴天魏长河一早就起来，",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "131": {
+      "ch": 131,
+      "status": "PASS",
+      "score": 95,
+      "metrics": {
+        "chars": 1907,
+        "dash": 0,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 最后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "最后",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "low",
+          "description": "字数偏差 1907/1660 (+15%)",
+          "fix_instruction": "",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "132": {
+      "ch": 132,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 1758,
+        "dash": 1,
+        "metaphor": 3,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 11处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "地看了许久父亲出身显赫，却是旁支分家的时候，只分到",
+                "length": 8
+              },
+              {
+                "text": "，却是旁支分家的时候，只分到三瓜两枣，祖宅的边角都",
+                "length": 8
+              },
+              {
+                "text": "角都没摸到父亲生性懦弱，害怕战祸，于是和母亲来这里",
+                "length": 8
+              },
+              {
+                "text": "性懦弱，害怕战祸，于是和母亲来这里隐居岭头村偏僻，",
+                "length": 8
+              },
+              {
+                "text": "岭头村偏僻，外乡人很少来，搬来十几年，左邻右舍还当",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "133": {
+      "ch": 133,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 2234,
+        "dash": 2,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2234/1443 (+55%)",
+          "fix_instruction": "目标字数: 1298~1587",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 7处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "八糟的——毛线织针、锯齿锥子、瓦罐笸箩、麻绳纽扣，",
+                "length": 8
+              },
+              {
+                "text": "针、锯齿锥子、瓦罐笸箩、麻绳纽扣，她一股脑倒出来魏",
+                "length": 8
+              },
+              {
+                "text": "刀，把一根黄瓜皮削下来，将脆嫩的瓜肉递给她“吃”“",
+                "length": 8
+              },
+              {
+                "text": "削下来，将脆嫩的瓜肉递给她“吃”“你要吃皮”魏长河",
+                "length": 8
+              },
+              {
+                "text": "得下去吗”“我喜欢吃皮，落落喜欢吃果肉，结婚后，我",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "134": {
+      "ch": 134,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 1975,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 7处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "的地窖塞得满当当，丁文的尸体塞在大缸里，两条腿没了",
+                "length": 8
+              },
+              {
+                "text": "村长身上扑她当时死了吗她不确定她没有上去，在那一刻",
+                "length": 8
+              },
+              {
+                "text": "吗她不确定她没有上去，在那一刻，她不知道自己在想什",
+                "length": 8
+              },
+              {
+                "text": "上去，在那一刻，她不知道自己在想什么宋明锦翻了个身",
+                "length": 8
+              },
+              {
+                "text": "，那时候她站在人堆里，打了个哆嗦，往后退了几步，靠",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "135": {
+      "ch": 135,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 1814,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 1814/1059 (+71%)",
+          "fix_instruction": "目标字数: 953~1164",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "136": {
+      "ch": 136,
+      "status": "FAIL",
+      "score": 65,
+      "metrics": {
+        "chars": 3775,
+        "dash": 3,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 3775/2817 (+34%)",
+          "fix_instruction": "目标字数: 2535~3098",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 3处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "仙桌旁，手像枯树枝一样干裂，紧紧攥着茶杯杯子里的水",
+                "length": 8
+              },
+              {
+                "text": "的她想留下听，但林母的脸色很可怕“明锦，回屋去”林",
+                "length": 8
+              },
+              {
+                "text": "很瘦，像是贴在骨头上的一层皮那天晚上，宋明锦做了个",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "137": {
+      "ch": 137,
+      "status": "FAIL",
+      "score": 65,
+      "metrics": {
+        "chars": 2890,
+        "dash": 6,
+        "metaphor": 1,
+        "ai_markers": 4,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2890/1707 (+69%)",
+          "fix_instruction": "目标字数: 1536~1877",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 4处 (源文1, 上限2)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 最后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "最后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "138": {
+      "ch": 138,
+      "status": "FAIL",
+      "score": 80,
+      "metrics": {
+        "chars": 1269,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 0,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 4处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "，地面扫得干干净净泥巴墙上面种着仙人掌，红艳艳的果",
+                "length": 8
+              },
+              {
+                "text": "朝她走过来“我们谈一下吧”她说魏长河停在她面前，垂",
+                "length": 8
+              },
+              {
+                "text": "搭在里头了”讨厌鬼、贱鬼、混蛋宋明锦在心里骂着，眼",
+                "length": 8
+              },
+              {
+                "text": "，又烫又痒讨厌鬼、贱鬼、混蛋她心里骂着，却一个字都",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "word_count",
+          "severity": "medium",
+          "description": "字数不足 1269/1557 (-18%)",
+          "fix_instruction": "目标字数: 1401~1712",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "139": {
+      "ch": 139,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 1266,
+        "dash": 0,
+        "metaphor": 1,
+        "ai_markers": 1,
+        "direct_emotion": 1
+      },
+      "issues": [
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 7处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "上的巴掌印，在院子里洗衣服宋明锦站在门口看他，嘴角",
+                "length": 8
+              },
+              {
+                "text": "渣都没剩下“洗好了，我们该走了”宋明锦看了看挂在铁",
+                "length": 8
+              },
+              {
+                "text": "了”宋明锦看了看挂在铁丝上的衣服后，又望向房间魏长",
+                "length": 8
+              },
+              {
+                "text": "挂在铁丝上的衣服后，又望向房间魏长河立刻丢下手里的",
+                "length": 8
+              },
+              {
+                "text": "二八自行车，后座他加了软垫宋明锦坐上去，他骑得很稳",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "140": {
+      "ch": 140,
+      "status": "FAIL",
+      "score": 70,
+      "metrics": {
+        "chars": 3083,
+        "dash": 1,
+        "metaphor": 2,
+        "ai_markers": 3,
+        "direct_emotion": 2
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 3083/1228 (+151%)",
+          "fix_instruction": "目标字数: 1105~1350",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 11处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "张望魏长河这场酒席摆的实在，上的肉菜分量足，馒头是",
+                "length": 8
+              },
+              {
+                "text": "席摆的实在，上的肉菜分量足，馒头是白面的、酒也是好",
+                "length": 8
+              },
+              {
+                "text": "肉菜分量足，馒头是白面的、酒也是好酒，香味扑鼻，村",
+                "length": 8
+              },
+              {
+                "text": "是白面的、酒也是好酒，香味扑鼻，村里人看了直咋舌“",
+                "length": 8
+              },
+              {
+                "text": "好酒，香味扑鼻，村里人看了直咋舌“这魏家小子出息了",
+                "length": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "141": {
+      "ch": 141,
+      "status": "FAIL",
+      "score": 85,
+      "metrics": {
+        "chars": 2075,
+        "dash": 0,
+        "metaphor": 0,
+        "ai_markers": 1,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 2075/1266 (+64%)",
+          "fix_instruction": "目标字数: 1139~1392",
+          "auto_fixable": false,
+          "details": {}
+        }
+      ]
+    },
+    "142": {
+      "ch": 142,
+      "status": "FAIL",
+      "score": 50,
+      "metrics": {
+        "chars": 1647,
+        "dash": 3,
+        "metaphor": 0,
+        "ai_markers": 2,
+        "direct_emotion": 0
+      },
+      "issues": [
+        {
+          "type": "word_count",
+          "severity": "high",
+          "description": "字数超标 1647/1060 (+55%)",
+          "fix_instruction": "目标字数: 954~1166",
+          "auto_fixable": false,
+          "details": {}
+        },
+        {
+          "type": "ai_marker",
+          "severity": "high",
+          "description": "AI路标词 2处 (源文0, 上限1)",
+          "fix_instruction": "删除句首的首先/其次/然后/最后等路标词",
+          "auto_fixable": true,
+          "details": {}
+        },
+        {
+          "type": "plagiarism",
+          "severity": "high",
+          "description": "台词雷同 1处（连续≥8字匹配）",
+          "fix_instruction": "重写雷同台词，保持意思但换表达方式",
+          "auto_fixable": false,
+          "details": {
+            "matches": [
+              {
+                "text": "他走近一步“我以后不会这样做了”宋明锦没说话，转身",
+                "length": 8
+              }
+            ]
+          }
+        },
+        {
+          "type": "ai_trace",
+          "severity": "medium",
+          "description": "AI痕迹词 1处: 然后×1",
+          "fix_instruction": "删除句首的AI痕迹词",
+          "auto_fixable": true,
+          "details": {
+            "traces": [
+              {
+                "marker": "然后",
+                "count": 1
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,48 @@
+[
+  {
+    "timestamp": "2026-06-10T15:39:08.935534",
+    "chapters": "1-10",
+    "analysis": {
+      "plagiarism": {
+        "count": 0,
+        "chapters": [],
+        "needs_fix": false
+      },
+      "ai_markers": {
+        "count": 0,
+        "chapters": [],
+        "needs_fix": false,
+        "markers": []
+      },
+      "word_count": {
+        "count": 0,
+        "chapters": [],
+        "needs_fix": false
+      }
+    },
+    "changes": []
+  },
+  {
+    "timestamp": "2026-06-10T17:13:30.419026",
+    "chapters": "1-142",
+    "analysis": {
+      "plagiarism": {
+        "count": 0,
+        "chapters": [],
+        "needs_fix": false
+      },
+      "ai_markers": {
+        "count": 0,
+        "chapters": [],
+        "needs_fix": false,
+        "markers": []
+      },
+      "word_count": {
+        "count": 0,
+        "chapters": [],
+        "needs_fix": false
+      }
+    },
+    "changes": []
+  }
+]

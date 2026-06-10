@@ -1,0 +1,601 @@
+[
+  {
+    "ch": 1,
+    "status": "FIXED",
+    "orig": 1827,
+    "new": 1840
+  },
+  {
+    "ch": 2,
+    "status": "FIXED",
+    "orig": 1825,
+    "new": 1799
+  },
+  {
+    "ch": 3,
+    "status": "FIXED",
+    "orig": 2724,
+    "new": 2724
+  },
+  {
+    "ch": 5,
+    "status": "FIXED",
+    "orig": 2398,
+    "new": 2494
+  },
+  {
+    "ch": 4,
+    "status": "FIXED",
+    "orig": 2741,
+    "new": 3014
+  },
+  {
+    "ch": 6,
+    "status": "FIXED",
+    "orig": 1860,
+    "new": 1736
+  },
+  {
+    "ch": 7,
+    "status": "FIXED",
+    "orig": 2324,
+    "new": 2417
+  },
+  {
+    "ch": 10,
+    "status": "FIXED",
+    "orig": 2194,
+    "new": 2170
+  },
+  {
+    "ch": 8,
+    "status": "FIXED",
+    "orig": 2858,
+    "new": 2829
+  },
+  {
+    "ch": 9,
+    "status": "FIXED",
+    "orig": 3752,
+    "new": 3815
+  },
+  {
+    "ch": 11,
+    "status": "FIXED",
+    "orig": 2293,
+    "new": 1980
+  },
+  {
+    "ch": 12,
+    "status": "FIXED",
+    "orig": 2151,
+    "new": 2453
+  },
+  {
+    "ch": 13,
+    "status": "FIXED",
+    "orig": 2010,
+    "new": 2019
+  },
+  {
+    "ch": 14,
+    "status": "FIXED",
+    "orig": 2176,
+    "new": 1974
+  },
+  {
+    "ch": 15,
+    "status": "FIXED",
+    "orig": 1995,
+    "new": 2013
+  },
+  {
+    "ch": 16,
+    "status": "FIXED",
+    "orig": 2027,
+    "new": 2140
+  },
+  {
+    "ch": 18,
+    "status": "FIXED",
+    "orig": 1527,
+    "new": 1504
+  },
+  {
+    "ch": 17,
+    "status": "FIXED",
+    "orig": 2277,
+    "new": 2271
+  },
+  {
+    "ch": 19,
+    "status": "FIXED",
+    "orig": 2056,
+    "new": 1911
+  },
+  {
+    "ch": 20,
+    "status": "FIXED",
+    "orig": 2726,
+    "new": 3032
+  },
+  {
+    "ch": 21,
+    "status": "FIXED",
+    "orig": 2055,
+    "new": 2144
+  },
+  {
+    "ch": 22,
+    "status": "FIXED",
+    "orig": 1978,
+    "new": 2102
+  },
+  {
+    "ch": 23,
+    "status": "FIXED",
+    "orig": 2576,
+    "new": 2573
+  },
+  {
+    "ch": 27,
+    "status": "FIXED",
+    "orig": 1889,
+    "new": 1922
+  },
+  {
+    "ch": 25,
+    "status": "FIXED",
+    "orig": 2297,
+    "new": 2275
+  },
+  {
+    "ch": 26,
+    "status": "FIXED",
+    "orig": 1950,
+    "new": 1949
+  },
+  {
+    "ch": 24,
+    "status": "FIXED",
+    "orig": 2947,
+    "new": 2960
+  },
+  {
+    "ch": 28,
+    "status": "FIXED",
+    "orig": 2062,
+    "new": 2313
+  },
+  {
+    "ch": 31,
+    "status": "FIXED",
+    "orig": 1648,
+    "new": 1727
+  },
+  {
+    "ch": 32,
+    "status": "FIXED",
+    "orig": 1994,
+    "new": 1786
+  },
+  {
+    "ch": 30,
+    "status": "FIXED",
+    "orig": 1631,
+    "new": 1686
+  },
+  {
+    "ch": 29,
+    "status": "FIXED",
+    "orig": 2017,
+    "new": 2038
+  },
+  {
+    "ch": 33,
+    "status": "FIXED",
+    "orig": 1734,
+    "new": 1711
+  },
+  {
+    "ch": 36,
+    "status": "FIXED",
+    "orig": 1911,
+    "new": 1975
+  },
+  {
+    "ch": 34,
+    "status": "FIXED",
+    "orig": 2471,
+    "new": 2489
+  },
+  {
+    "ch": 35,
+    "status": "FIXED",
+    "orig": 2402,
+    "new": 2694
+  },
+  {
+    "ch": 38,
+    "status": "FIXED",
+    "orig": 2057,
+    "new": 2212
+  },
+  {
+    "ch": 37,
+    "status": "FIXED",
+    "orig": 2789,
+    "new": 2894
+  },
+  {
+    "ch": 39,
+    "status": "FIXED",
+    "orig": 2640,
+    "new": 2725
+  },
+  {
+    "ch": 43,
+    "status": "FIXED",
+    "orig": 1540,
+    "new": 1542
+  },
+  {
+    "ch": 40,
+    "status": "FIXED",
+    "orig": 2429,
+    "new": 2450
+  },
+  {
+    "ch": 41,
+    "status": "SKIP",
+    "reason": "字数差异过大 (1788→2128)"
+  },
+  {
+    "ch": 42,
+    "status": "SKIP",
+    "reason": "字数差异过大 (1911→2448)"
+  },
+  {
+    "ch": 45,
+    "status": "FIXED",
+    "orig": 1976,
+    "new": 1964
+  },
+  {
+    "ch": 44,
+    "status": "FIXED",
+    "orig": 2369,
+    "new": 2324
+  },
+  {
+    "ch": 46,
+    "status": "SKIP",
+    "reason": "字数差异过大 (1699→2194)"
+  },
+  {
+    "ch": 47,
+    "status": "FIXED",
+    "orig": 2440,
+    "new": 2347
+  },
+  {
+    "ch": 48,
+    "status": "FIXED",
+    "orig": 2042,
+    "new": 1980
+  },
+  {
+    "ch": 50,
+    "status": "FIXED",
+    "orig": 1699,
+    "new": 1713
+  },
+  {
+    "ch": 49,
+    "status": "FIXED",
+    "orig": 2247,
+    "new": 2345
+  },
+  {
+    "ch": 52,
+    "status": "FIXED",
+    "orig": 1746,
+    "new": 1717
+  },
+  {
+    "ch": 53,
+    "status": "FIXED",
+    "orig": 1680,
+    "new": 1723
+  },
+  {
+    "ch": 51,
+    "status": "SKIP",
+    "reason": "字数差异过大 (2390→2801)"
+  },
+  {
+    "ch": 54,
+    "status": "FIXED",
+    "orig": 2482,
+    "new": 2848
+  },
+  {
+    "ch": 55,
+    "status": "FIXED",
+    "orig": 3036,
+    "new": 2741
+  },
+  {
+    "ch": 57,
+    "status": "FIXED",
+    "orig": 1709,
+    "new": 1859
+  },
+  {
+    "ch": 56,
+    "status": "FIXED",
+    "orig": 2434,
+    "new": 2749
+  },
+  {
+    "ch": 58,
+    "status": "FIXED",
+    "orig": 2480,
+    "new": 2572
+  },
+  {
+    "ch": 60,
+    "status": "FIXED",
+    "orig": 2066,
+    "new": 2014
+  },
+  {
+    "ch": 59,
+    "status": "FIXED",
+    "orig": 1943,
+    "new": 1795
+  },
+  {
+    "ch": 61,
+    "status": "FIXED",
+    "orig": 1290,
+    "new": 1335
+  },
+  {
+    "ch": 62,
+    "status": "FIXED",
+    "orig": 2867,
+    "new": 2940
+  },
+  {
+    "ch": 64,
+    "status": "FIXED",
+    "orig": 1611,
+    "new": 1609
+  },
+  {
+    "ch": 65,
+    "status": "FIXED",
+    "orig": 1864,
+    "new": 1778
+  },
+  {
+    "ch": 66,
+    "status": "FIXED",
+    "orig": 2316,
+    "new": 2600
+  },
+  {
+    "ch": 63,
+    "status": "SKIP",
+    "reason": "字数差异过大 (2061→2404)"
+  },
+  {
+    "ch": 67,
+    "status": "FIXED",
+    "orig": 2138,
+    "new": 2293
+  },
+  {
+    "ch": 68,
+    "status": "FIXED",
+    "orig": 2322,
+    "new": 2001
+  },
+  {
+    "ch": 69,
+    "status": "FIXED",
+    "orig": 2396,
+    "new": 2601
+  },
+  {
+    "ch": 70,
+    "status": "FIXED",
+    "orig": 2532,
+    "new": 2200
+  },
+  {
+    "ch": 72,
+    "status": "FIXED",
+    "orig": 1781,
+    "new": 1925
+  },
+  {
+    "ch": 71,
+    "status": "FIXED",
+    "orig": 3203,
+    "new": 3203
+  },
+  {
+    "ch": 73,
+    "status": "FIXED",
+    "orig": 2075,
+    "new": 2060
+  },
+  {
+    "ch": 74,
+    "status": "FIXED",
+    "orig": 2023,
+    "new": 2123
+  },
+  {
+    "ch": 76,
+    "status": "FIXED",
+    "orig": 2360,
+    "new": 2303
+  },
+  {
+    "ch": 78,
+    "status": "FIXED",
+    "orig": 2038,
+    "new": 1913
+  },
+  {
+    "ch": 75,
+    "status": "SKIP",
+    "reason": "字数差异过大 (2003→2326)"
+  },
+  {
+    "ch": 77,
+    "status": "SKIP",
+    "reason": "字数差异过大 (2571→3098)"
+  },
+  {
+    "ch": 79,
+    "status": "FIXED",
+    "orig": 2047,
+    "new": 2045
+  },
+  {
+    "ch": 82,
+    "status": "FIXED",
+    "orig": 2110,
+    "new": 2098
+  },
+  {
+    "ch": 80,
+    "status": "FIXED",
+    "orig": 1551,
+    "new": 1530
+  },
+  {
+    "ch": 83,
+    "status": "FIXED",
+    "orig": 2317,
+    "new": 2351
+  },
+  {
+    "ch": 81,
+    "status": "FIXED",
+    "orig": 2287,
+    "new": 2483
+  },
+  {
+    "ch": 84,
+    "status": "FIXED",
+    "orig": 2400,
+    "new": 2490
+  },
+  {
+    "ch": 87,
+    "status": "FIXED",
+    "orig": 1056,
+    "new": 1078
+  },
+  {
+    "ch": 85,
+    "status": "FIXED",
+    "orig": 2288,
+    "new": 2306
+  },
+  {
+    "ch": 86,
+    "status": "FIXED",
+    "orig": 1967,
+    "new": 2171
+  },
+  {
+    "ch": 88,
+    "status": "FIXED",
+    "orig": 2264,
+    "new": 2302
+  },
+  {
+    "ch": 89,
+    "status": "FIXED",
+    "orig": 1801,
+    "new": 1711
+  },
+  {
+    "ch": 91,
+    "status": "FIXED",
+    "orig": 2020,
+    "new": 2088
+  },
+  {
+    "ch": 93,
+    "status": "FIXED",
+    "orig": 1954,
+    "new": 2101
+  },
+  {
+    "ch": 92,
+    "status": "FIXED",
+    "orig": 2197,
+    "new": 2246
+  },
+  {
+    "ch": 90,
+    "status": "FIXED",
+    "orig": 2113,
+    "new": 2257
+  },
+  {
+    "ch": 96,
+    "status": "FIXED",
+    "orig": 1800,
+    "new": 1923
+  },
+  {
+    "ch": 95,
+    "status": "FIXED",
+    "orig": 1833,
+    "new": 1947
+  },
+  {
+    "ch": 94,
+    "status": "FIXED",
+    "orig": 2077,
+    "new": 2149
+  },
+  {
+    "ch": 97,
+    "status": "FIXED",
+    "orig": 2464,
+    "new": 2642
+  },
+  {
+    "ch": 99,
+    "status": "FIXED",
+    "orig": 2357,
+    "new": 2532
+  },
+  {
+    "ch": 100,
+    "status": "FIXED",
+    "orig": 2754,
+    "new": 2919
+  },
+  {
+    "ch": 101,
+    "status": "FIXED",
+    "orig": 4450,
+    "new": 3905
+  },
+  {
+    "ch": 98,
+    "status": "FIXED",
+    "orig": 2205,
+    "new": 2393
+  }
+]
