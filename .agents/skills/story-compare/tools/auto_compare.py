@@ -6,23 +6,14 @@ import requests
 from pathlib import Path
 
 API_URL = "https://api.deepseek.com/chat/completions"
-SYSTEM_PROMPT = """你是一名资深网文编辑，专门负责检测仿写作品的抄袭风险。
+SYSTEM_PROMPT = """对比两份文本，检测抄袭风险。
 
-你的任务是对比两份文本，给出：
+输出：
 1. 核心差异（2-3句话）
-2. 质量判断（哪个版本更好）
-3. 抄袭风险等级（低/中/高）
-4. 具体问题（哪里像）
+2. 抄袭风险等级（低/中/高）
+3. 具体雷同点（配角名、地名、道具、情节装置）
 
-**必须检查以下具体元素是否重复**：
-- 配角名（任何非主角的名字）
-- 地名（任何场所名称）
-- 角色外号/别称
-- 关键道具/意象
-- 关键情节装置（如时间期限、触发事件等）
-- 动作链条（如捡到→私藏→反复看）
-
-只基于文本本身做判断，不要猜测哪版是仿写。"""
+不要猜测哪版是仿写。"""
 
 
 def call_api(api_key, model, user_prompt, reasoning_effort="low", max_tokens=4096):

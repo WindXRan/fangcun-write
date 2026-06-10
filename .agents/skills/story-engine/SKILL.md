@@ -41,7 +41,13 @@ python .agents/skills/story-engine/tools/rewrite_chapters.py --config configs/xx
 projects/{作者名}/{源书名}/
 ├── _cache/chapters/第N章.txt        # 拆章缓存
 └── rewrites/{新书名}/
-    ├── concept.md                    # 新书设定 + 全书弧线（含固定角色名）
+    ├── concept.md                    # 精简索引（速查角色名+主线）
+    └── settings/
+        ├── characters.md             # 角色设定
+        ├── world.md                  # 世界观设定
+        ├── plot.md                   # 剧情设定
+        ├── book_info.md              # 书籍信息
+        └── source_analysis.md        # 源文分析
     ├── guides/
     │   ├── plot_{N}.md              # 章纲：源文→新书 节拍映射表 + 换皮检验
     │   └── style_{N}.md             # 风格指南：定量锚点 + 去AI指令
@@ -63,7 +69,7 @@ projects/{作者名}/{源书名}/
 
 ```
 Phase 0:   导入 (story-import)        → _cache/chapters/ + _header.txt + _toc.txt
-Phase 1:   开书 (pro, 1 call)        → concept.md                    [engine]
+Phase 1:   开书 (pro, 1 call)        → settings/ + concept.md       [engine]
 Phase 1.1: Concept审查 (flash)        → 检查人设/冲突/情节是否换皮     [engine]
 Phase 1.5: 风格分析 (脚本)            → style_analysis/style_{N}.json [engine]
 Phase 2:   Guides (flash, 2N 并行)   → plot_{N}.md + style_{N}.md    [engine]
@@ -142,7 +148,7 @@ python tools/rewrite_chapters.py --config configs/xxx.json --phase write,compare
 
 | Prompt | 用途 | 输入 | 输出 |
 |--------|------|------|------|
-| `open-book.md` | 开书 | 源文样本（首/前/25%/50%/75%/尾，覆盖全书弧线） | concept.md（设定+弧线+角色名） |
+| `open-book.md` | 开书 | 源文样本（首/前/25%/50%/75%/尾，覆盖全书弧线） | settings/ + concept.md（设定+弧线+角色名） |
 | `plot-guide.md` | 章纲 | 源文第N章 + concept | 节拍映射表 + 换皮检验 |
 | `style-guide.md` | 风格 | 源文第N章 | 定量锚点 + 去AI指令 |
 | `write-chapter.md` | 写章 | plot_guide + style_guide | ch_{N}.txt |

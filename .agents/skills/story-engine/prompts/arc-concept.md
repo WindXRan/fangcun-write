@@ -17,7 +17,11 @@
 - 人设必须与源文有差异化（改性别/改身份/改相识方式）
 - NPC命名映射表：源文角色→新书角色，标注性格差异
 
-【输出】`projects/{作者名}/{源书名}/rewrites/{新书名}/concept.md`
+【输出】
+- `projects/{作者名}/{源书名}/rewrites/{新书名}/settings/characters.md` - 角色设定
+- `projects/{作者名}/{源书名}/rewrites/{新书名}/settings/world.md` - 世界观
+- `projects/{作者名}/{源书名}/rewrites/{新书名}/settings/plot.md` - 剧情
+- `projects/{作者名}/{源书名}/rewrites/{新书名}/concept.md` - 精简索引
 
 ```
 # 《推荐书名》设定
