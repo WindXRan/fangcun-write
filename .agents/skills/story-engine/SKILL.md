@@ -149,9 +149,39 @@ python tools/rewrite_chapters.py --config configs/xxx.json --phase write,compare
 | Prompt | 用途 | 输入 | 输出 |
 |--------|------|------|------|
 | `open-book.md` | 开书 | 源文样本（首/前/25%/50%/75%/尾，覆盖全书弧线） | settings/ + concept.md（设定+弧线+角色名） |
-| `plot-guide.md` | 章纲 | 源文第N章 + concept | 节拍映射表 + 换皮检验 |
-| `style-guide.md` | 风格 | 源文第N章 | 定量锚点 + 去AI指令 |
+| `plot-guide.md` | 章纲 | 源文第N章 + concept + 样板库 | 节拍映射表 + 换皮检验 |
+| `style-guide.md` | 风格 | 源文第N章 + 样板库 | 定量锚点 + 去AI指令 |
 | `write-chapter.md` | 写章 | plot_guide + style_guide | ch_{N}.txt |
+
+## 知识库（样板库）
+
+plot-guide / style-guide 生成时按需参考的写作技巧库。
+
+```
+knowledge/
+├── INDEX.md                 # 总索引：文件路径→内容描述速查
+├── plot/                    # 情节结构技巧
+│   ├── character-entry.md   # 人物入场方式（T1-T4）
+│   ├── scene-cut.md         # 场景切入方式（S1-S3）
+│   ├── chapter-link.md      # 章间衔接方式（C1-C5）
+│   ├── hook.md              # 开篇钩子技巧（K1-K4）
+│   ├── side-character.md    # 配角功能技巧（P1-P2）
+│   ├── relationship.md      # 关系突破技巧（R1-R3）
+│   ├── meet-cute.md         # 相遇方式技巧（M1-M4）
+│   └── original-plot.md     # 原创情节框架（F1-F4）
+└── style/                   # 文笔技巧
+    ├── description.md       # 描写技巧（D1-D4）
+    ├── dialogue.md          # 对话技巧
+    ├── sentence.md          # 句式技巧
+    ├── pronoun-density.md   # 代词密度控制
+    ├── metaphor.md          # 比喻技巧
+    └── object-arrangement.md # 物象排列模板
+```
+
+### 加载规则
+- 写 plot_guide，如需结构参考 → 加载 knowledge/INDEX.md（总索引 + key rules）
+- 写 style_guide，如需文笔参考 → 加载 knowledge/INDEX.md（总索引 + key rules）
+- 如需特定技巧详情 → 加载对应的 plot/X.md 或 style/Y.md
 
 ## 配套 Skills
 

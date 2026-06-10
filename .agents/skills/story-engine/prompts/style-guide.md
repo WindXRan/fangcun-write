@@ -1,7 +1,7 @@
 为《{新书名}》第{N}章提取风格速查卡（供写章时快速参考）。
 
 【源文】projects/{作者名}/{源书名}/_cache/chapters/第{N}章.txt
-【样板库】.agents/skills/story-engine/writing-techniques-style.md
+【样板库】.agents/skills/story-engine/knowledge/INDEX.md
 
 ---
 

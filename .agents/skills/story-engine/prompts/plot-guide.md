@@ -4,7 +4,7 @@
 【设定】projects/{作者名}/{源书名}/rewrites/{新书名}/settings/characters.md
 【剧情】projects/{作者名}/{源书名}/rewrites/{新书名}/settings/plot.md
 【世界观】projects/{作者名}/{源书名}/rewrites/{新书名}/settings/world.md
-【样板库】.agents/skills/story-engine/writing-techniques-plot.md
+【样板库】.agents/skills/story-engine/knowledge/INDEX.md
 
 ---
 
