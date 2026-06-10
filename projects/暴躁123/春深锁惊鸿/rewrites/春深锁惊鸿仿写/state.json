@@ -1,13 +1,38 @@
 {
   "version": 1,
-  "created": "2026-06-10T21:21:19",
-  "updated": "2026-06-10T21:21:19",
+  "created": "2026-06-10T21:33:15",
+  "updated": "2026-06-10T21:37:28",
   "phases": {
     "open-book": {
-      "status": "running",
-      "started": "2026-06-10T21:21:19"
+      "status": "done",
+      "started": "2026-06-10T21:33:15",
+      "finished": "2026-06-10T21:35:21"
+    },
+    "guides": {
+      "status": "done",
+      "started": "2026-06-10T21:35:45",
+      "finished": "2026-06-10T21:37:28"
     }
   },
-  "chapters": {},
+  "chapters": {
+    "1": {
+      "status": "completed",
+      "timestamp": "2026-06-10T21:37:28",
+      "model": "deepseek-v4-flash",
+      "retries": 0
+    },
+    "2": {
+      "status": "completed",
+      "timestamp": "2026-06-10T21:37:22",
+      "model": "deepseek-v4-flash",
+      "retries": 0
+    },
+    "3": {
+      "status": "completed",
+      "timestamp": "2026-06-10T21:37:14",
+      "model": "deepseek-v4-flash",
+      "retries": 0
+    }
+  },
   "runs": []
 }

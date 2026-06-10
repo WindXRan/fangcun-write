@@ -636,7 +636,7 @@ def phase_prep(config):
 # ============================================================
 
 def phase_open_book(config, state_mgr=None):
-    """生成 concept.md（设定 + 弧线，含固定角色名）。"""
+    """生成 concept.md + settings/ 目录下的独立文件。"""
     print("\n" + "=" * 50)
     print("Phase 1: 开书 (pro, reasoning=high)")
     print("=" * 50)
@@ -649,9 +649,21 @@ def phase_open_book(config, state_mgr=None):
 
     pro = {**config, "model": "deepseek-v4-pro", "reasoning_effort": "high"}
     try:
-        concept = run_one(pro, "open-book")
-        path = save_file(config["rewrites_dir"], "concept.md", concept)
-        print(f"[OK] concept.md → {path}")
+        result = run_one(pro, "open-book")
+        
+        # 解析多文件输出：AI 用 ===FILE: path=== 分隔不同文件
+        files = parse_multi_file_output(result)
+        
+        if files:
+            # 多文件模式：拆分到 settings/ 目录
+            for filepath, content in files.items():
+                full_path = save_file(config["rewrites_dir"], filepath, content)
+                print(f"[OK] {filepath} → {full_path}")
+        else:
+            # 单文件模式：直接保存为 concept.md
+            path = save_file(config["rewrites_dir"], "concept.md", result)
+            print(f"[OK] concept.md → {path}")
+        
         if state_mgr:
             state_mgr.phase_done("open-book")
         return True
@@ -660,6 +672,31 @@ def phase_open_book(config, state_mgr=None):
         if state_mgr:
             state_mgr.phase_failed("open-book", error=str(e))
         return False
+
+
+def parse_multi_file_output(text):
+    """解析 AI 输出的多文件内容。格式：===FILE: path===\n内容"""
+    import re
+    files = {}
+    # 匹配 ===FILE: path=== 分隔符
+    pattern = r'===FILE:\s*(.+?)\s*==='
+    parts = re.split(pattern, text)
+    
+    if len(parts) < 3:
+        # 没有找到分隔符，返回空
+        return {}
+    
+    # parts[0] 是第一个分隔符之前的内容（通常是说明文字，跳过）
+    # parts[1] 是第一个文件路径，parts[2] 是第一个文件内容
+    # parts[3] 是第二个文件路径，parts[4] 是第二个文件内容，以此类推
+    for i in range(1, len(parts), 2):
+        if i + 1 < len(parts):
+            filepath = parts[i].strip()
+            content = parts[i + 1].strip()
+            if filepath and content:
+                files[filepath] = content
+    
+    return files
 
 
 # ============================================================
