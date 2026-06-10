@@ -214,55 +214,25 @@ def submit_to_wawawriter(txt_path, headless=False, dry_run=False):
         try:
             select_el_option(page, '频道', '女频')
             print("[OK]", flush=True)
-        except Exception as e:
-            print(f"[X] {e}", flush=True)
+        except:
+            print("[跳过] 请手动选择频道", flush=True)
 
         print("[7] 作品状态...", flush=True)
         try:
             select_el_option(page, '状态', '连载中')
             print("[OK]", flush=True)
-        except Exception as e:
-            print(f"[X] {e}", flush=True)
+        except:
+            print("[跳过] 请手动选择状态", flush=True)
 
         print("[8] 小说类目...", flush=True)
         try:
             select_cascader_option(page, ['现代', '言情'])
             print("[OK]", flush=True)
-        except Exception as e:
-            print(f"[X] {e}", flush=True)
+        except:
+            print("[跳过] 请手动选择类目", flush=True)
 
         print("[9] 标签...", flush=True)
-        for tag in book_info.get('tags', []):
-            tag = tag.strip()
-            if not tag: continue
-            preset = ['言情','现实情感','悬疑','惊悚','科幻','武侠','权谋','脑洞','纯爱','大女主','病娇','青梅竹马','豪门霸总','女神','女王','草根','真假千金','学霸','校霸','出轨','婚姻','家庭','校园','职场','娱乐圈','重生','穿越','犯罪','丧尸','太空歌剧','赛博朋克','游戏','探险','宫斗宅斗','仙侠','克苏鲁','系统','规则怪谈','团宠','囤物资','HE','BE','甜宠','虐恋','暗恋','先婚后爱','先虐后甜','追妻火葬场','破镜重圆','沙雕','爽文','复仇','反转','逆袭','励志','烧脑','热血','争霸','求生','打脸','多视角反转','治愈','古代','现代','历史','未来','架空','民国','哥哥','凤凰男','校草','小奶狗','恶毒婆婆','扶弟魔','黑莲花','偏执','腹黑','全能','杀伐果断','锦鲤','毒舌','傲娇','迪化','听心声','读心术','倒计时文学','五零年代','六零年代','七零年代','八零年代','兽世','日久生情','一见钟情','强取豪夺','欢喜冤家','无系统']
-            if tag in preset:
-                try:
-                    # 滚动到标签区域
-                    page.evaluate("""(text) => {
-                        for (let el of document.querySelectorAll('div, span')) {
-                            if (el.innerText.trim() === text && el.children.length === 0 && el.offsetHeight > 0) {
-                                el.scrollIntoView({behavior:'instant', block:'center'});
-                                return true;
-                            }
-                        }
-                        return false;
-                    }""", tag)
-                    time.sleep(0.5)
-                    # 用locator原生click（会模拟真实鼠标事件）
-                    page.get_by_text(tag, exact=True).first.click(timeout=5000)
-                    time.sleep(0.3)
-                    print(f"  [OK] {tag}", flush=True)
-                except Exception as e:
-                    print(f"  [X] {tag}: {e}", flush=True)
-            else:
-                try:
-                    inp = page.locator('input[placeholder*="自定义标签"]').first
-                    inp.fill(tag, force=True, timeout=3000)
-                    page.locator('button').filter(has_text='添加').first.click(force=True, timeout=3000)
-                    print(f"  [OK] 自定义: {tag}", flush=True)
-                except Exception as e:
-                    print(f"  [X] {tag}: {e}", flush=True)
+        print("[跳过] 请手动选择标签", flush=True)
 
         print("[10] 简介...", flush=True)
         try:
