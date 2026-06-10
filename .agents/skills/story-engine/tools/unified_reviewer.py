@@ -225,19 +225,19 @@ def review_batch_llm(api_key, api_url, model, chapters_data, source_texts=None):
     """LLM 批量审核多章，返回 {ch: (issues, score)}。"""
     import requests
 
-    # 拼接章节文本
+    # 拼接章节文本（35章×2000字≈7万字，截断到5万字以内）
     parts = []
     for ch, ch_text in chapters_data:
-        parts.append(f"=== 第{ch}章 ===\n{ch_text[:3000]}")
-    chapters_text = "\n\n".join(parts)[:12000]
+        parts.append(f"=== 第{ch}章 ===\n{ch_text[:2000]}")
+    chapters_text = "\n\n".join(parts)[:50000]
 
     source_context = ""
     if source_texts:
         samples = []
         for ch, src in source_texts.items():
             if src:
-                samples.append(f"【第{ch}章源文】\n{src[:800]}")
-        source_context = "\n\n".join(samples)[:3000]
+                samples.append(f"【第{ch}章源文】\n{src[:500]}")
+        source_context = "\n\n".join(samples)[:8000]
         if source_context:
             source_context = "【源文（供参考风格，不要仿写内容）】\n" + source_context
 
@@ -257,9 +257,9 @@ def review_batch_llm(api_key, api_url, model, chapters_data, source_texts=None):
                     {"role": "user", "content": prompt},
                 ],
                 "temperature": 0.3,
-                "max_tokens": 8000,
+                "max_tokens": 16000,
             },
-            timeout=120,
+            timeout=180,
         )
         if resp.status_code == 200:
             content = resp.json()["choices"][0]["message"]["content"]
@@ -321,7 +321,7 @@ def review_chapter_algo(config, ch, get_source_text_fn):
     }
 
 
-def review_all(config, start, end, get_source_text_fn, api_key=None, api_url=None, model=None, llm=False, workers=5, batch_size=10):
+def review_all(config, start, end, get_source_text_fn, api_key=None, api_url=None, model=None, llm=False, workers=5, batch_size=35):
     """审查所有章节：算法检查 + LLM 批量审稿。"""
     chapters = list(range(start, end + 1))
 
@@ -439,7 +439,8 @@ def main():
     parser.add_argument("--end", type=int, default=None, help="结束章（默认自动检测）")
     parser.add_argument("--output", default=None, help="输出报告路径（默认 compare/unified_review.json）")
     parser.add_argument("--llm", action=argparse.BooleanOptionalAction, default=True, help="LLM审稿（默认开启，--no-llm 关闭）")
-    parser.add_argument("--workers", type=int, default=5, help="LLM审稿并行数")
+    parser.add_argument("--batch-size", type=int, default=35, help="LLM批量审稿每批章数（默认35）")
+    parser.add_argument("--workers", type=int, default=5, help="算法检查并行数")
     args = parser.parse_args()
 
     config_path = Path(args.config)
@@ -495,7 +496,7 @@ def main():
     print(f"统一审查 | ch{args.start}-{args.end} | LLM={'on' if args.llm else 'off'}")
 
     t0 = time.time()
-    results = review_all(config, args.start, args.end, get_source_text_fn, api_key, api_url, model, args.llm, args.workers)
+    results = review_all(config, args.start, args.end, get_source_text_fn, api_key, api_url, model, args.llm, args.workers, args.batch_size)
     report = save_report(results, output)
     print_summary(report)
     print(f"  报告已保存: {output}")
