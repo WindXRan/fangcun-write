@@ -592,26 +592,5 @@ def main():
         f.write(ai_content)
     print(f'AI分析版已生成: {ai_path}')
 
-    # 生成合成版txt（供AI检测）
-    if src_chapters:
-        src_txt_path = os.path.join(out_dir, f'源文_{start}-{end}.txt')
-        with open(src_txt_path, 'w', encoding='utf-8') as f:
-            for ch in sorted(src_chapters.keys()):
-                content, title = src_chapters[ch]
-                f.write(f'{title}\n\n' if title else f'第{ch}章\n\n')
-                f.write(content)
-                f.write('\n\n')
-        print(f'源文合成版已生成: {src_txt_path}')
-
-    if new_chapters:
-        new_txt_path = os.path.join(out_dir, f'新书_{start}-{end}.txt')
-        with open(new_txt_path, 'w', encoding='utf-8') as f:
-            for ch in sorted(new_chapters.keys()):
-                content, title = new_chapters[ch]
-                f.write(f'{title}\n\n' if title else f'第{ch}章\n\n')
-                f.write(content)
-                f.write('\n\n')
-        print(f'新书合成版已生成: {new_txt_path}')
-
 if __name__ == '__main__':
     main()
