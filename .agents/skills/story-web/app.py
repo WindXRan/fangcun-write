@@ -200,6 +200,41 @@ def api_search():
     return jsonify(books)
 
 
+@app.route('/api/chapters')
+def api_chapters():
+    """API: 获取书籍的章节列表"""
+    file = request.args.get('file', '')
+    if not file:
+        return jsonify([])
+    
+    content = read_file(file)
+    if not content:
+        return jsonify([])
+    
+    chapters = split_chapters(content)
+    return jsonify(chapters)
+
+
+@app.route('/api/content')
+def api_content():
+    """API: 获取指定章节内容"""
+    file = request.args.get('file', '')
+    chapter = request.args.get('chapter', type=int, default=0)
+    
+    if not file:
+        return jsonify({"content": ""})
+    
+    content = read_file(file)
+    if not content:
+        return jsonify({"content": ""})
+    
+    chapters = split_chapters(content)
+    if chapter < 1 or chapter > len(chapters):
+        return jsonify({"content": ""})
+    
+    return jsonify({"content": chapters[chapter - 1]["content"]})
+
+
 @app.route('/scan')
 def scan_page():
     return render_template('scan.html')
@@ -322,4 +357,5 @@ def api_download_archive():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    # production 模式：关 reloader 防子进程冲突，关 debugger 防信息泄露
+    app.run(debug=False, use_reloader=False, port=5000)
