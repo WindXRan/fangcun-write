@@ -1,0 +1,33 @@
+{
+  "total_chars": 2049,
+  "avg_sentence_len": 33.1,
+  "sentence_len_std": 21.8,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 106
+  },
+  "vocabulary_diversity": 0.241,
+  "top_patterns": [
+    "黄玉(6次)",
+    "苏瑶(5次)",
+    "李命(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 6,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 17,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 12,
+    "问号": 2,
+    "叹号": 12,
+    "引号": 0
+  },
+  "chapter": 536,
+  "file": "第536章.txt"
+}

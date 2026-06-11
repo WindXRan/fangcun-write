@@ -1,0 +1,30 @@
+{
+  "total_chars": 2073,
+  "avg_sentence_len": 36.7,
+  "sentence_len_std": 17.8,
+  "avg_paragraph_len": 38,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 76
+  },
+  "vocabulary_diversity": 0.254,
+  "top_patterns": [
+    "李命(8次)",
+    "韩素(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 1,
+  "ai_marker_count": 5,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 28,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 29,
+    "问号": 4,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 471,
+  "file": "第471章.txt"
+}

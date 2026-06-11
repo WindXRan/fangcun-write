@@ -1,0 +1,32 @@
+{
+  "total_chars": 1971,
+  "avg_sentence_len": 29.6,
+  "sentence_len_std": 18.7,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 117
+  },
+  "vocabulary_diversity": 0.284,
+  "top_patterns": [
+    "李命(6次)",
+    "夏红(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 29,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 23,
+    "问号": 0,
+    "叹号": 16,
+    "引号": 0
+  },
+  "chapter": 96,
+  "file": "第96章.txt"
+}

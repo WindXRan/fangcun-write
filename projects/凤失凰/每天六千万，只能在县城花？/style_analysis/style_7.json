@@ -1,0 +1,35 @@
+{
+  "total_chars": 1988,
+  "avg_sentence_len": 22.4,
+  "sentence_len_std": 14.0,
+  "avg_paragraph_len": 30,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 77
+  },
+  "vocabulary_diversity": 0.309,
+  "top_patterns": [
+    "陆明(6次)",
+    "”陆(5次)",
+    "刘副(5次)",
+    "“陆(4次)",
+    "王卫(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 1,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 45,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 7,
+  "file": "第7章.txt"
+}

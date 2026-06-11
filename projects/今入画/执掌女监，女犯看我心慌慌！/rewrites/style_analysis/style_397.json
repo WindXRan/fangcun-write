@@ -1,0 +1,32 @@
+{
+  "total_chars": 2135,
+  "avg_sentence_len": 27.6,
+  "sentence_len_std": 18.7,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 100
+  },
+  "vocabulary_diversity": 0.243,
+  "top_patterns": [
+    "李命(10次)",
+    "周琳(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 8,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 40,
+    "问号": 0,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 397,
+  "file": "第397章.txt"
+}

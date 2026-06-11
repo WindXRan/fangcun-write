@@ -1,0 +1,35 @@
+{
+  "total_chars": 2087,
+  "avg_sentence_len": 21.7,
+  "sentence_len_std": 14.4,
+  "avg_paragraph_len": 29,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 105
+  },
+  "vocabulary_diversity": 0.285,
+  "top_patterns": [
+    "苏长(17次)",
+    "陆明(10次)",
+    "孙长(6次)",
+    "”陆(6次)",
+    "“苏(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 39,
+    "问号": 2,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 52,
+  "file": "第52章.txt"
+}

@@ -1,0 +1,30 @@
+{
+  "total_chars": 2128,
+  "avg_sentence_len": 37.1,
+  "sentence_len_std": 14.4,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 77
+  },
+  "vocabulary_diversity": 0.251,
+  "top_patterns": [
+    "李命(14次)",
+    "于是(4次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 1,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 11,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 30,
+    "问号": 2,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 338,
+  "file": "第338章.txt"
+}

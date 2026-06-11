@@ -1,0 +1,35 @@
+{
+  "total_chars": 2059,
+  "avg_sentence_len": 17.2,
+  "sentence_len_std": 9.9,
+  "avg_paragraph_len": 27,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 80
+  },
+  "vocabulary_diversity": 0.292,
+  "top_patterns": [
+    "陆明(14次)",
+    "陆建(12次)",
+    "”陆(8次)",
+    "胖子(5次)",
+    "”胖(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 49,
+    "问号": 2,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 5,
+  "file": "第5章.txt"
+}

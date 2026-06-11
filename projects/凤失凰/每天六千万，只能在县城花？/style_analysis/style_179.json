@@ -1,0 +1,35 @@
+{
+  "total_chars": 2498,
+  "avg_sentence_len": 18.5,
+  "sentence_len_std": 12.3,
+  "avg_paragraph_len": 35,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 95
+  },
+  "vocabulary_diversity": 0.259,
+  "top_patterns": [
+    "”刘(6次)",
+    "刘永(5次)",
+    "张晨(4次)",
+    "”于(4次)",
+    "“赵(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(10处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 2,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 35,
+    "问号": 1,
+    "叹号": 1,
+    "引号": 0
+  },
+  "chapter": 179,
+  "file": "第179章.txt"
+}

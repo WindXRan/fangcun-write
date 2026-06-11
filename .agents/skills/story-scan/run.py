@@ -139,15 +139,18 @@ def build():
     return run_cmd("python scripts/build_latest.py", timeout=300)
 
 def serve():
-    """启动本地服务"""
-    print("\n🌐 启动本地看板...")
+    """启动本地服务 - 跳转到 story-web"""
+    print("\n🌐 启动书库服务（含排行榜）...")
     print("访问地址:")
-    print("  - 榜单看板: http://localhost:8000")
-    print("  - 趋势风向: http://localhost:8000/trend.html")
-    print("  - 创作灵感: http://localhost:8000/author.html")
+    print("  - 书库首页: http://localhost:5000/")
+    print("  - 番茄排行榜: http://localhost:5000/ranks/")
+    print("  - 趋势风向: http://localhost:5000/ranks/trend.html")
+    print("  - 创作灵感: http://localhost:5000/ranks/author.html")
     print("\n按 Ctrl+C 停止服务")
     
-    return run_cmd("python -m http.server 8000")
+    # 启动 story-web
+    web_dir = ROOT_DIR.parent.parent / "skills" / "story-web"
+    return run_cmd("python app.py", cwd=str(web_dir))
 
 def show_help():
     """显示帮助信息"""

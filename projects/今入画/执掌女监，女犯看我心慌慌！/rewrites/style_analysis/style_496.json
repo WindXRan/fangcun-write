@@ -1,0 +1,34 @@
+{
+  "total_chars": 2065,
+  "avg_sentence_len": 36.5,
+  "sentence_len_std": 20.7,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 104
+  },
+  "vocabulary_diversity": 0.252,
+  "top_patterns": [
+    "李命(11次)",
+    "周琳(7次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [
+    "反问(2处)",
+    "短句节奏(2处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 14,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 23,
+    "问号": 1,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 496,
+  "file": "第496章.txt"
+}

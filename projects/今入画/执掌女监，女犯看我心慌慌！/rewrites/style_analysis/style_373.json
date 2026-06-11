@@ -1,0 +1,32 @@
+{
+  "total_chars": 2277,
+  "avg_sentence_len": 43.7,
+  "sentence_len_std": 27.9,
+  "avg_paragraph_len": 47,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 127
+  },
+  "vocabulary_diversity": 0.247,
+  "top_patterns": [
+    "李命(14次)",
+    "“好(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(3处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 25,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 20,
+    "问号": 0,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 373,
+  "file": "第373章.txt"
+}

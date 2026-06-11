@@ -1,0 +1,35 @@
+{
+  "total_chars": 2310,
+  "avg_sentence_len": 20.0,
+  "sentence_len_std": 14.1,
+  "avg_paragraph_len": 25,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 68
+  },
+  "vocabulary_diversity": 0.286,
+  "top_patterns": [
+    "胡奎(6次)",
+    "陆明(5次)",
+    "陈志(3次)",
+    "”陈(3次)",
+    "方瑜(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 15,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 54,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 45,
+  "file": "第45章.txt"
+}

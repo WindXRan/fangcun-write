@@ -1,0 +1,30 @@
+{
+  "total_chars": 2076,
+  "avg_sentence_len": 42.3,
+  "sentence_len_std": 21.8,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 99
+  },
+  "vocabulary_diversity": 0.236,
+  "top_patterns": [
+    "李命(6次)",
+    "姜禾(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 4,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 30,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 20,
+    "问号": 1,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 484,
+  "file": "第484章.txt"
+}

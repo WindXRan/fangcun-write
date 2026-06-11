@@ -21,7 +21,7 @@ from pathlib import Path
 
 
 # 需要嵌入内容的标签（输入类），不包含的标签只保留路径引用
-EMBED_TAGS = {"源文", "弧线", "弧线参考", "设定", "新书设定", "风格数据", "plot_guide", "style_guide", "模板", "旧真相", "本章正文", "下章正文", "原文", "样板库", "热梗素材", "频道配置", "题材配置", "爽点配置"}
+EMBED_TAGS = {"源文", "弧线", "弧线参考", "设定", "新书设定", "风格数据", "风格模板", "plot_guide", "style_guide", "模板", "旧真相", "本章正文", "下章正文", "原文", "样板库", "热梗素材", "频道配置", "题材配置", "爽点配置"}
 
 # 不需要嵌入的标签（输出/指令类）
 PASS_THROUGH_TAGS = {"输出", "回传"}
@@ -31,6 +31,9 @@ FILE_REF_PATTERN = re.compile(r'【(.+?)】(.+?\.(?:md|txt|json|ps1))', re.MULTI
 
 # 配置目录（相对于 story-engine）
 CONFIG_DIR = "config"
+
+# 品类级联警告缓存（防并行刷屏）
+_cascade_warned = set()
 
 
 def resolve_path(base_dir, ref_path):
@@ -192,12 +195,12 @@ def embed_files(prompt_text, base_dir, extra_replacements=None):
 
 def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites_dir=None):
     """
-    统一入口：加载 prompt，支持 agent/api 双模式。
+    统一入口：加载 prompt，支持 agent/api 双模式 + 品类级联。
 
     Args:
         prompt_path: prompt 文件路径（相对于 base_dir 或绝对路径）
         base_dir: 项目根目录
-        replacements: {变量名: 值} 字典
+        replacements: {变量名: 值} 字典，可含 "genre" 字段触发品类级联
         mode: "agent" | "api"
         rewrites_dir: 仿写项目目录，用于自动加载 book_data.json 中的变量
 
@@ -206,6 +209,12 @@ def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites
 
     Agent 模式：返回原始 prompt（agent 自己读文件）
     API 模式：嵌入所有引用文件的内容
+
+    品类级联：
+        prompt_path = "prompts/write-chapter.md"
+        genre = "都市擦边"
+        → 先加载 prompts/write-chapter.md
+        → 如果 prompts/write-chapter.都市擦边.md 存在，追加在后面
     """
     prompt_file = resolve_path(base_dir, prompt_path)
 
@@ -213,6 +222,20 @@ def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites
         raise FileNotFoundError(f"Prompt 文件不存在: {prompt_file}")
 
     raw_text = prompt_file.read_text(encoding='utf-8')
+
+    # 品类级联：加载通用文件后，追加品类特化文件
+    genre = (replacements or {}).get("genre", "")
+    if genre:
+        genre_file = prompt_file.with_name(f"{prompt_file.stem}.{genre}{prompt_file.suffix}")
+        if genre_file.exists():
+            genre_text = genre_file.read_text(encoding='utf-8')
+            raw_text += "\n\n" + genre_text
+        else:
+            # 品类文件不存在时仅首次警告
+            global _cascade_warned
+            if genre not in _cascade_warned:
+                _cascade_warned.add(genre)
+                print(f"  [CASCADE] 品类文件 {genre_file.name} 不存在，使用通用 prompt")
 
     # 合并 book_data.json 的变量（低优先级，不覆盖传入的 replacements）
     merged = {}

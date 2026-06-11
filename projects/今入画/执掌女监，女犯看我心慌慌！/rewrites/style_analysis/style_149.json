@@ -1,0 +1,32 @@
+{
+  "total_chars": 2158,
+  "avg_sentence_len": 41.2,
+  "sentence_len_std": 27.4,
+  "avg_paragraph_len": 48,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 127
+  },
+  "vocabulary_diversity": 0.251,
+  "top_patterns": [
+    "李命(7次)",
+    "沈佳(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 24,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 24,
+    "问号": 0,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 149,
+  "file": "第149章.txt"
+}

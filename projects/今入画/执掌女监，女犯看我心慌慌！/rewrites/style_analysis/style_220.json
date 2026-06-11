@@ -1,0 +1,35 @@
+{
+  "total_chars": 2141,
+  "avg_sentence_len": 34.6,
+  "sentence_len_std": 24.8,
+  "avg_paragraph_len": 41,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 125
+  },
+  "vocabulary_diversity": 0.242,
+  "top_patterns": [
+    "沈佳(9次)",
+    "李命(8次)",
+    "夏红(5次)",
+    "可是(4次)",
+    "“佳(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 5,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 12,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 18,
+    "问号": 4,
+    "叹号": 14,
+    "引号": 0
+  },
+  "chapter": 220,
+  "file": "第220章.txt"
+}

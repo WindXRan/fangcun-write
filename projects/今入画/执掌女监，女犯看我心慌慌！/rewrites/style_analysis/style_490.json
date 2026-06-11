@@ -1,0 +1,32 @@
+{
+  "total_chars": 2051,
+  "avg_sentence_len": 37.5,
+  "sentence_len_std": 26.3,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 138
+  },
+  "vocabulary_diversity": 0.278,
+  "top_patterns": [
+    "李命(6次)",
+    "周琳(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 8,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 34,
+    "问号": 0,
+    "叹号": 3,
+    "引号": 0
+  },
+  "chapter": 490,
+  "file": "第490章.txt"
+}

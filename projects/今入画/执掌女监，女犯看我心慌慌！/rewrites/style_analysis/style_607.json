@@ -1,0 +1,35 @@
+{
+  "total_chars": 2102,
+  "avg_sentence_len": 35.9,
+  "sentence_len_std": 25.7,
+  "avg_paragraph_len": 53,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 125
+  },
+  "vocabulary_diversity": 0.265,
+  "top_patterns": [
+    "李由(11次)",
+    "“这(4次)",
+    "李命(3次)",
+    "“爸(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(5处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 26,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 16,
+    "问号": 0,
+    "叹号": 2,
+    "引号": 0
+  },
+  "chapter": 607,
+  "file": "第607章.txt"
+}

@@ -1,0 +1,33 @@
+{
+  "total_chars": 1770,
+  "avg_sentence_len": 33.4,
+  "sentence_len_std": 24.7,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 13,
+    "max": 94
+  },
+  "vocabulary_diversity": 0.264,
+  "top_patterns": [
+    "周琳(8次)",
+    "李命(6次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 13,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 17,
+    "问号": 0,
+    "叹号": 10,
+    "引号": 0
+  },
+  "chapter": 333,
+  "file": "第333章.txt"
+}

@@ -1,0 +1,32 @@
+{
+  "total_chars": 2078,
+  "avg_sentence_len": 32.5,
+  "sentence_len_std": 22.2,
+  "avg_paragraph_len": 38,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 116
+  },
+  "vocabulary_diversity": 0.248,
+  "top_patterns": [
+    "李命(8次)",
+    "周琳(6次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 18,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 31,
+    "问号": 0,
+    "叹号": 2,
+    "引号": 0
+  },
+  "chapter": 586,
+  "file": "第586章.txt"
+}

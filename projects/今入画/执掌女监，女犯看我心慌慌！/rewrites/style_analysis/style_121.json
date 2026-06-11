@@ -1,0 +1,32 @@
+{
+  "total_chars": 1990,
+  "avg_sentence_len": 25.9,
+  "sentence_len_std": 14.5,
+  "avg_paragraph_len": 35,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 72
+  },
+  "vocabulary_diversity": 0.309,
+  "top_patterns": [
+    "李命(12次)",
+    "”李(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 16,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 22,
+    "问号": 0,
+    "叹号": 25,
+    "引号": 0
+  },
+  "chapter": 121,
+  "file": "第121章.txt"
+}

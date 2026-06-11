@@ -1,0 +1,35 @@
+{
+  "total_chars": 2081,
+  "avg_sentence_len": 34.3,
+  "sentence_len_std": 18.9,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 95
+  },
+  "vocabulary_diversity": 0.258,
+  "top_patterns": [
+    "李命(10次)",
+    "金秀(6次)",
+    "“李(4次)",
+    "而且(3次)",
+    "可是(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 18,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 15,
+    "问号": 3,
+    "叹号": 14,
+    "引号": 0
+  },
+  "chapter": 551,
+  "file": "第551章.txt"
+}

@@ -1,0 +1,35 @@
+{
+  "total_chars": 2083,
+  "avg_sentence_len": 28.5,
+  "sentence_len_std": 20.1,
+  "avg_paragraph_len": 36,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 111
+  },
+  "vocabulary_diversity": 0.255,
+  "top_patterns": [
+    "李命(6次)",
+    "不过(5次)",
+    "“我(3次)",
+    "周琳(3次)",
+    "而李(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 13,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 34,
+    "问号": 0,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 507,
+  "file": "第507章.txt"
+}

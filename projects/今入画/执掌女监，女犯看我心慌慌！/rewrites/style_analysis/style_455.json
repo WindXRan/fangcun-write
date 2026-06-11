@@ -1,0 +1,34 @@
+{
+  "total_chars": 2078,
+  "avg_sentence_len": 29.7,
+  "sentence_len_std": 25.4,
+  "avg_paragraph_len": 35,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 139
+  },
+  "vocabulary_diversity": 0.218,
+  "top_patterns": [
+    "叶莓(13次)",
+    "李命(9次)",
+    "而叶(4次)",
+    "“监(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 44,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 13,
+    "问号": 1,
+    "叹号": 13,
+    "引号": 0
+  },
+  "chapter": 455,
+  "file": "第455章.txt"
+}

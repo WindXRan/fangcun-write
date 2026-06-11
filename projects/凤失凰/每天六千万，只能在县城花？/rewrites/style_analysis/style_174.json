@@ -1,0 +1,35 @@
+{
+  "total_chars": 2439,
+  "avg_sentence_len": 15.8,
+  "sentence_len_std": 10.4,
+  "avg_paragraph_len": 24,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 92
+  },
+  "vocabulary_diversity": 0.257,
+  "top_patterns": [
+    "刘永(11次)",
+    "”刘(11次)",
+    "赵德(8次)",
+    "“高(5次)",
+    "“刘(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(13处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 4,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 40,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 174,
+  "file": "第174章.txt"
+}

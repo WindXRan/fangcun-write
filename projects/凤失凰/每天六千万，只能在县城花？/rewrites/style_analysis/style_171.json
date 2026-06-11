@@ -1,0 +1,35 @@
+{
+  "total_chars": 2249,
+  "avg_sentence_len": 17.0,
+  "sentence_len_std": 13.4,
+  "avg_paragraph_len": 24,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 71
+  },
+  "vocabulary_diversity": 0.286,
+  "top_patterns": [
+    "陆明(9次)",
+    "陆建(9次)",
+    "”陆(8次)",
+    "王爱(6次)",
+    "“陆(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(15处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 41,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 171,
+  "file": "第171章.txt"
+}

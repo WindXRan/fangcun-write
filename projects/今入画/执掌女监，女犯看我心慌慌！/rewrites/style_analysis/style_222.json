@@ -1,0 +1,33 @@
+{
+  "total_chars": 2126,
+  "avg_sentence_len": 33.7,
+  "sentence_len_std": 22.6,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 110
+  },
+  "vocabulary_diversity": 0.235,
+  "top_patterns": [
+    "二管(8次)",
+    "李命(4次)",
+    "监狱(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 8,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 29,
+    "问号": 1,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 222,
+  "file": "第222章.txt"
+}

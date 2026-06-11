@@ -1,0 +1,35 @@
+{
+  "total_chars": 2065,
+  "avg_sentence_len": 20.7,
+  "sentence_len_std": 12.0,
+  "avg_paragraph_len": 30,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 95
+  },
+  "vocabulary_diversity": 0.273,
+  "top_patterns": [
+    "陈越(13次)",
+    "陆明(12次)",
+    "王启(5次)",
+    "”陆(4次)",
+    "“王(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 43,
+    "问号": 2,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 149,
+  "file": "第149章.txt"
+}

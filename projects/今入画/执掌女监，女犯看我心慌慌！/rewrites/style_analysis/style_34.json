@@ -1,0 +1,34 @@
+{
+  "total_chars": 2062,
+  "avg_sentence_len": 22.8,
+  "sentence_len_std": 15.6,
+  "avg_paragraph_len": 38,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 88
+  },
+  "vocabulary_diversity": 0.252,
+  "top_patterns": [
+    "李命(9次)",
+    "”李(8次)",
+    "夏红(6次)",
+    "”夏(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 8,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 32,
+    "问号": 1,
+    "叹号": 9,
+    "引号": 0
+  },
+  "chapter": 34,
+  "file": "第34章.txt"
+}

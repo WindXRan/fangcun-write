@@ -1,0 +1,32 @@
+{
+  "total_chars": 1236,
+  "avg_sentence_len": 26.5,
+  "sentence_len_std": 19.4,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 109
+  },
+  "vocabulary_diversity": 0.306,
+  "top_patterns": [
+    "李命(8次)",
+    "林希(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 18,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 11,
+    "问号": 3,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 128,
+  "file": "第128章.txt"
+}

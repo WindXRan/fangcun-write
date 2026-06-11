@@ -1,0 +1,32 @@
+{
+  "total_chars": 2158,
+  "avg_sentence_len": 34.7,
+  "sentence_len_std": 22.3,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 144
+  },
+  "vocabulary_diversity": 0.255,
+  "top_patterns": [
+    "周琳(8次)",
+    "李命(7次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 9,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 20,
+    "问号": 2,
+    "叹号": 16,
+    "引号": 0
+  },
+  "chapter": 359,
+  "file": "第359章.txt"
+}

@@ -1,0 +1,33 @@
+{
+  "total_chars": 2158,
+  "avg_sentence_len": 28.8,
+  "sentence_len_std": 23.0,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 137
+  },
+  "vocabulary_diversity": 0.274,
+  "top_patterns": [
+    "夏红(12次)",
+    "沈佳(7次)",
+    "“佳(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 9,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 34,
+    "问号": 1,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 103,
+  "file": "第103章.txt"
+}

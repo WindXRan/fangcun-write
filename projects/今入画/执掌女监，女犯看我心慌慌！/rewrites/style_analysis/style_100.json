@@ -1,0 +1,33 @@
+{
+  "total_chars": 1429,
+  "avg_sentence_len": 20.5,
+  "sentence_len_std": 19.2,
+  "avg_paragraph_len": 32,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 153
+  },
+  "vocabulary_diversity": 0.323,
+  "top_patterns": [
+    "黄莺(6次)",
+    "李命(6次)",
+    "”许(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 17,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 27,
+    "问号": 1,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 100,
+  "file": "第100章.txt"
+}

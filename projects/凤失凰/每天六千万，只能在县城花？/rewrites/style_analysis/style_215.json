@@ -1,0 +1,35 @@
+{
+  "total_chars": 2145,
+  "avg_sentence_len": 21.8,
+  "sentence_len_std": 17.2,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 165
+  },
+  "vocabulary_diversity": 0.309,
+  "top_patterns": [
+    "詹卡(6次)",
+    "陆明(4次)",
+    "“陆(3次)",
+    "”陆(3次)",
+    "“第(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 1,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 20,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 215,
+  "file": "第215章.txt"
+}

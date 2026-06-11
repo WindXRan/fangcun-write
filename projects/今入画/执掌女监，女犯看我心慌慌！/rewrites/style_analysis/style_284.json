@@ -1,0 +1,29 @@
+{
+  "total_chars": 1580,
+  "avg_sentence_len": 38.8,
+  "sentence_len_std": 22.0,
+  "avg_paragraph_len": 40,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 92
+  },
+  "vocabulary_diversity": 0.272,
+  "top_patterns": [
+    "周琳(5次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 30,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 12,
+    "问号": 2,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 284,
+  "file": "第284章.txt"
+}

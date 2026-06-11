@@ -1,0 +1,31 @@
+{
+  "total_chars": 2055,
+  "avg_sentence_len": 30.8,
+  "sentence_len_std": 19.5,
+  "avg_paragraph_len": 35,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 103
+  },
+  "vocabulary_diversity": 0.237,
+  "top_patterns": [
+    "李命(5次)",
+    "“你(3次)",
+    "接着(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 28,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 30,
+    "问号": 1,
+    "叹号": 2,
+    "引号": 0
+  },
+  "chapter": 572,
+  "file": "第572章.txt"
+}

@@ -1,0 +1,31 @@
+{
+  "total_chars": 2074,
+  "avg_sentence_len": 25.1,
+  "sentence_len_std": 18.8,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 87
+  },
+  "vocabulary_diversity": 0.267,
+  "top_patterns": [
+    "李命(12次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 7,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 38,
+    "问号": 0,
+    "叹号": 3,
+    "引号": 0
+  },
+  "chapter": 46,
+  "file": "第46章.txt"
+}

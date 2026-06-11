@@ -1,0 +1,33 @@
+{
+  "total_chars": 2096,
+  "avg_sentence_len": 34.5,
+  "sentence_len_std": 18.9,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 11,
+    "max": 78
+  },
+  "vocabulary_diversity": 0.251,
+  "top_patterns": [
+    "姜禾(8次)",
+    "李命(5次)",
+    "于是(4次)",
+    "所以(3次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 23,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 32,
+    "问号": 2,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 473,
+  "file": "第473章.txt"
+}

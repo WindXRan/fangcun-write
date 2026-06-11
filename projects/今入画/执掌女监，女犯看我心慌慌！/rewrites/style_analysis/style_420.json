@@ -1,0 +1,33 @@
+{
+  "total_chars": 2064,
+  "avg_sentence_len": 32.9,
+  "sentence_len_std": 19.7,
+  "avg_paragraph_len": 40,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 101
+  },
+  "vocabulary_diversity": 0.24,
+  "top_patterns": [
+    "可是(6次)",
+    "林希(4次)",
+    "男警(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 49,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 13,
+    "问号": 2,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 420,
+  "file": "第420章.txt"
+}

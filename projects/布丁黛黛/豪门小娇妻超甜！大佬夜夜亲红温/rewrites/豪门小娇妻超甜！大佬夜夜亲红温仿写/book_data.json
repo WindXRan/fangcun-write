@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "book_info": {
+    "name": "新书基础信息",
+    "author": "待定",
+    "source_book": "",
+    "genre": "现代言情 · 豪门总裁 · 甜宠",
+    "tags": [],
+    "packages": []
+  },
+  "characters": [
+    {
+      "tag": "女主",
+      "tag_short": "女主",
+      "name": "温宁",
+      "aliases": [],
+      "age": "23岁",
+      "identity": "温家独女，曾为沪上名媛，“温氏糖记”甜品店主理人",
+      "personality": "- 父亲重病住院，医疗费高昂",
+      "arc": "从“独立撑起一切”的逞强→学会依靠霍司珩，不再独自硬扛",
+      "weaknesses": [],
+      "archetype": "",
+      "first_appearance": 1,
+      "frequency": ""
+    },
+    {
+      "tag": "男主",
+      "tag_short": "男主",
+      "name": "霍司珩",
+      "aliases": [],
+      "age": "32岁",
+      "identity": "霍氏资本掌门人，京圈资本圈最年轻的执棋者",
+      "personality": "- 暗恋温宁多年，却以“拯救者”身份出现",
+      "arc": "",
+      "weaknesses": [],
+      "archetype": "",
+      "first_appearance": 1,
+      "frequency": ""
+    },
+    {
+      "tag": "女主父亲",
+      "tag_short": "女主父亲",
+      "name": "温启明",
+      "aliases": [],
+      "age": "58",
+      "identity": "女主父亲",
+      "personality": "病重昏迷，曾为慈父",
+      "arc": "",
+      "weaknesses": [],
+      "archetype": "",
+      "first_appearance": 1,
+      "frequency": ""
+    },
+    {
+      "tag": "女主继母",
+      "tag_short": "女主继母",
+      "name": "赵雪茹",
+      "aliases": [],
+      "age": "42",
+      "identity": "女主继母",
+      "personality": "贪婪自私，卷款私逃",
+      "arc": "",
+      "weaknesses": [],
+      "archetype": "",
+      "first_appearance": 1,
+      "frequency": ""
+    },
+    {
+      "tag": "女主异母弟",
+      "tag_short": "女主异母弟",
+      "name": "温子墨",
+      "aliases": [],
+      "age": "9",
+      "identity": "女主异母弟",
+      "personality": "乖巧懂事",
+      "arc": "",
+      "weaknesses": [],
+      "archetype": "",
+      "first_appearance": 1,
+      "frequency": ""
+    },
+    {
+      "tag": "男主发小/助理",
+      "tag_short": "男主发小/助理",
+      "name": "顾衍舟",
+      "aliases": [],
+      "age": "31",
+      "identity": "男主发小/助理",
+      "personality": "阳光开朗，助攻担当",
+      "arc": "",
+      "weaknesses": [],
+      "archetype": "",
+      "first_appearance": 1,
+      "frequency": ""
+    },
+    {
+      "tag": "女主前名媛圈闺蜜",
+      "tag_short": "女主前名媛圈闺蜜",
+      "name": "乔婉",
+      "aliases": [],
+      "age": "27",
+      "identity": "女主前名媛圈闺蜜",
+      "personality": "虚荣势利，嫉妒温宁",
+      "arc": "",
+      "weaknesses": [],
+      "archetype": "",
+      "first_appearance": 1,
+      "frequency": ""
+    },
+    {
+      "tag": "女主前追求者/商业对手",
+      "tag_short": "女主前追求者/商业对手",
+      "name": "陆景尧",
+      "aliases": [],
+      "age": "33",
+      "identity": "女主前追求者/商业对手",
+      "personality": "阴险，觊觎温家产业",
+      "arc": "",
+      "weaknesses": [],
+      "archetype": "",
+      "first_appearance": 1,
+      "frequency": ""
+    },
+    {
+      "tag": "霍家主宅管家",
+      "tag_short": "霍家主宅管家",
+      "name": "林姨",
+      "aliases": [],
+      "age": "55",
+      "identity": "霍家主宅管家",
+      "personality": "慈爱，神助攻",
+      "arc": "",
+      "weaknesses": [],
+      "archetype": "",
+      "first_appearance": 1,
+      "frequency": ""
+    }
+  ],
+  "conflicts": {
+    "source": {
+      "types": [],
+      "description": ""
+    },
+    "new": {
+      "types": [],
+      "description": ""
+    },
+    "peel_points": []
+  },
+  "world": {
+    "era": "",
+    "category": "",
+    "settings": {
+      "时间": "现代，与源文时代一致",
+      "地点": "中国·上海 / 北京 双城设定",
+      "季度": "秋冬开篇，跨越一年四季，展现冷暖变化",
+      "核心阶层": "京圈/沪圈顶级资本圈",
+      "财富等级": "万亿级家族资本",
+      "社交圈层": "- 霍家：京圈资本圈的隐形掌权者，家族产业横跨金融、地产、高科技",
+      "旧派资本": "霍家代表的掌权者，低调但有巨大影响力",
+      "新贵势力": "陆景尧代表的金融投机者，快速崛起但根基不稳",
+      "金融监管": "男主凭借人脉与信息优势，在金融博弈中碾压对手",
+      "定位": "女主父亲治疗处，情感牵挂地",
+      "特征": "CBD顶层，极简现代风，冰冷疏离",
+      "关键空间": "- CEO办公室：展现男主专业能力与商业手腕",
+      "氛围营造": "历史沉淀的厚重感，处处藏着霍司珩对女主用心的细节",
+      "困境展现": "从门庭若市到冷清，象征温家衰落",
+      "功能": "定期展现女主孝心，男主默默付出被发现的窗口"
+    },
+    "places": [
+      "乔婉所在的暴发户圈子，想要挤入顶层",
+      "|------|------|",
+      "|----------|",
+      "|----------|------|"
+    ]
+  },
+  "plot": {
+    "main_arc": "",
+    "conflict_escalation": "",
+    "emotion_cores": {
+      "source": {
+        "fear": "",
+        "essence": ""
+      },
+      "new": {
+        "fear": "",
+        "essence": ""
+      }
+    },
+    "numerical": {
+      "timeline": "",
+      "countdown": null
+    },
+    "suspense": [
+      {
+        "id": 1,
+        "description": "霍司珩为何答应联姻",
+        "recovery_chapter": 1
+      },
+      {
+        "id": 2,
+        "description": "继母赵雪茹卷款去向",
+        "recovery_chapter": 3
+      },
+      {
+        "id": 3,
+        "description": "霍司珩与温家早年渊源",
+        "recovery_chapter": 25
+      },
+      {
+        "id": 4,
+        "description": "陆景尧与赵雪茹的关系",
+        "recovery_chapter": 40
+      },
+      {
+        "id": 5,
+        "description": "“温氏糖记”品牌被黑幕后",
+        "recovery_chapter": 35
+      },
+      {
+        "id": 6,
+        "description": "霍司珩胃病病因",
+        "recovery_chapter": 55
+      },
+      {
+        "id": 7,
+        "description": "温父醒来后的态度",
+        "recovery_chapter": 70
+      }
+    ]
+  },
+  "source_analysis": {
+    "success_factors": [],
+    "pleasure_formula": "```\n[铺垫] 女主身处困境/被看低\n    ↓\n[触发] 男主因她破例/吃醋/动怒\n    ↓\n[展现] 男主的权势/温柔/占有欲（两人独处时最明显）\n    ↓\n[反应] 女主羞怯/抗拒/心动\n    ↓\n[升温] 身体接触/暧昧台词/半夜爬上床\n    ↓\n[回响] 女主内心小剧场+闺蜜/旁观者惊呼\n    ↓\n[回到铺垫] 下一波危机或误会\n```\n\n**关键节奏**：小甜小虐交替，虐不超过2章，甜要持续3-5章，节奏快，不拖沓。\n\n---",
+    "archetype": "- 第1章：一夜情次日醒来的冲击（身体描写+心理冲击）\n- 第2章：女主逃离，男主处理后续（分线并行）\n- 第3-4章：闺蜜线+学校线（信息释放：男主身份）\n- 第5-6章：重逢+身份揭晓（第一次冲突高潮）\n\n---",
+    "rhythm": "### 章均字数与内容密度\n- 章均约2200字\n- 每章必有1个推进点（情节/情感/关系）\n- 15%纯甜章，25%剧情推进章，40%暧昧拉扯章，20%冲突化解章"
+  },
+  "meta": {
+    "schema_version": 1,
+    "generated_at": "2026-06-11T15:50:47",
+    "extracted_from": [
+      "settings/book_info.md",
+      "settings/characters.md",
+      "settings/plot.md",
+      "settings/world.md",
+      "settings/source_analysis.md"
+    ],
+    "character_variables": {
+      "女主名": "温宁",
+      "男主名": "霍司珩",
+      "女主父亲名": "温启明",
+      "女主继母名": "赵雪茹",
+      "女主异母弟名": "温子墨",
+      "男主发小/助理名": "顾衍舟",
+      "女主前名媛圈闺蜜名": "乔婉",
+      "女主前追求者/商业对手名": "陆景尧",
+      "霍家主宅管家名": "林姨"
+    }
+  }
+}

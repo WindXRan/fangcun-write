@@ -1,0 +1,31 @@
+{
+  "total_chars": 1084,
+  "avg_sentence_len": 31.0,
+  "sentence_len_std": 18.9,
+  "avg_paragraph_len": 38,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 69
+  },
+  "vocabulary_diversity": 0.358,
+  "top_patterns": [
+    "夏红(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 18,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 8,
+    "问号": 1,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 286,
+  "file": "第286章.txt"
+}

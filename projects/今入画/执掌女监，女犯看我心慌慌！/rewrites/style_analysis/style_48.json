@@ -1,0 +1,32 @@
+{
+  "total_chars": 1093,
+  "avg_sentence_len": 26.9,
+  "sentence_len_std": 20.9,
+  "avg_paragraph_len": 38,
+  "paragraph_len_range": {
+    "min": 11,
+    "max": 104
+  },
+  "vocabulary_diversity": 0.337,
+  "top_patterns": [
+    "狱警(4次)",
+    "监狱(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 13,
+    "问号": 0,
+    "叹号": 9,
+    "引号": 0
+  },
+  "chapter": 48,
+  "file": "第48章.txt"
+}

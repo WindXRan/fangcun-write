@@ -1,0 +1,30 @@
+{
+  "total_chars": 2051,
+  "avg_sentence_len": 39.5,
+  "sentence_len_std": 16.7,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 76
+  },
+  "vocabulary_diversity": 0.233,
+  "top_patterns": [
+    "李命(8次)",
+    "姜禾(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 12,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 28,
+    "问号": 0,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 598,
+  "file": "第598章.txt"
+}

@@ -1,0 +1,33 @@
+{
+  "total_chars": 2086,
+  "avg_sentence_len": 30.9,
+  "sentence_len_std": 19.3,
+  "avg_paragraph_len": 47,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 145
+  },
+  "vocabulary_diversity": 0.273,
+  "top_patterns": [
+    "李命(11次)",
+    "”杨(3次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(10处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 32,
+    "问号": 0,
+    "叹号": 3,
+    "引号": 0
+  },
+  "chapter": 45,
+  "file": "第45章.txt"
+}

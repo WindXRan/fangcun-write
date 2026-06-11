@@ -1,0 +1,34 @@
+{
+  "total_chars": 2119,
+  "avg_sentence_len": 26.9,
+  "sentence_len_std": 20.1,
+  "avg_paragraph_len": 38,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 129
+  },
+  "vocabulary_diversity": 0.228,
+  "top_patterns": [
+    "李命(9次)",
+    "胖女(4次)",
+    "不过(3次)",
+    "可是(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 17,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 31,
+    "问号": 1,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 582,
+  "file": "第582章.txt"
+}

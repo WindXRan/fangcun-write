@@ -1,0 +1,35 @@
+{
+  "total_chars": 2080,
+  "avg_sentence_len": 33.6,
+  "sentence_len_std": 23.2,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 119
+  },
+  "vocabulary_diversity": 0.242,
+  "top_patterns": [
+    "李命(11次)",
+    "谭青(3次)",
+    "王馨(3次)",
+    "二管(3次)"
+  ],
+  "rhetorical_features": [
+    "反问(2处)",
+    "短句节奏(2处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 28,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 12,
+    "问号": 2,
+    "叹号": 19,
+    "引号": 0
+  },
+  "chapter": 138,
+  "file": "第138章.txt"
+}

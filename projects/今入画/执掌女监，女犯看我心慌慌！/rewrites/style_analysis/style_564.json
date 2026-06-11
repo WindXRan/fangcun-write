@@ -1,0 +1,35 @@
+{
+  "total_chars": 2078,
+  "avg_sentence_len": 24.7,
+  "sentence_len_std": 16.2,
+  "avg_paragraph_len": 30,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 84
+  },
+  "vocabulary_diversity": 0.244,
+  "top_patterns": [
+    "周琳(11次)",
+    "李命(5次)",
+    "黑煞(3次)",
+    "而这(3次)",
+    "“黑(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 46,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 14,
+    "问号": 4,
+    "叹号": 20,
+    "引号": 0
+  },
+  "chapter": 564,
+  "file": "第564章.txt"
+}

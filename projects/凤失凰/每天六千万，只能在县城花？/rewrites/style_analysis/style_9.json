@@ -1,0 +1,35 @@
+{
+  "total_chars": 2193,
+  "avg_sentence_len": 14.5,
+  "sentence_len_std": 11.5,
+  "avg_paragraph_len": 22,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 85
+  },
+  "vocabulary_diversity": 0.28,
+  "top_patterns": [
+    "陆鸢(16次)",
+    "”陆(8次)",
+    "“你(7次)",
+    "“我(7次)",
+    "陆明(6次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(18处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 4,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 43,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 9,
+  "file": "第9章.txt"
+}

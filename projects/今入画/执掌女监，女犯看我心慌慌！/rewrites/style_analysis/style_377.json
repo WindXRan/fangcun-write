@@ -1,0 +1,33 @@
+{
+  "total_chars": 2262,
+  "avg_sentence_len": 38.0,
+  "sentence_len_std": 25.9,
+  "avg_paragraph_len": 48,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 120
+  },
+  "vocabulary_diversity": 0.247,
+  "top_patterns": [
+    "周琳(5次)",
+    "李命(4次)",
+    "陈知(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 33,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 17,
+    "问号": 1,
+    "叹号": 3,
+    "引号": 0
+  },
+  "chapter": 377,
+  "file": "第377章.txt"
+}

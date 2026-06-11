@@ -1,0 +1,34 @@
+{
+  "total_chars": 2074,
+  "avg_sentence_len": 33.1,
+  "sentence_len_std": 19.9,
+  "avg_paragraph_len": 40,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 69
+  },
+  "vocabulary_diversity": 0.24,
+  "top_patterns": [
+    "李命(10次)",
+    "沈佳(8次)",
+    "可是(5次)",
+    "王可(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 20,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 21,
+    "问号": 0,
+    "叹号": 13,
+    "引号": 0
+  },
+  "chapter": 216,
+  "file": "第216章.txt"
+}

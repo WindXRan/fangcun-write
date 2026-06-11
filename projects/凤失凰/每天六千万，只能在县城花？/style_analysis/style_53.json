@@ -1,0 +1,35 @@
+{
+  "total_chars": 2176,
+  "avg_sentence_len": 18.3,
+  "sentence_len_std": 13.2,
+  "avg_paragraph_len": 25,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 102
+  },
+  "vocabulary_diversity": 0.283,
+  "top_patterns": [
+    "陆明(7次)",
+    "”陆(7次)",
+    "胡奎(5次)",
+    "“你(3次)",
+    "“那(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(13处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 7,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 42,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 53,
+  "file": "第53章.txt"
+}

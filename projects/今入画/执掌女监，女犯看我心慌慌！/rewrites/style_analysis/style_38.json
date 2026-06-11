@@ -1,0 +1,35 @@
+{
+  "total_chars": 2116,
+  "avg_sentence_len": 22.1,
+  "sentence_len_std": 20.1,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 130
+  },
+  "vocabulary_diversity": 0.265,
+  "top_patterns": [
+    "李命(10次)",
+    "谭青(3次)",
+    "自己(3次)",
+    "“监(3次)",
+    "“我(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(12处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 26,
+    "问号": 1,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 38,
+  "file": "第38章.txt"
+}

@@ -1,0 +1,35 @@
+{
+  "total_chars": 2057,
+  "avg_sentence_len": 26.4,
+  "sentence_len_std": 17.8,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 113
+  },
+  "vocabulary_diversity": 0.24,
+  "top_patterns": [
+    "李命(6次)",
+    "只见(5次)",
+    "谭青(5次)",
+    "叶莓(3次)",
+    "监狱(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "simile_count": 6,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 19,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 32,
+    "问号": 0,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 69,
+  "file": "第69章.txt"
+}

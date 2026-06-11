@@ -1,0 +1,32 @@
+{
+  "total_chars": 1312,
+  "avg_sentence_len": 37.6,
+  "sentence_len_std": 23.3,
+  "avg_paragraph_len": 40,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 109
+  },
+  "vocabulary_diversity": 0.308,
+  "top_patterns": [
+    "柳若(3次)",
+    "李命(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 16,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 16,
+    "问号": 0,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 176,
+  "file": "第176章.txt"
+}

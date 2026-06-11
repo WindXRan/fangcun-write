@@ -1,0 +1,29 @@
+{
+  "total_chars": 2154,
+  "avg_sentence_len": 46.8,
+  "sentence_len_std": 31.2,
+  "avg_paragraph_len": 60,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 151
+  },
+  "vocabulary_diversity": 0.254,
+  "top_patterns": [
+    "李命(4次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 6,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 20,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 18,
+    "问号": 0,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 154,
+  "file": "第154章.txt"
+}

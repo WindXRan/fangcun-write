@@ -1,0 +1,30 @@
+{
+  "total_chars": 1996,
+  "avg_sentence_len": 41.4,
+  "sentence_len_std": 29.7,
+  "avg_paragraph_len": 46,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 109
+  },
+  "vocabulary_diversity": 0.264,
+  "top_patterns": [
+    "李命(6次)",
+    "周琳(4次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 15,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 18,
+    "问号": 3,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 261,
+  "file": "第261章.txt"
+}

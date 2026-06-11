@@ -1,0 +1,33 @@
+{
+  "total_chars": 2156,
+  "avg_sentence_len": 37.3,
+  "sentence_len_std": 26.6,
+  "avg_paragraph_len": 54,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 130
+  },
+  "vocabulary_diversity": 0.262,
+  "top_patterns": [
+    "李命(10次)",
+    "沈佳(8次)",
+    "“监(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 3,
+  "ellipsis_count": 14,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 13,
+    "问号": 1,
+    "叹号": 14,
+    "引号": 0
+  },
+  "chapter": 133,
+  "file": "第133章.txt"
+}

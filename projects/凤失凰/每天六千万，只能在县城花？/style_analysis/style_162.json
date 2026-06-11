@@ -1,0 +1,35 @@
+{
+  "total_chars": 2329,
+  "avg_sentence_len": 20.8,
+  "sentence_len_std": 13.1,
+  "avg_paragraph_len": 28,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 76
+  },
+  "vocabulary_diversity": 0.256,
+  "top_patterns": [
+    "陈越(9次)",
+    "白崇(7次)",
+    "于颖(5次)",
+    "沈璃(4次)",
+    "王启(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 7,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 43,
+    "问号": 3,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 162,
+  "file": "第162章.txt"
+}

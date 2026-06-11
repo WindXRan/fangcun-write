@@ -1,0 +1,30 @@
+{
+  "total_chars": 2089,
+  "avg_sentence_len": 39.4,
+  "sentence_len_std": 18.3,
+  "avg_paragraph_len": 45,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 111
+  },
+  "vocabulary_diversity": 0.254,
+  "top_patterns": [
+    "李命(7次)",
+    "周琳(4次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 1,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 16,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 28,
+    "问号": 0,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 382,
+  "file": "第382章.txt"
+}

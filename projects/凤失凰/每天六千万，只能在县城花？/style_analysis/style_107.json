@@ -1,0 +1,34 @@
+{
+  "total_chars": 2060,
+  "avg_sentence_len": 24.8,
+  "sentence_len_std": 21.3,
+  "avg_paragraph_len": 36,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 139
+  },
+  "vocabulary_diversity": 0.29,
+  "top_patterns": [
+    "陆明(9次)",
+    "”方(8次)",
+    "”陆(6次)",
+    "方瑜(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 26,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 107,
+  "file": "第107章.txt"
+}

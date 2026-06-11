@@ -1,0 +1,31 @@
+{
+  "total_chars": 1933,
+  "avg_sentence_len": 31.1,
+  "sentence_len_std": 20.0,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 112
+  },
+  "vocabulary_diversity": 0.291,
+  "top_patterns": [
+    "周琳(10次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 15,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 23,
+    "问号": 2,
+    "叹号": 9,
+    "引号": 0
+  },
+  "chapter": 188,
+  "file": "第188章.txt"
+}

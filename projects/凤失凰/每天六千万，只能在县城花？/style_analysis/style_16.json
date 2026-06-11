@@ -1,0 +1,35 @@
+{
+  "total_chars": 2443,
+  "avg_sentence_len": 16.3,
+  "sentence_len_std": 10.4,
+  "avg_paragraph_len": 23,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 88
+  },
+  "vocabulary_diversity": 0.284,
+  "top_patterns": [
+    "王大(14次)",
+    "陆明(10次)",
+    "“王(5次)",
+    "万家(4次)",
+    "“你(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(14处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 0,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 72,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 16,
+  "file": "第16章.txt"
+}

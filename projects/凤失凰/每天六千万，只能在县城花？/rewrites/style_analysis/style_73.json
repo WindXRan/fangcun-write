@@ -1,0 +1,35 @@
+{
+  "total_chars": 2220,
+  "avg_sentence_len": 18.7,
+  "sentence_len_std": 13.3,
+  "avg_paragraph_len": 22,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 85
+  },
+  "vocabulary_diversity": 0.256,
+  "top_patterns": [
+    "孙长(12次)",
+    "陆明(9次)",
+    "白崇(9次)",
+    "王卫(6次)",
+    "“孙(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 11,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 49,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 73,
+  "file": "第73章.txt"
+}

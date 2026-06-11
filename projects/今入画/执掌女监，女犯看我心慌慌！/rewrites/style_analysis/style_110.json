@@ -1,0 +1,33 @@
+{
+  "total_chars": 1734,
+  "avg_sentence_len": 22.1,
+  "sentence_len_std": 13.5,
+  "avg_paragraph_len": 29,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 60
+  },
+  "vocabulary_diversity": 0.289,
+  "top_patterns": [
+    "李命(15次)",
+    "许清(3次)",
+    "谭程(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 19,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 23,
+    "问号": 3,
+    "叹号": 21,
+    "引号": 0
+  },
+  "chapter": 110,
+  "file": "第110章.txt"
+}

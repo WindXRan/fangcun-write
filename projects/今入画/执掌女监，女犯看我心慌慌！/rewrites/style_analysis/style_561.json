@@ -1,0 +1,29 @@
+{
+  "total_chars": 2214,
+  "avg_sentence_len": 40.1,
+  "sentence_len_std": 19.5,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 86
+  },
+  "vocabulary_diversity": 0.283,
+  "top_patterns": [
+    "李命(14次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 28,
+    "问号": 0,
+    "叹号": 17,
+    "引号": 0
+  },
+  "chapter": 561,
+  "file": "第561章.txt"
+}

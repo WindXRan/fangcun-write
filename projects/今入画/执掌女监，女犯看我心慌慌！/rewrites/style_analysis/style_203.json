@@ -1,0 +1,32 @@
+{
+  "total_chars": 2117,
+  "avg_sentence_len": 39.8,
+  "sentence_len_std": 21.6,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 82
+  },
+  "vocabulary_diversity": 0.263,
+  "top_patterns": [
+    "李命(3次)",
+    "围观(3次)",
+    "可是(3次)",
+    "而李(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 11,
+    "问号": 0,
+    "叹号": 27,
+    "引号": 0
+  },
+  "chapter": 203,
+  "file": "第203章.txt"
+}

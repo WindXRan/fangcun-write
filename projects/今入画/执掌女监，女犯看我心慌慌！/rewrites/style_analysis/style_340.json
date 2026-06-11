@@ -1,0 +1,29 @@
+{
+  "total_chars": 2098,
+  "avg_sentence_len": 44.7,
+  "sentence_len_std": 25.9,
+  "avg_paragraph_len": 49,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 118
+  },
+  "vocabulary_diversity": 0.275,
+  "top_patterns": [
+    "李命(11次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 6,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 2,
+  "ellipsis_count": 13,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 19,
+    "问号": 1,
+    "叹号": 13,
+    "引号": 0
+  },
+  "chapter": 340,
+  "file": "第340章.txt"
+}

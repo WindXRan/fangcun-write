@@ -1,0 +1,31 @@
+{
+  "total_chars": 1304,
+  "avg_sentence_len": 22.3,
+  "sentence_len_std": 17.2,
+  "avg_paragraph_len": 36,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 91
+  },
+  "vocabulary_diversity": 0.354,
+  "top_patterns": [
+    "林希(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 11,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 17,
+    "问号": 1,
+    "叹号": 10,
+    "引号": 0
+  },
+  "chapter": 112,
+  "file": "第112章.txt"
+}

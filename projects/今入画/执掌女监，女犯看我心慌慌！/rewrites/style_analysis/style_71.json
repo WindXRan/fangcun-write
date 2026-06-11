@@ -1,0 +1,35 @@
+{
+  "total_chars": 2103,
+  "avg_sentence_len": 23.6,
+  "sentence_len_std": 20.0,
+  "avg_paragraph_len": 46,
+  "paragraph_len_range": {
+    "min": 12,
+    "max": 104
+  },
+  "vocabulary_diversity": 0.271,
+  "top_patterns": [
+    "林希(5次)",
+    "”林(4次)",
+    "李命(4次)",
+    "张文(3次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(16处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 15,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 21,
+    "问号": 1,
+    "叹号": 15,
+    "引号": 0
+  },
+  "chapter": 71,
+  "file": "第71章.txt"
+}

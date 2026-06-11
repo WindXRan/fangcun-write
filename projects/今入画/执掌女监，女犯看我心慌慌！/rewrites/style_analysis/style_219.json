@@ -1,0 +1,33 @@
+{
+  "total_chars": 2117,
+  "avg_sentence_len": 30.5,
+  "sentence_len_std": 19.0,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 72
+  },
+  "vocabulary_diversity": 0.248,
+  "top_patterns": [
+    "夏红(8次)",
+    "沈佳(8次)",
+    "李命(7次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 18,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 26,
+    "问号": 3,
+    "叹号": 14,
+    "引号": 0
+  },
+  "chapter": 219,
+  "file": "第219章.txt"
+}

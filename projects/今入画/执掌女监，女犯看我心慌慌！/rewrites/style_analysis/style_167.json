@@ -1,0 +1,32 @@
+{
+  "total_chars": 1616,
+  "avg_sentence_len": 31.9,
+  "sentence_len_std": 24.5,
+  "avg_paragraph_len": 41,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 107
+  },
+  "vocabulary_diversity": 0.297,
+  "top_patterns": [
+    "柳若(3次)",
+    "柳如(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 23,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 12,
+    "问号": 0,
+    "叹号": 13,
+    "引号": 0
+  },
+  "chapter": 167,
+  "file": "第167章.txt"
+}

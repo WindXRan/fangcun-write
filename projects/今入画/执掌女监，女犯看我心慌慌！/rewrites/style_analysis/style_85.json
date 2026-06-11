@@ -1,0 +1,33 @@
+{
+  "total_chars": 1063,
+  "avg_sentence_len": 19.6,
+  "sentence_len_std": 12.7,
+  "avg_paragraph_len": 34,
+  "paragraph_len_range": {
+    "min": 11,
+    "max": 92
+  },
+  "vocabulary_diversity": 0.347,
+  "top_patterns": [
+    "李命(5次)",
+    "”许(4次)",
+    "许清(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 17,
+    "问号": 1,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 85,
+  "file": "第85章.txt"
+}

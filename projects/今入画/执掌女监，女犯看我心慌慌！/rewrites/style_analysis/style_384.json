@@ -1,0 +1,33 @@
+{
+  "total_chars": 2062,
+  "avg_sentence_len": 37.1,
+  "sentence_len_std": 19.5,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 12,
+    "max": 121
+  },
+  "vocabulary_diversity": 0.248,
+  "top_patterns": [
+    "陈知(6次)",
+    "李命(5次)",
+    "李由(4次)",
+    "“不(3次)",
+    "“我(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 3,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 18,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 23,
+    "问号": 1,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 384,
+  "file": "第384章.txt"
+}

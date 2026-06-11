@@ -1,0 +1,34 @@
+{
+  "total_chars": 2058,
+  "avg_sentence_len": 24.9,
+  "sentence_len_std": 16.5,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 110
+  },
+  "vocabulary_diversity": 0.274,
+  "top_patterns": [
+    "李命(5次)",
+    "”夏(3次)",
+    "沈佳(3次)",
+    "夏红(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 20,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 24,
+    "问号": 1,
+    "叹号": 16,
+    "引号": 0
+  },
+  "chapter": 104,
+  "file": "第104章.txt"
+}

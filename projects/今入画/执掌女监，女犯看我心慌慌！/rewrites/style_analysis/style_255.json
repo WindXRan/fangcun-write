@@ -1,0 +1,33 @@
+{
+  "total_chars": 2368,
+  "avg_sentence_len": 33.8,
+  "sentence_len_std": 22.4,
+  "avg_paragraph_len": 41,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 123
+  },
+  "vocabulary_diversity": 0.233,
+  "top_patterns": [
+    "周琳(6次)",
+    "红牙(4次)",
+    "而李(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 28,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 24,
+    "问号": 1,
+    "叹号": 18,
+    "引号": 0
+  },
+  "chapter": 255,
+  "file": "第255章.txt"
+}

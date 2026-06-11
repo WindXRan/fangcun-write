@@ -1,0 +1,34 @@
+{
+  "total_chars": 2083,
+  "avg_sentence_len": 37.5,
+  "sentence_len_std": 21.0,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 93
+  },
+  "vocabulary_diversity": 0.253,
+  "top_patterns": [
+    "周琳(5次)",
+    "李命(4次)",
+    "于是(3次)",
+    "“你(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 13,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 27,
+    "问号": 1,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 488,
+  "file": "第488章.txt"
+}

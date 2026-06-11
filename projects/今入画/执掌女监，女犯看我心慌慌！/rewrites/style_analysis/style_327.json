@@ -1,0 +1,32 @@
+{
+  "total_chars": 2250,
+  "avg_sentence_len": 49.9,
+  "sentence_len_std": 37.1,
+  "avg_paragraph_len": 66,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 156
+  },
+  "vocabulary_diversity": 0.234,
+  "top_patterns": [
+    "“而(5次)",
+    "顾婉(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 11,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 12,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 327,
+  "file": "第327章.txt"
+}

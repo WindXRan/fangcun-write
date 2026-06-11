@@ -1,0 +1,31 @@
+{
+  "total_chars": 2057,
+  "avg_sentence_len": 39.3,
+  "sentence_len_std": 25.5,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 149
+  },
+  "vocabulary_diversity": 0.25,
+  "top_patterns": [
+    "陈知(8次)",
+    "李命(4次)",
+    "周琳(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 3,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 16,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 27,
+    "问号": 0,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 596,
+  "file": "第596章.txt"
+}

@@ -1,0 +1,32 @@
+{
+  "total_chars": 2080,
+  "avg_sentence_len": 46.3,
+  "sentence_len_std": 25.0,
+  "avg_paragraph_len": 53,
+  "paragraph_len_range": {
+    "min": 11,
+    "max": 112
+  },
+  "vocabulary_diversity": 0.254,
+  "top_patterns": [
+    "李命(6次)",
+    "而李(4次)",
+    "周琳(3次)",
+    "黄莺(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 11,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 20,
+    "问号": 3,
+    "叹号": 9,
+    "引号": 0
+  },
+  "chapter": 248,
+  "file": "第248章.txt"
+}

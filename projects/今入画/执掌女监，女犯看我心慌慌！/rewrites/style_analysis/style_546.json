@@ -1,0 +1,32 @@
+{
+  "total_chars": 2051,
+  "avg_sentence_len": 27.7,
+  "sentence_len_std": 16.2,
+  "avg_paragraph_len": 34,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 99
+  },
+  "vocabulary_diversity": 0.256,
+  "top_patterns": [
+    "李命(10次)",
+    "韩素(6次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 5,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 27,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 24,
+    "问号": 4,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 546,
+  "file": "第546章.txt"
+}

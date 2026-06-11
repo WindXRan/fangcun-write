@@ -1,0 +1,33 @@
+{
+  "total_chars": 1680,
+  "avg_sentence_len": 21.6,
+  "sentence_len_std": 17.8,
+  "avg_paragraph_len": 36,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 139
+  },
+  "vocabulary_diversity": 0.283,
+  "top_patterns": [
+    "李命(5次)",
+    "林希(3次)",
+    "周琳(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(10处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 26,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 17,
+    "问号": 1,
+    "叹号": 15,
+    "引号": 0
+  },
+  "chapter": 144,
+  "file": "第144章.txt"
+}

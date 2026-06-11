@@ -1,0 +1,35 @@
+{
+  "total_chars": 2151,
+  "avg_sentence_len": 32.6,
+  "sentence_len_std": 26.9,
+  "avg_paragraph_len": 47,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 158
+  },
+  "vocabulary_diversity": 0.241,
+  "top_patterns": [
+    "沈佳(11次)",
+    "李命(5次)",
+    "“沈(3次)",
+    "于是(3次)"
+  ],
+  "rhetorical_features": [
+    "反问(2处)",
+    "短句节奏(3处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 21,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 16,
+    "问号": 2,
+    "叹号": 12,
+    "引号": 0
+  },
+  "chapter": 132,
+  "file": "第132章.txt"
+}

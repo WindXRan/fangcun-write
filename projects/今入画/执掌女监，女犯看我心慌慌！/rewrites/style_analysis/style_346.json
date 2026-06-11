@@ -1,0 +1,33 @@
+{
+  "total_chars": 2121,
+  "avg_sentence_len": 41.3,
+  "sentence_len_std": 26.6,
+  "avg_paragraph_len": 49,
+  "paragraph_len_range": {
+    "min": 12,
+    "max": 126
+  },
+  "vocabulary_diversity": 0.272,
+  "top_patterns": [
+    "赛丽(5次)",
+    "李命(5次)",
+    "可是(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 15,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 18,
+    "问号": 0,
+    "叹号": 12,
+    "引号": 0
+  },
+  "chapter": 346,
+  "file": "第346章.txt"
+}

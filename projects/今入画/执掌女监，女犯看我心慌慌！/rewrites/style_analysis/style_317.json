@@ -1,0 +1,29 @@
+{
+  "total_chars": 2157,
+  "avg_sentence_len": 43.1,
+  "sentence_len_std": 23.6,
+  "avg_paragraph_len": 50,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 102
+  },
+  "vocabulary_diversity": 0.286,
+  "top_patterns": [
+    "李命(7次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 2,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 2,
+  "ellipsis_count": 8,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 32,
+    "问号": 0,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 317,
+  "file": "第317章.txt"
+}

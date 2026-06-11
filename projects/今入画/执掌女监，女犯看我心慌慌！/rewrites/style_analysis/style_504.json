@@ -1,0 +1,33 @@
+{
+  "total_chars": 2052,
+  "avg_sentence_len": 32.7,
+  "sentence_len_std": 22.7,
+  "avg_paragraph_len": 36,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 112
+  },
+  "vocabulary_diversity": 0.232,
+  "top_patterns": [
+    "周琳(5次)",
+    "李命(5次)",
+    "可是(5次)",
+    "“我(5次)",
+    "而李(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 3,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 45,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 16,
+    "问号": 0,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 504,
+  "file": "第504章.txt"
+}

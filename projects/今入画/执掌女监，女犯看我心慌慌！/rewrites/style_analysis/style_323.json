@@ -1,0 +1,33 @@
+{
+  "total_chars": 2103,
+  "avg_sentence_len": 41.1,
+  "sentence_len_std": 26.1,
+  "avg_paragraph_len": 49,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 131
+  },
+  "vocabulary_diversity": 0.247,
+  "top_patterns": [
+    "林希(5次)",
+    "张雅(4次)",
+    "“你(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 36,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 14,
+    "问号": 2,
+    "叹号": 5,
+    "引号": 0
+  },
+  "chapter": 323,
+  "file": "第323章.txt"
+}

@@ -1,0 +1,31 @@
+{
+  "total_chars": 2102,
+  "avg_sentence_len": 34.7,
+  "sentence_len_std": 23.9,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 101
+  },
+  "vocabulary_diversity": 0.247,
+  "top_patterns": [
+    "张雅(12次)",
+    "李命(4次)",
+    "怎么(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 7,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 23,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 16,
+    "问号": 2,
+    "叹号": 16,
+    "引号": 0
+  },
+  "chapter": 319,
+  "file": "第319章.txt"
+}

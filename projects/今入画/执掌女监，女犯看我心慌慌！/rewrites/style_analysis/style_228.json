@@ -1,0 +1,31 @@
+{
+  "total_chars": 1756,
+  "avg_sentence_len": 35.6,
+  "sentence_len_std": 20.6,
+  "avg_paragraph_len": 41,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 106
+  },
+  "vocabulary_diversity": 0.247,
+  "top_patterns": [
+    "黄莺(6次)",
+    "王可(5次)",
+    "可是(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 5,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 33,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 18,
+    "问号": 1,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 228,
+  "file": "第228章.txt"
+}

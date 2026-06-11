@@ -1,0 +1,33 @@
+{
+  "total_chars": 2195,
+  "avg_sentence_len": 23.6,
+  "sentence_len_std": 17.5,
+  "avg_paragraph_len": 34,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 97
+  },
+  "vocabulary_diversity": 0.259,
+  "top_patterns": [
+    "二管(5次)",
+    "女生(3次)",
+    "“这(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 5,
+  "direct_emotion_count": 3,
+  "ellipsis_count": 35,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 19,
+    "问号": 3,
+    "叹号": 14,
+    "引号": 0
+  },
+  "chapter": 505,
+  "file": "第505章.txt"
+}

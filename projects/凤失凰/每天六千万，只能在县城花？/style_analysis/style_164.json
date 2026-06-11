@@ -1,0 +1,35 @@
+{
+  "total_chars": 2142,
+  "avg_sentence_len": 21.7,
+  "sentence_len_std": 14.6,
+  "avg_paragraph_len": 27,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 91
+  },
+  "vocabulary_diversity": 0.318,
+  "top_patterns": [
+    "王启(9次)",
+    "顾怀(8次)",
+    "“领(4次)",
+    "“不(3次)",
+    "一个(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 39,
+    "问号": 4,
+    "叹号": 1,
+    "引号": 0
+  },
+  "chapter": 164,
+  "file": "第164章.txt"
+}

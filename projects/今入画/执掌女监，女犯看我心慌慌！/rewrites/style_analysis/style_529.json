@@ -1,0 +1,34 @@
+{
+  "total_chars": 2098,
+  "avg_sentence_len": 30.5,
+  "sentence_len_std": 21.2,
+  "avg_paragraph_len": 47,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 112
+  },
+  "vocabulary_diversity": 0.247,
+  "top_patterns": [
+    "黄玉(7次)",
+    "李命(5次)",
+    "“我(4次)",
+    "自己(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 29,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 11,
+    "问号": 1,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 529,
+  "file": "第529章.txt"
+}

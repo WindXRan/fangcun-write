@@ -1,0 +1,35 @@
+{
+  "total_chars": 2071,
+  "avg_sentence_len": 29.9,
+  "sentence_len_std": 18.2,
+  "avg_paragraph_len": 38,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 101
+  },
+  "vocabulary_diversity": 0.226,
+  "top_patterns": [
+    "二管(10次)",
+    "李命(4次)",
+    "不过(4次)",
+    "“监(3次)",
+    "于是(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 33,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 18,
+    "问号": 4,
+    "叹号": 15,
+    "引号": 0
+  },
+  "chapter": 508,
+  "file": "第508章.txt"
+}

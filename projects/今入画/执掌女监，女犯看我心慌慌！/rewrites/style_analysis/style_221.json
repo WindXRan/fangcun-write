@@ -1,0 +1,31 @@
+{
+  "total_chars": 2181,
+  "avg_sentence_len": 35.8,
+  "sentence_len_std": 20.3,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 107
+  },
+  "vocabulary_diversity": 0.252,
+  "top_patterns": [
+    "李命(7次)",
+    "谭青(5次)",
+    "“监(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 5,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 8,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 28,
+    "问号": 0,
+    "叹号": 14,
+    "引号": 0
+  },
+  "chapter": 221,
+  "file": "第221章.txt"
+}

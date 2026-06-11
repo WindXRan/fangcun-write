@@ -1,0 +1,32 @@
+{
+  "total_chars": 2070,
+  "avg_sentence_len": 33.0,
+  "sentence_len_std": 19.1,
+  "avg_paragraph_len": 46,
+  "paragraph_len_range": {
+    "min": 12,
+    "max": 134
+  },
+  "vocabulary_diversity": 0.267,
+  "top_patterns": [
+    "李命(7次)",
+    "周琳(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 22,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 16,
+    "问号": 0,
+    "叹号": 13,
+    "引号": 0
+  },
+  "chapter": 240,
+  "file": "第240章.txt"
+}

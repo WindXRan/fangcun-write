@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "created": "2026-06-11T21:15:23",
+  "updated": "2026-06-11T21:16:59",
+  "phases": {
+    "open-book": {
+      "status": "running",
+      "started": "2026-06-11T21:16:59"
+    }
+  },
+  "chapters": {},
+  "runs": []
+}

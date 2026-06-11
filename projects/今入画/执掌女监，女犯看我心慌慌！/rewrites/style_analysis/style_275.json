@@ -1,0 +1,30 @@
+{
+  "total_chars": 2065,
+  "avg_sentence_len": 47.2,
+  "sentence_len_std": 29.4,
+  "avg_paragraph_len": 52,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 119
+  },
+  "vocabulary_diversity": 0.26,
+  "top_patterns": [
+    "沈佳(5次)",
+    "夏红(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 4,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 17,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 22,
+    "问号": 2,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 275,
+  "file": "第275章.txt"
+}

@@ -15,15 +15,15 @@ description: |
 ## 快速开始
 
 ```bash
-cd .agents/skills/FanqieZhiShu
+cd .agents/skills/story-scan
 
-# 一键运行（爬虫+构建+启动看板）
+# 一键运行（爬虫+构建+启动书库）
 python run.py all
 
 # 或分步执行
 python run.py scrape    # 采集数据
 python run.py build     # 构建分析
-python run.py serve     # 启动看板
+python run.py serve     # 启动书库（含排行榜）
 ```
 
 ---
@@ -34,7 +34,7 @@ python run.py serve     # 启动看板
 |------|------|------|
 | `python run.py scrape` | 采集数据 | 爬取番茄小说四大榜单 Top 30 |
 | `python run.py build` | 构建分析 | 生成趋势数据、市场热点、作者分析 |
-| `python run.py serve` | 启动看板 | 本地 HTTP 服务，端口 8000 |
+| `python run.py serve` | 启动书库 | 跳转到 story-web（端口5000） |
 | `python run.py all` | 完整流程 | 采集→构建→启动 |
 | `python run.py status` | 查看状态 | 显示数据文件状态 |
 
@@ -42,10 +42,11 @@ python run.py serve     # 启动看板
 
 ## 看板地址
 
-启动服务后访问：
-- **榜单看板**: http://localhost:8000
-- **趋势风向**: http://localhost:8000/trend.html
-- **创作灵感**: http://localhost:8000/author.html
+启动服务后访问（统一入口 http://localhost:5000）：
+- **书库首页**: http://localhost:5000/
+- **番茄排行榜**: http://localhost:5000/ranks/
+- **趋势风向**: http://localhost:5000/ranks/trend.html
+- **创作灵感**: http://localhost:5000/ranks/author.html
 
 ---
 

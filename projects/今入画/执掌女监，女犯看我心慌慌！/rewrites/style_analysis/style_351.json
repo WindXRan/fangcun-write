@@ -1,0 +1,32 @@
+{
+  "total_chars": 2061,
+  "avg_sentence_len": 40.1,
+  "sentence_len_std": 25.5,
+  "avg_paragraph_len": 49,
+  "paragraph_len_range": {
+    "min": 13,
+    "max": 163
+  },
+  "vocabulary_diversity": 0.237,
+  "top_patterns": [
+    "李命(6次)",
+    "许清(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 29,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 16,
+    "问号": 1,
+    "叹号": 9,
+    "引号": 0
+  },
+  "chapter": 351,
+  "file": "第351章.txt"
+}

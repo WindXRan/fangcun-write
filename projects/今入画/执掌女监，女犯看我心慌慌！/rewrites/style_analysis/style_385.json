@@ -1,0 +1,33 @@
+{
+  "total_chars": 2091,
+  "avg_sentence_len": 31.0,
+  "sentence_len_std": 17.5,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 118
+  },
+  "vocabulary_diversity": 0.256,
+  "top_patterns": [
+    "李命(7次)",
+    "周琳(5次)",
+    "于是(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 17,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 25,
+    "问号": 0,
+    "叹号": 13,
+    "引号": 0
+  },
+  "chapter": 385,
+  "file": "第385章.txt"
+}

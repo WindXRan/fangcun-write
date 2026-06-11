@@ -1,0 +1,31 @@
+{
+  "total_chars": 2104,
+  "avg_sentence_len": 37.9,
+  "sentence_len_std": 22.6,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 112
+  },
+  "vocabulary_diversity": 0.246,
+  "top_patterns": [
+    "林希(5次)",
+    "周琳(4次)",
+    "李命(4次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 7,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 26,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 23,
+    "问号": 0,
+    "叹号": 10,
+    "引号": 0
+  },
+  "chapter": 357,
+  "file": "第357章.txt"
+}

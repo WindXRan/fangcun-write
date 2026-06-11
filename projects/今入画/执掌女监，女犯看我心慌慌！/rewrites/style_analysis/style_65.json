@@ -1,0 +1,35 @@
+{
+  "total_chars": 2074,
+  "avg_sentence_len": 25.4,
+  "sentence_len_std": 19.6,
+  "avg_paragraph_len": 52,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 150
+  },
+  "vocabulary_diversity": 0.277,
+  "top_patterns": [
+    "”林(7次)",
+    "”男(5次)",
+    "“哎(4次)",
+    "林希(3次)",
+    "“爸(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(12处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 17,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 24,
+    "问号": 0,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 65,
+  "file": "第65章.txt"
+}

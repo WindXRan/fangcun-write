@@ -1,0 +1,206 @@
+{
+  "version": 1,
+  "created": "2026-06-11T19:28:56",
+  "updated": "2026-06-11T21:42:40",
+  "phases": {
+    "guides": {
+      "status": "running",
+      "started": "2026-06-11T21:41:07"
+    },
+    "write": {
+      "status": "running",
+      "started": "2026-06-11T21:38:06"
+    },
+    "open-book": {
+      "status": "done",
+      "started": "2026-06-11T21:33:16",
+      "finished": "2026-06-11T21:35:27"
+    },
+    "style-analysis": {
+      "status": "done",
+      "started": "2026-06-11T21:35:27",
+      "finished": "2026-06-11T21:35:34"
+    }
+  },
+  "chapters": {
+    "1": {
+      "status": "writing",
+      "timestamp": "2026-06-11T21:42:40"
+    },
+    "2": {
+      "status": "writing",
+      "timestamp": "2026-06-11T21:42:40"
+    },
+    "3": {
+      "status": "writing",
+      "timestamp": "2026-06-11T21:42:40"
+    },
+    "4": {
+      "status": "writing",
+      "timestamp": "2026-06-11T21:42:40"
+    },
+    "5": {
+      "status": "writing",
+      "timestamp": "2026-06-11T21:42:40"
+    },
+    "6": {
+      "status": "writing",
+      "timestamp": "2026-06-11T21:42:40"
+    },
+    "7": {
+      "status": "writing",
+      "timestamp": "2026-06-11T21:42:40"
+    },
+    "8": {
+      "status": "writing",
+      "timestamp": "2026-06-11T21:42:40"
+    },
+    "9": {
+      "status": "writing",
+      "timestamp": "2026-06-11T21:42:40"
+    },
+    "10": {
+      "status": "writing",
+      "timestamp": "2026-06-11T21:42:40"
+    }
+  },
+  "runs": [
+    {
+      "id": "write_1781177497",
+      "phase": "write",
+      "started": "2026-06-11T19:31:37",
+      "range": [
+        1,
+        10
+      ],
+      "model": "deepseek-v4-flash",
+      "finished": "2026-06-11T19:33:44",
+      "ok": 10,
+      "fail": 0
+    },
+    {
+      "id": "write_1781178361",
+      "phase": "write",
+      "started": "2026-06-11T19:46:01",
+      "range": [
+        9,
+        9
+      ],
+      "model": "deepseek-v4-flash",
+      "finished": "2026-06-11T19:46:02",
+      "ok": 0,
+      "fail": 0
+    },
+    {
+      "id": "write_1781178434",
+      "phase": "write",
+      "started": "2026-06-11T19:47:14",
+      "range": [
+        9,
+        9
+      ],
+      "model": "deepseek-v4-flash",
+      "finished": "2026-06-11T19:47:45",
+      "ok": 1,
+      "fail": 0
+    },
+    {
+      "id": "write_1781178604",
+      "phase": "write",
+      "started": "2026-06-11T19:50:04",
+      "range": [
+        9,
+        9
+      ],
+      "model": "deepseek-v4-flash",
+      "finished": "2026-06-11T19:50:31",
+      "ok": 1,
+      "fail": 0
+    },
+    {
+      "id": "write_1781178727",
+      "phase": "write",
+      "started": "2026-06-11T19:52:07",
+      "range": [
+        4,
+        4
+      ],
+      "model": "deepseek-v4-flash"
+    },
+    {
+      "id": "write_1781178876",
+      "phase": "write",
+      "started": "2026-06-11T19:54:36",
+      "range": [
+        7,
+        10
+      ],
+      "model": "deepseek-v4-flash",
+      "finished": "2026-06-11T19:55:05",
+      "ok": 3,
+      "fail": 0
+    },
+    {
+      "id": "write_1781178976",
+      "phase": "write",
+      "started": "2026-06-11T19:56:16",
+      "range": [
+        4,
+        4
+      ],
+      "model": "deepseek-v4-flash",
+      "finished": "2026-06-11T19:56:46",
+      "ok": 1,
+      "fail": 0
+    },
+    {
+      "id": "write_1781179157",
+      "phase": "write",
+      "started": "2026-06-11T19:59:17",
+      "range": [
+        4,
+        4
+      ],
+      "model": "deepseek-v4-flash",
+      "finished": "2026-06-11T20:00:20",
+      "ok": 1,
+      "fail": 0
+    },
+    {
+      "id": "write_1781179517",
+      "phase": "write",
+      "started": "2026-06-11T20:05:17",
+      "range": [
+        4,
+        4
+      ],
+      "model": "deepseek-v4-flash",
+      "finished": "2026-06-11T20:05:51",
+      "ok": 1,
+      "fail": 0
+    },
+    {
+      "id": "write_1781179701",
+      "phase": "write",
+      "started": "2026-06-11T20:08:21",
+      "range": [
+        4,
+        4
+      ],
+      "model": "deepseek-v4-flash",
+      "finished": "2026-06-11T20:08:43",
+      "ok": 1,
+      "fail": 0
+    },
+    {
+      "id": "write_1781185086",
+      "phase": "write",
+      "started": "2026-06-11T21:38:06",
+      "range": [
+        1,
+        10
+      ],
+      "model": "deepseek-v4-flash"
+    }
+  ]
+}

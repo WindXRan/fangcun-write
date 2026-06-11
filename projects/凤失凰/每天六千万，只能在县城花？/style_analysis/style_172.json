@@ -1,0 +1,35 @@
+{
+  "total_chars": 2102,
+  "avg_sentence_len": 20.9,
+  "sentence_len_std": 16.2,
+  "avg_paragraph_len": 29,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 93
+  },
+  "vocabulary_diversity": 0.268,
+  "top_patterns": [
+    "”陆(9次)",
+    "陆明(9次)",
+    "苏国(9次)",
+    "”苏(6次)",
+    "“苏(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(10处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 4,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 48,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 172,
+  "file": "第172章.txt"
+}

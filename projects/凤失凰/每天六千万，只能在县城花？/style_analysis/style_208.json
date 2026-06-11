@@ -1,0 +1,35 @@
+{
+  "total_chars": 2164,
+  "avg_sentence_len": 18.6,
+  "sentence_len_std": 12.3,
+  "avg_paragraph_len": 34,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 93
+  },
+  "vocabulary_diversity": 0.311,
+  "top_patterns": [
+    "陆明(9次)",
+    "”孟(8次)",
+    "孟祥(6次)",
+    "”陆(5次)",
+    "王爱(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(13处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 2,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 29,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 208,
+  "file": "第208章.txt"
+}

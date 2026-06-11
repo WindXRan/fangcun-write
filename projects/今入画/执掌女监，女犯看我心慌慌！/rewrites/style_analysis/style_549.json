@@ -1,0 +1,33 @@
+{
+  "total_chars": 2140,
+  "avg_sentence_len": 30.4,
+  "sentence_len_std": 18.2,
+  "avg_paragraph_len": 36,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 95
+  },
+  "vocabulary_diversity": 0.242,
+  "top_patterns": [
+    "李命(8次)",
+    "韩素(5次)",
+    "“我(4次)",
+    "服务(4次)",
+    "“两(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 14,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 31,
+    "问号": 1,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 549,
+  "file": "第549章.txt"
+}

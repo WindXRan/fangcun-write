@@ -1,0 +1,32 @@
+{
+  "total_chars": 2082,
+  "avg_sentence_len": 34.3,
+  "sentence_len_std": 21.2,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 86
+  },
+  "vocabulary_diversity": 0.259,
+  "top_patterns": [
+    "叶莓(7次)",
+    "李命(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 5,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 19,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 17,
+    "问号": 5,
+    "叹号": 9,
+    "引号": 0
+  },
+  "chapter": 302,
+  "file": "第302章.txt"
+}

@@ -1,0 +1,31 @@
+{
+  "total_chars": 2059,
+  "avg_sentence_len": 37.0,
+  "sentence_len_std": 19.9,
+  "avg_paragraph_len": 40,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 93
+  },
+  "vocabulary_diversity": 0.268,
+  "top_patterns": [
+    "李命(12次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 6,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 19,
+    "问号": 0,
+    "叹号": 22,
+    "引号": 0
+  },
+  "chapter": 310,
+  "file": "第310章.txt"
+}

@@ -1,0 +1,32 @@
+{
+  "total_chars": 2142,
+  "avg_sentence_len": 24.7,
+  "sentence_len_std": 19.1,
+  "avg_paragraph_len": 40,
+  "paragraph_len_range": {
+    "min": 11,
+    "max": 115
+  },
+  "vocabulary_diversity": 0.273,
+  "top_patterns": [
+    "李命(11次)",
+    "我们(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(15处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 21,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 28,
+    "问号": 4,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 109,
+  "file": "第109章.txt"
+}

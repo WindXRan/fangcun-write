@@ -1,0 +1,33 @@
+{
+  "total_chars": 2234,
+  "avg_sentence_len": 42.7,
+  "sentence_len_std": 28.3,
+  "avg_paragraph_len": 47,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 118
+  },
+  "vocabulary_diversity": 0.257,
+  "top_patterns": [
+    "李命(6次)",
+    "保安(4次)",
+    "于是(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 15,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 26,
+    "问号": 1,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 441,
+  "file": "第441章.txt"
+}

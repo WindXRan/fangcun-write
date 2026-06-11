@@ -1,0 +1,35 @@
+{
+  "total_chars": 2176,
+  "avg_sentence_len": 18.5,
+  "sentence_len_std": 12.4,
+  "avg_paragraph_len": 26,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 116
+  },
+  "vocabulary_diversity": 0.32,
+  "top_patterns": [
+    "“陆(4次)",
+    "”陆(4次)",
+    "方珩(4次)",
+    "陆明(4次)",
+    "这个(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(12处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 6,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 52,
+    "问号": 1,
+    "叹号": 2,
+    "引号": 0
+  },
+  "chapter": 108,
+  "file": "第108章.txt"
+}

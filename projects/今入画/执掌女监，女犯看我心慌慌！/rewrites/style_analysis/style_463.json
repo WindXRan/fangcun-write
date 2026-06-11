@@ -1,0 +1,30 @@
+{
+  "total_chars": 2102,
+  "avg_sentence_len": 37.5,
+  "sentence_len_std": 21.3,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 102
+  },
+  "vocabulary_diversity": 0.256,
+  "top_patterns": [
+    "李命(6次)",
+    "而这(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 6,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 33,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 19,
+    "问号": 0,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 463,
+  "file": "第463章.txt"
+}

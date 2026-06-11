@@ -1,0 +1,30 @@
+{
+  "total_chars": 2166,
+  "avg_sentence_len": 38.3,
+  "sentence_len_std": 22.6,
+  "avg_paragraph_len": 41,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 110
+  },
+  "vocabulary_diversity": 0.238,
+  "top_patterns": [
+    "姜禾(9次)",
+    "李命(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 14,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 30,
+    "问号": 0,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 475,
+  "file": "第475章.txt"
+}

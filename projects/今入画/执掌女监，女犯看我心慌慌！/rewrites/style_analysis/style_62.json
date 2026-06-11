@@ -1,0 +1,35 @@
+{
+  "total_chars": 2457,
+  "avg_sentence_len": 23.6,
+  "sentence_len_std": 16.9,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 107
+  },
+  "vocabulary_diversity": 0.245,
+  "top_patterns": [
+    "张文(11次)",
+    "李命(6次)",
+    "谭程(5次)",
+    "“谭(4次)",
+    "“张(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(14处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 35,
+    "问号": 2,
+    "叹号": 10,
+    "引号": 0
+  },
+  "chapter": 62,
+  "file": "第62章.txt"
+}

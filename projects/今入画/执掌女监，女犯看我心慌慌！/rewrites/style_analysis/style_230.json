@@ -1,0 +1,33 @@
+{
+  "total_chars": 2028,
+  "avg_sentence_len": 32.2,
+  "sentence_len_std": 23.4,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 115
+  },
+  "vocabulary_diversity": 0.267,
+  "top_patterns": [
+    "李命(7次)",
+    "叶莓(5次)",
+    "监狱(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 15,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 21,
+    "问号": 2,
+    "叹号": 16,
+    "引号": 0
+  },
+  "chapter": 230,
+  "file": "第230章.txt"
+}

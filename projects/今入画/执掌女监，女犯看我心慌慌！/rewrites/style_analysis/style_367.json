@@ -1,0 +1,33 @@
+{
+  "total_chars": 2084,
+  "avg_sentence_len": 36.2,
+  "sentence_len_std": 23.0,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 105
+  },
+  "vocabulary_diversity": 0.246,
+  "top_patterns": [
+    "李命(7次)",
+    "周琳(7次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 9,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 18,
+    "问号": 0,
+    "叹号": 22,
+    "引号": 0
+  },
+  "chapter": 367,
+  "file": "第367章.txt"
+}

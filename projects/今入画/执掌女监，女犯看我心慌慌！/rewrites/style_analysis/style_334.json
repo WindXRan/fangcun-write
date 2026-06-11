@@ -1,0 +1,33 @@
+{
+  "total_chars": 2062,
+  "avg_sentence_len": 41.1,
+  "sentence_len_std": 24.7,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 121
+  },
+  "vocabulary_diversity": 0.274,
+  "top_patterns": [
+    "顾婉(6次)",
+    "林希(5次)",
+    "可是(4次)",
+    "“婉(3次)",
+    "“我(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 4,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 16,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 25,
+    "问号": 0,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 334,
+  "file": "第334章.txt"
+}

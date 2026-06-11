@@ -1,0 +1,33 @@
+{
+  "total_chars": 2195,
+  "avg_sentence_len": 38.2,
+  "sentence_len_std": 25.0,
+  "avg_paragraph_len": 46,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 118
+  },
+  "vocabulary_diversity": 0.248,
+  "top_patterns": [
+    "黄鑫(8次)",
+    "姜禾(4次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 25,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 14,
+    "问号": 0,
+    "叹号": 18,
+    "引号": 0
+  },
+  "chapter": 477,
+  "file": "第477章.txt"
+}

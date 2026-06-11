@@ -1,0 +1,35 @@
+{
+  "total_chars": 2247,
+  "avg_sentence_len": 25.6,
+  "sentence_len_std": 17.8,
+  "avg_paragraph_len": 47,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 176
+  },
+  "vocabulary_diversity": 0.254,
+  "top_patterns": [
+    "李命(10次)",
+    "林希(4次)",
+    "自己(4次)",
+    "但是(3次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 24,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 17,
+    "问号": 2,
+    "叹号": 17,
+    "引号": 0
+  },
+  "chapter": 72,
+  "file": "第72章.txt"
+}

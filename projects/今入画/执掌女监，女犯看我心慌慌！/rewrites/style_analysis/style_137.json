@@ -1,0 +1,35 @@
+{
+  "total_chars": 2049,
+  "avg_sentence_len": 25.2,
+  "sentence_len_std": 14.5,
+  "avg_paragraph_len": 38,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 109
+  },
+  "vocabulary_diversity": 0.24,
+  "top_patterns": [
+    "李命(8次)",
+    "沈佳(5次)",
+    "黄莺(4次)",
+    "两人(3次)",
+    "二管(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 30,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 11,
+    "问号": 1,
+    "叹号": 24,
+    "引号": 0
+  },
+  "chapter": 137,
+  "file": "第137章.txt"
+}

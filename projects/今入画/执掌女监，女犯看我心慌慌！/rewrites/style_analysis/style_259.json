@@ -1,0 +1,35 @@
+{
+  "total_chars": 2113,
+  "avg_sentence_len": 40.4,
+  "sentence_len_std": 21.8,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 95
+  },
+  "vocabulary_diversity": 0.261,
+  "top_patterns": [
+    "李命(8次)",
+    "不过(5次)",
+    "周琳(3次)",
+    "红牙(3次)",
+    "只见(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 6,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 25,
+    "问号": 1,
+    "叹号": 15,
+    "引号": 0
+  },
+  "chapter": 259,
+  "file": "第259章.txt"
+}

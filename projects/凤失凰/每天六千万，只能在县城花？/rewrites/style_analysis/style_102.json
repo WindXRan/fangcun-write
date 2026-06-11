@@ -1,0 +1,35 @@
+{
+  "total_chars": 2160,
+  "avg_sentence_len": 21.0,
+  "sentence_len_std": 15.6,
+  "avg_paragraph_len": 27,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 89
+  },
+  "vocabulary_diversity": 0.299,
+  "top_patterns": [
+    "陆明(7次)",
+    "方瑜(6次)",
+    "陆鸢(4次)",
+    "”孙(4次)",
+    "”陈(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 5,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 50,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 102,
+  "file": "第102章.txt"
+}

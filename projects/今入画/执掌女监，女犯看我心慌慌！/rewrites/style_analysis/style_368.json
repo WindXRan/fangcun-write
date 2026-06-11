@@ -1,0 +1,30 @@
+{
+  "total_chars": 2077,
+  "avg_sentence_len": 43.3,
+  "sentence_len_std": 25.1,
+  "avg_paragraph_len": 47,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 104
+  },
+  "vocabulary_diversity": 0.249,
+  "top_patterns": [
+    "可是(3次)",
+    "周琳(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 11,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 17,
+    "问号": 0,
+    "叹号": 13,
+    "引号": 0
+  },
+  "chapter": 368,
+  "file": "第368章.txt"
+}

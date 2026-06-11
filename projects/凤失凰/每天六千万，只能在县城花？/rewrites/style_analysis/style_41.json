@@ -1,0 +1,35 @@
+{
+  "total_chars": 2300,
+  "avg_sentence_len": 17.1,
+  "sentence_len_std": 11.4,
+  "avg_paragraph_len": 20,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 87
+  },
+  "vocabulary_diversity": 0.253,
+  "top_patterns": [
+    "胡奎(18次)",
+    "陆明(14次)",
+    "陈志(7次)",
+    "副科(5次)",
+    "“三(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 4,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 69,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 41,
+  "file": "第41章.txt"
+}

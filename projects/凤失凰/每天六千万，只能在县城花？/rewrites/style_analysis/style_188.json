@@ -1,0 +1,35 @@
+{
+  "total_chars": 2711,
+  "avg_sentence_len": 21.6,
+  "sentence_len_std": 13.5,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 110
+  },
+  "vocabulary_diversity": 0.302,
+  "top_patterns": [
+    "陆明(6次)",
+    "”沈(6次)",
+    "赵一(5次)",
+    "”陆(5次)",
+    "沈璃(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 4,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 43,
+    "问号": 3,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 188,
+  "file": "第188章.txt"
+}

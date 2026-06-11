@@ -1,0 +1,33 @@
+{
+  "total_chars": 1953,
+  "avg_sentence_len": 17.1,
+  "sentence_len_std": 12.5,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 118
+  },
+  "vocabulary_diversity": 0.263,
+  "top_patterns": [
+    "”李(7次)",
+    "”林(6次)",
+    "李命(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(27处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 30,
+    "问号": 1,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 4,
+  "file": "第4章.txt"
+}

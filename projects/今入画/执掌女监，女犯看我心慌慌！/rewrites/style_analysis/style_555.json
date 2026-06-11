@@ -1,0 +1,33 @@
+{
+  "total_chars": 2103,
+  "avg_sentence_len": 33.6,
+  "sentence_len_std": 16.9,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 103
+  },
+  "vocabulary_diversity": 0.251,
+  "top_patterns": [
+    "可是(7次)",
+    "周琳(6次)",
+    "当时(3次)",
+    "所以(3次)",
+    "如果(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 24,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 29,
+    "问号": 0,
+    "叹号": 13,
+    "引号": 0
+  },
+  "chapter": 555,
+  "file": "第555章.txt"
+}

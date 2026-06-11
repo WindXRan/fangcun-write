@@ -1,0 +1,33 @@
+{
+  "total_chars": 2056,
+  "avg_sentence_len": 38.6,
+  "sentence_len_std": 26.6,
+  "avg_paragraph_len": 46,
+  "paragraph_len_range": {
+    "min": 11,
+    "max": 119
+  },
+  "vocabulary_diversity": 0.245,
+  "top_patterns": [
+    "李命(4次)",
+    "黄莺(3次)",
+    "两位(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 21,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 20,
+    "问号": 2,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 578,
+  "file": "第578章.txt"
+}

@@ -110,6 +110,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         "作者名": config.get("author", ""),
         "源书名": config.get("source_book", ""),
         "总章数": str(total_ch),
+        "genre": config.get("genre", ""),
     }
 
     # 需要源文字数时，脚本计算（API 无法跑 PowerShell）
@@ -121,6 +122,15 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         replacements["目标字数_min"] = str(int(target_chars * 0.9))
         replacements["目标字数_max"] = str(int(target_chars * 1.1))
     
+    # 源文脱敏：剥离数字/人名，只留结构（代替直接喂全章源文）
+    if prompt_type in ("plot-guide", "style-guide") and chapter_num:
+        from lib.source_stripper import strip_source_chapter
+        stripped = strip_source_chapter(config, chapter_num)
+        if stripped:
+            replacements["源文结构"] = stripped
+        else:
+            replacements["源文结构"] = "（源文读取失败）"
+
     # style-guide注入源文指标（从缓存的 style_analysis/style_{N}.json 读取）
     if prompt_type == "style-guide" and chapter_num:
         import json
@@ -163,6 +173,7 @@ def process_plot_guide_output(config, chapter_num, ai_output):
     """处理 plot-guide 的输出，合并到模板。
     
     支持格式：带标签输出（标签：内容）
+    合并后自动填充 {N}、{女主名} 等模板变量。
     
     Args:
         config: 配置字典
@@ -174,7 +185,6 @@ def process_plot_guide_output(config, chapter_num, ai_output):
     """
     from pathlib import Path
     
-    # 获取模板路径
     base_dir = config.get("base_dir", os.getcwd())
     template_path = Path(base_dir) / ".agents/skills/story-engine/templates/plot-guide-output.md"
     
@@ -182,14 +192,51 @@ def process_plot_guide_output(config, chapter_num, ai_output):
         print(f"  [WARN] 模板不存在: {template_path}，使用原始输出")
         return ai_output
     
+    # 1. 标签模板合并
     try:
         from template_merger import merge_tagged_output
         result = merge_tagged_output(str(template_path), ai_output)
         print(f"  [OK] 标签模板合并完成")
-        return result
     except Exception as e:
         print(f"  [WARN] 模板合并失败: {e}，使用原始输出")
         return ai_output
+    
+    # 2. 填充模板中的配置变量（{N}、{源文字数}、{女主名} 等）
+    from prompt_loader import make_book_data_replacements
+    replacements = {
+        "N": str(chapter_num),
+        "N03d": f"{chapter_num:03d}",
+    }
+    # 源文字数 / 目标字数
+    from utils import count_source_chars
+    src_chars = count_source_chars(config, chapter_num)
+    replacements["源文字数"] = str(src_chars)
+    replacements["目标字数"] = str(src_chars)
+    replacements["目标字数_min"] = str(int(src_chars * 0.9))
+    replacements["目标字数_max"] = str(int(src_chars * 1.1))
+    # 作者/书名
+    replacements["作者名"] = config.get("author", "")
+    replacements["新书名"] = config.get("book_name", "")
+    replacements["源书名"] = config.get("source_book", "")
+    # 角色变量（从 book_data.json）
+    book_data = None
+    rewrites_dir = config.get("rewrites_dir", "")
+    if rewrites_dir:
+        bd_path = Path(rewrites_dir) / "book_data.json"
+        if bd_path.exists():
+            try:
+                import json
+                book_data = json.loads(bd_path.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+    if book_data:
+        bd_replacements = make_book_data_replacements(book_data)
+        replacements.update(bd_replacements)
+    
+    for key, value in replacements.items():
+        result = result.replace(f"{{{key}}}", str(value))
+    
+    return result
 
 
 def run_one_with_template(config, prompt_type, chapter_num=None, **kwargs):

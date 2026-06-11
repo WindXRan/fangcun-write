@@ -1,0 +1,33 @@
+{
+  "total_chars": 1902,
+  "avg_sentence_len": 39.4,
+  "sentence_len_std": 24.1,
+  "avg_paragraph_len": 50,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 129
+  },
+  "vocabulary_diversity": 0.236,
+  "top_patterns": [
+    "古娅(5次)",
+    "“监(4次)",
+    "李命(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 23,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 18,
+    "问号": 0,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 306,
+  "file": "第306章.txt"
+}

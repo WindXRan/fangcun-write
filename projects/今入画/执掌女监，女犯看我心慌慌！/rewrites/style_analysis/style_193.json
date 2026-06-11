@@ -1,0 +1,33 @@
+{
+  "total_chars": 1799,
+  "avg_sentence_len": 30.4,
+  "sentence_len_std": 19.3,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 74
+  },
+  "vocabulary_diversity": 0.267,
+  "top_patterns": [
+    "李命(6次)",
+    "许清(4次)"
+  ],
+  "rhetorical_features": [
+    "反问(3处)",
+    "短句节奏(5处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 17,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 24,
+    "问号": 2,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 193,
+  "file": "第193章.txt"
+}

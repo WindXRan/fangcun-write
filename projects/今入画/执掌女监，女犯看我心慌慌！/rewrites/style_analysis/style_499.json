@@ -1,0 +1,31 @@
+{
+  "total_chars": 2205,
+  "avg_sentence_len": 35.3,
+  "sentence_len_std": 20.4,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 92
+  },
+  "vocabulary_diversity": 0.215,
+  "top_patterns": [
+    "李命(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)"
+  ],
+  "simile_count": 12,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 21,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 26,
+    "问号": 0,
+    "叹号": 10,
+    "引号": 0
+  },
+  "chapter": 499,
+  "file": "第499章.txt"
+}

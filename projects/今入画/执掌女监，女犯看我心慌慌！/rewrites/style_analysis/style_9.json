@@ -1,0 +1,35 @@
+{
+  "total_chars": 2058,
+  "avg_sentence_len": 15.7,
+  "sentence_len_std": 13.6,
+  "avg_paragraph_len": 45,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 95
+  },
+  "vocabulary_diversity": 0.256,
+  "top_patterns": [
+    "”女(6次)",
+    "李命(4次)",
+    "17(4次)",
+    "“你(3次)",
+    "“报(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(32处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 6,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 33,
+    "问号": 0,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 9,
+  "file": "第9章.txt"
+}

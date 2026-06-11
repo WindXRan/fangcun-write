@@ -1,0 +1,35 @@
+{
+  "total_chars": 2528,
+  "avg_sentence_len": 20.1,
+  "sentence_len_std": 12.5,
+  "avg_paragraph_len": 35,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 129
+  },
+  "vocabulary_diversity": 0.308,
+  "top_patterns": [
+    "林文(7次)",
+    "”陆(6次)",
+    "陈越(5次)",
+    "陆明(4次)",
+    "”陈(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(14处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 44,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 202,
+  "file": "第202章.txt"
+}

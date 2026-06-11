@@ -1,0 +1,32 @@
+{
+  "total_chars": 2209,
+  "avg_sentence_len": 34.5,
+  "sentence_len_std": 21.8,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 113
+  },
+  "vocabulary_diversity": 0.25,
+  "top_patterns": [
+    "黄莺(4次)",
+    "李命(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 2,
+  "ellipsis_count": 14,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 29,
+    "问号": 2,
+    "叹号": 9,
+    "引号": 0
+  },
+  "chapter": 161,
+  "file": "第161章.txt"
+}

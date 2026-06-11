@@ -1,0 +1,31 @@
+{
+  "total_chars": 2079,
+  "avg_sentence_len": 41.6,
+  "sentence_len_std": 22.0,
+  "avg_paragraph_len": 46,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 100
+  },
+  "vocabulary_diversity": 0.258,
+  "top_patterns": [
+    "周琳(5次)",
+    "陈知(4次)",
+    "李命(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 5,
+  "ai_marker_count": 5,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 21,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 17,
+    "问号": 1,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 378,
+  "file": "第378章.txt"
+}

@@ -1,0 +1,35 @@
+{
+  "total_chars": 2374,
+  "avg_sentence_len": 19.0,
+  "sentence_len_std": 13.1,
+  "avg_paragraph_len": 24,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 75
+  },
+  "vocabulary_diversity": 0.279,
+  "top_patterns": [
+    "陆明(21次)",
+    "王坤(14次)",
+    "”陆(8次)",
+    "”王(7次)",
+    "两人(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(16处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 1,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 63,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 125,
+  "file": "第125章.txt"
+}

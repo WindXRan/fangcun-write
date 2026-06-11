@@ -1,0 +1,35 @@
+{
+  "total_chars": 2196,
+  "avg_sentence_len": 17.6,
+  "sentence_len_std": 15.6,
+  "avg_paragraph_len": 26,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 124
+  },
+  "vocabulary_diversity": 0.249,
+  "top_patterns": [
+    "苏国(15次)",
+    "陆明(14次)",
+    "王卫(11次)",
+    "”陆(4次)",
+    "“借(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(12处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 6,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 45,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 154,
+  "file": "第154章.txt"
+}

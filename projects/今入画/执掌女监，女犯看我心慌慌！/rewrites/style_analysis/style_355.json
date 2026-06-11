@@ -1,0 +1,32 @@
+{
+  "total_chars": 2207,
+  "avg_sentence_len": 39.9,
+  "sentence_len_std": 25.7,
+  "avg_paragraph_len": 46,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 125
+  },
+  "vocabulary_diversity": 0.23,
+  "top_patterns": [
+    "顾婉(3次)",
+    "张雅(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 24,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 21,
+    "问号": 0,
+    "叹号": 5,
+    "引号": 0
+  },
+  "chapter": 355,
+  "file": "第355章.txt"
+}

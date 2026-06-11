@@ -1,0 +1,35 @@
+{
+  "total_chars": 2073,
+  "avg_sentence_len": 17.7,
+  "sentence_len_std": 14.0,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 104
+  },
+  "vocabulary_diversity": 0.261,
+  "top_patterns": [
+    "李命(9次)",
+    "”林(6次)",
+    "”李(5次)",
+    "“江(3次)",
+    "”江(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(25处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 30,
+    "问号": 0,
+    "叹号": 13,
+    "引号": 0
+  },
+  "chapter": 2,
+  "file": "第2章.txt"
+}

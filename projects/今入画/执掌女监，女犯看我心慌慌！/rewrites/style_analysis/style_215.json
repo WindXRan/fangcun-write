@@ -1,0 +1,33 @@
+{
+  "total_chars": 2122,
+  "avg_sentence_len": 33.1,
+  "sentence_len_std": 20.8,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 95
+  },
+  "vocabulary_diversity": 0.263,
+  "top_patterns": [
+    "李命(6次)",
+    "可是(3次)",
+    "黄莺(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 5,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 19,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 26,
+    "问号": 4,
+    "叹号": 14,
+    "引号": 0
+  },
+  "chapter": 215,
+  "file": "第215章.txt"
+}

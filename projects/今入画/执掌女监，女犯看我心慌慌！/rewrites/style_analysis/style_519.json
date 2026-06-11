@@ -1,0 +1,33 @@
+{
+  "total_chars": 2098,
+  "avg_sentence_len": 27.3,
+  "sentence_len_std": 16.5,
+  "avg_paragraph_len": 30,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 69
+  },
+  "vocabulary_diversity": 0.251,
+  "top_patterns": [
+    "李命(6次)",
+    "周琳(5次)",
+    "男人(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 3,
+  "ellipsis_count": 25,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 23,
+    "问号": 2,
+    "叹号": 22,
+    "引号": 0
+  },
+  "chapter": 519,
+  "file": "第519章.txt"
+}

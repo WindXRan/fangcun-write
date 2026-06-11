@@ -1,0 +1,35 @@
+{
+  "total_chars": 2111,
+  "avg_sentence_len": 22.1,
+  "sentence_len_std": 16.2,
+  "avg_paragraph_len": 27,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 79
+  },
+  "vocabulary_diversity": 0.283,
+  "top_patterns": [
+    "苏国(8次)",
+    "赵一(7次)",
+    "苏文(6次)",
+    "陆明(6次)",
+    "“你(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 47,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 83,
+  "file": "第83章.txt"
+}

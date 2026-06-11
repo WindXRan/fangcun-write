@@ -1,0 +1,35 @@
+{
+  "total_chars": 2189,
+  "avg_sentence_len": 15.5,
+  "sentence_len_std": 10.4,
+  "avg_paragraph_len": 20,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 73
+  },
+  "vocabulary_diversity": 0.283,
+  "top_patterns": [
+    "陆明(13次)",
+    "赵得(9次)",
+    "赵一(6次)",
+    "男子(4次)",
+    "“这(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(12处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 44,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 110,
+  "file": "第110章.txt"
+}

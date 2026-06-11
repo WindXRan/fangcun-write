@@ -1,0 +1,33 @@
+{
+  "total_chars": 2107,
+  "avg_sentence_len": 31.6,
+  "sentence_len_std": 20.8,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 84
+  },
+  "vocabulary_diversity": 0.267,
+  "top_patterns": [
+    "李命(12次)",
+    "周琳(8次)",
+    "他们(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 31,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 21,
+    "问号": 1,
+    "叹号": 10,
+    "引号": 0
+  },
+  "chapter": 376,
+  "file": "第376章.txt"
+}

@@ -1,0 +1,35 @@
+{
+  "total_chars": 2059,
+  "avg_sentence_len": 18.3,
+  "sentence_len_std": 10.8,
+  "avg_paragraph_len": 26,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 99
+  },
+  "vocabulary_diversity": 0.34,
+  "top_patterns": [
+    "陆明(12次)",
+    "”方(6次)",
+    "方娟(4次)",
+    "“陆(3次)",
+    "秦业(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 50,
+    "问号": 3,
+    "叹号": 1,
+    "引号": 0
+  },
+  "chapter": 98,
+  "file": "第98章.txt"
+}

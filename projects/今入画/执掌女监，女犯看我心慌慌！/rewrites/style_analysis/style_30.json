@@ -1,0 +1,35 @@
+{
+  "total_chars": 2044,
+  "avg_sentence_len": 20.4,
+  "sentence_len_std": 15.6,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 99
+  },
+  "vocabulary_diversity": 0.262,
+  "top_patterns": [
+    "”李(9次)",
+    "”夏(8次)",
+    "李命(5次)",
+    "夏红(5次)",
+    "“红(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(22处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 9,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 32,
+    "问号": 1,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 30,
+  "file": "第30章.txt"
+}

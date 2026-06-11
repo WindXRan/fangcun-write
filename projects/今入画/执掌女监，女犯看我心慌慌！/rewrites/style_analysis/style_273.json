@@ -1,0 +1,30 @@
+{
+  "total_chars": 1066,
+  "avg_sentence_len": 38.5,
+  "sentence_len_std": 30.9,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 155
+  },
+  "vocabulary_diversity": 0.345,
+  "top_patterns": [
+    "李命(5次)",
+    "杨阳(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 14,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 11,
+    "问号": 1,
+    "叹号": 3,
+    "引号": 0
+  },
+  "chapter": 273,
+  "file": "第273章.txt"
+}

@@ -1,0 +1,35 @@
+{
+  "total_chars": 2052,
+  "avg_sentence_len": 35.8,
+  "sentence_len_std": 25.1,
+  "avg_paragraph_len": 46,
+  "paragraph_len_range": {
+    "min": 11,
+    "max": 125
+  },
+  "vocabulary_diversity": 0.268,
+  "top_patterns": [
+    "周琳(5次)",
+    "李命(4次)",
+    "刘野(4次)",
+    "于是(3次)"
+  ],
+  "rhetorical_features": [
+    "反问(2处)",
+    "短句节奏(3处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 17,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 11,
+    "问号": 1,
+    "叹号": 19,
+    "引号": 0
+  },
+  "chapter": 199,
+  "file": "第199章.txt"
+}

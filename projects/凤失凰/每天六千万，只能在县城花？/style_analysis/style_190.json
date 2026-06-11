@@ -1,0 +1,35 @@
+{
+  "total_chars": 2132,
+  "avg_sentence_len": 23.1,
+  "sentence_len_std": 14.7,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 107
+  },
+  "vocabulary_diversity": 0.319,
+  "top_patterns": [
+    "陆明(7次)",
+    "陈越(5次)",
+    "徐栋(4次)",
+    "方瑜(3次)",
+    "沈璃(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 25,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 190,
+  "file": "第190章.txt"
+}

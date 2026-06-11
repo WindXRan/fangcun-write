@@ -1,0 +1,34 @@
+{
+  "total_chars": 2172,
+  "avg_sentence_len": 21.4,
+  "sentence_len_std": 15.5,
+  "avg_paragraph_len": 27,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 71
+  },
+  "vocabulary_diversity": 0.307,
+  "top_patterns": [
+    "方珩(9次)",
+    "方瑜(8次)",
+    "陆明(7次)",
+    "张广(7次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 63,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 79,
+  "file": "第79章.txt"
+}

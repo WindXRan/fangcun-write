@@ -1,0 +1,31 @@
+{
+  "total_chars": 1126,
+  "avg_sentence_len": 27.1,
+  "sentence_len_std": 22.1,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 188
+  },
+  "vocabulary_diversity": 0.355,
+  "top_patterns": [
+    "李命(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 4,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 21,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 24,
+  "file": "第24章.txt"
+}

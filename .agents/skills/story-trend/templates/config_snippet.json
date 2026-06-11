@@ -1,0 +1,11 @@
+{
+  "book_name": "新书名",
+  "author": "作者",
+  "source_book": "源书名",
+  "trend_dir": "trends/题材名",
+  "api_key": null,
+  "model": "deepseek-v4-flash",
+  "reasoning_effort": "low",
+  "prompts_dir": ".agents/skills/story-engine/prompts",
+  "rewrites_dir": "projects/作者/源书/rewrites/新书"
+}

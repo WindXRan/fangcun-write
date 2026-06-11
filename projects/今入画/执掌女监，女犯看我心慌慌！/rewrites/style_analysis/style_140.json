@@ -1,0 +1,33 @@
+{
+  "total_chars": 2060,
+  "avg_sentence_len": 32.6,
+  "sentence_len_std": 22.2,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 129
+  },
+  "vocabulary_diversity": 0.252,
+  "top_patterns": [
+    "李命(7次)",
+    "林希(7次)",
+    "沈佳(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 38,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 19,
+    "问号": 1,
+    "叹号": 10,
+    "引号": 0
+  },
+  "chapter": 140,
+  "file": "第140章.txt"
+}

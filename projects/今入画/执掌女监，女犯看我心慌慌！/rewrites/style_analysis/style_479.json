@@ -1,0 +1,30 @@
+{
+  "total_chars": 2144,
+  "avg_sentence_len": 39.5,
+  "sentence_len_std": 23.9,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 96
+  },
+  "vocabulary_diversity": 0.26,
+  "top_patterns": [
+    "李命(3次)",
+    "刘国(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 4,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 24,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 17,
+    "问号": 2,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 479,
+  "file": "第479章.txt"
+}

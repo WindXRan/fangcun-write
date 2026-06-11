@@ -1,0 +1,30 @@
+{
+  "total_chars": 2138,
+  "avg_sentence_len": 52.5,
+  "sentence_len_std": 25.9,
+  "avg_paragraph_len": 58,
+  "paragraph_len_range": {
+    "min": 12,
+    "max": 121
+  },
+  "vocabulary_diversity": 0.247,
+  "top_patterns": [
+    "黄飞(6次)",
+    "李命(4次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 3,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 5,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 21,
+    "问号": 0,
+    "叹号": 10,
+    "引号": 0
+  },
+  "chapter": 162,
+  "file": "第162章.txt"
+}

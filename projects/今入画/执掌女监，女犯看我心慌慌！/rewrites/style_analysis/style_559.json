@@ -1,0 +1,31 @@
+{
+  "total_chars": 2160,
+  "avg_sentence_len": 33.3,
+  "sentence_len_std": 19.0,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 93
+  },
+  "vocabulary_diversity": 0.256,
+  "top_patterns": [
+    "李命(11次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 17,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 32,
+    "问号": 1,
+    "叹号": 13,
+    "引号": 0
+  },
+  "chapter": 559,
+  "file": "第559章.txt"
+}

@@ -1,0 +1,32 @@
+{
+  "total_chars": 2185,
+  "avg_sentence_len": 32.8,
+  "sentence_len_std": 20.4,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 92
+  },
+  "vocabulary_diversity": 0.254,
+  "top_patterns": [
+    "李命(6次)",
+    "顾婉(4次)",
+    "可是(3次)",
+    "于是(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 5,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 2,
+  "ellipsis_count": 37,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 14,
+    "问号": 4,
+    "叹号": 15,
+    "引号": 0
+  },
+  "chapter": 435,
+  "file": "第435章.txt"
+}

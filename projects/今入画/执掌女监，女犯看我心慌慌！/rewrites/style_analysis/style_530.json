@@ -1,0 +1,31 @@
+{
+  "total_chars": 2072,
+  "avg_sentence_len": 32.9,
+  "sentence_len_std": 18.8,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 97
+  },
+  "vocabulary_diversity": 0.259,
+  "top_patterns": [
+    "李命(7次)",
+    "可是(4次)",
+    "苏瑶(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 27,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 11,
+    "问号": 2,
+    "叹号": 12,
+    "引号": 0
+  },
+  "chapter": 530,
+  "file": "第530章.txt"
+}

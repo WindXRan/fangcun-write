@@ -1,0 +1,33 @@
+{
+  "total_chars": 1466,
+  "avg_sentence_len": 23.9,
+  "sentence_len_std": 21.7,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 106
+  },
+  "vocabulary_diversity": 0.311,
+  "top_patterns": [
+    "林希(5次)",
+    "李命(4次)",
+    "“不(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 7,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 15,
+    "问号": 0,
+    "叹号": 5,
+    "引号": 0
+  },
+  "chapter": 41,
+  "file": "第41章.txt"
+}

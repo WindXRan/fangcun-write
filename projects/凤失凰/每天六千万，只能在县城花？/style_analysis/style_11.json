@@ -1,0 +1,35 @@
+{
+  "total_chars": 2269,
+  "avg_sentence_len": 15.8,
+  "sentence_len_std": 11.3,
+  "avg_paragraph_len": 24,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 80
+  },
+  "vocabulary_diversity": 0.276,
+  "top_patterns": [
+    "沈璃(13次)",
+    "“你(10次)",
+    "陆明(8次)",
+    "”陆(5次)",
+    "”她(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(13处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 45,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 11,
+  "file": "第11章.txt"
+}

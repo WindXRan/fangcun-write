@@ -1,0 +1,35 @@
+{
+  "total_chars": 2214,
+  "avg_sentence_len": 44.1,
+  "sentence_len_std": 23.6,
+  "avg_paragraph_len": 49,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 100
+  },
+  "vocabulary_diversity": 0.234,
+  "top_patterns": [
+    "韩素(6次)",
+    "李命(4次)",
+    "“监(4次)",
+    "“韩(3次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 5,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 31,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 23,
+    "问号": 1,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 469,
+  "file": "第469章.txt"
+}

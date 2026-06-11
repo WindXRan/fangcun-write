@@ -1,0 +1,35 @@
+{
+  "total_chars": 2429,
+  "avg_sentence_len": 26.5,
+  "sentence_len_std": 19.3,
+  "avg_paragraph_len": 48,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 129
+  },
+  "vocabulary_diversity": 0.274,
+  "top_patterns": [
+    "李命(8次)",
+    "谭程(5次)",
+    "”李(4次)",
+    "张文(3次)",
+    "“你(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(10处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 18,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 28,
+    "问号": 0,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 64,
+  "file": "第64章.txt"
+}

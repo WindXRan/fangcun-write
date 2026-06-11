@@ -1,0 +1,35 @@
+{
+  "total_chars": 2371,
+  "avg_sentence_len": 20.7,
+  "sentence_len_std": 14.1,
+  "avg_paragraph_len": 27,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 82
+  },
+  "vocabulary_diversity": 0.261,
+  "top_patterns": [
+    "陆明(12次)",
+    "张广(12次)",
+    "“这(7次)",
+    "“陆(4次)",
+    "“张(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 6,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 47,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 58,
+  "file": "第58章.txt"
+}

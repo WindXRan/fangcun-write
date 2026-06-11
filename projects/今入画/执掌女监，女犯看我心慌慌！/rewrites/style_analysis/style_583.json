@@ -1,0 +1,32 @@
+{
+  "total_chars": 2142,
+  "avg_sentence_len": 35.4,
+  "sentence_len_std": 21.5,
+  "avg_paragraph_len": 45,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 143
+  },
+  "vocabulary_diversity": 0.242,
+  "top_patterns": [
+    "李命(5次)",
+    "胖女(4次)",
+    "可是(4次)",
+    "苏瑶(4次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 5,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 33,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 20,
+    "问号": 0,
+    "叹号": 5,
+    "引号": 0
+  },
+  "chapter": 583,
+  "file": "第583章.txt"
+}

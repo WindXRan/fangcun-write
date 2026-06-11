@@ -1,0 +1,33 @@
+{
+  "total_chars": 2082,
+  "avg_sentence_len": 38.8,
+  "sentence_len_std": 38.4,
+  "avg_paragraph_len": 53,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 188
+  },
+  "vocabulary_diversity": 0.239,
+  "top_patterns": [
+    "”李(3次)",
+    "夏红(3次)",
+    "沈佳(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 22,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 24,
+    "问号": 0,
+    "叹号": 5,
+    "引号": 0
+  },
+  "chapter": 158,
+  "file": "第158章.txt"
+}

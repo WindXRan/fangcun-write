@@ -1,0 +1,32 @@
+{
+  "total_chars": 2099,
+  "avg_sentence_len": 41.9,
+  "sentence_len_std": 23.3,
+  "avg_paragraph_len": 48,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 103
+  },
+  "vocabulary_diversity": 0.255,
+  "top_patterns": [
+    "周琳(5次)",
+    "李命(4次)",
+    "可是(3次)",
+    "刘野(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 3,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 14,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 18,
+    "问号": 2,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 196,
+  "file": "第196章.txt"
+}

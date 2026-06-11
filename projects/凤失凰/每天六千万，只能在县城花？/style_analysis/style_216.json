@@ -1,0 +1,35 @@
+{
+  "total_chars": 2098,
+  "avg_sentence_len": 21.5,
+  "sentence_len_std": 16.4,
+  "avg_paragraph_len": 34,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 92
+  },
+  "vocabulary_diversity": 0.273,
+  "top_patterns": [
+    "陆明(7次)",
+    "陈越(7次)",
+    "”陆(5次)",
+    "小李(5次)",
+    "”陈(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 7,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 18,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 216,
+  "file": "第216章.txt"
+}

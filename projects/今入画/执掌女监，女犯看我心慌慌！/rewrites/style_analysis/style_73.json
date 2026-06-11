@@ -1,0 +1,33 @@
+{
+  "total_chars": 2002,
+  "avg_sentence_len": 31.6,
+  "sentence_len_std": 24.9,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 121
+  },
+  "vocabulary_diversity": 0.243,
+  "top_patterns": [
+    "李命(11次)",
+    "夏红(4次)",
+    "”李(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 15,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 27,
+    "问号": 1,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 73,
+  "file": "第73章.txt"
+}

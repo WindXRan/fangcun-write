@@ -1,0 +1,35 @@
+{
+  "total_chars": 2333,
+  "avg_sentence_len": 22.9,
+  "sentence_len_std": 16.8,
+  "avg_paragraph_len": 28,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 108
+  },
+  "vocabulary_diversity": 0.29,
+  "top_patterns": [
+    "胡奎(9次)",
+    "孟昭(9次)",
+    "陆明(8次)",
+    "孙长(4次)",
+    "\"孟(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 2,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 50,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 20
+  },
+  "chapter": 62,
+  "file": "第62章.txt"
+}

@@ -1,0 +1,30 @@
+{
+  "total_chars": 2070,
+  "avg_sentence_len": 31.8,
+  "sentence_len_std": 19.1,
+  "avg_paragraph_len": 36,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 149
+  },
+  "vocabulary_diversity": 0.247,
+  "top_patterns": [
+    "李命(4次)",
+    "“我(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 4,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 2,
+  "ellipsis_count": 35,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 16,
+    "问号": 0,
+    "叹号": 14,
+    "引号": 0
+  },
+  "chapter": 407,
+  "file": "第407章.txt"
+}

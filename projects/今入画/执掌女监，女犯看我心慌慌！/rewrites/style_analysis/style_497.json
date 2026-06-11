@@ -1,0 +1,33 @@
+{
+  "total_chars": 2107,
+  "avg_sentence_len": 38.5,
+  "sentence_len_std": 19.0,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 98
+  },
+  "vocabulary_diversity": 0.242,
+  "top_patterns": [
+    "周琳(6次)",
+    "服务(4次)",
+    "李命(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 22,
+    "问号": 3,
+    "叹号": 9,
+    "引号": 0
+  },
+  "chapter": 497,
+  "file": "第497章.txt"
+}

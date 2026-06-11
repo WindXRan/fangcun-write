@@ -1,0 +1,29 @@
+{
+  "total_chars": 1928,
+  "avg_sentence_len": 40.8,
+  "sentence_len_std": 22.5,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 109
+  },
+  "vocabulary_diversity": 0.267,
+  "top_patterns": [
+    "李命(7次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 4,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 13,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 18,
+    "问号": 1,
+    "叹号": 15,
+    "引号": 0
+  },
+  "chapter": 309,
+  "file": "第309章.txt"
+}

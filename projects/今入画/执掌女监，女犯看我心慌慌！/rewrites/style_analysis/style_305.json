@@ -1,0 +1,29 @@
+{
+  "total_chars": 2087,
+  "avg_sentence_len": 42.8,
+  "sentence_len_std": 23.6,
+  "avg_paragraph_len": 50,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 102
+  },
+  "vocabulary_diversity": 0.227,
+  "top_patterns": [
+    "李命(8次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 3,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 34,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 10,
+    "问号": 2,
+    "叹号": 10,
+    "引号": 0
+  },
+  "chapter": 305,
+  "file": "第305章.txt"
+}

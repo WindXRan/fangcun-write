@@ -1,0 +1,35 @@
+{
+  "total_chars": 2063,
+  "avg_sentence_len": 26.8,
+  "sentence_len_std": 17.7,
+  "avg_paragraph_len": 31,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 87
+  },
+  "vocabulary_diversity": 0.296,
+  "top_patterns": [
+    "李命(4次)",
+    "周琳(4次)",
+    "轰…(3次)",
+    "基地(3次)",
+    "而且(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 2,
+  "ellipsis_count": 39,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 22,
+    "问号": 3,
+    "叹号": 20,
+    "引号": 0
+  },
+  "chapter": 563,
+  "file": "第563章.txt"
+}

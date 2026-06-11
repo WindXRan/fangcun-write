@@ -1,0 +1,32 @@
+{
+  "total_chars": 2045,
+  "avg_sentence_len": 37.6,
+  "sentence_len_std": 26.7,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 113
+  },
+  "vocabulary_diversity": 0.238,
+  "top_patterns": [
+    "李命(9次)",
+    "王可(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 26,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 15,
+    "问号": 1,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 209,
+  "file": "第209章.txt"
+}

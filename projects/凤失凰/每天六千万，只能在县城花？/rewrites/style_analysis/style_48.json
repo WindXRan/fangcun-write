@@ -1,0 +1,35 @@
+{
+  "total_chars": 2372,
+  "avg_sentence_len": 22.1,
+  "sentence_len_std": 15.9,
+  "avg_paragraph_len": 31,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 119
+  },
+  "vocabulary_diversity": 0.295,
+  "top_patterns": [
+    "陆明(13次)",
+    "孙长(10次)",
+    "”孙(5次)",
+    "”陆(4次)",
+    "“孙(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 2,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 41,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 48,
+  "file": "第48章.txt"
+}

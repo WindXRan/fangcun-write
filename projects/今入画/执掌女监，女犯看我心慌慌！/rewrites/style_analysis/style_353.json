@@ -1,0 +1,30 @@
+{
+  "total_chars": 2156,
+  "avg_sentence_len": 44.9,
+  "sentence_len_std": 32.3,
+  "avg_paragraph_len": 51,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 165
+  },
+  "vocabulary_diversity": 0.239,
+  "top_patterns": [
+    "林希(14次)",
+    "李命(6次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 2,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 21,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 21,
+    "问号": 2,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 353,
+  "file": "第353章.txt"
+}

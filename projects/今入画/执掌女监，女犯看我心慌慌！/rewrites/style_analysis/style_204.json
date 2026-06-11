@@ -1,0 +1,33 @@
+{
+  "total_chars": 2093,
+  "avg_sentence_len": 35.8,
+  "sentence_len_std": 23.5,
+  "avg_paragraph_len": 46,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 100
+  },
+  "vocabulary_diversity": 0.257,
+  "top_patterns": [
+    "周琳(9次)",
+    "李命(4次)",
+    "可是(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 16,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 27,
+    "问号": 4,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 204,
+  "file": "第204章.txt"
+}

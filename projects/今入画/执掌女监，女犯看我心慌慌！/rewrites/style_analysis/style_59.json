@@ -1,0 +1,35 @@
+{
+  "total_chars": 2143,
+  "avg_sentence_len": 22.8,
+  "sentence_len_std": 17.9,
+  "avg_paragraph_len": 51,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 165
+  },
+  "vocabulary_diversity": 0.264,
+  "top_patterns": [
+    "谭程(7次)",
+    "李命(6次)",
+    "我们(5次)",
+    "“李(3次)",
+    "“谭(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 21,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 24,
+    "问号": 1,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 59,
+  "file": "第59章.txt"
+}

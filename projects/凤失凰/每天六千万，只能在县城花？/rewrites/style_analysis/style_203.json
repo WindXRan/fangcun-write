@@ -1,0 +1,35 @@
+{
+  "total_chars": 2099,
+  "avg_sentence_len": 20.6,
+  "sentence_len_std": 14.4,
+  "avg_paragraph_len": 33,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 92
+  },
+  "vocabulary_diversity": 0.298,
+  "top_patterns": [
+    "陆明(8次)",
+    "王强(7次)",
+    "陈越(4次)",
+    "”王(4次)",
+    "赵海(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 1,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 36,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 203,
+  "file": "第203章.txt"
+}

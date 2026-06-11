@@ -1,0 +1,35 @@
+{
+  "total_chars": 2200,
+  "avg_sentence_len": 24.4,
+  "sentence_len_std": 19.7,
+  "avg_paragraph_len": 32,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 110
+  },
+  "vocabulary_diversity": 0.298,
+  "top_patterns": [
+    "陆明(9次)",
+    "张广(7次)",
+    "方瑜(5次)",
+    "“陆(4次)",
+    "赵一(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 4,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 34,
+    "问号": 0,
+    "叹号": 1,
+    "引号": 0
+  },
+  "chapter": 47,
+  "file": "第47章.txt"
+}

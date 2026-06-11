@@ -1,0 +1,35 @@
+{
+  "total_chars": 2045,
+  "avg_sentence_len": 16.8,
+  "sentence_len_std": 10.7,
+  "avg_paragraph_len": 24,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 89
+  },
+  "vocabulary_diversity": 0.287,
+  "top_patterns": [
+    "胡奎(10次)",
+    "陆明(6次)",
+    "电话(5次)",
+    "“胡(4次)",
+    "“我(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 44,
+    "问号": 2,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 25,
+  "file": "第25章.txt"
+}

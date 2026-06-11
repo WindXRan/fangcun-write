@@ -1,0 +1,33 @@
+{
+  "total_chars": 1755,
+  "avg_sentence_len": 29.9,
+  "sentence_len_std": 21.3,
+  "avg_paragraph_len": 41,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 119
+  },
+  "vocabulary_diversity": 0.293,
+  "top_patterns": [
+    "李命(4次)",
+    "叶莓(4次)",
+    "监狱(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 8,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 26,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 5,
+    "问号": 3,
+    "叹号": 22,
+    "引号": 0
+  },
+  "chapter": 301,
+  "file": "第301章.txt"
+}

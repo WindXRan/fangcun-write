@@ -1,0 +1,32 @@
+{
+  "total_chars": 2113,
+  "avg_sentence_len": 48.1,
+  "sentence_len_std": 32.9,
+  "avg_paragraph_len": 54,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 164
+  },
+  "vocabulary_diversity": 0.258,
+  "top_patterns": [
+    "李命(7次)",
+    "周琳(6次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 15,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 21,
+    "问号": 0,
+    "叹号": 3,
+    "引号": 0
+  },
+  "chapter": 356,
+  "file": "第356章.txt"
+}

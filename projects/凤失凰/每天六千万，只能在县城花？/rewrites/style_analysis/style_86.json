@@ -1,0 +1,35 @@
+{
+  "total_chars": 2356,
+  "avg_sentence_len": 18.7,
+  "sentence_len_std": 12.7,
+  "avg_paragraph_len": 29,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 101
+  },
+  "vocabulary_diversity": 0.27,
+  "top_patterns": [
+    "秦业(16次)",
+    "陆明(14次)",
+    "”陆(10次)",
+    "”秦(8次)",
+    "“陆(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(12处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 2,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 51,
+    "问号": 0,
+    "叹号": 1,
+    "引号": 0
+  },
+  "chapter": 86,
+  "file": "第86章.txt"
+}

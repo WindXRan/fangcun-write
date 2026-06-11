@@ -1,0 +1,35 @@
+{
+  "total_chars": 2043,
+  "avg_sentence_len": 17.7,
+  "sentence_len_std": 11.0,
+  "avg_paragraph_len": 30,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 105
+  },
+  "vocabulary_diversity": 0.325,
+  "top_patterns": [
+    "”陆(6次)",
+    "“陆(5次)",
+    "陆明(5次)",
+    "“还(3次)",
+    "方瑜(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 37,
+    "问号": 2,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 132,
+  "file": "第132章.txt"
+}

@@ -1,0 +1,33 @@
+{
+  "total_chars": 1965,
+  "avg_sentence_len": 31.9,
+  "sentence_len_std": 19.4,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 96
+  },
+  "vocabulary_diversity": 0.256,
+  "top_patterns": [
+    "红牙(6次)",
+    "可是(5次)",
+    "夏红(4次)",
+    "李命(3次)",
+    "“红(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 5,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 38,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 16,
+    "问号": 1,
+    "叹号": 15,
+    "引号": 0
+  },
+  "chapter": 292,
+  "file": "第292章.txt"
+}

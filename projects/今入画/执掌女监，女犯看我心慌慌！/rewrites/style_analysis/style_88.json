@@ -1,0 +1,33 @@
+{
+  "total_chars": 1126,
+  "avg_sentence_len": 25.7,
+  "sentence_len_std": 14.7,
+  "avg_paragraph_len": 36,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 77
+  },
+  "vocabulary_diversity": 0.302,
+  "top_patterns": [
+    "李命(6次)",
+    "王馨(4次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 2,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 20,
+    "问号": 0,
+    "叹号": 5,
+    "引号": 0
+  },
+  "chapter": 88,
+  "file": "第88章.txt"
+}

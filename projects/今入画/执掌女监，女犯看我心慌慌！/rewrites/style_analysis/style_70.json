@@ -1,0 +1,35 @@
+{
+  "total_chars": 2648,
+  "avg_sentence_len": 20.3,
+  "sentence_len_std": 17.2,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 127
+  },
+  "vocabulary_diversity": 0.232,
+  "top_patterns": [
+    "李命(9次)",
+    "”李(7次)",
+    "监狱(4次)",
+    "”叶(4次)",
+    "叶莓(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(21处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 43,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 31,
+    "问号": 0,
+    "叹号": 14,
+    "引号": 0
+  },
+  "chapter": 70,
+  "file": "第70章.txt"
+}

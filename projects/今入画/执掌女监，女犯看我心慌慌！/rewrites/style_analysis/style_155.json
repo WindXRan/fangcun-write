@@ -1,0 +1,34 @@
+{
+  "total_chars": 1909,
+  "avg_sentence_len": 32.4,
+  "sentence_len_std": 24.2,
+  "avg_paragraph_len": 41,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 118
+  },
+  "vocabulary_diversity": 0.255,
+  "top_patterns": [
+    "李命(7次)",
+    "古娅(4次)",
+    "两女(3次)",
+    "阿莎(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 20,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 16,
+    "问号": 3,
+    "叹号": 17,
+    "引号": 0
+  },
+  "chapter": 155,
+  "file": "第155章.txt"
+}

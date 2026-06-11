@@ -1,0 +1,32 @@
+{
+  "total_chars": 2057,
+  "avg_sentence_len": 42.7,
+  "sentence_len_std": 22.7,
+  "avg_paragraph_len": 49,
+  "paragraph_len_range": {
+    "min": 12,
+    "max": 97
+  },
+  "vocabulary_diversity": 0.253,
+  "top_patterns": [
+    "李命(10次)",
+    "叶莓(6次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 9,
+  "ai_marker_count": 5,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 13,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 24,
+    "问号": 1,
+    "叹号": 5,
+    "引号": 0
+  },
+  "chapter": 452,
+  "file": "第452章.txt"
+}

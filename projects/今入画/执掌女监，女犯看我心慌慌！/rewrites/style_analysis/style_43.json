@@ -1,0 +1,35 @@
+{
+  "total_chars": 1828,
+  "avg_sentence_len": 18.7,
+  "sentence_len_std": 13.5,
+  "avg_paragraph_len": 36,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 101
+  },
+  "vocabulary_diversity": 0.269,
+  "top_patterns": [
+    "王可(9次)",
+    "李命(9次)",
+    "”李(6次)",
+    "“李(4次)",
+    "……(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(16处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 33,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 19,
+    "问号": 3,
+    "叹号": 13,
+    "引号": 0
+  },
+  "chapter": 43,
+  "file": "第43章.txt"
+}

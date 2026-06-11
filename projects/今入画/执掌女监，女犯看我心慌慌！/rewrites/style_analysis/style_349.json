@@ -1,0 +1,30 @@
+{
+  "total_chars": 2074,
+  "avg_sentence_len": 38.9,
+  "sentence_len_std": 22.1,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 126
+  },
+  "vocabulary_diversity": 0.24,
+  "top_patterns": [
+    "赛丽(7次)",
+    "李命(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 1,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 17,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 28,
+    "问号": 0,
+    "叹号": 9,
+    "引号": 0
+  },
+  "chapter": 349,
+  "file": "第349章.txt"
+}

@@ -1,0 +1,35 @@
+{
+  "total_chars": 2064,
+  "avg_sentence_len": 17.8,
+  "sentence_len_std": 12.4,
+  "avg_paragraph_len": 24,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 107
+  },
+  "vocabulary_diversity": 0.291,
+  "top_patterns": [
+    "胡奎(12次)",
+    "陈志(6次)",
+    "”胡(5次)",
+    "”马(4次)",
+    "“哥(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 7,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 52,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 42,
+  "file": "第42章.txt"
+}

@@ -1,0 +1,32 @@
+{
+  "total_chars": 2068,
+  "avg_sentence_len": 35.4,
+  "sentence_len_std": 20.2,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 91
+  },
+  "vocabulary_diversity": 0.27,
+  "top_patterns": [
+    "红牙(5次)",
+    "周琳(4次)",
+    "李命(3次)",
+    "杨阳(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 1,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 34,
+    "问号": 0,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 312,
+  "file": "第312章.txt"
+}

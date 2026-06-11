@@ -1,0 +1,32 @@
+{
+  "total_chars": 2134,
+  "avg_sentence_len": 37.1,
+  "sentence_len_std": 24.8,
+  "avg_paragraph_len": 45,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 117
+  },
+  "vocabulary_diversity": 0.274,
+  "top_patterns": [
+    "周琳(10次)",
+    "李命(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 5,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 24,
+    "问号": 0,
+    "叹号": 10,
+    "引号": 0
+  },
+  "chapter": 201,
+  "file": "第201章.txt"
+}

@@ -1,0 +1,33 @@
+{
+  "total_chars": 2096,
+  "avg_sentence_len": 29.9,
+  "sentence_len_std": 15.8,
+  "avg_paragraph_len": 33,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 88
+  },
+  "vocabulary_diversity": 0.259,
+  "top_patterns": [
+    "李命(9次)",
+    "黄玉(3次)",
+    "所以(3次)",
+    "随后(3次)",
+    "于是(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 1,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 10,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 28,
+    "问号": 4,
+    "叹号": 14,
+    "引号": 0
+  },
+  "chapter": 539,
+  "file": "第539章.txt"
+}

@@ -1,0 +1,34 @@
+{
+  "total_chars": 2043,
+  "avg_sentence_len": 22.9,
+  "sentence_len_std": 14.2,
+  "avg_paragraph_len": 35,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 78
+  },
+  "vocabulary_diversity": 0.289,
+  "top_patterns": [
+    "李命(16次)",
+    "王馨(7次)",
+    "”李(4次)",
+    "”王(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 36,
+    "问号": 1,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 53,
+  "file": "第53章.txt"
+}

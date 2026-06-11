@@ -1,0 +1,34 @@
+{
+  "total_chars": 2074,
+  "avg_sentence_len": 34.7,
+  "sentence_len_std": 23.6,
+  "avg_paragraph_len": 45,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 104
+  },
+  "vocabulary_diversity": 0.217,
+  "top_patterns": [
+    "黄莺(13次)",
+    "李命(6次)",
+    "“监(4次)",
+    "“黄(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 20,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 19,
+    "问号": 2,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 160,
+  "file": "第160章.txt"
+}

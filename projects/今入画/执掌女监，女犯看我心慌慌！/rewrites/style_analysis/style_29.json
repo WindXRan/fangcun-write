@@ -1,0 +1,35 @@
+{
+  "total_chars": 2032,
+  "avg_sentence_len": 20.4,
+  "sentence_len_std": 14.8,
+  "avg_paragraph_len": 58,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 115
+  },
+  "vocabulary_diversity": 0.249,
+  "top_patterns": [
+    "”李(12次)",
+    "”谭(8次)",
+    "李命(6次)",
+    "“监(3次)",
+    "我一(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(18处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 8,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 28,
+    "问号": 3,
+    "叹号": 2,
+    "引号": 0
+  },
+  "chapter": 29,
+  "file": "第29章.txt"
+}

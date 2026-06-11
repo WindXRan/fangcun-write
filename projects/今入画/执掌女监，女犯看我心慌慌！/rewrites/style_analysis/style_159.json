@@ -1,0 +1,34 @@
+{
+  "total_chars": 2357,
+  "avg_sentence_len": 34.1,
+  "sentence_len_std": 26.7,
+  "avg_paragraph_len": 45,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 126
+  },
+  "vocabulary_diversity": 0.233,
+  "top_patterns": [
+    "李命(6次)",
+    "沈佳(3次)",
+    "明明(3次)",
+    "夏红(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 26,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 23,
+    "问号": 4,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 159,
+  "file": "第159章.txt"
+}

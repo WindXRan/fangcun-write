@@ -1,0 +1,32 @@
+{
+  "total_chars": 2116,
+  "avg_sentence_len": 37.3,
+  "sentence_len_std": 24.5,
+  "avg_paragraph_len": 46,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 112
+  },
+  "vocabulary_diversity": 0.242,
+  "top_patterns": [
+    "李命(8次)",
+    "周琳(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 11,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 30,
+    "问号": 0,
+    "叹号": 1,
+    "引号": 0
+  },
+  "chapter": 489,
+  "file": "第489章.txt"
+}

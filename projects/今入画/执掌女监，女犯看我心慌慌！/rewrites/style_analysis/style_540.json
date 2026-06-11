@@ -1,0 +1,34 @@
+{
+  "total_chars": 2057,
+  "avg_sentence_len": 33.1,
+  "sentence_len_std": 19.2,
+  "avg_paragraph_len": 38,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 96
+  },
+  "vocabulary_diversity": 0.249,
+  "top_patterns": [
+    "赛丽(8次)",
+    "“老(5次)",
+    "可是(3次)",
+    "而李(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 20,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 20,
+    "问号": 2,
+    "叹号": 10,
+    "引号": 0
+  },
+  "chapter": 540,
+  "file": "第540章.txt"
+}

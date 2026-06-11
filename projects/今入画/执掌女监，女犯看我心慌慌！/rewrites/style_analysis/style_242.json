@@ -1,0 +1,30 @@
+{
+  "total_chars": 2083,
+  "avg_sentence_len": 44.3,
+  "sentence_len_std": 30.0,
+  "avg_paragraph_len": 50,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 144
+  },
+  "vocabulary_diversity": 0.256,
+  "top_patterns": [
+    "周琳(10次)",
+    "李命(7次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 16,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 14,
+    "问号": 1,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 242,
+  "file": "第242章.txt"
+}

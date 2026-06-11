@@ -1,0 +1,33 @@
+{
+  "total_chars": 2087,
+  "avg_sentence_len": 32.3,
+  "sentence_len_std": 20.4,
+  "avg_paragraph_len": 38,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 100
+  },
+  "vocabulary_diversity": 0.253,
+  "top_patterns": [
+    "李命(6次)",
+    "不过(3次)",
+    "重炮(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 11,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 26,
+    "问号": 0,
+    "叹号": 13,
+    "引号": 0
+  },
+  "chapter": 493,
+  "file": "第493章.txt"
+}

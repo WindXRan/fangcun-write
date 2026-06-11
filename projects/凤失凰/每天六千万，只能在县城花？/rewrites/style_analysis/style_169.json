@@ -1,0 +1,35 @@
+{
+  "total_chars": 2061,
+  "avg_sentence_len": 19.1,
+  "sentence_len_std": 13.3,
+  "avg_paragraph_len": 33,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 81
+  },
+  "vocabulary_diversity": 0.269,
+  "top_patterns": [
+    "陈越(9次)",
+    "高国(7次)",
+    "”方(6次)",
+    "”高(6次)",
+    "”陆(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(16处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 23,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 169,
+  "file": "第169章.txt"
+}

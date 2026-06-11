@@ -1,0 +1,35 @@
+{
+  "total_chars": 2095,
+  "avg_sentence_len": 24.8,
+  "sentence_len_std": 14.2,
+  "avg_paragraph_len": 41,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 108
+  },
+  "vocabulary_diversity": 0.24,
+  "top_patterns": [
+    "李命(6次)",
+    "”李(5次)",
+    "“监(4次)",
+    "”林(4次)",
+    "王可(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 15,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 41,
+    "问号": 2,
+    "叹号": 3,
+    "引号": 0
+  },
+  "chapter": 33,
+  "file": "第33章.txt"
+}

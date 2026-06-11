@@ -1,0 +1,35 @@
+{
+  "total_chars": 2084,
+  "avg_sentence_len": 15.8,
+  "sentence_len_std": 11.7,
+  "avg_paragraph_len": 27,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 91
+  },
+  "vocabulary_diversity": 0.283,
+  "top_patterns": [
+    "”苏(22次)",
+    "苏文(16次)",
+    "苏国(6次)",
+    "“我(5次)",
+    "“还(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(26处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 2,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 36,
+    "问号": 0,
+    "叹号": 3,
+    "引号": 0
+  },
+  "chapter": 104,
+  "file": "第104章.txt"
+}

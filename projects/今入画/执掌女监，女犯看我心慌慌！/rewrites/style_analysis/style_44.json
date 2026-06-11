@@ -1,0 +1,34 @@
+{
+  "total_chars": 2087,
+  "avg_sentence_len": 23.4,
+  "sentence_len_std": 15.6,
+  "avg_paragraph_len": 35,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 86
+  },
+  "vocabulary_diversity": 0.299,
+  "top_patterns": [
+    "李命(16次)",
+    "”王(3次)",
+    "”李(3次)"
+  ],
+  "rhetorical_features": [
+    "反问(2处)",
+    "短句节奏(11处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 4,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 44,
+    "问号": 1,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 44,
+  "file": "第44章.txt"
+}

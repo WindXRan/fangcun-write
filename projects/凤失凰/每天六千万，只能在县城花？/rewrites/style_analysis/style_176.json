@@ -1,0 +1,35 @@
+{
+  "total_chars": 2423,
+  "avg_sentence_len": 23.9,
+  "sentence_len_std": 16.0,
+  "avg_paragraph_len": 34,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 120
+  },
+  "vocabulary_diversity": 0.297,
+  "top_patterns": [
+    "张炳(14次)",
+    "“张(8次)",
+    "陆明(6次)",
+    "”陆(5次)",
+    "此时(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 1,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 42,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 176,
+  "file": "第176章.txt"
+}

@@ -1,0 +1,34 @@
+{
+  "total_chars": 2108,
+  "avg_sentence_len": 23.3,
+  "sentence_len_std": 14.6,
+  "avg_paragraph_len": 35,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 77
+  },
+  "vocabulary_diversity": 0.25,
+  "top_patterns": [
+    "李命(13次)",
+    "夏红(6次)",
+    "王可(6次)",
+    "林希(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(10处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 7,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 40,
+    "问号": 0,
+    "叹号": 9,
+    "引号": 0
+  },
+  "chapter": 42,
+  "file": "第42章.txt"
+}

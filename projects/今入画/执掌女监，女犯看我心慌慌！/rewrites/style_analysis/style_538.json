@@ -1,0 +1,32 @@
+{
+  "total_chars": 2149,
+  "avg_sentence_len": 31.3,
+  "sentence_len_std": 17.6,
+  "avg_paragraph_len": 34,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 93
+  },
+  "vocabulary_diversity": 0.211,
+  "top_patterns": [
+    "李命(9次)",
+    "“我(6次)",
+    "黄玉(5次)",
+    "不过(4次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 5,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 16,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 35,
+    "问号": 0,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 538,
+  "file": "第538章.txt"
+}

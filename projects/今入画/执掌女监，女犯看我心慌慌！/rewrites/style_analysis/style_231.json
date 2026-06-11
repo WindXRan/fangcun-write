@@ -1,0 +1,33 @@
+{
+  "total_chars": 2105,
+  "avg_sentence_len": 29.2,
+  "sentence_len_std": 18.0,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 98
+  },
+  "vocabulary_diversity": 0.241,
+  "top_patterns": [
+    "李命(9次)",
+    "「监(5次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 21,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 15,
+    "问号": 1,
+    "叹号": 14,
+    "引号": 0
+  },
+  "chapter": 231,
+  "file": "第231章.txt"
+}

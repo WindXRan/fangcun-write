@@ -1,0 +1,33 @@
+{
+  "total_chars": 2047,
+  "avg_sentence_len": 33.6,
+  "sentence_len_std": 22.0,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 11,
+    "max": 115
+  },
+  "vocabulary_diversity": 0.259,
+  "top_patterns": [
+    "周琳(11次)",
+    "李命(7次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 17,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 25,
+    "问号": 1,
+    "叹号": 5,
+    "引号": 0
+  },
+  "chapter": 206,
+  "file": "第206章.txt"
+}

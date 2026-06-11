@@ -1,0 +1,34 @@
+{
+  "total_chars": 2055,
+  "avg_sentence_len": 23.9,
+  "sentence_len_std": 18.7,
+  "avg_paragraph_len": 34,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 148
+  },
+  "vocabulary_diversity": 0.216,
+  "top_patterns": [
+    "李命(9次)",
+    "叶莓(9次)",
+    "“监(6次)",
+    "“叶(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 49,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 18,
+    "问号": 3,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 574,
+  "file": "第574章.txt"
+}

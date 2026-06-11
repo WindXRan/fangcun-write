@@ -1,0 +1,35 @@
+{
+  "total_chars": 2521,
+  "avg_sentence_len": 22.6,
+  "sentence_len_std": 15.0,
+  "avg_paragraph_len": 28,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 82
+  },
+  "vocabulary_diversity": 0.241,
+  "top_patterns": [
+    "孙长(11次)",
+    "白崇(10次)",
+    "赵海(7次)",
+    "云梦(3次)",
+    "王卫(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 44,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 76,
+  "file": "第76章.txt"
+}

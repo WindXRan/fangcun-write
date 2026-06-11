@@ -7,6 +7,8 @@ story-export · 小说导出工具
 import os
 import re
 import argparse
+import subprocess
+import tempfile
 from pathlib import Path
 
 
@@ -60,7 +62,78 @@ def extract_tags_from_source(cache_dir: str, source_book: str) -> str:
     return '现代言情'
 
 
-def merge_chapters(chapters_dir: str) -> tuple:
+def generate_chapter_title(chapter_num: int, content: str) -> str:
+    """使用LLM根据章节内容生成标题"""
+    # 提取前500字作为参考
+    sample = content[:500] if len(content) > 500 else content
+    
+    prompt = f"""你是一个网文编辑，需要根据章节内容生成一个简洁的章节标题。
+
+章节编号：第{chapter_num}章
+章节内容（前500字）：
+{sample}
+
+要求：
+1. 标题简洁，2-6个字
+2. 体现章节核心情节或冲突
+3. 网文风格，有吸引力
+4. 只返回标题名称（不要包含"第X章"），不要其他内容"""
+
+    try:
+        # 读取环境变量
+        api_key = os.environ.get("API_KEY", "")
+        base_url = os.environ.get("API_BASE_URL", "https://api.deepseek.com")
+        model = os.environ.get("API_MODEL", "deepseek-chat")
+        
+        # 写入临时文件
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False, encoding='utf-8') as f:
+            f.write(f'''
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="{api_key}",
+    base_url="{base_url}"
+)
+
+prompt = """{prompt}"""
+
+response = client.chat.completions.create(
+    model="{model}",
+    messages=[{{"role": "user", "content": prompt}}],
+    temperature=0.3,
+    max_tokens=50
+)
+
+print(response.choices[0].message.content.strip())
+''')
+            temp_file = f.name
+        
+        result = subprocess.run(
+            ['python', temp_file],
+            capture_output=True,
+            text=True,
+            timeout=30,
+            encoding='utf-8'
+        )
+        
+        # 删除临时文件
+        os.unlink(temp_file)
+        
+        if result.returncode == 0:
+            title = result.stdout.strip()
+            # 清理标题（移除引号等）
+            title = title.strip('"\'').strip()
+            if title:
+                return title
+    except Exception as e:
+        print(f"  [警告] LLM生成标题失败: {e}")
+    
+    return ''
+
+
+def merge_chapters(chapters_dir: str, fix_titles: bool = True) -> tuple:
     """合并所有章节，返回(内容, 字数, 章节数)"""
     chapters = []
     total_chars = 0
@@ -75,6 +148,35 @@ def merge_chapters(chapters_dir: str) -> tuple:
         filepath = os.path.join(chapters_dir, filename)
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read().strip()
+        
+        # 处理章节标题格式：移除开头的#号和空格
+        lines = content.split('\n')
+        if lines and lines[0].startswith('#'):
+            lines[0] = lines[0].lstrip('#').strip()
+        
+        # 检查章节标题是否为空或缺少名称
+        first_line = lines[0] if lines else ''
+        chapter_match = re.match(r'^第(\d+)章\s*(.*)', first_line)
+        
+        if chapter_match and fix_titles:
+            chapter_num = int(chapter_match.group(1))
+            chapter_name = chapter_match.group(2).strip()
+            
+            # 如果章节名称为空，使用LLM生成
+            if not chapter_name:
+                print(f"  生成第{chapter_num}章标题...", flush=True)
+                new_title = generate_chapter_title(chapter_num, '\n'.join(lines[1:]))
+                if new_title:
+                    # 清理标题，移除可能重复的章节编号
+                    new_title = re.sub(r'^第\d+章\s*', '', new_title).strip()
+                    lines[0] = f"第{chapter_num}章 {new_title}"
+                    print(f"    -> {lines[0]}", flush=True)
+                    
+                    # 更新源文件
+                    with open(filepath, 'w', encoding='utf-8') as f:
+                        f.write('\n'.join(lines))
+        
+        content = '\n'.join(lines)
         
         # 统计字数（去除空白和标点）
         chars = len(re.sub(r'\s+', '', content))

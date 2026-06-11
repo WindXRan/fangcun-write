@@ -1,0 +1,33 @@
+{
+  "total_chars": 2245,
+  "avg_sentence_len": 35.9,
+  "sentence_len_std": 25.6,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 12,
+    "max": 120
+  },
+  "vocabulary_diversity": 0.258,
+  "top_patterns": [
+    "李命(7次)",
+    "“监(4次)",
+    "很快(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 6,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 18,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 27,
+    "问号": 3,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 207,
+  "file": "第207章.txt"
+}

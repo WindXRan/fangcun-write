@@ -1,0 +1,35 @@
+{
+  "total_chars": 2055,
+  "avg_sentence_len": 29.6,
+  "sentence_len_std": 16.9,
+  "avg_paragraph_len": 35,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 83
+  },
+  "vocabulary_diversity": 0.241,
+  "top_patterns": [
+    "赛丽(5次)",
+    "张雅(4次)",
+    "李命(4次)",
+    "因为(3次)",
+    "于是(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 17,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 25,
+    "问号": 3,
+    "叹号": 9,
+    "引号": 0
+  },
+  "chapter": 438,
+  "file": "第438章.txt"
+}

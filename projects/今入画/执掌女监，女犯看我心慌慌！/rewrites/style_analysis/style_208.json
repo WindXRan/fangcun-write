@@ -1,0 +1,35 @@
+{
+  "total_chars": 2061,
+  "avg_sentence_len": 35.1,
+  "sentence_len_std": 22.8,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 11,
+    "max": 87
+  },
+  "vocabulary_diversity": 0.251,
+  "top_patterns": [
+    "李命(8次)",
+    "林希(8次)",
+    "王可(5次)",
+    "于是(4次)",
+    "可是(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 13,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 26,
+    "问号": 3,
+    "叹号": 5,
+    "引号": 0
+  },
+  "chapter": 208,
+  "file": "第208章.txt"
+}

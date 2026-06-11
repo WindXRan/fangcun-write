@@ -21,6 +21,8 @@
 ## Pipeline
 
 ```
+Phase 0:   品类检测 (detect-genre)    → 自动检测品类（LLM读源文，判genre→写回config）
+Phase 0.5: 热梗调研 (story-trend)     → trends/{题材名}/ 知识库（可选）
 Phase 1:   开书 (pro, 1 call)        → concept.md（设定+角色名+角色行为模式+全局节奏图+弧线）
 Phase 2:   Guides (flash, 2N 并行)   → plot_{N}.md + style_{N}.md（每章独立风格）
 Phase 3:   写章 (flash, N 并行)      → ch_{N}.txt（章名自生成）
@@ -70,6 +72,15 @@ projects/{作者}/{书名}/
     ├── guides/style_{N}.md          # 风格速查（定量锚点+执行规则）
     ├── chapters/ch_{N}.txt          # 正文
     └── compare/                      # 对比报告
+
+trends/{题材名}/                      # 热梗知识库（story-trend 生成）
+├── overview.md                       # 题材概述+读者画像
+├── mechanics.md                      # 核心机制/爽点循环
+├── characters.md                     # 角色模板
+├── plot_patterns.md                  # 情节模式
+├── references.md                     # 参考素材/真实案例
+├── keywords.md                       # 关键词/标签
+└── style_notes.md                    # 风格备注
 ```
 
 ## 模型策略

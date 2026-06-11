@@ -1,0 +1,34 @@
+{
+  "total_chars": 2078,
+  "avg_sentence_len": 47.8,
+  "sentence_len_std": 23.7,
+  "avg_paragraph_len": 48,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 120
+  },
+  "vocabulary_diversity": 0.251,
+  "top_patterns": [
+    "李命(5次)",
+    "研究(4次)",
+    "而这(3次)",
+    "“实(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)"
+  ],
+  "simile_count": 5,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 29,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 11,
+    "问号": 0,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 374,
+  "file": "第374章.txt"
+}

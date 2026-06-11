@@ -1,0 +1,29 @@
+{
+  "total_chars": 1600,
+  "avg_sentence_len": 38.1,
+  "sentence_len_std": 18.6,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 90
+  },
+  "vocabulary_diversity": 0.309,
+  "top_patterns": [
+    "王可(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 2,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 12,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 19,
+    "问号": 1,
+    "叹号": 5,
+    "引号": 0
+  },
+  "chapter": 271,
+  "file": "第271章.txt"
+}

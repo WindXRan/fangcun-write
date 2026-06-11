@@ -1,0 +1,35 @@
+{
+  "total_chars": 1717,
+  "avg_sentence_len": 20.3,
+  "sentence_len_std": 16.7,
+  "avg_paragraph_len": 29,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 91
+  },
+  "vocabulary_diversity": 0.249,
+  "top_patterns": [
+    "二管(8次)",
+    "黄莺(7次)",
+    "王馨(5次)",
+    "”二(4次)"
+  ],
+  "rhetorical_features": [
+    "反问(2处)",
+    "短句节奏(11处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 9,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 37,
+    "问号": 2,
+    "叹号": 9,
+    "引号": 0
+  },
+  "chapter": 89,
+  "file": "第89章.txt"
+}

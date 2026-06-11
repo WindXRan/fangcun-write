@@ -1,0 +1,31 @@
+{
+  "total_chars": 2091,
+  "avg_sentence_len": 42.7,
+  "sentence_len_std": 22.9,
+  "avg_paragraph_len": 46,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 111
+  },
+  "vocabulary_diversity": 0.227,
+  "top_patterns": [
+    "姜禾(8次)",
+    "赛丽(6次)",
+    "而姜(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 20,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 17,
+    "问号": 0,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 462,
+  "file": "第462章.txt"
+}

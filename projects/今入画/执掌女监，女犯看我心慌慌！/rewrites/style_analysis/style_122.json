@@ -1,0 +1,33 @@
+{
+  "total_chars": 1825,
+  "avg_sentence_len": 28.0,
+  "sentence_len_std": 19.9,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 119
+  },
+  "vocabulary_diversity": 0.299,
+  "top_patterns": [
+    "李命(5次)",
+    "叶莓(5次)",
+    "林希(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(6处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 29,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 10,
+    "问号": 3,
+    "叹号": 17,
+    "引号": 0
+  },
+  "chapter": 122,
+  "file": "第122章.txt"
+}

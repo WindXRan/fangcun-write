@@ -1,0 +1,32 @@
+{
+  "total_chars": 2169,
+  "avg_sentence_len": 23.4,
+  "sentence_len_std": 14.6,
+  "avg_paragraph_len": 29,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 98
+  },
+  "vocabulary_diversity": 0.262,
+  "top_patterns": [
+    "李命(11次)",
+    "黄莺(9次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 22,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 43,
+    "问号": 2,
+    "叹号": 13,
+    "引号": 0
+  },
+  "chapter": 84,
+  "file": "第84章.txt"
+}

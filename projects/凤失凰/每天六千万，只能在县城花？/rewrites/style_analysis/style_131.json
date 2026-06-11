@@ -1,0 +1,35 @@
+{
+  "total_chars": 2195,
+  "avg_sentence_len": 18.9,
+  "sentence_len_std": 14.2,
+  "avg_paragraph_len": 30,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 91
+  },
+  "vocabulary_diversity": 0.285,
+  "top_patterns": [
+    "陆明(6次)",
+    "”陆(6次)",
+    "赵一(4次)",
+    "“是(3次)",
+    "“那(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(12处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 39,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 131,
+  "file": "第131章.txt"
+}

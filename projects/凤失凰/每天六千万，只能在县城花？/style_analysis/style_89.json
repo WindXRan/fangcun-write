@@ -1,0 +1,35 @@
+{
+  "total_chars": 2459,
+  "avg_sentence_len": 19.2,
+  "sentence_len_std": 14.2,
+  "avg_paragraph_len": 27,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 66
+  },
+  "vocabulary_diversity": 0.27,
+  "top_patterns": [
+    "”赵(7次)",
+    "苏文(6次)",
+    "”苏(5次)",
+    "赵国(5次)",
+    "”方(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 8,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 59,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 89,
+  "file": "第89章.txt"
+}

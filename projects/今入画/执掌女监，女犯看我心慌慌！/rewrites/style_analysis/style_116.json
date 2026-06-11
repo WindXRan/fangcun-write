@@ -1,0 +1,32 @@
+{
+  "total_chars": 1352,
+  "avg_sentence_len": 16.9,
+  "sentence_len_std": 10.2,
+  "avg_paragraph_len": 34,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 105
+  },
+  "vocabulary_diversity": 0.305,
+  "top_patterns": [
+    "柳若(4次)",
+    "李命(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 21,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 7,
+    "问号": 4,
+    "叹号": 23,
+    "引号": 0
+  },
+  "chapter": 116,
+  "file": "第116章.txt"
+}

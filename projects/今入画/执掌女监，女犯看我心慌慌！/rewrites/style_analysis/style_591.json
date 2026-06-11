@@ -1,0 +1,36 @@
+{
+  "total_chars": 2063,
+  "avg_sentence_len": 25.1,
+  "sentence_len_std": 15.2,
+  "avg_paragraph_len": 33,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 87
+  },
+  "vocabulary_diversity": 0.229,
+  "top_patterns": [
+    "李由(6次)",
+    "可是(4次)",
+    "李命(4次)",
+    "而李(3次)",
+    "于是(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(7处)"
+  ],
+  "simile_count": 6,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 43,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 10,
+    "问号": 5,
+    "叹号": 22,
+    "引号": 0
+  },
+  "chapter": 591,
+  "file": "第591章.txt"
+}

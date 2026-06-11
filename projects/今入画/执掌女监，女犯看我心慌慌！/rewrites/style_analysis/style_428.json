@@ -1,0 +1,29 @@
+{
+  "total_chars": 2064,
+  "avg_sentence_len": 40.4,
+  "sentence_len_std": 21.6,
+  "avg_paragraph_len": 45,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 92
+  },
+  "vocabulary_diversity": 0.247,
+  "top_patterns": [
+    "李命(7次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 3,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 30,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 15,
+    "问号": 1,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 428,
+  "file": "第428章.txt"
+}

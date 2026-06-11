@@ -1,0 +1,33 @@
+{
+  "total_chars": 2114,
+  "avg_sentence_len": 18.9,
+  "sentence_len_std": 14.9,
+  "avg_paragraph_len": 30,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 135
+  },
+  "vocabulary_diversity": 0.289,
+  "top_patterns": [
+    "陈越(10次)",
+    "沈璃(4次)",
+    "“第(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(18处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 2,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 28,
+    "问号": 5,
+    "叹号": 0,
+    "引号": 11
+  },
+  "chapter": 141,
+  "file": "第141章.txt"
+}

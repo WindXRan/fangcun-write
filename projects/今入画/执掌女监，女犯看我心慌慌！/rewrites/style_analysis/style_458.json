@@ -1,0 +1,30 @@
+{
+  "total_chars": 2075,
+  "avg_sentence_len": 41.9,
+  "sentence_len_std": 32.1,
+  "avg_paragraph_len": 44,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 185
+  },
+  "vocabulary_diversity": 0.277,
+  "top_patterns": [
+    "李命(8次)",
+    "“徐(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 5,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 16,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 34,
+    "问号": 0,
+    "叹号": 1,
+    "引号": 0
+  },
+  "chapter": 458,
+  "file": "第458章.txt"
+}

@@ -1,0 +1,33 @@
+{
+  "total_chars": 2093,
+  "avg_sentence_len": 27.4,
+  "sentence_len_std": 16.0,
+  "avg_paragraph_len": 31,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 63
+  },
+  "vocabulary_diversity": 0.256,
+  "top_patterns": [
+    "李命(10次)",
+    "赛丽(4次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)"
+  ],
+  "simile_count": 5,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 18,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 40,
+    "问号": 0,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 542,
+  "file": "第542章.txt"
+}

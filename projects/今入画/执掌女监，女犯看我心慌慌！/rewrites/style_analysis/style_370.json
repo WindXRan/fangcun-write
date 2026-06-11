@@ -1,0 +1,30 @@
+{
+  "total_chars": 2086,
+  "avg_sentence_len": 44.4,
+  "sentence_len_std": 28.6,
+  "avg_paragraph_len": 48,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 133
+  },
+  "vocabulary_diversity": 0.237,
+  "top_patterns": [
+    "李命(5次)",
+    "周琳(4次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 16,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 24,
+    "问号": 0,
+    "叹号": 2,
+    "引号": 0
+  },
+  "chapter": 370,
+  "file": "第370章.txt"
+}

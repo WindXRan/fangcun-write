@@ -1,0 +1,30 @@
+{
+  "total_chars": 2056,
+  "avg_sentence_len": 43.8,
+  "sentence_len_std": 24.2,
+  "avg_paragraph_len": 53,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 140
+  },
+  "vocabulary_diversity": 0.27,
+  "top_patterns": [
+    "黄玉(5次)",
+    "苏瑶(5次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 5,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 15,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 16,
+    "问号": 0,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 526,
+  "file": "第526章.txt"
+}

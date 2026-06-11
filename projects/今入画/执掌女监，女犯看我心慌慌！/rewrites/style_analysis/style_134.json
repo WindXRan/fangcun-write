@@ -1,0 +1,35 @@
+{
+  "total_chars": 2051,
+  "avg_sentence_len": 31.8,
+  "sentence_len_std": 22.0,
+  "avg_paragraph_len": 48,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 115
+  },
+  "vocabulary_diversity": 0.243,
+  "top_patterns": [
+    "李命(9次)",
+    "黄莺(5次)",
+    "”李(3次)",
+    "“监(3次)",
+    "“沈(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 4,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 27,
+    "问号": 1,
+    "叹号": 5,
+    "引号": 0
+  },
+  "chapter": 134,
+  "file": "第134章.txt"
+}

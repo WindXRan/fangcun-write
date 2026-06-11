@@ -1,0 +1,32 @@
+{
+  "total_chars": 2067,
+  "avg_sentence_len": 34.3,
+  "sentence_len_std": 23.3,
+  "avg_paragraph_len": 48,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 142
+  },
+  "vocabulary_diversity": 0.221,
+  "top_patterns": [
+    "李命(6次)",
+    "苏瑶(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 19,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 12,
+    "问号": 3,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 522,
+  "file": "第522章.txt"
+}

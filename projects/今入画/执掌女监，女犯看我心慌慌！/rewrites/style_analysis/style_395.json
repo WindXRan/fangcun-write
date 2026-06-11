@@ -1,0 +1,31 @@
+{
+  "total_chars": 2134,
+  "avg_sentence_len": 36.4,
+  "sentence_len_std": 21.1,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 90
+  },
+  "vocabulary_diversity": 0.263,
+  "top_patterns": [
+    "陈知(8次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 25,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 32,
+    "问号": 0,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 395,
+  "file": "第395章.txt"
+}

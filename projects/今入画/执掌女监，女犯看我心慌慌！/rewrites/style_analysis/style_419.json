@@ -1,0 +1,33 @@
+{
+  "total_chars": 2076,
+  "avg_sentence_len": 40.3,
+  "sentence_len_std": 32.5,
+  "avg_paragraph_len": 53,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 154
+  },
+  "vocabulary_diversity": 0.258,
+  "top_patterns": [
+    "可是(3次)",
+    "男警(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(2处)"
+  ],
+  "simile_count": 6,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 19,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 16,
+    "问号": 0,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 419,
+  "file": "第419章.txt"
+}

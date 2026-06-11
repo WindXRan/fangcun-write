@@ -1,0 +1,35 @@
+{
+  "total_chars": 2448,
+  "avg_sentence_len": 22.4,
+  "sentence_len_std": 14.9,
+  "avg_paragraph_len": 32,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 103
+  },
+  "vocabulary_diversity": 0.301,
+  "top_patterns": [
+    "”刘(7次)",
+    "刘永(6次)",
+    "”陆(5次)",
+    "陈越(4次)",
+    "平林(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 2,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 59,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 217,
+  "file": "第217章.txt"
+}

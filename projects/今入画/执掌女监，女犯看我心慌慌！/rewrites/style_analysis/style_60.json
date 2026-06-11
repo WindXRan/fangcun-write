@@ -1,0 +1,35 @@
+{
+  "total_chars": 2148,
+  "avg_sentence_len": 22.3,
+  "sentence_len_std": 14.4,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 117
+  },
+  "vocabulary_diversity": 0.255,
+  "top_patterns": [
+    "李命(7次)",
+    "谭程(6次)",
+    "”谭(4次)",
+    "如果(4次)",
+    "可以(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 44,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 29,
+    "问号": 1,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 60,
+  "file": "第60章.txt"
+}

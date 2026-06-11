@@ -1,0 +1,30 @@
+{
+  "total_chars": 2152,
+  "avg_sentence_len": 40.9,
+  "sentence_len_std": 32.7,
+  "avg_paragraph_len": 55,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 121
+  },
+  "vocabulary_diversity": 0.267,
+  "top_patterns": [],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)",
+    "短句节奏(5处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 17,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 11,
+    "问号": 0,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 379,
+  "file": "第379章.txt"
+}

@@ -1,0 +1,35 @@
+{
+  "total_chars": 2546,
+  "avg_sentence_len": 19.6,
+  "sentence_len_std": 14.3,
+  "avg_paragraph_len": 27,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 100
+  },
+  "vocabulary_diversity": 0.246,
+  "top_patterns": [
+    "苏国(20次)",
+    "陈越(11次)",
+    "”陈(8次)",
+    "陆明(7次)",
+    "王坤(6次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(14处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 7,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 45,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 142,
+  "file": "第142章.txt"
+}

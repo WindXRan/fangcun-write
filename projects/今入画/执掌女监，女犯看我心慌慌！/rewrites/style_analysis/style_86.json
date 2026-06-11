@@ -1,0 +1,33 @@
+{
+  "total_chars": 1051,
+  "avg_sentence_len": 21.0,
+  "sentence_len_std": 16.0,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 94
+  },
+  "vocabulary_diversity": 0.345,
+  "top_patterns": [
+    "李命(4次)",
+    "这么(3次)",
+    "许清(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(10处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 4,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 16,
+    "问号": 1,
+    "叹号": 1,
+    "引号": 0
+  },
+  "chapter": 86,
+  "file": "第86章.txt"
+}

@@ -1,0 +1,30 @@
+{
+  "total_chars": 2056,
+  "avg_sentence_len": 45.6,
+  "sentence_len_std": 26.3,
+  "avg_paragraph_len": 49,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 129
+  },
+  "vocabulary_diversity": 0.238,
+  "top_patterns": [
+    "李命(5次)",
+    "周琳(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 6,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 20,
+    "问号": 0,
+    "叹号": 10,
+    "引号": 0
+  },
+  "chapter": 372,
+  "file": "第372章.txt"
+}

@@ -1,0 +1,35 @@
+{
+  "total_chars": 2064,
+  "avg_sentence_len": 23.7,
+  "sentence_len_std": 18.1,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 119
+  },
+  "vocabulary_diversity": 0.234,
+  "top_patterns": [
+    "”李(9次)",
+    "李命(7次)",
+    "”王(7次)",
+    "“监(6次)",
+    "王馨(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(16处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 21,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 35,
+    "问号": 0,
+    "叹号": 3,
+    "引号": 0
+  },
+  "chapter": 39,
+  "file": "第39章.txt"
+}

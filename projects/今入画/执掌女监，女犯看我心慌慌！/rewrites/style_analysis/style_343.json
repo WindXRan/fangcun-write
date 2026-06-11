@@ -1,0 +1,31 @@
+{
+  "total_chars": 2162,
+  "avg_sentence_len": 33.7,
+  "sentence_len_std": 24.1,
+  "avg_paragraph_len": 41,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 120
+  },
+  "vocabulary_diversity": 0.262,
+  "top_patterns": [
+    "赛丽(5次)",
+    "李命(4次)",
+    "血玫(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 3,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 32,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 12,
+    "问号": 7,
+    "叹号": 14,
+    "引号": 0
+  },
+  "chapter": 343,
+  "file": "第343章.txt"
+}

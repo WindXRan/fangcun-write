@@ -1,0 +1,30 @@
+{
+  "total_chars": 1051,
+  "avg_sentence_len": 32.7,
+  "sentence_len_std": 22.7,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 12,
+    "max": 96
+  },
+  "vocabulary_diversity": 0.362,
+  "top_patterns": [
+    "夏红(4次)",
+    "李命(4次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 15,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 9,
+    "问号": 0,
+    "叹号": 4,
+    "引号": 0
+  },
+  "chapter": 281,
+  "file": "第281章.txt"
+}

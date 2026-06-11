@@ -1,0 +1,33 @@
+{
+  "total_chars": 2011,
+  "avg_sentence_len": 27.7,
+  "sentence_len_std": 18.0,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 99
+  },
+  "vocabulary_diversity": 0.274,
+  "top_patterns": [
+    "李命(7次)",
+    "杨阳(6次)",
+    "”杨(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 39,
+    "问号": 0,
+    "叹号": 2,
+    "引号": 0
+  },
+  "chapter": 22,
+  "file": "第22章.txt"
+}

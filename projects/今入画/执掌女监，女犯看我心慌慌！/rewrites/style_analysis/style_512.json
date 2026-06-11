@@ -1,0 +1,34 @@
+{
+  "total_chars": 2078,
+  "avg_sentence_len": 41.2,
+  "sentence_len_std": 28.9,
+  "avg_paragraph_len": 52,
+  "paragraph_len_range": {
+    "min": 13,
+    "max": 143
+  },
+  "vocabulary_diversity": 0.252,
+  "top_patterns": [
+    "韩素(6次)",
+    "“而(4次)",
+    "……(3次)",
+    "“当(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 31,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 9,
+    "问号": 0,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 512,
+  "file": "第512章.txt"
+}

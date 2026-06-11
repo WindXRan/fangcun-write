@@ -1,0 +1,32 @@
+{
+  "total_chars": 2096,
+  "avg_sentence_len": 32.2,
+  "sentence_len_std": 21.3,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 120
+  },
+  "vocabulary_diversity": 0.264,
+  "top_patterns": [
+    "李命(15次)",
+    "周琳(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 5,
+  "ai_marker_count": 9,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 16,
+    "问号": 4,
+    "叹号": 14,
+    "引号": 0
+  },
+  "chapter": 234,
+  "file": "第234章.txt"
+}

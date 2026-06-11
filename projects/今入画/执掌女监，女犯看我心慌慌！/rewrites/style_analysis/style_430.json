@@ -1,0 +1,30 @@
+{
+  "total_chars": 2055,
+  "avg_sentence_len": 46.7,
+  "sentence_len_std": 25.8,
+  "avg_paragraph_len": 50,
+  "paragraph_len_range": {
+    "min": 11,
+    "max": 113
+  },
+  "vocabulary_diversity": 0.264,
+  "top_patterns": [
+    "所以(3次)",
+    "刘国(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 22,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 26,
+    "问号": 0,
+    "叹号": 1,
+    "引号": 0
+  },
+  "chapter": 430,
+  "file": "第430章.txt"
+}

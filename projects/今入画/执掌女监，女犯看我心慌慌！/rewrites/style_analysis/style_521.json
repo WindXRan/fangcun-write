@@ -1,0 +1,33 @@
+{
+  "total_chars": 2089,
+  "avg_sentence_len": 30.3,
+  "sentence_len_std": 19.7,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 131
+  },
+  "vocabulary_diversity": 0.261,
+  "top_patterns": [
+    "李命(8次)",
+    "姜禾(4次)",
+    "不过(3次)",
+    "周琳(3次)",
+    "可是(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 5,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 42,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 24,
+    "问号": 3,
+    "叹号": 5,
+    "引号": 0
+  },
+  "chapter": 521,
+  "file": "第521章.txt"
+}

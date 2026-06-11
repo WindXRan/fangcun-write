@@ -1,0 +1,34 @@
+{
+  "total_chars": 2241,
+  "avg_sentence_len": 30.9,
+  "sentence_len_std": 19.2,
+  "avg_paragraph_len": 35,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 139
+  },
+  "vocabulary_diversity": 0.216,
+  "top_patterns": [
+    "姜禾(11次)",
+    "李命(7次)",
+    "周琳(4次)",
+    "“局(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 35,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 35,
+    "问号": 0,
+    "叹号": 2,
+    "引号": 0
+  },
+  "chapter": 487,
+  "file": "第487章.txt"
+}

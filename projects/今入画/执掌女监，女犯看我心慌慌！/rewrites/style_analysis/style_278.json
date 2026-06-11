@@ -1,0 +1,31 @@
+{
+  "total_chars": 1466,
+  "avg_sentence_len": 34.0,
+  "sentence_len_std": 22.6,
+  "avg_paragraph_len": 38,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 115
+  },
+  "vocabulary_diversity": 0.274,
+  "top_patterns": [
+    "王馨(5次)",
+    "谭青(4次)",
+    "“青(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 20,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 21,
+    "问号": 0,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 278,
+  "file": "第278章.txt"
+}

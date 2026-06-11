@@ -91,3 +91,86 @@ def call_api(api_key, model, user_prompt, reasoning_effort="low",
             raise
 
     raise Exception(f"API 调用失败，已重试 {max_retries} 次")
+
+
+def test_api_connection(config=None, timeout=10):
+    """测试 API 连接是否正常。
+    
+    Returns:
+        dict: {
+            "success": bool,
+            "url": str,
+            "model": str,
+            "latency_ms": float or None,
+            "error": str or None
+        }
+    """
+    import requests
+    
+    api_key = get_api_key(config)
+    api_url = get_api_url(config)
+    model = (config or {}).get("model", "deepseek-v4-flash")
+    
+    if not api_key:
+        return {
+            "success": False,
+            "url": api_url,
+            "model": model,
+            "latency_ms": None,
+            "error": "未配置 API_KEY"
+        }
+    
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    data = {
+        "model": model,
+        "messages": [
+            {"role": "user", "content": "test"}
+        ],
+        "max_tokens": 5,
+    }
+    
+    try:
+        start_time = time.time()
+        resp = requests.post(api_url, headers=headers, json=data, timeout=timeout)
+        latency_ms = (time.time() - start_time) * 1000
+        
+        if resp.status_code == 200:
+            return {
+                "success": True,
+                "url": api_url,
+                "model": model,
+                "latency_ms": round(latency_ms, 2),
+                "error": None
+            }
+        else:
+            return {
+                "success": False,
+                "url": api_url,
+                "model": model,
+                "latency_ms": round(latency_ms, 2),
+                "error": f"HTTP {resp.status_code}: {resp.text[:200]}"
+            }
+    except requests.exceptions.Timeout:
+        return {
+            "success": False,
+            "url": api_url,
+            "model": model,
+            "latency_ms": None,
+            "error": f"连接超时 ({timeout}s)"
+        }
+    except requests.exceptions.ConnectionError as e:
+        return {
+            "success": False,
+            "url": api_url,
+            "model": model,
+            "latency_ms": None,
+            "error": f"连接失败: {str(e)[:200]}"
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "url": api_url,
+            "model": model,
+            "latency_ms": None,
+            "error": f"未知错误: {str(e)[:200]}"
+        }

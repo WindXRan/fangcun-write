@@ -1,0 +1,33 @@
+{
+  "total_chars": 2069,
+  "avg_sentence_len": 34.0,
+  "sentence_len_std": 27.7,
+  "avg_paragraph_len": 41,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 149
+  },
+  "vocabulary_diversity": 0.237,
+  "top_patterns": [
+    "李命(6次)",
+    "女警(5次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 6,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 13,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 26,
+    "问号": 1,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 418,
+  "file": "第418章.txt"
+}

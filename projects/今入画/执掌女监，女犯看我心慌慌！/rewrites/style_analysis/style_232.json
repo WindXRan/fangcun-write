@@ -1,0 +1,33 @@
+{
+  "total_chars": 1999,
+  "avg_sentence_len": 25.4,
+  "sentence_len_std": 17.7,
+  "avg_paragraph_len": 35,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 73
+  },
+  "vocabulary_diversity": 0.27,
+  "top_patterns": [
+    "叶莓(9次)",
+    "李命(8次)",
+    "可是(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(10处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 28,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 21,
+    "问号": 0,
+    "叹号": 16,
+    "引号": 0
+  },
+  "chapter": 232,
+  "file": "第232章.txt"
+}

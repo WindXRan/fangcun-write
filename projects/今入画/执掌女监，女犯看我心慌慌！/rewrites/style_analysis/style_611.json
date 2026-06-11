@@ -1,0 +1,31 @@
+{
+  "total_chars": 2053,
+  "avg_sentence_len": 29.8,
+  "sentence_len_std": 17.0,
+  "avg_paragraph_len": 35,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 83
+  },
+  "vocabulary_diversity": 0.277,
+  "top_patterns": [
+    "李命(5次)",
+    "他们(3次)",
+    "所以(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 5,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 32,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 27,
+    "问号": 1,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 611,
+  "file": "第611章.txt"
+}

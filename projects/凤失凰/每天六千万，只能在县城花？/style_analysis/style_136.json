@@ -1,0 +1,35 @@
+{
+  "total_chars": 2197,
+  "avg_sentence_len": 17.5,
+  "sentence_len_std": 12.0,
+  "avg_paragraph_len": 25,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 97
+  },
+  "vocabulary_diversity": 0.314,
+  "top_patterns": [
+    "陆明(8次)",
+    "”陈(7次)",
+    "陈越(6次)",
+    "”陆(5次)",
+    "“陈(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(10处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 57,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 136,
+  "file": "第136章.txt"
+}

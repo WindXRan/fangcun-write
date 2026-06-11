@@ -1,0 +1,35 @@
+{
+  "total_chars": 2361,
+  "avg_sentence_len": 18.4,
+  "sentence_len_std": 10.2,
+  "avg_paragraph_len": 29,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 114
+  },
+  "vocabulary_diversity": 0.303,
+  "top_patterns": [
+    "陆明(11次)",
+    "”陆(9次)",
+    "周岩(6次)",
+    "”胖(4次)",
+    "胖子(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(10处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 1,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 50,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 13,
+  "file": "第13章.txt"
+}

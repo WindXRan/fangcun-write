@@ -1,0 +1,29 @@
+{
+  "total_chars": 2065,
+  "avg_sentence_len": 43.0,
+  "sentence_len_std": 22.5,
+  "avg_paragraph_len": 48,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 97
+  },
+  "vocabulary_diversity": 0.259,
+  "top_patterns": [
+    "李命(10次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 13,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 24,
+    "问号": 0,
+    "叹号": 12,
+    "引号": 0
+  },
+  "chapter": 336,
+  "file": "第336章.txt"
+}

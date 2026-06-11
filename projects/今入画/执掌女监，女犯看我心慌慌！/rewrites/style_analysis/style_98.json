@@ -1,0 +1,32 @@
+{
+  "total_chars": 1961,
+  "avg_sentence_len": 23.2,
+  "sentence_len_std": 13.6,
+  "avg_paragraph_len": 33,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 86
+  },
+  "vocabulary_diversity": 0.288,
+  "top_patterns": [
+    "李命(11次)",
+    "”夏(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 39,
+    "问号": 4,
+    "叹号": 5,
+    "引号": 0
+  },
+  "chapter": 98,
+  "file": "第98章.txt"
+}

@@ -1,0 +1,35 @@
+{
+  "total_chars": 2389,
+  "avg_sentence_len": 16.5,
+  "sentence_len_std": 12.4,
+  "avg_paragraph_len": 25,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 96
+  },
+  "vocabulary_diversity": 0.289,
+  "top_patterns": [
+    "赵一(4次)",
+    "万家(4次)",
+    "“一(4次)",
+    "老李(3次)",
+    "”赵(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(21处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 54,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 106,
+  "file": "第106章.txt"
+}

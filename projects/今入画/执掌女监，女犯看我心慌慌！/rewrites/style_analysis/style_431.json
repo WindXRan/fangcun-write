@@ -1,0 +1,33 @@
+{
+  "total_chars": 2108,
+  "avg_sentence_len": 35.4,
+  "sentence_len_std": 15.9,
+  "avg_paragraph_len": 38,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 63
+  },
+  "vocabulary_diversity": 0.296,
+  "top_patterns": [
+    "可是(3次)",
+    "接着(3次)",
+    "于是(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(3处)"
+  ],
+  "simile_count": 7,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 18,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 28,
+    "问号": 0,
+    "叹号": 13,
+    "引号": 0
+  },
+  "chapter": 431,
+  "file": "第431章.txt"
+}

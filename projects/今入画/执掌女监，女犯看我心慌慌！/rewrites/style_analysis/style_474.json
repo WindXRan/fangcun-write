@@ -1,0 +1,31 @@
+{
+  "total_chars": 2068,
+  "avg_sentence_len": 41.4,
+  "sentence_len_std": 23.0,
+  "avg_paragraph_len": 45,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 117
+  },
+  "vocabulary_diversity": 0.236,
+  "top_patterns": [
+    "姜禾(10次)",
+    "李命(6次)",
+    "“李(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 25,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 22,
+    "问号": 0,
+    "叹号": 3,
+    "引号": 0
+  },
+  "chapter": 474,
+  "file": "第474章.txt"
+}

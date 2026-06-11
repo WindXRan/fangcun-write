@@ -1,0 +1,33 @@
+{
+  "total_chars": 2016,
+  "avg_sentence_len": 24.6,
+  "sentence_len_std": 16.7,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 146
+  },
+  "vocabulary_diversity": 0.252,
+  "top_patterns": [
+    "李命(12次)",
+    "柳如(5次)",
+    "”柳(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 12,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 20,
+    "问号": 3,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 113,
+  "file": "第113章.txt"
+}

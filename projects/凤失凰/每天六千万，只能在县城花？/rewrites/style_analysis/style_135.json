@@ -1,0 +1,35 @@
+{
+  "total_chars": 2128,
+  "avg_sentence_len": 22.8,
+  "sentence_len_std": 16.5,
+  "avg_paragraph_len": 28,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 104
+  },
+  "vocabulary_diversity": 0.265,
+  "top_patterns": [
+    "孙长(5次)",
+    "方瑜(5次)",
+    "周正(4次)",
+    "陆明(4次)",
+    "王文(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 6,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 45,
+    "问号": 2,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 135,
+  "file": "第135章.txt"
+}

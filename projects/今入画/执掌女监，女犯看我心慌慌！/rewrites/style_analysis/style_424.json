@@ -1,0 +1,33 @@
+{
+  "total_chars": 2075,
+  "avg_sentence_len": 40.5,
+  "sentence_len_std": 27.3,
+  "avg_paragraph_len": 48,
+  "paragraph_len_range": {
+    "min": 13,
+    "max": 162
+  },
+  "vocabulary_diversity": 0.245,
+  "top_patterns": [
+    "林希(7次)",
+    "李命(4次)",
+    "刘国(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 15,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 17,
+    "问号": 2,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 424,
+  "file": "第424章.txt"
+}

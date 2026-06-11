@@ -15,26 +15,49 @@
         .panel-header h3 { font-size: 16px; margin-bottom: 10px; }
         .panel-header select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
         
-        .chapter-select { padding: 10px 15px; background: #f9f9f9; border-bottom: 1px solid #ddd; }
-        .chapter-select select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        .book-info { font-size: 12px; color: #666; margin-top: 8px; }
+        .book-info span { margin-right: 12px; }
+        
+        .chapter-select { padding: 10px 15px; background: #f9f9f9; border-bottom: 1px solid #ddd; display: flex; gap: 8px; }
+        .chapter-select select { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        .chapter-select button { padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; background: #fff; white-space: nowrap; }
+        .chapter-select button:hover { background: #f5f5f5; }
         
         .content { flex: 1; overflow-y: auto; padding: 20px; line-height: 1.8; font-size: 16px; }
         .content p { margin-bottom: 1em; text-indent: 2em; }
         
-        .controls { background: #fff; padding: 10px; border-bottom: 1px solid #ddd; display: flex; gap: 10px; }
+        .controls { background: #fff; padding: 10px; border-bottom: 1px solid #ddd; display: flex; gap: 10px; align-items: center; }
         .controls button { padding: 8px 16px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; background: #fff; }
         .controls button:hover { background: #f5f5f5; }
         .controls button.active { background: #4CAF50; color: #fff; border-color: #4CAF50; }
+        .controls .char-count { font-size: 12px; color: #666; margin-left: auto; }
         
-        .nav-links { position: fixed; top: 10px; right: 10px; z-index: 100; }
+        .nav-links { position: fixed; top: 10px; right: 10px; z-index: 100; display: flex; gap: 8px; }
         .nav-links a { color: #4CAF50; text-decoration: none; background: #fff; padding: 8px 12px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .nav-links button { color: #666; background: #fff; padding: 8px 12px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #ddd; cursor: pointer; }
+        .nav-links button:hover { background: #f5f5f5; }
         
         .empty-state { text-align: center; padding: 40px; color: #666; }
+        
+        .highlight { background: #fff3cd; padding: 2px 4px; border-radius: 2px; }
+        
+        /* 夜间模式 */
+        body.night-mode { background: #1a1a2e; }
+        body.night-mode .panel-header { background: #16213e; border-color: #2a2a4a; }
+        body.night-mode .chapter-select { background: #0f3460; border-color: #2a2a4a; }
+        body.night-mode .chapter-select select { background: #16213e; color: #ccc; border-color: #2a2a4a; }
+        body.night-mode .chapter-select button { background: #16213e; color: #ccc; border-color: #2a2a4a; }
+        body.night-mode .content { color: #ccc; }
+        body.night-mode .controls { background: #16213e; border-color: #2a2a4a; }
+        body.night-mode .controls button { background: #16213e; color: #ccc; border-color: #2a2a4a; }
+        body.night-mode .nav-links a, body.night-mode .nav-links button { background: #16213e; color: #ccc; border-color: #2a2a4a; }
     </style>
 </head>
 <body>
     <div class="nav-links">
         <a href="/">← 返回书库</a>
+        <button onclick="toggleNightMode()">夜间模式</button>
+        <button onclick="syncChapters()">同步章节</button>
     </div>
     
     <div class="panel">
@@ -43,19 +66,31 @@
             <select id="book1Select" onchange="loadBook(1)">
                 <option value="">选择书籍...</option>
                 {% for book in books %}
-                <option value="{{ book.file }}">{{ book.author }} - {{ book.title }}</option>
+                <option value="{{ loop.index0 }}" data-idx="{{ loop.index0 }}">
+                    {{ book.author }} - {{ book.title }}
+                    {% if book.version_count > 1 %} ({{ book.version_count }}版本){% endif %}
+                </option>
                 {% endfor %}
+            </select>
+            <div class="book-info" id="bookInfo1"></div>
+        </div>
+        <div class="version-select" id="versionSelect1" style="display:none; padding: 10px 15px; background: #e8f5e9; border-bottom: 1px solid #ddd;">
+            <select id="version1Select" onchange="loadVersion(1)">
+                <option value="">选择版本...</option>
             </select>
         </div>
         <div class="chapter-select">
             <select id="chapter1Select" onchange="loadChapter(1)">
                 <option value="">选择章节...</option>
             </select>
+            <button onclick="prevChapter(1)">◀</button>
+            <button onclick="nextChapter(1)">▶</button>
         </div>
         <div class="controls">
             <button onclick="syncScroll(1)" id="syncBtn1">同步滚动</button>
             <button onclick="increaseFont(1)">A+</button>
             <button onclick="decreaseFont(1)">A-</button>
+            <span class="char-count" id="charCount1"></span>
         </div>
         <div class="content" id="content1">
             <div class="empty-state">请选择书籍和章节</div>
@@ -64,23 +99,35 @@
     
     <div class="panel">
         <div class="panel-header">
-            <h3>新书</h3>
+            <h3>仿写</h3>
             <select id="book2Select" onchange="loadBook(2)">
                 <option value="">选择书籍...</option>
                 {% for book in books %}
-                <option value="{{ book.file }}">{{ book.author }} - {{ book.title }}</option>
+                <option value="{{ loop.index0 }}" data-idx="{{ loop.index0 }}">
+                    {{ book.author }} - {{ book.title }}
+                    {% if book.version_count > 1 %} ({{ book.version_count }}版本){% endif %}
+                </option>
                 {% endfor %}
+            </select>
+            <div class="book-info" id="bookInfo2"></div>
+        </div>
+        <div class="version-select" id="versionSelect2" style="display:none; padding: 10px 15px; background: #e3f2fd; border-bottom: 1px solid #ddd;">
+            <select id="version2Select" onchange="loadVersion(2)">
+                <option value="">选择版本...</option>
             </select>
         </div>
         <div class="chapter-select">
             <select id="chapter2Select" onchange="loadChapter(2)">
                 <option value="">选择章节...</option>
             </select>
+            <button onclick="prevChapter(2)">◀</button>
+            <button onclick="nextChapter(2)">▶</button>
         </div>
         <div class="controls">
             <button onclick="syncScroll(2)" id="syncBtn2">同步滚动</button>
             <button onclick="increaseFont(2)">A+</button>
             <button onclick="decreaseFont(2)">A-</button>
+            <span class="char-count" id="charCount2"></span>
         </div>
         <div class="content" id="content2">
             <div class="empty-state">请选择书籍和章节</div>
@@ -90,39 +137,129 @@
     <script>
         let syncEnabled = { 1: false, 2: false };
         let fontSizes = { 1: 16, 2: 16 };
+        let currentChapters = { 1: [], 2: [] };
+        let currentChapterIdx = { 1: 0, 2: 0 };
+        let nightMode = false;
+        
+        // 书籍数据
+        const books = {{ books | tojson }};
         
         function loadBook(panel) {
             const select = document.getElementById(`book${panel}Select`);
-            const file = select.value;
+            const bookIdx = parseInt(select.value);
             
-            if (!file) return;
+            if (isNaN(bookIdx)) return;
             
-            // 加载章节列表
-            fetch(`/api/chapters?file=${encodeURIComponent(file)}`)
+            const book = books[bookIdx];
+            if (!book) return;
+            
+            // 显示书籍信息
+            const info = document.getElementById(`bookInfo${panel}`);
+            info.innerHTML = `
+                <span>题材: ${book.genre || '未知'}</span>
+                <span>字数: ${(book.char_count || 0).toLocaleString()}</span>
+                <span>章节: ${book.chapter_count || 0}</span>
+            `;
+            
+            // 处理版本
+            const versions = book.versions || [];
+            const versionSelect = document.getElementById(`versionSelect${panel}`);
+            const versionDropdown = document.getElementById(`version${panel}Select`);
+            
+            if (versions.length > 1) {
+                versionSelect.style.display = 'block';
+                versionDropdown.innerHTML = versions.map((v, i) => 
+                    `<option value="${i}">${v.name} (${v.type})</option>`
+                ).join('');
+                loadVersion(panel);
+            } else {
+                versionSelect.style.display = 'none';
+                // 直接加载单版本章节
+                loadVersionChapters(bookIdx, 0, panel);
+            }
+        }
+        
+        function loadVersion(panel) {
+            const bookSelect = document.getElementById(`book${panel}Select`);
+            const versionSelect = document.getElementById(`version${panel}Select`);
+            
+            const bookIdx = parseInt(bookSelect.value);
+            const verIdx = parseInt(versionSelect.value);
+            
+            if (isNaN(bookIdx) || isNaN(verIdx)) return;
+            
+            loadVersionChapters(bookIdx, verIdx, panel);
+        }
+        
+        function loadVersionChapters(bookIdx, verIdx, panel) {
+            fetch(`/api/version_chapters?book_idx=${bookIdx}&ver_idx=${verIdx}`)
                 .then(res => res.json())
                 .then(chapters => {
+                    currentChapters[panel] = chapters;
                     const chapterSelect = document.getElementById(`chapter${panel}Select`);
                     chapterSelect.innerHTML = '<option value="">选择章节...</option>' +
-                        chapters.map((c, i) => `<option value="${i+1}">${c.title} (${c.char_count}字)</option>`).join('');
+                        chapters.map((c, i) => `<option value="${i}">${c.title} (${c.char_count}字)</option>`).join('');
                 });
         }
         
         function loadChapter(panel) {
-            const bookSelect = document.getElementById(`book${panel}Select`);
             const chapterSelect = document.getElementById(`chapter${panel}Select`);
+            const chapterIdx = parseInt(chapterSelect.value);
             
-            const file = bookSelect.value;
-            const chapter = chapterSelect.value;
+            if (isNaN(chapterIdx)) return;
             
-            if (!file || !chapter) return;
+            const chapters = currentChapters[panel];
+            if (chapterIdx < 0 || chapterIdx >= chapters.length) return;
             
-            // 加载章节内容
-            fetch(`/api/content?file=${encodeURIComponent(file)}&chapter=${chapter}`)
-                .then(res => res.json())
-                .then(data => {
-                    const content = document.getElementById(`content${panel}`);
-                    content.innerHTML = data.content.split('\n').map(p => `<p>${p}</p>`).join('');
-                });
+            const chapter = chapters[chapterIdx];
+            const content = document.getElementById(`content${panel}`);
+            content.innerHTML = chapter.content.split('\n').map(p => `<p>${p}</p>`).join('');
+            
+            // 更新字数统计
+            document.getElementById(`charCount${panel}`).textContent = `${chapter.char_count}字`;
+            
+            currentChapterIdx[panel] = chapterIdx;
+        }
+        
+        function prevChapter(panel) {
+            const chapters = currentChapters[panel];
+            const idx = currentChapterIdx[panel];
+            if (idx > 0) {
+                currentChapterIdx[panel] = idx - 1;
+                document.getElementById(`chapter${panel}Select`).value = idx - 1;
+                loadChapter(panel);
+            }
+        }
+        
+        function nextChapter(panel) {
+            const chapters = currentChapters[panel];
+            const idx = currentChapterIdx[panel];
+            if (idx < chapters.length - 1) {
+                currentChapterIdx[panel] = idx + 1;
+                document.getElementById(`chapter${panel}Select`).value = idx + 1;
+                loadChapter(panel);
+            }
+        }
+        
+        function syncChapters() {
+            // 同步两个面板到同一章节索引
+            const idx1 = currentChapterIdx[1];
+            const idx2 = currentChapterIdx[2];
+            
+            // 使用较小的索引
+            const targetIdx = Math.min(idx1, idx2);
+            
+            if (currentChapters[1].length > targetIdx) {
+                currentChapterIdx[1] = targetIdx;
+                document.getElementById('chapter1Select').value = targetIdx;
+                loadChapter(1);
+            }
+            
+            if (currentChapters[2].length > targetIdx) {
+                currentChapterIdx[2] = targetIdx;
+                document.getElementById('chapter2Select').value = targetIdx;
+                loadChapter(2);
+            }
         }
         
         function syncScroll(panel) {
@@ -140,6 +277,11 @@
             document.getElementById(`content${panel}`).style.fontSize = fontSizes[panel] + 'px';
         }
         
+        function toggleNightMode() {
+            nightMode = !nightMode;
+            document.body.classList.toggle('night-mode');
+        }
+        
         // 同步滚动
         document.getElementById('content1').addEventListener('scroll', function() {
             if (syncEnabled[1]) {
@@ -154,6 +296,26 @@
                 const content1 = document.getElementById('content1');
                 const ratio = this.scrollTop / (this.scrollHeight - this.clientHeight);
                 content1.scrollTop = ratio * (content1.scrollHeight - content1.clientHeight);
+            }
+        });
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                // 左箭头：上一章
+                if (document.activeElement.tagName !== 'SELECT') {
+                    prevChapter(1);
+                    prevChapter(2);
+                }
+            } else if (e.key === 'ArrowRight') {
+                // 右箭头：下一章
+                if (document.activeElement.tagName !== 'SELECT') {
+                    nextChapter(1);
+                    nextChapter(2);
+                }
+            } else if (e.key === 'n') {
+                // N键：切换夜间模式
+                toggleNightMode();
             }
         });
     </script>

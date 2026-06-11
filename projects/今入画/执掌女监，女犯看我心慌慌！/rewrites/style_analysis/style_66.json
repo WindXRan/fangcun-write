@@ -1,0 +1,31 @@
+{
+  "total_chars": 1210,
+  "avg_sentence_len": 19.6,
+  "sentence_len_std": 14.4,
+  "avg_paragraph_len": 36,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 87
+  },
+  "vocabulary_diversity": 0.345,
+  "top_patterns": [
+    "李命(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 14,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 13,
+    "问号": 1,
+    "叹号": 9,
+    "引号": 0
+  },
+  "chapter": 66,
+  "file": "第66章.txt"
+}

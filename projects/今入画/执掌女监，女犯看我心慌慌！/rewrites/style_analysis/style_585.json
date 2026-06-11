@@ -1,0 +1,30 @@
+{
+  "total_chars": 2078,
+  "avg_sentence_len": 37.6,
+  "sentence_len_std": 20.2,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 95
+  },
+  "vocabulary_diversity": 0.278,
+  "top_patterns": [
+    "李由(4次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 3,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 22,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 22,
+    "问号": 1,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 585,
+  "file": "第585章.txt"
+}

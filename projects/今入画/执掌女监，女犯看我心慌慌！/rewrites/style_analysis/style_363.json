@@ -1,0 +1,31 @@
+{
+  "total_chars": 2124,
+  "avg_sentence_len": 39.8,
+  "sentence_len_std": 25.0,
+  "avg_paragraph_len": 48,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 131
+  },
+  "vocabulary_diversity": 0.251,
+  "top_patterns": [
+    "周琳(7次)",
+    "李命(5次)",
+    "可是(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 14,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 24,
+    "问号": 0,
+    "叹号": 3,
+    "引号": 0
+  },
+  "chapter": 363,
+  "file": "第363章.txt"
+}

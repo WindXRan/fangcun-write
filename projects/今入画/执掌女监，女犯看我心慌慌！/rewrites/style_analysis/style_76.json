@@ -1,0 +1,32 @@
+{
+  "total_chars": 1445,
+  "avg_sentence_len": 27.3,
+  "sentence_len_std": 23.2,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 88
+  },
+  "vocabulary_diversity": 0.308,
+  "top_patterns": [
+    "李命(6次)",
+    "夏红(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 10,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 18,
+    "问号": 3,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 76,
+  "file": "第76章.txt"
+}

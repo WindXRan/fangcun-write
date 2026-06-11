@@ -1,0 +1,35 @@
+{
+  "total_chars": 2033,
+  "avg_sentence_len": 21.3,
+  "sentence_len_std": 14.8,
+  "avg_paragraph_len": 32,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 75
+  },
+  "vocabulary_diversity": 0.301,
+  "top_patterns": [
+    "李命(12次)",
+    "夏红(8次)",
+    "”李(6次)",
+    "“红(3次)",
+    "”夏(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(12处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 39,
+    "问号": 0,
+    "叹号": 13,
+    "引号": 0
+  },
+  "chapter": 54,
+  "file": "第54章.txt"
+}

@@ -1,0 +1,32 @@
+{
+  "total_chars": 2112,
+  "avg_sentence_len": 29.6,
+  "sentence_len_std": 21.9,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 141
+  },
+  "vocabulary_diversity": 0.249,
+  "top_patterns": [
+    "黄鑫(7次)",
+    "赛丽(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 11,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 32,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 18,
+    "问号": 2,
+    "叹号": 9,
+    "引号": 0
+  },
+  "chapter": 483,
+  "file": "第483章.txt"
+}

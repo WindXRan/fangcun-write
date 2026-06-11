@@ -1,0 +1,35 @@
+{
+  "total_chars": 2087,
+  "avg_sentence_len": 19.5,
+  "sentence_len_std": 12.5,
+  "avg_paragraph_len": 34,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 84
+  },
+  "vocabulary_diversity": 0.321,
+  "top_patterns": [
+    "王强(7次)",
+    "”陆(5次)",
+    "陈越(3次)",
+    "沈璃(3次)",
+    "陆明(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(12处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 27,
+    "问号": 0,
+    "叹号": 3,
+    "引号": 0
+  },
+  "chapter": 204,
+  "file": "第204章.txt"
+}

@@ -1,0 +1,35 @@
+{
+  "total_chars": 2353,
+  "avg_sentence_len": 18.9,
+  "sentence_len_std": 13.6,
+  "avg_paragraph_len": 27,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 106
+  },
+  "vocabulary_diversity": 0.259,
+  "top_patterns": [
+    "周正(14次)",
+    "陆明(12次)",
+    "“陆(5次)",
+    "“周(5次)",
+    "”周(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(13处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 1,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 40,
+    "问号": 3,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 133,
+  "file": "第133章.txt"
+}

@@ -1,0 +1,31 @@
+{
+  "total_chars": 2428,
+  "avg_sentence_len": 39.5,
+  "sentence_len_std": 26.2,
+  "avg_paragraph_len": 45,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 125
+  },
+  "vocabulary_diversity": 0.226,
+  "top_patterns": [
+    "李命(8次)",
+    "顾婉(7次)",
+    "可是(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 2,
+  "ellipsis_count": 33,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 23,
+    "问号": 1,
+    "叹号": 10,
+    "引号": 0
+  },
+  "chapter": 335,
+  "file": "第335章.txt"
+}

@@ -1,0 +1,33 @@
+{
+  "total_chars": 2258,
+  "avg_sentence_len": 23.7,
+  "sentence_len_std": 20.5,
+  "avg_paragraph_len": 35,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 159
+  },
+  "vocabulary_diversity": 0.275,
+  "top_patterns": [
+    "李命(12次)",
+    "林希(8次)",
+    "“监(5次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(14处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 2,
+  "ellipsis_count": 5,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 40,
+    "问号": 0,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 91,
+  "file": "第91章.txt"
+}

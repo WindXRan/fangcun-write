@@ -1,0 +1,35 @@
+{
+  "total_chars": 2131,
+  "avg_sentence_len": 16.9,
+  "sentence_len_std": 13.8,
+  "avg_paragraph_len": 24,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 95
+  },
+  "vocabulary_diversity": 0.321,
+  "top_patterns": [
+    "苏国(9次)",
+    "陆明(6次)",
+    "沈璃(5次)",
+    "王坤(5次)",
+    "”苏(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(19处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 7,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 52,
+    "问号": 1,
+    "叹号": 2,
+    "引号": 0
+  },
+  "chapter": 128,
+  "file": "第128章.txt"
+}

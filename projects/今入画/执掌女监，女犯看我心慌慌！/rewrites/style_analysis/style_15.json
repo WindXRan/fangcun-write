@@ -1,0 +1,36 @@
+{
+  "total_chars": 2140,
+  "avg_sentence_len": 23.7,
+  "sentence_len_std": 20.0,
+  "avg_paragraph_len": 48,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 150
+  },
+  "vocabulary_diversity": 0.245,
+  "top_patterns": [
+    "”李(6次)",
+    "“你(5次)",
+    "”林(4次)",
+    "“我(4次)",
+    "”一(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(3处)",
+    "短句节奏(17处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 30,
+    "问号": 1,
+    "叹号": 2,
+    "引号": 0
+  },
+  "chapter": 15,
+  "file": "第15章.txt"
+}

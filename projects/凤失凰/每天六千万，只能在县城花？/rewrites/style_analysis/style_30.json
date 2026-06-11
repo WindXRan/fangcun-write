@@ -1,0 +1,35 @@
+{
+  "total_chars": 2180,
+  "avg_sentence_len": 19.9,
+  "sentence_len_std": 11.2,
+  "avg_paragraph_len": 25,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 90
+  },
+  "vocabulary_diversity": 0.296,
+  "top_patterns": [
+    "陆明(13次)",
+    "胡奎(9次)",
+    "白局(9次)",
+    "“白(6次)",
+    "“陆(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 0,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 56,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 30,
+  "file": "第30章.txt"
+}

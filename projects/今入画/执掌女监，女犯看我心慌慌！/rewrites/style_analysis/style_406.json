@@ -1,0 +1,34 @@
+{
+  "total_chars": 2082,
+  "avg_sentence_len": 29.8,
+  "sentence_len_std": 20.3,
+  "avg_paragraph_len": 36,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 86
+  },
+  "vocabulary_diversity": 0.227,
+  "top_patterns": [
+    "李命(12次)",
+    "林希(4次)",
+    "“你(3次)",
+    "于是(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 18,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 28,
+    "问号": 4,
+    "叹号": 10,
+    "引号": 0
+  },
+  "chapter": 406,
+  "file": "第406章.txt"
+}

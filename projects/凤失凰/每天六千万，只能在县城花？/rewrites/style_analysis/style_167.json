@@ -1,0 +1,35 @@
+{
+  "total_chars": 2245,
+  "avg_sentence_len": 23.1,
+  "sentence_len_std": 12.5,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 10,
+    "max": 109
+  },
+  "vocabulary_diversity": 0.292,
+  "top_patterns": [
+    "陆明(9次)",
+    "”陆(9次)",
+    "陈越(7次)",
+    "方瑜(4次)",
+    "”陈(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 2,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 34,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 167,
+  "file": "第167章.txt"
+}

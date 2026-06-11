@@ -1,0 +1,34 @@
+{
+  "total_chars": 2234,
+  "avg_sentence_len": 38.2,
+  "sentence_len_std": 16.7,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 13,
+    "max": 78
+  },
+  "vocabulary_diversity": 0.245,
+  "top_patterns": [
+    "李命(6次)",
+    "不过(4次)",
+    "江婉(3次)",
+    "黄莺(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 32,
+    "问号": 3,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 315,
+  "file": "第315章.txt"
+}

@@ -1,0 +1,29 @@
+{
+  "total_chars": 1911,
+  "avg_sentence_len": 48.1,
+  "sentence_len_std": 21.1,
+  "avg_paragraph_len": 50,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 87
+  },
+  "vocabulary_diversity": 0.257,
+  "top_patterns": [
+    "李命(8次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 7,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 23,
+    "问号": 0,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 268,
+  "file": "第268章.txt"
+}

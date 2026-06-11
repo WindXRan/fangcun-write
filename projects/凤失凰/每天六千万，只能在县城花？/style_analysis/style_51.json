@@ -1,0 +1,35 @@
+{
+  "total_chars": 2181,
+  "avg_sentence_len": 20.6,
+  "sentence_len_std": 15.0,
+  "avg_paragraph_len": 25,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 99
+  },
+  "vocabulary_diversity": 0.273,
+  "top_patterns": [
+    "陆明(6次)",
+    "孙长(5次)",
+    "王卫(3次)",
+    "“五(3次)",
+    "“不(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(7处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 6,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 47,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 51,
+  "file": "第51章.txt"
+}

@@ -1,0 +1,33 @@
+{
+  "total_chars": 2085,
+  "avg_sentence_len": 36.4,
+  "sentence_len_std": 23.6,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 105
+  },
+  "vocabulary_diversity": 0.243,
+  "top_patterns": [
+    "赛丽(6次)",
+    "张雅(4次)",
+    "于是(3次)",
+    "“是(3次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 4,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 28,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 14,
+    "问号": 1,
+    "叹号": 16,
+    "引号": 0
+  },
+  "chapter": 437,
+  "file": "第437章.txt"
+}

@@ -1,0 +1,35 @@
+{
+  "total_chars": 2096,
+  "avg_sentence_len": 18.9,
+  "sentence_len_std": 15.7,
+  "avg_paragraph_len": 26,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 100
+  },
+  "vocabulary_diversity": 0.262,
+  "top_patterns": [
+    "沈璃(7次)",
+    "陆明(7次)",
+    "何国(5次)",
+    "“周(4次)",
+    "周富(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(14处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 6,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 41,
+    "问号": 6,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 81,
+  "file": "第81章.txt"
+}

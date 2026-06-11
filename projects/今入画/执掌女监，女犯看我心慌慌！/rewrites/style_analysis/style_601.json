@@ -1,0 +1,33 @@
+{
+  "total_chars": 2094,
+  "avg_sentence_len": 34.8,
+  "sentence_len_std": 18.3,
+  "avg_paragraph_len": 38,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 101
+  },
+  "vocabulary_diversity": 0.242,
+  "top_patterns": [
+    "于是(3次)",
+    "林希(3次)",
+    "所以(3次)"
+  ],
+  "rhetorical_features": [
+    "比喻(像/如/仿佛)(2处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 26,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 22,
+    "问号": 0,
+    "叹号": 10,
+    "引号": 0
+  },
+  "chapter": 601,
+  "file": "第601章.txt"
+}

@@ -1,0 +1,34 @@
+{
+  "total_chars": 2247,
+  "avg_sentence_len": 37.0,
+  "sentence_len_std": 19.4,
+  "avg_paragraph_len": 45,
+  "paragraph_len_range": {
+    "min": 11,
+    "max": 86
+  },
+  "vocabulary_diversity": 0.265,
+  "top_patterns": [
+    "李命(8次)",
+    "许清(5次)",
+    "两女(3次)",
+    "谭程(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 7,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 30,
+    "问号": 1,
+    "叹号": 9,
+    "引号": 0
+  },
+  "chapter": 185,
+  "file": "第185章.txt"
+}

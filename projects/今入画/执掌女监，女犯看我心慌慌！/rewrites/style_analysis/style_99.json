@@ -1,0 +1,35 @@
+{
+  "total_chars": 1873,
+  "avg_sentence_len": 21.3,
+  "sentence_len_std": 18.6,
+  "avg_paragraph_len": 39,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 166
+  },
+  "vocabulary_diversity": 0.285,
+  "top_patterns": [
+    "”李(5次)",
+    "”许(4次)",
+    "谭程(3次)",
+    "“那(3次)",
+    "”谭(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(9处)"
+  ],
+  "simile_count": 2,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 40,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 30,
+    "问号": 0,
+    "叹号": 6,
+    "引号": 0
+  },
+  "chapter": 99,
+  "file": "第99章.txt"
+}

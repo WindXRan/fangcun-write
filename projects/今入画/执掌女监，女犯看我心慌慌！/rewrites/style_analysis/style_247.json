@@ -1,0 +1,33 @@
+{
+  "total_chars": 2261,
+  "avg_sentence_len": 40.8,
+  "sentence_len_std": 25.3,
+  "avg_paragraph_len": 47,
+  "paragraph_len_range": {
+    "min": 11,
+    "max": 127
+  },
+  "vocabulary_diversity": 0.241,
+  "top_patterns": [
+    "红牙(6次)",
+    "李命(6次)",
+    "周琳(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(4处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 5,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 17,
+    "问号": 1,
+    "叹号": 20,
+    "引号": 0
+  },
+  "chapter": 247,
+  "file": "第247章.txt"
+}

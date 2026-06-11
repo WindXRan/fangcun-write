@@ -1,0 +1,31 @@
+{
+  "total_chars": 1881,
+  "avg_sentence_len": 35.9,
+  "sentence_len_std": 21.6,
+  "avg_paragraph_len": 46,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 95
+  },
+  "vocabulary_diversity": 0.258,
+  "top_patterns": [
+    "夏红(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 42,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 10,
+    "问号": 4,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 150,
+  "file": "第150章.txt"
+}

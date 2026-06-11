@@ -1,0 +1,35 @@
+{
+  "total_chars": 2232,
+  "avg_sentence_len": 18.2,
+  "sentence_len_std": 12.6,
+  "avg_paragraph_len": 29,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 97
+  },
+  "vocabulary_diversity": 0.305,
+  "top_patterns": [
+    "林汐(12次)",
+    "”林(9次)",
+    "陆明(6次)",
+    "”陆(6次)",
+    "“陆(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(17处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 1,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 42,
+    "问号": 1,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 109,
+  "file": "第109章.txt"
+}

@@ -1,0 +1,31 @@
+{
+  "total_chars": 2087,
+  "avg_sentence_len": 40.7,
+  "sentence_len_std": 24.8,
+  "avg_paragraph_len": 48,
+  "paragraph_len_range": {
+    "min": 7,
+    "max": 102
+  },
+  "vocabulary_diversity": 0.276,
+  "top_patterns": [
+    "姜禾(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 27,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 5,
+    "问号": 1,
+    "叹号": 8,
+    "引号": 0
+  },
+  "chapter": 478,
+  "file": "第478章.txt"
+}

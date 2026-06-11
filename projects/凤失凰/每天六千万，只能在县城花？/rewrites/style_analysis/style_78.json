@@ -1,0 +1,35 @@
+{
+  "total_chars": 2573,
+  "avg_sentence_len": 22.2,
+  "sentence_len_std": 16.0,
+  "avg_paragraph_len": 28,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 92
+  },
+  "vocabulary_diversity": 0.269,
+  "top_patterns": [
+    "苏国(12次)",
+    "苏文(11次)",
+    "陆明(10次)",
+    "”苏(5次)",
+    "孙长(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(11处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 1,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 7,
+  "has_said_tag": true,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 57,
+    "问号": 0,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 78,
+  "file": "第78章.txt"
+}

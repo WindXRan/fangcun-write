@@ -1,0 +1,33 @@
+{
+  "total_chars": 2065,
+  "avg_sentence_len": 28.5,
+  "sentence_len_std": 16.0,
+  "avg_paragraph_len": 35,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 89
+  },
+  "vocabulary_diversity": 0.235,
+  "top_patterns": [
+    "李命(4次)",
+    "周琳(3次)",
+    "女生(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 5,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 20,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 25,
+    "问号": 0,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 502,
+  "file": "第502章.txt"
+}

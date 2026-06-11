@@ -1,0 +1,32 @@
+{
+  "total_chars": 2067,
+  "avg_sentence_len": 32.8,
+  "sentence_len_std": 16.5,
+  "avg_paragraph_len": 40,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 104
+  },
+  "vocabulary_diversity": 0.247,
+  "top_patterns": [
+    "李命(5次)",
+    "不过(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(3处)"
+  ],
+  "simile_count": 4,
+  "ai_marker_count": 5,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 7,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 27,
+    "问号": 0,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 518,
+  "file": "第518章.txt"
+}

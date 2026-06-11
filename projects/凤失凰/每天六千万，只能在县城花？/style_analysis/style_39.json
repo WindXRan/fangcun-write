@@ -1,0 +1,35 @@
+{
+  "total_chars": 2390,
+  "avg_sentence_len": 21.3,
+  "sentence_len_std": 14.8,
+  "avg_paragraph_len": 27,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 101
+  },
+  "vocabulary_diversity": 0.262,
+  "top_patterns": [
+    "胡奎(16次)",
+    "助理(6次)",
+    "”胡(6次)",
+    "陈志(5次)",
+    "刘长(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(5处)"
+  ],
+  "simile_count": 0,
+  "ai_marker_count": 0,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 3,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 54,
+    "问号": 2,
+    "叹号": 0,
+    "引号": 0
+  },
+  "chapter": 39,
+  "file": "第39章.txt"
+}

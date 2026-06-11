@@ -1,0 +1,30 @@
+{
+  "total_chars": 1668,
+  "avg_sentence_len": 37.6,
+  "sentence_len_std": 20.9,
+  "avg_paragraph_len": 42,
+  "paragraph_len_range": {
+    "min": 12,
+    "max": 92
+  },
+  "vocabulary_diversity": 0.282,
+  "top_patterns": [
+    "李命(3次)",
+    "沈佳(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 0,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 1,
+  "ellipsis_count": 13,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 23,
+    "问号": 0,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 270,
+  "file": "第270章.txt"
+}

@@ -1,0 +1,32 @@
+{
+  "total_chars": 2037,
+  "avg_sentence_len": 29.2,
+  "sentence_len_std": 18.9,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 84
+  },
+  "vocabulary_diversity": 0.269,
+  "top_patterns": [
+    "黄玉(11次)",
+    "可是(4次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(8处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 4,
+  "direct_emotion_count": 2,
+  "ellipsis_count": 39,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 12,
+    "问号": 4,
+    "叹号": 14,
+    "引号": 0
+  },
+  "chapter": 534,
+  "file": "第534章.txt"
+}

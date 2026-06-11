@@ -1,0 +1,31 @@
+{
+  "total_chars": 2136,
+  "avg_sentence_len": 34.3,
+  "sentence_len_std": 19.3,
+  "avg_paragraph_len": 37,
+  "paragraph_len_range": {
+    "min": 6,
+    "max": 106
+  },
+  "vocabulary_diversity": 0.254,
+  "top_patterns": [
+    "李命(6次)",
+    "叶莓(6次)",
+    "可是(3次)"
+  ],
+  "rhetorical_features": [],
+  "simile_count": 1,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 39,
+  "has_said_tag": false,
+  "has_emotion_words": false,
+  "end_punctuations": {
+    "句号": 25,
+    "问号": 0,
+    "叹号": 11,
+    "引号": 0
+  },
+  "chapter": 457,
+  "file": "第457章.txt"
+}

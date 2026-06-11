@@ -1,0 +1,34 @@
+{
+  "total_chars": 2058,
+  "avg_sentence_len": 38.6,
+  "sentence_len_std": 21.8,
+  "avg_paragraph_len": 48,
+  "paragraph_len_range": {
+    "min": 8,
+    "max": 114
+  },
+  "vocabulary_diversity": 0.256,
+  "top_patterns": [
+    "周琳(9次)",
+    "红牙(5次)",
+    "不过(3次)",
+    "李命(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 1,
+  "ai_marker_count": 3,
+  "direct_emotion_count": 0,
+  "ellipsis_count": 10,
+  "has_said_tag": false,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 27,
+    "问号": 0,
+    "叹号": 5,
+    "引号": 0
+  },
+  "chapter": 316,
+  "file": "第316章.txt"
+}

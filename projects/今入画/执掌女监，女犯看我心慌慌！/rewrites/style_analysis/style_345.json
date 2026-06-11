@@ -1,0 +1,33 @@
+{
+  "total_chars": 2151,
+  "avg_sentence_len": 37.0,
+  "sentence_len_std": 31.3,
+  "avg_paragraph_len": 43,
+  "paragraph_len_range": {
+    "min": 9,
+    "max": 161
+  },
+  "vocabulary_diversity": 0.254,
+  "top_patterns": [
+    "李命(7次)",
+    "赛丽(6次)",
+    "自己(3次)"
+  ],
+  "rhetorical_features": [
+    "短句节奏(2处)"
+  ],
+  "simile_count": 3,
+  "ai_marker_count": 2,
+  "direct_emotion_count": 2,
+  "ellipsis_count": 41,
+  "has_said_tag": true,
+  "has_emotion_words": true,
+  "end_punctuations": {
+    "句号": 20,
+    "问号": 2,
+    "叹号": 7,
+    "引号": 0
+  },
+  "chapter": 345,
+  "file": "第345章.txt"
+}
