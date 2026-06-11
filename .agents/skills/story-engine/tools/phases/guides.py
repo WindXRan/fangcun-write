@@ -159,18 +159,19 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         raise
 
 
-def process_plot_guide_output(config, chapter_num, json_result):
-    """处理 plot-guide 的 JSON 输出，合并到模板。
+def process_plot_guide_output(config, chapter_num, ai_output):
+    """处理 plot-guide 的输出，合并到模板。
+    
+    支持格式：带标签输出（标签：内容）
     
     Args:
         config: 配置字典
         chapter_num: 章节号
-        json_result: AI 输出的 JSON 字符串
+        ai_output: AI 输出的文本
     
     Returns:
         合并后的 markdown 文本
     """
-    import json
     from pathlib import Path
     
     # 获取模板路径
@@ -179,31 +180,16 @@ def process_plot_guide_output(config, chapter_num, json_result):
     
     if not template_path.exists():
         print(f"  [WARN] 模板不存在: {template_path}，使用原始输出")
-        return json_result
+        return ai_output
     
     try:
-        # 解析 JSON
-        # 提取 JSON 部分（可能包含 markdown 代码块标记）
-        json_text = json_result
-        if "```json" in json_text:
-            json_text = json_text.split("```json")[1].split("```")[0]
-        elif "```" in json_text:
-            json_text = json_text.split("```")[1].split("```")[0]
-        
-        content = json.loads(json_text)
-        
-        # 合并模板
-        from template_merger import merge_json_to_template
-        result = merge_json_to_template(str(template_path), content)
-        
-        print(f"  [OK] 模板合并完成")
+        from template_merger import merge_tagged_output
+        result = merge_tagged_output(str(template_path), ai_output)
+        print(f"  [OK] 标签模板合并完成")
         return result
-    except json.JSONDecodeError as e:
-        print(f"  [WARN] JSON 解析失败: {e}，使用原始输出")
-        return json_result
     except Exception as e:
         print(f"  [WARN] 模板合并失败: {e}，使用原始输出")
-        return json_result
+        return ai_output
 
 
 def run_one_with_template(config, prompt_type, chapter_num=None, **kwargs):
