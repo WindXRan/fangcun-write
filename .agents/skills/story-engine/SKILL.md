@@ -22,10 +22,13 @@ shell: powershell
 # 设置API密钥
 $env:API_KEY = "sk-xxx"
 
-# 运行脚本
+# 运行脚本（新模块化结构）
+python .agents/skills/story-engine/tools/pipeline.py --config configs/xxx.json --phase open-book
+python .agents/skills/story-engine/tools/pipeline.py --config configs/xxx.json --phase guides --start 1 --end 3
+python .agents/skills/story-engine/tools/pipeline.py --config configs/xxx.json --phase write --start 1 --end 3
+
+# 向后兼容（旧入口仍然可用）
 python .agents/skills/story-engine/tools/rewrite_chapters.py --config configs/xxx.json --phase open-book
-python .agents/skills/story-engine/tools/rewrite_chapters.py --config configs/xxx.json --phase guides --start 1 --end 3
-python .agents/skills/story-engine/tools/rewrite_chapters.py --config configs/xxx.json --phase write --start 1 --end 3
 ```
 
 错误的执行方式（禁止）：
@@ -35,13 +38,48 @@ python .agents/skills/story-engine/tools/rewrite_chapters.py --config configs/xx
 
 **原因**：Agent模式生成的质量不稳定，API模式通过脚本有更好的错误处理、重试机制和质量验证。
 
+## 代码结构（模块化重构后）
+
+```
+.story-engine/tools/
+├── pipeline.py              # 主pipeline编排器（推荐入口）
+├── rewrite_chapters.py      # 向后兼容入口（薄包装层）
+├── state_manager.py         # 状态管理器（持久化state.json）
+├── utils.py                 # 公共工具函数（缓存、进度、重试）
+├── prompt_loader.py         # prompt加载器
+├── merge_chapters.py        # 章节合并导出
+├── extract_book_data.py     # 提取book_data.json
+├── unified_reviewer.py      # 统一审改系统（审查）
+├── unified_fixer.py         # 统一审改系统（修复）
+├── lib/                     # 共享库
+│   ├── api_client.py        # API客户端（带重试）
+│   ├── constants.py         # 常量定义
+│   ├── text_metrics.py      # 文本指标计算器
+│   ├── plagiarism.py        # 抄袭检测
+│   ├── source_locator.py    # 源文定位器
+│   └── progress.py          # 进度显示
+└── phases/                  # 各阶段实现
+    ├── __init__.py
+    ├── open_book.py         # Phase 0-1: Prep + 开书
+    ├── guides.py            # Phase 2-2.5: Guide生成 + 衔接修复
+    ├── write.py             # Phase 3: 写章
+    ├── validate.py          # Phase 3.1: 质量验证
+    ├── postprocess.py       # Phase 3.2-3.8: 后处理（精简/重写/润色/扩写）
+    ├── compare.py           # Phase 4: 对比
+    ├── review.py            # Phase 4.5-5: 审稿修复
+    └── unified.py           # Phase 6: 统一审查修复
+```
+
 ## 文件结构
 
 ```
 projects/{作者名}/{源书名}/
-├── _cache/chapters/第N章.txt        # 拆章缓存
+├── _cache/
+│   └── chapters/第N章.txt        # 拆章缓存
 └── rewrites/{新书名}/
     ├── concept.md                    # 精简索引（速查角色名+主线）
+    ├── state.json                    # 状态文件（自动管理）
+    ├── 完本报告.md                   # 完本报告（自动生成）
     └── settings/
         ├── characters.md             # 角色设定
         ├── world.md                  # 世界观设定
@@ -53,7 +91,9 @@ projects/{作者名}/{源书名}/
     │   └── style_{N}.md             # 风格指南：定量锚点 + 去AI指令
     ├── chapters/
     │   └── ch_{N}.txt               # 正文
-    └── compare/                      # 对比报告
+    ├── compare/                      # 对比报告
+    └── export/                       # 导出文件
+        └── {书名}.txt
 ```
 
 ## 方法论
@@ -65,52 +105,40 @@ projects/{作者名}/{源书名}/
 
 详见 `网文小说仿写教学.md`
 
-## Pipeline（编排器，委托各 skill 执行）
+## Pipeline（编排器，委托各 phase 执行）
 
 ```
 Phase 0:   导入 (story-import)        → _cache/chapters/ + _header.txt + _toc.txt
-Phase 1:   开书 (pro, 1 call)        → settings/ + concept.md       [engine]
-Phase 1.1: Concept审查 (flash)        → 检查人设/冲突/情节是否换皮     [engine]
-Phase 1.5: 风格分析 (脚本)            → style_analysis/style_{N}.json [engine]
-Phase 2:   Guides (flash, 2N 并行)   → plot_{N}.md + style_{N}.md    [engine]
-Phase 3:   写章 (flash, N 并行)      → ch_{N}.txt                    [engine]
-Phase 3.1: 质量验证                    → 字数/比喻/AI路标词/台词抄袭检测 [engine]
-Phase 3.2: 后处理                      → 去#号/修标题/补省略号          [engine]
-Phase 3.5: Trim (flash)              → 超字数 20% 的章自动精简        [engine]
-Phase 3.6: 衔接修复 (flash, N-1 并行) → 修章间重叠                    [engine]
-Phase 4:   对比 (本地)                → compare/报告                  [story-compare]
-Phase 4.5: 审稿 (分批→汇总)          → 审稿报告 + 汇总报告            [story-review]
-Phase 5:   修复 (根据审稿)            → 修复后章节                     [story-review]
-Phase 6:   自动导出                    → export/{书名}.txt             [story-export]
+Phase 1:   开书 (pro, 1 call)        → settings/ + concept.md       [open_book.py]
+Phase 1.1: Concept审查 (flash)        → 检查人设/冲突/情节是否换皮     [open_book.py]
+Phase 1.5: 风格分析 (脚本)            → style_analysis/style_{N}.json [open_book.py]
+Phase 2:   Guides (flash, 2N 并行)   → plot_{N}.md + style_{N}.md    [guides.py]
+Phase 2.5: Guide衔接修复 (flash)     → 修复章间断裂                    [guides.py]
+Phase 3:   写章 (flash, N 并行)      → ch_{N}.txt                    [write.py]
+Phase 3.1: 质量验证                    → 字数/比喻/AI路标词/台词抄袭检测 [validate.py]
+Phase 3.2: 后处理                      → 去#号/修标题/补省略号          [postprocess.py]
+Phase 3.5: Trim (flash)              → 超字数 20% 的章自动精简        [postprocess.py]
+Phase 3.6: 整章重写 (flash)           → 人设崩塌/节奏失控时重写        [postprocess.py]
+Phase 3.7: 润色 (flash)              → 只改文笔，不改内容             [postprocess.py]
+Phase 3.8: 扩写 (flash)              → 增加内容扩充字数               [postprocess.py]
+Phase 4:   对比 (本地)                → compare/报告                  [compare.py]
+Phase 4.5: 审稿 (分批→汇总)          → 审稿报告 + 汇总报告            [review.py]
+Phase 5:   修复 (根据审稿)            → 修复后章节                     [review.py]
+Phase 6:   统一审查+修复              → unified_review_fix.json       [unified.py]
+Phase 7:   自动导出                    → export/{书名}.txt             [merge_chapters.py]
 ```
-
-**Phase 1.1 Concept审查**：
-- 检查人设模式是否与源文相同（纨绔vs病弱等）
-- 检查冲突类型组合是否与源文相同
-- 检查情感内核是否与源文相同
-- 检查配角名、地名是否与源文重复
-- 不通过则要求重新开书
-
-**engine 只做编排，具体逻辑归各 skill：**
-- `story-export`：导出为番茄格式txt
-- `story-review`：审稿（分批+汇总）、修复、审改闭环
-- `story-compare`：对比报告、抄袭风险分析
-- `story-optimize`：自动评分、规则沉淀
 
 ## 鲁棒性特性
 
 - **API 重试**：429限流/5xx错误/超时 自动指数退避重试（最多3次）
+- **章节重试**：失败章节自动重试（最多2轮）
 - **超时自适应**：超时后自动翻倍超时时间（600→1200s）
 - **配置校验**：启动时校验必填字段和API_KEY
-- **源文缓存**：读取过的源文自动缓存，避免重复IO
+- **源文缓存**：内存+磁盘两级缓存，避免重复IO
+- **状态持久化**：state.json 记录每章状态，支持断点续传
 - **损坏检测**：跳过已有文件时检查"抱歉"/"无法生成"等AI拒绝特征
 - **抄袭检测**：基于8-gram集合匹配，O(n)复杂度
-
-## Agent/API 双模式
-
-通过 `prompt_loader.py` 实现同一套 prompt 两种模式通用：
-- **Agent 模式**：Claude 自行 Read 文件
-- **API 模式**：自动解析 `【标签】路径` → 嵌入文件内容 → 调 API
+- **进度显示**：实时进度条，显示ETA
 
 ## 使用
 
@@ -118,13 +146,29 @@ Phase 6:   自动导出                    → export/{书名}.txt             [
 # Phase 0: 导入源文
 python tools/story_import.py "projects/作者/书名/书名.txt"
 
-# 完整流水线
-python tools/rewrite_chapters.py --config configs/config_rewrite_10ch.json --start 1 --end 10 --workers 10
+# 完整流水线（推荐）
+python tools/pipeline.py --config configs/xxx.json --start 1 --end 10 --workers 10
+
+# 一键完成（生成+审查+修复+报告）
+python tools/pipeline.py --config configs/xxx.json --phase all-with-fix --start 1 --end 10
 
 # 分步执行
+python tools/pipeline.py --config configs/xxx.json --phase open-book
+python tools/pipeline.py --config configs/xxx.json --phase guides
+python tools/pipeline.py --config configs/xxx.json --phase write,compare
+
+# 统一审查+修复（推荐）
+python tools/pipeline.py --config configs/xxx.json --phase unified --start 1 --end 10
+
+# 查看项目状态
+python tools/pipeline.py --config configs/xxx.json --status
+
+# 健康检查（诊断项目问题）
+python tools/pipeline.py --config configs/xxx.json --health-check
+python tools/pipeline.py --config configs/xxx.json --health-output report.json
+
+# 向后兼容（旧入口）
 python tools/rewrite_chapters.py --config configs/xxx.json --phase open-book
-python tools/rewrite_chapters.py --config configs/xxx.json --phase guides
-python tools/rewrite_chapters.py --config configs/xxx.json --phase write,compare
 ```
 
 ## 配置文件
@@ -134,15 +178,21 @@ python tools/rewrite_chapters.py --config configs/xxx.json --phase write,compare
   "book_name": "仿写书名",
   "author": "作者",
   "source_book": "源书名",
+  "trend_dir": "trends/题材名",
   "api_key": null,
   "model": "deepseek-v4-flash",
   "reasoning_effort": "low",
   "prompts_dir": ".agents/skills/story-engine/prompts",
-  "rewrites_dir": "projects/作者/源书/rewrites/仿写书"
+  "rewrites_dir": "projects/作者/源书/rewrites/仿写书",
+  "config_file": "configs/xxx.json"
 }
 ```
 
 > ⚠️ `api_key` 为 null 时从 `$env:API_KEY` 读取。不要把 key 写入配置文件。
+> 
+> 📌 `trend_dir` 可选，指定后开书阶段会自动注入热梗知识库素材。配合 `story-trend` skill 使用。
+> 
+> 📌 `config_file` 用于审稿修复阶段，指向配置文件路径。
 
 ## Prompts
 
@@ -152,6 +202,7 @@ python tools/rewrite_chapters.py --config configs/xxx.json --phase write,compare
 | `plot-guide.md` | 章纲 | 源文第N章 + concept + 样板库 | 节拍映射表 + 换皮检验 |
 | `style-guide.md` | 风格 | 源文第N章 + 样板库 | 定量锚点 + 去AI指令 |
 | `write-chapter.md` | 写章 | plot_guide + style_guide | ch_{N}.txt |
+| `trim-chapter.md` | 精简 | 超字数章节 | 精简后章节 |
 
 ## 知识库（样板库）
 
@@ -188,6 +239,7 @@ knowledge/
 | Skill | 用途 | 触发词 | engine 委托 |
 |-------|------|--------|------------|
 | `story-import` | 标准化导入（拆章+生成header/toc） | 「导入」「import」 | Phase 0 |
+| `story-trend` | 热梗调研+知识库构建 | 「热梗调研」「搜热梗」「热点调研」 | Phase 1（可选） |
 | `story-review` | 审稿（分批+汇总）、修复、审改闭环 | 「审稿」「review」 | Phase 4.5/5 |
 | `story-compare` | 对比报告、抄袭风险分析 | 「跑对比」「对比」 | Phase 4 |
 | `story-optimize` | 自动评分、规则沉淀 | 「优化prompt」 | — |
