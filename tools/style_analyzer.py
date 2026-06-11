@@ -195,24 +195,11 @@ def run(src_dir, output_dir):
         
         all_metrics.append(metrics)
     
-    # 保存汇总
-    with open(out_path / "all_chapters_style.json", 'w', encoding='utf-8') as fout:
-        json.dump(all_metrics, fout, ensure_ascii=False, indent=2)
-    
     print(f"已分析 {len(files)} 章，输出到: {output_dir}")
     print(f"  - JSON: {len(files)} 个")
     print(f"  - style_guide 模板: {len(files)} 个")
-    print(f"\n--- 汇总统计 ---")
-    for key in ['total_chars', 'avg_sentence_len', 'sentence_len_std', 'avg_paragraph_len',
-                'vocabulary_diversity', 'simile_count', 'ai_marker_count', 
-                'direct_emotion_count', 'ellipsis_count']:
-        values = [m[key] for m in all_metrics]
-        mean = sum(values) / len(values)
-        print(f"{key}: 均值={mean:.1f}, 范围=[{min(values)}, {max(values)}]")
-    
     print(f"\n下一步：用 LLM 填充模板中的「LLM 补充」部分")
     print(f"  python tools/fill_style_guides.py <guides目录> [api_key]")
-
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:
