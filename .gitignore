@@ -1,5 +1,9 @@
 .DS_Store
 **/.omc/
+
+# === Python 缓存 ===
+__pycache__/
+*.pyc
 .active-book
 */_active-book
 .codebuddy/
