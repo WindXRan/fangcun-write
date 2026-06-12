@@ -1,3 +1,8 @@
+---
+version: 1
+changelog: 初始版本
+---
+
 修复第{N}章和第{N_plus1}章的衔接。
 
 【本章正文】projects/{作者名}/{源书名}/rewrites/{新书名}/chapters/ch_{N03d}.txt

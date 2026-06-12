@@ -8,15 +8,11 @@ import time
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# 添加路径
-current_dir = str(Path(__file__).parent)
-sys.path.insert(0, current_dir)
-
 from lib.constants import CORRUPT_MARKERS
 from lib.text_metrics import get_body_chars
 from lib.source_locator import get_source_text as _lib_get_source_text, get_total_chapters as _lib_get_total_chapters
 from lib.api_client import call_api as _lib_call_api, get_api_url
-from logger import get_logger, log_info, log_warning, log_error, log_success, log_fail, log_progress
+from logger import log_info, log_warning, log_success, log_fail, log_progress
 
 # 源文缓存（进程内）
 _source_cache = {}
@@ -25,21 +21,6 @@ _source_cache = {}
 def _get_cache_key(config, ch):
     """生成缓存键。"""
     return (config.get("author", ""), config.get("source_book", ""), ch)
-
-
-def validate_config(config):
-    """校验配置完整性，返回错误列表。"""
-    errors = []
-    required = ["book_name", "author", "source_book", "rewrites_dir"]
-    for key in required:
-        if not config.get(key):
-            errors.append(f"缺少必填字段: {key}")
-    
-    api_key = config.get("api_key") or os.environ.get("API_KEY")
-    if not api_key:
-        errors.append("未配置 API_KEY（config.api_key 或 $env:API_KEY）")
-    
-    return errors
 
 
 def get_source_text(config, ch):
@@ -68,9 +49,9 @@ def count_source_chars(config, chapter_num):
     return get_body_chars(text)
 
 
-def call_api(api_key, model, user_prompt, reasoning_effort="low", max_tokens=8192, system_prompt=None, api_url=None, max_retries=3):
+def call_api(api_key, model, user_prompt, reasoning_effort="low", max_tokens=8192, system_prompt=None, api_url=None, max_retries=3, temperature=0.8):
     """调用 API（委托给 lib 模块）。"""
-    return _lib_call_api(api_key, model, user_prompt, reasoning_effort, max_tokens, system_prompt, api_url, max_retries)
+    return _lib_call_api(api_key, model, user_prompt, reasoning_effort, max_tokens, system_prompt, api_url, max_retries, temperature=temperature)
 
 
 def get_source_title(config, chapter_num):
@@ -236,7 +217,12 @@ def _execute_batch(todo, config, prompt_type, output_dir, filename_fmt, workers,
             ch = futures[future]
             try:
                 content = future.result()
+                # 防御：空内容不保存，抛异常触发重试
+                if not content or len(content.strip()) < 50:
+                    raise ValueError(f"内容为空或过短 ({len(content or '')} chars)")
                 path = Path(output_dir) / filename_fmt.format(ch=ch)
+                from prompt_loader import tag_output
+                content = tag_output(content, prompt_type)
                 from state_manager import atomic_write_text
                 atomic_write_text(path, content)
                 results[ch] = str(path)
@@ -273,6 +259,8 @@ def _retry_failed(retry_queue, config, prompt_type, output_dir, filename_fmt, wo
                 try:
                     content = future.result()
                     path = Path(output_dir) / filename_fmt.format(ch=ch)
+                    from prompt_loader import tag_output
+                    content = tag_output(content, prompt_type)
                     from state_manager import atomic_write_text
                     atomic_write_text(path, content)
                     results[ch] = str(path)
@@ -338,6 +326,58 @@ def batch_run(config, prompt_type, start, end, workers, output_dir, filename_fmt
         state_mgr.save()
 
     return results, errors
+
+
+class PhaseTimer:
+    """流水线阶段耗时统计器。"""
+
+    def __init__(self):
+        self.phases = []
+        self._current_name = None
+        self._current_start = None
+
+    def start(self, name):
+        """开始计时一个阶段。会自动结束上一个阶段。"""
+        if self._current_name is not None:
+            self.end()
+        self._current_name = name
+        self._current_start = time.time()
+        return self
+
+    def end(self, name=None):
+        """结束当前阶段或指定阶段。"""
+        if name:
+            for p in self.phases:
+                if p["name"] == name and p["elapsed"] == 0:
+                    p["elapsed"] = time.time() - p["start"]
+                    return
+        if self._current_name is not None and self._current_start is not None:
+            elapsed = time.time() - self._current_start
+            self.phases.append({
+                "name": self._current_name,
+                "start": self._current_start,
+                "elapsed": round(elapsed, 1),
+            })
+        self._current_name = None
+        self._current_start = None
+
+    def summary(self, total=None):
+        """打印耗时汇总表。"""
+        if self._current_name is not None:
+            self.end()
+        if not self.phases:
+            return
+        total_elapsed = total or sum(p["elapsed"] for p in self.phases)
+        print(f"\n{'=' * 60}")
+        print(f"  阶段耗时统计")
+        print(f"{'=' * 60}")
+        print(f"  {'阶段':<28} {'耗时':>8} {'占比':>8}")
+        print(f"  {'-' * 46}")
+        for p in self.phases:
+            pct = p["elapsed"] / total_elapsed * 100 if total_elapsed > 0 else 0
+            print(f"  {p['name']:<28} {p['elapsed']:>7.1f}s {pct:>7.1f}%")
+        print(f"  {'-' * 46}")
+        print(f"  {'合计':<28} {total_elapsed:>7.1f}s {100.0:>7.1f}%")
 
 
 def clear_cache(config=None):

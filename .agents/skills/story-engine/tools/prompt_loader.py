@@ -21,7 +21,7 @@ from pathlib import Path
 
 
 # 需要嵌入内容的标签（输入类），不包含的标签只保留路径引用
-EMBED_TAGS = {"源文", "弧线", "弧线参考", "设定", "新书设定", "风格数据", "风格模板", "plot_guide", "style_guide", "模板", "旧真相", "本章正文", "下章正文", "原文", "样板库", "热梗素材", "频道配置", "题材配置", "爽点配置"}
+EMBED_TAGS = {"源文", "弧线", "弧线参考", "设定", "新书设定", "plot_guide", "模板", "旧真相", "本章正文", "下章正文", "原文", "样板库", "热梗素材", "频道配置", "题材配置", "爽点配置"}
 
 # 不需要嵌入的标签（输出/指令类）
 PASS_THROUGH_TAGS = {"输出", "回传"}
@@ -210,11 +210,9 @@ def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites
     Agent 模式：返回原始 prompt（agent 自己读文件）
     API 模式：嵌入所有引用文件的内容
 
-    品类级联：
-        prompt_path = "prompts/write-chapter.md"
-        genre = "都市擦边"
-        → 先加载 prompts/write-chapter.md
-        → 如果 prompts/write-chapter.都市擦边.md 存在，追加在后面
+    品类级联（已弃用，保留代码兼容）：
+        如果 prompts/write-chapter.{genre}.md 存在会追加，但我们现在不维护品类文件。
+        品类差异靠 {源文全文} 直接喂给 LLM，不靠手写规则。
     """
     prompt_file = resolve_path(base_dir, prompt_path)
 
@@ -222,6 +220,8 @@ def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites
         raise FileNotFoundError(f"Prompt 文件不存在: {prompt_file}")
 
     raw_text = prompt_file.read_text(encoding='utf-8')
+    # 去掉 frontmatter
+    _, _, raw_text = _parse_frontmatter(raw_text)
 
     # 品类级联：加载通用文件后，追加品类特化文件
     genre = (replacements or {}).get("genre", "")
@@ -259,6 +259,151 @@ def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites
     return user_prompt
 
 
+_PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
+_MANIFEST_PATH = _PROMPTS_DIR / "manifest.json"
+_MANIFEST = None
+
+
+def _load_manifest():
+    global _MANIFEST
+    if _MANIFEST is None:
+        if _MANIFEST_PATH.exists():
+            _MANIFEST = json.loads(_MANIFEST_PATH.read_text(encoding="utf-8"))
+        else:
+            _MANIFEST = {}
+    return _MANIFEST
+
+
+_FRONTMATTER_RE = re.compile(r'^---\s*\n(.*?)\n---\s*\n', re.DOTALL)
+
+
+def _parse_frontmatter(text):
+    """解析 YAML frontmatter，返回 (version, changelog, body)。
+
+    frontmatter 格式：
+      ---
+      version: N
+      changelog: 文本
+      ---
+      正文...
+    """
+    m = _FRONTMATTER_RE.match(text)
+    if not m:
+        return 1, "", text
+    body = text[m.end():]
+    version = 1
+    changelog = ""
+    for line in m.group(1).split('\n'):
+        line = line.strip()
+        if line.startswith("version:"):
+            try:
+                version = int(line.split(":", 1)[1].strip())
+            except ValueError:
+                pass
+        elif line.startswith("changelog:"):
+            changelog = line.split(":", 1)[1].strip()
+    return version, changelog, body
+
+
+def _make_tag(name, version):
+    return f"<!-- prompt: {name}@{version} -->"
+
+
+def load_system_prompt(name):
+    """加载 prompts/ 目录下的系统 prompt 文件。返回去掉 frontmatter 的正文。"""
+    p = _PROMPTS_DIR / name
+    if not p.exists():
+        return ""
+    _, _, body = _parse_frontmatter(p.read_text(encoding="utf-8"))
+    return body.strip()
+
+
+def load_prompt_str(name, with_tag=False):
+    """从 prompts/ 按名加载 prompt，去掉 frontmatter。
+
+    Args:
+        name: 文件名（如 "write-chapter.md"）
+        with_tag: 是否在末尾追加版本 tag
+
+    Returns:
+        body (str) 或 (body, version) 元组（如果 with_tag=True）
+    """
+    p = _PROMPTS_DIR / name
+    if not p.exists():
+        return ("", 0) if with_tag else ""
+    version, _, body = _parse_frontmatter(p.read_text(encoding="utf-8"))
+    if with_tag:
+        return body.strip(), version
+    return body.strip()
+
+
+def validate_prompt_variables(name, replacements):
+    """校验 prompt 所需变量是否已提供，缺失则 fail fast。
+
+    从 manifest.json 中读取该 prompt 的 required_vars，
+    对照 replacements 检查，缺的报错。
+    """
+    manifest = _load_manifest()
+    entry = manifest.get(name)
+    if not entry:
+        return
+    required = entry.get("required_vars", [])
+    missing = [v for v in required if v not in (replacements or {})]
+    if missing:
+        raise ValueError(
+            f"[PROMPT] {name} 缺少必要变量: {', '.join(missing)}\n"
+            f"  required: {required}\n"
+            f"  provided: {list((replacements or {}).keys())}"
+        )
+
+
+def get_prompt_config(name):
+    """返回 manifest.json 中该 prompt 的默认调用参数（model/max_tokens/reasoning_effort/temperature）。
+
+    可在 config.json 的 prompt_overrides 中按 prompt 名覆盖。
+    覆盖优先级: config.prompt_overrides > manifest.defaults > 代码级默认值（由调用方处理）
+    """
+    manifest = _load_manifest()
+    entry = manifest.get(name, {})
+    return dict(entry.get("defaults", {}))
+
+
+def get_prompt_config_with_overrides(name, config):
+    """读取 prompt 默认调用参数，合并 config.json 的 prompt_overrides 覆盖。"""
+    cfg = get_prompt_config(name)
+    overrides = (config or {}).get("prompt_overrides", {}).get(name, {})
+    cfg.update(overrides)
+    return cfg
+
+
+def get_prompt_version(name):
+    """读取 prompt 文件的 frontmatter 版本号。"""
+    p = _PROMPTS_DIR / name
+    if not p.exists():
+        return 0
+    version, _, _ = _parse_frontmatter(p.read_text(encoding="utf-8"))
+    return version
+
+
+def prompt_tag(name):
+    """生成 HTML 注释格式的版本 tag。"""
+    return _make_tag(name, get_prompt_version(name))
+
+
+def tag_output(content, prompt_name):
+    """给输出内容末尾追加 prompt 版本 tag。
+
+    Args:
+        content: 原始输出内容
+        prompt_name: prompt 文件名（如 "write-chapter.md"）
+
+    Returns:
+        末尾追加了版本 tag 的内容
+    """
+    tag = _make_tag(prompt_name, get_prompt_version(prompt_name))
+    return content.rstrip("\n") + "\n" + tag + "\n"
+
+
 def get_output_path(prompt_text, replacements=None):
     """
     从 prompt 中提取【输出】路径。
@@ -276,26 +421,138 @@ def get_output_path(prompt_text, replacements=None):
     return None
 
 
-# ============================================================
-# 测试
-# ============================================================
+def _get_git_diff_summary(path):
+    """自动提取 prompt 的 git diff 摘要作为 changelog。
+
+    只统计 frontmatter 之外的实质内容变化，跳过版本号变更。
+    变化行少时展示具体变化，变化多时只统计行数。
+    """
+    try:
+        import subprocess
+        result = subprocess.run(
+            ["git", "diff", "--unified=1", "--", str(path)],
+            capture_output=True, text=True, encoding="utf-8",
+        )
+        diff = result.stdout.strip()
+        if not diff:
+            return ""
+        # 解析 hunk，跳过 frontmatter（第一个 `---` 之前的内容）
+        lines = diff.splitlines()
+
+        # 收集真实 +/- 行（跳过 hunk header、---/+++、和 frontmatter）
+        plus, minus = [], []
+        in_content = False
+        for l in lines:
+            if l.startswith('@@'):
+                in_content = True
+                continue
+            if not in_content:
+                continue
+            if l.startswith('+++') or l.startswith('---'):
+                continue
+            if l.startswith('+') and not l.startswith('+++'):
+                plus.append(l[1:])
+            elif l.startswith('-') and not l.startswith('---'):
+                minus.append(l[1:])
+
+        total_changed = max(len(plus), len(minus))
+        if total_changed <= 4:
+            parts = []
+            if minus:
+                parts.append(f"删: {minus[0][:80]}")
+            if plus:
+                parts.append(f"加: {plus[0][:80]}")
+            return "自动diff: " + " | ".join(parts) if parts else ""
+        # 太多变化，统计行数
+        # 猜测变更类型
+        p_sum = sum(len(l) for l in plus)
+        m_sum = sum(len(l) for l in minus)
+        return f"自动diff: +{len(plus)}/-{len(minus)} 行 (+{p_sum}/-{m_sum} 字符) 请见 git diff"
+    except Exception:
+        return ""
+
+
+def bump_prompt_version(name, changelog_msg=""):
+    """递增 prompt 版本号 + 自动记录 diff。
+
+    不传 changelog_msg 时自动从 git diff 生成 changelog。
+
+    Args:
+        name: 文件名（如 "write-chapter.md"）
+        changelog_msg: 可选，手动描述的变更说明
+
+    Returns:
+        (旧版本, 新版本) 元组，文件不存在返回 (0, 0)
+    """
+    p = _PROMPTS_DIR / name
+    if not p.exists():
+        print(f"[WARN] prompt 文件不存在: {name}")
+        return 0, 0
+
+    # 自动生成 changelog
+    if not changelog_msg:
+        changelog_msg = _get_git_diff_summary(p)
+        if not changelog_msg:
+            changelog_msg = "版本更新"
+
+    text = p.read_text(encoding="utf-8")
+    m = _FRONTMATTER_RE.match(text)
+    if not m:
+        new_text = f"---\nversion: 1\nchangelog: {changelog_msg}\n---\n\n{text}"
+        p.write_text(new_text, encoding="utf-8")
+        print(f"[OK] {name}: 添加 frontmatter, version=1")
+        return 0, 1
+
+    old_version = 1
+    new_lines = []
+    changed = False
+    for line in m.group(1).split('\n'):
+        if line.startswith("version:"):
+            try:
+                old_version = int(line.split(":", 1)[1].strip())
+            except ValueError:
+                pass
+            new_lines.append(f"version: {old_version + 1}")
+            changed = True
+        elif line.startswith("changelog:"):
+            new_lines.append(f"changelog: {changelog_msg}")
+            changed = True
+        else:
+            new_lines.append(line)
+
+    if not changed:
+        new_lines.append(f"version: {old_version + 1}")
+        new_lines.append(f"changelog: {changelog_msg}")
+
+    new_frontmatter = '\n'.join(new_lines)
+    new_text = f"---\n{new_frontmatter}\n---\n{text[m.end():]}"
+    p.write_text(new_text, encoding="utf-8")
+    print(f"[OK] {name}: {old_version} → {old_version + 1}")
+    if changelog_msg:
+        print(f"  changelog: {changelog_msg}")
+    return old_version, old_version + 1
+
+
 if __name__ == '__main__':
     import sys
-    base = os.getcwd()
 
-    if len(sys.argv) < 2:
+    if len(sys.argv) >= 3 and sys.argv[1] == "bump":
+        name = sys.argv[2]
+        msg = sys.argv[3] if len(sys.argv) > 3 else ""
+        bump_prompt_version(name, msg)
+    elif len(sys.argv) >= 2:
+        base = os.getcwd()
+        prompt_path = sys.argv[1]
+        mode = sys.argv[2] if len(sys.argv) > 2 else "api"
+        result = load_prompt(
+            prompt_path, base,
+            replacements={"新书名": "测试书", "N": "1", "作者名": "测试作者", "源书名": "测试源文"},
+            mode=mode
+        )
+        print(f"=== Mode: {mode} ===")
+        print(result[:3000])
+        if len(result) > 3000:
+            print(f"\n... (总长 {len(result)} 字符)")
+    else:
         print("用法: python prompt_loader.py <prompt_path> [mode=api|agent]")
-        sys.exit(1)
-
-    prompt_path = sys.argv[1]
-    mode = sys.argv[2] if len(sys.argv) > 2 else "api"
-
-    result = load_prompt(
-        prompt_path, base,
-        replacements={"新书名": "测试书", "N": "1", "作者名": "测试作者", "源书名": "测试源文"},
-        mode=mode
-    )
-    print(f"=== Mode: {mode} ===")
-    print(result[:3000])
-    if len(result) > 3000:
-        print(f"\n... (总长 {len(result)} 字符)")
+        print("  或: python prompt_loader.py bump <prompt_name> [changelog_msg]")

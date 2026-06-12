@@ -1,4 +1,4 @@
-"""Phase 2: Guide 生成（plot_guide + style_guide）
+"""Phase 2: plot-guide 生成
 Phase 2.5: Guide 衔接修复"""
 
 import os
@@ -7,15 +7,11 @@ import sys
 import time
 from pathlib import Path
 
-# 添加路径
-current_dir = str(Path(__file__).parent.parent)
-sys.path.insert(0, current_dir)
-
 from utils import (
     get_total_chapters, count_source_chars, call_api, batch_run
 )
 from state_manager import atomic_write_text
-from prompt_loader import load_prompt
+from prompt_loader import load_prompt, load_system_prompt, tag_output, get_prompt_config_with_overrides
 
 
 # ============================================================
@@ -27,20 +23,9 @@ def phase_guides(config, start, end, workers=5, serial=False, state_mgr=None):
     from lib.api_client import get_api_url
     
     guides_dir = f"{config['rewrites_dir']}/guides"
-    flash = {**config, "model": "deepseek-v4-flash", "reasoning_effort": "low"}
 
     if state_mgr:
         state_mgr.phase_start("guides")
-
-    # style-guide（引用 templates）
-    print(f"\n{'=' * 50}")
-    print(f"Phase 2: style_guide (flash, ch{start}-{end}, 引用 templates)")
-    print("=" * 50)
-
-    ok_style, fail_style = batch_run(flash, "style-guide", start, end, workers, guides_dir,
-                                     "style_{ch}.md", skip_existing=True, state_mgr=state_mgr,
-                                     run_one_func=run_one)
-    print(f"style_guide: OK={len(ok_style)} FAIL={len(fail_style)}")
 
     # plot-guide（JSON 输出 + 模板合并）
     print(f"\n{'=' * 50}")
@@ -55,7 +40,7 @@ def phase_guides(config, start, end, workers=5, serial=False, state_mgr=None):
                 overrides = {}
                 if prev_summary:
                     overrides["上一章摘要"] = prev_summary
-                result = run_one(flash, "plot-guide", ch, extra_replacements=overrides)
+                result = run_one(config, "plot-guide", ch, extra_replacements=overrides)
                 # JSON 输出 + 模板合并
                 result = process_plot_guide_output(config, ch, result)
                 path = Path(guides_dir) / f"plot_{ch}.md"
@@ -70,15 +55,15 @@ def phase_guides(config, start, end, workers=5, serial=False, state_mgr=None):
                 fail[ch] = str(e)
                 print(f"  [FAIL] ch{ch}: {e}")
     else:
-        ok, fail = batch_run(flash, "plot-guide", start, end, workers, guides_dir,
+        ok, fail = batch_run(config, "plot-guide", start, end, workers, guides_dir,
                              "plot_{ch}.md", skip_existing=True, state_mgr=state_mgr,
                              run_one_func=run_one_with_template)
 
     print(f"plot_guide: OK={len(ok)} FAIL={len(fail)}")
 
     if state_mgr:
-        if fail or fail_style:
-            state_mgr.phase_failed("guides", error=f"plot:{len(fail)} fail, style:{len(fail_style)} fail")
+        if fail:
+            state_mgr.phase_failed("guides", error=f"{len(fail)} fail")
         else:
             state_mgr.phase_done("guides")
 
@@ -92,8 +77,9 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     if not api_key:
         raise ValueError("未配置 API_KEY，请设置 $env:API_KEY")
 
-    model = model or config.get("model", "deepseek-v4-flash")
-    reasoning_effort = reasoning_effort or config.get("reasoning_effort", "low")
+    pc = get_prompt_config_with_overrides(f"{prompt_type}.md", config)
+    model = model or pc.get("model", "deepseek-v4-flash")
+    reasoning_effort = reasoning_effort or pc.get("reasoning_effort", "low")
     prompts_dir = config.get("prompts_dir", ".agents/skills/story-engine/prompts")
     base_dir = config.get("base_dir", os.getcwd())
     api_url = get_api_url(config)
@@ -114,7 +100,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     }
 
     # 需要源文字数时，脚本计算（API 无法跑 PowerShell）
-    if prompt_type in ("plot-guide", "style-guide", "write-chapter", "trim-chapter") and chapter_num:
+    if prompt_type in ("plot-guide", "write-chapter", "trim-chapter") and chapter_num:
         src_chars = count_source_chars(config, chapter_num)
         target_chars = src_chars  # 1:1对标源文字数
         replacements["源文字数"] = str(src_chars)
@@ -122,29 +108,25 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         replacements["目标字数_min"] = str(int(target_chars * 0.9))
         replacements["目标字数_max"] = str(int(target_chars * 1.1))
     
-    # 源文脱敏：剥离数字/人名，只留结构（代替直接喂全章源文）
-    if prompt_type in ("plot-guide", "style-guide") and chapter_num:
-        from lib.source_stripper import strip_source_chapter
-        stripped = strip_source_chapter(config, chapter_num)
-        if stripped:
-            replacements["源文结构"] = stripped
+    # plot-guide 和 write-chapter 直接注入源文全文（精度对标，抄袭由下游检测）
+    if prompt_type in ("plot-guide", "write-chapter") and chapter_num:
+        from utils import get_source_text
+        source_text = get_source_text(config, chapter_num)
+        if source_text:
+            replacements["源文全文"] = source_text
         else:
-            replacements["源文结构"] = "（源文读取失败）"
+            replacements["源文全文"] = "（源文读取失败）"
 
-    # style-guide注入源文指标（从缓存的 style_analysis/style_{N}.json 读取）
-    if prompt_type == "style-guide" and chapter_num:
-        import json
-        style_json = Path(config.get("rewrites_dir", "")).parent / "style_analysis" / f"style_{chapter_num}.json"
-        if style_json.exists():
-            try:
-                metrics = json.loads(style_json.read_text(encoding='utf-8'))
-                replacements["源文指标"] = json.dumps(metrics, ensure_ascii=False, indent=2)
-            except Exception:
-                replacements["源文指标"] = "（JSON读取失败）"
-        else:
-            replacements["源文指标"] = "（未找到 style_analysis/style_{N}.json，请先运行 --phase style-analysis）"
-
-    max_tokens = 8192  # 不限制，靠重跑兜底
+    # 写章时按目标字数动态设 max_tokens（够写完整不截断，超字数靠 trim 裁）
+    if prompt_type == "write-chapter" and chapter_num:
+        src_chars = replacements.get("目标字数", "0")
+        try:
+            target = int(src_chars)
+            max_tokens = max(2048, int(target * 1.6))
+        except ValueError:
+            max_tokens = pc.get("max_tokens", 8192)
+    else:
+        max_tokens = pc.get("max_tokens", 8192)
 
     # 合并额外替换变量（如串行模式的上一章摘要）
     if extra_replacements:
@@ -153,13 +135,13 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     prompt_path = f"{prompts_dir}/{prompt_type}.md"
     user_prompt = load_prompt(prompt_path, base_dir, replacements, mode="api", rewrites_dir=config.get("rewrites_dir"))
 
-    # 写章时使用每章独立的 style_guide（通过 prompt 中的【style_guide】标签引用）
-    sys_prompt = system_prompt or "你是一个专业的网文写手，擅长仿写风格迁移。严格按照提供的指南和指令执行。"
+    if not system_prompt:
+        system_prompt = load_system_prompt("system-guide.md")
 
     label = f"ch{chapter_num or '?'} {prompt_type}"
     t_req = time.time()
     try:
-        result = call_api(api_key, model, user_prompt, reasoning_effort, max_tokens, sys_prompt, api_url)
+        result = call_api(api_key, model, user_prompt, reasoning_effort, max_tokens, system_prompt, api_url, temperature=pc.get("temperature", 0.8))
         elapsed = time.time() - t_req
         print(f"  [OK] {label} ({elapsed:.0f}s)")
         return result
@@ -192,9 +174,11 @@ def process_plot_guide_output(config, chapter_num, ai_output):
         print(f"  [WARN] 模板不存在: {template_path}，使用原始输出")
         return ai_output
     
+    from template_merger import merge_tagged_output, parse_tagged_output, load_template
+    template_text = load_template(str(template_path))
+    
     # 1. 标签模板合并
     try:
-        from template_merger import merge_tagged_output
         result = merge_tagged_output(str(template_path), ai_output)
         print(f"  [OK] 标签模板合并完成")
     except Exception as e:
@@ -236,6 +220,17 @@ def process_plot_guide_output(config, chapter_num, ai_output):
     for key, value in replacements.items():
         result = result.replace(f"{{{key}}}", str(value))
     
+    # 收集游离标签：AI输出中有但模板没有对应的 → 追加到尾部
+    from template_merger import parse_tagged_output
+    all_tags = parse_tagged_output(ai_output)
+    orphan_sections = []
+    for tag, content in all_tags.items():
+        placeholder = f"{{{tag}}}"
+        if placeholder not in template_text:
+            orphan_sections.append(f"## {tag}\n{content}")
+    if orphan_sections:
+        result += "\n\n" + "\n\n".join(orphan_sections)
+    
     return result
 
 
@@ -273,7 +268,8 @@ def phase_guide_continuity_fix(config, start, end, batch_size=40):
         print("[FAIL] guides 目录不存在")
         return
 
-    model = config.get("model", "deepseek-v4-flash")
+    pc = get_prompt_config_with_overrides("guide-continuity-fix.md", config)
+    model = pc.get("model", config.get("model", "deepseek-v4-flash"))
     api_url = get_api_url(config)
 
     print(f"\n{'=' * 50}")
@@ -308,37 +304,23 @@ def phase_guide_continuity_fix(config, start, end, batch_size=40):
             print(f"    [SKIP] 无 plot_guide")
             continue
 
-        # 组织 prompt
-        parts = ["# Guide 衔接修复\n",
-                 "以下为同一部小说的多章章纲（plot_guide），请检查相邻章之间的衔接问题。\n",
-                 "## 检查项\n",
-                 "1. **角色名一致性**：各章使用的角色名是否完全一致（注意：第一部可能有配角名变化是因为角色正常登场，只要不冲突即可）\n",
-                 "2. **人设一致性**：角色的身份、性格、行为模式在跨章时是否连贯\n",
-                 "3. **时间线连贯性**：相邻章的时间顺序是否合理，有无跳跃或回溯\n",
-                 "4. **场景连续性**：章与章之间的场景转换是否有交代\n",
-                 "5. **主线一致性**：各章是否在同一条主线/冲突线上推进，有无另起新线\n",
-                 "6. **钩子呼应**：上一章结尾的悬念/约定/未完成事件，下一章是否有回应\n",
-                 "\n## 修复要求\n",
-                 "- 对**有断裂**的章节，重写其角色列表和节拍映射表中的事件，使其与前后章连贯\n",
-                 "- 对**无断裂**的章节，保持原样不动\n",
-                 "- **必须保持各章节拍数量、结构功能、情绪曲线与源文的对应关系不变**（这是仿写骨架）\n",
-                 "- 只改情节事件、角色名、场景名，不改字数分配、冲突类型标签\n",
-                 "- 禁止引入新角色（除非已在本批其他 guide 中出现）\n",
-                 "\n## 各章章纲\n"]
-
-        for ch_str in sorted(guides.keys(), key=int):
-            parts.append(f"---\n### 第{ch_str}章\n\n{guides[ch_str]}\n")
-
-        parts.append("\n## 输出格式\n")
-        parts.append("对每章输出修复后的完整 guide，格式不变。仅对有问题的章做修改，**无问题的章原样输出**。\n")
-        parts.append("用分隔符 `===章: N===` 隔开各章输出。\n")
-
-        user_prompt = "".join(parts)
+        # 加载 guide-continuity-fix prompt
+        prompt_template = load_prompt(
+            f"{prompts_dir}/guide-continuity-fix.md",
+            base_dir, mode="api",
+            rewrites_dir=config.get("rewrites_dir"),
+        )
+        user_prompt = prompt_template.replace(
+            "{guides}",
+            '\n'.join(f"---\n### 第{ch_str}章\n\n{guides[ch_str]}\n" for ch_str in sorted(guides.keys(), key=int))
+        )
 
         try:
             result = call_api(api_key, model, user_prompt,
-                              reasoning_effort="low", max_tokens=16000,
-                              system_prompt="你是专业网文编辑，擅长检查小说章纲的衔接连贯性。只改有问题的部分，不要动没问题的地方。",
+                              reasoning_effort=pc.get("reasoning_effort", "low"),
+                              max_tokens=pc.get("max_tokens", 16000),
+                              temperature=pc.get("temperature", 0.8),
+                              system_prompt=load_system_prompt("system-guide.md"),
                               api_url=api_url)
 
             # 解析输出
@@ -353,7 +335,7 @@ def phase_guide_continuity_fix(config, start, end, batch_size=40):
                 out_path = guides_dir / f"plot_{ch_str}.md"
                 old_content = out_path.read_text(encoding='utf-8') if out_path.exists() else ""
                 if content and content != old_content:
-                    out_path.write_text(content, encoding='utf-8')
+                    out_path.write_text(tag_output(content, "guide-continuity-fix.md"), encoding='utf-8')
                     fixed += 1
 
             elapsed = time.time() - t0

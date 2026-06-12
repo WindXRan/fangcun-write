@@ -1,22 +1,20 @@
 """Phase 0: Prep（提取元数据+章节目录）
+Phase 0.5: 曲线分析（读 _toc.txt → 选关键章节）
 Phase 1: 开书（生成 concept.md + settings/）"""
 
+import json
 import os
 import re
 import sys
 import time
 from pathlib import Path
 
-# 添加路径
-current_dir = str(Path(__file__).parent.parent)
-sys.path.insert(0, current_dir)
-
 from utils import (
     get_total_chapters, get_source_title, call_api, 
     load_trend_knowledge, count_source_chars
 )
 from state_manager import atomic_write_text
-from prompt_loader import load_prompt
+from prompt_loader import load_prompt, load_system_prompt, tag_output, get_prompt_config_with_overrides
 
 
 # ============================================================
@@ -35,28 +33,14 @@ def phase_prep(config):
     # 1. 提取原始 TXT 头部（书名/作者/简介/标签/等级体系）
     header_file = cache_dir / "_header.txt"
     if not header_file.exists():
-        # 多路径搜索原始 TXT
-        raw_paths = [
-            Path(base_dir) / "projects" / f"{source_book}.txt",
-            Path(base_dir) / "projects" / author / f"{source_book}.txt",
-            Path(base_dir) / "projects" / author / source_book / f"{source_book}.txt",
-            Path(base_dir) / "projects" / author / f"{source_book}.txt",
-            Path(base_dir) / f"{source_book}.txt",
-        ]
-        raw_txt = None
-        for p in raw_paths:
-            if p.exists():
-                raw_txt = p
-                break
-
+        raw_txt = _find_source_txt(base_dir, author, source_book)
         if raw_txt:
+            head_lines = []
             with open(raw_txt, encoding='utf-8') as f:
-                head_lines = []
                 for i, line in enumerate(f):
                     if i >= 80:
                         break
                     stripped = line.strip()
-                    # 多种章节标题模式：第1章 / 第一章 / 第001章 / Chapter 1
                     if stripped and (
                         (stripped.startswith('第') and '章' in stripped[:15]) or
                         stripped.lower().startswith('chapter')
@@ -71,7 +55,6 @@ def phase_prep(config):
     # 2. 生成章节目录（从已拆分的章节）
     toc_file = cache_dir / "_toc.txt"
     if not toc_file.exists():
-        # 多路径搜索拆分章节
         chapters_dirs = [
             cache_dir / "chapters",
             Path(base_dir) / "projects" / author / source_book / "源文",
@@ -92,7 +75,6 @@ def phase_prep(config):
             for cf in chapter_files:
                 try:
                     first_line = cf.read_text(encoding='utf-8').strip().split('\n')[0]
-                    # 只取前60字（标题行），去掉空白
                     title = first_line.strip()[:60]
                     toc_lines.append(title)
                 except:
@@ -103,14 +85,120 @@ def phase_prep(config):
             print(f"[WARN] 未找到拆分章节，_toc.txt 跳过")
 
 
+def _find_source_txt(base_dir, author, source_book):
+    """多路径搜索原始 TXT。"""
+    candidates = [
+        Path(base_dir) / "projects" / f"{source_book}.txt",
+        Path(base_dir) / "projects" / author / f"{source_book}.txt",
+        Path(base_dir) / "projects" / author / source_book / f"{source_book}.txt",
+        Path(base_dir) / f"{source_book}.txt",
+    ]
+    for p in candidates:
+        if p.exists():
+            return p
+    return None
+
+
+# ============================================================
+# Phase 0.5: 曲线分析 — 读 _toc.txt → 选关键章节
+# ============================================================
+
+def _fallback_key_chapters(total_ch):
+    """等距采样（toc 不可用时的降级方案）。"""
+    chs = [1]
+    total_ch = max(total_ch, 5)
+    for frac in [0.15, 0.30, 0.45, 0.60, 0.75, 0.88]:
+        chs.append(max(2, int(total_ch * frac)))
+    for c in range(total_ch, 0, -1):
+        if c not in chs:
+            chs.append(c)
+            break
+    return sorted(set(chs))
+
+
+def _detect_curve(config, api_key, api_url):
+    """Stage 1: 读 _toc.txt，用 flash 分析情绪曲线，返回关键章节列表。"""
+    base_dir = config.get("base_dir", os.getcwd())
+    author = config.get("author", "")
+    source_book = config.get("source_book", "")
+    toc_path = Path(base_dir) / "projects" / author / source_book / "_cache" / "_toc.txt"
+
+    if not toc_path.exists():
+        print("  [CURVE] _toc.txt 不存在，使用等距采样")
+        return _fallback_key_chapters(get_total_chapters(config))
+
+    total_ch = get_total_chapters(config)
+    prompts_dir = config.get("prompts_dir", ".agents/skills/story-engine/prompts")
+    replacements = {
+        "作者名": author,
+        "源书名": source_book,
+        "总章数": str(total_ch),
+    }
+
+    try:
+        curve_prompt = load_prompt(
+            f"{prompts_dir}/toc-curve.md",
+            base_dir, replacements, mode="api",
+            rewrites_dir=config.get("rewrites_dir"),
+        )
+    except FileNotFoundError:
+        print("  [CURVE] toc-curve.md 不存在，使用等距采样")
+        return _fallback_key_chapters(total_ch)
+
+    print("  [CURVE] 曲线分析中...")
+    try:
+        pc = get_prompt_config_with_overrides("toc-curve.md", config)
+        result = call_api(
+            api_key, pc.get("model", "deepseek-v4-flash"), curve_prompt,
+            max_tokens=pc.get("max_tokens", 4096), api_url=api_url,
+            temperature=pc.get("temperature", 0.8),
+        )
+    except Exception:
+        print("  [CURVE] LLM 调用失败，使用等距采样")
+        return _fallback_key_chapters(total_ch)
+
+    chapters = _parse_curve_result(result, total_ch)
+    print(f"  [CURVE] 选定 {len(chapters)} 章: {chapters}")
+    return chapters
+
+
+def _parse_curve_result(text, total_ch):
+    """从 LLM 输出中解析 key_chapters JSON 数组。"""
+    try:
+        m = re.search(r'```json\s*(.*?)```', text, re.DOTALL)
+        if m:
+            data = json.loads(m.group(1))
+        else:
+            data = json.loads(text)
+        chs = data.get("key_chapters", [])
+        valid = sorted(set(int(c) for c in chs if 1 <= int(c) <= total_ch))
+        if len(valid) >= 3:
+            return valid
+    except Exception:
+        pass
+    return _fallback_key_chapters(total_ch)
+
+
+def _build_sample_block(config, chapter_numbers):
+    """构建 {源文样本} 内容：每个章节生成一行 【源文_样本N】path。"""
+    base_dir = config.get("base_dir", os.getcwd())
+    author = config.get("author", "")
+    source_book = config.get("source_book", "")
+    lines = []
+    for i, ch in enumerate(chapter_numbers, 1):
+        path = f"projects/{author}/{source_book}/_cache/chapters/第{ch}章.txt"
+        lines.append(f"【源文_样本{i}】{path}")
+    return "\n".join(lines)
+
+
 # ============================================================
 # Phase 1: 开书
 # ============================================================
 
 def phase_open_book(config, state_mgr=None):
-    """生成 concept.md + settings/ 目录下的独立文件。"""
+    """两段式开书：曲线分析(flash) → 选章精读 → 开书(pro)。"""
     print("\n" + "=" * 50)
-    print("Phase 1: 开书 (pro, reasoning=high)")
+    print("Phase 1: 开书 (两段式: curve→open-book)")
     print("=" * 50)
 
     if state_mgr:
@@ -119,7 +207,18 @@ def phase_open_book(config, state_mgr=None):
             return True
         state_mgr.phase_start("open-book")
 
-    # 动态样本章节（开局5章+中间3章+最后5章）
+    base_dir = config.get("base_dir", os.getcwd())
+    api_key = config.get("api_key") or os.environ.get("API_KEY")
+    if not api_key:
+        raise ValueError("未配置 API_KEY，请设置 $env:API_KEY")
+
+    from lib.api_client import get_api_url
+    api_url = get_api_url(config)
+
+    # === Stage 1: 曲线分析 → 选关键章节 ===
+    key_chapters = _detect_curve(config, api_key, api_url)
+
+    # === Stage 2: 用选定的章节做开书分析 ===
     total_ch = get_total_chapters(config)
     replacements = {
         "新书名": config["book_name"],
@@ -127,83 +226,51 @@ def phase_open_book(config, state_mgr=None):
         "源书名": config.get("source_book", ""),
         "总章数": str(total_ch),
         "genre": config.get("genre", ""),
+        "源文样本": _build_sample_block(config, key_chapters),
     }
-    
-    if total_ch > 0:
-        # 开局5章
-        replacements["章号_开篇1"] = "1"
-        replacements["章号_开篇2"] = "2"
-        replacements["章号_开篇3"] = "3"
-        replacements["章号_开篇4"] = "4"
-        replacements["章号_开篇5"] = "5"
-        # 中间3章（25%/50%/75%位置）
-        replacements["章号_中段1"] = str(max(1, int(total_ch * 0.25)))
-        replacements["章号_中段2"] = str(max(1, int(total_ch * 0.50)))
-        replacements["章号_中段3"] = str(max(1, int(total_ch * 0.75)))
-        # 最后5章（跳过番外）
-        tail_chs = []
-        for c in range(total_ch, 0, -1):
-            tail_title = get_source_title(config, c)
-            if '番外' in tail_title:
-                continue
-            tail_chs.append(str(c))
-            if len(tail_chs) >= 5:
-                break
-        tail_chs.reverse()
-        for i in range(5):
-            replacements[f"章号_结尾{i+1}"] = tail_chs[i] if i < len(tail_chs) else str(total_ch)
 
-    # 热梗素材注入
     trend_content = ""
     trend_dir = config.get("trend_dir")
     if trend_dir:
-        trend_content = load_trend_knowledge(trend_dir, config.get("base_dir", os.getcwd()))
+        trend_content = load_trend_knowledge(trend_dir, base_dir)
 
-    # 加载 prompt
     prompts_dir = config.get("prompts_dir", ".agents/skills/story-engine/prompts")
-    base_dir = config.get("base_dir", os.getcwd())
-    prompt_path = f"{prompts_dir}/open-book.md"
-    user_prompt = load_prompt(prompt_path, base_dir, replacements, mode="api", rewrites_dir=config.get("rewrites_dir"))
-    
+    user_prompt = load_prompt(
+        f"{prompts_dir}/open-book.md",
+        base_dir, replacements, mode="api",
+        rewrites_dir=config.get("rewrites_dir"),
+    )
     if trend_content:
         user_prompt += trend_content
 
-    # 调用 API（使用 pro 模型）
-    api_key = config.get("api_key") or os.environ.get("API_KEY")
-    if not api_key:
-        raise ValueError("未配置 API_KEY，请设置 $env:API_KEY")
-
-    from lib.api_client import get_api_url
-    api_url = get_api_url(config)
-    system_prompt = "你是一个专业的网文写手，擅长仿写风格迁移。严格按照提供的指南和指令执行。"
+    system_prompt = load_system_prompt("system-generic.md")
 
     try:
+        pc = get_prompt_config_with_overrides("open-book.md", config)
         result = call_api(
-            api_key, "deepseek-v4-pro", user_prompt,
-            reasoning_effort="high", max_tokens=8192,
-            system_prompt=system_prompt, api_url=api_url
+            api_key, pc.get("model", "deepseek-v4-pro"), user_prompt,
+            reasoning_effort=pc.get("reasoning_effort", "high"),
+            max_tokens=pc.get("max_tokens", 8192),
+            temperature=pc.get("temperature", 0.8),
+            system_prompt=system_prompt, api_url=api_url,
         )
-        
-        # 解析多文件输出：AI 用 ===FILE: path=== 分隔不同文件
+
         files = parse_multi_file_output(result)
-        
         if files:
-            # 多文件模式：拆分到 settings/ 目录
             for filepath, content in files.items():
                 full_path = Path(config["rewrites_dir"]) / filepath
-                atomic_write_text(full_path, content)
+                atomic_write_text(full_path, tag_output(content, "open-book.md"))
                 print(f"[OK] {filepath} → {full_path}")
         else:
-            # 单文件模式：直接保存为 concept.md
             path = Path(config["rewrites_dir"]) / "concept.md"
-            atomic_write_text(path, result)
+            atomic_write_text(path, tag_output(result, "open-book.md"))
             print(f"[OK] concept.md → {path}")
-        
+
         if state_mgr:
             state_mgr.phase_done("open-book")
         return True
     except Exception as e:
-        print(f"[FAIL] concept.md: {e}")
+        print(f"[FAIL] open-book: {e}")
         if state_mgr:
             state_mgr.phase_failed("open-book", error=str(e))
         return False
@@ -212,22 +279,17 @@ def phase_open_book(config, state_mgr=None):
 def parse_multi_file_output(text):
     """解析 AI 输出的多文件内容。格式：===FILE: path===\n内容"""
     files = {}
-    # 匹配 ===FILE: path=== 分隔符
     pattern = r'===FILE:\s*(.+?)\s*==='
     parts = re.split(pattern, text)
-    
+
     if len(parts) < 3:
-        # 没有找到分隔符，返回空
         return {}
-    
-    # parts[0] 是第一个分隔符之前的内容（通常是说明文字，跳过）
-    # parts[1] 是第一个文件路径，parts[2] 是第一个文件内容
-    # parts[3] 是第二个文件路径，parts[4] 是第二个文件内容，以此类推
+
     for i in range(1, len(parts), 2):
         if i + 1 < len(parts):
             filepath = parts[i].strip()
             content = parts[i + 1].strip()
             if filepath and content:
                 files[filepath] = content
-    
+
     return files

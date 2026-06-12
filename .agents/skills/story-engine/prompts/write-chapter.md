@@ -1,3 +1,8 @@
+---
+version: 1
+changelog: 初始版本
+---
+
 写《{新书名}》第{N}章。正文第一行写"第{N}章 XXX"（不加#）。
 
 【plot_guide】projects/{作者名}/{源书名}/rewrites/{新书名}/guides/plot_{N}.md

@@ -1,14 +1,9 @@
 """Phase 6: 统一审查+修复（新系统）"""
 
 import os
-import sys
 import json
 import time
 from pathlib import Path
-
-# 添加路径
-current_dir = str(Path(__file__).parent.parent)
-sys.path.insert(0, current_dir)
 
 
 def phase_unified_check(config, start, end, workers=10, batch_size=25, state_mgr=None):

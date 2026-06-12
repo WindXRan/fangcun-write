@@ -5,7 +5,6 @@ import time
 import requests
 
 DEFAULT_API_URL = "https://api.deepseek.com/v1/chat/completions"
-SYSTEM_PROMPT = "你是一个专业的网文写手，擅长仿写风格迁移。严格按照提供的指南和指令执行。"
 
 
 def get_api_url(config=None):
@@ -30,8 +29,12 @@ def get_api_key(config=None):
 
 
 def call_api(api_key, model, user_prompt, reasoning_effort="low",
-             max_tokens=8192, system_prompt=None, api_url=None, max_retries=3):
+             max_tokens=8192, system_prompt=None, api_url=None, max_retries=3,
+             temperature=0.8):
     """调用 API，带指数退避重试。
+
+    Args:
+        temperature: 默认 0.8。审稿推荐 0.3，修复推荐 0.6。
 
     重试策略：
     - 429 (限流): 指数退避 10/20/40 秒
@@ -39,15 +42,18 @@ def call_api(api_key, model, user_prompt, reasoning_effort="low",
     - 超时: 重试，超时时间翻倍
     - 其他错误: 不重试
     """
+    from prompt_loader import load_system_prompt
+
     url = api_url or DEFAULT_API_URL
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    sys_prompt = system_prompt or load_system_prompt("system-generic.md")
     data = {
         "model": model,
         "messages": [
-            {"role": "system", "content": system_prompt or SYSTEM_PROMPT},
+            {"role": "system", "content": sys_prompt},
             {"role": "user", "content": user_prompt}
         ],
-        "temperature": 0.8,
+        "temperature": temperature,
         "max_tokens": max_tokens,
     }
 

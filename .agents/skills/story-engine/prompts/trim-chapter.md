@@ -1,3 +1,8 @@
+---
+version: 1
+changelog: 初始版本
+---
+
 精简以下章节，目标 {目标字数} 字。
 
 【原文】projects/{作者名}/{源书名}/rewrites/{新书名}/chapters/ch_{N03d}.txt

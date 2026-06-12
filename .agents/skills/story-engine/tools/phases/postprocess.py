@@ -2,16 +2,12 @@
 
 import os
 import re
-import sys
 import time
 from pathlib import Path
 
-# 添加路径
-current_dir = str(Path(__file__).parent.parent)
-sys.path.insert(0, current_dir)
-
 from utils import count_source_chars, get_source_title, call_api, print_progress
 from lib.api_client import get_api_url
+from prompt_loader import load_prompt_str, validate_prompt_variables, tag_output, get_prompt_config_with_overrides
 
 
 # ============================================================
@@ -104,7 +100,7 @@ def phase_trim(config, start, end):
             result = run_one(config, "trim-chapter", ch)
             # 保留原标题
             title = lines[0] if lines and lines[0].startswith('第') else f"第{ch}章"
-            ch_file.write_text(title + '\n\n' + result.strip(), encoding='utf-8')
+            ch_file.write_text(tag_output(title + '\n\n' + result.strip(), "trim-chapter.md"), encoding='utf-8')
             trimmed += 1
         except Exception as e:
             print(f"  [FAIL] trim ch{ch}: {e}")
@@ -153,7 +149,7 @@ def phase_rewrite(config, start, end, workers=5):
             
             # 生成标题
             title = f"第{ch}章"
-            ch_file.write_text(title + '\n\n' + result.strip(), encoding='utf-8')
+            ch_file.write_text(tag_output(title + '\n\n' + result.strip(), "write-chapter.md"), encoding='utf-8')
             rewritten += 1
         except Exception as e:
             print(f"  [FAIL] rewrite ch{ch}: {e}")
@@ -197,27 +193,20 @@ def phase_polish(config, start, end, workers=5):
         original = ch_file.read_text(encoding='utf-8')
         orig_chars = len(original.replace('\n', '').replace(' ', ''))
 
-        prompt = f"""你是专业网文写手。请润色以下章节，提升文笔质量。
+        prompt_template = load_prompt_str("polish-chapter.md")
+        r = {"content": original, "min_chars": int(orig_chars * 0.9), "max_chars": int(orig_chars * 1.1)}
+        validate_prompt_variables("polish-chapter.md", r)
+        prompt = prompt_template.format(**r)
 
-【润色要求】
-1. 不改变情节、人物、对话内容
-2. 删除AI痕迹（「仿佛」「似乎」「不禁」「心中涌起」等）
-3. 增加细节描写（五感、环境、动作）
-4. 优化句式，避免排比句连续超过3句
-5. 对话更自然，像真人说话
-6. 字数控制在原文±10%以内（{int(orig_chars*0.9)}~{int(orig_chars*1.1)}字）
-
-【原文】
-{original}
-
-【输出格式】
-直接输出润色后的完整章节，不要解释。"""
+        pc = get_prompt_config_with_overrides("polish-chapter.md", config)
 
         try:
             result = call_api(
-                api_key, model, prompt,
-                reasoning_effort="low", max_tokens=8000,
-                system_prompt="你是专业网文写手，擅长润色文笔。保持情节不变，只改表达。",
+                api_key, pc.get("model", model), prompt,
+                reasoning_effort=pc.get("reasoning_effort", "low"),
+                max_tokens=pc.get("max_tokens", 8000),
+                temperature=pc.get("temperature", 0.8),
+                system_prompt="",
                 api_url=api_url
             )
             
@@ -227,7 +216,7 @@ def phase_polish(config, start, end, workers=5):
             if orig_chars > 0 and abs(new_chars - orig_chars) / orig_chars > 0.15:
                 print(f"  [SKIP] ch{ch:03d}: 字数差异过大 ({orig_chars}→{new_chars})")
             else:
-                ch_file.write_text(result, encoding='utf-8')
+                ch_file.write_text(tag_output(result, "polish-chapter.md"), encoding='utf-8')
                 polished += 1
                 print(f"  [POLISH] ch{ch:03d}: {orig_chars}→{new_chars}字")
         except Exception as e:
@@ -279,27 +268,21 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=5):
             done_chapters += 1
             continue  # 字数已够，跳过
 
-        prompt = f"""你是专业网文写手。请扩写以下章节，增加内容使字数达到{target_chars}字左右。
+        prompt_template = load_prompt_str("expand-chapter.md")
+        r = {"content": original, "orig_chars": orig_chars, "target_chars": target_chars,
+             "min_chars": int(target_chars * 0.9), "max_chars": int(target_chars * 1.1)}
+        validate_prompt_variables("expand-chapter.md", r)
+        prompt = prompt_template.format(**r)
 
-【扩写要求】
-1. 保持原有情节框架和人物关系
-2. 增加细节描写（环境、心理、动作）
-3. 增加对话互动
-4. 增加场景过渡
-5. 不要增加新的情节线
-6. 字数控制在{int(target_chars*0.9)}~{int(target_chars*1.1)}字
-
-【原文（{orig_chars}字）】
-{original}
-
-【输出格式】
-直接输出扩写后的完整章节，不要解释。"""
+        pc = get_prompt_config_with_overrides("expand-chapter.md", config)
 
         try:
             result = call_api(
-                api_key, model, prompt,
-                reasoning_effort="low", max_tokens=10000,
-                system_prompt="你是专业网文写手，擅长扩写内容。保持情节不变，增加细节。",
+                api_key, pc.get("model", model), prompt,
+                reasoning_effort=pc.get("reasoning_effort", "low"),
+                max_tokens=pc.get("max_tokens", 10000),
+                temperature=pc.get("temperature", 0.8),
+                system_prompt="",
                 api_url=api_url
             )
             
@@ -309,7 +292,7 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=5):
             if new_chars < orig_chars * 1.1:
                 print(f"  [SKIP] ch{ch:03d}: 扩写不足 ({orig_chars}→{new_chars})")
             else:
-                ch_file.write_text(result, encoding='utf-8')
+                ch_file.write_text(tag_output(result, "expand-chapter.md"), encoding='utf-8')
                 expanded += 1
                 print(f"  [EXPAND] ch{ch:03d}: {orig_chars}→{new_chars}字 (+{(new_chars/orig_chars-1)*100:.0f}%)")
         except Exception as e:
