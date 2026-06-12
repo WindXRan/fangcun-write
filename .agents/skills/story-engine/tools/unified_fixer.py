@@ -726,12 +726,18 @@ def main():
 
     output = args.output or os.path.join(cfg['rewrites_dir'], 'compare', 'unified_review_fix.json')
     Path(output).parent.mkdir(parents=True, exist_ok=True)
+    def _safe(val):
+        if isinstance(val, (FixTask, FixResult)):
+            return asdict(val)
+        if isinstance(val, Issue):
+            return asdict(val)
+        return val
     Path(output).write_text(json.dumps({
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
         "range": [args.start, args.end],
-        "results": {str(k): asdict(v) if isinstance(v, FixResult) else v for k, v in (results or {}).items()},
+        "results": {str(k): _safe(v) for k, v in (results or {}).items()},
         "merged_report": merged,
-    }, ensure_ascii=False, indent=2), encoding='utf-8')
+    }, ensure_ascii=False, indent=2, default=str), encoding='utf-8')
     print(f"\n  结果已保存: {output}")
 
 
