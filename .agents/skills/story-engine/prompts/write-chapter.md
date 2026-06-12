@@ -9,7 +9,7 @@ optional_vars: ["genre", "女主名", "男主名"]
 system_prompt: system-generic.md
 defaults: {"model": "deepseek-v4-flash", "max_tokens": 4096, "reasoning_effort": "low", "temperature": 0.8}
 ---
-写《{新书名}》第{N}章。正文第一行写"第{N}章 XXX"（不加#）。
+写《{新书名}》第{N}章。正文第一行写"第{N}章 [章名]"，章名使用下方 plot_guide 中标注的（不加#）。若 plot_guide 未标注章名则自拟。
 
 **你不直接接触源文。** 源文结构已由 plot_guide 抽象为节拍表。你的任务是根据节拍表创作全新内容，不是改写源文段落。
 
