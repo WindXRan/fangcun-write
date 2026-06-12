@@ -11,7 +11,7 @@ from utils import (
     get_total_chapters, count_source_chars, call_api, batch_run
 )
 from state_manager import atomic_write_text
-from prompt_loader import load_prompt, load_system_prompt, tag_output, get_prompt_config_with_overrides
+from prompt_loader import load_prompt, load_system_prompt, tag_output, get_prompt_config_with_overrides, get_system_prompt_name
 
 
 # ============================================================
@@ -136,7 +136,8 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     user_prompt = load_prompt(prompt_path, base_dir, replacements, mode="api", rewrites_dir=config.get("rewrites_dir"))
 
     if not system_prompt:
-        system_prompt = load_system_prompt("system-guide.md")
+        sp_name = get_system_prompt_name(f"{prompt_type}.md") or "system-guide.md"
+        system_prompt = load_system_prompt(sp_name)
 
     label = f"ch{chapter_num or '?'} {prompt_type}"
     t_req = time.time()

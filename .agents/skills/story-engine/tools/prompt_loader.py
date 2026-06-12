@@ -376,6 +376,16 @@ def get_prompt_config_with_overrides(name, config):
     return cfg
 
 
+def get_system_prompt_name(user_prompt_name):
+    """返回 manifest.json 中 user prompt 关联的 system prompt 文件名。
+    
+    如果未配置 system_prompt，返回 None。
+    """
+    manifest = _load_manifest()
+    entry = manifest.get(user_prompt_name, {})
+    return entry.get("system_prompt")
+
+
 def get_prompt_version(name):
     """读取 prompt 文件的 frontmatter 版本号。"""
     p = _PROMPTS_DIR / name
