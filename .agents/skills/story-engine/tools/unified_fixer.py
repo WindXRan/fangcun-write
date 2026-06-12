@@ -591,7 +591,7 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
     review_results = []
     with ThreadPoolExecutor(max_workers=min(workers, len(batches))) as ex:
         futures = {
-            ex.submit(review_agent, config, batch, api_key, api_url, model): i
+            ex.submit(review_agent, cfg, batch, api_key, api_url, model): i
             for i, batch in enumerate(batches)
         }
         for f in as_completed(futures):
@@ -625,7 +625,7 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
     print(f"Step 3: 派任务 Agent")
     print("="*40)
 
-    tasks = dispatch_agent(config, summary)
+    tasks = dispatch_agent(cfg, summary)
     mech_total = sum(len(t.mechanical) for t in tasks.values())
     llm_total = sum(1 for t in tasks.values() if t.llm)
     print(f"  {len(tasks)} 章需修复 | 机械修复 {mech_total} 处 | LLM 修复 {llm_total} 章")
@@ -644,7 +644,7 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
     total = len(tasks)
     with ThreadPoolExecutor(max_workers=min(workers, total or 1)) as ex:
         futures = {
-            ex.submit(fix_agent, config, task, api_key, api_url, model, dry_run): ch
+            ex.submit(fix_agent, cfg, task, api_key, api_url, model, dry_run): ch
             for ch, task in tasks.items()
         }
         for f in as_completed(futures):
