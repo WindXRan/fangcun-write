@@ -6,12 +6,9 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-# 添加路径
-current_dir = str(Path(__file__).parent)
-sys.path.insert(0, current_dir)
-
 from state_manager import StateManager
-from utils import validate_config, get_chapters_list, get_cache_stats
+from config_validator import validate_config
+from utils import get_chapters_list, get_cache_stats
 from logger import get_logger
 
 

@@ -1,7 +1,6 @@
 """Phase 1.5: 风格分析（脚本，自动提取源文指标）"""
 
 import subprocess
-import sys
 from pathlib import Path
 
 

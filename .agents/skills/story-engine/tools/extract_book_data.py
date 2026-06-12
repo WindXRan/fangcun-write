@@ -105,64 +105,88 @@ TAG_NORMALIZE = {
 
 
 def parse_characters(text):
-    """解析 settings/characters.md → characters 数组。"""
+    """解析 settings/characters.md → characters 数组。
+    
+    支持两种格式：
+      A: `### 郝仁 (男主)`  —— 名字在前，tag括号内（当前项目格式）
+      B: `## 男主：郝仁`   —— tag在前，冒号分隔
+    """
     characters = []
+    TAG_KEYWORDS = r'女[主二配]|男[主二配]|反派|[^\n]{0,4}(?:父亲|母亲|爷爷|奶奶|祖父|祖母|外公|外婆|闺蜜|好友|助理|管家|继母|继父|弟弟|妹妹|哥哥|姐姐)'
     
-    # 只匹配包含角色关键词的标题：女主、男主、配角、父亲、母亲、爷爷、奶奶等
-    role_pattern = r'##\s*(女[主二配]|男[主二配]|反派|重要配角|[^\n]{0,4}(?:父亲|母亲|爷爷|奶奶|祖父|祖母|外公|外婆|闺蜜|好友|助理|管家|继母|继父|弟弟|妹妹|哥哥|姐姐))[^\n]*?[：:]\s*([\u4e00-\u9fa5]{2,8})(?:[^\n]*?)\s*\n(.*?)(?=\n##|\Z)'
-    entries = re.findall(role_pattern, text, re.DOTALL)
-    
-    for role_tag, name, body in entries:
-        role_tag = role_tag.strip()
-        name = name.strip()
-        
-        # 跳过表格行和非角色标题
-        if name.startswith('|') or name.startswith('-'):
-            continue
+    # 格式 A: ### 郝仁 (男主) —— 名字在前，(tag) 在括号内
+    pattern_a = re.compile(
+        r'^#{2,4}\s+([\u4e00-\u9fa5]{2,8})[^\n]*?[(（]\s*(' + TAG_KEYWORDS + r')[^\n)]*?[)）]\s*\n(.*?)(?=\n^#{2,4}\s+|\Z)',
+        re.MULTILINE | re.DOTALL
+    )
+    for m in pattern_a.finditer(text):
+        name, role_tag, body = m.group(1), m.group(2), m.group(3)
+        _add_character(characters, role_tag.strip(), name.strip(), body)
 
-        char = {
-            "tag": role_tag,
-            "tag_short": TAG_NORMALIZE.get(role_tag, role_tag),
-            "name": name,
-            "aliases": [],
-            "age": "",
-            "identity": "",
-            "personality": "",
-            "arc": "",
-            "weaknesses": [],
-            "archetype": "",
-            "first_appearance": 1,
-            "frequency": ""
-        }
+    # 格式 B: ## 男主：郝仁 —— tag在前，冒号分隔
+    pattern_b = re.compile(
+        r'^#{2,4}\s+(' + TAG_KEYWORDS + r')[^\n]*?[：:]\s*([\u4e00-\u9fa5]{2,8})(?:[^\n]*?)\s*\n(.*?)(?=\n^#{2,4}\s+|\Z)',
+        re.MULTILINE | re.DOTALL
+    )
+    for m in pattern_b.finditer(text):
+        role_tag, name, body = m.group(1), m.group(2), m.group(3)
+        # 格式A已处理则不重复
+        if not any(c["name"] == name.strip() for c in characters):
+            _add_character(characters, role_tag.strip(), name.strip(), body)
 
-        kv = re.compile(r'[-*]\s*\*\*(.+?)\*\*\s*[：:]\s*(.+)')
-        for m in kv.finditer(body):
-            key = m.group(1).strip()
-            val = m.group(2).strip()
-            if '身份' in key:
-                char["identity"] = val
-            elif '年龄' in key or '岁' in key:
-                char["age"] = val
-            elif '性格' in key or '核心' in key or '人设' in key:
-                char["personality"] = val
-            elif '弧线' in key or '成长' in key:
-                char["arc"] = val
-            elif '弱点' in key or '软肋' in key or '在乎' in key:
-                char["weaknesses"] = [w.strip() for w in val.replace('、', ',').split(',') if w.strip()]
-            elif '原型' in key or '模式' in key or '类型' in key:
-                char["archetype"] = val
-            elif '出场' in key or '首次' in key:
-                nums = re.findall(r'\d+', val)
-                if nums:
-                    char["first_appearance"] = int(nums[0])
+    # 解析表格格式的配角
+    _parse_side_characters(text, characters)
 
-        arc_match = re.search(r'弧线[：:](.*?)(?=\n[-*]|\Z)', body, re.DOTALL)
-        if arc_match:
-            char["arc"] = arc_match.group(1).strip()
+    return characters
 
-        characters.append(char)
 
-    # 解析表格格式的配角（## 重要配角 下面的表格）
+def _add_character(characters, role_tag, name, body):
+    """内部：解析角色body并添加到列表。"""
+    if name.startswith('|') or name.startswith('-'):
+        return
+    tag_short = TAG_NORMALIZE.get(role_tag, role_tag)
+    char = {
+        "tag": role_tag,
+        "tag_short": tag_short,
+        "name": name,
+        "aliases": [],
+        "age": "",
+        "identity": "",
+        "personality": "",
+        "arc": "",
+        "weaknesses": [],
+        "archetype": "",
+        "first_appearance": 1,
+        "frequency": ""
+    }
+    kv = re.compile(r'[-*]\s*\*\*(.+?)\*\*\s*[：:]\s*(.+)')
+    for m in kv.finditer(body):
+        key = m.group(1).strip()
+        val = m.group(2).strip()
+        if '身份' in key:
+            char["identity"] = val
+        elif '年龄' in key or '岁' in key:
+            char["age"] = val
+        elif '性格' in key or '核心' in key or '人设' in key:
+            char["personality"] = val
+        elif '弧线' in key or '成长' in key:
+            char["arc"] = val
+        elif '弱点' in key or '软肋' in key or '在乎' in key:
+            char["weaknesses"] = [w.strip() for w in val.replace('、', ',').split(',') if w.strip()]
+        elif '原型' in key or '模式' in key or '类型' in key:
+            char["archetype"] = val
+        elif '出场' in key or '首次' in key:
+            nums = re.findall(r'\d+', val)
+            if nums:
+                char["first_appearance"] = int(nums[0])
+    arc_match = re.search(r'弧线[：:](.*?)(?=\n[-*]|\Z)', body, re.DOTALL)
+    if arc_match:
+        char["arc"] = arc_match.group(1).strip()
+    characters.append(char)
+
+
+def _parse_side_characters(text, characters):
+    """解析 ## 重要配角 下面的表格。"""
     side_char_section = re.search(r'##\s*重要配角\s*\n(.*?)(?=\n##|\Z)', text, re.DOTALL)
     if side_char_section:
         table_text = side_char_section.group(1)
@@ -394,13 +418,16 @@ def build_character_variables(characters):
     
     产出 {男主名}, {女主名} 等，可直接用于 prompt 替换。
     优先用 tag_short（男主角→男主），fallback 到原始 tag。
+    同名角色只取第一个（写在前的是核心角色）。
     """
     vars_map = {}
+    seen_tags = set()
     for ch in characters:
         tag = ch.get("tag_short", ch.get("tag", ""))
         name = ch.get("name", "")
-        if tag:
+        if tag and tag not in seen_tags:
             vars_map[f"{tag}名"] = name
+            seen_tags.add(tag)
     return vars_map
 
 

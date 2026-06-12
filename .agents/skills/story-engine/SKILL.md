@@ -49,8 +49,7 @@ python .agents/skills/story-engine/tools/rewrite_chapters.py --config configs/xx
 ├── prompt_loader.py         # prompt加载器
 ├── merge_chapters.py        # 章节合并导出
 ├── extract_book_data.py     # 提取book_data.json
-├── unified_reviewer.py      # 统一审改系统（审查）
-├── unified_fixer.py         # 统一审改系统（修复）
+├── unified_fixer.py         # 多 Agent 审改系统（审查+修复）
 ├── lib/                     # 共享库
 │   ├── api_client.py        # API客户端（带重试）
 │   ├── constants.py         # 常量定义
@@ -200,13 +199,12 @@ python tools/rewrite_chapters.py --config configs/xxx.json --phase open-book
 |--------|------|------|------|
 | `open-book.md` | 开书 | 源文样本（首/前/25%/50%/75%/尾，覆盖全书弧线） | settings/ + concept.md（设定+弧线+角色名） |
 | `plot-guide.md` | 章纲 | 源文第N章 + concept + 样板库 | 节拍映射表 + 换皮检验 |
-| `style-guide.md` | 风格 | 源文第N章 + 样板库 | 定量锚点 + 去AI指令 |
-| `write-chapter.md` | 写章 | plot_guide + style_guide | ch_{N}.txt |
+| `write-chapter.md` | 写章 | plot_guide + concept + 源文全文 | ch_{N}.txt |
 | `trim-chapter.md` | 精简 | 超字数章节 | 精简后章节 |
 
 ## 知识库（样板库）
 
-plot-guide / style-guide 生成时按需参考的写作技巧库。
+plot-guide 生成时按需参考的写作技巧库。
 
 ```
 knowledge/

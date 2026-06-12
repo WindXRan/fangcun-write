@@ -19,7 +19,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field, asdict
 from typing import Optional
 
-from lib.constants import AI_MARKERS
+from lib.constants import AI_MARKERS, AI_MARKER_PATTERN
 from lib.text_metrics import count_metrics, get_body_chars
 from lib.plagiarism import find_plagiarism
 from lib.source_locator import get_source_text
@@ -61,6 +61,7 @@ class FixTask:
     mechanical: list[Issue] = field(default_factory=list)
     llm: list[Issue] = field(default_factory=list)
     target_chars: int = 0
+    skip_llm: bool = False
 
 @dataclass
 class FixResult:
@@ -413,7 +414,7 @@ def summary_agent(review_results: list[ReviewResult]) -> SummaryReport:
 # Agent 3: Dispatch Agent (按章生成修复任务)
 # ============================================================
 
-def dispatch_agent(config, report: SummaryReport) -> dict[int, FixTask]:
+def dispatch_agent(config, report: SummaryReport, skip_llm: bool = False) -> dict[int, FixTask]:
     """将 summary 转为修复任务，每章一个 FixTask。
 
     Input:  config, SummaryReport
@@ -427,16 +428,12 @@ def dispatch_agent(config, report: SummaryReport) -> dict[int, FixTask]:
         mech = [Issue(**{k: v for k, v in i.items() if k in _ISSUE_FIELDS}) for i in data["issues"] if i.get("auto_fixable")]
         llm_list = [Issue(**{k: v for k, v in i.items() if k in _ISSUE_FIELDS}) for i in data["issues"] if not i.get("auto_fixable")]
 
-        needs_llm = bool(llm_list and any(
-            i.get("priority") in ("P0", "P1") for i in data["issues"]
-        ))
-
         target = 0
-        if needs_llm:
+        if llm_list and not skip_llm:
             src = get_source_text(config, ch)
             target = get_body_chars(src)
 
-        tasks[ch] = FixTask(ch=ch, mechanical=mech, llm=llm_list, target_chars=target)
+        tasks[ch] = FixTask(ch=ch, mechanical=mech, llm=llm_list, target_chars=target, skip_llm=skip_llm)
 
     return tasks
 
@@ -455,7 +452,7 @@ def fix_agent(config, task: FixTask, api_key, api_url, model, dry_run=False) -> 
     Output: FixResult
     """
     ch_dir = Path(f"{config['rewrites_dir']}/chapters")
-    ch_file = ch_dir / f"{task.ch:03d}.txt"
+    ch_file = ch_dir / f"ch_{task.ch:03d}.txt"
     if not ch_file.exists():
         return FixResult(ch=task.ch, status="missing")
 
@@ -468,8 +465,8 @@ def fix_agent(config, task: FixTask, api_key, api_url, model, dry_run=False) -> 
     if task.mechanical:
         text, mech_count = _fix_mechanical(text, task.mechanical)
 
-    # LLM 修复
-    if task.llm and api_key and not dry_run:
+    # LLM 修复 (skip if skip_llm flag set)
+    if task.llm and api_key and not dry_run and not task.skip_llm:
         llm_text = _fix_llm(config, task, text, api_key, api_url, model)
         if llm_text:
             text = llm_text
@@ -477,6 +474,7 @@ def fix_agent(config, task: FixTask, api_key, api_url, model, dry_run=False) -> 
 
     if text == original:
         return FixResult(ch=task.ch, status="unchanged",
+                         mech_count=mech_count,
                          orig_chars=len(re.sub(r'\s', '', original)),
                          new_chars=len(re.sub(r'\s', '', text)))
 
@@ -501,10 +499,10 @@ def _fix_mechanical(text, issues):
                     count += len(found)
                     text = re.sub(pat, lambda m: m.group()[:1] if m.group() else '', text)
         elif iss.type == "ai_marker":
-            for marker in AI_MARKERS:
-                pat = r'(?:^|[\n。！？])\s*' + re.escape(marker)
-                text = re.sub(pat, lambda m: m.group()[:1] if m.group() else '', text)
-                count += 1
+            found = re.findall(AI_MARKER_PATTERN, text)
+            if found:
+                count += len(found)
+                text = re.sub(AI_MARKER_PATTERN, '', text)
     text = re.sub(r'\n{3,}', '\n\n', text)
     return text, count
 
@@ -528,7 +526,7 @@ def _fix_llm(config, task, text, api_key, api_url, model):
         adj_ch = task.ch + offset
         if adj_ch < 1:
             continue
-        adj_file = ch_dir / f"{adj_ch:03d}.txt"
+        adj_file = ch_dir / f"ch_{adj_ch:03d}.txt"
         if adj_file.exists():
             adj_t = adj_file.read_text(encoding='utf-8')
             adj_parts.append(f"【{label}】\n{adj_t[-500:]}" if offset == -1 else f"【{label}】\n{adj_t[:500]}")
@@ -627,9 +625,9 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
     print(f"Step 3: 派任务 Agent")
     print("="*40)
 
-    tasks = dispatch_agent(cfg, summary)
+    tasks = dispatch_agent(cfg, summary, skip_llm=skip_llm_review)
     mech_total = sum(len(t.mechanical) for t in tasks.values())
-    llm_total = sum(1 for t in tasks.values() if t.llm)
+    llm_total = sum(1 for t in tasks.values() if t.llm and not t.skip_llm)
     print(f"  {len(tasks)} 章需修复 | 机械修复 {mech_total} 处 | LLM 修复 {llm_total} 章")
 
     if dry_run:
@@ -663,6 +661,7 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
     # ========== Step 5: Gather — 最终报告 ==========
     fixed = sum(1 for r in results.values() if r.status == "fixed")
     unchanged = sum(1 for r in results.values() if r.status == "unchanged")
+    missing = sum(1 for r in results.values() if r.status == "missing")
     mech_done = sum(r.mech_count for r in results.values())
     llm_done = sum(1 for r in results.values() if r.llm_used)
     errors = sum(1 for r in results.values() if r.status == "error")
@@ -671,7 +670,7 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
     print(f"完成 | {time.time()-t_start:.0f}s")
     print("="*50)
     print(f"  P0:{s['p0']}  P1:{s['p1']}  P2:{s['p2']}")
-    print(f"  修复: {fixed} 章已修 / {unchanged} 章未变 / {errors} 错误")
+    print(f"  修复: {fixed} 章已修 / {unchanged} 章未变 / {missing} 缺失 / {errors} 错误")
     print(f"  机械: {mech_done} 处 / LLM: {llm_done} 章")
 
     return {str(k): asdict(v) for k, v in results.items()}, {str(k): v for k, v in summary.chapters.items()}

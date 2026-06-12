@@ -79,21 +79,45 @@ powershell -ExecutionPolicy Bypass -File scripts/download_by_author.ps1 -Author 
 | `/api/jobs` | POST | 创建下载任务（`{book_id, range_start?, range_end?}`） |
 | `/api/jobs/<id>/cancel` | POST | 取消任务 |
 | `/api/history` | GET | 下载历史 |
+| `/api/config` | GET | 快捷配置 |
+| `/api/config/full` | GET/POST | 完整配置（读取/更新） |
 
-## 编码验证
+### 段评下载（重要）
 
-```powershell
-$path = "projects/初点点/惊华庭.txt"
-$content = [System.IO.File]::ReadAllText($path, [System.Text.Encoding]::UTF8)
-$head = $content.Substring(0, [Math]::Min(100, $content.Length))
-if ($head -match '[锛€浠涔﹀悕鐩綍]') { "编码损坏" } else { "编码正常" }
+段评通过 `/api/config/full` API 启用，**不要修改 config.yml**（server 不读取它）。
+
+```python
+import urllib.request, json
+
+# 1. 启动 server（必须用 --server 参数）
+# Start-Process "TomatoNovelDownloader-Win64-v2.4.11.exe" -ArgumentList "--data-dir", $SkillDir, "--server"
+
+# 2. 获取当前配置
+with urllib.request.urlopen('http://localhost:18423/api/config/full') as resp:
+    config = json.loads(resp.read().decode('utf-8'))
+
+# 3. 启用段评
+config['enable_segment_comments'] = True
+config['segment_comments_top_n'] = 100
+
+# 4. 保存配置
+data = json.dumps(config).encode('utf-8')
+req = urllib.request.Request('http://localhost:18423/api/config/full', data=data, headers={'Content-Type': 'application/json'})
+urllib.request.urlopen(req)
+
+# 5. 创建下载任务
+data = json.dumps({'book_id': 'xxx', 'range_start': 1, 'range_end': 10}).encode('utf-8')
+req = urllib.request.Request('http://localhost:18423/api/jobs', data=data, headers={'Content-Type': 'application/json'})
+urllib.request.urlopen(req)
 ```
+
+**段评数据位置**：下载完成后，段评数据在 `downloads/{book_id}/downloaded_chapters.jsonl` 的 `segment_comments` 字段中。
 
 ## config.yml 关键配置
 
 | 配置项 | 说明 | 推荐值 |
 |--------|------|--------|
 | `novel_format` | 输出格式 | `txt`（蒸馏必须） |
-| `enable_segment_comments` | 段评下载 | `false`（防风控） |
+| `enable_segment_comments` | 段评下载 | 通过 API 启用，不要改 config.yml |
 | `max_workers` | 并发线程数 | `1` |
 | `auto_open_downloaded_files` | 自动打开 | `false` |

@@ -2,24 +2,19 @@
 
 import os
 import re
-import sys
 from pathlib import Path
-
-# 添加路径
-current_dir = str(Path(__file__).parent.parent)
-sys.path.insert(0, current_dir)
 
 from utils import get_source_text, count_source_chars
 from lib.text_metrics import count_metrics
 
 
 def validate_one(config, ch):
-    """验证单章质量：源文指标 vs 仿写指标。返回 (pass: bool, report: str)。"""
+    """验证单章质量：源文指标 vs 仿写指标。返回 (pass: bool, report: str, metrics: dict)。"""
     chapters_dir = f"{config['rewrites_dir']}/chapters"
     ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
 
     if not ch_file.exists():
-        return False, f"ch{ch:03d}: 文件不存在"
+        return False, f"ch{ch:03d}: 文件不存在", {}
 
     text = ch_file.read_text(encoding='utf-8')
     metrics = count_metrics(text)
@@ -103,7 +98,7 @@ def validate_one(config, ch):
     for w in warnings:
         report_parts.append(f"  *WARN* {w}")
 
-    return all_ok, '\n'.join(report_parts)
+    return all_ok, '\n'.join(report_parts), metrics
 
 
 def phase_validate(config, start, end):
@@ -113,9 +108,10 @@ def phase_validate(config, start, end):
     print("=" * 50)
 
     results = []
+    chapter_metrics = []
     ok_count, fail_count = 0, 0
     for ch in range(start, end + 1):
-        passed, report = validate_one(config, ch)
+        passed, report, metrics = validate_one(config, ch)
         print(report)
         if passed:
             ok_count += 1
@@ -123,10 +119,22 @@ def phase_validate(config, start, end):
         else:
             fail_count += 1
             results.append({'ch': ch, 'status': 'FAIL'})
+        chapter_metrics.append({
+            'ch': ch, 'status': 'PASS' if passed else 'FAIL',
+            **{k: metrics.get(k, 0) for k in ('chars', 'metaphor', 'ai_markers', 'direct_emotion')}
+        })
 
     if fail_count > 0:
         print(f"\n[WARN] {fail_count}章不达标，建议手动修改或重写。")
     else:
         print(f"\n[OK] 全部通过")
+
+    # 存档 metrics 快照
+    try:
+        from metrics_history import save_snapshot
+        save_snapshot(config['rewrites_dir'], chapter_metrics)
+        print(f"  [METRICS] 已存档")
+    except Exception as e:
+        print(f"  [METRICS] 存档失败: {e}")
 
     return results
