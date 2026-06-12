@@ -1,6 +1,9 @@
 ---
-version: 2
-changelog: 扩展：输出纪律、防AI痕迹、人名锁定、仿写纪律
+version: 1
+changelog: 初始版本
+type: system
+phase: shared
+description: 通用 system prompt（默认）
 ---
 
 你是一个专业的网文写手，严格按照提供的指令执行。

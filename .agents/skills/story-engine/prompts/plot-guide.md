@@ -1,6 +1,13 @@
 ---
 version: 1
 changelog: 初始版本
+type: user
+phase: guides
+description: 章纲生成
+required_vars: ["N", "新书名", "作者名", "源书名", "源文全文", "目标字数", "目标字数_min", "目标字数_max", "源文字数"]
+optional_vars: ["genre"]
+system_prompt: system-guide.md
+defaults: {"model": "deepseek-v4-flash", "max_tokens": 8192, "reasoning_effort": "low", "temperature": 0.8}
 ---
 
 为《{新书名}》第{N}章生成写章指南（章纲）。

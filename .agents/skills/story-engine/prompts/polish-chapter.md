@@ -1,6 +1,11 @@
 ---
 version: 1
 changelog: 初始版本
+type: user
+phase: postprocess
+description: 润色章节
+required_vars: ["content", "min_chars", "max_chars"]
+defaults: {"model": "deepseek-v4-flash", "max_tokens": 8000, "reasoning_effort": "low", "temperature": 0.8}
 ---
 
 你是专业网文写手。请润色以下章节，提升文笔质量。

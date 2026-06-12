@@ -1,6 +1,11 @@
 ---
 version: 1
 changelog: 初始版本
+type: user
+phase: unified
+description: 修复章节
+required_vars: ["issues_text", "adjacent_context", "orig_chars", "target_chars", "min_chars", "max_chars", "chapter_content"]
+defaults: {"model": "deepseek-v4-flash", "max_tokens": 8000, "reasoning_effort": "low", "temperature": 0.6}
 ---
 
 # 统一修复提示词

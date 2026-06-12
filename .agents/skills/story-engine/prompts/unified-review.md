@@ -1,6 +1,12 @@
 ---
 version: 1
 changelog: 初始版本
+type: user
+phase: unified
+description: 多Agent审稿
+required_vars: ["count", "chapters_text"]
+optional_vars: ["source_context"]
+defaults: {"model": "deepseek-v4-flash", "max_tokens": 8000, "reasoning_effort": "low", "temperature": 0.3}
 ---
 
 # 统一审稿提示词

@@ -221,7 +221,7 @@ def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites
 
     raw_text = prompt_file.read_text(encoding='utf-8')
     # 去掉 frontmatter
-    _, _, raw_text = _parse_frontmatter(raw_text)
+    _, raw_text = _parse_frontmatter(raw_text)
 
     # 品类级联：加载通用文件后，追加品类特化文件
     genre = (replacements or {}).get("genre", "")
@@ -260,49 +260,44 @@ def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites
 
 
 _PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
-_MANIFEST_PATH = _PROMPTS_DIR / "manifest.json"
-_MANIFEST = None
-
-
-def _load_manifest():
-    global _MANIFEST
-    if _MANIFEST is None:
-        if _MANIFEST_PATH.exists():
-            _MANIFEST = json.loads(_MANIFEST_PATH.read_text(encoding="utf-8"))
-        else:
-            _MANIFEST = {}
-    return _MANIFEST
-
-
 _FRONTMATTER_RE = re.compile(r'^---\s*\n(.*?)\n---\s*\n', re.DOTALL)
 
 
 def _parse_frontmatter(text):
-    """解析 YAML frontmatter，返回 (version, changelog, body)。
+    """解析 YAML frontmatter，返回 (meta: dict, body: str)。
 
-    frontmatter 格式：
-      ---
-      version: N
-      changelog: 文本
-      ---
-      正文...
+    meta 至少包含 version (int) 和 changelog (str)。
+    其他字段（type/phase/required_vars/defaults 等）按 JSON 解析。
     """
+    meta = {"version": 1, "changelog": ""}
     m = _FRONTMATTER_RE.match(text)
     if not m:
-        return 1, "", text
+        return meta, text
     body = text[m.end():]
-    version = 1
-    changelog = ""
     for line in m.group(1).split('\n'):
         line = line.strip()
-        if line.startswith("version:"):
+        if not line or ':' not in line:
+            continue
+        key, _, val = line.partition(':')
+        key = key.strip()
+        val = val.strip()
+        if key == "version":
             try:
-                version = int(line.split(":", 1)[1].strip())
+                meta["version"] = int(val)
             except ValueError:
                 pass
-        elif line.startswith("changelog:"):
-            changelog = line.split(":", 1)[1].strip()
-    return version, changelog, body
+        elif key == "changelog":
+            meta["changelog"] = val
+        elif val.startswith('[') or val.startswith('{'):
+            try:
+                meta[key] = json.loads(val)
+            except json.JSONDecodeError:
+                meta[key] = val
+        elif val in ("true", "false"):
+            meta[key] = val == "true"
+        else:
+            meta[key] = val
+    return meta, body
 
 
 def _make_tag(name, version):
@@ -314,7 +309,7 @@ def load_system_prompt(name):
     p = _PROMPTS_DIR / name
     if not p.exists():
         return ""
-    _, _, body = _parse_frontmatter(p.read_text(encoding="utf-8"))
+    _, body = _parse_frontmatter(p.read_text(encoding="utf-8"))
     return body.strip()
 
 
@@ -331,23 +326,31 @@ def load_prompt_str(name, with_tag=False):
     p = _PROMPTS_DIR / name
     if not p.exists():
         return ("", 0) if with_tag else ""
-    version, _, body = _parse_frontmatter(p.read_text(encoding="utf-8"))
+    meta, body = _parse_frontmatter(p.read_text(encoding="utf-8"))
     if with_tag:
-        return body.strip(), version
+        return body.strip(), meta["version"]
     return body.strip()
+
+
+def get_prompt_meta(name):
+    """读取 prompts/{name} 文件的 frontmatter，返回 meta 字典。"""
+    p = _PROMPTS_DIR / name
+    if not p.exists():
+        return {}
+    meta, _ = _parse_frontmatter(p.read_text(encoding="utf-8"))
+    return meta
 
 
 def validate_prompt_variables(name, replacements):
     """校验 prompt 所需变量是否已提供，缺失则 fail fast。
 
-    从 manifest.json 中读取该 prompt 的 required_vars，
+    从 prompt 文件的 frontmatter 读取 required_vars，
     对照 replacements 检查，缺的报错。
     """
-    manifest = _load_manifest()
-    entry = manifest.get(name)
-    if not entry:
+    meta = get_prompt_meta(name)
+    required = meta.get("required_vars", [])
+    if not required:
         return
-    required = entry.get("required_vars", [])
     missing = [v for v in required if v not in (replacements or {})]
     if missing:
         raise ValueError(
@@ -358,14 +361,13 @@ def validate_prompt_variables(name, replacements):
 
 
 def get_prompt_config(name):
-    """返回 manifest.json 中该 prompt 的默认调用参数（model/max_tokens/reasoning_effort/temperature）。
+    """返回 prompt 文件 frontmatter 中的默认调用参数。
 
     可在 config.json 的 prompt_overrides 中按 prompt 名覆盖。
-    覆盖优先级: config.prompt_overrides > manifest.defaults > 代码级默认值（由调用方处理）
+    覆盖优先级: config.prompt_overrides > frontmatter.defaults > 代码级默认值（由调用方处理）
     """
-    manifest = _load_manifest()
-    entry = manifest.get(name, {})
-    return dict(entry.get("defaults", {}))
+    meta = get_prompt_meta(name)
+    return dict(meta.get("defaults", {}))
 
 
 def get_prompt_config_with_overrides(name, config):
@@ -377,22 +379,17 @@ def get_prompt_config_with_overrides(name, config):
 
 
 def get_system_prompt_name(user_prompt_name):
-    """返回 manifest.json 中 user prompt 关联的 system prompt 文件名。
+    """返回 prompt 文件 frontmatter 中关联的 system prompt 文件名。
     
-    如果未配置 system_prompt，返回 None。
+    如果未配置，返回 None。
     """
-    manifest = _load_manifest()
-    entry = manifest.get(user_prompt_name, {})
-    return entry.get("system_prompt")
+    meta = get_prompt_meta(user_prompt_name)
+    return meta.get("system_prompt")
 
 
 def get_prompt_version(name):
-    """读取 prompt 文件的 frontmatter 版本号。"""
-    p = _PROMPTS_DIR / name
-    if not p.exists():
-        return 0
-    version, _, _ = _parse_frontmatter(p.read_text(encoding="utf-8"))
-    return version
+    """读取 prompts/{name} 文件的 frontmatter，返回 version 号。"""
+    return get_prompt_meta(name).get("version", 0)
 
 
 def prompt_tag(name):

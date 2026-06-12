@@ -1,6 +1,11 @@
 ---
 version: 1
 changelog: 初始版本
+type: user
+phase: postprocess
+description: 扩写章节
+required_vars: ["content", "orig_chars", "target_chars", "min_chars", "max_chars"]
+defaults: {"model": "deepseek-v4-flash", "max_tokens": 10000, "reasoning_effort": "low", "temperature": 0.8}
 ---
 
 你是专业网文写手。请扩写以下章节，增加内容使字数达到{target_chars}字左右。

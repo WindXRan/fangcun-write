@@ -1,6 +1,11 @@
 ---
 version: 1
 changelog: 初始版本
+type: user
+phase: postprocess
+description: 精简超字数章
+required_vars: ["目标字数", "作者名", "源书名", "新书名", "N", "N03d"]
+defaults: {"model": "deepseek-v4-flash", "max_tokens": 4096, "reasoning_effort": "low", "temperature": 0.8}
 ---
 
 精简以下章节，目标 {目标字数} 字。
