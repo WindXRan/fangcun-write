@@ -1,5 +1,4 @@
-"""Phase 2: plot-guide 生成
-Phase 2.5: Guide 衔接修复"""
+"""Phase 2: plot-guide 生成"""
 
 import os
 import re
@@ -10,8 +9,7 @@ from pathlib import Path
 from utils import (
     get_total_chapters, count_source_chars, call_api, batch_run
 )
-from state_manager import atomic_write_text
-from prompt_loader import load_prompt, load_system_prompt, tag_output, get_prompt_config_with_overrides, get_system_prompt_name
+from prompt_loader import load_prompt, load_system_prompt, get_prompt_config_with_overrides, get_system_prompt_name
 
 
 # ============================================================
@@ -246,106 +244,7 @@ def run_one_with_template(config, prompt_type, chapter_num=None, **kwargs):
     return result
 
 
-# ============================================================
-# Phase 2.5: Guide 衔接修复（分批滑动窗口）
-# ============================================================
 
-def phase_guide_continuity_fix(config, start, end, batch_size=40):
-    """修复 plot_guide 的章间断裂。
-    
-    分批滑动窗口处理，保证跨章连贯：
-    - 首批覆盖 start ~ start+batch_size-1
-    - 后续每批步进 batch_size-1（前后各 1 章重叠，防止批间断裂）
-    """
-    from lib.api_client import get_api_url
-    
-    api_key = config.get("api_key") or os.environ.get("API_KEY")
-    if not api_key:
-        print("[FAIL] 未配置 API_KEY")
-        return
-
-    guides_dir = Path(config["rewrites_dir"]) / "guides"
-    if not guides_dir.exists():
-        print("[FAIL] guides 目录不存在")
-        return
-
-    pc = get_prompt_config_with_overrides("guide-continuity-fix.md", config)
-    model = pc.get("model", config.get("model", "deepseek-v4-flash"))
-    api_url = get_api_url(config)
-
-    print(f"\n{'=' * 50}")
-    print(f"Phase 2.5: Guide 衔接修复 (ch{start}-{end}, batch={batch_size})")
-    print("=" * 50)
-
-    total = end - start + 1
-    # 滑动窗口计算批次数
-    if total <= batch_size:
-        batches = [(start, end)]
-    else:
-        batches = [(start, start + batch_size - 1)]
-        cur = start + batch_size - 1
-        while cur < end:
-            nxt = min(cur + batch_size - 1, end)
-            batches.append((cur, nxt))
-            cur = nxt
-
-    t0 = time.time()
-    for b_idx, (b_start, b_end) in enumerate(batches):
-        batch_chs = list(range(b_start, b_end + 1))
-        print(f"\n  批 {b_idx+1}/{len(batches)}: 第{b_start}-{b_end}章 ({len(batch_chs)}份guide)")
-
-        # 收集本批所有 plot_guide
-        guides = {}
-        for ch in batch_chs:
-            pf = guides_dir / f"plot_{ch}.md"
-            if pf.exists():
-                guides[str(ch)] = pf.read_text(encoding='utf-8')
-
-        if not guides:
-            print(f"    [SKIP] 无 plot_guide")
-            continue
-
-        # 加载 guide-continuity-fix prompt
-        prompt_template = load_prompt(
-            f"{prompts_dir}/guide-continuity-fix.md",
-            base_dir, mode="api",
-            rewrites_dir=config.get("rewrites_dir"),
-        )
-        user_prompt = prompt_template.replace(
-            "{guides}",
-            '\n'.join(f"---\n### 第{ch_str}章\n\n{guides[ch_str]}\n" for ch_str in sorted(guides.keys(), key=int))
-        )
-
-        try:
-            result = call_api(api_key, model, user_prompt,
-                              reasoning_effort=pc.get("reasoning_effort", "low"),
-                              max_tokens=pc.get("max_tokens", 16000),
-                              temperature=pc.get("temperature", 0.8),
-                              system_prompt=load_system_prompt("system-guide.md"),
-                              api_url=api_url)
-
-            # 解析输出
-            fixed = 0
-            for m in re.finditer(r'===章:\s*(\d+)===', result):
-                ch_str = m.group(1)
-                start_idx = m.end()
-                next_m = re.search(r'===章:\s*\d+===', result[start_idx:])
-                content = result[start_idx:start_idx + next_m.start()] if next_m else result[start_idx:]
-                content = content.strip()
-
-                out_path = guides_dir / f"plot_{ch_str}.md"
-                old_content = out_path.read_text(encoding='utf-8') if out_path.exists() else ""
-                if content and content != old_content:
-                    out_path.write_text(tag_output(content, "guide-continuity-fix.md"), encoding='utf-8')
-                    fixed += 1
-
-            elapsed = time.time() - t0
-            print(f"    [OK] 修复 {fixed}/{len(guides)} 份 guide ({elapsed:.0f}s)")
-
-        except Exception as e:
-            print(f"    [FAIL] 批 {b_idx+1}: {e}")
-
-    print(f"\n[OK] Guide 衔接修复完成 (总耗时 {time.time()-t0:.0f}s)")
 
 
 def get_source_metrics(config, ch):

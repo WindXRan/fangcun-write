@@ -67,34 +67,7 @@
       "temperature": 0.8
     }
   },
-  "continuity-fix.md": {
-    "type": "user",
-    "phase": "write",
-    "description": "章间衔接修复",
-    "required_vars": ["N", "N_plus1", "N03d", "N03d_plus1", "作者名", "源书名", "新书名"],
-    "optional_vars": [],
-    "system_prompt": "system-continuity-fix.md",
-    "defaults": {
-      "model": "deepseek-v4-flash",
-      "max_tokens": 4096,
-      "reasoning_effort": "low",
-      "temperature": 0.8
-    }
-  },
-  "guide-continuity-fix.md": {
-    "type": "user",
-    "phase": "guides",
-    "description": "章纲衔接修复",
-    "required_vars": ["guides"],
-    "optional_vars": [],
-    "system_prompt": "system-guide.md",
-    "defaults": {
-      "model": "deepseek-v4-flash",
-      "max_tokens": 16000,
-      "reasoning_effort": "low",
-      "temperature": 0.8
-    }
-  },
+
   "polish-chapter.md": {
     "type": "user",
     "phase": "postprocess",

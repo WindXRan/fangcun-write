@@ -4,28 +4,23 @@
 新的模块化结构请直接使用 pipeline.py 或 phases/ 目录下的模块。
 """
 
-import os
-import sys
 from pathlib import Path
-
-# 添加路径
-current_dir = str(Path(__file__).parent)
-sys.path.insert(0, current_dir)
 
 # 导入新的模块化结构
 from pipeline import main, all_with_fix, generate_completion_report
 from state_manager import StateManager, atomic_write_json, atomic_write_text
+from config_validator import validate_config
 from utils import (
-    validate_config, get_source_text, get_total_chapters, 
+    get_source_text, get_total_chapters, 
     count_source_chars, call_api, get_source_title, prepend_title,
     print_progress, load_trend_knowledge, get_chapters_list, batch_run
 )
 from phases import (
-    phase_prep, phase_open_book, phase_style_analysis,
-    phase_guides, phase_guide_continuity_fix,
+    phase_prep, phase_open_book,
+    phase_guides,
     phase_write, phase_validate, validate_one,
     phase_postfix, phase_trim, phase_rewrite, phase_polish, phase_expand,
-    phase_compare, phase_review, phase_fix,
+    phase_compare,
     phase_unified_check, phase_unified_fix, phase_unified_review_fix
 )
 
@@ -58,7 +53,6 @@ __all__ = [
     'phase_prep',
     'phase_open_book',
     'phase_guides',
-    'phase_guide_continuity_fix',
     'phase_write',
     'phase_validate',
     'validate_one',
@@ -68,8 +62,6 @@ __all__ = [
     'phase_polish',
     'phase_expand',
     'phase_compare',
-    'phase_review',
-    'phase_fix',
     'phase_unified_check',
     'phase_unified_fix',
     'phase_unified_review_fix',

@@ -12,7 +12,7 @@ from config_validator import validate_config
 from utils import get_chapters_list
 from phases import (
     phase_prep, phase_open_book,
-    phase_guides, phase_guide_continuity_fix,
+    phase_guides,
     phase_write, phase_validate,
     phase_postfix, phase_trim, phase_rewrite, phase_polish, phase_expand,
     phase_compare,
@@ -107,7 +107,6 @@ def _build_orch(config, state_mgr) -> Orchestrator:
     orch.register_handler("open_book", lambda cfg, s, e: phase_open_book(cfg, state_mgr=state_mgr))
     orch.register_handler("extract", _extract)
     orch.register_handler("guides", _guide_handler)
-    orch.register_handler("guide_fix", phase_guide_continuity_fix)
     orch.register_handler("write", _write_handler)
     orch.register_handler("validate", phase_validate)
     orch.register_handler("compare", phase_compare)
