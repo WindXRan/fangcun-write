@@ -62,7 +62,6 @@ class FixTask:
     mechanical: list[Issue] = field(default_factory=list)
     llm: list[Issue] = field(default_factory=list)
     target_chars: int = 0
-    skip_llm: bool = False
 
 @dataclass
 class FixResult:
@@ -421,7 +420,7 @@ def summary_agent(review_results: list[ReviewResult]) -> SummaryReport:
 # Agent 3: Dispatch Agent (按章生成修复任务)
 # ============================================================
 
-def dispatch_agent(config, report: SummaryReport, skip_llm: bool = False) -> dict[int, FixTask]:
+def dispatch_agent(config, report: SummaryReport) -> dict[int, FixTask]:
     """将 summary 转为修复任务，每章一个 FixTask。
 
     Input:  config, SummaryReport
@@ -436,11 +435,11 @@ def dispatch_agent(config, report: SummaryReport, skip_llm: bool = False) -> dic
         llm_list = [Issue(**{k: v for k, v in i.items() if k in _ISSUE_FIELDS}) for i in data["issues"] if not i.get("auto_fixable")]
 
         target = 0
-        if llm_list and not skip_llm:
+        if llm_list:
             src = get_source_text(config, ch)
             target = get_body_chars(src)
 
-        tasks[ch] = FixTask(ch=ch, mechanical=mech, llm=llm_list, target_chars=target, skip_llm=skip_llm)
+        tasks[ch] = FixTask(ch=ch, mechanical=mech, llm=llm_list, target_chars=target)
 
     return tasks
 
@@ -472,8 +471,8 @@ def fix_agent(config, task: FixTask, api_key, api_url, model, dry_run=False) -> 
     if task.mechanical:
         text, mech_count = _fix_mechanical(text, task.mechanical)
 
-    # LLM 修复 (skip if skip_llm flag set)
-    if task.llm and api_key and not dry_run and not task.skip_llm:
+    # LLM 修复
+    if task.llm and api_key and not dry_run:
         llm_text = _fix_llm(config, task, text, api_key, api_url, model)
         if llm_text:
             text = llm_text
@@ -581,7 +580,7 @@ def _fix_llm(config, task, text, api_key, api_url, model):
 # ============================================================
 
 def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
-                 batch_size=10, workers=10, dry_run=False, skip_llm_review=False):
+                 batch_size=10, workers=10, dry_run=False):
     """多 Agent 审改流程。
 
     Flow:
@@ -639,9 +638,9 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
     print(f"Step 3: 派任务 Agent", flush=True)
     print("="*40, flush=True)
 
-    tasks = dispatch_agent(cfg, summary, skip_llm=skip_llm_review)
+    tasks = dispatch_agent(cfg, summary)
     mech_total = sum(len(t.mechanical) for t in tasks.values())
-    llm_total = sum(1 for t in tasks.values() if t.llm and not t.skip_llm)
+    llm_total = sum(1 for t in tasks.values() if t.llm)
     print(f"  {len(tasks)} 章需修复 | 机械修复 {mech_total} 处 | LLM 修复 {llm_total} 章", flush=True)
 
     if dry_run:
@@ -742,7 +741,6 @@ def main():
     parser.add_argument("--batch-size", type=int, default=10, help="每 agent 审多少章")
     parser.add_argument("--workers", type=int, default=10, help="并行 agent 数")
     parser.add_argument("--dry-run", action="store_true")
-    parser.add_argument("--skip-llm-review", action="store_true")
     parser.add_argument("--output", default=None)
     args = parser.parse_args()
 
@@ -774,7 +772,6 @@ def main():
         batch_size=args.batch_size,
         workers=args.workers,
         dry_run=args.dry_run,
-        skip_llm_review=args.skip_llm_review,
     )
 
     output = args.output or os.path.join(cfg['rewrites_dir'], 'compare', 'unified_review_fix.json')

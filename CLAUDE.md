@@ -61,9 +61,6 @@ Phase 6:   多Agent审改                → unified_review_fix.json
 # 审查（默认 LLM 模式，算法+LLM 全面检查）
 python .agents/skills/story-engine/tools/unified_fixer.py --config configs/xxx.json --dry-run
 
-# 只用算法（不开 LLM，快但粗糙）
-python .agents/skills/story-engine/tools/unified_fixer.py --config configs/xxx.json --dry-run --skip-llm-review
-
 # 审查+修复
 python .agents/skills/story-engine/tools/unified_fixer.py --config configs/xxx.json
 
