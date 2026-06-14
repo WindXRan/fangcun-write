@@ -38,9 +38,14 @@ def count_style_fingerprint(text):
     avg_sent = round(sum(sent_lens) / n_sents, 1)
     short_ratio = round(sum(1 for l in sent_lens if l < 8) / n_sents, 2)
 
-    # 对话
+    # 对话：引号行 + 无引号对话（说/道/问/喊/叫 等言说动词）
     lines = body.split('\n')
-    dia_lines = sum(1 for l in lines if re.search(r'[「『""""‘’]', l))
+    dia_lines = 0
+    for l in lines:
+        if re.search(r'[「『""""‘’]', l):
+            dia_lines += 1
+        elif re.search(r'(?:说|道|问|喊|叫|骂|吼|答|嚷|喝)[：:]|^[^。！？\n]{2,20}[！？](?:$|\n)|(?:说道|问道|喊道|笑道|怒道|叹道|冷声道)', l):
+            dia_lines += 1
     dia_ratio = round(dia_lines / max(len(lines), 1), 2)
 
     # 段落

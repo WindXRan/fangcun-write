@@ -14,7 +14,6 @@ defaults: {"model": "deepseek-v4-flash", "max_tokens": 4096, "reasoning_effort":
 **你不直接接触源文。** 源文结构已由 plot_guide 抽象为节拍表。你的任务是根据节拍表创作全新内容，不是改写源文段落。
 
 【plot_guide】projects/{作者名}/{源书名}/rewrites/{新书名}/guides/plot_{N}.md
-【style_guide】projects/{作者名}/{源书名}/rewrites/{新书名}/guides/style_{N}.md
 
 ## 本章写作规则（源文风格指纹）
 

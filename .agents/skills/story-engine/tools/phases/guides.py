@@ -333,7 +333,9 @@ def _get_style_analysis(config, ch, src_text, algo_fp, api_key, api_url, model):
     if config.get("debug") and ch <= 3:
         from utils import debug_dump_prompt
         debug_dump_prompt(config, "style-analyze", ch,
-                          "prompts/style-analyze.md", "", prompt, "system-generic.md", pc)
+                          "prompts/style-analyze.md",
+                          "你是资深文学编辑。分析文笔风格，3-5句话即可。",
+                          prompt, "style-analyze (inline)", pc)
 
     # prompts_only: 不调 LLM，返回占位
     if config.get("prompts_only"):
