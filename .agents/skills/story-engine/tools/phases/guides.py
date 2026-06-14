@@ -7,7 +7,7 @@ import time
 from pathlib import Path
 
 from utils import (
-    get_total_chapters, count_source_chars, call_api, batch_run
+    get_total_chapters, count_source_chars, call_api, batch_run, debug_dump_prompt
 )
 from prompt_loader import load_prompt, load_system_prompt, get_prompt_config_with_overrides, get_system_prompt_name
 
@@ -138,6 +138,15 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     if not system_prompt:
         sp_name = get_system_prompt_name(f"{prompt_type}.md") or "system-guide.md"
         system_prompt = load_system_prompt(sp_name)
+
+    # === Debug: 保存最终发给 API 的完整 prompt ===
+    if config.get("debug"):
+        # 非写章阶段只保留第 1 章样本, 写章阶段保留前 3 章
+        if prompt_type == "write-chapter":
+            if chapter_num and chapter_num <= 3:
+                debug_dump_prompt(config, prompt_type, chapter_num, prompt_path, system_prompt, user_prompt, sp_name, pc)
+        elif chapter_num == 1 or chapter_num is None:
+            debug_dump_prompt(config, prompt_type, chapter_num, prompt_path, system_prompt, user_prompt, sp_name, pc)
 
     label = f"ch{chapter_num or '?'} {prompt_type}"
     t_req = time.time()

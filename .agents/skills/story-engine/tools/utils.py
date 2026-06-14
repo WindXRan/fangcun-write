@@ -390,3 +390,35 @@ def clear_cache(config=None):
 def get_cache_stats(config):
     """获取缓存统计信息。"""
     return {"memory": len(_source_cache)}
+
+
+def debug_dump_prompt(config, prompt_type, chapter_num, prompt_path, system_prompt, user_prompt, sp_name, pc):
+    """--debug: 保存发给 API 的完整 prompt 到 _debug/ 目录。"""
+    rewrites_dir = config.get("rewrites_dir", ".")
+    debug_dir = Path(rewrites_dir) / "_debug" / prompt_type
+    debug_dir.mkdir(parents=True, exist_ok=True)
+
+    ch_label = f"{chapter_num:03d}" if chapter_num else "01"
+    out = debug_dir / f"ch{ch_label}_{prompt_type}.md"
+    content = f"""# Debug: ch{chapter_num or '?'} — {prompt_type}
+
+**Prompt 文件**: `{prompt_path}`
+**System Prompt**: `{sp_name}`
+**Model**: `{pc.get('model')}`
+**Temperature**: `{pc.get('temperature')}`
+**Max Tokens**: `{pc.get('max_tokens')}`
+
+---
+
+## System Prompt
+
+{system_prompt}
+
+---
+
+## User Prompt
+
+{user_prompt}
+"""
+    out.write_text(content, encoding="utf-8")
+    print(f"  [DEBUG] {out}")

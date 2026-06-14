@@ -162,6 +162,7 @@ def main():
     parser.add_argument("--health-output")
     parser.add_argument("--diff", action="store_true")
     parser.add_argument("--auto-rollback", action="store_true")
+    parser.add_argument("--debug", action="store_true", help="输出最终发给 API 的完整 prompt 到 _debug/ 目录")
 
     args = parser.parse_args()
     config_path = Path(args.config)
@@ -172,6 +173,7 @@ def main():
     config.setdefault("prompts_dir", ".agents/skills/story-engine/prompts")
     config.setdefault("base_dir", os.getcwd())
     config["workers"] = args.workers
+    config["debug"] = args.debug
 
     errors = validate_config(config)
     if errors:

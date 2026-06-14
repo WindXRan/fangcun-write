@@ -5,7 +5,7 @@ import re
 import time
 from pathlib import Path
 
-from utils import count_source_chars, get_source_title, call_api, print_progress
+from utils import count_source_chars, get_source_title, call_api, print_progress, debug_dump_prompt
 from lib.api_client import get_api_url
 from prompt_loader import load_prompt_str, validate_prompt_variables, tag_output, get_prompt_config_with_overrides
 
@@ -201,6 +201,8 @@ def phase_polish(config, start, end, workers=5):
         pc = get_prompt_config_with_overrides("polish-chapter.md", config)
 
         try:
+            if config.get("debug"):
+                debug_dump_prompt(config, "polish", ch, "prompts/polish-chapter.md", "", prompt, "N/A", pc)
             result = call_api(
                 api_key, pc.get("model", model), prompt,
                 reasoning_effort=pc.get("reasoning_effort", "low"),
@@ -209,9 +211,9 @@ def phase_polish(config, start, end, workers=5):
                 system_prompt="",
                 api_url=api_url
             )
-            
+
             new_chars = len(result.replace('\n', '').replace(' ', ''))
-            
+
             # 检查字数差异
             if orig_chars > 0 and abs(new_chars - orig_chars) / orig_chars > 0.15:
                 print(f"  [SKIP] ch{ch:03d}: 字数差异过大 ({orig_chars}→{new_chars})")
@@ -277,6 +279,8 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=5):
         pc = get_prompt_config_with_overrides("expand-chapter.md", config)
 
         try:
+            if config.get("debug"):
+                debug_dump_prompt(config, "expand", ch, "prompts/expand-chapter.md", "", prompt, "N/A", pc)
             result = call_api(
                 api_key, pc.get("model", model), prompt,
                 reasoning_effort=pc.get("reasoning_effort", "low"),
@@ -285,9 +289,9 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=5):
                 system_prompt="",
                 api_url=api_url
             )
-            
+
             new_chars = len(result.replace('\n', '').replace(' ', ''))
-            
+
             # 检查字数
             if new_chars < orig_chars * 1.1:
                 print(f"  [SKIP] ch{ch:03d}: 扩写不足 ({orig_chars}→{new_chars})")

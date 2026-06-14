@@ -64,6 +64,9 @@ python .agents/skills/story-engine/tools/unified_fixer.py --config configs/xxx.j
 # 审查+修复
 python .agents/skills/story-engine/tools/unified_fixer.py --config configs/xxx.json
 
+# Debug 模式：输出发给 API 的完整 prompt 到 _debug/ 目录（各阶段 1 样本，写章前 3 章）
+python .agents/skills/story-engine/tools/pipeline.py --config configs/xxx.json --phase all --debug
+
 # pipeline 集成
 python .agents/skills/story-engine/tools/rewrite_chapters.py --config configs/xxx.json --phase unified
 ```

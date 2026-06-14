@@ -148,6 +148,9 @@ def _detect_curve(config, api_key, api_url):
     print("  [CURVE] 曲线分析中...")
     try:
         pc = get_prompt_config_with_overrides("toc-curve.md", config)
+        if config.get("debug"):
+            from utils import debug_dump_prompt
+            debug_dump_prompt(config, "toc-curve", 0, f"{prompts_dir}/toc-curve.md", "", curve_prompt, "N/A", pc)
         result = call_api(
             api_key, pc.get("model", "deepseek-v4-flash"), curve_prompt,
             max_tokens=pc.get("max_tokens", 4096), api_url=api_url,
@@ -247,6 +250,9 @@ def phase_open_book(config, state_mgr=None):
 
     try:
         pc = get_prompt_config_with_overrides("open-book.md", config)
+        if config.get("debug"):
+            from utils import debug_dump_prompt
+            debug_dump_prompt(config, "open-book", 0, f"{prompts_dir}/open-book.md", system_prompt, user_prompt, "system-generic.md", pc)
         result = call_api(
             api_key, pc.get("model", "deepseek-v4-pro"), user_prompt,
             reasoning_effort=pc.get("reasoning_effort", "high"),
