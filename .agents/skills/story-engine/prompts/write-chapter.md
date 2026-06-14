@@ -5,7 +5,7 @@ type: user
 phase: write
 description: 写章
 required_vars: ["N", "新书名", "作者名", "源书名", "目标字数", "目标字数_min", "目标字数_max"]
-optional_vars: ["genre", "女主名", "男主名"]
+optional_vars: ["genre", "女主名", "男主名", "文笔锚点", "文笔风格"]
 system_prompt: system-generic.md
 defaults: {"model": "deepseek-v4-flash", "max_tokens": 4096, "reasoning_effort": "low", "temperature": 0.8}
 ---
@@ -15,6 +15,10 @@ defaults: {"model": "deepseek-v4-flash", "max_tokens": 4096, "reasoning_effort":
 
 【plot_guide】projects/{作者名}/{源书名}/rewrites/{新书名}/guides/plot_{N}.md
 【style_guide】projects/{作者名}/{源书名}/rewrites/{新书名}/guides/style_{N}.md
+
+**源文风格参考**
+锚点: {文笔锚点}
+风格: {文笔风格}
 
 ---
 
