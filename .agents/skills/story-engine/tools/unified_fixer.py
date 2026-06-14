@@ -1,12 +1,13 @@
 """
-多 Agent 审改系统 v4
+多 Agent 审改系统 v5 — 混合架构
 
 Agent 架构:
-  1. Review Agents (scatter)  — N个并行，每人审 X 章 (algo+LLM)
-  2. Summary Agent (gather)   — 合并去重、分级 P0/P1/P2、跨章分析
-  3. Dispatch Agent (plan)    — 按章生成修复任务，指派给 fix agent
-  4. Fix Agents (scatter)     — N个并行，每人修分配到的任务
-  5. Collect Results (gather) — 汇总报告
+  1a. Batch Review Agents (scatter)   — N个并行，每人审 X 章 (algo+LLM, 7维全检)
+  1b. Global Review Agents (scatter)  — 2个并行，通读全书关键章：人设一致性 + 全局节奏/伏笔
+  2.  Summary Agent (gather)          — 合并两层结果，去重分级 P0/P1/P2
+  3.  Dispatch Agent (plan)           — 按章生成修复任务
+  4.  Fix Agents (scatter)            — N个并行，每人修分配到的任务
+  5.  Collect Results (gather)        — 汇总报告
 
 用法：
     python unified_fixer.py --config xxx.json
@@ -335,6 +336,199 @@ def _llm_batch_review(config, chapter_nums, api_key, api_url, model):
 
 
 # ============================================================
+# Agent 1b: Global Review Agents (2个并行，通读全书关键章)
+# ============================================================
+
+def _sample_global_chapters(config, start, end):
+    """采样全书关键章：头2 + 四分位中点 + 尾2 → ~6章。"""
+    total = end - start + 1
+    if total <= 6:
+        return list(range(start, end + 1))
+
+    picks = [start, start + 1]  # 头2章
+    # 三分位
+    q1 = start + total // 4
+    q2 = start + total // 2
+    q3 = start + 3 * total // 4
+    picks.extend([q1, q2, q3])
+    picks.extend([end - 1, end])  # 尾2章
+    return sorted(set(picks))
+
+
+def _load_global_context(config, sampled_chapters):
+    """为全局审查加载 context：角色设定 + 节奏图 + 章节样本。"""
+    rewrites_dir = Path(config["rewrites_dir"])
+    chapters_dir = rewrites_dir / "chapters"
+
+    # 角色设定（从 concept.md 提取角色相关段）
+    concept_path = rewrites_dir / "concept.md"
+    character_profiles = ""
+    if concept_path.exists():
+        concept = concept_path.read_text(encoding="utf-8")
+        # 提取角色相关段落（## 角色 或 ### 角色名 直到下一个 ##）
+        char_sec = re.search(r'##\s*(?:角色|人设|人物).*?(?=##\s|\Z)', concept, re.DOTALL)
+        if char_sec:
+            character_profiles = char_sec.group(0)[:3000]
+
+    # 全局节奏图（从 concept.md 提取）
+    rhythm_map = ""
+    rhythm_sec = re.search(r'##\s*(?:节奏|弧线|全局).*?(?=##\s|\Z)', concept, re.DOTALL)
+    if rhythm_sec:
+        rhythm_map = rhythm_sec.group(0)[:3000]
+
+    # 章节样本
+    parts = []
+    for ch in sampled_chapters:
+        cf = chapters_dir / f"ch_{ch:03d}.txt"
+        if cf.exists():
+            text = cf.read_text(encoding="utf-8")
+            # 取头 500 字 + 尾 300 字（节省 token，保留关键信息）
+            sample = text[:800]
+            if len(text) > 1500:
+                sample += f"\n\n...（中间省略 {len(text)-1500} 字）...\n\n" + text[-700:]
+            parts.append(f"=== 第{ch}章 ===\n{sample}")
+    chapters_sample = '\n\n'.join(parts)
+
+    # 目录摘要（从 guides 目录提取 plot_guide 标题）
+    guides_dir = rewrites_dir / "guides"
+    toc_parts = []
+    for ch in sorted(sampled_chapters):
+        gf = guides_dir / f"plot_{ch}.md"
+        if gf.exists():
+            guide_text = gf.read_text(encoding="utf-8")
+            # 提取第一行（通常是章节主题）
+            first_line = guide_text.strip().split('\n')[0][:100]
+            toc_parts.append(f"第{ch}章: {first_line}")
+    toc_summary = '\n'.join(toc_parts) if toc_parts else "（无 guide）"
+
+    return {
+        "character_profiles": character_profiles or "（concept.md 中无角色设定段）",
+        "rhythm_map": rhythm_map or "（concept.md 中无节奏段）",
+        "chapters_sample": chapters_sample,
+        "toc_summary": toc_summary,
+    }
+
+
+def _global_dimension_review(config, dimension, context, api_key, api_url, model):
+    """单个全局审查 agent：读全书关键章，只审一个维度。
+
+    dimension: "character" | "rhythm"
+    """
+    import requests
+
+    prompt_name = f"unified-review-{dimension}.md"
+    prompt_template = load_prompt_str(prompt_name)
+    if not prompt_template:
+        print(f"    [全局审查] prompt {prompt_name} 不存在，跳过", flush=True)
+        return ReviewResult()
+
+    # 格式化 prompt
+    prompt = prompt_template.format(**context)
+
+    pc = get_prompt_config_with_overrides(prompt_name, config)
+    label = {"character": "人设一致性", "rhythm": "全局节奏/伏笔"}.get(dimension, dimension)
+
+    # Debug: 保存全局审查 prompt
+    if config.get("debug"):
+        debug_dir = Path(config.get("rewrites_dir", ".")) / "_debug" / f"global-{dimension}"
+        debug_dir.mkdir(parents=True, exist_ok=True)
+        (debug_dir / "prompt.md").write_text(
+            f"# Global Review: {label}\n**Model**: {pc.get('model')}\n**Temp**: {pc.get('temperature')}\n\n---\n\n{prompt}",
+            encoding="utf-8")
+
+    print(f"    [全局审查] {label} — 审查中...", flush=True)
+    try:
+        resp = requests.post(
+            api_url,
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            json={"model": pc.get("model", model),
+                  "messages": [
+                {"role": "system", "content": "你是资深网文编辑。只输出 JSON。"},
+                {"role": "user", "content": prompt},
+            ], "temperature": pc.get("temperature", 0.3),
+               "max_tokens": pc.get("max_tokens", 8192)},
+            timeout=180,
+        )
+        if resp.status_code != 200:
+            raise Exception(f"API {resp.status_code}")
+
+        content = resp.json()["choices"][0]["message"]["content"]
+        result = _parse_global_review(content, dimension)
+        n_ch = len(result.chapters)
+        n_cross = len(result.cross_issues)
+        print(f"    [全局审查] {label} → {n_ch} 章问题 + {n_cross} 跨章问题", flush=True)
+        return result
+    except Exception as e:
+        print(f"    [全局审查] {label} 失败: {e}", flush=True)
+        return ReviewResult()
+
+
+def _parse_global_review(content, dimension):
+    """解析全局审查的 JSON 输出。"""
+    result = ReviewResult()
+    try:
+        # 提取 JSON
+        m = re.search(r'\{.*\}', content, re.DOTALL)
+        if not m:
+            return result
+        data = json.loads(m.group(0))
+
+        # 单章问题
+        for issue in data.get("issues", []):
+            ch = issue.get("ch", 0)
+            if ch not in result.chapters:
+                result.chapters[ch] = {"score": 100, "issues": []}
+            result.chapters[ch]["issues"].append({
+                "type": issue.get("type", dimension),
+                "severity": issue.get("severity", "medium"),
+                "desc": issue.get("desc", ""),
+                "fix": issue.get("fix", ""),
+                "auto_fixable": False,
+            })
+            # 降低分数反映问题严重度
+            sev_penalty = {"high": 20, "medium": 10, "low": 5}
+            result.chapters[ch]["score"] = max(0,
+                result.chapters[ch]["score"] - sev_penalty.get(issue.get("severity", "low"), 10))
+
+        # 跨章问题
+        for ci in data.get("cross_issues", []):
+            result.cross_issues.append({
+                "chapters": ci.get("chapters", []),
+                "type": ci.get("type", dimension),
+                "severity": ci.get("severity", "medium"),
+                "desc": ci.get("desc", ""),
+                "fix": ci.get("fix", ""),
+            })
+
+    except Exception as e:
+        print(f"    [全局审查] JSON 解析失败: {e}", flush=True)
+
+    return result
+
+
+def _run_global_reviews(config, start, end, api_key, api_url, model):
+    """Layer 1b: 运行 2 个全局维度审查 agent（并行）。"""
+    sampled = _sample_global_chapters(config, start, end)
+    context = _load_global_context(config, sampled)
+
+    dimensions = ["character", "rhythm"]
+    results = []
+
+    with ThreadPoolExecutor(max_workers=2) as ex:
+        futures = {
+            ex.submit(_global_dimension_review, config, dim, context, api_key, api_url, model): dim
+            for dim in dimensions
+        }
+        for f in as_completed(futures):
+            try:
+                results.append(f.result())
+            except Exception as e:
+                print(f"    [全局审查] {futures[f]} 异常: {e}", flush=True)
+
+    return results
+
+
+# ============================================================
 # Agent 2: Summary Agent (合并、分级 P0/P1/P2、跨章分析)
 # ============================================================
 
@@ -614,6 +808,17 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
                 print(f"    [FAIL] Review Agent {futures[f]}: {e}")
 
     print(f"  {len(review_results)}/{len(batches)} 个审查 agent 完成")
+
+    # ========== Step 1b: Global Review Agents (跨章维度审查) ==========
+    if api_key:
+        print(f"\n{'='*40}", flush=True)
+        print(f"Step 1b: 全局审查 Agent (人设一致性 + 全局节奏/伏笔)", flush=True)
+        print("="*40, flush=True)
+
+        global_results = _run_global_reviews(cfg, start, end, api_key, api_url, model)
+        review_results.extend(global_results)
+    else:
+        global_results = []
 
     # ========== Step 2: Gather — Summary Agent ==========
     print(f"\n{'='*40}", flush=True)

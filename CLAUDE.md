@@ -30,20 +30,24 @@ Phase 3.5: Trim (flash)              → 超字数 20% 的章自动精简
 Phase 4:   对比 (本地)                → compare/报告  
 （已移除旧 review/fix 系统，仅保留 unified 审改路径）
 Phase 6:   多Agent审改                → unified_review_fix.json  
-            (Scatter: N审查agent → Gather: 总结agent → Plan: 派任务agent → Scatter: N修复agent → Gather: 收集结果)
+            混合架构：批次审查 + 全局维度审查 → 汇总 → 修复
 ```
 
-### 统一审改系统（Phase 6）
-
-多 Agent 架构：Scatter → Gather → Plan → Scatter → Gather
+### 统一审改系统（Phase 6）— 混合架构
 
 ```
-审查 Agent 1 (批1-10章) ──┐
-审查 Agent 2 (批11-20章) ──┤
-审查 Agent 3 (批21-30章) ──┤──→ 总结 Agent → 派任务 Agent → 修复 Agent 1 (任务集A) ──┐
-...                        │                                         修复 Agent 2 (任务集B) ──┤──→ 收集结果
-审查 Agent N              ┘                                         修复 Agent N (任务集C) ──┘
+Layer 1a: 批次审查 (7维全检)
+  审查 Agent 1 (批1-10章) ──┐
+  审查 Agent 2 (批11-20章) ──┤
+  ...                        │
+  审查 Agent N              ─┘
+                              │
+Layer 1b: 全局维度审查          ├──→ 总结 Agent → 派任务 Agent → 修复 Agent 1 (任务集A) ──┐
+  全局-Agent A (人设一致性) ──┤                                          ...              ├──→ 收集结果
+  全局-Agent B (节奏/伏笔) ──┘                                          修复 Agent N     ──┘
 ```
+
+Layer 1b 每个 agent 读全书关键章（头2+四分位+尾2）+ concept.md，独立输出 P0/P1/P2，不重复做 1a 的工作。
 
 每个 Agent 有明确契约：输入→输出。总结 Agent 给每个 issue 标 P0/P1/P2。
 
