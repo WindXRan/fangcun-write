@@ -1,6 +1,5 @@
 """Phase 4: 对比 + 版本聚合"""
 
-import os
 import re
 import subprocess
 from pathlib import Path

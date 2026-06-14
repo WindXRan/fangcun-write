@@ -14,7 +14,7 @@ Agent 架构:
     python unified_fixer.py --config xxx.json --start 1 --end 188
 """
 
-import os, re, sys, json, time, argparse, warnings
+import os, re, json, time, argparse, warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="requests")
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed

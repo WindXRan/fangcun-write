@@ -76,17 +76,6 @@ def get_source_title(config, chapter_num):
     return f"第{chapter_num}章"
 
 
-def prepend_title(content, title):
-    """在章节内容前加上标题行。"""
-    lines = content.strip().split('\n')
-    # 去掉 LLM 自己生成的标题（如 # 第一章）
-    if lines and lines[0].startswith('#'):
-        lines = lines[1:]
-    if lines and lines[0].strip() == '':
-        lines = lines[1:]
-    return title + '\n\n' + '\n'.join(lines).strip()
-
-
 def print_progress(done, total, t_start, prefix="  "):
     """打印进度条。"""
     if done % max(1, total // 20) == 0 or done == total:
@@ -326,58 +315,6 @@ def batch_run(config, prompt_type, start, end, workers, output_dir, filename_fmt
         state_mgr.save()
 
     return results, errors
-
-
-class PhaseTimer:
-    """流水线阶段耗时统计器。"""
-
-    def __init__(self):
-        self.phases = []
-        self._current_name = None
-        self._current_start = None
-
-    def start(self, name):
-        """开始计时一个阶段。会自动结束上一个阶段。"""
-        if self._current_name is not None:
-            self.end()
-        self._current_name = name
-        self._current_start = time.time()
-        return self
-
-    def end(self, name=None):
-        """结束当前阶段或指定阶段。"""
-        if name:
-            for p in self.phases:
-                if p["name"] == name and p["elapsed"] == 0:
-                    p["elapsed"] = time.time() - p["start"]
-                    return
-        if self._current_name is not None and self._current_start is not None:
-            elapsed = time.time() - self._current_start
-            self.phases.append({
-                "name": self._current_name,
-                "start": self._current_start,
-                "elapsed": round(elapsed, 1),
-            })
-        self._current_name = None
-        self._current_start = None
-
-    def summary(self, total=None):
-        """打印耗时汇总表。"""
-        if self._current_name is not None:
-            self.end()
-        if not self.phases:
-            return
-        total_elapsed = total or sum(p["elapsed"] for p in self.phases)
-        print(f"\n{'=' * 60}")
-        print(f"  阶段耗时统计")
-        print(f"{'=' * 60}")
-        print(f"  {'阶段':<28} {'耗时':>8} {'占比':>8}")
-        print(f"  {'-' * 46}")
-        for p in self.phases:
-            pct = p["elapsed"] / total_elapsed * 100 if total_elapsed > 0 else 0
-            print(f"  {p['name']:<28} {p['elapsed']:>7.1f}s {pct:>7.1f}%")
-        print(f"  {'-' * 46}")
-        print(f"  {'合计':<28} {total_elapsed:>7.1f}s {100.0:>7.1f}%")
 
 
 def clear_cache(config=None):

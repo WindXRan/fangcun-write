@@ -5,7 +5,6 @@ Phase 1: 开书（生成 concept.md + settings/）"""
 import json
 import os
 import re
-import sys
 import time
 from pathlib import Path
 

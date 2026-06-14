@@ -8,9 +8,7 @@
 输出：rewrites_dir/book_data.json
 """
 
-import os
 import re
-import sys
 import json
 import argparse
 from pathlib import Path

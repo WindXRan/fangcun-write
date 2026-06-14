@@ -1,6 +1,5 @@
 """Phase 3.1: 质量验证（源文指标 vs 仿写指标）"""
 
-import os
 import re
 from pathlib import Path
 
@@ -55,37 +54,12 @@ def validate_one(config, ch):
 
     # 5. 台词抄袭检测（连续8字以上与源文重合）
     if src_text:
-        # 构建源文所有8-gram集合（O(n)）
-        src_clean = re.sub(r'[。！？…\n\s]+', '', src_text)
-        src_grams = set()
-        for i in range(len(src_clean) - 7):
-            src_grams.add(src_clean[i:i+8])
-        
-        # 检测仿写文中的8-gram匹配
-        imt_clean = re.sub(r'[。！？…\n\s]+', '', text)
-        plagiarisms = []
-        matched_ranges = []
-        i = 0
-        while i < len(imt_clean) - 7:
-            gram = imt_clean[i:i+8]
-            if gram in src_grams:
-                # 找到匹配，扩展找最长匹配
-                j = i + 8
-                while j < len(imt_clean) and imt_clean[i:j+1] in src_grams:
-                    j += 1
-                match_len = j - i
-                # 避免重叠计数
-                if not matched_ranges or i >= matched_ranges[-1][1]:
-                    plagiarisms.append((imt_clean[max(0,i-5):i+20], match_len))
-                    matched_ranges.append((i, j))
-                i = j
-            else:
-                i += 1
-        
-        if len(plagiarisms) > 0:
+        from lib.plagiarism import find_plagiarism
+        plagiarisms = find_plagiarism(text, src_text)
+        if plagiarisms:
             issues.append(f"台词雷同 {len(plagiarisms)}处（连续≥8字匹配）")
             for p in plagiarisms[:3]:
-                issues.append(f"  '{p[0]}...' ({p[1]}字重合)")
+                issues.append(f"  '{p['text']}...' ({p['length']}字重合)")
 
     # 汇总
     all_ok = len(issues) == 0

@@ -2,12 +2,12 @@
 
 import os
 import re
-import sys
 import time
 from pathlib import Path
 
 from utils import (
-    get_total_chapters, count_source_chars, call_api, batch_run, debug_dump_prompt
+    get_total_chapters, count_source_chars, call_api, batch_run, debug_dump_prompt,
+    get_source_text
 )
 from prompt_loader import load_prompt, load_system_prompt, get_prompt_config_with_overrides, get_system_prompt_name
 
