@@ -9,8 +9,7 @@ import time
 from pathlib import Path
 
 from utils import (
-    get_total_chapters, get_source_title, call_api, 
-    load_trend_knowledge, count_source_chars
+    get_total_chapters, get_source_title, call_api, count_source_chars
 )
 from state_manager import atomic_write_text
 from prompt_loader import load_prompt, load_system_prompt, tag_output, get_prompt_config_with_overrides
@@ -231,19 +230,12 @@ def phase_open_book(config, state_mgr=None):
         "源文样本": _build_sample_block(config, key_chapters),
     }
 
-    trend_content = ""
-    trend_dir = config.get("trend_dir")
-    if trend_dir:
-        trend_content = load_trend_knowledge(trend_dir, base_dir)
-
     prompts_dir = config.get("prompts_dir", ".agents/skills/story-engine/prompts")
     user_prompt = load_prompt(
         f"{prompts_dir}/open-book.md",
         base_dir, replacements, mode="api",
         rewrites_dir=config.get("rewrites_dir"),
     )
-    if trend_content:
-        user_prompt += trend_content
 
     system_prompt = load_system_prompt("system-generic.md")
 

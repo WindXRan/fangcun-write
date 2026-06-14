@@ -87,40 +87,6 @@ def print_progress(done, total, t_start, prefix="  "):
         log_progress(done, total, t_start, prefix)
 
 
-def load_trend_knowledge(trend_dir, base_dir):
-    """加载热梗知识库文件，返回注入 prompt 的文本块。"""
-    td = Path(base_dir) / trend_dir if not Path(trend_dir).is_absolute() else Path(trend_dir)
-    if not td.exists() or not td.is_dir():
-        return ""
-    
-    # 按优先级加载知识库文件
-    files = [
-        ("overview.md", "题材概述"),
-        ("mechanics.md", "核心机制/爽点"),
-        ("characters.md", "角色模板"),
-        ("plot_patterns.md", "情节模式"),
-        ("references.md", "参考素材/真实案例"),
-        ("keywords.md", "关键词/标签"),
-        ("style_notes.md", "风格备注"),
-    ]
-    
-    sections = []
-    for fname, label in files:
-        fp = td / fname
-        if fp.exists():
-            try:
-                content = fp.read_text(encoding='utf-8').strip()
-                if content:
-                    sections.append(f"### {label}\n{content}")
-            except Exception:
-                pass
-    
-    if not sections:
-        return ""
-    
-    return "\n\n---\n\n## 热梗/题材素材库（开书时参考）\n\n" + "\n\n".join(sections)
-
-
 def get_chapters_list(config, include_fanwai=False):
     """获取章节目录中的章节列表"""
     author = config.get("author", "")

@@ -21,7 +21,6 @@ FIELD_SCHEMA = [
     ("prompts_dir", str, False, "prompt 目录（默认 .agents/skills/story-engine/prompts）"),
     ("base_dir", str, False, "项目根目录（默认 CWD）"),
     ("source_chapter_dir", str, False, "源文章节目录（绝对或相对于 base_dir）"),
-    ("trend_dir", str, False, "热梗知识库目录"),
     ("batch_size", dict, False, '批大小配置: {"write": 10, "guides": 10}'),
     ("topic", str, False, "强制话题/题材"),
     ("pleasure", str, False, "爽点类型"),

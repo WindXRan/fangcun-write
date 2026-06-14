@@ -39,24 +39,6 @@ def _expand(phase_str: str) -> set[str]:
     return combined
 
 
-def _run_detect_genre(config, config_path, args):
-    if not (args.detect_genre or "detect-genre" in args.phase.split(",")):
-        return
-    if config.get("genre") and not args.detect_genre:
-        print(f"  [DETECT] 品类已配置: {config['genre']}（跳过检测）")
-        return
-    sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "story-genre" / "tools"))
-    from detect_genre import detect_genre
-    genre = detect_genre(config, config.get("api_key") or os.environ.get("API_KEY"))
-    if not genre:
-        print("  [WARN] 品类检测未匹配")
-        return
-    config["genre"] = genre
-    cd = json.loads(config_path.read_text(encoding="utf-8"))
-    cd["genre"] = genre
-    config_path.write_text(json.dumps(cd, ensure_ascii=False, indent=2), encoding="utf-8")
-
-
 def _post_process(config, goal):
     if "write" not in goal:
         return
@@ -155,7 +137,6 @@ def main():
     parser.add_argument("--end", type=int, default=10)
     parser.add_argument("--workers", type=int, default=200)
     parser.add_argument("--phase", default="all")
-    parser.add_argument("--detect-genre", action="store_true")
     parser.add_argument("--include-fanwai", action="store_true")
     parser.add_argument("--status", action="store_true")
     parser.add_argument("--health-check", action="store_true")
@@ -206,8 +187,6 @@ def main():
     if not any("--end" in a for a in sys.argv):
         chs = get_chapters_list(config, include_fanwai=args.include_fanwai)
         if chs: args.end = max(chs)
-
-    _run_detect_genre(config, config_path, args)
 
     goal = _expand(args.phase)
 
