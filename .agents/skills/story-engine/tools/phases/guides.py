@@ -173,13 +173,8 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         system_prompt = load_system_prompt(sp_name)
 
     # === Debug: 保存最终发给 API 的完整 prompt ===
-    if config.get("debug"):
-        # 非写章阶段只保留第 1 章样本, 写章阶段保留前 3 章
-        if prompt_type == "write-chapter":
-            if chapter_num and chapter_num <= 3:
-                debug_dump_prompt(config, prompt_type, chapter_num, prompt_path, system_prompt, user_prompt, sp_name, pc)
-        elif chapter_num == 1 or chapter_num is None:
-            debug_dump_prompt(config, prompt_type, chapter_num, prompt_path, system_prompt, user_prompt, sp_name, pc)
+    if config.get("debug") and chapter_num and chapter_num <= 3:
+        debug_dump_prompt(config, prompt_type, chapter_num, prompt_path, system_prompt, user_prompt, sp_name, pc)
 
     label = f"ch{chapter_num or '?'} {prompt_type}"
     t_req = time.time()
@@ -302,6 +297,8 @@ def _get_style_analysis(config, ch, src_text, algo_fp, api_key, api_url, model):
         try:
             data = json.loads(style_file.read_text(encoding="utf-8"))
             if data.get("llm_analysis"):
+                if config.get("debug") and ch <= 3:
+                    print(f"  [DEBUG] style cache hit: {style_file}")
                 return data["llm_analysis"]
         except Exception:
             pass
@@ -321,6 +318,13 @@ def _get_style_analysis(config, ch, src_text, algo_fp, api_key, api_url, model):
     )
 
     pc = get_prompt_config_with_overrides("style-analyze.md", config)
+
+    # Debug: 保存 style-analyze prompt
+    if config.get("debug") and ch <= 3:
+        from utils import debug_dump_prompt
+        debug_dump_prompt(config, "style-analyze", ch,
+                          "prompts/style-analyze.md", "", prompt, "system-generic.md", pc)
+
     try:
         resp = requests.post(
             api_url,
