@@ -169,7 +169,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     user_prompt = load_prompt(prompt_path, base_dir, replacements, mode="api", rewrites_dir=config.get("rewrites_dir"))
 
     if not system_prompt:
-        sp_name = get_system_prompt_name(f"{prompt_type}.md") or "system-guide.md"
+        sp_name = get_system_prompt_name(f"{prompt_type}.md") or "system-generic.md"
         system_prompt = load_system_prompt(sp_name)
 
     # === Debug: 保存最终发给 API 的完整 prompt ===
@@ -328,14 +328,14 @@ def _get_style_analysis(config, ch, src_text, algo_fp, api_key, api_url, model):
     )
 
     pc = get_prompt_config_with_overrides("style-analyze.md", config)
+    sys_prompt = load_system_prompt("system-generic.md") or "你是资深文学编辑，分析文笔风格。"
 
     # Debug: 保存 style-analyze prompt
     if config.get("debug") and ch <= 3:
         from utils import debug_dump_prompt
         debug_dump_prompt(config, "style-analyze", ch,
-                          "prompts/style-analyze.md",
-                          "你是资深文学编辑。分析文笔风格，3-5句话即可。",
-                          prompt, "style-analyze (inline)", pc)
+                          "prompts/style-analyze.md", sys_prompt,
+                          prompt, "system-generic.md", pc)
 
     # prompts_only: 不调 LLM，返回占位
     if config.get("prompts_only"):
@@ -349,7 +349,7 @@ def _get_style_analysis(config, ch, src_text, algo_fp, api_key, api_url, model):
             json={
                 "model": pc.get("model", model),
                 "messages": [
-                    {"role": "system", "content": "你是资深文学编辑。分析文笔风格，3-5句话即可。"},
+                    {"role": "system", "content": sys_prompt},
                     {"role": "user", "content": prompt},
                 ],
                 "temperature": pc.get("temperature", 0.3),
