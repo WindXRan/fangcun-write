@@ -297,8 +297,9 @@ def get_cache_stats(config):
 
 def debug_dump_prompt(config, prompt_type, chapter_num, prompt_path, system_prompt, user_prompt, sp_name, pc):
     """--debug: 保存发给 API 的完整 prompt 到 _debug/ 目录。"""
+    base_dir = config.get("base_dir", os.getcwd())
     rewrites_dir = config.get("rewrites_dir", ".")
-    debug_dir = Path(rewrites_dir) / "_debug" / prompt_type
+    debug_dir = (Path(base_dir) / rewrites_dir / "_debug" / prompt_type).resolve()
     debug_dir.mkdir(parents=True, exist_ok=True)
 
     ch_label = f"{chapter_num:03d}" if chapter_num else "01"
