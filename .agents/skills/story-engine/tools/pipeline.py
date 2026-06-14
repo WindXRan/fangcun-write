@@ -156,6 +156,13 @@ def main():
     config["workers"] = args.workers
     config["debug"] = args.debug
 
+    # 相对路径对齐 base_dir，防 CWD 变化导致文件散落
+    base_dir = config.get("base_dir", os.getcwd())
+    for key in ("rewrites_dir", "prompts_dir"):
+        val = config.get(key, "")
+        if val and not Path(val).is_absolute():
+            config[key] = str(Path(base_dir) / val)
+
     errors = validate_config(config)
     if errors:
         for e in errors: print(f"  - {e}")
