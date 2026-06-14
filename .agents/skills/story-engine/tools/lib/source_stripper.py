@@ -7,7 +7,11 @@ import re
 import json
 from pathlib import Path
 
-from lib.source_locator import get_source_text, find_source_file
+from lib.source_locator import find_source_file
+# 使用 utils 的缓存版 get_source_text（避免每章重复读磁盘）
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from utils import get_source_text
 
 
 def _load_characters(config):

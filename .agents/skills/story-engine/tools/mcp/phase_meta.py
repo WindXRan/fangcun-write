@@ -41,9 +41,6 @@ register(PhaseMeta("extract", "提取 book_data.json",
 register(PhaseMeta("guides", "plot guide 生成",
                    depends_on=["open_book", "extract"], produces=["plot_N.md"],
                    scope="chapter", parallel=True, batchable=True))
-register(PhaseMeta("guide_fix", "guide 衔接修复",
-                   depends_on=["guides"], produces=["fixed_plot_N.md"],
-                   scope="chapter", parallel=True, batchable=True))
 register(PhaseMeta("write", "写章",
                    depends_on=["guides"], produces=["ch_N.txt"],
                    scope="chapter", parallel=True, batchable=True))

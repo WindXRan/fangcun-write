@@ -115,7 +115,11 @@ class Orchestrator:
         try:
             handler(self.config, start, end)
             elapsed = time.time() - t0
-            self._mark_done(phase)
+            # 章级 phase 按章标记，全局 phase 全局标记
+            if start == end and start != 0:
+                self._mark_done(phase, start)
+            else:
+                self._mark_done(phase)
             return TaskResult(phase, start, "ok", duration=elapsed)
         except Exception as e:
             elapsed = time.time() - t0
@@ -134,14 +138,14 @@ class Orchestrator:
         if self.state_mgr is None:
             return False
         if chapter:
-            return self.state_mgr.get_chapter_status(chapter) == "done"
+            return self.state_mgr.is_phase_chapter_done(phase, chapter)
         return self.state_mgr.is_phase_done(phase)
 
     def _mark_done(self, phase: str, chapter: int = 0):
         if self.state_mgr is None:
             return
         if chapter:
-            self.state_mgr.chapter_completed(chapter)
+            self.state_mgr.phase_chapter_done(phase, chapter)
         else:
             self.state_mgr.phase_done(phase)
 

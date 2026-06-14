@@ -51,19 +51,24 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
         if not retry_list:
             break
 
-        print(f"  [RETRY R{retry_round}] {len(retry_list)}章字数异常: {[(c, w) for c,w in retry_list]}")
-        for ch, _ in retry_list:
-            ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-            ch_file.unlink(missing_ok=True)
+        print(f"  [RETRY R{retry_round}] {len(retry_list)}章: {[(c, w) for c,w in retry_list]}")
+        t_retry = time.time()
+        for ch, reason in retry_list:
             if state_mgr:
                 state_mgr.chapter_writing(ch)
-
-        ok2, fail2 = batch_run(write_cfg, "write-chapter",
-            min(c for c, _ in retry_list), max(c for c, _ in retry_list),
-            workers, chapters_dir, "ch_{ch:03d}.txt", skip_existing=False,
-            state_mgr=state_mgr, run_one_func=run_one)
-        ok.update(ok2)
-        fail.update(fail2)
+            try:
+                result = run_one(write_cfg, "write-chapter", ch)
+                ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+                ch_file.parent.mkdir(parents=True, exist_ok=True)
+                ch_file.write_text(result, encoding='utf-8')
+                ok[ch] = str(ch_file)
+                fail.pop(ch, None)
+                if state_mgr:
+                    state_mgr.chapter_completed(ch)
+            except Exception as e:
+                print(f"    [FAIL] retry ch{ch}: {e}")
+                fail[ch] = reason
+        print(f"  重试轮次 {retry_round} 完成 ({time.time()-t_retry:.0f}s)")
 
     total = sum(
         len(Path(path).read_text(encoding='utf-8').replace('\n', '').replace(' ', '').replace('\r', ''))

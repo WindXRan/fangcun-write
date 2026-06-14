@@ -11,6 +11,27 @@ from utils import (
 )
 from prompt_loader import load_prompt, load_system_prompt, get_prompt_config_with_overrides, get_system_prompt_name
 
+# 模块级缓存：book_data.json 每章都读，缓存一次
+_book_data_cache = None
+
+
+def _get_book_data(rewrites_dir):
+    """读取 book_data.json（模块级缓存）。"""
+    global _book_data_cache
+    if _book_data_cache is not None:
+        return _book_data_cache
+    if rewrites_dir:
+        bd_path = Path(rewrites_dir) / "book_data.json"
+        if bd_path.exists():
+            import json
+            try:
+                _book_data_cache = json.loads(bd_path.read_text(encoding="utf-8"))
+            except Exception:
+                _book_data_cache = {}
+            return _book_data_cache
+    _book_data_cache = {}
+    return _book_data_cache
+
 
 # ============================================================
 # Phase 2: Guide 生成
@@ -197,32 +218,20 @@ def process_plot_guide_output(config, chapter_num, ai_output):
     
     # 2. 填充模板中的配置变量（{N}、{源文字数}、{女主名} 等）
     from prompt_loader import make_book_data_replacements
+    src_chars = count_source_chars(config, chapter_num)
     replacements = {
         "N": str(chapter_num),
         "N03d": f"{chapter_num:03d}",
+        "源文字数": str(src_chars),
+        "目标字数": str(src_chars),
+        "目标字数_min": str(int(src_chars * 0.9)),
+        "目标字数_max": str(int(src_chars * 1.1)),
+        "作者名": config.get("author", ""),
+        "新书名": config.get("book_name", ""),
+        "源书名": config.get("source_book", ""),
     }
-    # 源文字数 / 目标字数
-    from utils import count_source_chars
-    src_chars = count_source_chars(config, chapter_num)
-    replacements["源文字数"] = str(src_chars)
-    replacements["目标字数"] = str(src_chars)
-    replacements["目标字数_min"] = str(int(src_chars * 0.9))
-    replacements["目标字数_max"] = str(int(src_chars * 1.1))
-    # 作者/书名
-    replacements["作者名"] = config.get("author", "")
-    replacements["新书名"] = config.get("book_name", "")
-    replacements["源书名"] = config.get("source_book", "")
-    # 角色变量（从 book_data.json）
-    book_data = None
-    rewrites_dir = config.get("rewrites_dir", "")
-    if rewrites_dir:
-        bd_path = Path(rewrites_dir) / "book_data.json"
-        if bd_path.exists():
-            try:
-                import json
-                book_data = json.loads(bd_path.read_text(encoding="utf-8"))
-            except Exception:
-                pass
+    # 角色变量（从 book_data.json，缓存读）
+    book_data = _get_book_data(config.get("rewrites_dir", ""))
     if book_data:
         bd_replacements = make_book_data_replacements(book_data)
         replacements.update(bd_replacements)

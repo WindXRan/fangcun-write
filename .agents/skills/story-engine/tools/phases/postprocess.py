@@ -4,6 +4,7 @@ import os
 import re
 import time
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from utils import count_source_chars, get_source_title, call_api, print_progress, debug_dump_prompt
 from lib.api_client import get_api_url
@@ -59,60 +60,57 @@ def phase_postfix(config, start, end):
 # Phase 3.5: Post-Trim
 # ============================================================
 
-def phase_trim(config, start, end):
-    """超字数章节自动精简（>20% 偏差触发）。"""
+def phase_trim(config, start, end, workers=None):
+    """超字数章节自动精简（>20% 偏差触发）。并行执行。"""
     from phases.guides import run_one
-    
+
     chapters_dir = f"{config['rewrites_dir']}/chapters"
+    w = workers or config.get("workers", 30)
 
     print(f"\n{'=' * 50}")
-    print(f"Phase 3.5: 字数精简 (ch{start}-{end})")
+    print(f"Phase 3.5: 字数精简 (ch{start}-{end}, {w}w)")
     print("=" * 50)
 
-    trimmed = 0
-    total_chapters = end - start + 1
-    done_chapters = 0
-    t_start = time.time()
-
+    # 先扫描全章，找出需要精简的
+    candidates = []
     for ch in range(start, end + 1):
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         if not ch_file.exists():
-            done_chapters += 1
             continue
-
         text = ch_file.read_text(encoding='utf-8')
         lines = text.strip().split('\n')
         body = '\n'.join(lines[1:]) if lines and lines[0].startswith('第') else text
         chars = len(re.sub(r'\s', '', body))
         target = count_source_chars(config, ch)
+        if target > 0 and (chars - target) / target > 0.2:
+            candidates.append((ch, chars, target, lines[0] if lines and lines[0].startswith('第') else f"第{ch}章"))
 
-        if target == 0:
-            done_chapters += 1
-            continue
+    if not candidates:
+        print(f"  所有章节在 ±20% 内，无需精简")
+        return 0
 
-        over = (chars - target) / target
-        if over <= 0.2:
-            done_chapters += 1
-            continue  # 在 ±20% 内，跳过
+    print(f"  {len(candidates)}章需要精简，并行执行...")
 
-        print(f"  [TRIM] ch{ch:03d}: {chars}->{target} ({over:+.0%})")
+    def _trim_one(ch, chars, target, title):
         try:
             result = run_one(config, "trim-chapter", ch)
-            # 保留原标题
-            title = lines[0] if lines and lines[0].startswith('第') else f"第{ch}章"
+            ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
             ch_file.write_text(tag_output(title + '\n\n' + result.strip(), "trim-chapter.md"), encoding='utf-8')
-            trimmed += 1
+            print(f"  [TRIM] ch{ch:03d}: {chars}→{target}")
+            return True
         except Exception as e:
             print(f"  [FAIL] trim ch{ch}: {e}")
+            return False
 
-        # 更新进度
-        done_chapters += 1
-        print_progress(done_chapters, total_chapters, t_start)
+    t0 = time.time()
+    trimmed = 0
+    with ThreadPoolExecutor(max_workers=min(w, len(candidates))) as ex:
+        futures = {ex.submit(_trim_one, ch, chars, target, title): ch for ch, chars, target, title in candidates}
+        for f in as_completed(futures):
+            if f.result():
+                trimmed += 1
 
-    if trimmed:
-        print(f"\n[OK] 精简了 {trimmed} 章")
-    else:
-        print(f"\n所有章节在 ±20% 内，无需精简")
+    print(f"  [OK] 精简了 {trimmed}/{len(candidates)} 章 ({time.time()-t0:.0f}s)")
     return trimmed
 
 
@@ -120,46 +118,47 @@ def phase_trim(config, start, end):
 # Phase 3.6: 整章重写（人设崩塌、节奏失控时使用）
 # ============================================================
 
-def phase_rewrite(config, start, end, workers=5):
-    """整章重写：保留guide，从头重写正文。"""
+def phase_rewrite(config, start, end, workers=None):
+    """整章重写：保留guide，从头重写正文。并行执行。"""
     from phases.guides import run_one
-    
+
     chapters_dir = f"{config['rewrites_dir']}/chapters"
+    w = workers or config.get("workers", 30)
 
     print(f"\n{'=' * 50}")
-    print(f"Phase 3.6: 整章重写 (ch{start}-{end}, {workers}w)")
+    print(f"Phase 3.6: 整章重写 (ch{start}-{end}, {w}w)")
     print("=" * 50)
 
-    rewritten = 0
-    total_chapters = end - start + 1
-    done_chapters = 0
-    t_start = time.time()
-
+    todo = []
     for ch in range(start, end + 1):
-        ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-        if not ch_file.exists():
-            done_chapters += 1
-            continue
+        if Path(chapters_dir, f"ch_{ch:03d}.txt").exists():
+            todo.append(ch)
 
-        print(f"  [REWRITE] ch{ch:03d}")
+    if not todo:
+        print(f"  无章节可重写")
+        return 0
+
+    def _rewrite_one(ch):
+        ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         try:
-            # 删除旧文件，重新生成
-            ch_file.unlink(missing_ok=True)
             result = run_one(config, "write-chapter", ch)
-            
-            # 生成标题
             title = f"第{ch}章"
             ch_file.write_text(tag_output(title + '\n\n' + result.strip(), "write-chapter.md"), encoding='utf-8')
-            rewritten += 1
+            print(f"  [REWRITE] ch{ch:03d}")
+            return True
         except Exception as e:
             print(f"  [FAIL] rewrite ch{ch}: {e}")
+            return False
 
-        # 更新进度
-        done_chapters += 1
-        print_progress(done_chapters, total_chapters, t_start)
+    t0 = time.time()
+    rewritten = 0
+    with ThreadPoolExecutor(max_workers=min(w, len(todo))) as ex:
+        futures = {ex.submit(_rewrite_one, ch): ch for ch in todo}
+        for f in as_completed(futures):
+            if f.result():
+                rewritten += 1
 
-    if rewritten:
-        print(f"\n[OK] 重写了 {rewritten} 章")
+    print(f"  [OK] 重写了 {rewritten}/{len(todo)} 章 ({time.time()-t0:.0f}s)")
     return rewritten
 
 
@@ -167,42 +166,46 @@ def phase_rewrite(config, start, end, workers=5):
 # Phase 3.7: 润色（只改文笔，不改内容）
 # ============================================================
 
-def phase_polish(config, start, end, workers=5):
-    """润色：只改文笔（删AI味、加细节、改对话），不改情节。"""
+def phase_polish(config, start, end, workers=None):
+    """润色：只改文笔（删AI味、加细节、改对话），不改情节。并行执行。"""
     chapters_dir = f"{config['rewrites_dir']}/chapters"
+    w = workers or config.get("workers", 30)
 
     print(f"\n{'=' * 50}")
-    print(f"Phase 3.7: 润色 (ch{start}-{end}, {workers}w)")
+    print(f"Phase 3.7: 润色 (ch{start}-{end}, {w}w)")
     print("=" * 50)
-
-    polished = 0
-    total_chapters = end - start + 1
-    done_chapters = 0
-    t_start = time.time()
 
     api_key = config.get("api_key") or os.environ.get("API_KEY")
     api_url = get_api_url(config)
     model = config.get("model", "deepseek-v4-flash")
 
+    # 扫描存在的章节
+    todo = []
     for ch in range(start, end + 1):
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-        if not ch_file.exists():
-            done_chapters += 1
-            continue
+        if ch_file.exists():
+            todo.append(ch)
 
-        original = ch_file.read_text(encoding='utf-8')
-        orig_chars = len(original.replace('\n', '').replace(' ', ''))
+    if not todo:
+        print(f"  无章节可润色")
+        return 0
 
-        prompt_template = load_prompt_str("polish-chapter.md")
-        r = {"content": original, "min_chars": int(orig_chars * 0.9), "max_chars": int(orig_chars * 1.1)}
-        validate_prompt_variables("polish-chapter.md", r)
-        prompt = prompt_template.format(**r)
+    prompt_template = load_prompt_str("polish-chapter.md")
+    pc = get_prompt_config_with_overrides("polish-chapter.md", config)
 
-        pc = get_prompt_config_with_overrides("polish-chapter.md", config)
-
+    def _polish_one(ch):
+        ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         try:
+            original = ch_file.read_text(encoding='utf-8')
+            orig_chars = len(original.replace('\n', '').replace(' ', ''))
+
+            r = {"content": original, "min_chars": int(orig_chars * 0.9), "max_chars": int(orig_chars * 1.1)}
+            validate_prompt_variables("polish-chapter.md", r)
+            prompt = prompt_template.format(**r)
+
             if config.get("debug"):
                 debug_dump_prompt(config, "polish", ch, "prompts/polish-chapter.md", "", prompt, "N/A", pc)
+
             result = call_api(
                 api_key, pc.get("model", model), prompt,
                 reasoning_effort=pc.get("reasoning_effort", "low"),
@@ -213,23 +216,26 @@ def phase_polish(config, start, end, workers=5):
             )
 
             new_chars = len(result.replace('\n', '').replace(' ', ''))
-
-            # 检查字数差异
             if orig_chars > 0 and abs(new_chars - orig_chars) / orig_chars > 0.15:
                 print(f"  [SKIP] ch{ch:03d}: 字数差异过大 ({orig_chars}→{new_chars})")
+                return False
             else:
                 ch_file.write_text(tag_output(result, "polish-chapter.md"), encoding='utf-8')
-                polished += 1
                 print(f"  [POLISH] ch{ch:03d}: {orig_chars}→{new_chars}字")
+                return True
         except Exception as e:
             print(f"  [FAIL] polish ch{ch}: {e}")
+            return False
 
-        # 更新进度
-        done_chapters += 1
-        print_progress(done_chapters, total_chapters, t_start)
+    t0 = time.time()
+    polished = 0
+    with ThreadPoolExecutor(max_workers=min(w, len(todo))) as ex:
+        futures = {ex.submit(_polish_one, ch): ch for ch in todo}
+        for f in as_completed(futures):
+            if f.result():
+                polished += 1
 
-    if polished:
-        print(f"\n[OK] 润色了 {polished} 章")
+    print(f"  [OK] 润色了 {polished}/{len(todo)} 章 ({time.time()-t0:.0f}s)")
     return polished
 
 
@@ -237,50 +243,56 @@ def phase_polish(config, start, end, workers=5):
 # Phase 3.8: 扩写（增加内容扩充字数）
 # ============================================================
 
-def phase_expand(config, start, end, target_ratio=1.3, workers=5):
-    """扩写：增加内容扩充字数，默认扩充30%。"""
+def phase_expand(config, start, end, target_ratio=1.3, workers=None):
+    """扩写：增加内容扩充字数，默认扩充30%。并行执行。"""
     chapters_dir = f"{config['rewrites_dir']}/chapters"
+    w = workers or config.get("workers", 30)
 
     print(f"\n{'=' * 50}")
-    print(f"Phase 3.8: 扩写 (ch{start}-{end}, 目标+{(target_ratio-1)*100:.0f}%, {workers}w)")
+    print(f"Phase 3.8: 扩写 (ch{start}-{end}, 目标+{(target_ratio-1)*100:.0f}%, {w}w)")
     print("=" * 50)
-
-    expanded = 0
-    total_chapters = end - start + 1
-    done_chapters = 0
-    t_start = time.time()
 
     api_key = config.get("api_key") or os.environ.get("API_KEY")
     api_url = get_api_url(config)
     model = config.get("model", "deepseek-v4-flash")
 
+    # 扫描需要扩写的章节
+    todo = []
     for ch in range(start, end + 1):
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         if not ch_file.exists():
-            done_chapters += 1
             continue
-
-        original = ch_file.read_text(encoding='utf-8')
-        orig_chars = len(original.replace('\n', '').replace(' ', ''))
-        target_chars = int(orig_chars * target_ratio)
-
-        # 检查是否需要扩写
         source_chars = count_source_chars(config, ch)
-        if source_chars > 0 and orig_chars >= source_chars * 0.9:
-            done_chapters += 1
-            continue  # 字数已够，跳过
+        if source_chars > 0:
+            original = ch_file.read_text(encoding='utf-8')
+            orig_chars = len(original.replace('\n', '').replace(' ', ''))
+            if orig_chars < source_chars * 0.9:
+                todo.append(ch)
 
-        prompt_template = load_prompt_str("expand-chapter.md")
-        r = {"content": original, "orig_chars": orig_chars, "target_chars": target_chars,
-             "min_chars": int(target_chars * 0.9), "max_chars": int(target_chars * 1.1)}
-        validate_prompt_variables("expand-chapter.md", r)
-        prompt = prompt_template.format(**r)
+    if not todo:
+        print(f"  所有章节字数已达标，无需扩写")
+        return 0
 
-        pc = get_prompt_config_with_overrides("expand-chapter.md", config)
+    print(f"  {len(todo)}章需要扩写，并行执行...")
 
+    prompt_template = load_prompt_str("expand-chapter.md")
+    pc = get_prompt_config_with_overrides("expand-chapter.md", config)
+
+    def _expand_one(ch):
+        ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         try:
+            original = ch_file.read_text(encoding='utf-8')
+            orig_chars = len(original.replace('\n', '').replace(' ', ''))
+            target_chars = int(orig_chars * target_ratio)
+
+            r = {"content": original, "orig_chars": orig_chars, "target_chars": target_chars,
+                 "min_chars": int(target_chars * 0.9), "max_chars": int(target_chars * 1.1)}
+            validate_prompt_variables("expand-chapter.md", r)
+            prompt = prompt_template.format(**r)
+
             if config.get("debug"):
                 debug_dump_prompt(config, "expand", ch, "prompts/expand-chapter.md", "", prompt, "N/A", pc)
+
             result = call_api(
                 api_key, pc.get("model", model), prompt,
                 reasoning_effort=pc.get("reasoning_effort", "low"),
@@ -291,21 +303,24 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=5):
             )
 
             new_chars = len(result.replace('\n', '').replace(' ', ''))
-
-            # 检查字数
             if new_chars < orig_chars * 1.1:
                 print(f"  [SKIP] ch{ch:03d}: 扩写不足 ({orig_chars}→{new_chars})")
+                return False
             else:
                 ch_file.write_text(tag_output(result, "expand-chapter.md"), encoding='utf-8')
-                expanded += 1
                 print(f"  [EXPAND] ch{ch:03d}: {orig_chars}→{new_chars}字 (+{(new_chars/orig_chars-1)*100:.0f}%)")
+                return True
         except Exception as e:
             print(f"  [FAIL] expand ch{ch}: {e}")
+            return False
 
-        # 更新进度
-        done_chapters += 1
-        print_progress(done_chapters, total_chapters, t_start)
+    t0 = time.time()
+    expanded = 0
+    with ThreadPoolExecutor(max_workers=min(w, len(todo))) as ex:
+        futures = {ex.submit(_expand_one, ch): ch for ch in todo}
+        for f in as_completed(futures):
+            if f.result():
+                expanded += 1
 
-    if expanded:
-        print(f"\n[OK] 扩写了 {expanded} 章")
+    print(f"  [OK] 扩写了 {expanded}/{len(todo)} 章 ({time.time()-t0:.0f}s)")
     return expanded

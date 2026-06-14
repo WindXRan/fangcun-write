@@ -24,9 +24,9 @@ from mcp.phase_meta import PHASES
 
 
 GOAL_MAP = {
-    "all": {"prep", "open_book", "extract", "guides", "write", "validate", "compare"},
+    "all": {"prep", "open_book", "extract", "guides", "write", "trim", "validate", "compare"},
     "open-book": {"prep", "open_book", "extract"},
-    "write": {"guides", "write"},
+    "write": {"guides", "write", "trim"},
     "unified": {"write", "unified_review_fix"},
 }
 

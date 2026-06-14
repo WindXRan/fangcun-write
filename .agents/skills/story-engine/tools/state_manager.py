@@ -114,6 +114,18 @@ class StateManager:
         """检查 phase 是否已完成。"""
         return self.state["phases"].get(phase_name, {}).get("status") == "done"
 
+    def phase_chapter_done(self, phase_name, ch_num):
+        """标记某章在某 phase 下完成（per-phase chapter tracking）。"""
+        entry = self.state["phases"].setdefault(phase_name, {})
+        completed = entry.setdefault("completed_chapters", [])
+        if ch_num not in completed:
+            completed.append(ch_num)
+
+    def is_phase_chapter_done(self, phase_name, ch_num):
+        """检查某章在某 phase 下是否已完成。"""
+        entry = self.state["phases"].get(phase_name, {})
+        return ch_num in entry.get("completed_chapters", [])
+
     # ---- Chapter 管理 ----
 
     def chapter_writing(self, ch_num):
