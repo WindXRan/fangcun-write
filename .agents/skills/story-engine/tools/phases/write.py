@@ -32,6 +32,12 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
                          "ch_{ch:03d}.txt", skip_existing=True, state_mgr=state_mgr,
                          run_one_func=run_one)
 
+    # prompts_only 跳过字数检查和重试
+    if write_cfg.get("prompts_only"):
+        total = sum(len(Path(path).read_text(encoding='utf-8')) for path in ok.values()) if ok else 0
+        print(f"  完成: 已生成 {len(ok)} 个 prompt | 耗时 {time.time()-t0:.0f}s")
+        return ok, fail
+
     for retry_round in range(1, 3):
         retry_list = []
         for ch in range(start, end + 1):

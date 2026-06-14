@@ -177,6 +177,12 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         debug_dump_prompt(config, prompt_type, chapter_num, prompt_path, system_prompt, user_prompt, sp_name, pc)
 
     label = f"ch{chapter_num or '?'} {prompt_type}"
+
+    # prompts_only: 只输出 prompt，不调 API
+    if config.get("prompts_only"):
+        print(f"  [PROMPT] {label}")
+        return f"<!-- PROMPTS_ONLY: {label} — prompt 已保存至 _debug/ -->"
+
     t_req = time.time()
     try:
         result = call_api(api_key, model, user_prompt, reasoning_effort, max_tokens, system_prompt, api_url, temperature=pc.get("temperature", 0.8))
@@ -263,11 +269,15 @@ def process_plot_guide_output(config, chapter_num, ai_output):
 def run_one_with_template(config, prompt_type, chapter_num=None, **kwargs):
     """包装 run_one，自动处理模板合并（用于 plot-guide）。"""
     result = run_one(config, prompt_type, chapter_num, **kwargs)
-    
+
+    # prompts_only 跳过模板合并
+    if config.get("prompts_only"):
+        return result
+
     # 只对 plot-guide 使用模板合并
     if prompt_type == "plot-guide":
         result = process_plot_guide_output(config, chapter_num, result)
-    
+
     return result
 
 
@@ -324,6 +334,11 @@ def _get_style_analysis(config, ch, src_text, algo_fp, api_key, api_url, model):
         from utils import debug_dump_prompt
         debug_dump_prompt(config, "style-analyze", ch,
                           "prompts/style-analyze.md", "", prompt, "system-generic.md", pc)
+
+    # prompts_only: 不调 LLM，返回占位
+    if config.get("prompts_only"):
+        placeholder = f"<!-- PROMPTS_ONLY: style-analyze ch{ch:03d} — prompt 已保存至 _debug/ -->"
+        return placeholder
 
     try:
         resp = requests.post(

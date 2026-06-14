@@ -143,7 +143,7 @@ def main():
     parser.add_argument("--health-output")
     parser.add_argument("--diff", action="store_true")
     parser.add_argument("--auto-rollback", action="store_true")
-    parser.add_argument("--debug", action="store_true", help="输出最终发给 API 的完整 prompt 到 _debug/ 目录")
+    parser.add_argument("--debug", action="store_true", help="只输出 prompt 不调 API，保存到 _debug/ 目录")
 
     args = parser.parse_args()
     config_path = Path(args.config)
@@ -155,6 +155,7 @@ def main():
     config.setdefault("base_dir", os.getcwd())
     config["workers"] = args.workers
     config["debug"] = args.debug
+    config["prompts_only"] = args.debug  # debug 模式不调 API
 
     # rewrites_dir 对齐 base_dir，防 CWD 变化导致文件散落
     base_dir = config.get("base_dir", os.getcwd())
