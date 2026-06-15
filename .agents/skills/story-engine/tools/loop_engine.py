@@ -291,100 +291,94 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
         with open(progress_path, "a", encoding="utf-8") as f:
             f.write(msg + "\n")
 
-    best_metrics = None
     progress_path.write_text(f"# Loop Progress\n\n**开始**: {time.strftime('%H:%M:%S')}\n\n", encoding="utf-8")
 
+    # Phase 6 审改迭代：写一次，多轮审+改直到 P0=0
+    from phases.style_extract import phase_style_extract
+    from phases.guides import phase_guides
+    from phases.write import phase_write
+    from unified_fixer import run_pipeline as unified_run
+    from lib.api_client import get_api_url
+
+    api_url = get_api_url(config)
+
+    # --- 写章 (1次) ---
+    _log("## 写章 (style→guides→write)")
+    t0 = time.time()
+    phase_style_extract(config, start, end, workers=config.get("workers", 5))
+    phase_guides(config, start, end, workers=config.get("workers", 5))
+    phase_write(config, start, end, workers=config.get("workers", 5))
+    _log(f"写章: {time.time()-t0:.0f}s")
+
+    best_chapters_dir = Path(config["rewrites_dir"]) / "chapters"
+
+    # --- 审改循环 ---
+    prev_p0 = float('inf')
+    final_loop = 0
     for loop_num in range(1, max_loops + 1):
-        round_dir = loop_dir / f"loop_{loop_num}"
+        round_dir = loop_dir / f"fix_{loop_num}"
         round_dir.mkdir(parents=True, exist_ok=True)
         _log(f"\n---")
-        _log(f"## Loop #{loop_num}/{max_loops} ({time.strftime('%H:%M:%S')})")
-        _log(f"输出: {round_dir}")
+        _log(f"## 审改 #{loop_num}/{max_loops} ({time.strftime('%H:%M:%S')})")
 
-        # 切换 rewrites_dir 指向本轮目录
-        orig_rewrites = config["rewrites_dir"]
-        config["rewrites_dir"] = str(round_dir)
-        (round_dir / "chapters").mkdir(exist_ok=True)
-        (round_dir / "guides").mkdir(exist_ok=True)
-        (round_dir / "styles").mkdir(exist_ok=True)
-
-        # 复制 concept.md 到本轮目录
-        concept_src = Path(orig_rewrites) / "concept.md"
-        if concept_src.exists():
-            import shutil
-            shutil.copy(concept_src, round_dir / "concept.md")
-
-        # 1. FULL PIPELINE
-        _log("### [1/4] 写章 (style→guides→write)")
+        # [1] Review (dry-run)
+        _log("### 审查 (3 agent)...")
         t0 = time.time()
-        from phases.style_extract import phase_style_extract
-        from phases.guides import phase_guides
-        from phases.write import phase_write
-        phase_style_extract(config, start, end, workers=config.get("workers", 5))
-        phase_guides(config, start, end, workers=config.get("workers", 5))
-        phase_write(config, start, end, workers=config.get("workers", 5))
-        _log(f"全流程耗时 {time.time()-t0:.0f}s")
+        tasks, report = unified_run(
+            config, start, end, api_key=api_key, api_url=api_url,
+            model=config.get("model", "deepseek-v4-flash"),
+            batch_size=max(5, (end - start + 1) // 2),
+            workers=3, dry_run=True,
+        )
+        p0 = sum(1 for ch_data in report.values()
+                 for iss in ch_data.get("issues", []) if iss.get("priority") == "P0")
+        p1 = sum(1 for ch_data in report.values()
+                 for iss in ch_data.get("issues", []) if iss.get("priority") == "P1")
+        review_time = time.time() - t0
+        _log(f"P0:{p0} P1:{p1} ({review_time:.0f}s)")
 
-        # 恢复 rewrites_dir
-        config["rewrites_dir"] = orig_rewrites
-
-        # 2. MEASURE（用本轮目录）
-        metrics = _collect_metrics(config, start, end, chapters_subdir=f"_loop/loop_{loop_num}")
-        metrics.loop = loop_num
-        s = metrics.summary
-        _log(f"均分: {s['avg_score']} | 问题: {s['total_issues']} | P0:{s.get('p0',0)} P1:{s.get('p1',0)} P2:{s.get('p2',0)}")
-
-        # 3. COMPARE
-        _log("### [3/4] 对比最优...")
-        if best_metrics is None:
-            best_metrics = metrics
-            history.best_loop = loop_num
-            history.best_score = s["avg_score"]
-            _log("首轮 → 设为基线")
-        else:
-            improved, degraded = _compare_metrics(metrics, best_metrics)
-            suggestions = _suggest_prompt_changes(improved, degraded, metrics)
-
-            if s["avg_score"] > best_metrics.summary["avg_score"] or not degraded:
-                best_metrics = metrics
-                history.best_loop = loop_num
-                history.best_score = s["avg_score"]
-
-            for l, d in improved:
-                _log(f"  ▲ {l} ({d:+.0f}%)")
-            for l, d in degraded:
-                _log(f"  ▼ {l} ({d:+.0f}%)")
-            for sug in suggestions:
-                _log(f"  → [{sug['prompt']}] {sug['action']}")
-
-        # 4. SAVE
-        history.loops.append(asdict(metrics))
-        history_path.parent.mkdir(parents=True, exist_ok=True)
-        history_path.write_text(json.dumps(asdict(history), ensure_ascii=False, indent=2), encoding="utf-8")
-
-        # 5. AUTO-BUMP
-        if loop_num == history.best_loop and loop_num > 1 and auto_apply:
-            _log("### [4/4] Auto-bump...")
-            from prompt_loader import bump_prompt
-            bump_prompt("write-chapter.md", f"loop#{loop_num} auto-optimize")
+        # 保存审查报告
+        json.dump(report, (round_dir / "review.json").open("w", encoding="utf-8"),
+                  ensure_ascii=False, indent=2)
 
         # 收敛
-        if loop_num >= 2 and s["avg_score"] >= 85 and s.get("p0", 0) <= 1:
-            _log(f"\n✓ 收敛 — 结束迭代")
+        if p0 == 0:
+            _log(f"✓ P0=0 收敛！")
+            history.best_score = 100 - p1 * 2  # P1 每个扣 2 分
+            final_loop = loop_num
             break
 
-    # 拷贝最优轮次到 best/
-    best_dir = loop_dir / "best"
-    best_src = loop_dir / f"loop_{history.best_loop}"
-    if best_src.exists():
-        import shutil
-        if best_dir.exists():
-            shutil.rmtree(best_dir)
-        shutil.copytree(best_src, best_dir)
-        _log(f"\n最优产出已拷贝: {best_dir}")
+        # 退化/停滞检测
+        if p0 >= prev_p0:
+            _log(f"→ P0 未降低 ({prev_p0}→{p0})，已达极限")
+            final_loop = loop_num - 1
+            break
 
-    _log(f"\n## 完成: {len(history.loops)}轮 | 最优 Loop #{history.best_loop} (均分 {history.best_score})")
-    print(f"\n目录: {loop_dir}")
+        # [2] Fix
+        _log(f"### 修复 ({p0}P0 + {p1}P1)...")
+        t0 = time.time()
+        fix_results, _ = unified_run(
+            config, start, end, api_key=api_key, api_url=api_url,
+            model=config.get("model", "deepseek-v4-flash"),
+            batch_size=max(5, (end - start + 1) // 2),
+            workers=3, dry_run=False,
+        )
+        fixed = sum(1 for r in fix_results.values() if r.get("status") == "fixed")
+        _log(f"修复 {fixed}章 ({time.time()-t0:.0f}s)")
+
+        # 保存本轮快照
+        import shutil
+        (round_dir / "chapters").mkdir(exist_ok=True)
+        for f in best_chapters_dir.glob("ch_*.txt"):
+            shutil.copy(f, round_dir / "chapters" / f.name)
+
+        prev_p0 = p0
+        final_loop = loop_num
+
+    # --- 最终报告 ---
+    _log(f"\n## 完成: {final_loop}轮审改 | P0: {prev_p0 if prev_p0 > 0 else 0}")
+    _log(f"最终产出: {best_chapters_dir}")
+    print(f"\n进度: {progress_path}")
     return history
 
 
