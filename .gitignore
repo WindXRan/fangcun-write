@@ -16,6 +16,10 @@ docs/plans/
 # === 下载/导入文件 ===
 *.epub
 *.exe
+!.agents/skills/novel-download/TomatoNovelDownloader-Win64-v2.4.11.exe
+
+# === configs 目录 ===
+configs/
 
 # === 日志 ===
 logs/
