@@ -156,7 +156,8 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         src_chars = replacements.get("目标字数", "0")
         try:
             target = int(src_chars)
-            max_tokens = max(2048, int(target * 1.6))
+            multiplier = 2.0 if "pro" in model else 1.6
+            max_tokens = max(2048, int(target * multiplier))
         except ValueError:
             max_tokens = pc.get("max_tokens", 8192)
     else:
