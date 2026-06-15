@@ -274,16 +274,14 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
         print("[FAIL] 未设置 API_KEY")
         return
 
+    # 输出目录
+    loop_dir = Path(config["rewrites_dir"]) / "_loop"
+    loop_dir.mkdir(parents=True, exist_ok=True)
     history_path = loop_dir / "_history.json"
     history = LoopHistory(config=config_path, chapter_range=[start, end],
                           started=time.strftime("%Y-%m-%d %H:%M:%S"))
 
     print(f"Loop Engine | {config['book_name']} | ch{start}-{end} | max {max_loops} 轮")
-    print(f"  初始 prompt versions: {_get_prompt_versions()}")
-
-    # 输出目录结构: _loop/loop_N/{chapters,debug}/
-    loop_dir = Path(config["rewrites_dir"]) / "_loop"
-    loop_dir.mkdir(parents=True, exist_ok=True)
     progress_path = loop_dir / "_progress.md"
 
     def _log(msg):
