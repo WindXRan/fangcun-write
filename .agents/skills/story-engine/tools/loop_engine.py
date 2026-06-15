@@ -294,16 +294,37 @@ def _strengthen_prompts_from_issues(p0_issues):
     return changes
 
 
+def _save_prompt_snapshot():
+    """备份所有 prompt 文件内容。"""
+    prompts_dir = Path(".agents/skills/story-engine/prompts")
+    snapshot = {}
+    for f in prompts_dir.glob("*.md"):
+        snapshot[f.name] = f.read_text(encoding="utf-8")
+    return snapshot
+
+
+def _restore_prompt_snapshot(snapshot):
+    """从备份恢复 prompt 文件。"""
+    prompts_dir = Path(".agents/skills/story-engine/prompts")
+    for name, content in snapshot.items():
+        (prompts_dir / name).write_text(content, encoding="utf-8")
+
+
 def _strengthen_prompt_rule(prompt_name, keyword):
-    """强化 prompt 中的某条规则——加粗标记。"""
+    """强化 prompt 正文中的某条规则——加粗标记。跳过YAML头。"""
     prompts_dir = Path(".agents/skills/story-engine/prompts")
     path = prompts_dir / prompt_name
     if not path.exists():
         return
     content = path.read_text(encoding="utf-8")
-    # 找到包含关键词的行，但不是已经在 ** 里的
     lines = content.split("\n")
+    sep_count = 0
     for i, line in enumerate(lines):
+        if line.strip() == "---":
+            sep_count += 1
+            continue
+        if sep_count < 2:  # 跳过 YAML frontmatter
+            continue
         if keyword in line and "**" not in line and line.strip():
             lines[i] = f"**{line.strip()}**"
             break
@@ -500,7 +521,8 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
             best_p0 = p0
             best_prompt_state = _get_prompt_versions()
 
-        # [4] Analyze → strengthen prompt rules
+        # [4] Save backup → strengthen → analyze
+        _prompt_backup = _save_prompt_snapshot()
         _log("分析规则失效...")
         changes = _strengthen_prompts_from_issues(p0_issues)
         for change in changes:
@@ -508,9 +530,12 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
 
         prev_p0 = p0
 
-    # Restore best prompt state if current is worse
-    if prev_p0 > best_p0 and best_prompt_state:
-        _log(f"\n回退到最优版本: {best_prompt_state}")
+    # Restore best prompt if current degraded
+    if prev_p0 > best_p0 and _prompt_backup:
+        _restore_prompt_snapshot(_prompt_backup)
+        _log(f"\n回退 prompt 到 Loop #{history.best_loop} 版本")
+    elif prev_p0 <= best_p0:
+        history.best_loop = loop_num
 
     _log(f"\n完成: {loop_num}轮 | 最优 P0:{best_p0}")
     print(f"\n进度: {progress_path}")
