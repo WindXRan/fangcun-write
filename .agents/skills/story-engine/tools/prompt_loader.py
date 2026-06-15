@@ -304,12 +304,26 @@ def _make_tag(name, version):
     return f"<!-- prompt: {name}@{version} -->"
 
 
-def load_system_prompt(name):
-    """加载 prompts/ 目录下的系统 prompt 文件。返回去掉 frontmatter 的正文。"""
+def load_system_prompt(name, visited=None):
+    """加载 prompts/ 目录下的系统 prompt 文件，递归解析 system_prompt 链。
+    
+    如果文件 frontmatter 中有 system_prompt 字段，会递归加载父 prompt，
+    父 prompt 内容在前，当前 prompt 在后。
+    """
+    if visited is None:
+        visited = set()
+    if name in visited:
+        return ""  # 防循环引用
+    visited.add(name)
     p = _PROMPTS_DIR / name
     if not p.exists():
         return ""
-    _, body = _parse_frontmatter(p.read_text(encoding="utf-8"))
+    meta, body = _parse_frontmatter(p.read_text(encoding="utf-8"))
+    parent = meta.get("system_prompt", "")
+    if parent:
+        parent_body = load_system_prompt(parent, visited)
+        if parent_body:
+            return parent_body + "\n\n" + body.strip()
     return body.strip()
 
 

@@ -246,13 +246,14 @@ def phase_open_book(config, state_mgr=None):
         rewrites_dir=config.get("rewrites_dir"),
     )
 
-    system_prompt = load_system_prompt("system-generic.md")
+    sp_name = get_system_prompt_name("open-book.md") or "system-generic.md"
+    system_prompt = load_system_prompt(sp_name)
 
     try:
         pc = get_prompt_config_with_overrides("open-book.md", config)
         if config.get("debug"):
             from utils import debug_dump_prompt
-            debug_dump_prompt(config, "open-book", 0, f"{prompts_dir}/open-book.md", system_prompt, user_prompt, "system-generic.md", pc)
+            debug_dump_prompt(config, "open-book", 0, f"{prompts_dir}/open-book.md", system_prompt, user_prompt, sp_name, pc)
         result = call_api(
             api_key, pc.get("model", "deepseek-v4-pro"), user_prompt,
             reasoning_effort=pc.get("reasoning_effort", "high"),

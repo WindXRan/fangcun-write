@@ -323,14 +323,15 @@ def _get_style_analysis(config, ch, src_text, algo_fp, api_key, api_url, model):
     )
 
     pc = get_prompt_config_with_overrides("style-analyze.md", config)
-    sys_prompt = load_system_prompt("system-generic.md") or "你是资深文学编辑，分析文笔风格。"
+    sp_name = get_system_prompt_name("style-analyze.md") or "system-generic.md"
+    sys_prompt = load_system_prompt(sp_name) or "你是资深文学编辑，分析文笔风格。"
 
     # Debug: 保存 style-analyze prompt
     if config.get("debug") and ch <= 3:
         from utils import debug_dump_prompt
         debug_dump_prompt(config, "style-analyze", ch,
                           "prompts/style-analyze.md", sys_prompt,
-                          prompt, "system-generic.md", pc)
+                          prompt, sp_name, pc)
 
     try:
         resp = requests.post(
