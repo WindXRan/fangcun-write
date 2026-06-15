@@ -278,15 +278,23 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
     print(f"Loop Engine | {config['book_name']} | ch{start}-{end} | max {max_loops} 轮")
     print(f"  初始 prompt versions: {_get_prompt_versions()}")
 
+    progress_path = Path(config["rewrites_dir"]) / "_loop_progress.md"
+
+    def _log(msg):
+        """写进度文件 + print。"""
+        print(msg)
+        with open(progress_path, "a", encoding="utf-8") as f:
+            f.write(msg + "\n")
+
     best_metrics = None
+    progress_path.write_text(f"# Loop Engine Progress\n\n**开始**: {time.strftime('%H:%M:%S')}\n\n", encoding="utf-8")
 
     for loop_num in range(1, max_loops + 1):
-        print(f"\n{'─'*60}")
-        print(f"  Loop #{loop_num}/{max_loops}")
-        print(f"{'─'*60}")
+        _log(f"\n---")
+        _log(f"## Loop #{loop_num}/{max_loops} ({time.strftime('%H:%M:%S')})")
 
-        # 1. FULL PIPELINE (style + guides + write)
-        print(f"  [1/4] 写章 (style→guides→write)...")
+        # 1. FULL PIPELINE
+        _log("### [1/4] 写章 (style→guides→write)")
         t0 = time.time()
         from phases.style_extract import phase_style_extract
         from phases.guides import phase_guides
@@ -294,64 +302,56 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
         phase_style_extract(config, start, end, workers=config.get("workers", 5))
         phase_guides(config, start, end, workers=config.get("workers", 5))
         phase_write(config, start, end, workers=config.get("workers", 5))
-        print(f"        全流程耗时 {time.time()-t0:.0f}s")
+        _log(f"全流程耗时 {time.time()-t0:.0f}s")
 
         # 2. MEASURE
-        print(f"  [2/4] 校验...")
+        _log("### [2/4] 校验+审改...")
         metrics = _collect_metrics(config, start, end)
         metrics.loop = loop_num
+        s = metrics.summary
+        _log(f"均分: {s['avg_score']} | 问题: {s['total_issues']} | P0:{s.get('p0',0)} P1:{s.get('p1',0)} P2:{s.get('p2',0)}")
 
         # 3. COMPARE
-        print(f"  [3/4] 对比...")
+        _log("### [3/4] 对比最优...")
         if best_metrics is None:
             best_metrics = metrics
             history.best_loop = loop_num
-            history.best_score = metrics.summary["avg_score"]
-            print(f"        首轮 → 设为基线")
+            history.best_score = s["avg_score"]
+            _log("首轮 → 设为基线")
         else:
             improved, degraded = _compare_metrics(metrics, best_metrics)
             suggestions = _suggest_prompt_changes(improved, degraded, metrics)
 
-            s = metrics.summary
-            better = s["avg_score"] > best_metrics.summary["avg_score"]
-
-            if better or not degraded:
-                # 保留
+            if s["avg_score"] > best_metrics.summary["avg_score"] or not degraded:
                 best_metrics = metrics
                 history.best_loop = loop_num
                 history.best_score = s["avg_score"]
-                print(f"        保留本轮 (均分 {s['avg_score']} vs 最优 {best_metrics.summary['avg_score']})")
 
-            _print_report(loop_num, metrics, improved, degraded, suggestions, history.best_loop)
+            for l, d in improved:
+                _log(f"  ▲ {l} ({d:+.0f}%)")
+            for l, d in degraded:
+                _log(f"  ▼ {l} ({d:+.0f}%)")
+            for sug in suggestions:
+                _log(f"  → [{sug['prompt']}] {sug['action']}")
 
-        # 4. RECORD
+        # 4. SAVE
         history.loops.append(asdict(metrics))
-
-        # 5. AUTO-BUMP (if improved and auto mode)
-        if loop_num == history.best_loop and loop_num > 1 and auto_apply:
-            print(f"  [4/4] Auto-bump...")
-            from prompt_loader import bump_prompt
-            bump_prompt("write-chapter.md", f"loop#{loop_num} auto-optimize")
-            history.prompt_changelog.append({
-                "loop": loop_num,
-                "action": "bump write-chapter.md",
-                "reason": f"均分 {metrics.summary['avg_score']} (vs prev {best_metrics.summary.get('avg_score', 0)})",
-            })
-
-        # 6. SAVE history
         history_path.parent.mkdir(parents=True, exist_ok=True)
         history_path.write_text(json.dumps(asdict(history), ensure_ascii=False, indent=2), encoding="utf-8")
 
-        # 收敛检查
-        if loop_num >= 3 and best_metrics.summary["avg_score"] >= 90 and best_metrics.summary["total_issues"] <= 2:
-            print(f"\n  ✓ 收敛 (均分≥90, 问题≤2)，结束迭代")
+        # 5. AUTO-BUMP
+        if loop_num == history.best_loop and loop_num > 1 and auto_apply:
+            _log("### [4/4] Auto-bump...")
+            from prompt_loader import bump_prompt
+            bump_prompt("write-chapter.md", f"loop#{loop_num} auto-optimize")
+
+        # 收敛
+        if loop_num >= 2 and s["avg_score"] >= 85 and s.get("p0", 0) <= 1:
+            _log(f"\n✓ 收敛 — 结束迭代")
             break
 
-    print(f"\n{'='*60}")
-    print(f"  迭代完成 | {len(history.loops)} 轮 | 最优: Loop #{history.best_loop} (均分 {history.best_score})")
-    print(f"  历史: {history_path}")
-    print(f"{'='*60}")
-
+    _log(f"\n## 完成: {len(history.loops)}轮 | 最优 Loop #{history.best_loop} (均分 {history.best_score})")
+    print(f"\n进度文件: {progress_path}")
     return history
 
 
