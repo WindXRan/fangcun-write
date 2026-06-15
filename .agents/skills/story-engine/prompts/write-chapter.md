@@ -30,7 +30,7 @@ defaults: {"model": "deepseek-v4-pro", "max_tokens": 8192, "reasoning_effort": "
 女主={女主名}，男主={男主名}。
 
 ## 字数
-目标 {目标字数} 字（{目标字数_min}~{目标字数_max}）。
+**目标 {目标字数} 字（{目标字数_min}~{目标字数_max}）。**
 
 ## 输出路径
 projects/{作者名}/{源书名}/rewrites/{新书名}/chapters/ch_{N}.txt

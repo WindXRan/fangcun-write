@@ -524,7 +524,8 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
         # [4] Save backup → strengthen → analyze
         _prompt_backup = _save_prompt_snapshot()
         _log("分析规则失效...")
-        changes = _strengthen_prompts_from_issues(p0_issues)
+        from prompt_improver import llm_improve_prompts
+        changes = llm_improve_prompts(p0_issues, api_key, api_url)
         for change in changes:
             _log(f"  [{change['prompt']}] {change['action']}: {change['reason']}")
 
