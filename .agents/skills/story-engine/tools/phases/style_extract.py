@@ -78,8 +78,16 @@ def _algo_one(config, ch, styles_dir):
     if not text:
         return False
     fp = count_style_fingerprint(text)
-    anchors = format_style_anchors(fp)
-    _write_md(styles_dir, ch, anchor=f"## 算法锚点\n{anchors}")
+    items = [
+        f"- 句长: {fp.get('sentence_avg_len','?')}字/句 (短句<8字: {fp.get('sentence_short_ratio',0):.0%})",
+        f"- 对话: {fp.get('dialogue_ratio',0):.0%}",
+        f"- 段均: {fp.get('paragraph_avg_len','?')}字",
+        f"- 代词密度: {fp.get('pronoun_density','?')}/千字",
+        f"- 词汇丰富度: {fp.get('ttr','?')}",
+        f"- 标点: {fp.get('punct_style','?')}",
+        f"- 开头: {fp.get('opening_type','?')} / 结尾: {fp.get('closing_type','?')}",
+    ]
+    _write_md(styles_dir, ch, anchor="## 算法锚点\n" + "\n".join(items))
     return True
 
 
@@ -157,11 +165,10 @@ def _write_md(styles_dir, ch, anchor=None, analysis=None):
         sections["analysis"] = analysis
 
     content = f"# 第{ch}章 文笔指纹\n\n"
-    if "anchor" in sections:
-        content += sections["anchor"] + "\n\n"
-    if "analysis" in sections:
-        content += sections["analysis"] + "\n"
-    f.write_text(content, encoding="utf-8")
+    for key in ["anchor", "analysis"]:
+        if key in sections:
+            content += sections[key].strip() + "\n\n"
+    f.write_text(content.rstrip() + "\n", encoding="utf-8")
 
 
 def load_style_text(config, ch):
