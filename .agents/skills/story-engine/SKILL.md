@@ -124,6 +124,7 @@ Phase 4:   对比 (本地)                → compare/报告                  [c
 Phase 4.5: 审稿 (分批→汇总)          → 审稿报告 + 汇总报告            [review.py]
 Phase 5:   修复 (根据审稿)            → 修复后章节                     [review.py]
 Phase 6:   统一审查+修复              → unified_review_fix.json       [unified.py]
+Phase 1.2: 书名+简介 (flash)           → book_info.md 中生成5书名+5简介 [pipeline.py --phase blurb]
 Phase 7:   自动导出                    → export/{书名}.txt             [merge_chapters.py]
 ```
 
@@ -198,6 +199,7 @@ python tools/rewrite_chapters.py --config configs/xxx.json --phase open-book
 | Prompt | 用途 | 输入 | 输出 |
 |--------|------|------|------|
 | `open-book.md` | 开书 | 源文样本（首/前/25%/50%/75%/尾，覆盖全书弧线） | settings/ + concept.md（设定+弧线+角色名） |
+| `blurb.md` | 书名+简介 | book_info.md + characters.md + 源文头部 | 5书名 + 5简介，番茄爆款对标 |
 | `plot-guide.md` | 章纲 | 源文第N章 + concept + 样板库 | 节拍映射表 + 换皮检验 |
 | `write-chapter.md` | 写章 | plot_guide + concept + 源文全文 | ch_{N}.txt |
 | `trim-chapter.md` | 精简 | 超字数章节 | 精简后章节 |
@@ -241,7 +243,6 @@ knowledge/
 | `story-review` | 审稿（分批+汇总）、修复、审改闭环 | 「审稿」「review」 | Phase 4.5/5 |
 | `story-compare` | 对比报告、抄袭风险分析 | 「跑对比」「对比」 | Phase 4 |
 | `story-optimize` | 自动评分、规则沉淀 | 「优化prompt」 | — |
-| `story-blurb` | 书名+简介生成 | 「写简介」「书名」 | — |
 | `story-cover` | 封面生成（默认输出prompt） | 「封面」「生成封面」 | — |
 | `story-scan` | 番茄排行榜分析 | 「番茄扫描」「番茄数据」 | — |
 
