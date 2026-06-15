@@ -104,29 +104,31 @@ projects/{作者名}/{源书名}/
 
 详见 `网文小说仿写教学.md`
 
-## Pipeline（编排器，委托各 phase 执行）
+## Pipeline（5 步主流程）
 
 ```
-Phase 0:   导入 (story-import)        → _cache/chapters/ + _header.txt + _toc.txt
-Phase 1:   开书 (pro, 1 call)        → settings/ + concept.md       [open_book.py]
-Phase 1.1: Concept审查 (flash)        → 检查人设/冲突/情节是否换皮     [open_book.py]
-Phase 1.5: 风格分析 (脚本)            → style_analysis/style_{N}.json [open_book.py]
-Phase 2:   Guides (flash, 2N 并行)   → plot_{N}.md + style_{N}.md    [guides.py]
-Phase 2.5: Guide衔接修复 (flash)     → 修复章间断裂                    [guides.py]
-Phase 3:   写章 (flash, N 并行)      → ch_{N}.txt                    [write.py]
-Phase 3.1: 质量验证                    → 字数/比喻/AI路标词/台词抄袭检测 [validate.py]
-Phase 3.2: 后处理                      → 去#号/修标题/补省略号          [postprocess.py]
-Phase 3.5: Trim (flash)              → 超字数 20% 的章自动精简        [postprocess.py]
-Phase 3.6: 整章重写 (flash)           → 人设崩塌/节奏失控时重写        [postprocess.py]
-Phase 3.7: 润色 (flash)              → 只改文笔，不改内容             [postprocess.py]
-Phase 3.8: 扩写 (flash)              → 增加内容扩充字数               [postprocess.py]
-Phase 4:   对比 (本地)                → compare/报告                  [compare.py]
-Phase 4.5: 审稿 (分批→汇总)          → 审稿报告 + 汇总报告            [review.py]
-Phase 5:   修复 (根据审稿)            → 修复后章节                     [review.py]
-Phase 6:   统一审查+修复              → unified_review_fix.json       [unified.py]
-Phase 1.2: 书名+简介 (flash)           → book_info.md 中生成5书名+5简介 [pipeline.py --phase blurb]
-Phase 7:   自动导出                    → export/{书名}.txt             [merge_chapters.py]
+导入 → 开书 → 写章 → 审改 → 导出
 ```
+
+| 步骤 | phase 名 | 内容 | 输出 |
+|------|----------|------|------|
+| 1. 导入 | `import` | 拆章+生成header/toc | _cache/chapters/ |
+| 2. 开书 | `open` | 设定+概念+风格分析 | settings/ + concept.md |
+| 3. 写章 | `write` | guides→写章→验证→后处理 | chapters/ch_{N}.txt |
+| 4. 审改 | `review` | 对比+统一审改 | compare/ + unified_review_fix.json |
+| 5. 导出 | `export` | 合并导出txt | export/{书名}.txt |
+
+**写章后按需执行（选一个）：**
+
+| 条件 | phase | 说明 |
+|------|-------|------|
+| 字数超 20% | `trim` | 精简 |
+| 人设崩塌/节奏失控 | `rewrite` | 整章重写 |
+| 文笔需打磨 | `polish` | 润色 |
+| 字数不够 | `expand` | 扩写 |
+
+**单步调试：**
+- `prep` / `open_book` / `guides` / `write-only` / `validate` / `compare` / `postfix` / `unified`
 
 ## 鲁棒性特性
 
@@ -143,32 +145,27 @@ Phase 7:   自动导出                    → export/{书名}.txt             [
 ## 使用
 
 ```bash
-# Phase 0: 导入源文
+# 1. 导入源文
 python .agents/skills/story-import/story_import.py "projects/作者/书名/书名.txt"
 
-# 完整流水线（推荐）
-python tools/pipeline.py --config configs/xxx.json --start 1 --end 10 --workers 10
-
-# 一键完成（生成+审查+修复+报告）
-python tools/pipeline.py --config configs/xxx.json --phase all-with-fix --start 1 --end 10
+# 2. 完整流水线（5 步一键）
+python tools/pipeline.py --config configs/xxx.json --phase import,open,write,review,export
 
 # 分步执行
-python tools/pipeline.py --config configs/xxx.json --phase open-book
-python tools/pipeline.py --config configs/xxx.json --phase guides
-python tools/pipeline.py --config configs/xxx.json --phase write,compare
+python tools/pipeline.py --config configs/xxx.json --phase open          # 开书
+python tools/pipeline.py --config configs/xxx.json --phase write         # 写章
+python tools/pipeline.py --config configs/xxx.json --phase review        # 审改
+python tools/pipeline.py --config configs/xxx.json --phase export        # 导出
 
-# 统一审查+修复（推荐）
-python tools/pipeline.py --config configs/xxx.json --phase unified --start 1 --end 10
+# 单步调试
+python tools/pipeline.py --config configs/xxx.json --phase guides
+python tools/pipeline.py --config configs/xxx.json --phase write-only
 
 # 查看项目状态
 python tools/pipeline.py --config configs/xxx.json --status
 
-# 健康检查（诊断项目问题）
+# 健康检查
 python tools/pipeline.py --config configs/xxx.json --health-check
-python tools/pipeline.py --config configs/xxx.json --health-output report.json
-
-# 向后兼容（旧入口）
-python tools/rewrite_chapters.py --config configs/xxx.json --phase open-book
 ```
 
 ## 配置文件

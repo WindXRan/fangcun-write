@@ -4,13 +4,13 @@ import json
 import re
 import sys
 from pathlib import Path
-from flask import Flask, render_template, jsonify, request, send_from_directory
+from flask import Flask, render_template, jsonify, request, send_from_directory, redirect
 
 SKILL_DIR = Path(__file__).parent
 ROOT_DIR = SKILL_DIR.parent.parent.parent  # 项目根目录
 PROJECTS_DIR = ROOT_DIR / "projects"
 BOOK_LIBRARY_FILE = SKILL_DIR / "data" / "book_library.json"
-SCAN_DATA_DIR = SKILL_DIR / "data" / "scan"
+SCAN_DATA_DIR = SKILL_DIR.parent / "story-scan"
 NOVEL_DOWNLOAD_DIR = SKILL_DIR.parent / "novel-download"  # 下载器目录
 
 # 添加 tools 目录到 sys.path
@@ -156,6 +156,10 @@ def serve_scan_data(filepath):
 def serve_scan_api(filepath):
     return send_from_directory(str(SCAN_DATA_DIR / "api" / "latest"), filepath)
 
+
+@app.route('/ranks/')
+def ranks_index():
+    return redirect('/ranks/index.html')
 
 @app.route('/ranks/<path:filepath>')
 def serve_ranks(filepath):

@@ -22,7 +22,7 @@ param(
 $ErrorActionPreference = "Stop"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-$SkillDir = "C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\.agents\skills\novel-download"
+$SkillDir = "C:\Users\Administrator\Documents\trae_projects\fangcun-write\.agents\skills\novel-download"
 
 function Write-Step($msg) { Write-Host "`n>>> $msg" -ForegroundColor Cyan }
 function Write-Ok($msg) { Write-Host "    OK: $msg" -ForegroundColor Green }
@@ -67,8 +67,8 @@ function Ensure-Server {
     return $port
 }
 
-function Parse-BookId($input) {
-    $trimmed = $input.Trim()
+function Parse-BookId($rawInput) {
+    $trimmed = $rawInput.Trim()
     # 纯数字
     if ($trimmed -match '^\d+$') { return $trimmed }
     # URL 中的 book_id
