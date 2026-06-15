@@ -46,7 +46,7 @@ def call_api(api_key, model, user_prompt, reasoning_effort="low",
 
     url = api_url or DEFAULT_API_URL
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-    sys_prompt = system_prompt or load_system_prompt("system-generic.md")
+    sys_prompt = system_prompt or load_system_prompt("system-generic.md") or ""
     data = {
         "model": model,
         "messages": [

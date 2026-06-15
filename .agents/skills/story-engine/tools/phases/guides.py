@@ -88,8 +88,12 @@ def phase_guides(config, start, end, workers=5, serial=False, state_mgr=None):
 
 
 def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=None, 
-            system_prompt=None, extra_replacements=None):
-    """执行单次调用。通过 prompt_loader 加载并嵌入文件内容。"""
+            system_prompt=None, extra_replacements=None, retry_context=None):
+    """执行单次调用。通过 prompt_loader 加载并嵌入文件内容。
+    
+    Args:
+        retry_context: 重试时附带的修正提示（如"代词密度偏离源文"），注入 system_prompt
+    """
     from lib.api_client import get_api_url
     
     api_key = config.get("api_key") or os.environ.get("API_KEY")
@@ -170,11 +174,19 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
 
     if not system_prompt:
         sp_name = get_system_prompt_name(f"{prompt_type}.md") or "system-generic.md"
-        system_prompt = load_system_prompt(sp_name)
+        system_prompt = load_system_prompt(sp_name) or ""
+
+    # 重试修正提示：注入 system_prompt 前端
+    if retry_context:
+        system_prompt = f"【修正提示】上一次写这章存在以下问题：{retry_context}。这次务必修正。\n\n{system_prompt}"
 
     # === Debug: 保存最终发给 API 的完整 prompt ===
     if config.get("debug") and chapter_num and chapter_num <= 3:
         debug_dump_prompt(config, prompt_type, chapter_num, prompt_path, system_prompt, user_prompt, sp_name, pc)
+
+    # prompts_only: 只输出 prompt，不调 API
+    if config.get("prompts_only"):
+        return f"<!-- PROMPTS_ONLY: {prompt_type} ch{chapter_num} — prompt 已保存至 _debug/ -->"
 
     label = f"ch{chapter_num or '?'} {prompt_type}"
 
@@ -332,6 +344,10 @@ def _get_style_analysis(config, ch, src_text, algo_fp, api_key, api_url, model):
         debug_dump_prompt(config, "style-analyze", ch,
                           "prompts/style-analyze.md", sys_prompt,
                           prompt, sp_name, pc)
+
+    # prompts_only: 不调 LLM，返回占位
+    if config.get("prompts_only"):
+        return {"technique": "", "summary": "", "anchors": {}, "raw": ""}
 
     try:
         resp = requests.post(

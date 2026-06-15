@@ -1,31 +1,47 @@
 """文本指标计算器。
 
-算法锚点: count_style_fingerprint() — 7 项，纯正则
+算法锚点: count_style_fingerprint() — 10 项，纯正则
 LLM 分析: style-analyze prompt — 正反面写法规则
+
+朱雀防线: 代词密度/句长标准差/词汇多样性 — 比对源文，防 AI 句法均匀
 """
 
 import re
+import math
 from .constants import AI_MARKER_PATTERN, METAPHOR_PATTERN, DIRECT_EMOTION_PATTERN
+
+PRONOUN_PATTERN = r'[她他它]'
 
 
 def count_metrics(text):
     """统计文本的量化指标（用于算法审查）。"""
     body = _strip_title(text)
     clean = re.sub(r'\s', '', body)
+    total = max(len(clean), 1)
+
+    sents = re.split(r'[。！？!?\n]', body)
+    sent_lens = [len(re.sub(r'\s', '', s)) for s in sents if re.sub(r'\s', '', s)]
+    n_sents = max(len(sent_lens), 1)
+    avg_sent = sum(sent_lens) / n_sents
+    var_sent = sum((l - avg_sent) ** 2 for l in sent_lens) / n_sents
+
     return {
-        "chars": len(clean),
+        "chars": total,
         "dash": body.count('——'),
         "metaphor": len(re.findall(METAPHOR_PATTERN, body)),
         "ai_markers": len(re.findall(AI_MARKER_PATTERN, body)),
         "direct_emotion": len(re.findall(DIRECT_EMOTION_PATTERN, body)),
+        "pronoun_density": round(len(re.findall(PRONOUN_PATTERN, clean)) / total * 1000, 1),
+        "sent_len_stddev": round(math.sqrt(var_sent), 1),
     }
 
 
 def count_style_fingerprint(text):
-    """7 个锚点，纯正则，<30ms。
+    """10 个锚点，纯正则，<30ms。
 
     返回: {chars, sentence_avg_len, sentence_short_ratio, dialogue_ratio,
-           paragraph_avg_len, punct_style, opening_type, closing_type}
+           paragraph_avg_len, punct_style, opening_type, closing_type,
+           pronoun_density, ttr}
     """
     body = _strip_title(text)
     clean = re.sub(r'\s', '', body)
@@ -53,6 +69,13 @@ def count_style_fingerprint(text):
     para_lens = [len(re.sub(r'\s', '', p)) for p in paras]
     para_avg = round(sum(para_lens) / max(len(para_lens), 1), 1)
 
+    # 代词密度（防朱雀：AI 过度使用他/她/它）
+    pronoun_count = len(re.findall(r'[她他它]', clean))
+    pronoun_density = round(pronoun_count / total * 1000, 1)
+
+    # 词汇多样性（字符级 TTR，朱雀检测指标）
+    ttr = round(len(set(clean)) / total, 4)
+
     # 标点指纹
     punct = _classify_punct(body, total)
 
@@ -66,6 +89,8 @@ def count_style_fingerprint(text):
         "sentence_short_ratio": short_ratio,
         "dialogue_ratio": dia_ratio,
         "paragraph_avg_len": para_avg,
+        "pronoun_density": pronoun_density,
+        "ttr": ttr,
         "punct_style": punct,
         "opening_type": opening,
         "closing_type": closing,
@@ -73,7 +98,7 @@ def count_style_fingerprint(text):
 
 
 def format_style_anchors(fp):
-    """7 个锚点 → 紧凑描述。"""
+    """10 个锚点 → 紧凑描述。"""
     parts = []
     if fp.get("sentence_avg_len"):
         parts.append(f"句长{fp['sentence_avg_len']}字/句, 短句(<8字)占{fp.get('sentence_short_ratio',0):.0%}")
@@ -81,6 +106,10 @@ def format_style_anchors(fp):
         parts.append(f"对话{fp['dialogue_ratio']:.0%}")
     if fp.get("paragraph_avg_len"):
         parts.append(f"段均{fp['paragraph_avg_len']:.0f}字")
+    if fp.get("pronoun_density") is not None:
+        parts.append(f"代词密度{fp['pronoun_density']}/千字")
+    if fp.get("ttr"):
+        parts.append(f"词汇丰富度{fp['ttr']:.2f}")
     if fp.get("punct_style"):
         parts.append(fp["punct_style"])
     parts.append(f"开头:{fp.get('opening_type','?')} 结尾:{fp.get('closing_type','?')}")

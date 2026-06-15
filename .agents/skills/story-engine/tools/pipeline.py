@@ -82,6 +82,9 @@ def _build_orch(config, state_mgr, config_path=None) -> Orchestrator:
     orch = Orchestrator(config, state_mgr)
 
     def _extract(cfg, s, e):
+        if cfg.get("prompts_only"):
+            print("  [SKIP] extract — prompts_only 模式跳过")
+            return
         import importlib
         bd = importlib.import_module("extract_book_data").extract(cfg)
         if not bd:

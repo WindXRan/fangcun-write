@@ -1,15 +1,15 @@
-"""Phase 3: 写章"""
+"""Phase 3: 写章（含 key chapter 升级 + 风格自检）"""
 
 import os
 import re
 import time
 from pathlib import Path
 
-from utils import count_source_chars, batch_run
+from utils import count_source_chars, batch_run, get_source_text
 
 
 def phase_write(config, start, end, workers=10, state_mgr=None):
-    """并行写章 + 异常章自动重跑。"""
+    """并行写章 + 字数重试 + 风格自检重试。"""
     from phases.guides import run_one
 
     chapters_dir = f"{config['rewrites_dir']}/chapters"
@@ -28,6 +28,28 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
     if state_mgr:
         run_id = state_mgr.add_run("write", start, end, model=write_cfg.get("model", "deepseek-v4-flash"))
 
+    # --- Key chapter 升级：开头章用 Pro ---
+    pro_model = write_cfg.get("key_chapter_model")
+    key_chapters = set(write_cfg.get("key_chapters", [1, 2]))
+    if pro_model:
+        for ch in sorted(key_chapters):
+            if ch < start or ch > end:
+                continue
+            ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+            if ch_file.exists() and ch_file.stat().st_size >= 500:
+                continue
+            if state_mgr:
+                state_mgr.chapter_writing(ch)
+            try:
+                result = run_one(write_cfg, "write-chapter", ch, model=pro_model)
+                ch_file.parent.mkdir(parents=True, exist_ok=True)
+                ch_file.write_text(result, encoding='utf-8')
+                if state_mgr:
+                    state_mgr.chapter_completed(ch, model=pro_model)
+                print(f"  [KEY] ch{ch:03d} → {pro_model}")
+            except Exception as e:
+                print(f"  [FAIL] key ch{ch}: {e}")
+
     ok, fail = batch_run(write_cfg, "write-chapter", start, end, workers, chapters_dir,
                          "ch_{ch:03d}.txt", skip_existing=True, state_mgr=state_mgr,
                          run_one_func=run_one)
@@ -38,6 +60,7 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
         print(f"  完成: 已生成 {len(ok)} 个 prompt | 耗时 {time.time()-t0:.0f}s")
         return ok, fail
 
+    # --- 字数重试 ---
     for retry_round in range(1, 3):
         retry_list = []
         for ch in range(start, end + 1):
@@ -75,6 +98,53 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
                 print(f"    [FAIL] retry ch{ch}: {e}")
                 fail[ch] = reason
         print(f"  重试轮次 {retry_round} 完成 ({time.time()-t_retry:.0f}s)")
+
+    # --- 风格自检（朱雀防线）---
+    if not write_cfg.get("skip_style_check"):
+        from lib.text_metrics import count_metrics
+        style_retry_list = []
+        for ch in range(start, end + 1):
+            ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+            if not ch_file.exists():
+                continue
+            text = ch_file.read_text(encoding='utf-8')
+            metrics = count_metrics(text)
+            src_text = get_source_text(config, ch)
+            if not src_text:
+                continue
+            src = count_metrics(src_text)
+            issues = []
+            if src.get("pronoun_density", 0) > 0:
+                ratio = metrics["pronoun_density"] / src["pronoun_density"]
+                if ratio > 1.5 or ratio < 0.5:
+                    issues.append(f"代词密度{metrics['pronoun_density']}(源文{src['pronoun_density']})")
+            if src.get("sent_len_stddev", 0) > 0:
+                ratio = metrics["sent_len_stddev"] / src["sent_len_stddev"]
+                if ratio > 1.5 or ratio < 0.5:
+                    issues.append(f"句长标准差{metrics['sent_len_stddev']}(源文{src['sent_len_stddev']})")
+            if issues:
+                style_retry_list.append((ch, "风格偏离: " + ", ".join(issues)))
+
+        if style_retry_list:
+            print(f"  [STYLE-RETRY] {len(style_retry_list)}章风格偏离")
+            t_retry = time.time()
+            for ch, reason in style_retry_list:
+                if state_mgr:
+                    state_mgr.chapter_writing(ch)
+                try:
+                    result = run_one(write_cfg, "write-chapter", ch, retry_context=reason)
+                    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+                    ch_file.parent.mkdir(parents=True, exist_ok=True)
+                    ch_file.write_text(result, encoding='utf-8')
+                    ok[ch] = str(ch_file)
+                    fail.pop(ch, None)
+                    if state_mgr:
+                        state_mgr.chapter_completed(ch)
+                    print(f"    [STYLE-FIX] ch{ch:03d}")
+                except Exception as e:
+                    print(f"    [FAIL] style-retry ch{ch}: {e}")
+                    fail[ch] = reason
+            print(f"  风格重试完成 ({time.time()-t_retry:.0f}s)")
 
     total = sum(
         len(Path(path).read_text(encoding='utf-8').replace('\n', '').replace(' ', '').replace('\r', ''))

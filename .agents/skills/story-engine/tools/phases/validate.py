@@ -52,7 +52,23 @@ def validate_one(config, ch):
         if metrics["direct_emotion"] > limit:
             issues.append(f"直抒情 {metrics['direct_emotion']}处 (源文{src['direct_emotion']}, 上限{limit})")
 
-    # 5. 台词抄袭检测（连续8字以上与源文重合）
+    # 5. 代词密度（朱雀防线，源文±50%以内）
+    if src and src.get("pronoun_density") and src["pronoun_density"] > 0:
+        ratio = metrics["pronoun_density"] / src["pronoun_density"]
+        if ratio > 1.5 or ratio < 0.5:
+            issues.append(f"代词密度 {metrics['pronoun_density']}/千字 (源文{src['pronoun_density']}, ±50%界限)")
+        elif ratio > 1.3 or ratio < 0.7:
+            warnings.append(f"代词密度偏离 {metrics['pronoun_density']}/千字 (源文{src['pronoun_density']})")
+
+    # 6. 句长标准差（朱雀防线，AI句法均匀度检测，源文±50%以内）
+    if src and src.get("sent_len_stddev") and src["sent_len_stddev"] > 0:
+        ratio = metrics["sent_len_stddev"] / src["sent_len_stddev"]
+        if ratio > 1.5 or ratio < 0.5:
+            issues.append(f"句长标准差 {metrics['sent_len_stddev']} (源文{src['sent_len_stddev']}, ±50%界限)")
+        elif ratio > 1.3 or ratio < 0.7:
+            warnings.append(f"句长标准差偏离 {metrics['sent_len_stddev']} (源文{src['sent_len_stddev']})")
+
+    # 7. 台词抄袭检测（连续8字以上与源文重合）
     if src_text:
         from lib.plagiarism import find_plagiarism
         plagiarisms = find_plagiarism(text, src_text)
@@ -64,9 +80,9 @@ def validate_one(config, ch):
     # 汇总
     all_ok = len(issues) == 0
     status = "[PASS]" if all_ok else "[FAIL]"
-    report_parts = [f"ch{ch:03d} {status} | {metrics['chars']}字 | metaphor={metrics['metaphor']} | AI={metrics['ai_markers']} | direct_emo={metrics['direct_emotion']}"]
+    report_parts = [f"ch{ch:03d} {status} | {metrics['chars']}字 | metaphor={metrics['metaphor']} | AI={metrics['ai_markers']} | direct_emo={metrics['direct_emotion']} | pronoun_d={metrics.get('pronoun_density','?')}/千 | sent_sd={metrics.get('sent_len_stddev','?')}"]
     if src:
-        report_parts.append(f"  源文: {src['chars']}字 | metaphor={src['metaphor']} | AI={src['ai_markers']} | direct_emo={src['direct_emotion']}")
+        report_parts.append(f"  源文: {src['chars']}字 | metaphor={src['metaphor']} | AI={src['ai_markers']} | direct_emo={src['direct_emotion']} | pronoun_d={src.get('pronoun_density','?')}/千 | sent_sd={src.get('sent_len_stddev','?')}")
     for i in issues:
         report_parts.append(f"  *ISSUE* {i}")
     for w in warnings:
@@ -95,7 +111,7 @@ def phase_validate(config, start, end):
             results.append({'ch': ch, 'status': 'FAIL'})
         chapter_metrics.append({
             'ch': ch, 'status': 'PASS' if passed else 'FAIL',
-            **{k: metrics.get(k, 0) for k in ('chars', 'metaphor', 'ai_markers', 'direct_emotion')}
+            **{k: metrics.get(k, 0) for k in ('chars', 'metaphor', 'ai_markers', 'direct_emotion', 'pronoun_density', 'sent_len_stddev')}
         })
 
     if fail_count > 0:

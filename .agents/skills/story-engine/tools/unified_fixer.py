@@ -192,6 +192,24 @@ def _algo_check(config, ch):
                            "fix": "用动作细节代替", "auto_fixable": False})
             score -= 10
 
+    # 代词密度（朱雀防线）
+    if src_metrics and src_metrics.get("pronoun_density", 0) > 0:
+        ratio = metrics["pronoun_density"] / src_metrics["pronoun_density"]
+        if ratio > 1.5 or ratio < 0.5:
+            issues.append({"type": "pronoun", "severity": "medium",
+                           "desc": f"代词密度 {metrics['pronoun_density']}/千字 (源文{src_metrics['pronoun_density']})",
+                           "fix": "交替使用名字/身份/零代词替代他/她", "auto_fixable": False})
+            score -= 10
+
+    # 句长标准差（朱雀防线）
+    if src_metrics and src_metrics.get("sent_len_stddev", 0) > 0:
+        ratio = metrics["sent_len_stddev"] / src_metrics["sent_len_stddev"]
+        if ratio > 1.5 or ratio < 0.5:
+            issues.append({"type": "sentence_stddev", "severity": "medium",
+                           "desc": f"句长标准差 {metrics['sent_len_stddev']} (源文{src_metrics['sent_len_stddev']})",
+                           "fix": "交错长短句，避免句长均匀", "auto_fixable": False})
+            score -= 10
+
     # 字数
     if src_chars > 0:
         dev = (metrics["chars"] - src_chars) / src_chars

@@ -118,7 +118,7 @@ def phase_trim(config, start, end, workers=None):
 # Phase 3.6: 整章重写（人设崩塌、节奏失控时使用）
 # ============================================================
 
-def phase_rewrite(config, start, end, workers=None):
+def phase_rewrite(config, start, end, workers=None, state_mgr=None):
     """整章重写：保留guide，从头重写正文。并行执行。"""
     from phases.guides import run_one
 
@@ -141,12 +141,18 @@ def phase_rewrite(config, start, end, workers=None):
     def _rewrite_one(ch):
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         try:
+            if state_mgr:
+                state_mgr.chapter_writing(ch)
             result = run_one(config, "write-chapter", ch)
             title = f"第{ch}章"
             ch_file.write_text(tag_output(title + '\n\n' + result.strip(), "write-chapter.md"), encoding='utf-8')
+            if state_mgr:
+                state_mgr.chapter_completed(ch)
             print(f"  [REWRITE] ch{ch:03d}")
             return True
         except Exception as e:
+            if state_mgr:
+                state_mgr.chapter_failed(ch, error=str(e))
             print(f"  [FAIL] rewrite ch{ch}: {e}")
             return False
 
@@ -158,6 +164,8 @@ def phase_rewrite(config, start, end, workers=None):
             if f.result():
                 rewritten += 1
 
+    if state_mgr:
+        state_mgr.save()
     print(f"  [OK] 重写了 {rewritten}/{len(todo)} 章 ({time.time()-t0:.0f}s)")
     return rewritten
 
@@ -166,7 +174,7 @@ def phase_rewrite(config, start, end, workers=None):
 # Phase 3.7: 润色（只改文笔，不改内容）
 # ============================================================
 
-def phase_polish(config, start, end, workers=None):
+def phase_polish(config, start, end, workers=None, state_mgr=None):
     """润色：只改文笔（删AI味、加细节、改对话），不改情节。并行执行。"""
     chapters_dir = f"{config['rewrites_dir']}/chapters"
     w = workers or config.get("workers", 30)
@@ -196,6 +204,8 @@ def phase_polish(config, start, end, workers=None):
     def _polish_one(ch):
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         try:
+            if state_mgr:
+                state_mgr.chapter_writing(ch)
             original = ch_file.read_text(encoding='utf-8')
             orig_chars = len(original.replace('\n', '').replace(' ', ''))
 
@@ -218,12 +228,18 @@ def phase_polish(config, start, end, workers=None):
             new_chars = len(result.replace('\n', '').replace(' ', ''))
             if orig_chars > 0 and abs(new_chars - orig_chars) / orig_chars > 0.15:
                 print(f"  [SKIP] ch{ch:03d}: 字数差异过大 ({orig_chars}→{new_chars})")
+                if state_mgr:
+                    state_mgr.chapter_failed(ch, error="字数差异过大")
                 return False
             else:
                 ch_file.write_text(tag_output(result, "polish-chapter.md"), encoding='utf-8')
+                if state_mgr:
+                    state_mgr.chapter_completed(ch)
                 print(f"  [POLISH] ch{ch:03d}: {orig_chars}→{new_chars}字")
                 return True
         except Exception as e:
+            if state_mgr:
+                state_mgr.chapter_failed(ch, error=str(e))
             print(f"  [FAIL] polish ch{ch}: {e}")
             return False
 
@@ -235,6 +251,8 @@ def phase_polish(config, start, end, workers=None):
             if f.result():
                 polished += 1
 
+    if state_mgr:
+        state_mgr.save()
     print(f"  [OK] 润色了 {polished}/{len(todo)} 章 ({time.time()-t0:.0f}s)")
     return polished
 
@@ -243,7 +261,7 @@ def phase_polish(config, start, end, workers=None):
 # Phase 3.8: 扩写（增加内容扩充字数）
 # ============================================================
 
-def phase_expand(config, start, end, target_ratio=1.3, workers=None):
+def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=None):
     """扩写：增加内容扩充字数，默认扩充30%。并行执行。"""
     chapters_dir = f"{config['rewrites_dir']}/chapters"
     w = workers or config.get("workers", 30)
@@ -281,6 +299,8 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None):
     def _expand_one(ch):
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         try:
+            if state_mgr:
+                state_mgr.chapter_writing(ch)
             original = ch_file.read_text(encoding='utf-8')
             orig_chars = len(original.replace('\n', '').replace(' ', ''))
             target_chars = int(orig_chars * target_ratio)
@@ -305,12 +325,18 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None):
             new_chars = len(result.replace('\n', '').replace(' ', ''))
             if new_chars < orig_chars * 1.1:
                 print(f"  [SKIP] ch{ch:03d}: 扩写不足 ({orig_chars}→{new_chars})")
+                if state_mgr:
+                    state_mgr.chapter_failed(ch, error="扩写不足")
                 return False
             else:
                 ch_file.write_text(tag_output(result, "expand-chapter.md"), encoding='utf-8')
+                if state_mgr:
+                    state_mgr.chapter_completed(ch)
                 print(f"  [EXPAND] ch{ch:03d}: {orig_chars}→{new_chars}字 (+{(new_chars/orig_chars-1)*100:.0f}%)")
                 return True
         except Exception as e:
+            if state_mgr:
+                state_mgr.chapter_failed(ch, error=str(e))
             print(f"  [FAIL] expand ch{ch}: {e}")
             return False
 
@@ -322,5 +348,7 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None):
             if f.result():
                 expanded += 1
 
+    if state_mgr:
+        state_mgr.save()
     print(f"  [OK] 扩写了 {expanded}/{len(todo)} 章 ({time.time()-t0:.0f}s)")
     return expanded

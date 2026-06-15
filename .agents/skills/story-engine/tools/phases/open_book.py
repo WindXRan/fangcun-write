@@ -12,7 +12,7 @@ from utils import (
     get_total_chapters, get_source_title, call_api, count_source_chars
 )
 from state_manager import atomic_write_text
-from prompt_loader import load_prompt, load_system_prompt, tag_output, get_prompt_config_with_overrides
+from prompt_loader import load_prompt, load_system_prompt, tag_output, get_prompt_config_with_overrides, get_system_prompt_name
 
 
 # ============================================================
@@ -149,6 +149,9 @@ def _detect_curve(config, api_key, api_url):
         if config.get("debug"):
             from utils import debug_dump_prompt
             debug_dump_prompt(config, "toc-curve", 0, f"{prompts_dir}/toc-curve.md", "", curve_prompt, "N/A", pc)
+        if config.get("prompts_only"):
+            print("  [PROMPT] toc-curve — prompt 已保存至 _debug/")
+            return _fallback_key_chapters(total_ch)
         result = call_api(
             api_key, pc.get("model", "deepseek-v4-flash"), curve_prompt,
             max_tokens=pc.get("max_tokens", 4096), api_url=api_url,
@@ -247,13 +250,18 @@ def phase_open_book(config, state_mgr=None):
     )
 
     sp_name = get_system_prompt_name("open-book.md") or "system-generic.md"
-    system_prompt = load_system_prompt(sp_name)
+    system_prompt = load_system_prompt(sp_name) or ""
 
     try:
         pc = get_prompt_config_with_overrides("open-book.md", config)
         if config.get("debug"):
             from utils import debug_dump_prompt
             debug_dump_prompt(config, "open-book", 0, f"{prompts_dir}/open-book.md", system_prompt, user_prompt, sp_name, pc)
+        if config.get("prompts_only"):
+            print("  [PROMPT] open-book — prompt 已保存至 _debug/")
+            if state_mgr:
+                state_mgr.phase_done("open-book")
+            return True
         result = call_api(
             api_key, pc.get("model", "deepseek-v4-pro"), user_prompt,
             reasoning_effort=pc.get("reasoning_effort", "high"),

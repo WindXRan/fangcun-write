@@ -57,6 +57,8 @@ def save_snapshot(rewrites_dir, chapter_metrics):
             "avg_metaphor": sum(c["metaphor"] for c in chapter_metrics) / len(chapter_metrics),
             "avg_ai_markers": sum(c["ai_markers"] for c in chapter_metrics) / len(chapter_metrics),
             "avg_direct_emotion": sum(c["direct_emotion"] for c in chapter_metrics) / len(chapter_metrics),
+            "avg_pronoun_density": sum(c.get("pronoun_density", 0) for c in chapter_metrics) / len(chapter_metrics),
+            "avg_sent_len_stddev": sum(c.get("sent_len_stddev", 0) for c in chapter_metrics) / len(chapter_metrics),
         }
 
     history.append(entry)
@@ -123,7 +125,8 @@ def print_diff(rewrites_dir):
     print(f"{'指标':<20} {'v1':>8} {'v2':>8} {'变化':>8}")
     print("-" * 50)
     for key, label in [("avg_chars", "字数"), ("avg_metaphor", "比喻/章"),
-                       ("avg_ai_markers", "AI路标词/章"), ("avg_direct_emotion", "直抒情/章")]:
+                       ("avg_ai_markers", "AI路标词/章"), ("avg_direct_emotion", "直抒情/章"),
+                       ("avg_pronoun_density", "代词密/千字"), ("avg_sent_len_stddev", "句长标准差")]:
         va = sa.get(key, 0)
         vb = sb.get(key, 0)
         diff = vb - va
@@ -152,6 +155,8 @@ _DEGRADE_THRESHOLDS = {
     "ai_markers_rise": 0.5,
     "emotion_rise": 0.5,
     "metaphor_rise": 0.5,
+    "pronoun_deviation": 2.0,
+    "sent_stddev_deviation": 2.0,
 }
 
 
@@ -180,6 +185,14 @@ def auto_rollback_if_degraded(rewrites_dir):
     em_diff = sb["avg_direct_emotion"] - sa["avg_direct_emotion"]
     if em_diff > _DEGRADE_THRESHOLDS["emotion_rise"]:
         degrade_reasons.append(f"直抒情 +{em_diff:.1f}/章")
+
+    pd_diff = abs(sb.get("avg_pronoun_density", 0) - sa.get("avg_pronoun_density", 0))
+    if pd_diff > _DEGRADE_THRESHOLDS["pronoun_deviation"]:
+        degrade_reasons.append(f"代词密度偏移 {pd_diff:.1f}/千字")
+
+    ss_diff = abs(sb.get("avg_sent_len_stddev", 0) - sa.get("avg_sent_len_stddev", 0))
+    if ss_diff > _DEGRADE_THRESHOLDS["sent_stddev_deviation"]:
+        degrade_reasons.append(f"句长标准差偏移 {ss_diff:.1f}")
 
     if not degrade_reasons:
         return False
