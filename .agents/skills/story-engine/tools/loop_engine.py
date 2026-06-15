@@ -186,6 +186,146 @@ def _compare_metrics(current: LoopMetrics, best: LoopMetrics):
     return improved, degraded
 
 
+def _strengthen_prompts_from_issues(p0_issues):
+    """根据 P0 问题映射到具体 prompt 规则，精准强化。"""
+    changes = []
+    seen = set()
+
+    for iss in p0_issues:
+        typ = iss.get("type", "")
+        desc = iss.get("desc", "")
+
+        # 映射表
+        if typ in ("character", "人设漂移", "character_drift"):
+            key = "character"
+            if key not in seen:
+                seen.add(key)
+                changes.append({
+                    "prompt": "write-chapter.md",
+                    "action": "强化角色行为约束",
+                    "reason": desc[:80],
+                    "apply": lambda: _strengthen_prompt_rule("write-chapter.md", "角色行为约束"),
+                })
+
+        elif typ in ("plagiarism", "台词雷同", "plagiarism_text"):
+            key = "plagiarism"
+            if key not in seen:
+                seen.add(key)
+                changes.append({
+                    "prompt": "system-generic.md",
+                    "action": "强化换皮规则",
+                    "reason": desc[:80],
+                    "apply": lambda: _strengthen_prompt_rule("system-generic.md", "剥掉人名地名"),
+                })
+
+        elif typ in ("emotion", "直抒情", "emotion_tell"):
+            key = "emotion"
+            if key not in seen:
+                seen.add(key)
+                changes.append({
+                    "prompt": "system-generic.md",
+                    "action": "追加情绪禁词",
+                    "reason": desc[:80],
+                    "apply": lambda: _add_words_to_prompt("system-generic.md", "情绪", "泛起的,涌动的,发紧的"),
+                })
+
+        elif typ in ("ai_marker", "ai_trace", "AI路标"):
+            key = "ai"
+            if key not in seen:
+                seen.add(key)
+                changes.append({
+                    "prompt": "system-generic.md",
+                    "action": "追加AI禁词",
+                    "reason": desc[:80],
+                    "apply": lambda: _add_words_to_prompt("system-generic.md", "路标词", "紧接着,转眼间,片刻后"),
+                })
+
+        elif typ in ("word_count", "字数"):
+            key = "wordcount"
+            if key not in seen:
+                seen.add(key)
+                changes.append({
+                    "prompt": "write-chapter.md",
+                    "action": "收紧字数控制",
+                    "reason": desc[:80],
+                    "apply": lambda: _strengthen_prompt_rule("write-chapter.md", "目标"),
+                })
+
+        elif typ in ("emotion_stage", "感情跳跃", "情感阶段"):
+            key = "emotion_stage"
+            if key not in seen:
+                seen.add(key)
+                changes.append({
+                    "prompt": "write-chapter.md",
+                    "action": "加感情渐进约束",
+                    "reason": desc[:80],
+                    "apply": lambda: _add_words_to_prompt("write-chapter.md", "写作要求", "感情发展不跳跃(陌生→在意→暧昧→确认)"),
+                })
+
+        elif typ in ("continuity", "连贯性", "节奏"):
+            key = "continuity"
+            if key not in seen:
+                seen.add(key)
+                changes.append({
+                    "prompt": "plot-guide.md",
+                    "action": "强化节拍衔接",
+                    "reason": desc[:80],
+                    "apply": lambda: _strengthen_prompt_rule("plot-guide.md", "本章自洽与前章连贯"),
+                })
+
+        elif typ in ("rhythm", "节奏断层"):
+            key = "rhythm"
+            if key not in seen:
+                seen.add(key)
+                changes.append({
+                    "prompt": "write-chapter.md",
+                    "action": "强化段落节奏规则",
+                    "reason": desc[:80],
+                    "apply": lambda: _strengthen_prompt_rule("write-chapter.md", "段尾"),
+                })
+
+    # Apply changes
+    for c in changes:
+        try:
+            c["apply"]()
+        except Exception as e:
+            print(f"  [WARN] 应用失败: {c['prompt']} {c['action']}: {e}")
+
+    return changes
+
+
+def _strengthen_prompt_rule(prompt_name, keyword):
+    """强化 prompt 中的某条规则——加粗标记。"""
+    prompts_dir = Path(".agents/skills/story-engine/prompts")
+    path = prompts_dir / prompt_name
+    if not path.exists():
+        return
+    content = path.read_text(encoding="utf-8")
+    # 找到包含关键词的行，但不是已经在 ** 里的
+    lines = content.split("\n")
+    for i, line in enumerate(lines):
+        if keyword in line and "**" not in line and line.strip():
+            lines[i] = f"**{line.strip()}**"
+            break
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def _add_words_to_prompt(prompt_name, keyword, words):
+    """在 prompt 中包含关键词的行追加词。"""
+    prompts_dir = Path(".agents/skills/story-engine/prompts")
+    path = prompts_dir / prompt_name
+    if not path.exists():
+        return
+    content = path.read_text(encoding="utf-8")
+    for line in content.split("\n"):
+        if keyword in line:
+            new_words = [w for w in words.split(",") if w not in line]
+            if new_words:
+                content = content.replace(line, line.rstrip() + "/" + "/".join(new_words))
+            break
+    path.write_text(content, encoding="utf-8")
+
+
 def _suggest_prompt_changes(improved, degraded, current_metrics):
     """根据指标变化建议 prompt 修改。"""
     suggestions = []
@@ -296,7 +436,7 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
 
     progress_path.write_text(f"# Loop Progress\n\n**开始**: {time.strftime('%H:%M:%S')}\n\n", encoding="utf-8")
 
-    # Phase 6 审改迭代：写一次，多轮审+改直到 P0=0
+    # Prompt 迭代：写章→审查→分析规则失效→强化prompt→重写
     from phases.style_extract import phase_style_extract
     from phases.guides import phase_guides
     from phases.write import phase_write
@@ -304,29 +444,26 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
     from lib.api_client import get_api_url
 
     api_url = get_api_url(config)
-
-    # --- 写章 (1次) ---
-    _log("## 写章 (style→guides→write)")
-    t0 = time.time()
-    phase_style_extract(config, start, end, workers=config.get("workers", 5))
-    phase_guides(config, start, end, workers=config.get("workers", 5))
-    phase_write(config, start, end, workers=config.get("workers", 5))
-    _log(f"写章: {time.time()-t0:.0f}s")
-
-    best_chapters_dir = Path(config["rewrites_dir"]) / "chapters"
-
-    # --- 审改循环 ---
     prev_p0 = float('inf')
-    final_loop = 0
+    best_p0 = float('inf')
+    best_prompt_state = None
+
     for loop_num in range(1, max_loops + 1):
-        round_dir = loop_dir / f"fix_{loop_num}"
+        round_dir = loop_dir / f"loop_{loop_num}"
         round_dir.mkdir(parents=True, exist_ok=True)
         _log(f"\n---")
-        _log(f"## 审改 #{loop_num}/{max_loops} ({time.strftime('%H:%M:%S')})")
+        _log(f"## Loop #{loop_num}/{max_loops}")
 
-        # [1] Review (dry-run)
-        _log("### 审查 (3 agent)...")
+        # [1] Write with current prompts
+        _log("写章...")
         t0 = time.time()
+        phase_style_extract(config, start, end, workers=config.get("workers", 5))
+        phase_guides(config, start, end, workers=config.get("workers", 5))
+        phase_write(config, start, end, workers=config.get("workers", 5))
+        _log(f"写章: {time.time()-t0:.0f}s")
+
+        # [2] Review
+        _log("审查...")
         tasks, report = unified_run(
             config, start, end, api_key=api_key, api_url=api_url,
             model=config.get("model", "deepseek-v4-flash"),
@@ -337,50 +474,45 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
                  for iss in ch_data.get("issues", []) if iss.get("priority") == "P0")
         p1 = sum(1 for ch_data in report.values()
                  for iss in ch_data.get("issues", []) if iss.get("priority") == "P1")
-        review_time = time.time() - t0
-        _log(f"P0:{p0} P1:{p1} ({review_time:.0f}s)")
+        _log(f"P0:{p0} P1:{p1}")
 
-        # 保存审查报告
-        json.dump(report, (round_dir / "review.json").open("w", encoding="utf-8"),
-                  ensure_ascii=False, indent=2)
+        # [3] Collect P0 issues and their types
+        p0_issues = []
+        for ch_str, ch_data in report.items():
+            for iss in ch_data.get("issues", []):
+                if iss.get("priority") == "P0":
+                    p0_issues.append({"ch": ch_str, **iss})
 
-        # 收敛
+        # Save review
+        json.dump({"p0": p0, "p1": p1, "issues": p0_issues, "versions": _get_prompt_versions()},
+                  (round_dir / "review.json").open("w", encoding="utf-8"), ensure_ascii=False, indent=2)
+
+        # Convergence
         if p0 == 0:
-            _log(f"✓ P0=0 收敛！")
-            history.best_score = 100 - p1 * 2  # P1 每个扣 2 分
-            final_loop = loop_num
+            _log("P0=0 收敛！")
+            break
+        if p0 > prev_p0 or (p0 == prev_p0 and loop_num > 2):
+            _log(f"P0 未改善 ({prev_p0}→{p0})，已达极限")
             break
 
-        # 退化/停滞检测
-        if p0 >= prev_p0:
-            _log(f"→ P0 未降低 ({prev_p0}→{p0})，已达极限")
-            final_loop = loop_num - 1
-            break
+        # Track best
+        if p0 < best_p0:
+            best_p0 = p0
+            best_prompt_state = _get_prompt_versions()
 
-        # [2] Fix
-        _log(f"### 修复 ({p0}P0 + {p1}P1)...")
-        t0 = time.time()
-        fix_results, _ = unified_run(
-            config, start, end, api_key=api_key, api_url=api_url,
-            model=config.get("model", "deepseek-v4-flash"),
-            batch_size=max(5, (end - start + 1) // 2),
-            workers=3, dry_run=False,
-        )
-        fixed = sum(1 for r in fix_results.values() if r.get("status") == "fixed")
-        _log(f"修复 {fixed}章 ({time.time()-t0:.0f}s)")
-
-        # 保存本轮快照
-        import shutil
-        (round_dir / "chapters").mkdir(exist_ok=True)
-        for f in best_chapters_dir.glob("ch_*.txt"):
-            shutil.copy(f, round_dir / "chapters" / f.name)
+        # [4] Analyze → strengthen prompt rules
+        _log("分析规则失效...")
+        changes = _strengthen_prompts_from_issues(p0_issues)
+        for change in changes:
+            _log(f"  [{change['prompt']}] {change['action']}: {change['reason']}")
 
         prev_p0 = p0
-        final_loop = loop_num
 
-    # --- 最终报告 ---
-    _log(f"\n## 完成: {final_loop}轮审改 | P0: {prev_p0 if prev_p0 > 0 else 0}")
-    _log(f"最终产出: {best_chapters_dir}")
+    # Restore best prompt state if current is worse
+    if prev_p0 > best_p0 and best_prompt_state:
+        _log(f"\n回退到最优版本: {best_prompt_state}")
+
+    _log(f"\n完成: {loop_num}轮 | 最优 P0:{best_p0}")
     print(f"\n进度: {progress_path}")
     return history
 
