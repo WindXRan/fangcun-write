@@ -122,14 +122,15 @@ def generate_header(info: dict, synopsis: str, chapter_count: int) -> str:
     return "\n".join(lines)
 
 
-def generate_toc(chapter_count: int) -> str:
+def generate_toc(chapters: list) -> str:
     """生成 _toc.txt"""
     lines = []
-    lines.append(f"总章数: {chapter_count}")
+    lines.append(f"总章数: {len(chapters)}")
     lines.append("")
     lines.append("")
-    for i in range(1, chapter_count + 1):
-        lines.append(f"第{i}章")
+    for ch in chapters:
+        first_line = ch['content'].split('\n')[0].strip()
+        lines.append(first_line)
     
     return "\n".join(lines)
 
@@ -208,7 +209,7 @@ def import_novel(txt_path: str, output_dir: str = None):
     toc_file = output_path / "_toc.txt"
     print(f"生成：{toc_file}")
     with open(toc_file, 'w', encoding='utf-8') as f:
-        f.write(generate_toc(len(chapters)))
+        f.write(generate_toc(chapters))
     
     print(f"\n导入完成！")
     print(f"  输出目录：{output_path}")
