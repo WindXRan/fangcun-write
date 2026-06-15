@@ -59,15 +59,14 @@ def _collect_metrics(config, start, end):
             continue
 
         from phases.validate import validate_one
-        result = validate_one(config, ch)
-        chapters[ch] = result
+        passed, report, metrics = validate_one(config, ch)
+        chapters[ch] = {"passed": passed, "report": report, "metrics": metrics}
 
-        issues = result.get("issues", [])
-        total_issues += len(issues)
-        total_ai += sum(1 for i in issues if "AI" in str(i))
-        total_plag += sum(1 for i in issues if "雷同" in str(i) or "plagiarism" in str(i))
-        total_emo += sum(1 for i in issues if "直抒" in str(i) or "emotion" in str(i))
-        scores.append(result.get("score", 100))
+        total_issues += 0 if passed else 1
+        total_ai += len(re.findall(r'AI|ai_marker', report))
+        total_plag += len(re.findall(r'雷同|plagiarism', report))
+        total_emo += len(re.findall(r'直抒|emotion', report))
+        scores.append(100 if passed else 50)
 
     avg_score = round(sum(scores) / max(len(scores), 1), 1)
 
