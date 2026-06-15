@@ -43,11 +43,10 @@ class LoopHistory:
 
 
 def _collect_metrics(config, start, end):
-    """收集当前产出的所有指标。"""
+    """收集当前产出所有指标（validate + unified review）。"""
     chapters_dir = Path(config["rewrites_dir"]) / "chapters"
 
     chapters = {}
-    total_chars = 0
     total_issues = 0
     total_ai = 0
     total_plag = 0
@@ -63,7 +62,6 @@ def _collect_metrics(config, start, end):
         result = validate_one(config, ch)
         chapters[ch] = result
 
-        total_chars += result.get("chars", 0)
         issues = result.get("issues", [])
         total_issues += len(issues)
         total_ai += sum(1 for i in issues if "AI" in str(i))
@@ -85,6 +83,32 @@ def _collect_metrics(config, start, end):
                 dev_total += abs(body - src) / src
     avg_dev = round(dev_total / max(len(chapters), 1) * 100, 1)
 
+    # Unified review (dry-run: 只审不改)
+    review_stats = {"p0": 0, "p1": 0, "p2": 0, "cross_issues": 0}
+    api_key = config.get("api_key") or os.environ.get("API_KEY")
+    if api_key:
+        try:
+            from unified_fixer import run_pipeline as unified_run
+            tasks, report = unified_run(
+                config, start, end, api_key=api_key,
+                api_url=None, model=config.get("model", "deepseek-v4-flash"),
+                batch_size=max(5, (end - start + 1) // 2),
+                workers=2, dry_run=True,
+            )
+            for ch_data in report.values():
+                for iss in ch_data.get("issues", []):
+                    p = iss.get("priority", "P2")
+                    if p in review_stats:
+                        review_stats[p] += 1
+            # 跨章问题
+            review_stats["cross_issues"] = sum(
+                1 for ch_data in report.values()
+                for iss in ch_data.get("issues", [])
+                if iss.get("type") in ("character", "continuity", "rhythm")
+            )
+        except Exception as e:
+            print(f"        审改跳过: {e}")
+
     return LoopMetrics(
         loop=0,
         timestamp=time.strftime("%Y-%m-%d %H:%M:%S"),
@@ -98,6 +122,10 @@ def _collect_metrics(config, start, end):
             "plagiarism_count": total_plag,
             "emotion_count": total_emo,
             "chars_deviation_pct": avg_dev,
+            "p0": review_stats["p0"],
+            "p1": review_stats["p1"],
+            "p2": review_stats["p2"],
+            "cross_issues": review_stats["cross_issues"],
         }
     )
 
@@ -123,12 +151,15 @@ def _compare_metrics(current: LoopMetrics, best: LoopMetrics):
     degraded = []
 
     checks = [
-        ("avg_score", "均分", True),   # higher better
-        ("total_issues", "问题数", False),  # lower better
+        ("avg_score", "均分", True),
+        ("total_issues", "问题数", False),
         ("ai_markers", "AI痕迹", False),
         ("plagiarism_count", "台词雷同", False),
         ("emotion_count", "直抒情", False),
         ("chars_deviation_pct", "字数偏差%", False),
+        ("p0", "审改P0", False),
+        ("p1", "审改P1", False),
+        ("cross_issues", "跨章问题", False),
     ]
 
     for key, label, higher_better in checks:
@@ -186,6 +217,13 @@ def _suggest_prompt_changes(improved, degraded, current_metrics):
                 "detail": f"总问题数增加{delta:.0f}%，建议重跑或回滚到上一版prompt",
                 "severity": "high",
             })
+        elif "审改" in label or "跨章" in label:
+            suggestions.append({
+                "prompt": "unified-review.md",
+                "action": "审改质量退化",
+                "detail": f"{label}增加{delta:.0f}%，unified-review prompt 需加强该维度审查力度",
+                "severity": "high" if "P0" in label else "medium",
+            })
 
     return suggestions
 
@@ -198,6 +236,7 @@ def _print_report(loop_num, metrics, improved, degraded, suggestions, best_loop)
     print(f"{'='*60}")
     print(f"  {s['total_ch']}章 | 均分:{s['avg_score']} | 问题:{s['total_issues']}")
     print(f"  AI痕迹:{s['ai_markers']} | 雷同:{s['plagiarism_count']} | 直抒:{s['emotion_count']} | 字数偏差:{s['chars_deviation_pct']}%")
+    print(f"  审改: P0:{s.get('p0',0)} P1:{s.get('p1',0)} P2:{s.get('p2',0)} | 跨章:{s.get('cross_issues',0)}")
 
     if improved:
         print(f"\n  ▲ 改进: {', '.join(f'{l}({d:+.0f}%)' for l, d in improved)}")
@@ -224,6 +263,8 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
     rw = config.get("rewrites_dir", "")
     if rw and not Path(rw).is_absolute():
         config["rewrites_dir"] = str(Path(base_dir) / rw)
+
+    config["debug"] = True  # loop 模式自动启用 debug
 
     api_key = config.get("api_key") or os.environ.get("API_KEY")
     if not api_key:

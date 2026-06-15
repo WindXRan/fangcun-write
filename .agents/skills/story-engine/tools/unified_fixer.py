@@ -335,6 +335,13 @@ def _llm_batch_review(config, chapter_nums, api_key, api_url, model):
 
     pc = get_prompt_config_with_overrides("unified-review.md", config)
 
+    if config.get("debug"):
+        from utils import debug_dump_prompt
+        label = f"batch{chapter_nums[0]}-{chapter_nums[-1]}"
+        debug_dump_prompt(config, "unified-review", chapter_nums[0],
+                          "prompts/unified-review.md", "你是资深网文编辑。",
+                          prompt, "unified-review", pc)
+
     resp = requests.post(
         api_url,
         headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
@@ -767,6 +774,12 @@ def _fix_llm(config, task, text, api_key, api_url, model):
     )
 
     pc = get_prompt_config_with_overrides("unified-fix.md", config)
+
+    if config.get("debug"):
+        from utils import debug_dump_prompt
+        debug_dump_prompt(config, "unified-fix", task.ch,
+                          "prompts/unified-fix.md", "你是资深网文写手。只输出修改后的章节。",
+                          prompt, "unified-fix", pc)
 
     resp = requests.post(
         api_url,
