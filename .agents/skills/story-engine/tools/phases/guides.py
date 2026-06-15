@@ -142,13 +142,27 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             source_text = get_source_text(config, chapter_num)
             replacements["源文全文"] = source_text or "（源文读取失败）"
 
-    # 写章时注入文笔指纹 + 角色行为卡片
+    # 写章时注入文笔指纹 + 角色行为卡片 + 源文句长锚点
     if prompt_type == "write-chapter" and chapter_num:
         from phases.style_extract import load_style_text
         style_md = load_style_text(config, chapter_num)
         replacements["文笔指纹"] = style_md or "（文笔指纹未生成）"
-        # 注入角色行为卡片（从 concept 读取）
         replacements["角色行为卡片"] = _load_char_card(config)
+        # 源文句长锚点（从指纹提取，做硬约束）
+        src_text = get_source_text(config, chapter_num)
+        if src_text:
+            from lib.text_metrics import count_style_fingerprint
+            fp = count_style_fingerprint(src_text)
+            sl = fp.get("sentence_avg_len", 20)
+            sr = int(fp.get("sentence_short_ratio", 0.15) * 100)
+            pa = fp.get("paragraph_avg_len", 40)
+            replacements["源文句长"] = f"{sl}"
+            replacements["源文短句比"] = f"{sr}"
+            replacements["源文段长"] = f"{int(pa)}"
+        else:
+            replacements["源文句长"] = "20"
+            replacements["源文短句比"] = "15"
+            replacements["源文段长"] = "40"
 
     # 写章时按目标字数动态设 max_tokens（够写完整不截断，超字数靠 trim 裁）
     if prompt_type == "write-chapter" and chapter_num:
