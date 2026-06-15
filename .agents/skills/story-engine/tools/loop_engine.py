@@ -475,7 +475,12 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
         _log(f"\n---")
         _log(f"## Loop #{loop_num}/{max_loops}")
 
-        # [1] Write with current prompts
+        # [1] Write with current prompts (清除旧章确保新prompt生效)
+        if loop_num > 1:
+            import shutil
+            for d in ["chapters", "guides", "styles"]:
+                p = Path(config["rewrites_dir"]) / d
+                if p.exists(): shutil.rmtree(p)
         _log("写章...")
         t0 = time.time()
         phase_style_extract(config, start, end, workers=config.get("workers", 5))
