@@ -913,12 +913,16 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
             more = f"...共{len(info['chapters'])}章" if len(info['chapters']) > 5 else ""
             print(f"    {label}: {info['count']} 处 (第{','.join(map(str,ch_list))}章{more})", flush=True)
 
-    print(f"\n  按 Enter 开始修复，或 Ctrl+C 取消...", end="", flush=True)
-    try:
-        input()
-    except KeyboardInterrupt:
-        print(f"\n  已取消", flush=True)
-        return {}, {str(k): v for k, v in summary.chapters.items()}
+    # 交互模式等待确认，非交互(loop/CI)自动继续
+    if sys.stdin.isatty():
+        print(f"\n  按 Enter 开始修复，或 Ctrl+C 取消...", end="", flush=True)
+        try:
+            input()
+        except KeyboardInterrupt:
+            print(f"\n  已取消", flush=True)
+            return {}, {str(k): v for k, v in summary.chapters.items()}
+    else:
+        print(f"\n  [AUTO] 非交互模式，自动开始修复", flush=True)
 
     # ========== Step 4: Scatter — Fix Agents ==========
     print(f"\n{'='*40}", flush=True)
