@@ -1,125 +1,145 @@
-"""LLM-driven prompt improvement. Replaces mechanical rule-strengthening."""
+"""Smart editor agent: reads source+rewrite+all prompts, outputs feedback + improved prompts.
+
+No numeric scores. No rule-based mapping. One LLM call does everything.
+"""
 
 import re
 import requests
 from pathlib import Path
 
 
-def llm_improve_prompts(p0_issues, api_key, api_url, config=None, start=1, end=3):
-    """Analyze source vs rewrite sentence-by-sentence, then improve prompts.
-    Returns list of {prompt, summary} changes.
+def smart_edit_loop(config, start, end, api_key, api_url, loop_num):
+    """One smart agent: analyze gaps -> editorial feedback -> modify any prompts.
+
+    Returns dict with {feedback, changes, prompts_modified}
     """
-    if not p0_issues:
-        return []
+    from utils import get_source_text
 
-    target_prompts = _identify_prompts(p0_issues)
-    if not target_prompts:
-        return []
+    chapters_dir = Path(config["rewrites_dir"]) / "chapters"
+    prompts_dir = Path(".agents/skills/story-engine/prompts")
 
-    # Load source+rewrite comparison samples
-    comparison = ""
-    if config:
-        from utils import get_source_text
-        chapters_dir = Path(config["rewrites_dir"]) / "chapters"
-        samples = []
-        for ch in range(start, end + 1):
-            src = get_source_text(config, ch)
-            rw_file = chapters_dir / f"ch_{ch:03d}.txt"
-            if src and rw_file.exists():
-                rw = rw_file.read_text(encoding="utf-8")
-                # Take first 600 chars of each for comparison
-                samples.append(
-                    f"=== 第{ch}章 源文(前600字) ===\n{src[:600]}\n\n"
-                    f"=== 第{ch}章 仿写(前600字) ===\n{rw[:600]}"
-                )
-        comparison = "\n\n---\n\n".join(samples[:2])  # Max 2 chapters
+    # Load source vs rewrite (full text, 2 chapters max)
+    comparison_parts = []
+    for ch in range(start, min(end, start + 1)):
+        src = get_source_text(config, ch)
+        rw_file = chapters_dir / f"ch_{ch:03d}.txt"
+        if src and rw_file.exists():
+            rw = rw_file.read_text(encoding="utf-8")
+            comparison_parts.append(
+                f"## 第{ch}章 源文\n{src[:3000]}\n\n## 第{ch}章 仿写\n{rw[:3000]}"
+            )
+    comparison = "\n\n---\n\n".join(comparison_parts)
 
-    changes = []
-    for prompt_name in target_prompts:
-        path = Path(".agents/skills/story-engine/prompts") / prompt_name
-        if not path.exists():
-            continue
-        original = path.read_text(encoding="utf-8")
+    # Load ALL current prompts
+    all_prompts = {}
+    for f in sorted(prompts_dir.glob("*.md")):
+        if f.stem.startswith("system-") or f.stem in ("write-chapter", "plot-guide", "style-analyze",
+                                                       "unified-review", "unified-fix", "open-book"):
+            all_prompts[f.name] = f.read_text(encoding="utf-8")
 
-        issue_text = "\n".join(
-            f"- [P0] [{iss.get('type','?')}] ch{iss.get('ch','?')}: {iss.get('desc','')[:200]}"
-            for iss in p0_issues
-        )[:2000]
+    prompt_section = "\n\n".join(
+        f"### {name}\n```\n{content[:2000]}\n```"
+        for name, content in all_prompts.items()
+    )
 
-        prompt = f"""Compare the source and rewritten chapters, then fix the prompt to make the rewrite match the source better.
+    # Concepts for context
+    concepts = ""
+    for name in ["concept.md", "characters.md", "plot.md"]:
+        p = Path(config["rewrites_dir"]) / name
+        if p.exists():
+            concepts += f"\n### {name}\n{p.read_text(encoding='utf-8')[:1000]}\n"
 
-## Source vs Rewrite Comparison
-{comparison if comparison else '(no comparison available)'}
+    # The prompt for the smart editor
+    editor_prompt = f"""You are a master web novel editor. Review the source vs rewrite comparison and ALL prompts. Give editorial feedback, then modify prompts to close gaps.
 
-## P0 Issues Found
-{issue_text}
+## Source vs Rewrite (full text comparison)
+{comparison}
 
-## Current prompt ({prompt_name})
-```
-{original}
-```
+## Story Concepts
+{concepts}
+
+## Current Prompts
+{prompt_section}
 
 ## Task
-Analyze the gaps in opening style, paragraph rhythm, dialogue handling, hook structure — whatever differs between source and rewrite. Then modify the prompt to close those gaps. You may: add examples showing correct vs wrong, tighten vague rules, add specific constraints. Output the complete modified prompt file."""
 
-        try:
-            resp = requests.post(
-                api_url,
-                headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-                json={
-                    "model": "deepseek-v4-flash",
-                    "messages": [
-                        {"role": "system", "content": "You are a prompt engineer. Output the complete modified prompt file."},
-                        {"role": "user", "content": prompt},
-                    ],
-                    "temperature": 0.3, "max_tokens": 4096,
-                }, timeout=120,
-            )
-            if resp.status_code == 200:
-                new_content = resp.json()["choices"][0]["message"]["content"]
-                m = re.search(r'---\s*\n.*?\n---.*', new_content, re.DOTALL)
-                if m:
-                    new_content = m.group(0)
+### Part 1: Editorial Feedback
+Analyze the gaps between source and rewrite in these dimensions:
+- Hook/Opening: Does the rewrite open the same way as the source?
+- Paragraph rhythm: Same paragraph length and count?
+- Dialogue handling: Same style of dialogue tags and density?
+- Emotional register: Same intensity and expression style?
+- Character voice: Do characters behave according to their cards?
 
-                cl_m = re.search(r'changelog:\s*(.+)', new_content)
-                summary = cl_m.group(1)[:100] if cl_m else "LLM improved prompt"
+Be specific. Quote examples from both texts. Do NOT give numeric scores.
 
-                _bump_version(path, summary)
-                path.write_text(new_content, encoding="utf-8")
-                changes.append({"prompt": prompt_name, "summary": summary})
-                print(f"  [OK] {prompt_name}: {summary}")
-        except Exception as e:
-            print(f"  [FAIL] {prompt_name}: {e}")
+### Part 2: Prompt Modifications
+Based on your analysis, modify up to 3 prompts. For each:
+- Which prompt file (exact filename)?
+- What specific change and why?
+- Output the COMPLETE modified prompt (with YAML header).
 
-    return changes
+Output format:
+```
+## Editorial Feedback
+(your analysis here)
 
+## Prompt Changes
 
-def _identify_prompts(p0_issues):
-    """Map P0 issue types to prompt files that need fixing."""
-    prompts = set()
-    for iss in p0_issues:
-        typ = iss.get("type", "")
-        if typ in ("character", "continuity"):
-            prompts.add("write-chapter.md")
-        elif typ in ("plagiarism", "ai_marker", "ai_trace"):
-            prompts.add("system-generic.md")
-        elif typ in ("emotion", "emotion_tell", "emotion_stage"):
-            prompts.add("write-chapter.md")
-        elif typ in ("word_count",):
-            prompts.add("write-chapter.md")
-        elif typ in ("rhythm",):
-            prompts.add("plot-guide.md")
-        else:
-            prompts.add("write-chapter.md")
-    return list(prompts)[:2]
+### FILE: write-chapter.md
+(complete modified file content)
 
+### FILE: system-generic.md
+(complete modified file content)
+```
+"""
 
-def _bump_version(path, changelog):
-    """Increment version number in prompt frontmatter."""
-    content = path.read_text(encoding="utf-8")
-    m = re.search(r'version:\s*(\d+)', content)
-    if m:
-        old_ver = int(m.group(1))
-        content = content.replace(f"version: {old_ver}", f"version: {old_ver + 1}")
-    content = re.sub(r'changelog:\s*.*', f'changelog: {changelog}', content)
-    path.write_text(content, encoding="utf-8")
+    try:
+        resp = requests.post(
+            api_url,
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            json={
+                "model": "deepseek-v4-flash",
+                "messages": [
+                    {"role": "system", "content": "You are a master web novel editor and prompt engineer. Output editorial feedback and complete modified prompts."},
+                    {"role": "user", "content": editor_prompt},
+                ],
+                "temperature": 0.3, "max_tokens": 8192,
+            }, timeout=180,
+        )
+        if resp.status_code != 200:
+            return {"feedback": f"API error: {resp.status_code}", "changes": []}
+
+        content = resp.json()["choices"][0]["message"]["content"]
+
+        # Extract feedback
+        fb_match = re.search(r'## Editorial Feedback\n(.*?)(?=## Prompt Changes|\Z)', content, re.DOTALL)
+        feedback = fb_match.group(1).strip() if fb_match else content[:500]
+
+        # Extract and apply prompt changes
+        changes = []
+        for m in re.finditer(r'### FILE:\s*(\S+)\s*\n(.*?)(?=### FILE:|\Z)', content, re.DOTALL):
+            fname = m.group(1).strip()
+            new_content = m.group(2).strip()
+            # Verify it has YAML header
+            if new_content.startswith("---"):
+                path = prompts_dir / fname
+                if path.exists():
+                    # Bump version
+                    old = path.read_text(encoding="utf-8")
+                    ver_m = re.search(r'version:\s*(\d+)', new_content)
+                    if not ver_m:
+                        old_ver = re.search(r'version:\s*(\d+)', old)
+                        if old_ver:
+                            new_content = new_content.replace(
+                                f"version: {old_ver.group(1)}",
+                                f"version: {int(old_ver.group(1)) + 1}"
+                            )
+                    path.write_text(new_content, encoding="utf-8")
+                    changes.append(fname)
+                    print(f"  [OK] {fname} updated")
+
+        return {"feedback": feedback, "changes": changes}
+
+    except Exception as e:
+        return {"feedback": f"Error: {e}", "changes": []}

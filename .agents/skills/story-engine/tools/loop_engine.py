@@ -529,8 +529,11 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
         # [4] Save backup → strengthen → analyze
         _prompt_backup = _save_prompt_snapshot()
         _log("分析规则失效...")
-        from prompt_improver import llm_improve_prompts
-        changes = llm_improve_prompts(p0_issues, api_key, api_url, config, start, end)
+        from prompt_improver import smart_edit_loop
+        result = smart_edit_loop(config, start, end, api_key, api_url, loop_num)
+        _log(result["feedback"][:500])
+        (round_dir / "feedback.md").write_text(result["feedback"], encoding="utf-8")
+        changes = [{"prompt": p, "summary": "smart edit"} for p in result["changes"]]
         for change in changes:
             _log(f"  [{change['prompt']}] {change['summary']}")
 
