@@ -2,6 +2,7 @@
 
 import re
 import subprocess
+import time
 from pathlib import Path
 
 
@@ -15,13 +16,22 @@ def phase_compare(config, start, end, batch_size=10):
     print(f"Phase 4: 对比 (ch{start}-{end}, 每{batch_size}章一批)")
     print("=" * 50)
 
-    # 清理旧的对比报告
+    # 清理旧的对比报告（并发安全）
     for old_file in Path(compare_dir).glob("对比_*.md"):
-        old_file.unlink()
+        try:
+            old_file.unlink()
+        except OSError:
+            pass
     for old_file in Path(compare_dir).glob("源文_*.txt"):
-        old_file.unlink()
+        try:
+            old_file.unlink()
+        except OSError:
+            pass
     for old_file in Path(compare_dir).glob("新书_*.txt"):
-        old_file.unlink()
+        try:
+            old_file.unlink()
+        except OSError:
+            pass
     print("已清理旧对比报告")
 
     # 分批处理
@@ -132,5 +142,11 @@ def _write_version_report(rewrites_dir, compare_dir):
         lines.append("\n")
 
     Path(compare_dir).mkdir(parents=True, exist_ok=True)
-    out_path.write_text("".join(lines), encoding="utf-8")
+    content = "".join(lines)
+    for attempt in range(5):
+        try:
+            out_path.write_text(content, encoding="utf-8")
+            break
+        except OSError:
+            time.sleep(0.2)
     print(f"  [OK] 版本聚合 → {out_path}")

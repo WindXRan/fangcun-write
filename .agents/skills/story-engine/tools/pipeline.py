@@ -24,10 +24,25 @@ from mcp.phase_meta import PHASES
 
 
 GOAL_MAP = {
+    # 5 步主流程
+    "import": {"prep"},
+    "open": {"prep", "open_book", "extract"},
+    "write": {"guides", "write", "trim", "validate", "postfix", "rewrite", "polish", "expand"},
+    "review": {"compare", "unified_review_fix"},
+    "export": set(),  # 导出在 _post_process 处理
+    # 兼容旧名
     "all": {"prep", "open_book", "extract", "guides", "write", "trim", "validate", "compare"},
     "open-book": {"prep", "open_book", "extract"},
-    "write": {"guides", "write", "trim"},
     "unified": {"write", "unified_review_fix"},
+    # 单步（调试用）
+    "prep": {"prep"},
+    "open_book": {"open_book", "extract"},
+    "guides": {"guides"},
+    "write-only": {"write"},
+    "trim": {"trim"},
+    "validate": {"validate"},
+    "compare": {"compare"},
+    "postfix": {"postfix"},
 }
 
 
@@ -40,7 +55,8 @@ def _expand(phase_str: str) -> set[str]:
 
 
 def _post_process(config, goal):
-    if "write" not in goal:
+    # write 或 export 都触发导出
+    if "write" not in goal and "export" not in goal:
         return
     print(f"\n{'=' * 50}\n导出 TXT...\n{'=' * 50}")
     try:
@@ -208,9 +224,22 @@ def main():
         if phase_modes:
             mode_str += f" ({', '.join(phase_modes)})"
 
+    # 显示友好的 phase 名称
+    phase_display = {
+        "import": "导入", "open": "开书", "write": "写章",
+        "review": "审改", "export": "导出",
+        "prep": "导入", "open_book": "开书", "extract": "提取",
+        "guides": "指南", "write-only": "写章", "trim": "精简",
+        "validate": "验证", "compare": "对比", "postfix": "后处理",
+        "rewrite": "重写", "polish": "润色", "expand": "扩写",
+        "unified_check": "统一审查", "unified_fix": "统一修复",
+        "unified_review_fix": "统一审改",
+    }
+    display_names = [phase_display.get(p, p) for p in sorted(goal)]
+
     print(f"{'=' * 50}")
     print(f"{config['book_name']} | ch{args.start}-{args.end} | workers={args.workers}")
-    print(f"目的: {', '.join(sorted(goal))} | {mode_str}")
+    print(f"目的: {' → '.join(display_names)} | {mode_str}")
     print(f"{'=' * 50}")
 
     t0 = time.time()
