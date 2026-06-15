@@ -178,11 +178,6 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
 
     label = f"ch{chapter_num or '?'} {prompt_type}"
 
-    # prompts_only: 只输出 prompt，不调 API
-    if config.get("prompts_only"):
-        print(f"  [PROMPT] {label}")
-        return f"<!-- PROMPTS_ONLY: {label} — prompt 已保存至 _debug/ -->"
-
     t_req = time.time()
     try:
         result = call_api(api_key, model, user_prompt, reasoning_effort, max_tokens, system_prompt, api_url, temperature=pc.get("temperature", 0.8))
@@ -336,11 +331,6 @@ def _get_style_analysis(config, ch, src_text, algo_fp, api_key, api_url, model):
         debug_dump_prompt(config, "style-analyze", ch,
                           "prompts/style-analyze.md", sys_prompt,
                           prompt, "system-generic.md", pc)
-
-    # prompts_only: 不调 LLM，返回占位
-    if config.get("prompts_only"):
-        placeholder = f"<!-- PROMPTS_ONLY: style-analyze ch{ch:03d} — prompt 已保存至 _debug/ -->"
-        return placeholder
 
     try:
         resp = requests.post(
