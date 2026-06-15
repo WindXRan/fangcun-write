@@ -65,11 +65,16 @@ def _collect_metrics(config, start, end, chapters_subdir=None):
         passed, report, metrics = validate_one(config, ch)
         chapters[ch] = {"passed": passed, "report": report, "metrics": metrics}
 
-        total_issues += 0 if passed else 1
-        total_ai += len(re.findall(r'AI|ai_marker', report))
-        total_plag += len(re.findall(r'雷同|plagiarism', report))
+        # 按问题严重度扣分
+        iss = report.count("*ISSUE*")
+        score = 100 - iss * 10 if passed else 50
+        score = max(0, min(100, score))
+        scores.append(score)
+
+        total_issues += iss
+        total_ai += len(re.findall(r'AI|ai_marker|路标', report))
+        total_plag += len(re.findall(r'雷同|plagiarism|台词', report))
         total_emo += len(re.findall(r'直抒|emotion', report))
-        scores.append(100 if passed else 50)
 
     avg_score = round(sum(scores) / max(len(scores), 1), 1)
 

@@ -142,14 +142,13 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             source_text = get_source_text(config, chapter_num)
             replacements["源文全文"] = source_text or "（源文读取失败）"
 
-    # 写章时注入文笔指纹（从 style_{N}.md 缓存读取，由 phase_style_extract 预生成）
+    # 写章时注入文笔指纹 + 角色行为卡片
     if prompt_type == "write-chapter" and chapter_num:
         from phases.style_extract import load_style_text
         style_md = load_style_text(config, chapter_num)
-        if style_md:
-            replacements["文笔指纹"] = style_md
-        else:
-            replacements["文笔指纹"] = "（文笔指纹未生成，请先运行 style_extract phase）"
+        replacements["文笔指纹"] = style_md or "（文笔指纹未生成）"
+        # 注入角色行为卡片（从 concept 读取）
+        replacements["角色行为卡片"] = _load_char_card(config)
 
     # 写章时按目标字数动态设 max_tokens（够写完整不截断，超字数靠 trim 裁）
     if prompt_type == "write-chapter" and chapter_num:
@@ -298,4 +297,19 @@ def get_source_metrics(config, ch):
         return count_metrics(text)
     return None
 
-    return "（LLM分析失败）"
+
+def _load_char_card(config):
+    """从 characters.md 读取角色行为卡片，注入写章 prompt。"""
+    chars_path = Path(config["rewrites_dir"]) / "settings" / "characters.md"
+    if not chars_path.exists():
+        return "（角色设定文件不存在）"
+    text = chars_path.read_text(encoding="utf-8")
+    # 提取行为模式相关内容
+    sections = []
+    for keyword in ["应激模式", "决策方式", "情感表达", "致命弱点", "行为模式"]:
+        idx = text.find(keyword)
+        if idx > 0:
+            # 往前找角色名
+            before = text[:idx].strip().split("\n")[-1]
+            sections.append(f"{before.strip()} — {text[idx:idx+200].strip().split(chr(10))[0]}")
+    return "\n".join(sections[:8]) if sections else "（角色设定中无行为卡片）"

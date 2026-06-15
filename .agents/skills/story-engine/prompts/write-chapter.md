@@ -5,7 +5,7 @@ type: user
 phase: write
 description: 写章
 required_vars: ["N", "新书名", "作者名", "源书名", "目标字数", "目标字数_min", "目标字数_max"]
-optional_vars: ["genre", "女主名", "男主名", "文笔指纹"]
+optional_vars: ["genre", "女主名", "男主名", "文笔指纹", "角色行为卡片"]
 system_prompt: system-generic.md
 defaults: {"model": "deepseek-v4-pro", "max_tokens": 8192, "reasoning_effort": "high", "temperature": 0.8}
 ---
@@ -22,6 +22,9 @@ defaults: {"model": "deepseek-v4-pro", "max_tokens": 8192, "reasoning_effort": "
 **写作**: 按节拍情绪定位写，不逐段对应源文。前300字进场景/悬念。选一个节拍放大写作为记忆点。章末留钩子。时间跳跃开头1-2句交代。
 
 **反AI**: 句长极端交替(5字↔50字), 段尾极短句或省略号, 代词不连续3次同字, 同段不重复形容词, 句式不连续3句同类型。
+
+**角色行为约束（本章出现的角色必须对齐以下卡片）:**
+{角色行为卡片}
 
 ## 角色名
 女主={女主名}，男主={男主名}。
