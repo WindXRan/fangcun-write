@@ -42,9 +42,12 @@ class LoopHistory:
     prompt_changelog: list = field(default_factory=list)
 
 
-def _collect_metrics(config, start, end):
+def _collect_metrics(config, start, end, chapters_subdir=None):
     """收集当前产出所有指标（validate + unified review）。"""
-    chapters_dir = Path(config["rewrites_dir"]) / "chapters"
+    if chapters_subdir:
+        chapters_dir = Path(config["rewrites_dir"]) / chapters_subdir / "chapters"
+    else:
+        chapters_dir = Path(config["rewrites_dir"]) / "chapters"
 
     chapters = {}
     total_issues = 0
@@ -271,27 +274,45 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
         print("[FAIL] 未设置 API_KEY")
         return
 
-    history_path = Path(config["rewrites_dir"]) / "_loop_history.json"
+    history_path = loop_dir / "_history.json"
     history = LoopHistory(config=config_path, chapter_range=[start, end],
                           started=time.strftime("%Y-%m-%d %H:%M:%S"))
 
     print(f"Loop Engine | {config['book_name']} | ch{start}-{end} | max {max_loops} 轮")
     print(f"  初始 prompt versions: {_get_prompt_versions()}")
 
-    progress_path = Path(config["rewrites_dir"]) / "_loop_progress.md"
+    # 输出目录结构: _loop/loop_N/{chapters,debug}/
+    loop_dir = Path(config["rewrites_dir"]) / "_loop"
+    loop_dir.mkdir(parents=True, exist_ok=True)
+    progress_path = loop_dir / "_progress.md"
 
     def _log(msg):
-        """写进度文件 + print。"""
         print(msg)
         with open(progress_path, "a", encoding="utf-8") as f:
             f.write(msg + "\n")
 
     best_metrics = None
-    progress_path.write_text(f"# Loop Engine Progress\n\n**开始**: {time.strftime('%H:%M:%S')}\n\n", encoding="utf-8")
+    progress_path.write_text(f"# Loop Progress\n\n**开始**: {time.strftime('%H:%M:%S')}\n\n", encoding="utf-8")
 
     for loop_num in range(1, max_loops + 1):
+        round_dir = loop_dir / f"loop_{loop_num}"
+        round_dir.mkdir(parents=True, exist_ok=True)
         _log(f"\n---")
         _log(f"## Loop #{loop_num}/{max_loops} ({time.strftime('%H:%M:%S')})")
+        _log(f"输出: {round_dir}")
+
+        # 切换 rewrites_dir 指向本轮目录
+        orig_rewrites = config["rewrites_dir"]
+        config["rewrites_dir"] = str(round_dir)
+        (round_dir / "chapters").mkdir(exist_ok=True)
+        (round_dir / "guides").mkdir(exist_ok=True)
+        (round_dir / "styles").mkdir(exist_ok=True)
+
+        # 复制 concept.md 到本轮目录
+        concept_src = Path(orig_rewrites) / "concept.md"
+        if concept_src.exists():
+            import shutil
+            shutil.copy(concept_src, round_dir / "concept.md")
 
         # 1. FULL PIPELINE
         _log("### [1/4] 写章 (style→guides→write)")
@@ -304,9 +325,11 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
         phase_write(config, start, end, workers=config.get("workers", 5))
         _log(f"全流程耗时 {time.time()-t0:.0f}s")
 
-        # 2. MEASURE
-        _log("### [2/4] 校验+审改...")
-        metrics = _collect_metrics(config, start, end)
+        # 恢复 rewrites_dir
+        config["rewrites_dir"] = orig_rewrites
+
+        # 2. MEASURE（用本轮目录）
+        metrics = _collect_metrics(config, start, end, chapters_subdir=f"_loop/loop_{loop_num}")
         metrics.loop = loop_num
         s = metrics.summary
         _log(f"均分: {s['avg_score']} | 问题: {s['total_issues']} | P0:{s.get('p0',0)} P1:{s.get('p1',0)} P2:{s.get('p2',0)}")
@@ -350,8 +373,18 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
             _log(f"\n✓ 收敛 — 结束迭代")
             break
 
+    # 拷贝最优轮次到 best/
+    best_dir = loop_dir / "best"
+    best_src = loop_dir / f"loop_{history.best_loop}"
+    if best_src.exists():
+        import shutil
+        if best_dir.exists():
+            shutil.rmtree(best_dir)
+        shutil.copytree(best_src, best_dir)
+        _log(f"\n最优产出已拷贝: {best_dir}")
+
     _log(f"\n## 完成: {len(history.loops)}轮 | 最优 Loop #{history.best_loop} (均分 {history.best_score})")
-    print(f"\n进度文件: {progress_path}")
+    print(f"\n目录: {loop_dir}")
     return history
 
 
