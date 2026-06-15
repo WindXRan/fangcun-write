@@ -890,7 +890,7 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
     print(f"  LLM 修复: {llm_total} 章 (需模型改写)", flush=True)
     print(f"  无问题跳过: {len(chapters) - len(tasks)} 章", flush=True)
     if llm_total > 0:
-        print(f"  ⚠ LLM 修复会调用模型改写，消耗 tokens", flush=True)
+        print(f"  [WARN] LLM 修复会调用模型改写，消耗 tokens", flush=True)
 
     # 按类型分组展示问题分布
     type_count = {}
