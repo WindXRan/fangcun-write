@@ -142,17 +142,14 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             source_text = get_source_text(config, chapter_num)
             replacements["源文全文"] = source_text or "（源文读取失败）"
 
-    # 写章时注入文笔指纹：算法锚点（即时算）+ LLM分析（缓存）
+    # 写章时注入文笔指纹（从 style_{N}.md 缓存读取，由 phase_style_extract 预生成）
     if prompt_type == "write-chapter" and chapter_num:
-        from lib.text_metrics import count_style_fingerprint, format_style_anchors
-        src_text = get_source_text(config, chapter_num)
-        if src_text:
-            fp = count_style_fingerprint(src_text)
-            replacements["文笔锚点"] = format_style_anchors(fp)
-            replacements["文笔风格"] = _get_style_analysis(config, chapter_num, src_text, fp, api_key, api_url, model)
+        from phases.style_extract import load_style_text
+        style_md = load_style_text(config, chapter_num)
+        if style_md:
+            replacements["文笔指纹"] = style_md
         else:
-            replacements["文笔锚点"] = "（无源文）"
-            replacements["文笔风格"] = "（无源文）"
+            replacements["文笔指纹"] = "（文笔指纹未生成，请先运行 style_extract phase）"
 
     # 写章时按目标字数动态设 max_tokens（够写完整不截断，超字数靠 trim 裁）
     if prompt_type == "write-chapter" and chapter_num:
@@ -299,81 +296,5 @@ def get_source_metrics(config, ch):
     if text:
         return count_metrics(text)
     return None
-
-
-def _get_style_analysis(config, ch, src_text, algo_fp, api_key, api_url, model):
-    """获取 LLM 风格分析（写章时内联调用，结果缓存到 style_{N}.json）。"""
-    import json, requests
-    from pathlib import Path
-    from prompt_loader import load_prompt_str, get_prompt_config_with_overrides
-
-    style_file = Path(config["rewrites_dir"]) / "styles" / f"style_{ch:03d}.json"
-
-    # 命中缓存
-    if style_file.exists():
-        try:
-            data = json.loads(style_file.read_text(encoding="utf-8"))
-            if data.get("llm_analysis"):
-                if config.get("debug") and ch <= 3:
-                    print(f"  [DEBUG] style cache hit: {style_file}")
-                return data["llm_analysis"]
-        except Exception:
-            pass
-
-    # 无 API key，跳过 LLM
-    if not api_key:
-        return "（无API_KEY，跳过）"
-
-    prompt_template = load_prompt_str("style-analyze.md")
-    if not prompt_template:
-        return "（prompt 缺失）"
-
-    from lib.text_metrics import format_style_anchors
-    prompt = prompt_template.format(
-        chapter_text=src_text[:3000],
-        style_anchors=format_style_anchors(algo_fp),
-    )
-
-    pc = get_prompt_config_with_overrides("style-analyze.md", config)
-    sp_name = get_system_prompt_name("style-analyze.md") or "system-generic.md"
-    sys_prompt = load_system_prompt(sp_name) or "你是资深文学编辑，分析文笔风格。"
-
-    # Debug: 保存 style-analyze prompt
-    if config.get("debug") and ch <= 3:
-        from utils import debug_dump_prompt
-        debug_dump_prompt(config, "style-analyze", ch,
-                          "prompts/style-analyze.md", sys_prompt,
-                          prompt, sp_name, pc)
-
-    # prompts_only: 不调 LLM，返回占位
-    if config.get("prompts_only"):
-        return {"technique": "", "summary": "", "anchors": {}, "raw": ""}
-
-    try:
-        resp = requests.post(
-            api_url,
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={
-                "model": pc.get("model", model),
-                "messages": [
-                    {"role": "system", "content": sys_prompt},
-                    {"role": "user", "content": prompt},
-                ],
-                "temperature": pc.get("temperature", 0.3),
-                "max_tokens": pc.get("max_tokens", 1024),
-            },
-            timeout=60,
-        )
-        if resp.status_code == 200:
-            analysis = resp.json()["choices"][0]["message"]["content"].strip()
-            style_file.parent.mkdir(parents=True, exist_ok=True)
-            style_file.write_text(json.dumps(
-                {"algo": algo_fp, "llm_analysis": analysis},
-                ensure_ascii=False, indent=2,
-            ), encoding="utf-8")
-            print(f"  [STYLE] ch{ch:03d}")
-            return analysis
-    except Exception as e:
-        print(f"  [STYLE] ch{ch:03d} err: {e}")
 
     return "（LLM分析失败）"

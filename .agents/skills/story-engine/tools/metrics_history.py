@@ -144,8 +144,9 @@ def print_diff(rewrites_dir):
     pb, fb = sb["pass"], sb["fail"]
     ra = pa / sa["total"] * 100 if sa["total"] else 0
     rb = pb / sb["total"] * 100 if sb["total"] else 0
+    arrow = '\u2191' if rb > ra else '\u2193'
     print(f"  v1: {pa}/{sa['total']} ({ra:.0f}%)  |  v2: {pb}/{sb['total']} ({rb:.0f}%)"
-          + (f"  {'\u2191' if rb > ra else '\u2193'}" if rb != ra else ""))
+          + (f"  {arrow}" if rb != ra else ""))
 
     return changed_prompts
 

@@ -38,11 +38,14 @@ register(PhaseMeta("extract", "提取 book_data.json",
                    scope="global", parallel=False, batchable=False))
 
 # ── 章级 phase（每章独立，可流水线并行） ──
+register(PhaseMeta("style_extract", "文笔指纹提取",
+                   depends_on=["open_book", "extract"], produces=["style_N.json"],
+                   scope="chapter", parallel=True, batchable=True))
 register(PhaseMeta("guides", "plot guide 生成",
                    depends_on=["open_book", "extract"], produces=["plot_N.md"],
                    scope="chapter", parallel=True, batchable=True))
 register(PhaseMeta("write", "写章",
-                   depends_on=["guides"], produces=["ch_N.txt"],
+                   depends_on=["guides", "style_extract"], produces=["ch_N.txt"],
                    scope="chapter", parallel=True, batchable=True))
 register(PhaseMeta("validate", "验证章节",
                    depends_on=["write"], produces=["validation_report"],

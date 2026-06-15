@@ -12,6 +12,7 @@ from config_validator import validate_config
 from utils import get_chapters_list
 from phases import (
     phase_prep, phase_open_book,
+    phase_style_extract,
     phase_guides,
     phase_write, phase_write_agent,
     phase_validate,
@@ -27,7 +28,7 @@ GOAL_MAP = {
     # 5 步主流程
     "import": {"prep"},
     "open": {"prep", "open_book", "extract"},
-    "write": {"guides", "write", "validate", "postfix"},  # 核心写章流程
+    "write": {"style_extract", "guides", "write", "validate", "postfix"},  # 核心写章流程
     "review": {"compare", "unified_review_fix"},
     "export": set(),  # 导出在 _post_process 处理
     # 写章后按需执行（选一个）

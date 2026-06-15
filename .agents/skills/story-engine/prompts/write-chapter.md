@@ -5,7 +5,7 @@ type: user
 phase: write
 description: 写章
 required_vars: ["N", "新书名", "作者名", "源书名", "目标字数", "目标字数_min", "目标字数_max"]
-optional_vars: ["genre", "女主名", "男主名", "文笔锚点", "文笔风格"]
+optional_vars: ["genre", "女主名", "男主名", "文笔指纹"]
 system_prompt: system-generic.md
 defaults: {"model": "deepseek-v4-flash", "max_tokens": 4096, "reasoning_effort": "low", "temperature": 0.8}
 ---
@@ -15,17 +15,9 @@ defaults: {"model": "deepseek-v4-flash", "max_tokens": 4096, "reasoning_effort":
 
 【plot_guide】projects/{作者名}/{源书名}/rewrites/{新书名}/guides/plot_{N}.md
 
-## 本章写作规则（源文风格指纹）
+## 本章源文风格指纹
 
-**锚点（算法指标，必须匹配）:** {文笔锚点}
-
-**正面规则（逐条执行）:**
-{文笔风格}
-
-**反面（禁止项+本章特例）:**
-- 句长/对话比/代词密度必须落在正面规则标注的范围内
-- 正面规则标注"本章特例"的特征不作为全书风格参考
-- 不写 AI 平铺（句长均匀、每段 3 句、引号外全叙述）
+{文笔指纹}
 
 ---
 
