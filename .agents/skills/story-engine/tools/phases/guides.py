@@ -153,16 +153,16 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         if src_text:
             from lib.text_metrics import count_style_fingerprint
             fp = count_style_fingerprint(src_text)
-            sl = fp.get("sentence_avg_len", 20)
-            sr = int(fp.get("sentence_short_ratio", 0.15) * 100)
-            pa = fp.get("paragraph_avg_len", 40)
-            replacements["源文句长"] = f"{sl}"
-            replacements["源文短句比"] = f"{sr}"
-            replacements["源文段长"] = f"{int(pa)}"
+            replacements["源文句长"] = str(fp.get("sentence_avg_len", 20))
+            replacements["源文短句比"] = str(int(fp.get("sentence_short_ratio", 0.15) * 100))
+            replacements["源文段长"] = str(int(fp.get("paragraph_avg_len", 40)))
+            replacements["源文对话比"] = str(int(fp.get("dialogue_ratio", 0.1) * 100))
+            replacements["源文代词密度"] = str(fp.get("pronoun_density", 15))
+            replacements["源文标点"] = fp.get("punct_style", "标点克制")
         else:
-            replacements["源文句长"] = "20"
-            replacements["源文短句比"] = "15"
-            replacements["源文段长"] = "40"
+            replacements["源文句长"] = "20"; replacements["源文短句比"] = "15"
+            replacements["源文段长"] = "40"; replacements["源文对话比"] = "10"
+            replacements["源文代词密度"] = "15"; replacements["源文标点"] = "标点克制"
 
     # 写章时按目标字数动态设 max_tokens（够写完整不截断，超字数靠 trim 裁）
     if prompt_type == "write-chapter" and chapter_num:
