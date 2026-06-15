@@ -161,6 +161,11 @@ python tools/pipeline.py --config configs/xxx.json --phase export        # 导�
 python tools/pipeline.py --config configs/xxx.json --phase guides
 python tools/pipeline.py --config configs/xxx.json --phase write-only
 
+# 执行模式（--mode）
+python tools/pipeline.py --config configs/xxx.json --phase write --mode api     # 默认，调 API
+python tools/pipeline.py --config configs/xxx.json --phase write --mode agent   # opencode 子 agent
+python tools/pipeline.py --config configs/xxx.json --phase write --mode debug   # 只输出 prompt，不调 API
+
 # 查看项目状态
 python tools/pipeline.py --config configs/xxx.json --status
 

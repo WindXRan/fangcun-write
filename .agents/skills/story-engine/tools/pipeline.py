@@ -160,6 +160,7 @@ def main():
     parser.add_argument("--end", type=int, default=10)
     parser.add_argument("--workers", type=int, default=200)
     parser.add_argument("--phase", default="all")
+    parser.add_argument("--mode", choices=["api", "agent", "debug"], help="执行模式：api(默认)/agent/debug")
     parser.add_argument("--include-fanwai", action="store_true")
     parser.add_argument("--status", action="store_true")
     parser.add_argument("--health-check", action="store_true")
@@ -177,8 +178,15 @@ def main():
     config.setdefault("prompts_dir", ".agents/skills/story-engine/prompts")
     config.setdefault("base_dir", os.getcwd())
     config["workers"] = args.workers
-    config["debug"] = args.debug
-    config["prompts_only"] = args.debug  # debug 模式不调 API
+    config["debug"] = args.debug or args.mode == "debug"
+    config["prompts_only"] = config["debug"]  # debug 模式不调 API
+
+    # --mode 覆盖 config 中的 execution_mode
+    if args.mode:
+        if args.mode == "debug":
+            config["execution_mode"] = "api"  # debug 模式底层用 api，但不实际调用
+        else:
+            config["execution_mode"] = args.mode
 
     # rewrites_dir 对齐 base_dir，防 CWD 变化导致文件散落
     base_dir = config.get("base_dir", os.getcwd())
