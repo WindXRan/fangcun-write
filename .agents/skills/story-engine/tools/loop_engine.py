@@ -89,9 +89,10 @@ def _collect_metrics(config, start, end):
     if api_key:
         try:
             from unified_fixer import run_pipeline as unified_run
+            from lib.api_client import get_api_url
             tasks, report = unified_run(
                 config, start, end, api_key=api_key,
-                api_url=None, model=config.get("model", "deepseek-v4-flash"),
+                api_url=get_api_url(config), model=config.get("model", "deepseek-v4-flash"),
                 batch_size=max(5, (end - start + 1) // 2),
                 workers=2, dry_run=True,
             )
@@ -285,12 +286,16 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
         print(f"  Loop #{loop_num}/{max_loops}")
         print(f"{'─'*60}")
 
-        # 1. WRITE
-        print(f"  [1/4] 写章...")
-        from phases.write import phase_write
+        # 1. FULL PIPELINE (style + guides + write)
+        print(f"  [1/4] 写章 (style→guides→write)...")
         t0 = time.time()
+        from phases.style_extract import phase_style_extract
+        from phases.guides import phase_guides
+        from phases.write import phase_write
+        phase_style_extract(config, start, end, workers=config.get("workers", 5))
+        phase_guides(config, start, end, workers=config.get("workers", 5))
         phase_write(config, start, end, workers=config.get("workers", 5))
-        print(f"        写章耗时 {time.time()-t0:.0f}s")
+        print(f"        全流程耗时 {time.time()-t0:.0f}s")
 
         # 2. MEASURE
         print(f"  [2/4] 校验...")
