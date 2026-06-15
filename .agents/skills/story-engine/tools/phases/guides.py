@@ -261,11 +261,20 @@ def process_plot_guide_output(config, chapter_num, ai_output):
         "新书名": config.get("book_name", ""),
         "源书名": config.get("source_book", ""),
     }
-    # 角色变量（从 book_data.json，缓存读）
+    # 角色变量（优先 book_data.json，fallback 直接从 characters.md 提取）
     book_data = _get_book_data(config.get("rewrites_dir", ""))
     if book_data:
         bd_replacements = make_book_data_replacements(book_data)
         replacements.update(bd_replacements)
+    else:
+        # Fallback: 直接从 characters.md 提取角色名
+        chars_path = Path(config["rewrites_dir"]) / "characters.md"
+        if chars_path.exists():
+            chars_text = chars_path.read_text(encoding="utf-8")
+            for role, key in [("男主", "男主名"), ("女主", "女主名")]:
+                m = re.search(rf'{role}[：:]\s*\**(\S+)\**', chars_text)
+                if m and key not in replacements:
+                    replacements[key] = m.group(1)
     
     for key, value in replacements.items():
         result = result.replace(f"{{{key}}}", str(value))
