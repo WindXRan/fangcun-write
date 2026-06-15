@@ -30,6 +30,68 @@ def decode_text(text: str) -> str:
             result.append(char)
     return "".join(result)
 
+
+def format_word_count(raw: str) -> str:
+    """将'187304'格式化为'18.7万字'"""
+    if not raw:
+        return "未知"
+    try:
+        n = int(raw)
+        if n >= 10000:
+            return f"{n / 10000:.1f}万字"
+        return f"{n}字"
+    except (ValueError, TypeError):
+        return "未知"
+
+
+def batch_fetch_book_meta(page, gender: int, rank_type: int, category_id: str,
+                          limit: int = 30) -> dict:
+    """通过排行榜 API 批量获取 bookId -> {wordNumber, creationStatus, lastChapterTitle}"""
+    result = {}
+    try:
+        api_url = (
+            f"https://fanqienovel.com/api/rank/category/list"
+            f"?app_id=2503&rank_list_type=3"
+            f"&offset=0&limit={limit}"
+            f"&category_id={category_id}"
+            f"&rank_version=&gender={gender}&rankMold={rank_type}&a_bogus=1"
+        )
+        resp = page.evaluate(
+            f"""
+            async () => {{
+                try {{
+                    var r = await fetch('{api_url}');
+                    var d = await r.json();
+                    if (d.code !== 0 || !d.data || !d.data.book_list) return null;
+                    var map = {{}};
+                    for (var i = 0; i < d.data.book_list.length; i++) {{
+                        var b = d.data.book_list[i];
+                        map[b.bookId] = {{
+                            wn: b.wordNumber || '',
+                            cs: b.creationStatus || '',
+                            lc: b.lastChapterTitle || ''
+                        }};
+                    }}
+                    return map;
+                }} catch(e) {{ return null; }}
+            }}
+            """
+        )
+        if resp:
+            for bid, info in resp.items():
+                if info.get('wn'):
+                    result[bid] = info
+    except Exception as e:
+        print(f"  ⚠️ API 调用失败: {e}")
+    return result
+
+
+def infer_status(creation_status: str) -> str:
+    """将 creationStatus 映射为中文状态"""
+    mapping = {"0": "已完结", "1": "连载中", "2": "已完结"}
+    return mapping.get(creation_status, "连载中")
+
+
 # 排行榜配置：URL模式为 /rank/{gender}_{type}_{category_id}
 # gender: 0=女频, 1=男频
 # type: 1=新书榜, 2=阅读榜
@@ -230,13 +292,22 @@ def scrape_rank_type(page, rank_config, limit=30, sleep_sec=5):
                 let introNode = item.querySelector('.intro, .abstract, .desc');
                 let intro = introNode ? introNode.innerText.trim() : "暂无简介";
 
+                let statusNode = item.querySelector('.book-item-footer-status');
+                let status = statusNode ? statusNode.innerText.trim() : "未知";
+
+                let urlEl = item.querySelector('a[href^="/page/"]');
+                let rawUrl = urlEl ? urlEl.getAttribute('href') : '';
+                let bookId = rawUrl.replace('/page/', '').split('?')[0];
+
                 results.push({
                     title: title,
                     author: author,
                     reads: reads,
                     intro: intro,
                     cover: cover,
-                    url: item.querySelector('a[href^="/page/"]').getAttribute('href')
+                    url: rawUrl,
+                    bookId: bookId,
+                    status: status
                 });
             }
             return results;
@@ -248,6 +319,10 @@ def scrape_rank_type(page, rank_config, limit=30, sleep_sec=5):
         except Exception as e:
             print(f"JS抽取失败 {cat_name}: {e}")
             books_data = []
+
+        # 批量获取字数和状态
+        cat_id = cat_href.rsplit('_', 1)[-1]
+        meta_map = batch_fetch_book_meta(page, gender, rank_type, cat_id, limit)
 
         category_books = []
         for b in books_data[:limit]:
@@ -271,11 +346,23 @@ def scrape_rank_type(page, rank_config, limit=30, sleep_sec=5):
             if not raw_url:
                 url = ""
             elif raw_url.startswith("http://") or raw_url.startswith("https://"):
-                # 已经是完整URL，直接使用
                 url = raw_url
             else:
-                # 相对路径，拼接域名
                 url = "https://fanqienovel.com" + raw_url
+
+            # 字数
+            book_id = b.get("bookId", "")
+            meta = meta_map.get(book_id, {})
+            raw_word = meta.get('wn', '')
+            word_count = format_word_count(raw_word)
+
+            # 完结状态（DOM 优先，API 兜底）
+            status = b.get("status", "")
+            if not status or status == "未知":
+                status = infer_status(meta.get('cs', ''))
+
+            # 最后更新章节（需要解码）
+            last_chapter = decode_text(meta.get('lc', ''))
 
             category_books.append({
                 "title": t,
@@ -283,7 +370,10 @@ def scrape_rank_type(page, rank_config, limit=30, sleep_sec=5):
                 "reads": cleaned_r,
                 "intro": i,
                 "cover": c,
-                "url": url
+                "url": url,
+                "status": status,
+                "word_count": word_count,
+                "last_chapter": last_chapter
             })
 
         # 去重：恢复模式下跳过已抓取的分类

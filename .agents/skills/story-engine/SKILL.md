@@ -144,7 +144,7 @@ Phase 7:   自动导出                    → export/{书名}.txt             [
 
 ```bash
 # Phase 0: 导入源文
-python tools/story_import.py "projects/作者/书名/书名.txt"
+python .agents/skills/story-import/story_import.py "projects/作者/书名/书名.txt"
 
 # 完整流水线（推荐）
 python tools/pipeline.py --config configs/xxx.json --start 1 --end 10 --workers 10

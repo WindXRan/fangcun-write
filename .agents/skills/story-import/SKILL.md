@@ -21,20 +21,20 @@ description: |
 
 ```bash
 # 基本用法
-python tools/story_import.py <txt文件路径>
+python .agents/skills/story-import/story_import.py <txt文件路径>
 
 # 指定输出目录
-python tools/story_import.py <txt文件路径> --output <输出目录>
+python .agents/skills/story-import/story_import.py <txt文件路径> --output <输出目录>
 ```
 
 ## 示例
 
 ```bash
 # 导入下载的小说
-python tools/story_import.py "projects/闻栖/将门有朵病娇花/将门有朵病娇花.txt"
+python .agents/skills/story-import/story_import.py "projects/闻栖/将门有朵病娇花/将门有朵病娇花.txt"
 
 # 指定输出目录
-python tools/story_import.py "downloads/春深锁惊鸿.txt" --output "projects/暴躁123/春深锁惊鸿/_cache"
+python .agents/skills/story-import/story_import.py "downloads/春深锁惊鸿.txt" --output "projects/暴躁123/春深锁惊鸿/_cache"
 ```
 
 ## 输出结构

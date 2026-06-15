@@ -164,7 +164,16 @@ def _detect_curve(config, api_key, api_url):
 
 
 def _parse_curve_result(text, total_ch):
-    """从 LLM 输出中解析 key_chapters JSON 数组。"""
+    """从 LLM 输出中解析 key_chapters。支持逗号分隔和 JSON 两种格式。"""
+    try:
+        m = re.search(r'key_chapters:\s*([\d,\s]+)', text)
+        if m:
+            chs = [int(x.strip()) for x in m.group(1).split(",") if x.strip()]
+            valid = sorted(set(c for c in chs if 1 <= c <= total_ch))
+            if len(valid) >= 3:
+                return valid
+    except Exception:
+        pass
     try:
         m = re.search(r'```json\s*(.*?)```', text, re.DOTALL)
         if m:

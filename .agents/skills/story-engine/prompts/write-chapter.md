@@ -1,6 +1,6 @@
 ---
-version: 5
-changelog: 精简：去重system规则、砍自检清单、merge小节
+version: 6
+changelog: 删"你不接触源文"矛盾指令+合并写作要求重复项
 type: user
 phase: write
 description: 写章
@@ -11,7 +11,7 @@ defaults: {"model": "deepseek-v4-flash", "max_tokens": 4096, "reasoning_effort":
 ---
 写《{新书名}》第{N}章。正文第一行写"第{N}章 [章名]"（不加#）。章名取 plot_guide 中标注的，未标注则自拟。
 
-**你不接触源文。** plot_guide 已将源文抽象为节拍表，按节拍创作全新内容，不是改写源文。
+按 plot_guide 节拍的情绪功能定位创作全新内容，不是改写源文。
 
 【plot_guide】projects/{作者名}/{源书名}/rewrites/{新书名}/guides/plot_{N}.md
 
@@ -30,23 +30,16 @@ defaults: {"model": "deepseek-v4-flash", "max_tokens": 4096, "reasoning_effort":
 ---
 
 ## 写作要求
-
-1. 按 plot_guide 节拍的情绪功能定位写，**不逐段对应源文结构**
-2. 每章至少一个**记忆点**——读者看完能记住的画面/对话/情绪/反转
-3. 选一个节拍放大写，给足细节，这就是记忆点
-4. 前 300 字必须有钩子，直接进场景/冲突/悬念
-5. 章末留钩子引导下一章
-6. 时间跳跃在开头用 1-2 句交代
-7. 角色行为对齐 plot_guide 标注的心理阶段
+- 按节拍情绪功能定位写，不逐段对应源文结构
+- 前300字直接进场景/冲突/悬念；章末留钩子
+- 选一个节拍放大写，这就是本章**记忆点**
+- 时间跳跃在开头1-2句交代
 
 ## 角色名
-
-女主={女主名}，男主={男主名}。禁止使用源文人名。
+女主={女主名}，男主={男主名}。
 
 ## 字数
-
 目标 {目标字数} 字（{目标字数_min}~{目标字数_max}）。
 
-## 输出
-
-【输出】projects/{作者名}/{源书名}/rewrites/{新书名}/chapters/ch_{N}.txt
+## 输出路径
+projects/{作者名}/{源书名}/rewrites/{新书名}/chapters/ch_{N}.txt

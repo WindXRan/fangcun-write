@@ -1,10 +1,11 @@
 ---
-version: 1
-changelog: 初始版本
+version: 2
+changelog: JSON→纯文本格式+加system_prompt引用
 type: user
 phase: open_book
 description: 目录情绪曲线分析
 required_vars: ["作者名", "源书名"]
+system_prompt: system-generic.md
 defaults: {"model": "deepseek-v4-flash", "max_tokens": 4096, "reasoning_effort": "low", "temperature": 0.8}
 ---
 
@@ -18,16 +19,12 @@ defaults: {"model": "deepseek-v4-flash", "max_tokens": 4096, "reasoning_effort":
 2. **关键转折点**：标注剧情出现重大转折的章号（感情升温/决裂/反转/高潮/真相揭露）
 3. **弧线阶段划分**：全书分为几个弧线阶段？每个阶段覆盖哪些章？
 
-输出以下 JSON（不要其他内容）：
+输出以下格式（不要其他内容）。**key_chapters 用逗号分隔，不要写 ...**：
 
-```json
-{
-  "key_chapters": [1, ...],
-  "curve": "情绪走势的一句话总结",
-  "phases": [
-    {"name": "阶段名", "start": 1, "end": 20, "description": ""}
-  ]
-}
+```
+key_chapters: 1, 20, 40, 60, 80, 100
+curve: 情绪走势的一句话总结
+phases: 阶段1(1-20:描述) | 阶段2(21-45:描述)
 ```
 
 **`key_chapters` 选择规则**：

@@ -5,6 +5,7 @@ type: user
 phase: postprocess
 description: 润色章节
 required_vars: ["content", "min_chars", "max_chars"]
+system_prompt: system-generic.md
 defaults: {"model": "deepseek-v4-flash", "max_tokens": 8000, "reasoning_effort": "low", "temperature": 0.8}
 ---
 

@@ -5,6 +5,7 @@ type: user
 phase: postprocess
 description: 精简超字数章
 required_vars: ["目标字数", "作者名", "源书名", "新书名", "N", "N03d"]
+system_prompt: system-generic.md
 defaults: {"model": "deepseek-v4-flash", "max_tokens": 4096, "reasoning_effort": "low", "temperature": 0.8}
 ---
 
