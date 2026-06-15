@@ -11,7 +11,7 @@ defaults: {"model": "deepseek-v4-pro", "max_tokens": 8192, "reasoning_effort": "
 ---
 写《{新书名}》第{N}章。正文第一行写"第{N}章 [章名]"（不加#）。章名取 plot_guide 中标注的，未标注则自拟。
 
-按 plot_guide 节拍的情绪功能定位创作全新内容，不是改写源文。
+按 plot_guide 节拍的情绪功能定位创作全新内容，不是改写源文。**plot_guide中的"叙事策略"必须继承——开篇钩子类型、核心悬念、情绪递进方式与源文一致，不能只模仿表面结构。**
 
 【plot_guide】projects/{作者名}/{源书名}/rewrites/{新书名}/guides/plot_{N}.md
 
