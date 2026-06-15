@@ -530,7 +530,7 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
         _prompt_backup = _save_prompt_snapshot()
         _log("分析规则失效...")
         from prompt_improver import llm_improve_prompts
-        changes = llm_improve_prompts(p0_issues, api_key, api_url)
+        changes = llm_improve_prompts(p0_issues, api_key, api_url, config, start, end)
         for change in changes:
             _log(f"  [{change['prompt']}] {change['summary']}")
 

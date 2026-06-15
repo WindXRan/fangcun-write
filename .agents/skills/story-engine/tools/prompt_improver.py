@@ -5,8 +5,8 @@ import requests
 from pathlib import Path
 
 
-def llm_improve_prompts(p0_issues, api_key, api_url):
-    """Analyze P0 issues with LLM, rewrite affected prompts, bump version.
+def llm_improve_prompts(p0_issues, api_key, api_url, config=None, start=1, end=3):
+    """Analyze source vs rewrite sentence-by-sentence, then improve prompts.
     Returns list of {prompt, summary} changes.
     """
     if not p0_issues:
@@ -15,6 +15,24 @@ def llm_improve_prompts(p0_issues, api_key, api_url):
     target_prompts = _identify_prompts(p0_issues)
     if not target_prompts:
         return []
+
+    # Load source+rewrite comparison samples
+    comparison = ""
+    if config:
+        from utils import get_source_text
+        chapters_dir = Path(config["rewrites_dir"]) / "chapters"
+        samples = []
+        for ch in range(start, end + 1):
+            src = get_source_text(config, ch)
+            rw_file = chapters_dir / f"ch_{ch:03d}.txt"
+            if src and rw_file.exists():
+                rw = rw_file.read_text(encoding="utf-8")
+                # Take first 600 chars of each for comparison
+                samples.append(
+                    f"=== 第{ch}章 源文(前600字) ===\n{src[:600]}\n\n"
+                    f"=== 第{ch}章 仿写(前600字) ===\n{rw[:600]}"
+                )
+        comparison = "\n\n---\n\n".join(samples[:2])  # Max 2 chapters
 
     changes = []
     for prompt_name in target_prompts:
@@ -28,9 +46,12 @@ def llm_improve_prompts(p0_issues, api_key, api_url):
             for iss in p0_issues
         )[:2000]
 
-        prompt = f"""Here are P0 issues from a novel rewrite run, and a prompt file. Fix the prompt to solve these issues.
+        prompt = f"""Compare the source and rewritten chapters, then fix the prompt to make the rewrite match the source better.
 
-## P0 Issues
+## Source vs Rewrite Comparison
+{comparison if comparison else '(no comparison available)'}
+
+## P0 Issues Found
 {issue_text}
 
 ## Current prompt ({prompt_name})
@@ -38,8 +59,8 @@ def llm_improve_prompts(p0_issues, api_key, api_url):
 {original}
 ```
 
-## Requirements
-Modify the prompt to fix these issues. You may: add examples, rewrite vague rules, adjust order, add counter-examples. Do NOT: remove rules, change YAML header, change variable names. Output the complete modified prompt file."""
+## Task
+Analyze the gaps in opening style, paragraph rhythm, dialogue handling, hook structure — whatever differs between source and rewrite. Then modify the prompt to close those gaps. You may: add examples showing correct vs wrong, tighten vague rules, add specific constraints. Output the complete modified prompt file."""
 
         try:
             resp = requests.post(
