@@ -526,28 +526,24 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
             best_p0 = p0
             best_prompt_state = _get_prompt_versions()
 
-        # [4] Save backup → strengthen → analyze
+        # [4] Smart editor
         _prompt_backup = _save_prompt_snapshot()
-        _log("分析规则失效...")
+        _log("智能编辑分析...")
         from prompt_improver import smart_edit_loop
         result = smart_edit_loop(config, start, end, api_key, api_url, loop_num)
         _log(result["feedback"][:500])
         (round_dir / "feedback.md").write_text(result["feedback"], encoding="utf-8")
-        changes = [{"prompt": p, "summary": "smart edit"} for p in result["changes"]]
-        for change in changes:
-            _log(f"  [{change['prompt']}] {change['summary']}")
+        for p in result["changes"]:
+            _log(f"  [{p}] updated")
+
+        if not result["changes"]:
+            _log("智能编辑判断无需修改, 收敛")
+            break
 
         prev_p0 = p0
 
-    # Restore best prompt if current degraded
-    if prev_p0 > best_p0 and _prompt_backup:
-        _restore_prompt_snapshot(_prompt_backup)
-        _log(f"\n回退 prompt 到 Loop #{history.best_loop} 版本")
-    elif prev_p0 <= best_p0:
-        history.best_loop = loop_num
-
-    _log(f"\n完成: {loop_num}轮 | 最优 P0:{best_p0}")
-    print(f"\n进度: {progress_path}")
+    _log(f"\n完成: {loop_num}轮")
+    print(f"\n进度 & 编辑意见: {progress_path}")
     return history
 
 
