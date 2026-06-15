@@ -40,12 +40,13 @@ Layer 1a: 批次审查 (7维全检)
   ...                        │
   审查 Agent N              ─┘
                               │
-Layer 1b: 全局维度审查          ├──→ 总结 Agent → 派任务 Agent → 修复 Agent 1 (任务集A) ──┐
-  全局-Agent A (人设一致性) ──┤                                          ...              ├──→ 收集结果
-  全局-Agent B (节奏/伏笔) ──┘                                          修复 Agent N     ──┘
+Layer 1b: 全局维度审查 (3个agent并行)          ├──→ 总结 Agent → 派任务 Agent → 修复 Agent ──┐
+  全局-Agent A (人设一致性: 对照行为卡片逐章检查) ──┤                                          ...    ├──→ 收集结果
+  全局-Agent B (感情逻辑: 阶段渐进+情绪真实性)    ──┤                                          修复 Agent N ──┘
+  全局-Agent C (节奏/伏笔)                       ──┘
 ```
 
-Layer 1b 每个 agent 读全书关键章（头2+四分位+尾2）+ concept.md，独立输出 P0/P1/P2，不重复做 1a 的工作。
+Layer 1b 每个 agent 读全书关键章（头3+每20%分位+尾3，~10章）+ concept.md，独立输出 P0/P1/P2。
 
 每个 Agent 有明确契约：输入→输出。总结 Agent 给每个 issue 标 P0/P1/P2。
 

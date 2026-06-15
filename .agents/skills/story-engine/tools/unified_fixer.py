@@ -365,18 +365,16 @@ def _llm_batch_review(config, chapter_nums, api_key, api_url, model):
 # ============================================================
 
 def _sample_global_chapters(config, start, end):
-    """采样全书关键章：头2 + 四分位中点 + 尾2 → ~6章。"""
+    """采样全书关键章：头3 + 每20%分位 + 尾3 → ~10章。"""
     total = end - start + 1
-    if total <= 6:
+    if total <= 10:
         return list(range(start, end + 1))
 
-    picks = [start, start + 1]  # 头2章
-    # 三分位
-    q1 = start + total // 4
-    q2 = start + total // 2
-    q3 = start + 3 * total // 4
-    picks.extend([q1, q2, q3])
-    picks.extend([end - 1, end])  # 尾2章
+    picks = [start, start + 1, start + 2]  # 头3章
+    # 每20%取一章
+    for pct in [20, 40, 60, 80]:
+        picks.append(start + int(total * pct / 100))
+    picks.extend([end - 2, end - 1, end])  # 尾3章
     return sorted(set(picks))
 
 
@@ -532,11 +530,11 @@ def _parse_global_review(content, dimension):
 
 
 def _run_global_reviews(config, start, end, api_key, api_url, model):
-    """Layer 1b: 运行 2 个全局维度审查 agent（并行）。"""
+    """Layer 1b: 运行 3 个全局维度审查 agent（并行）。"""
     sampled = _sample_global_chapters(config, start, end)
     context = _load_global_context(config, sampled)
 
-    dimensions = ["character", "rhythm"]
+    dimensions = ["character", "emotion", "rhythm"]
     results = []
 
     with ThreadPoolExecutor(max_workers=2) as ex:
