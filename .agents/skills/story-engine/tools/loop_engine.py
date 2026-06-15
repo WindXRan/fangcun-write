@@ -527,7 +527,7 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
         from prompt_improver import llm_improve_prompts
         changes = llm_improve_prompts(p0_issues, api_key, api_url)
         for change in changes:
-            _log(f"  [{change['prompt']}] {change['action']}: {change['reason']}")
+            _log(f"  [{change['prompt']}] {change['summary']}")
 
         prev_p0 = p0
 
