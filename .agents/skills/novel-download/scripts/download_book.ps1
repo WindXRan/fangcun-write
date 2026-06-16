@@ -165,9 +165,9 @@ if ($bookId) {
     }
 
     $bookId = $match.book_id
-    Write-Host "    匹配: $($match.title) (作者: $($match.author), ID: $bookId)" -ForegroundColor Green
-
-    if (-not $Author) { $Author = $match.author }
+    $bookName = $match.title
+    $Author = $match.author
+    Write-Host "    匹配: $bookName (作者: $Author, ID: $bookId)" -ForegroundColor Green
 
     # 如果有多个结果且开启了交互模式
     if ($Interactive -and $searchData.items.Count -gt 1) {
@@ -182,8 +182,9 @@ if ($bookId) {
             if ($idx -ge 0 -and $idx -lt $searchData.items.Count) {
                 $match = $searchData.items[$idx]
                 $bookId = $match.book_id
-                if (-not $Author) { $Author = $match.author }
-                Write-Host "    已选择: $($match.title)" -ForegroundColor Green
+                $bookName = $match.title
+                $Author = $match.author
+                Write-Host "    已选择: $bookName" -ForegroundColor Green
             }
         }
     }
@@ -237,12 +238,18 @@ if (-not $NoArchive -and $completed -gt 0) {
     if (-not $bookName) { $bookName = $bookId }
 
     # 标准化路径: projects/{作者}/{书名}/_cache/
-    $bookDir = "$SkillDir\projects\$Author\$bookName"
+    # 清理文件名中的特殊字符
+    $safeAuthor = $Author -replace '[\\/:*?"<>|]', '_'
+    $safeBookName = $bookName -replace '[\\/:*?"<>|]', '_'
+    $bookDir = "$SkillDir\projects\$safeAuthor\$safeBookName"
     $cacheDir = "$bookDir\_cache"
     New-Item -ItemType Directory -Path $cacheDir -Force | Out-Null
 
-    # 移动 txt 文件
-    $downloadedFiles = Get-ChildItem "$SkillDir\downloads\*.txt" -ErrorAction SilentlyContinue
+    # 移动 txt 文件（下载器可能保存在 skill 根目录或 downloads 目录）
+    $downloadedFiles = @()
+    $downloadedFiles += Get-ChildItem "$SkillDir\downloads\*.txt" -ErrorAction SilentlyContinue
+    $downloadedFiles += Get-ChildItem "$SkillDir\*.txt" -ErrorAction SilentlyContinue | Where-Object { $_.LastWriteTime -gt (Get-Date).AddMinutes(-5) }
+    $downloadedFiles = $downloadedFiles | Sort-Object LastWriteTime -Descending | Select-Object -Unique
     if ($downloadedFiles) {
         foreach ($f in $downloadedFiles) {
             $targetName = if ($f.Name -match $bookName) { $f.Name } else { "$bookName.txt" }
