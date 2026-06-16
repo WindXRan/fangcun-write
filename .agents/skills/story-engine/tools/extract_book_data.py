@@ -105,9 +105,10 @@ TAG_NORMALIZE = {
 def parse_characters(text):
     """解析 settings/characters.md → characters 数组。
     
-    支持两种格式：
-      A: `### 郝仁 (男主)`  —— 名字在前，tag括号内（当前项目格式）
+    支持三种格式：
+      A: `### 郝仁 (男主)`  —— 名字在前，tag括号内（markdown标题）
       B: `## 男主：郝仁`   —— tag在前，冒号分隔
+      C: `宋云(女主)`       —— 名字在前，tag括号内（纯文本，无markdown标题）
     """
     characters = []
     TAG_KEYWORDS = r'女[主二配]|男[主二配]|反派|[^\n]{0,4}(?:父亲|母亲|爷爷|奶奶|祖父|祖母|外公|外婆|闺蜜|好友|助理|管家|继母|继父|弟弟|妹妹|哥哥|姐姐)'
@@ -129,6 +130,16 @@ def parse_characters(text):
     for m in pattern_b.finditer(text):
         role_tag, name, body = m.group(1), m.group(2), m.group(3)
         # 格式A已处理则不重复
+        if not any(c["name"] == name.strip() for c in characters):
+            _add_character(characters, role_tag.strip(), name.strip(), body)
+
+    # 格式 C: 宋云(女主) —— 名字在前，(tag) 在括号内，纯文本无markdown标题
+    pattern_c = re.compile(
+        r'^([\u4e00-\u9fa5]{2,8})[^\n]*?[(（]\s*(' + TAG_KEYWORDS + r')[^\n)]*?[)）]\s*\n(.*?)(?=\n^[\u4e00-\u9fa5]{2,4}[^\n]*?[(（]|\Z)',
+        re.MULTILINE | re.DOTALL
+    )
+    for m in pattern_c.finditer(text):
+        name, role_tag, body = m.group(1), m.group(2), m.group(3)
         if not any(c["name"] == name.strip() for c in characters):
             _add_character(characters, role_tag.strip(), name.strip(), body)
 

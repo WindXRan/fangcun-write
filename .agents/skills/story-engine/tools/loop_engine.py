@@ -433,7 +433,7 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
     if rw and not Path(rw).is_absolute():
         config["rewrites_dir"] = str(Path(base_dir) / rw)
 
-    config["debug"] = True  # loop 模式自动启用 debug
+    config["debug"] = False  # loop 模式必须调 API，否则空转
 
     api_key = config.get("api_key") or os.environ.get("API_KEY")
     if not api_key:
@@ -475,12 +475,17 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
         _log(f"\n---")
         _log(f"## Loop #{loop_num}/{max_loops}")
 
-        # [1] Write with current prompts (清除旧章确保新prompt生效)
+        # [1] Write with current prompts (备份旧章后清除，确保新prompt生效)
         if loop_num > 1:
             import shutil
             for d in ["chapters", "guides", "styles"]:
                 p = Path(config["rewrites_dir"]) / d
-                if p.exists(): shutil.rmtree(p)
+                if p.exists():
+                    # 备份到 _loop/loop_{N-1}/
+                    backup = round_dir.parent / f"loop_{loop_num-1}" / d
+                    backup.mkdir(parents=True, exist_ok=True)
+                    shutil.copytree(p, backup, dirs_exist_ok=True)
+                    shutil.rmtree(p)
         _log("写章...")
         t0 = time.time()
         phase_style_extract(config, start, end, workers=config.get("workers", 5))
@@ -529,8 +534,13 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
         # [4] Smart editor
         _prompt_backup = _save_prompt_snapshot()
         _log("智能编辑分析...")
-        from prompt_improver import smart_edit_loop
-        result = smart_edit_loop(config, start, end, api_key, api_url, loop_num)
+        try:
+            from prompt_improver import smart_edit_loop
+            result = smart_edit_loop(config, start, end, api_key, api_url, loop_num)
+        except Exception as e:
+            _log(f"智能编辑失败: {e}，恢复 prompt 快照")
+            _restore_prompt_snapshot(_prompt_backup)
+            continue
         _log(result["feedback"][:500])
         (round_dir / "feedback.md").write_text(result["feedback"], encoding="utf-8")
         for p in result["changes"]:

@@ -4,7 +4,6 @@ No numeric scores. No rule-based mapping. One LLM call does everything.
 """
 
 import re
-import requests
 from pathlib import Path
 
 
@@ -14,13 +13,14 @@ def smart_edit_loop(config, start, end, api_key, api_url, loop_num):
     Returns dict with {feedback, changes, prompts_modified}
     """
     from utils import get_source_text
+    from lib.api_client import call_api
 
     chapters_dir = Path(config["rewrites_dir"]) / "chapters"
     prompts_dir = Path(".agents/skills/story-engine/prompts")
 
-    # Load source vs rewrite (full text, 2 chapters max)
+    # Load source vs rewrite (full text, up to 3 chapters)
     comparison_parts = []
-    for ch in range(start, min(end, start + 1)):
+    for ch in range(start, min(end, start + 3)):
         src = get_source_text(config, ch)
         rw_file = chapters_dir / f"ch_{ch:03d}.txt"
         if src and rw_file.exists():
@@ -95,22 +95,12 @@ Output format:
 """
 
     try:
-        resp = requests.post(
-            api_url,
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={
-                "model": "deepseek-v4-flash",
-                "messages": [
-                    {"role": "system", "content": "You are a master web novel editor and prompt engineer. Output editorial feedback and complete modified prompts."},
-                    {"role": "user", "content": editor_prompt},
-                ],
-                "temperature": 0.3, "max_tokens": 8192,
-            }, timeout=180,
+        content = call_api(
+            api_key, "deepseek-v4-flash", editor_prompt,
+            temperature=0.3, max_tokens=8192,
+            api_url=api_url,
+            system_prompt="You are a master web novel editor and prompt engineer. Output editorial feedback and complete modified prompts.",
         )
-        if resp.status_code != 200:
-            return {"feedback": f"API error: {resp.status_code}", "changes": []}
-
-        content = resp.json()["choices"][0]["message"]["content"]
 
         # Extract feedback
         fb_match = re.search(r'## Editorial Feedback\n(.*?)(?=## Prompt Changes|\Z)', content, re.DOTALL)

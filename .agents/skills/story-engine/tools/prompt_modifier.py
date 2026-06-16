@@ -62,7 +62,7 @@ def add_emotion_ban(name, words):
         # 检查是否已存在
         new_words = [w.strip() for w in words.split(",") if w.strip() not in line]
         if new_words:
-            new_line = line.rstrip() + "/" + "/".join(new_words)
+            new_line = line.rstrip() + "、" + "、".join(new_words)
             content = content.replace(line, new_line)
     else:
         # 没有情绪规则行，在防AI后追加
