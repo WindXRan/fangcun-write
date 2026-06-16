@@ -520,15 +520,23 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False, target_scor
         json.dump({"p0": p0, "p1": p1, "issues": p0_issues, "versions": _get_prompt_versions()},
                   (round_dir / "review.json").open("w", encoding="utf-8"), ensure_ascii=False, indent=2)
 
-        # Convergence
-        avg_score = 0
-        from phases.validate import validate_one
+        # Convergence — 用 LLM 编辑打分
+        from lib.llm_scorer import llm_score_chapter
+        from lib.api_client import get_api_url
+        api_url_local = get_api_url(config)
+        model_local = config.get("model", "deepseek-v4-flash")
+        chapters_dir = Path(config["rewrites_dir"]) / "chapters"
+        scores = []
+        details = []
         for ch in range(start, end + 1):
-            passed, report, metrics = validate_one(config, ch)
-            iss = report.count("*ISSUE*")
-            score = 100 - iss * 10 if passed else 50
-            avg_score += max(0, min(100, score))
-        avg_score = round(avg_score / max(end - start + 1, 1), 1)
+            ch_file = chapters_dir / f"ch_{ch:03d}.txt"
+            if ch_file.exists():
+                score, detail = llm_score_chapter(api_key, api_url_local, model_local,
+                                                  ch_file.read_text(encoding="utf-8"), ch, config["book_name"])
+                scores.append(score)
+                details.append(f"ch{ch}: {score}分")
+                _log(f"  第{ch}章: {score}分")
+        avg_score = round(sum(scores) / max(len(scores), 1), 1) if scores else 0
         _log(f"均分: {avg_score} (目标: {target_score})")
 
         if p0 == 0 and avg_score >= target_score:
@@ -536,7 +544,6 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False, target_scor
             break
         if p0 == 0 and avg_score < target_score:
             _log(f"P0=0 但均分<{target_score}，继续迭代...")
-            # 不退出，继续下一轮
         elif p0 > prev_p0 or (p0 == prev_p0 and loop_num > 2):
             _log(f"P0 未改善 ({prev_p0}→{p0})，已达极限")
             break
