@@ -279,6 +279,16 @@ def _build_sample_block(config, chapter_numbers):
 # Phase 1: 开书
 # ============================================================
 
+def _extract_book_name_candidates(book_info_content):
+    """从 book_info.md 内容中提取书名候选列表。"""
+    candidates = []
+    # 匹配格式：1. 《书名》 或 - 《书名》
+    pattern = r'^\s*(?:\d+\.|[-*])\s*[《](.+?)[》]'
+    for m in re.finditer(pattern, book_info_content, re.MULTILINE):
+        candidates.append(m.group(1).strip())
+    return candidates
+
+
 def phase_open_book(config, state_mgr=None):
     """两段式开书：曲线分析(flash) → 选章精读 → 开书(pro)。"""
     print("\n" + "=" * 50)
@@ -304,8 +314,9 @@ def phase_open_book(config, state_mgr=None):
 
     # === Stage 2: 用选定的章节做开书分析 ===
     total_ch = get_total_chapters(config)
+    book_name = config.get("book_name", "auto")
     replacements = {
-        "新书名": config["book_name"],
+        "新书名": book_name if book_name != "auto" else "（待生成）",
         "作者名": config.get("author", ""),
         "源书名": config.get("source_book", ""),
         "总章数": str(total_ch),
@@ -342,15 +353,43 @@ def phase_open_book(config, state_mgr=None):
         )
 
         files = parse_multi_file_output(result)
+        book_info_content = None
         if files:
             for filepath, content in files.items():
                 full_path = Path(config["rewrites_dir"]) / filepath
                 atomic_write_text(full_path, tag_output(content, "open-book.md"))
                 print(f"[OK] {filepath} → {full_path}")
+                if filepath == "book_info.md":
+                    book_info_content = content
         else:
             path = Path(config["rewrites_dir"]) / "concept.md"
             atomic_write_text(path, tag_output(result, "open-book.md"))
             print(f"[OK] concept.md → {path}")
+
+        # === Stage 3: book_name=auto 时从书名候选中选择 ===
+        if book_name == "auto" and book_info_content:
+            candidates = _extract_book_name_candidates(book_info_content)
+            if candidates:
+                selected_name = candidates[0]
+                config["book_name"] = selected_name
+                print(f"[AUTO] 书名候选: {candidates}")
+                print(f"[AUTO] 选定书名: {selected_name}")
+                # 更新 rewrites_dir 中的新书名
+                old_dir = config.get("rewrites_dir", "")
+                if old_dir and "/rewrites/" in old_dir:
+                    # 替换路径中的 {新书名} 部分
+                    parts = old_dir.split("/rewrites/")
+                    if len(parts) == 2:
+                        new_dir = f"{parts[0]}/rewrites/{selected_name}"
+                        config["rewrites_dir"] = new_dir
+                        # 重命名目录
+                        old_path = Path(old_dir)
+                        new_path = Path(new_dir)
+                        if old_path.exists() and not new_path.exists():
+                            old_path.rename(new_path)
+                            print(f"[OK] 目录重命名: {old_path} → {new_path}")
+            else:
+                print("[WARN] 未找到书名候选，请手动设置 book_name")
 
         if state_mgr:
             state_mgr.phase_done("open-book")

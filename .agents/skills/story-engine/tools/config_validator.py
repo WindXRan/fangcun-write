@@ -9,7 +9,7 @@ import os
 
 # (字段名, 类型, 必填, 说明)
 FIELD_SCHEMA = [
-    ("book_name", str, True, "新书名"),
+    ("book_name", str, False, '新书名（可选，填 "auto" 则开书后自动生成）'),
     ("author", str, True, "作者名"),
     ("source_book", str, True, "源文书名（目录名）"),
     ("rewrites_dir", str, True, "仿写输出目录（相对或绝对）"),

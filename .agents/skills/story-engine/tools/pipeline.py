@@ -53,10 +53,11 @@ def _post_process(config, goal):
     try:
         from merge_chapters import merge_chapters
         d = config["rewrites_dir"]
+        book_name = config.get("book_name", "未命名")
         os.makedirs(f"{d}/export", exist_ok=True)
-        if merge_chapters(f"{d}/chapters", f"{d}/export/{config['book_name']}.txt",
+        if merge_chapters(f"{d}/chapters", f"{d}/export/{book_name}.txt",
                           "utf-8", f"{d}/concept.md"):
-            print(f"[OK] 已导出: {d}/export/{config['book_name']}.txt")
+            print(f"[OK] 已导出: {d}/export/{book_name}.txt")
     except Exception as e:
         print(f"[WARN] 导出失败: {e}")
 
@@ -210,6 +211,15 @@ def main():
             auto_rollback_if_degraded(rewrites_dir)
         return
 
+    # book_name=auto 时，rewrites_dir 使用占位符
+    book_name = config.get("book_name", "auto")
+    if book_name == "auto":
+        # 如果 rewrites_dir 包含 {新书名}，先用占位符
+        rw = config.get("rewrites_dir", "")
+        if "{新书名}" in rw:
+            config["rewrites_dir"] = rw.replace("{新书名}", "_auto_pending")
+            print(f"[INFO] book_name=auto，暂用目录: _auto_pending")
+
     if not any("--end" in a for a in sys.argv):
         # 优先用 config 中的 initial_chapters（试水模式）
         initial = config.get("initial_chapters")
@@ -244,13 +254,34 @@ def main():
     display_names = [phase_display.get(p, p) for p in sorted(goal)]
 
     print(f"{'=' * 50}")
-    print(f"{config['book_name']} | ch{args.start}-{args.end} | workers={args.workers}")
+    print(f"{config.get('book_name', 'auto')} | ch{args.start}-{args.end} | workers={args.workers}")
     print(f"目的: {' → '.join(display_names)} | {mode_str}")
     print(f"{'=' * 50}")
 
     t0 = time.time()
     orch = _build_orch(config, state_mgr, config_path=args.config)
     results = orch.run(goal, args.start, args.end, args.workers)
+
+    # book_name=auto 时，从 state.json 或 rewrites_dir 读取实际书名
+    if config.get("book_name") == "auto":
+        rewrites_dir = config.get("rewrites_dir", "")
+        book_info_path = Path(rewrites_dir) / "settings" / "book_info.md"
+        if book_info_path.exists():
+            import re
+            content = book_info_path.read_text(encoding="utf-8")
+            # 提取第一个书名候选
+            m = re.search(r'^\s*(?:\d+\.|[-*])\s*[《](.+?)[》]', content, re.MULTILINE)
+            if m:
+                actual_name = m.group(1).strip()
+                config["book_name"] = actual_name
+                print(f"[AUTO] 从 book_info.md 提取书名: {actual_name}")
+                # 重命名目录
+                old_path = Path(rewrites_dir)
+                new_path = old_path.parent / actual_name
+                if old_path.exists() and not new_path.exists():
+                    old_path.rename(new_path)
+                    config["rewrites_dir"] = str(new_path)
+                    print(f"[OK] 目录重命名: {old_path} → {new_path}")
 
     _post_process(config, goal)
     _print_report(t0, config)
