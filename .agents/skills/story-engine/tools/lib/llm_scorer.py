@@ -1,7 +1,7 @@
 """LLM 编辑打分 — 像真人编辑一样评分。"""
 
 import re
-from lib.api_client import call_api
+import requests
 
 
 def llm_score_chapter(api_key, api_url, model, chapter_text, chapter_num, book_name):
@@ -25,26 +25,38 @@ def llm_score_chapter(api_key, api_url, model, chapter_text, chapter_num, book_n
 {chapter_text[:3000]}"""
 
     try:
-        content = call_api(
-            api_key, model, prompt,
-            temperature=0.2, max_tokens=512,
-            api_url=api_url,
-            system_prompt="你是资深网文编辑，打分严格，标准高。输出最后一行必须是：总分：XX",
+        resp = requests.post(
+            api_url,
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            json={
+                "model": model,
+                "messages": [
+                    {"role": "system", "content": "你是资深网文编辑，打分严格，标准高。输出最后一行必须是：总分：XX"},
+                    {"role": "user", "content": prompt},
+                ],
+                "temperature": 0.2,
+                "max_tokens": 1024,
+            },
+            timeout=120,
         )
-        # 提取总分 — 支持多种格式
-        m = re.search(r'总分[：:]\s*(\d+)', content)
-        if m:
-            return int(m.group(1)), content
-        # 尝试 "总分 XX" 格式
-        m = re.search(r'总分\s+(\d+)', content)
-        if m:
-            return int(m.group(1)), content
-        # 尝试从最后提取数字
-        numbers = re.findall(r'(\d+)', content)
-        if numbers:
-            score = int(numbers[-1])
-            if 0 <= score <= 100:
-                return score, content
-        return 0, f"无法解析分数: {content[:200]}"
+        if resp.status_code == 200:
+            content = resp.json()["choices"][0]["message"]["content"].strip()
+            # 提取总分 — 支持多种格式
+            m = re.search(r'总分[：:]\s*(\d+)', content)
+            if m:
+                return int(m.group(1)), content
+            # 尝试 "总分 XX" 格式
+            m = re.search(r'总分\s+(\d+)', content)
+            if m:
+                return int(m.group(1)), content
+            # 尝试从最后提取数字
+            numbers = re.findall(r'(\d+)', content)
+            if numbers:
+                score = int(numbers[-1])
+                if 0 <= score <= 100:
+                    return score, content
+            return 0, f"无法解析分数: {content[:200]}"
+        else:
+            return 0, f"API error: {resp.status_code}"
     except Exception as e:
         return 0, str(e)

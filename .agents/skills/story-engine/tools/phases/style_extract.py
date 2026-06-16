@@ -5,6 +5,7 @@
 
 import hashlib
 import json
+import os
 import time
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -36,7 +37,11 @@ def _cache_valid(styles_dir, ch, src_text):
 def phase_style_extract(config, start, end, workers=None):
     """并行提取源文每章文笔指纹，跳过已存在文件。"""
     w = workers or config.get("workers", 30)
-    styles_dir = Path(config["rewrites_dir"]) / "styles"
+    # 风格缓存放源书级别（共享，不随仿写版本重复计算）
+    source_book = config.get("source_book", "")
+    author = config.get("author", "")
+    base_dir = config.get("base_dir", os.getcwd())
+    styles_dir = Path(base_dir) / "projects" / author / source_book / "_cache" / "styles"
     styles_dir.mkdir(parents=True, exist_ok=True)
 
     api_key = config.get("api_key") or config.get("API_KEY")
