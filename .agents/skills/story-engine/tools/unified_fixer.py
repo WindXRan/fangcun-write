@@ -530,16 +530,33 @@ def _parse_global_review(content, dimension):
 
 
 def _run_global_reviews(config, start, end, api_key, api_url, model):
-    """Layer 1b: 全量分批审查（覆盖所有章节）。"""
-    chapters = list(range(start, end + 1))
-    batch_size = 10  # 每批 10 章
-    batches = [chapters[i:i+batch_size] for i in range(0, len(chapters), batch_size)]
+    """Layer 1b: 全量分批审查（按字数分批，每批~8万字）。"""
+    chapters_dir = Path(config["rewrites_dir"]) / "chapters"
+    max_chars = 80000  # 每批最大字数
+
+    # 按字数分批
+    batches = []
+    current_batch = []
+    current_chars = 0
+    for ch in range(start, end + 1):
+        cf = chapters_dir / f"ch_{ch:03d}.txt"
+        if not cf.exists():
+            continue
+        ch_chars = len(cf.read_text(encoding='utf-8').replace('\n', '').replace(' ', ''))
+        if current_chars + ch_chars > max_chars and current_batch:
+            batches.append(current_batch)
+            current_batch = []
+            current_chars = 0
+        current_batch.append(ch)
+        current_chars += ch_chars
+    if current_batch:
+        batches.append(current_batch)
 
     dimensions = ["character", "emotion", "rhythm"]
     results = []
 
     for batch_idx, batch in enumerate(batches):
-        print(f"  [全局审查] 批次 {batch_idx+1}/{len(batches)}: 第{batch[0]}-{batch[-1]}章", flush=True)
+        print(f"  [全局审查] 批次 {batch_idx+1}/{len(batches)}: 第{batch[0]}-{batch[-1]}章 ({len(batch)}章)", flush=True)
         context = _load_global_context(config, batch)
 
         with ThreadPoolExecutor(max_workers=3) as ex:

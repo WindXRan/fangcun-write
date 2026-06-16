@@ -510,11 +510,19 @@ def extract(config_or_dir):
     files_used = []
     texts = {}
     for fname in ["book_info.md", "characters.md", "plot.md", "world.md", "source_analysis.md"]:
+        # 优先从 settings/ 目录读取
         fpath = settings_dir / fname
         text = read_file(fpath)
         if text:
             texts[fname] = text
             files_used.append(f"settings/{fname}")
+        else:
+            # fallback: 从 rewrites/ 根目录读取
+            fpath = rewrites_dir / fname
+            text = read_file(fpath)
+            if text:
+                texts[fname] = text
+                files_used.append(f"{fname} (root)")
 
     if not texts.get("characters.md"):
         # fallback: 从 concept.md 提取
