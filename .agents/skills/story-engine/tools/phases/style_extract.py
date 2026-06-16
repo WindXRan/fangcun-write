@@ -108,6 +108,7 @@ def _algo_one(config, ch, styles_dir):
         f"- 句长: {fp.get('sentence_avg_len','?')}字/句 (短句<8字: {fp.get('sentence_short_ratio',0):.0%})",
         f"- 对话: {fp.get('dialogue_ratio',0):.0%}",
         f"- 段均: {fp.get('paragraph_avg_len','?')}字",
+        f"- 单句段: {fp.get('single_sent_ratio',0):.0%} (平均每段{fp.get('avg_sent_per_para','?')}句)",
         f"- 代词密度: {fp.get('pronoun_density','?')}/千字",
         f"- 词汇丰富度: {fp.get('ttr','?')}",
         f"- 标点: {fp.get('punct_style','?')}",

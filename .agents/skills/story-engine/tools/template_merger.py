@@ -41,8 +41,9 @@ def parse_tagged_output(text):
             continue
         
         # 检查是否是标签行（标签：内容 或 标签:内容）
+        # 支持加粗标记（**标签：**）
         # 标签名不能以特殊字符开头，必须是中文/英文/数字
-        match = re.match(r'^([a-zA-Z\u4e00-\u9fa5][a-zA-Z0-9\u4e00-\u9fa5]*)[：:]\s*(.*)', line)
+        match = re.match(r'^(?:\*\*)?([a-zA-Z\u4e00-\u9fa5][a-zA-Z0-9\u4e00-\u9fa5]*)(?:\*\*)?(?:\*\*)?[：:](?:\*\*)?\s*(.*)', line)
         if match:
             # 保存之前的标签内容
             if current_tag:

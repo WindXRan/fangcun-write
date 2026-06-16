@@ -68,6 +68,15 @@ def count_style_fingerprint(text):
     paras = [p for p in body.split('\n') if p.strip()]
     para_lens = [len(re.sub(r'\s', '', p)) for p in paras]
     para_avg = round(sum(para_lens) / max(len(para_lens), 1), 1)
+    
+    # 分段风格（单句段比例、平均每段句数）
+    para_sent_counts = []
+    for p in paras:
+        p_sents = re.split(r'[。！？!?\n]', p)
+        p_sent_lens = [len(re.sub(r'\s', '', s)) for s in p_sents if re.sub(r'\s', '', s)]
+        para_sent_counts.append(len(p_sent_lens))
+    single_sent_ratio = round(sum(1 for c in para_sent_counts if c == 1) / max(len(para_sent_counts), 1), 2)
+    avg_sent_per_para = round(sum(para_sent_counts) / max(len(para_sent_counts), 1), 1)
 
     # 代词密度（防朱雀：AI 过度使用他/她/它）
     pronoun_count = len(re.findall(r'[她他它]', clean))
@@ -89,6 +98,8 @@ def count_style_fingerprint(text):
         "sentence_short_ratio": short_ratio,
         "dialogue_ratio": dia_ratio,
         "paragraph_avg_len": para_avg,
+        "single_sent_ratio": single_sent_ratio,
+        "avg_sent_per_para": avg_sent_per_para,
         "pronoun_density": pronoun_density,
         "ttr": ttr,
         "punct_style": punct,
