@@ -14,7 +14,7 @@ Agent 架构:
     python unified_fixer.py --config xxx.json --start 1 --end 188
 """
 
-import os, re, json, time, argparse, warnings
+import os, re, json, time, argparse, sys, warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="requests")
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -25,7 +25,6 @@ from lib.constants import AI_MARKERS, AI_MARKER_PATTERN
 from lib.text_metrics import count_metrics, get_body_chars
 from lib.plagiarism import find_plagiarism
 from lib.source_locator import get_source_text
-from lib.api_client import get_api_url
 from prompt_loader import load_system_prompt, load_prompt_str, tag_output, get_prompt_config_with_overrides
 
 
@@ -88,7 +87,7 @@ def issue_dict(i):
 # Prompt 见 prompts/unified-review.md，由 _llm_batch_review 加载
 
 
-def review_agent(config, chapter_batch, api_key, api_url, model, agent_id=0):
+def review_agent(config, chapter_batch, agent_id=0):
     """单个审查 agent。在一批章节上运行 algo 检查 + LLM 批量审稿。
 
     Input:  config, chapter_batch (list[int]), api_key, api_url, model, agent_id
@@ -112,10 +111,10 @@ def review_agent(config, chapter_batch, api_key, api_url, model, agent_id=0):
 
     # ---- 1b: LLM 批量审稿 (有问题的章) ----
     problem_chs = [ch for ch, d in result.chapters.items() if d.get("issues")]
-    if problem_chs and api_key:
+    if problem_chs:
         print(f"    [审查#{agent_id}] LLM 审稿: {len(problem_chs)} 章...", flush=True)
         try:
-            ch_data, cross = _llm_batch_review(config, problem_chs, api_key, api_url, model)
+            ch_data, cross = _llm_batch_review(config, problem_chs)
             for ch_str, data in ch_data.items():
                 ch = int(ch_str)
                 if ch in result.chapters:
@@ -297,9 +296,9 @@ def _extract_field(line, label, default):
     return m.group(1).strip() if m else default
 
 
-def _llm_batch_review(config, chapter_nums, api_key, api_url, model):
+def _llm_batch_review(config, chapter_nums):
     """LLM 批量审稿一批章节。"""
-    import requests
+    from lib.api_client import call_llm
 
     prompt_template = load_prompt_str("unified-review.md")
     if not prompt_template:
@@ -333,30 +332,16 @@ def _llm_batch_review(config, chapter_nums, api_key, api_url, model):
         source_context=source_context[:2000] if source_context else "（无）",
     )
 
-    pc = get_prompt_config_with_overrides("unified-review.md", config)
-
     if config.get("debug"):
         from utils import debug_dump_prompt
+        pc = get_prompt_config_with_overrides("unified-review.md", config)
         label = f"batch{chapter_nums[0]}-{chapter_nums[-1]}"
         debug_dump_prompt(config, "unified-review", chapter_nums[0],
                           "prompts/unified-review.md", "你是资深网文编辑。",
                           prompt, "unified-review", pc)
 
-    resp = requests.post(
-        api_url,
-        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-        json={"model": pc.get("model", model),
-              "messages": [
-            {"role": "system", "content": "你是资深网文编辑。"},
-            {"role": "user", "content": prompt},
-        ], "temperature": pc.get("temperature", 0.3),
-           "max_tokens": pc.get("max_tokens", 8000)},
-        timeout=120,
-    )
-    if resp.status_code != 200:
-        raise Exception(f"API {resp.status_code}")
-
-    content = resp.json()["choices"][0]["message"]["content"]
+    content = call_llm(config, "unified-review", prompt,
+                       "你是资深网文编辑。按用户要求的格式输出审查结果。")
     return _parse_review_output(content)
 
 
@@ -432,12 +417,12 @@ def _load_global_context(config, sampled_chapters):
     }
 
 
-def _global_dimension_review(config, dimension, context, api_key, api_url, model):
+def _global_dimension_review(config, dimension, context):
     """单个全局审查 agent：读全书关键章，只审一个维度。
 
     dimension: "character" | "rhythm"
     """
-    import requests
+    from lib.api_client import call_llm
 
     prompt_name = f"unified-review-{dimension}.md"
     prompt_template = load_prompt_str(prompt_name)
@@ -449,7 +434,7 @@ def _global_dimension_review(config, dimension, context, api_key, api_url, model
     prompt = prompt_template.format(**context)
 
     pc = get_prompt_config_with_overrides(prompt_name, config)
-    label = {"character": "人设一致性", "rhythm": "全局节奏/伏笔"}.get(dimension, dimension)
+    label = {"character": "人设一致性", "emotion": "感情逻辑", "rhythm": "全局节奏/伏笔"}.get(dimension, dimension)
 
     # Debug: 保存全局审查 prompt
     if config.get("debug"):
@@ -461,21 +446,8 @@ def _global_dimension_review(config, dimension, context, api_key, api_url, model
 
     print(f"    [全局审查] {label} — 审查中...", flush=True)
     try:
-        resp = requests.post(
-            api_url,
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={"model": pc.get("model", model),
-                  "messages": [
-                {"role": "system", "content": "你是资深网文编辑。只输出 JSON。"},
-                {"role": "user", "content": prompt},
-            ], "temperature": pc.get("temperature", 0.3),
-               "max_tokens": pc.get("max_tokens", 8192)},
-            timeout=180,
-        )
-        if resp.status_code != 200:
-            raise Exception(f"API {resp.status_code}")
-
-        content = resp.json()["choices"][0]["message"]["content"]
+        content = call_llm(config, prompt_name, prompt,
+                           "你是资深网文编辑。按用户要求的格式输出审查结果。")
         result = _parse_global_review(content, dimension)
         n_ch = len(result.chapters)
         n_cross = len(result.cross_issues)
@@ -487,49 +459,75 @@ def _global_dimension_review(config, dimension, context, api_key, api_url, model
 
 
 def _parse_global_review(content, dimension):
-    """解析全局审查的 JSON 输出。"""
+    """解析全局审查的 MD 输出。
+
+    格式：
+      ### 章节 N
+      评分: XX
+      问题:
+      - 类型: X | 严重度: high|medium|low | 描述: X | 修复: X
+
+      ### 跨章问题
+      - 涉及章节: 1,2,3 | 类型: X | 严重度: X | 描述: X | 修复: X
+    """
     result = ReviewResult()
-    try:
-        # 提取 JSON
-        m = re.search(r'\{.*\}', content, re.DOTALL)
-        if not m:
-            return result
-        data = json.loads(m.group(0))
 
-        # 单章问题
-        for issue in data.get("issues", []):
-            ch = issue.get("ch", 0)
+    # 解析 ### 章节 N 块
+    ch_blocks = re.findall(r'###\s+章节\s+(\d+)\s*\n(.*?)(?=###\s+(?:章节|跨章问题)|\Z)', content, re.DOTALL)
+    for ch_str, body in ch_blocks:
+        ch = int(ch_str)
+        score_m = re.search(r'评分:\s*(\d+)', body)
+        score = int(score_m.group(1)) if score_m else 80
+
+        issues = []
+        in_issues = re.split(r'问题:', body, maxsplit=1)
+        if len(in_issues) > 1:
+            for line in in_issues[1].split('\n'):
+                line = line.strip()
+                m = re.match(r'-\s*类型:\s*(\S+)', line)
+                if m:
+                    typ = m.group(1)
+                    sev = _extract_field(line, '严重度', 'medium')
+                    desc = _extract_field(line, '描述', '')
+                    fix = _extract_field(line, '修复', '')
+                    issues.append({
+                        "type": typ or dimension,
+                        "severity": sev,
+                        "desc": desc,
+                        "fix": fix,
+                        "auto_fixable": False,
+                    })
+
+        if issues:
             if ch not in result.chapters:
-                result.chapters[ch] = {"score": 100, "issues": []}
-            result.chapters[ch]["issues"].append({
-                "type": issue.get("type", dimension),
-                "severity": issue.get("severity", "medium"),
-                "desc": issue.get("desc", ""),
-                "fix": issue.get("fix", ""),
-                "auto_fixable": False,
-            })
-            # 降低分数反映问题严重度
-            sev_penalty = {"high": 20, "medium": 10, "low": 5}
-            result.chapters[ch]["score"] = max(0,
-                result.chapters[ch]["score"] - sev_penalty.get(issue.get("severity", "low"), 10))
+                result.chapters[ch] = {"score": score, "issues": []}
+            result.chapters[ch]["issues"].extend(issues)
+            result.chapters[ch]["score"] = min(result.chapters[ch].get("score", 100), score)
 
-        # 跨章问题
-        for ci in data.get("cross_issues", []):
-            result.cross_issues.append({
-                "chapters": ci.get("chapters", []),
-                "type": ci.get("type", dimension),
-                "severity": ci.get("severity", "medium"),
-                "desc": ci.get("desc", ""),
-                "fix": ci.get("fix", ""),
-            })
-
-    except Exception as e:
-        print(f"    [全局审查] JSON 解析失败: {e}", flush=True)
+    # 解析 ### 跨章问题 块
+    cross_block = re.search(r'###\s+跨章问题\s*\n(.*?)(?=###|\Z)', content, re.DOTALL)
+    if cross_block:
+        for line in cross_block.group(1).split('\n'):
+            line = line.strip()
+            m = re.match(r'-\s*涉及章节:\s*([\d,]+)', line)
+            if m:
+                chs = [int(x.strip()) for x in m.group(1).split(',') if x.strip()]
+                typ = _extract_field(line, '类型', dimension)
+                sev = _extract_field(line, '严重度', 'medium')
+                desc = _extract_field(line, '描述', '')
+                fix = _extract_field(line, '修复', '')
+                result.cross_issues.append({
+                    "chapters": chs,
+                    "type": typ,
+                    "severity": sev,
+                    "desc": desc,
+                    "fix": fix,
+                })
 
     return result
 
 
-def _run_global_reviews(config, start, end, api_key, api_url, model):
+def _run_global_reviews(config, start, end):
     """Layer 1b: 全量分批审查（按字数分批，每批~8万字）。"""
     chapters_dir = Path(config["rewrites_dir"]) / "chapters"
     max_chars = 80000  # 每批最大字数
@@ -561,7 +559,7 @@ def _run_global_reviews(config, start, end, api_key, api_url, model):
 
         with ThreadPoolExecutor(max_workers=3) as ex:
             futures = {
-                ex.submit(_global_dimension_review, config, dim, context, api_key, api_url, model): dim
+                ex.submit(_global_dimension_review, config, dim, context): dim
                 for dim in dimensions
             }
             for f in as_completed(futures):
@@ -690,7 +688,7 @@ def dispatch_agent(config, report: SummaryReport) -> dict[int, FixTask]:
 # Prompt 见 prompts/unified-fix.md，由 _fix_llm 加载
 
 
-def fix_agent(config, task: FixTask, api_key, api_url, model, dry_run=False) -> FixResult:
+def fix_agent(config, task: FixTask, dry_run=False) -> FixResult:
     """执行一个修复任务（单章）。
 
     Input:  config, FixTask, api_key, api_url, model, dry_run
@@ -711,8 +709,8 @@ def fix_agent(config, task: FixTask, api_key, api_url, model, dry_run=False) -> 
         text, mech_count = _fix_mechanical(text, task.mechanical)
 
     # LLM 修复
-    if task.llm and api_key and not dry_run:
-        llm_text = _fix_llm(config, task, text, api_key, api_url, model)
+    if task.llm and not dry_run:
+        llm_text = _fix_llm(config, task, text)
         if llm_text:
             text = llm_text
             llm_used = True
@@ -752,9 +750,9 @@ def _fix_mechanical(text, issues):
     return text, count
 
 
-def _fix_llm(config, task, text, api_key, api_url, model):
+def _fix_llm(config, task, text):
     """LLM 修复。"""
-    import requests
+    from lib.api_client import call_llm
     print(f"      [修复] 第{task.ch}章 LLM 修复中...", flush=True)
 
     prompt_template = load_prompt_str("unified-fix.md")
@@ -778,7 +776,7 @@ def _fix_llm(config, task, text, api_key, api_url, model):
             adj_parts.append(f"【{label}】\n{adj_t[-500:]}" if offset == -1 else f"【{label}】\n{adj_t[:500]}")
     adj = '\n\n'.join(adj_parts)
 
-    # 读脱敏版源文（防数据泄漏，保留结构参考即可）
+    # 读脱敏版源文
     from lib.source_stripper import strip_source_chapter
     source_text = strip_source_chapter(config, task.ch) or get_source_text(config, task.ch) or "（无源文）"
 
@@ -793,54 +791,44 @@ def _fix_llm(config, task, text, api_key, api_url, model):
         源文全文=source_text,
     )
 
-    pc = get_prompt_config_with_overrides("unified-fix.md", config)
-
     if config.get("debug"):
         from utils import debug_dump_prompt
+        pc = get_prompt_config_with_overrides("unified-fix.md", config)
         debug_dump_prompt(config, "unified-fix", task.ch,
                           "prompts/unified-fix.md", "你是资深网文写手。只输出修改后的章节。",
                           prompt, "unified-fix", pc)
 
-    resp = requests.post(
-        api_url,
-        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-        json={"model": pc.get("model", model), "messages": [
-            {"role": "system", "content": "你是资深网文写手。只输出修改后的章节。"},
-            {"role": "user", "content": prompt},
-        ], "temperature": pc.get("temperature", 0.6),
-           "max_tokens": pc.get("max_tokens", 8000)},
-        timeout=120,
-    )
-    if resp.status_code == 200:
-        fixed = resp.json()["choices"][0]["message"]["content"]
-        # 提取修复后章节（跳过"修复策略"部分）
+    try:
+        fixed = call_llm(config, "unified-fix", prompt,
+                         "你是资深网文写手。只输出修改后的章节。")
+        # 提取修复后章节
         if "## 修复后章节" in fixed:
             fixed = fixed.split("## 修复后章节")[-1].strip()
         elif "## 修复策略" in fixed:
-            # 如果没有"修复后章节"标题，取"修复策略"之后的内容
             parts = fixed.split("## 修复策略")
             if len(parts) > 1:
                 fixed = parts[-1].strip()
-        # 去掉可能的代码块标记
         if fixed.startswith("```"):
             fixed = fixed.split("\n", 1)[-1]
         if fixed.endswith("```"):
             fixed = fixed.rsplit("```", 1)[0]
         fixed = fixed.strip()
-        
+
         fixed_chars = len(re.sub(r'\s', '', fixed))
         target = max(task.target_chars, 1)
         if abs(fixed_chars - target) / target < 0.3:
             return fixed
-    return None
+        return None
+    except Exception as e:
+        print(f"      [修复] 第{task.ch}章 LLM 修复失败: {e}", flush=True)
+        return None
 
 
 # ============================================================
 # Orchestrator (多 agent 编排)
 # ============================================================
 
-def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
-                 batch_size=10, workers=10, dry_run=False):
+def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False):
     """多 Agent 审改流程。
 
     Flow:
@@ -864,7 +852,7 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
     print(f"  {len(batches)} 个审查 agent 并行启动")
     with ThreadPoolExecutor(max_workers=min(workers, len(batches))) as ex:
         futures = {
-            ex.submit(review_agent, cfg, batch, api_key, api_url, model, agent_id=i): i
+            ex.submit(review_agent, cfg, batch, agent_id=i): i
             for i, batch in enumerate(batches)
         }
         for f in as_completed(futures):
@@ -876,14 +864,16 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
     print(f"  {len(review_results)}/{len(batches)} 个审查 agent 完成")
 
     # ========== Step 1b: Global Review Agents (跨章维度审查) ==========
+    api_key = cfg.get("api_key") or os.environ.get("API_KEY")
     if api_key:
         print(f"\n{'='*40}", flush=True)
         print(f"Step 1b: 全局审查 Agent (人设一致性 + 全局节奏/伏笔)", flush=True)
         print("="*40, flush=True)
 
-        global_results = _run_global_reviews(cfg, start, end, api_key, api_url, model)
+        global_results = _run_global_reviews(cfg, start, end)
         review_results.extend(global_results)
     else:
+        print(f"\n  [SKIP] 未配置 API_KEY，跳过全局审查", flush=True)
         global_results = []
 
     # ========== Step 2: Gather — Summary Agent ==========
@@ -971,7 +961,7 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
     total = len(tasks)
     with ThreadPoolExecutor(max_workers=min(workers, total or 1)) as ex:
         futures = {
-            ex.submit(fix_agent, cfg, task, api_key, api_url, model, dry_run): ch
+            ex.submit(fix_agent, cfg, task, dry_run): ch
             for ch, task in tasks.items()
         }
         for f in as_completed(futures):
@@ -994,7 +984,7 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
         print("="*40, flush=True)
 
         # 只审改过的章
-        re_review = review_agent(cfg, fixed_chs, api_key, api_url, model, agent_id="re-check")
+        re_review = review_agent(cfg, fixed_chs, agent_id="re-check")
         new_issues = []
         for ch, data in re_review.chapters.items():
             for iss in data.get("issues", []):
@@ -1018,7 +1008,7 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
             re_results = {}
             with ThreadPoolExecutor(max_workers=min(workers, len(re_tasks))) as ex:
                 futures = {
-                    ex.submit(fix_agent, cfg, task, api_key, api_url, model, False): ch
+                    ex.submit(fix_agent, cfg, task, False): ch
                     for ch, task in re_tasks.items()
                 }
                 for f in as_completed(futures):
@@ -1079,18 +1069,10 @@ def main():
     args.start = args.start or 1
     args.end = args.end or 10
 
-    api_key = cfg.get("api_key") or os.environ.get("API_KEY")
-    api_url = get_api_url(cfg)
-    model = cfg.get("model", "deepseek-chat")
-
-    if not api_key:
-        print("[WARN] 未配置 API_KEY，将跳过 LLM 审核和修复")
-
     print(f"多 Agent 审改 v4 | ch{args.start}-{args.end} | batch={args.batch_size} | workers={args.workers}")
 
     results, merged = run_pipeline(
         cfg, args.start, args.end,
-        api_key, api_url, model,
         batch_size=args.batch_size,
         workers=args.workers,
         dry_run=args.dry_run,

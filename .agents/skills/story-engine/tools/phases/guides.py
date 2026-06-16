@@ -71,18 +71,10 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     Args:
         retry_context: 重试时附带的修正提示（如"代词密度偏离源文"），注入 system_prompt
     """
-    from lib.api_client import get_api_url
-    
-    api_key = config.get("api_key") or os.environ.get("API_KEY")
-    if not api_key:
-        raise ValueError("未配置 API_KEY，请设置 $env:API_KEY")
+    from lib.api_client import call_llm, get_api_url
 
-    pc = get_prompt_config_with_overrides(f"{prompt_type}.md", config)
-    model = model or pc.get("model", "deepseek-v4-pro")
-    reasoning_effort = reasoning_effort or pc.get("reasoning_effort", "low")
     prompts_dir = config.get("prompts_dir", ".agents/skills/story-engine/prompts")
     base_dir = config.get("base_dir", os.getcwd())
-    api_url = get_api_url(config)
 
     n = str(chapter_num) if chapter_num else "1"
     n_plus1 = str(chapter_num + 1) if chapter_num else "2"
@@ -118,6 +110,23 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         else:
             source_text = get_source_text(config, chapter_num)
             replacements["源文全文"] = source_text or "（源文读取失败）"
+        # 注入角色名（plot-guide 也需要，否则角色名会乱）
+        book_data = _get_book_data(config.get("rewrites_dir", ""))
+        if book_data:
+            from prompt_loader import make_book_data_replacements
+            bd_replacements = make_book_data_replacements(book_data)
+            for k, v in bd_replacements.items():
+                if k not in replacements:
+                    replacements[k] = v
+        if "女主名" not in replacements or "男主名" not in replacements:
+            chars_path = Path(config["rewrites_dir"]) / "characters.md"
+            if chars_path.exists():
+                chars_text = chars_path.read_text(encoding="utf-8")
+                for role, key in [("女主", "女主名"), ("男主", "男主名"), ("主角", "女主名")]:
+                    if key not in replacements:
+                        m = re.search(rf'{role}[：:]\s*\**(\S+)\**', chars_text)
+                        if m:
+                            replacements[key] = m.group(1)
 
     # 写章时注入文笔指纹 + 角色行为卡片 + 源文段落锚点
     if prompt_type == "write-chapter" and chapter_num:
@@ -125,6 +134,24 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         style_md = load_style_text(config, chapter_num)
         replacements["文笔指纹"] = style_md or "（文笔指纹未生成）"
         replacements["角色行为卡片"] = _load_char_card(config)
+        # 注入角色名（女主名、男主名等）
+        book_data = _get_book_data(config.get("rewrites_dir", ""))
+        if book_data:
+            from prompt_loader import make_book_data_replacements
+            bd_replacements = make_book_data_replacements(book_data)
+            for k, v in bd_replacements.items():
+                if k not in replacements:
+                    replacements[k] = v
+        # Fallback: 直接从 characters.md 提取
+        if "女主名" not in replacements or "男主名" not in replacements:
+            chars_path = Path(config["rewrites_dir"]) / "characters.md"
+            if chars_path.exists():
+                chars_text = chars_path.read_text(encoding="utf-8")
+                for role, key in [("女主", "女主名"), ("男主", "男主名")]:
+                    if key not in replacements:
+                        m = re.search(rf'{role}[：:]\s*\**(\S+)\**', chars_text)
+                        if m:
+                            replacements[key] = m.group(1)
         # 源文段落锚点（从指纹提取，做硬约束）
         src_text = get_source_text(config, chapter_num)
         if src_text:
@@ -139,18 +166,6 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             replacements["源文段长"] = "40"; replacements["源文单句段比例"] = "50"
             replacements["源文对话比"] = "10"; replacements["源文代词密度"] = "15"
             replacements["源文标点"] = "标点克制"
-
-    # 写章时按目标字数动态设 max_tokens（够写完整不截断，超字数靠 trim 裁）
-    if prompt_type == "write-chapter" and chapter_num:
-        src_chars = replacements.get("目标字数", "0")
-        try:
-            target = int(src_chars)
-            multiplier = 2.0 if "pro" in model else 1.6
-            max_tokens = max(2048, int(target * multiplier))
-        except ValueError:
-            max_tokens = pc.get("max_tokens", 8192)
-    else:
-        max_tokens = pc.get("max_tokens", 8192)
 
     # 合并额外替换变量
     if extra_replacements:
@@ -167,6 +182,8 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     if retry_context:
         system_prompt = f"【修正提示】上一次写这章存在以下问题：{retry_context}。这次务必修正。\n\n{system_prompt}"
 
+    pc = get_prompt_config_with_overrides(f"{prompt_type}.md", config)
+
     # === Debug: 保存最终发给 API 的完整 prompt ===
     if config.get("debug") and chapter_num and chapter_num <= 3:
         debug_dump_prompt(config, prompt_type, chapter_num, prompt_path, system_prompt, user_prompt, sp_name, pc)
@@ -179,7 +196,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
 
     t_req = time.time()
     try:
-        result = call_api(api_key, model, user_prompt, reasoning_effort, max_tokens, system_prompt, api_url, temperature=pc.get("temperature", 0.8))
+        result = call_llm(config, prompt_type, user_prompt, system_prompt)
         elapsed = time.time() - t_req
         print(f"  [OK] {label} ({elapsed:.0f}s)")
         return result
@@ -190,41 +207,16 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
 
 
 def process_plot_guide_output(config, chapter_num, ai_output):
-    """处理 plot-guide 的输出，合并到模板。
+    """处理 plot-guide 的输出，填充剩余模板变量。
     
-    支持格式：带标签输出（标签：内容）
-    合并后自动填充 {N}、{女主名} 等模板变量。
-    
-    Args:
-        config: 配置字典
-        chapter_num: 章节号
-        ai_output: AI 输出的文本
-    
-    Returns:
-        合并后的 markdown 文本
+    AI 已在 prompt 中直接输出完整 markdown（模板内嵌），
+    这里只做 {N}、{女主名} 等变量的补替换。
     """
     from pathlib import Path
-    
-    base_dir = config.get("base_dir", os.getcwd())
-    template_path = Path(base_dir) / ".agents/skills/story-engine/templates/plot-guide-output.md"
-    
-    if not template_path.exists():
-        print(f"  [WARN] 模板不存在: {template_path}，使用原始输出")
-        return ai_output
-    
-    from template_merger import merge_tagged_output, parse_tagged_output, load_template
-    template_text = load_template(str(template_path))
-    
-    # 1. 标签模板合并
-    try:
-        result = merge_tagged_output(str(template_path), ai_output)
-        print(f"  [OK] 标签模板合并完成")
-    except Exception as e:
-        print(f"  [WARN] 模板合并失败: {e}，使用原始输出")
-        return ai_output
-    
-    # 2. 填充模板中的配置变量（{N}、{源文字数}、{女主名} 等）
     from prompt_loader import make_book_data_replacements
+
+    result = ai_output
+
     src_chars = count_source_chars(config, chapter_num)
     replacements = {
         "N": str(chapter_num),
@@ -237,13 +229,11 @@ def process_plot_guide_output(config, chapter_num, ai_output):
         "新书名": config.get("book_name", ""),
         "源书名": config.get("source_book", ""),
     }
-    # 角色变量（优先 book_data.json，fallback 直接从 characters.md 提取）
     book_data = _get_book_data(config.get("rewrites_dir", ""))
     if book_data:
         bd_replacements = make_book_data_replacements(book_data)
         replacements.update(bd_replacements)
     else:
-        # Fallback: 直接从 characters.md 提取角色名
         chars_path = Path(config["rewrites_dir"]) / "characters.md"
         if chars_path.exists():
             chars_text = chars_path.read_text(encoding="utf-8")
@@ -251,21 +241,15 @@ def process_plot_guide_output(config, chapter_num, ai_output):
                 m = re.search(rf'{role}[：:]\s*\**(\S+)\**', chars_text)
                 if m and key not in replacements:
                     replacements[key] = m.group(1)
-    
+
     for key, value in replacements.items():
         result = result.replace(f"{{{key}}}", str(value))
-    
-    # 收集游离标签：AI输出中有但模板没有对应的 → 追加到尾部
-    from template_merger import parse_tagged_output
-    all_tags = parse_tagged_output(ai_output)
-    orphan_sections = []
-    for tag, content in all_tags.items():
-        placeholder = f"{{{tag}}}"
-        if placeholder not in template_text:
-            orphan_sections.append(f"## {tag}\n{content}")
-    if orphan_sections:
-        result += "\n\n" + "\n\n".join(orphan_sections)
-    
+
+    # 事后校验：如果还有 {xxx} 占位符残留，告警但不阻塞
+    remaining = re.findall(r'\{[a-zA-Z\u4e00-\u9fa5]+\}', result)
+    if remaining:
+        print(f"  [WARN] 以下模板变量未填充: {set(remaining)}")
+
     return result
 
 
@@ -299,7 +283,11 @@ def get_source_metrics(config, ch):
 
 def _load_char_card(config):
     """从 characters.md 读取角色行为卡片，注入写章 prompt。"""
-    chars_path = Path(config["rewrites_dir"]) / "settings" / "characters.md"
+    rewrites_dir = Path(config["rewrites_dir"])
+    # 优先 settings/ 目录，fallback 到 rewrites_dir 根目录
+    chars_path = rewrites_dir / "settings" / "characters.md"
+    if not chars_path.exists():
+        chars_path = rewrites_dir / "characters.md"
     if not chars_path.exists():
         return "（角色设定文件不存在）"
     text = chars_path.read_text(encoding="utf-8")

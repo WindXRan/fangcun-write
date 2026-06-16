@@ -6,7 +6,7 @@ description: 缃戞枃涔﹀悕+绠€浠嬬敓鎴愶紝瀵规爣鐣寗鐖嗘
 required_vars: ["浣滆€呭悕", "婧愪功鍚?, "鏂颁功鍚?]
 optional_vars: []
 system_prompt: system-generic.md
-defaults: {"model": "deepseek-v4-pro", "max_tokens": 4096, "temperature": 0.9}
+defaults: {"model": "deepseek-v4-pro", "max_tokens": 4096, "reasoning_effort": "high", "temperature": 0.9}
 ---
 
 涓轰豢鍐欓」鐩敓鎴愪功鍚嶅拰绠€浠嬧€斺€旂湡浜烘劅绗竴锛孉I鎰熼浂瀹瑰繊銆?

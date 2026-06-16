@@ -6,8 +6,8 @@ import time
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from utils import count_source_chars, get_source_title, call_api, print_progress, debug_dump_prompt
-from lib.api_client import get_api_url
+from utils import count_source_chars, get_source_title, print_progress, debug_dump_prompt
+from lib.api_client import call_llm
 from prompt_loader import load_prompt_str, validate_prompt_variables, tag_output, get_prompt_config_with_overrides
 
 
@@ -183,10 +183,6 @@ def phase_polish(config, start, end, workers=None, state_mgr=None):
     print(f"Phase 3.7: 润色 (ch{start}-{end}, {w}w)")
     print("=" * 50)
 
-    api_key = config.get("api_key") or os.environ.get("API_KEY")
-    api_url = get_api_url(config)
-    model = config.get("model", "deepseek-v4-pro")
-
     # 扫描存在的章节
     todo = []
     for ch in range(start, end + 1):
@@ -199,7 +195,6 @@ def phase_polish(config, start, end, workers=None, state_mgr=None):
         return 0
 
     prompt_template = load_prompt_str("polish-chapter.md")
-    pc = get_prompt_config_with_overrides("polish-chapter.md", config)
 
     def _polish_one(ch):
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
@@ -214,16 +209,10 @@ def phase_polish(config, start, end, workers=None, state_mgr=None):
             prompt = prompt_template.format(**r)
 
             if config.get("debug"):
+                pc = get_prompt_config_with_overrides("polish-chapter.md", config)
                 debug_dump_prompt(config, "polish", ch, "prompts/polish-chapter.md", "", prompt, "N/A", pc)
 
-            result = call_api(
-                api_key, pc.get("model", model), prompt,
-                reasoning_effort=pc.get("reasoning_effort", "low"),
-                max_tokens=pc.get("max_tokens", 8000),
-                temperature=pc.get("temperature", 0.8),
-                system_prompt="",
-                api_url=api_url
-            )
+            result = call_llm(config, "polish-chapter", prompt, "")
 
             new_chars = len(result.replace('\n', '').replace(' ', ''))
             if orig_chars > 0 and abs(new_chars - orig_chars) / orig_chars > 0.15:
@@ -270,10 +259,6 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=N
     print(f"Phase 3.8: 扩写 (ch{start}-{end}, 目标+{(target_ratio-1)*100:.0f}%, {w}w)")
     print("=" * 50)
 
-    api_key = config.get("api_key") or os.environ.get("API_KEY")
-    api_url = get_api_url(config)
-    model = config.get("model", "deepseek-v4-pro")
-
     # 扫描需要扩写的章节
     todo = []
     for ch in range(start, end + 1):
@@ -294,7 +279,6 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=N
     print(f"  {len(todo)}章需要扩写，并行执行...")
 
     prompt_template = load_prompt_str("expand-chapter.md")
-    pc = get_prompt_config_with_overrides("expand-chapter.md", config)
 
     def _expand_one(ch):
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
@@ -311,16 +295,10 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=N
             prompt = prompt_template.format(**r)
 
             if config.get("debug"):
+                pc = get_prompt_config_with_overrides("expand-chapter.md", config)
                 debug_dump_prompt(config, "expand", ch, "prompts/expand-chapter.md", "", prompt, "N/A", pc)
 
-            result = call_api(
-                api_key, pc.get("model", model), prompt,
-                reasoning_effort=pc.get("reasoning_effort", "low"),
-                max_tokens=pc.get("max_tokens", 10000),
-                temperature=pc.get("temperature", 0.8),
-                system_prompt="",
-                api_url=api_url
-            )
+            result = call_llm(config, "expand-chapter", prompt, "")
 
             new_chars = len(result.replace('\n', '').replace(' ', ''))
             if new_chars < orig_chars * 1.1:

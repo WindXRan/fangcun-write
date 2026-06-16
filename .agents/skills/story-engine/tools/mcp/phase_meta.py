@@ -73,7 +73,7 @@ register(PhaseMeta("unified_fix", "统一修复",
                    scope="chapter", parallel=True, batchable=True))
 register(PhaseMeta("unified_review_fix", "统一审+修一轮",
                    depends_on=["write"], produces=["reviewed_ch_N.txt"],
-                   scope="chapter", parallel=True, batchable=True))
+                   scope="global", parallel=False, batchable=False))
 
 
 def resolve_order(goal_phases: set[str]) -> list[list[str]]:

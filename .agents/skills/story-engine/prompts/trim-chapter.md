@@ -6,7 +6,7 @@ phase: postprocess
 description: 绮剧畝瓒呭瓧鏁扮珷
 required_vars: ["鐩爣瀛楁暟", "浣滆€呭悕", "婧愪功鍚?, "鏂颁功鍚?, "N", "N03d"]
 system_prompt: system-generic.md
-defaults: {"model": "deepseek-v4-pro", "max_tokens": 4096, "reasoning_effort": "low", "temperature": 0.8}
+defaults: {"model": "deepseek-v4-pro", "max_tokens": 4096, "reasoning_effort": "high", "temperature": 0.8}
 ---
 
 绮剧畝浠ヤ笅绔犺妭锛岀洰鏍?{鐩爣瀛楁暟} 瀛椼€?

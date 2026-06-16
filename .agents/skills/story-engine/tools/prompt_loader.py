@@ -269,6 +269,9 @@ def _parse_frontmatter(text):
     meta 至少包含 version (int) 和 changelog (str)。
     其他字段（type/phase/required_vars/defaults 等）按 JSON 解析。
     """
+    # 去掉 BOM
+    if text.startswith('\ufeff'):
+        text = text[1:]
     meta = {"version": 1, "changelog": ""}
     m = _FRONTMATTER_RE.match(text)
     if not m:

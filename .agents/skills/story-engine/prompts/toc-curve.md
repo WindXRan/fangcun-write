@@ -6,7 +6,7 @@ phase: open_book
 description: 鐩綍鎯呯华鏇茬嚎鍒嗘瀽
 required_vars: ["浣滆€呭悕", "婧愪功鍚?]
 system_prompt: system-generic.md
-defaults: {"model": "deepseek-v4-pro", "max_tokens": 4096, "reasoning_effort": "low", "temperature": 0.8}
+defaults: {"model": "deepseek-v4-pro", "max_tokens": 4096, "reasoning_effort": "high", "temperature": 0.8}
 ---
 
 璇绘簮鏂囩殑绔犺妭鐩綍锛屽垎鏋愬叏涔︽儏缁洸绾垮拰鎯呰妭缁撴瀯銆?

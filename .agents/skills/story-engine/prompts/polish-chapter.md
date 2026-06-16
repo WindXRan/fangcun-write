@@ -6,7 +6,7 @@ phase: postprocess
 description: 娑﹁壊绔犺妭
 required_vars: ["content", "min_chars", "max_chars"]
 system_prompt: system-generic.md
-defaults: {"model": "deepseek-v4-pro", "max_tokens": 8000, "reasoning_effort": "low", "temperature": 0.8}
+defaults: {"model": "deepseek-v4-pro", "max_tokens": 8000, "reasoning_effort": "high", "temperature": 0.8}
 ---
 
 浣犳槸涓撲笟缃戞枃鍐欐墜銆傝娑﹁壊浠ヤ笅绔犺妭锛屾彁鍗囨枃绗旇川閲忋€?

@@ -28,6 +28,7 @@
         }).join("");
 
         const extraLinks = [];
+        extraLinks.push(`<a class="nav-extra-link" href="/pools/">大池子</a>`);
         if (!isTrend) extraLinks.push(`<a class="nav-extra-link" href="trend.html?rank=${currentRank}">趋势</a>`);
         if (!isAuthor) extraLinks.push(`<a class="nav-extra-link" href="author.html?rank=${currentRank}">灵感</a>`);
         if (isTrend || isAuthor) extraLinks.push(`<a class="nav-extra-link" href="index.html?rank=${currentRank}">榜单</a>`);

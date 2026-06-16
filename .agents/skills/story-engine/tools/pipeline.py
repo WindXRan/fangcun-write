@@ -137,7 +137,8 @@ def _build_orch(config, state_mgr, config_path=None) -> Orchestrator:
     orch.register_handler("expand", phase_expand)
     orch.register_handler("unified_check", phase_unified_check)
     orch.register_handler("unified_fix", phase_unified_fix)
-    orch.register_handler("unified_review_fix", phase_unified_review_fix)
+    orch.register_handler("unified_review_fix", lambda cfg, s, e: phase_unified_review_fix(
+        cfg, cfg.get("_chapter_start", s), cfg.get("_chapter_end", e), state_mgr=state_mgr))
 
     return orch
 
@@ -259,6 +260,9 @@ def main():
     print(f"{'=' * 50}")
 
     t0 = time.time()
+    # 存章节范围到 config，供 global phase handler 读取
+    config["_chapter_start"] = args.start
+    config["_chapter_end"] = args.end
     orch = _build_orch(config, state_mgr, config_path=args.config)
     results = orch.run(goal, args.start, args.end, args.workers)
 

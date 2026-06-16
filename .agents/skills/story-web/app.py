@@ -157,6 +157,19 @@ def serve_scan_api(filepath):
     return send_from_directory(str(SCAN_DATA_DIR / "api" / "latest"), filepath)
 
 
+# ── 大池子（跨分类对比） ──
+
+@app.route('/pools/')
+def pools_index():
+    return render_template('pools.html')
+
+@app.route('/pools/data/<path:filepath>')
+def serve_pools_data(filepath):
+    return send_from_directory(str(SCAN_DATA_DIR / "data" / "pools"), filepath)
+
+
+# ── 排行榜 ──
+
 @app.route('/ranks/')
 def ranks_index():
     return redirect('/ranks/index.html')

@@ -99,6 +99,7 @@ def parse_book_info(text):
 TAG_NORMALIZE = {
     "男主角": "男主", "女主角": "女主", "男二号": "男二", "女二号": "女二",
     "男配": "男配", "女配": "女配", "反派": "反派",
+    "主角": "女主", "正妻": "女主", "男配角": "男配", "女配角": "女配",
 }
 
 
@@ -112,7 +113,7 @@ def parse_characters(text):
       D: `### 沈麦（宋遥）` —— 名字在前，括号内是别名（需从内容推断tag）
     """
     characters = []
-    TAG_KEYWORDS = r'女[主二配]|男[主二配]|反派|[^\n]{0,4}(?:父亲|母亲|爷爷|奶奶|祖父|祖母|外公|外婆|闺蜜|好友|助理|管家|继母|继父|弟弟|妹妹|哥哥|姐姐)'
+    TAG_KEYWORDS = r'女[主二配]|男[主二配]|反派|主角|正妻|[^\n]{0,4}(?:父亲|母亲|爷爷|奶奶|祖父|祖母|外公|外婆|闺蜜|好友|助理|管家|继母|继父|弟弟|妹妹|哥哥|姐姐)'
     
     # 格式 A: ### 郝仁 (男主) —— 名字在前，(tag) 在括号内
     pattern_a = re.compile(
@@ -169,6 +170,25 @@ def parse_characters(text):
 
     # 解析表格格式的配角
     _parse_side_characters(text, characters)
+
+    # 格式 E: ## 角色名（无标签，用顺序推断）
+    if not characters:
+        pattern_e = re.compile(
+            r'^##\s+([\u4e00-\u9fa5]{2,8})\s*\n(.*?)(?=\n^##\s+|\Z)',
+            re.MULTILINE | re.DOTALL
+        )
+        for i, m in enumerate(pattern_e.finditer(text)):
+            name, body = m.group(1), m.group(2)
+            if name in ['主要角色', '重要配角', '出场规划表', '角色设定', '核心角色', '配角']:
+                continue
+            # 顺序推断：第一个=女主，第二个=男主，其余=配角
+            if i == 0:
+                role_tag = "女主"
+            elif i == 1:
+                role_tag = "男主"
+            else:
+                role_tag = "配角"
+            _add_character(characters, role_tag, name.strip(), body)
 
     return characters
 
@@ -484,15 +504,32 @@ def build_character_variables(characters):
     产出 {男主名}, {女主名} 等，可直接用于 prompt 替换。
     优先用 tag_short（男主角→男主），fallback 到原始 tag。
     同名角色只取第一个（写在前的是核心角色）。
+    
+    如果没有明确的女主/男主标签，用第一个角色作为女主，第二个作为男主。
     """
     vars_map = {}
     seen_tags = set()
+    first_name = None
     for ch in characters:
         tag = ch.get("tag_short", ch.get("tag", ""))
         name = ch.get("name", "")
+        if not name:
+            continue
+        if first_name is None:
+            first_name = name
         if tag and tag not in seen_tags:
             vars_map[f"{tag}名"] = name
             seen_tags.add(tag)
+    
+    # Fallback: 没有明确的女主/男主时，用第一个角色作为女主
+    if "女主名" not in vars_map and first_name:
+        vars_map["女主名"] = first_name
+    # 如果有第二个角色且没有男主，用第二个作为男主
+    if "男主名" not in vars_map and len(characters) > 1:
+        second = characters[1].get("name", "")
+        if second:
+            vars_map["男主名"] = second
+    
     return vars_map
 
 

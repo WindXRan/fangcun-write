@@ -9,7 +9,7 @@ import time
 from pathlib import Path
 
 from utils import (
-    get_total_chapters, get_source_title, call_api, count_source_chars
+    get_total_chapters, get_source_title, count_source_chars
 )
 from state_manager import atomic_write_text
 from prompt_loader import load_prompt, load_system_prompt, tag_output, get_prompt_config_with_overrides, get_system_prompt_name
@@ -188,8 +188,10 @@ def _heuristic_key_chapters(config):
     return result
 
 
-def _detect_curve(config, api_key, api_url):
-    """Stage 1: 读 _toc.txt，用 flash 分析情绪曲线，返回关键章节列表。"""
+def _detect_curve(config):
+    """Stage 1: 读 _toc.txt，分析情绪曲线，返回关键章节列表。"""
+    from lib.api_client import call_llm
+
     base_dir = config.get("base_dir", os.getcwd())
     author = config.get("author", "")
     source_book = config.get("source_book", "")
@@ -219,15 +221,11 @@ def _detect_curve(config, api_key, api_url):
 
     print("  [CURVE] 曲线分析中...")
     try:
-        pc = get_prompt_config_with_overrides("toc-curve.md", config)
         if config.get("debug"):
             from utils import debug_dump_prompt
+            pc = get_prompt_config_with_overrides("toc-curve.md", config)
             debug_dump_prompt(config, "toc-curve", 0, f"{prompts_dir}/toc-curve.md", "", curve_prompt, "N/A", pc)
-        result = call_api(
-            api_key, pc.get("model", "deepseek-v4-pro"), curve_prompt,
-            max_tokens=pc.get("max_tokens", 4096), api_url=api_url,
-            temperature=pc.get("temperature", 0.8),
-        )
+        result = call_llm(config, "toc-curve", curve_prompt, "")
     except Exception:
         print("  [CURVE] LLM 调用失败，使用等距采样")
         return _fallback_key_chapters(total_ch)
@@ -302,15 +300,9 @@ def phase_open_book(config, state_mgr=None):
         state_mgr.phase_start("open-book")
 
     base_dir = config.get("base_dir", os.getcwd())
-    api_key = config.get("api_key") or os.environ.get("API_KEY")
-    if not api_key:
-        raise ValueError("未配置 API_KEY，请设置 $env:API_KEY")
-
-    from lib.api_client import get_api_url
-    api_url = get_api_url(config)
 
     # === Stage 1: 曲线分析 → 选关键章节 ===
-    key_chapters = _detect_curve(config, api_key, api_url)
+    key_chapters = _detect_curve(config)
 
     # === Stage 2: 用选定的章节做开书分析 ===
     total_ch = get_total_chapters(config)
@@ -344,13 +336,7 @@ def phase_open_book(config, state_mgr=None):
             if state_mgr:
                 state_mgr.phase_done("open-book")
             return True
-        result = call_api(
-            api_key, pc.get("model", "deepseek-v4-pro"), user_prompt,
-            reasoning_effort=pc.get("reasoning_effort", "high"),
-            max_tokens=pc.get("max_tokens", 8192),
-            temperature=pc.get("temperature", 0.8),
-            system_prompt=system_prompt, api_url=api_url,
-        )
+        result = call_llm(config, "open-book", user_prompt, system_prompt)
 
         files = parse_multi_file_output(result)
         book_info_content = None

@@ -10,8 +10,8 @@ from state_manager import StateManager, atomic_write_json, atomic_write_text
 from config_validator import validate_config
 from utils import (
     get_source_text, get_total_chapters, 
-    count_source_chars, call_api, get_source_title, prepend_title,
-    print_progress, load_trend_knowledge, get_chapters_list, batch_run
+    count_source_chars, call_api, get_source_title,
+    print_progress, get_chapters_list, batch_run
 )
 from phases import *
 
@@ -34,9 +34,7 @@ __all__ = [
     'count_source_chars',
     'call_api',
     'get_source_title',
-    'prepend_title',
     'print_progress',
-    'load_trend_knowledge',
     'get_chapters_list',
     'batch_run',
     

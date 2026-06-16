@@ -13,9 +13,10 @@ def phase_unified_check(config, start, end, workers=10, batch_size=25, state_mgr
     print("=" * 50)
 
     from unified_fixer import run_pipeline
+    from lib.api_client import get_api_url
 
     api_key = config.get("api_key") or os.environ.get("API_KEY")
-    api_url = config.get("api_base_url", "https://api.deepseek.com").rstrip("/") + "/v1/chat/completions"
+    api_url = get_api_url(config)
     model = config.get("model", "deepseek-chat")
 
     results, merged = run_pipeline(
@@ -38,9 +39,10 @@ def phase_unified_fix(config, start, end, workers=10, batch_size=25, dry_run=Fal
     print("=" * 50)
 
     from unified_fixer import run_pipeline
+    from lib.api_client import get_api_url
 
     api_key = config.get("api_key") or os.environ.get("API_KEY")
-    api_url = config.get("api_base_url", "https://api.deepseek.com").rstrip("/") + "/v1/chat/completions"
+    api_url = get_api_url(config)
     model = config.get("model", "deepseek-chat")
 
     if not api_key:
