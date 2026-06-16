@@ -213,29 +213,39 @@ python tools/pipeline.py --config configs/xxx.json --health-check
 
 ## 配置文件
 
+配置文件在 `configs/` 目录下（被 gitignore），需要手动创建。
+
 ```json
 {
-  "book_name": "仿写书名",
-  "author": "作者",
+  "book_name": "新书名",
+  "author": "源书作者名",
   "source_book": "源书名",
-  "initial_chapters": 38,
-  "trend_dir": "trends/题材名",
   "api_key": null,
   "model": "deepseek-v4-flash",
   "reasoning_effort": "low",
+  "base_dir": ".",
   "prompts_dir": ".agents/skills/story-engine/prompts",
-  "rewrites_dir": "projects/作者/源书/rewrites/仿写书",
-  "config_file": "configs/xxx.json"
+  "rewrites_dir": "projects/{作者名}/{源书名}/rewrites/{新书名}",
+  "execution_mode": "api"
 }
 ```
 
-> ⚠️ `api_key` 为 null 时从 `$env:API_KEY` 读取。不要把 key 写入配置文件。
-> 
-> 📌 `initial_chapters` 可选，首次写章数量（试水模式）。不设则写完全书。
-> 
-> 📌 `trend_dir` 可选，指定后开书阶段会自动注入热梗知识库素材。配合 `story-trend` skill 使用。
-> 
-> 📌 `config_file` 用于审稿修复阶段，指向配置文件路径。
+**关键字段说明：**
+- `author`：必须与 `projects/` 下的目录名一致（如 "芋圆香芋派"）
+- `source_book`：必须与 `projects/{作者}/` 下的目录名一致（如 "临水小厨娘"）
+- `rewrites_dir`：仿写输出目录，格式 `projects/{作者}/{源书}/rewrites/{新书}`
+- `api_key`：为 null 时从 `$env:API_KEY` 读取，不要写入配置文件
+
+**目录结构要求：**
+```
+projects/
+└── {作者名}/
+    └── {源书名}/
+        ├── _cache/
+        │   └── chapters/第N章.txt   ← 源文章节
+        └── rewrites/
+            └── {新书名}/            ← 仿写输出
+```
 
 ## Prompts
 
