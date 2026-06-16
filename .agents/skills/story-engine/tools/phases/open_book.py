@@ -114,6 +114,77 @@ def _fallback_key_chapters(total_ch):
     return sorted(set(chs))
 
 
+def _heuristic_key_chapters(config):
+    """从 _toc.txt 章节标题启发式选关键章节（不调 API）。"""
+    base_dir = config.get("base_dir", os.getcwd())
+    author = config.get("author", "")
+    source_book = config.get("source_book", "")
+    toc_path = Path(base_dir) / "projects" / author / source_book / "_cache" / "_toc.txt"
+    if not toc_path.exists():
+        return _fallback_key_chapters(get_total_chapters(config))
+
+    lines = [l.strip() for l in toc_path.read_text(encoding="utf-8").splitlines() if l.strip()]
+    total = 0
+    chapter_titles = {}
+    for line in lines:
+        m = re.match(r'第(\d+)章\s*(.*)', line)
+        if m:
+            ch_num = int(m.group(1))
+            title = m.group(2).strip()
+            chapter_titles[ch_num] = title
+            total = max(total, ch_num)
+    if total == 0:
+        return _fallback_key_chapters(get_total_chapters(config))
+
+    # 关键词匹配：高光/转折/结局
+    KEYWORDS = [
+        # 剧情转折
+        "反转", "真相", "高潮", "升温", "决裂", "摊牌", "崩溃", "爆发",
+        "质问", "离开", "归来", "相认", "黑化", "觉醒", "逆转", "抉择",
+        "转折", "危机", "秘密", "发现", "误会", "冲突", "天降",
+        # 关系里程碑
+        "初见", "告白", "心事", "情敌", "吃醋", "心动", "想见", "在意",
+        "牵手", "拥抱", "亲吻", "提亲", "定亲", "婚礼", "大婚", "成亲",
+        "和好", "分手", "决裂", "两心", "心悦", "真心", "答应",
+        # 结局/番外
+        "大结局", "结局", "番外", "新年", "团圆", "结局",
+        # 穿越/重生
+        "穿越", "重生", "魂穿",
+    ]
+    scored = []
+    for ch_num, title in chapter_titles.items():
+        score = 0
+        for kw in KEYWORDS:
+            if kw in title:
+                score += 3
+        # 首章/末章加分
+        if ch_num == 1:
+            score += 5
+        if ch_num == total:
+            score += 4
+        if "番外" in title:
+            score += 2
+        scored.append((ch_num, score, title))
+
+    # 按分数降序取 top 12，再补等距
+    scored.sort(key=lambda x: -x[1])
+    selected = set(ch for ch, s, t in scored[:12] if s > 0)
+
+    # 补足：每 20% 分位至少一章
+    for frac in [0.1, 0.25, 0.4, 0.55, 0.7, 0.85]:
+        ch = max(1, int(total * frac))
+        selected.add(ch)
+
+    # 第1章必选
+    selected.add(1)
+    selected.add(total)
+
+    result = sorted(selected)
+    if len(result) < 5:
+        return _fallback_key_chapters(total)
+    return result
+
+
 def _detect_curve(config, api_key, api_url):
     """Stage 1: 读 _toc.txt，用 flash 分析情绪曲线，返回关键章节列表。"""
     base_dir = config.get("base_dir", os.getcwd())
@@ -151,7 +222,7 @@ def _detect_curve(config, api_key, api_url):
             debug_dump_prompt(config, "toc-curve", 0, f"{prompts_dir}/toc-curve.md", "", curve_prompt, "N/A", pc)
         if config.get("prompts_only"):
             print("  [PROMPT] toc-curve — prompt 已保存至 _debug/")
-            return _fallback_key_chapters(total_ch)
+            return _heuristic_key_chapters(config)
         result = call_api(
             api_key, pc.get("model", "deepseek-v4-flash"), curve_prompt,
             max_tokens=pc.get("max_tokens", 4096), api_url=api_url,
