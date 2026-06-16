@@ -157,6 +157,9 @@ def _heuristic_key_chapters(config):
         for kw in KEYWORDS:
             if kw in title:
                 score += 3
+        # 前10章加分：定人设/定调性/定冲突，开书分析必须读
+        if 2 <= ch_num <= 10:
+            score += 4
         # 首章/末章加分
         if ch_num == 1:
             score += 5
