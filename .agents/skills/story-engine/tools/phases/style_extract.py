@@ -46,7 +46,6 @@ def phase_style_extract(config, start, end, workers=None):
 
     api_key = config.get("api_key") or config.get("API_KEY")
     if not api_key:
-        import os
         api_key = os.environ.get("API_KEY")
 
     print(f"\n{'=' * 50}")
@@ -203,7 +202,15 @@ def _write_md(styles_dir, ch, anchor=None, analysis=None, src_text=None):
 
 def load_style_text(config, ch):
     """加载 style_{N}.md 全文（供写章 prompt 注入）。"""
-    f = Path(config["rewrites_dir"]) / "styles" / f"style_{ch:03d}.md"
-    if f.exists():
-        return f.read_text(encoding="utf-8")
+    # 优先读源书级共享缓存
+    source_book = config.get("source_book", "")
+    author = config.get("author", "")
+    base_dir = config.get("base_dir", os.getcwd())
+    shared = Path(base_dir) / "projects" / author / source_book / "_cache" / "styles" / f"style_{ch:03d}.md"
+    if shared.exists():
+        return shared.read_text(encoding="utf-8")
+    # fallback: 仿写版本内（兼容旧结构）
+    local = Path(config["rewrites_dir"]) / "styles" / f"style_{ch:03d}.md"
+    if local.exists():
+        return local.read_text(encoding="utf-8")
     return None

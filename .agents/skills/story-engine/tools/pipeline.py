@@ -134,6 +134,7 @@ def _build_orch(config, state_mgr, config_path=None) -> Orchestrator:
     orch.register_handler("prep", lambda cfg, s, e: phase_prep(cfg))
     orch.register_handler("open_book", lambda cfg, s, e: phase_open_book(cfg, state_mgr=state_mgr))
     orch.register_handler("extract", _extract)
+    orch.register_handler("style_extract", lambda cfg, s, e: phase_style_extract(cfg, s, e))
     orch.register_handler("guides", _guide_handler)
     # 根据 execution_mode 选择 write handler
     if _get_execution_mode(config, "write") == "agent":
