@@ -37,7 +37,7 @@ def _get_book_data(rewrites_dir):
 # Phase 2: Guide 生成
 # ============================================================
 
-def phase_guides(config, start, end, workers=5, serial=False, state_mgr=None):
+def phase_guides(config, start, end, workers=5, state_mgr=None):
     """生成 plot_guide + style_guide（引用 templates）。"""
     from lib.api_client import get_api_url
     
@@ -48,35 +48,12 @@ def phase_guides(config, start, end, workers=5, serial=False, state_mgr=None):
 
     # plot-guide（JSON 输出 + 模板合并）
     print(f"\n{'=' * 50}")
-    print(f"Phase 2: plot_guide (flash, ch{start}-{end}, {'串行(质量)' if serial else '并行(速度)'})")
+    print(f"Phase 2: plot_guide (flash, ch{start}-{end}, 并行)")
     print("=" * 50)
 
-    if serial:
-        prev_summary = ""
-        ok, fail = {}, {}
-        for ch in range(start, end + 1):
-            try:
-                overrides = {}
-                if prev_summary:
-                    overrides["上一章摘要"] = prev_summary
-                result = run_one(config, "plot-guide", ch, extra_replacements=overrides)
-                # JSON 输出 + 模板合并
-                result = process_plot_guide_output(config, ch, result)
-                path = Path(guides_dir) / f"plot_{ch}.md"
-                atomic_write_text(path, result)
-                ok[ch] = str(path)
-                beats = re.findall(r'新书[：:].*?(?=\n|$)', result)
-                if not beats:
-                    beats = re.findall(r'节拍\d+[：:].*?(?=\n|$)', result)
-                prev_summary = '；'.join(beats[-3:]) if beats else result[-300:]
-                print(f"  [OK] ch{ch} plot-guide")
-            except Exception as e:
-                fail[ch] = str(e)
-                print(f"  [FAIL] ch{ch}: {e}")
-    else:
-        ok, fail = batch_run(config, "plot-guide", start, end, workers, guides_dir,
-                             "plot_{ch}.md", skip_existing=True, state_mgr=state_mgr,
-                             run_one_func=run_one_with_template)
+    ok, fail = batch_run(config, "plot-guide", start, end, workers, guides_dir,
+                         "plot_{ch}.md", skip_existing=True, state_mgr=state_mgr,
+                         run_one_func=run_one_with_template)
 
     print(f"plot_guide: OK={len(ok)} FAIL={len(fail)}")
 
@@ -176,7 +153,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     else:
         max_tokens = pc.get("max_tokens", 8192)
 
-    # 合并额外替换变量（如串行模式的上一章摘要）
+    # 合并额外替换变量
     if extra_replacements:
         replacements.update(extra_replacements)
 
