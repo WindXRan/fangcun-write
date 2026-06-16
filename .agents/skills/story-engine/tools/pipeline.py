@@ -29,7 +29,7 @@ GOAL_MAP = {
     "import": {"prep"},
     "open": {"prep", "open_book", "extract"},
     "write": {"style_extract", "guides", "write", "validate", "postfix"},  # 核心写章流程
-    "review": {"compare", "unified_review_fix"},
+    "review": {"unified_review_fix"},  # 统一审改（审查+修复）
     "export": set(),  # 导出在 _post_process 处理
     # 写章后按需执行（选一个）
     "trim": {"trim"},
@@ -37,9 +37,9 @@ GOAL_MAP = {
     "polish": {"polish"},
     "expand": {"expand"},
     # 兼容旧名
-    "all": {"prep", "open_book", "extract", "guides", "write", "trim", "validate", "compare"},
+    "all": {"prep", "open_book", "extract", "style_extract", "guides", "write", "validate", "postfix", "unified_review_fix", "compare"},
     "open-book": {"prep", "open_book", "extract"},
-    "unified": {"write", "unified_review_fix"},
+    "unified": {"unified_review_fix"},
     # 单步（调试用）
     "prep": {"prep"},
     "open_book": {"open_book", "extract"},
