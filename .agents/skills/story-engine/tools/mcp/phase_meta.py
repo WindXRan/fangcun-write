@@ -72,7 +72,7 @@ register(PhaseMeta("unified_fix", "统一修复",
                    depends_on=["unified_check"], produces=["fixed_ch_N.txt"],
                    scope="chapter", parallel=True, batchable=True))
 register(PhaseMeta("unified_review_fix", "统一审+修一轮",
-                   depends_on=["write"], produces=["reviewed_ch_N.txt"],
+                   depends_on=[], produces=["reviewed_ch_N.txt"],
                    scope="global", parallel=False, batchable=False))
 
 

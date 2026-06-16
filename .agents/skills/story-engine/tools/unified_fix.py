@@ -19,7 +19,6 @@ from unified_fixer import (
     run_pipeline, review_agent, dispatch_agent, fix_agent,
     summary_agent, _run_global_reviews, ReviewResult, SummaryReport
 )
-from lib.api_client import get_api_key, get_api_url
 
 
 def main():
@@ -49,14 +48,6 @@ def main():
     args.start = args.start or 1
     args.end = args.end or 10
 
-    # API 配置
-    api_key = cfg.get("api_key") or os.environ.get("API_KEY")
-    api_url = get_api_url(cfg)
-    model = cfg.get("model", "deepseek-v4-pro")
-
-    if not api_key:
-        print("[WARN] 未配置 API_KEY，将跳过 LLM 审核和修复")
-
     print(f"\n{'='*50}")
     print(f"统一修复 | {cfg['book_name']} | ch{args.start}-{args.end}")
     print(f"{'='*50}")
@@ -64,7 +55,6 @@ def main():
     # 运行完整流程
     results, report = run_pipeline(
         cfg, args.start, args.end,
-        api_key=api_key, api_url=api_url, model=model,
         batch_size=args.batch_size, workers=args.workers,
         dry_run=args.dry_run
     )

@@ -10,10 +10,9 @@ import time
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from utils import get_source_text, debug_dump_prompt
+from utils import get_source_text
 from lib.text_metrics import count_style_fingerprint, format_style_anchors
-from lib.api_client import get_api_url
-from prompt_loader import load_system_prompt, load_prompt_str, get_prompt_config_with_overrides
+from prompt_loader import load_system_prompt, load_prompt_str
 
 
 def _text_hash(text):
@@ -82,11 +81,9 @@ def phase_style_extract(config, start, end, workers=None):
     # Layer 2: LLM 分析（并行，需 API key）
     if api_key:
         t0 = time.time()
-        api_url = get_api_url(config)
-        model = config.get("model", "deepseek-v4-pro")
         llm_count = 0
         with ThreadPoolExecutor(max_workers=min(w, len(todo))) as ex:
-            futures = {ex.submit(_llm_one, config, ch, styles_dir, api_key, api_url, model): ch for ch in todo}
+            futures = {ex.submit(_llm_one, config, ch, styles_dir): ch for ch in todo}
             for f in as_completed(futures):
                 if f.result():
                     llm_count += 1
@@ -117,9 +114,9 @@ def _algo_one(config, ch, styles_dir):
     return True
 
 
-def _llm_one(config, ch, styles_dir, api_key, api_url, model):
+def _llm_one(config, ch, styles_dir):
     """LLM 分析 → 追加到 style_{N}.md 后半部分。"""
-    import requests
+    from lib.api_client import call_llm
 
     text = get_source_text(config, ch)
     if not text:
@@ -137,10 +134,10 @@ def _llm_one(config, ch, styles_dir, api_key, api_url, model):
         style_anchors=anchors,
     )
 
-    pc = get_prompt_config_with_overrides("style-analyze.md", config)
-    sys_prompt = load_system_prompt("system-generic.md") or "你是资深文学编辑，分析文笔风格。"
-
     if config.get("debug") and ch <= 3:
+        from utils import debug_dump_prompt
+        pc = get_prompt_config_with_overrides("style-analyze.md", config)
+        sys_prompt = load_system_prompt("system-generic.md") or ""
         debug_dump_prompt(config, "style-analyze", ch,
                           "prompts/style-analyze.md", sys_prompt,
                           prompt, "system-generic.md", pc)
@@ -148,26 +145,12 @@ def _llm_one(config, ch, styles_dir, api_key, api_url, model):
     if config.get("prompts_only"):
         return False
 
+    sys_prompt = load_system_prompt("system-generic.md") or "你是资深文学编辑，分析文笔风格。"
     try:
-        resp = requests.post(
-            api_url,
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={
-                "model": pc.get("model", model),
-                "messages": [
-                    {"role": "system", "content": sys_prompt},
-                    {"role": "user", "content": prompt},
-                ],
-                "temperature": pc.get("temperature", 0.3),
-                "max_tokens": pc.get("max_tokens", 512),
-            },
-            timeout=60,
-        )
-        if resp.status_code == 200:
-            analysis = resp.json()["choices"][0]["message"]["content"].strip()
-            _write_md(styles_dir, ch, analysis=f"## LLM 风格分析\n{analysis}", src_text=text)
-            print(f"  [STYLE] ch{ch:03d}")
-            return True
+        analysis = call_llm(config, "style-analyze", prompt, sys_prompt).strip()
+        _write_md(styles_dir, ch, analysis=f"## LLM 风格分析\n{analysis}", src_text=text)
+        print(f"  [STYLE] ch{ch:03d}")
+        return True
     except Exception as e:
         print(f"  [STYLE] ch{ch:03d} err: {e}")
     return False

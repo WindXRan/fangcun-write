@@ -90,7 +90,7 @@ def issue_dict(i):
 def review_agent(config, chapter_batch, agent_id=0):
     """单个审查 agent。在一批章节上运行 algo 检查 + LLM 批量审稿。
 
-    Input:  config, chapter_batch (list[int]), api_key, api_url, model, agent_id
+    Input:  config, chapter_batch (list[int]), agent_id
     Output: ReviewResult
     """
     result = ReviewResult()
@@ -691,7 +691,7 @@ def dispatch_agent(config, report: SummaryReport) -> dict[int, FixTask]:
 def fix_agent(config, task: FixTask, dry_run=False) -> FixResult:
     """执行一个修复任务（单章）。
 
-    Input:  config, FixTask, api_key, api_url, model, dry_run
+    Input:  config, FixTask, dry_run
     Output: FixResult
     """
     ch_dir = Path(f"{config['rewrites_dir']}/chapters")
