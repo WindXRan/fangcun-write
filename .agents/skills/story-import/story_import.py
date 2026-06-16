@@ -71,9 +71,15 @@ def parse_synopsis(text: str) -> str:
 
 def split_chapters(text: str) -> list:
     """拆分章节"""
-    # 匹配"第X章"的模式
+    # 先尝试标准格式：标题后有换行
     pattern = r'\n(?=第\d+章)'
     parts = re.split(pattern, text)
+    
+    # 如果只拆出1章，尝试下载器格式：标题重复两遍
+    if len(parts) <= 2:
+        # 下载器格式：第X章 标题 第X章 标题 内容
+        pattern2 = r'(?=第\d+章\s+.+?\s+第\d+章)'
+        parts = re.split(pattern2, text)
     
     chapters = []
     for part in parts:
@@ -83,6 +89,10 @@ def split_chapters(text: str) -> list:
         
         # 检查是否是章节内容（以"第X章"开头）
         m = re.match(r'(第\d+章\s*.*)\n', part)
+        if not m:
+            # 下载器格式：标题和内容在同一行
+            m = re.match(r'(第\d+章\s+.+?)(?:\s+第\d+章|\s+)', part)
+        
         if m:
             chapter_header = m.group(1).strip()
             chapter_num_match = re.match(r'第(\d+)章', chapter_header)
