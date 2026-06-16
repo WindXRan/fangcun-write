@@ -84,9 +84,29 @@ def merge_tagged_output(template_path, ai_output):
     for tag, content in tags.items():
         placeholder = f'{{{tag}}}'
         if placeholder in result:
-            result = result.replace(placeholder, content)
+            # 去掉 AI 输出中的表格头（避免与模板中的表格头重复）
+            cleaned_content = _remove_table_header(content)
+            result = result.replace(placeholder, cleaned_content)
     
     return result
+
+
+def _remove_table_header(content):
+    """去掉内容开头的表格头（|...|...|格式的行和分隔行）。"""
+    lines = content.split('\n')
+    # 跳过开头的表格头行
+    start = 0
+    for i, line in enumerate(lines):
+        stripped = line.strip()
+        # 跳过表格头行（以 | 开头的行）
+        if stripped.startswith('|') and i < 3:
+            start = i + 1
+        # 跳过分隔行（|---|---|格式）
+        elif re.match(r'^\|[\s\-|]+\|$', stripped):
+            start = i + 1
+        else:
+            break
+    return '\n'.join(lines[start:]).strip()
 
 
 def merge_lines_to_template(template_path, lines):

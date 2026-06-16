@@ -58,7 +58,7 @@ def count_style_fingerprint(text):
     lines = body.split('\n')
     dia_lines = 0
     for l in lines:
-        if re.search(r'[「『""""‘’]', l):
+        if re.search(r'[「『""\u201c\u201d\'\u2018\u2019]', l):
             dia_lines += 1
         elif re.search(r'(?:说|道|问|喊|叫|骂|吼|答|嚷|喝)[：:]|^[^。！？\n]{2,20}[！？](?:$|\n)|(?:说道|问道|喊道|笑道|怒道|叹道|冷声道)', l):
             dia_lines += 1
