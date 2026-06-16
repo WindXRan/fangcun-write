@@ -17,7 +17,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 sys.path.insert(0, str(Path(__file__).parent))
 from unified_fixer import (
     run_pipeline, review_agent, dispatch_agent, fix_agent,
-    summary_agent, _run_global_reviews, ReviewResult, SummaryReport
+    summary_agent, ReviewResult, SummaryReport
 )
 
 

@@ -346,233 +346,7 @@ def _llm_batch_review(config, chapter_nums):
 
 
 # ============================================================
-# Agent 1b: Global Review Agents (2个并行，通读全书关键章)
-# ============================================================
-
-def _sample_global_chapters(config, start, end):
-    """采样全书关键章：头3 + 每20%分位 + 尾3 → ~10章。"""
-    total = end - start + 1
-    if total <= 10:
-        return list(range(start, end + 1))
-
-    picks = [start, start + 1, start + 2]  # 头3章
-    # 每20%取一章
-    for pct in [20, 40, 60, 80]:
-        picks.append(start + int(total * pct / 100))
-    picks.extend([end - 2, end - 1, end])  # 尾3章
-    return sorted(set(picks))
-
-
-def _load_global_context(config, sampled_chapters):
-    """为全局审查加载 context：角色设定 + 节奏图 + 章节样本。"""
-    rewrites_dir = Path(config["rewrites_dir"])
-    chapters_dir = rewrites_dir / "chapters"
-
-    # 角色设定（从 concept.md 提取角色相关段）
-    concept_path = rewrites_dir / "concept.md"
-    character_profiles = ""
-    if concept_path.exists():
-        concept = concept_path.read_text(encoding="utf-8")
-        # 提取角色相关段落（## 角色 或 ### 角色名 直到下一个 ##）
-        char_sec = re.search(r'##\s*(?:角色|人设|人物).*?(?=##\s|\Z)', concept, re.DOTALL)
-        if char_sec:
-            character_profiles = char_sec.group(0)[:3000]
-
-    # 全局节奏图（从 concept.md 提取）
-    rhythm_map = ""
-    rhythm_sec = re.search(r'##\s*(?:节奏|弧线|全局).*?(?=##\s|\Z)', concept, re.DOTALL)
-    if rhythm_sec:
-        rhythm_map = rhythm_sec.group(0)[:3000]
-
-    # 章节样本
-    parts = []
-    for ch in sampled_chapters:
-        cf = chapters_dir / f"ch_{ch:03d}.txt"
-        if cf.exists():
-            text = cf.read_text(encoding="utf-8")
-            # 取头 500 字 + 尾 300 字（节省 token，保留关键信息）
-            sample = text[:800]
-            if len(text) > 1500:
-                sample += f"\n\n...（中间省略 {len(text)-1500} 字）...\n\n" + text[-700:]
-            parts.append(f"=== 第{ch}章 ===\n{sample}")
-    chapters_sample = '\n\n'.join(parts)
-
-    # 目录摘要（从 guides 目录提取 plot_guide 标题）
-    guides_dir = rewrites_dir / "guides"
-    toc_parts = []
-    for ch in sorted(sampled_chapters):
-        gf = guides_dir / f"plot_{ch}.md"
-        if gf.exists():
-            guide_text = gf.read_text(encoding="utf-8")
-            # 提取第一行（通常是章节主题）
-            first_line = guide_text.strip().split('\n')[0][:100]
-            toc_parts.append(f"第{ch}章: {first_line}")
-    toc_summary = '\n'.join(toc_parts) if toc_parts else "（无 guide）"
-
-    return {
-        "character_profiles": character_profiles or "（concept.md 中无角色设定段）",
-        "rhythm_map": rhythm_map or "（concept.md 中无节奏段）",
-        "chapters_sample": chapters_sample,
-        "toc_summary": toc_summary,
-    }
-
-
-def _global_dimension_review(config, dimension, context):
-    """单个全局审查 agent：读全书关键章，只审一个维度。
-
-    dimension: "character" | "rhythm"
-    """
-    from lib.api_client import call_llm
-
-    prompt_name = f"unified-review-{dimension}.md"
-    prompt_template = load_prompt_str(prompt_name)
-    if not prompt_template:
-        print(f"    [全局审查] prompt {prompt_name} 不存在，跳过", flush=True)
-        return ReviewResult()
-
-    # 格式化 prompt
-    prompt = prompt_template.format(**context)
-
-    pc = get_prompt_config_with_overrides(prompt_name, config)
-    label = {"character": "人设一致性", "emotion": "感情逻辑", "rhythm": "全局节奏/伏笔"}.get(dimension, dimension)
-
-    # Debug: 保存全局审查 prompt
-    if config.get("debug"):
-        debug_dir = Path(config.get("rewrites_dir", ".")) / "_debug" / f"global-{dimension}"
-        debug_dir.mkdir(parents=True, exist_ok=True)
-        (debug_dir / "prompt.md").write_text(
-            f"# Global Review: {label}\n**Model**: {pc.get('model')}\n**Temp**: {pc.get('temperature')}\n\n---\n\n{prompt}",
-            encoding="utf-8")
-
-    print(f"    [全局审查] {label} — 审查中...", flush=True)
-    try:
-        content = call_llm(config, prompt_name, prompt,
-                           "你是资深网文编辑。按用户要求的格式输出审查结果。")
-        result = _parse_global_review(content, dimension)
-        n_ch = len(result.chapters)
-        n_cross = len(result.cross_issues)
-        print(f"    [全局审查] {label} → {n_ch} 章问题 + {n_cross} 跨章问题", flush=True)
-        return result
-    except Exception as e:
-        print(f"    [全局审查] {label} 失败: {e}", flush=True)
-        return ReviewResult()
-
-
-def _parse_global_review(content, dimension):
-    """解析全局审查的 MD 输出。
-
-    格式：
-      ### 章节 N
-      评分: XX
-      问题:
-      - 类型: X | 严重度: high|medium|low | 描述: X | 修复: X
-
-      ### 跨章问题
-      - 涉及章节: 1,2,3 | 类型: X | 严重度: X | 描述: X | 修复: X
-    """
-    result = ReviewResult()
-
-    # 解析 ### 章节 N 块
-    ch_blocks = re.findall(r'###\s+章节\s+(\d+)\s*\n(.*?)(?=###\s+(?:章节|跨章问题)|\Z)', content, re.DOTALL)
-    for ch_str, body in ch_blocks:
-        ch = int(ch_str)
-        score_m = re.search(r'评分:\s*(\d+)', body)
-        score = int(score_m.group(1)) if score_m else 80
-
-        issues = []
-        in_issues = re.split(r'问题:', body, maxsplit=1)
-        if len(in_issues) > 1:
-            for line in in_issues[1].split('\n'):
-                line = line.strip()
-                m = re.match(r'-\s*类型:\s*(\S+)', line)
-                if m:
-                    typ = m.group(1)
-                    sev = _extract_field(line, '严重度', 'medium')
-                    desc = _extract_field(line, '描述', '')
-                    fix = _extract_field(line, '修复', '')
-                    issues.append({
-                        "type": typ or dimension,
-                        "severity": sev,
-                        "desc": desc,
-                        "fix": fix,
-                        "auto_fixable": False,
-                    })
-
-        if issues:
-            if ch not in result.chapters:
-                result.chapters[ch] = {"score": score, "issues": []}
-            result.chapters[ch]["issues"].extend(issues)
-            result.chapters[ch]["score"] = min(result.chapters[ch].get("score", 100), score)
-
-    # 解析 ### 跨章问题 块
-    cross_block = re.search(r'###\s+跨章问题\s*\n(.*?)(?=###|\Z)', content, re.DOTALL)
-    if cross_block:
-        for line in cross_block.group(1).split('\n'):
-            line = line.strip()
-            m = re.match(r'-\s*涉及章节:\s*([\d,]+)', line)
-            if m:
-                chs = [int(x.strip()) for x in m.group(1).split(',') if x.strip()]
-                typ = _extract_field(line, '类型', dimension)
-                sev = _extract_field(line, '严重度', 'medium')
-                desc = _extract_field(line, '描述', '')
-                fix = _extract_field(line, '修复', '')
-                result.cross_issues.append({
-                    "chapters": chs,
-                    "type": typ,
-                    "severity": sev,
-                    "desc": desc,
-                    "fix": fix,
-                })
-
-    return result
-
-
-def _run_global_reviews(config, start, end):
-    """Layer 1b: 全量分批审查（按字数分批，每批~8万字）。"""
-    chapters_dir = Path(config["rewrites_dir"]) / "chapters"
-    max_chars = 80000  # 每批最大字数
-
-    # 按字数分批
-    batches = []
-    current_batch = []
-    current_chars = 0
-    for ch in range(start, end + 1):
-        cf = chapters_dir / f"ch_{ch:03d}.txt"
-        if not cf.exists():
-            continue
-        ch_chars = len(cf.read_text(encoding='utf-8').replace('\n', '').replace(' ', ''))
-        if current_chars + ch_chars > max_chars and current_batch:
-            batches.append(current_batch)
-            current_batch = []
-            current_chars = 0
-        current_batch.append(ch)
-        current_chars += ch_chars
-    if current_batch:
-        batches.append(current_batch)
-
-    dimensions = ["character", "emotion", "rhythm"]
-    results = []
-
-    for batch_idx, batch in enumerate(batches):
-        print(f"  [全局审查] 批次 {batch_idx+1}/{len(batches)}: 第{batch[0]}-{batch[-1]}章 ({len(batch)}章)", flush=True)
-        context = _load_global_context(config, batch)
-
-        with ThreadPoolExecutor(max_workers=3) as ex:
-            futures = {
-                ex.submit(_global_dimension_review, config, dim, context): dim
-                for dim in dimensions
-            }
-            for f in as_completed(futures):
-                try:
-                    results.append(f.result())
-                except Exception as e:
-                    print(f"    [全局审查] {futures[f]} 异常: {e}", flush=True)
-
-    return results
-
-
-# ============================================================
-# Agent 2: Summary Agent (合并、分级 P0/P1/P2、跨章分析)
+# Agent 2: Summary Agent (合并、分级 P0/P1/P2、跨章模式匹配)
 # ============================================================
 
 _P0_TYPES = {"plagiarism", "continuity", "missing", "character", "timeline"}
@@ -597,7 +371,7 @@ def summary_agent(review_results: list[ReviewResult]) -> SummaryReport:
     """汇总 N 个 review agent 的输出。
 
     Input:  [ReviewResult, ...]
-    Output: SummaryReport (去重、分级、跨章合并)
+    Output: SummaryReport (去重、分级、跨章模式匹配)
     """
     merged = {}
     all_cross = []
@@ -627,6 +401,43 @@ def summary_agent(review_results: list[ReviewResult]) -> SummaryReport:
         if key not in seen_cross:
             c["priority"] = severity_to_priority(c.get("severity", "medium"), c.get("type", "continuity"))
             cross_list.append(Issue(**{k: v for k, v in c.items() if k in _ISSUE_FIELDS}))
+            seen_cross.add(key)
+
+    # 跨章模式匹配：同一 type 在 ≥3 章出现 → 生成跨章问题
+    type_ch_map = {}  # type -> list of ch with that type
+    for ch, data in merged.items():
+        for iss in data["issues"]:
+            t = iss.get("type", "")
+            type_ch_map.setdefault(t, set())
+            type_ch_map[t].add(ch)
+
+    type_label = {
+        "character": "人设",
+        "emotion": "情感",
+        "rhythm": "节奏",
+        "plagiarism": "台词雷同",
+        "word_count": "字数",
+        "hook": "钩子",
+        "ai_marker": "AI路标词",
+        "ai_trace": "AI痕迹",
+        "metaphor": "比喻",
+        "sentence_stddev": "句长",
+        "pronoun": "代词",
+    }
+    for t, ch_set in type_ch_map.items():
+        if len(ch_set) < 3:
+            continue
+        sorted_ch = sorted(ch_set)
+        label = type_label.get(t, t)
+        key = f"跨章{label}"
+        if key not in seen_cross:
+            cross_list.append(Issue(
+                type=t, severity="high", priority="P0" if t in _P0_TYPES else "P1",
+                desc=f"【跨章{label}】{len(ch_set)}章存在{label}类问题: 第{','.join(map(str,sorted_ch[:5]))}章"
+                      + (f"...共{len(ch_set)}章" if len(ch_set) > 5 else ""),
+                fix="各章问题综合修复",
+                auto_fixable=False,
+            ))
             seen_cross.add(key)
 
     # 排序 per chapter: P0 > P1 > P2
@@ -862,19 +673,6 @@ def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False):
                 print(f"    [FAIL] Review Agent {futures[f]}: {e}")
 
     print(f"  {len(review_results)}/{len(batches)} 个审查 agent 完成")
-
-    # ========== Step 1b: Global Review Agents (跨章维度审查) ==========
-    api_key = cfg.get("api_key") or os.environ.get("API_KEY")
-    if api_key:
-        print(f"\n{'='*40}", flush=True)
-        print(f"Step 1b: 全局审查 Agent (人设一致性 + 全局节奏/伏笔)", flush=True)
-        print("="*40, flush=True)
-
-        global_results = _run_global_reviews(cfg, start, end)
-        review_results.extend(global_results)
-    else:
-        print(f"\n  [SKIP] 未配置 API_KEY，跳过全局审查", flush=True)
-        global_results = []
 
     # ========== Step 2: Gather — Summary Agent ==========
     print(f"\n{'='*40}", flush=True)
