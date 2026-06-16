@@ -481,8 +481,8 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
             for d in ["chapters", "guides", "styles"]:
                 p = Path(config["rewrites_dir"]) / d
                 if p.exists():
-                    # 备份到 _loop/loop_{N-1}/
-                    backup = round_dir.parent / f"loop_{loop_num-1}" / d
+                    # 备份到 _loop/loop_{N}/（当前轮次目录）
+                    backup = round_dir / d
                     backup.mkdir(parents=True, exist_ok=True)
                     shutil.copytree(p, backup, dirs_exist_ok=True)
                     shutil.rmtree(p)
