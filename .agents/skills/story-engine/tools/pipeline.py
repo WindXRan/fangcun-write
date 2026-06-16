@@ -1,4 +1,4 @@
-"""Pipeline：Orchestrator 驱动，全局串行 + 章级流水线并行。"""
+"""Pipeline：Orchestrator 驱动，全局顺序 + 章级流水线并行。"""
 
 import os
 import sys

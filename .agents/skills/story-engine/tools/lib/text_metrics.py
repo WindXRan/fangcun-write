@@ -37,22 +37,14 @@ def count_metrics(text):
 
 
 def count_style_fingerprint(text):
-    """10 个锚点，纯正则，<30ms。
+    """段落为核心的风格指纹。
 
-    返回: {chars, sentence_avg_len, sentence_short_ratio, dialogue_ratio,
-           paragraph_avg_len, punct_style, opening_type, closing_type,
-           pronoun_density, ttr}
+    返回: {chars, dialogue_ratio, paragraph_avg_len, single_sent_ratio,
+           avg_sent_per_para, pronoun_density, ttr, punct_style, opening_type, closing_type}
     """
     body = _strip_title(text)
     clean = re.sub(r'\s', '', body)
     total = max(len(clean), 1)
-
-    # 句法
-    sents = re.split(r'[。！？!?\n]', body)
-    sent_lens = [len(re.sub(r'\s', '', s)) for s in sents if re.sub(r'\s', '', s)]
-    n_sents = max(len(sent_lens), 1)
-    avg_sent = round(sum(sent_lens) / n_sents, 1)
-    short_ratio = round(sum(1 for l in sent_lens if l < 8) / n_sents, 2)
 
     # 对话：引号行 + 无引号对话（说/道/问/喊/叫 等言说动词）
     lines = body.split('\n')
@@ -64,7 +56,7 @@ def count_style_fingerprint(text):
             dia_lines += 1
     dia_ratio = round(dia_lines / max(len(lines), 1), 2)
 
-    # 段落
+    # 段落（核心指标）
     paras = [p for p in body.split('\n') if p.strip()]
     para_lens = [len(re.sub(r'\s', '', p)) for p in paras]
     para_avg = round(sum(para_lens) / max(len(para_lens), 1), 1)
@@ -94,8 +86,6 @@ def count_style_fingerprint(text):
 
     return {
         "chars": total,
-        "sentence_avg_len": avg_sent,
-        "sentence_short_ratio": short_ratio,
         "dialogue_ratio": dia_ratio,
         "paragraph_avg_len": para_avg,
         "single_sent_ratio": single_sent_ratio,
@@ -109,14 +99,14 @@ def count_style_fingerprint(text):
 
 
 def format_style_anchors(fp):
-    """10 个锚点 → 紧凑描述。"""
+    """段落核心锚点 → 紧凑描述。"""
     parts = []
-    if fp.get("sentence_avg_len"):
-        parts.append(f"句长{fp['sentence_avg_len']}字/句, 短句(<8字)占{fp.get('sentence_short_ratio',0):.0%}")
+    if fp.get("paragraph_avg_len"):
+        parts.append(f"段长{fp['paragraph_avg_len']:.0f}字")
+    if fp.get("single_sent_ratio") is not None:
+        parts.append(f"单句段{fp['single_sent_ratio']:.0%}")
     if fp.get("dialogue_ratio") is not None:
         parts.append(f"对话{fp['dialogue_ratio']:.0%}")
-    if fp.get("paragraph_avg_len"):
-        parts.append(f"段均{fp['paragraph_avg_len']:.0f}字")
     if fp.get("pronoun_density") is not None:
         parts.append(f"代词密度{fp['pronoun_density']}/千字")
     if fp.get("ttr"):

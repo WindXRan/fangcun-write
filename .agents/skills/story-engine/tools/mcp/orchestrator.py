@@ -1,4 +1,4 @@
-"""DAG 编排器：全局 phase 串行 → 章级 phase 流水线并行 + 自动重试。"""
+"""DAG 编排器：全局 phase 顺序 → 章级 phase 流水线并行 + 自动重试。"""
 
 from __future__ import annotations
 import time
@@ -37,7 +37,7 @@ class Orchestrator:
         self.results = []
         global_names, chapter_names = split_by_scope(goal_phases)
 
-        # ── 1. 全局 phase（串行） ──
+        # ── 1. 全局 phase（顺序执行） ──
         if global_names:
             print(f"\n{'=' * 50}\n全局阶段: {', '.join(global_names)}\n{'=' * 50}")
             for name in global_names:

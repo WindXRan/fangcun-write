@@ -119,27 +119,26 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             source_text = get_source_text(config, chapter_num)
             replacements["源文全文"] = source_text or "（源文读取失败）"
 
-    # 写章时注入文笔指纹 + 角色行为卡片 + 源文句长锚点
+    # 写章时注入文笔指纹 + 角色行为卡片 + 源文段落锚点
     if prompt_type == "write-chapter" and chapter_num:
         from phases.style_extract import load_style_text
         style_md = load_style_text(config, chapter_num)
         replacements["文笔指纹"] = style_md or "（文笔指纹未生成）"
         replacements["角色行为卡片"] = _load_char_card(config)
-        # 源文句长锚点（从指纹提取，做硬约束）
+        # 源文段落锚点（从指纹提取，做硬约束）
         src_text = get_source_text(config, chapter_num)
         if src_text:
             from lib.text_metrics import count_style_fingerprint
             fp = count_style_fingerprint(src_text)
-            replacements["源文句长"] = str(fp.get("sentence_avg_len", 20))
-            replacements["源文短句比"] = str(int(fp.get("sentence_short_ratio", 0.15) * 100))
             replacements["源文段长"] = str(int(fp.get("paragraph_avg_len", 40)))
+            replacements["源文单句段比例"] = str(int(fp.get("single_sent_ratio", 0.5) * 100))
             replacements["源文对话比"] = str(int(fp.get("dialogue_ratio", 0.1) * 100))
             replacements["源文代词密度"] = str(fp.get("pronoun_density", 15))
             replacements["源文标点"] = fp.get("punct_style", "标点克制")
         else:
-            replacements["源文句长"] = "20"; replacements["源文短句比"] = "15"
-            replacements["源文段长"] = "40"; replacements["源文对话比"] = "10"
-            replacements["源文代词密度"] = "15"; replacements["源文标点"] = "标点克制"
+            replacements["源文段长"] = "40"; replacements["源文单句段比例"] = "50"
+            replacements["源文对话比"] = "10"; replacements["源文代词密度"] = "15"
+            replacements["源文标点"] = "标点克制"
 
     # 写章时按目标字数动态设 max_tokens（够写完整不截断，超字数靠 trim 裁）
     if prompt_type == "write-chapter" and chapter_num:

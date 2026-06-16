@@ -105,10 +105,9 @@ def _algo_one(config, ch, styles_dir):
         return False
     fp = count_style_fingerprint(text)
     items = [
-        f"- 句长: {fp.get('sentence_avg_len','?')}字/句 (短句<8字: {fp.get('sentence_short_ratio',0):.0%})",
-        f"- 对话: {fp.get('dialogue_ratio',0):.0%}",
-        f"- 段均: {fp.get('paragraph_avg_len','?')}字",
+        f"- 段长: {fp.get('paragraph_avg_len','?')}字",
         f"- 单句段: {fp.get('single_sent_ratio',0):.0%} (平均每段{fp.get('avg_sent_per_para','?')}句)",
+        f"- 对话: {fp.get('dialogue_ratio',0):.0%}",
         f"- 代词密度: {fp.get('pronoun_density','?')}/千字",
         f"- 词汇丰富度: {fp.get('ttr','?')}",
         f"- 标点: {fp.get('punct_style','?')}",
@@ -175,42 +174,44 @@ def _llm_one(config, ch, styles_dir, api_key, api_url, model):
 
 
 def _write_md(styles_dir, ch, anchor=None, analysis=None, src_text=None):
-    """合并写入 style_{N}.md。"""
-    f = styles_dir / f"style_{ch:03d}.md"
-    # 读已有内容
-    sections = {}
-    if f.exists():
-        parts = f.read_text(encoding="utf-8").split("\n## ")
-        for p in parts:
-            if p.startswith("算法锚点"):
-                sections["anchor"] = "## " + p
-            elif p.startswith("LLM 风格分析"):
-                sections["analysis"] = "## " + p
+    """分开写入：算法锚点 → style_{N}.md，LLM 分析 → style_{N}_llm.md。"""
+    # 算法锚点
     if anchor:
-        sections["anchor"] = anchor
+        f = styles_dir / f"style_{ch:03d}.md"
+        content = f"# 第{ch}章 文笔指纹\n"
+        if src_text:
+            content += f"<!-- hash: {_text_hash(src_text)} -->\n"
+        content += "\n" + anchor.strip() + "\n"
+        f.write_text(content, encoding="utf-8")
+    
+    # LLM 分析（单独文件）
     if analysis:
-        sections["analysis"] = analysis
-
-    content = f"# 第{ch}章 文笔指纹\n"
-    # 源文哈希（缓存校验用）
-    if src_text:
-        content += f"<!-- hash: {_text_hash(src_text)} -->\n"
-    content += "\n"
-    for key in ["anchor", "analysis"]:
-        if key in sections:
-            content += sections[key].strip() + "\n\n"
-    f.write_text(content.rstrip() + "\n", encoding="utf-8")
+        f_llm = styles_dir / f"style_{ch:03d}_llm.md"
+        content = f"# 第{ch}章 LLM 风格分析\n\n" + analysis.strip() + "\n"
+        f_llm.write_text(content, encoding="utf-8")
 
 
 def load_style_text(config, ch):
-    """加载 style_{N}.md 全文（供写章 prompt 注入）。"""
-    # 优先读源书级共享缓存
+    """加载 style_{N}.md + style_{N}_llm.md（供写章 prompt 注入）。"""
     source_book = config.get("source_book", "")
     author = config.get("author", "")
     base_dir = config.get("base_dir", os.getcwd())
+    
+    parts = []
+    
+    # 算法锚点
     shared = Path(base_dir) / "projects" / author / source_book / "_cache" / "styles" / f"style_{ch:03d}.md"
     if shared.exists():
-        return shared.read_text(encoding="utf-8")
+        parts.append(shared.read_text(encoding="utf-8"))
+    
+    # LLM 分析
+    shared_llm = Path(base_dir) / "projects" / author / source_book / "_cache" / "styles" / f"style_{ch:03d}_llm.md"
+    if shared_llm.exists():
+        parts.append(shared_llm.read_text(encoding="utf-8"))
+    
+    if parts:
+        return "\n\n".join(parts)
+    
     # fallback: 仿写版本内（兼容旧结构）
     local = Path(config["rewrites_dir"]) / "styles" / f"style_{ch:03d}.md"
     if local.exists():

@@ -26,7 +26,7 @@ def register(m: PhaseMeta):
     PHASES[m.name] = m
     return m
 
-# ── 全局 phase（串行，跑一次） ──
+# ── 全局 phase（跑一次） ──
 register(PhaseMeta("prep", "项目准备：创建目录",
                    depends_on=[], produces=["dirs"],
                    scope="global", parallel=False, batchable=False))
