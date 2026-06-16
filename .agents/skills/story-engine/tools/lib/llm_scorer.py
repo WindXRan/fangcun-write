@@ -57,6 +57,6 @@ def llm_score_chapter(api_key, api_url, model, chapter_text, chapter_num, book_n
                     return score, content
             return 0, f"无法解析分数: {content[:200]}"
         else:
-            return 0, f"API error: {resp.status_code}"
+            return 0, f"API error: {resp.status_code} {resp.text[:200]}"
     except Exception as e:
-        return 0, str(e)
+        return 0, f"Exception: {str(e)}"

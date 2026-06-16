@@ -130,6 +130,44 @@ projects/{作者名}/{源书名}/
 **单步调试：**
 - `prep` / `open_book` / `guides` / `write-only` / `validate` / `compare` / `postfix` / `unified`
 
+## 试水+续写工作流
+
+**场景**：先写10万字试水看能不能签约，签约后再续写全书。
+
+### 触发词识别
+
+| 用户说 | AI执行 |
+|--------|--------|
+| "仿写这本书" | **先问范围**："全书还是先试水？比如先写10万字（约40章）" |
+| "先写10万字试试" | 创建 config，设 `initial_chapters`，跑 open+write |
+| "继续写" / "往后写" / "续写" | 检查 state.json，从断点续写 |
+| "写完剩下的" | 读取已完成章节，--start 设为 last+1 |
+
+### 试水配置
+
+config.json 增加 `initial_chapters` 字段：
+```json
+{
+  "book_name": "新书名",
+  "initial_chapters": 38,
+  ...
+}
+```
+
+- `initial_chapters`：首次写章数量（约10万字，按每章2500字估算）
+- 开书阶段自动用**全文**分析弧线，不受此字段限制
+- 写章阶段自动限制到 initial_chapters 章
+
+### 续写流程
+
+```
+1. 检查 state.json → 获取已完成章节列表
+2. --start = max(completed) + 1
+3. --end = 源文总章数
+4. 跳过 open-book（concept 已有）
+5. 只跑 guides + write + postfix
+```
+
 ## 鲁棒性特性
 
 - **API 重试**：429限流/5xx错误/超时 自动指数退避重试（最多3次）
@@ -180,6 +218,7 @@ python tools/pipeline.py --config configs/xxx.json --health-check
   "book_name": "仿写书名",
   "author": "作者",
   "source_book": "源书名",
+  "initial_chapters": 38,
   "trend_dir": "trends/题材名",
   "api_key": null,
   "model": "deepseek-v4-flash",
@@ -191,6 +230,8 @@ python tools/pipeline.py --config configs/xxx.json --health-check
 ```
 
 > ⚠️ `api_key` 为 null 时从 `$env:API_KEY` 读取。不要把 key 写入配置文件。
+> 
+> 📌 `initial_chapters` 可选，首次写章数量（试水模式）。不设则写完全书。
 > 
 > 📌 `trend_dir` 可选，指定后开书阶段会自动注入热梗知识库素材。配合 `story-trend` skill 使用。
 > 

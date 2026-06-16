@@ -225,8 +225,14 @@ def main():
         return
 
     if not any("--end" in a for a in sys.argv):
-        chs = get_chapters_list(config, include_fanwai=args.include_fanwai)
-        if chs: args.end = max(chs)
+        # 优先用 config 中的 initial_chapters（试水模式）
+        initial = config.get("initial_chapters")
+        if initial and isinstance(initial, int) and initial > 0:
+            args.end = initial
+            print(f"[INFO] 使用 initial_chapters={initial} 作为 end")
+        else:
+            chs = get_chapters_list(config, include_fanwai=args.include_fanwai)
+            if chs: args.end = max(chs)
 
     goal = _expand(args.phase)
 
