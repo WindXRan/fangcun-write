@@ -476,16 +476,15 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False, target_scor
         _log(f"## Loop #{loop_num}/{max_loops}")
 
         # [1] Write with current prompts (备份旧章后清除，确保新prompt生效)
-        if loop_num > 1:
-            import shutil
-            for d in ["chapters", "guides", "styles"]:
-                p = Path(config["rewrites_dir"]) / d
-                if p.exists():
-                    # 备份到 _loop/loop_{N}/（当前轮次目录）
-                    backup = round_dir / d
-                    backup.mkdir(parents=True, exist_ok=True)
-                    shutil.copytree(p, backup, dirs_exist_ok=True)
-                    shutil.rmtree(p)
+        import shutil
+        for d in ["chapters", "guides", "styles"]:
+            p = Path(config["rewrites_dir"]) / d
+            if p.exists():
+                # 备份到 _loop/loop_{N}/（当前轮次目录）
+                backup = round_dir / d
+                backup.mkdir(parents=True, exist_ok=True)
+                shutil.copytree(p, backup, dirs_exist_ok=True)
+                shutil.rmtree(p)
         _log("写章...")
         t0 = time.time()
         # 确保 book_data.json 存在（角色名等变量）
