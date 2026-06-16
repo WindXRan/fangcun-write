@@ -128,6 +128,7 @@ def _filter_todo(config, prompt_type, start, end, output_dir, filename_fmt, skip
     """筛选待处理章节：跳过已存在的、检查 plot_guide 完整性。"""
     todo = []
     empty_plots = set()
+    rewrite_set = config.get("_rewrite_chapters")  # 预检指定的章集合
 
     if prompt_type == "write-chapter":
         guides_dir = Path(config["rewrites_dir"]) / "guides"
@@ -141,6 +142,9 @@ def _filter_todo(config, prompt_type, start, end, output_dir, filename_fmt, skip
 
     for ch in range(start, end + 1):
         if ch in empty_plots:
+            continue
+        # 预检模式：只写指定的章
+        if rewrite_set is not None and ch not in rewrite_set:
             continue
         if skip_existing:
             filepath = Path(output_dir) / filename_fmt.format(ch=ch)

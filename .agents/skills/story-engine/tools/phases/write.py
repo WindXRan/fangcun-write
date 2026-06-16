@@ -1,4 +1,4 @@
-"""Phase 3: 写章（含 key chapter 升级 + 风格自检）"""
+"""Phase 3: 写章（含 key chapter 升级 + 风格自检 + 预检跳过）"""
 
 import os
 import re
@@ -6,6 +6,28 @@ import time
 from pathlib import Path
 
 from utils import count_source_chars, batch_run, get_source_text
+
+
+def _pre_validate(config, start, end):
+    """写前预检：已 PASS 的章跳过，只返回需要重写的章列表。"""
+    from phases.validate import validate_one
+    chapters_dir = Path(config['rewrites_dir']) / 'chapters'
+    skip = []
+    rewrite = []
+    for ch in range(start, end + 1):
+        ch_file = chapters_dir / f"ch_{ch:03d}.txt"
+        if not ch_file.exists() or ch_file.stat().st_size < 500:
+            rewrite.append(ch)
+            continue
+        try:
+            passed, report, _ = validate_one(config, ch)
+            if passed:
+                skip.append(ch)
+            else:
+                rewrite.append(ch)
+        except Exception:
+            rewrite.append(ch)
+    return skip, rewrite
 
 
 def phase_write(config, start, end, workers=10, state_mgr=None):
@@ -49,6 +71,17 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
                 print(f"  [KEY] ch{ch:03d} → {pro_model}")
             except Exception as e:
                 print(f"  [FAIL] key ch{ch}: {e}")
+
+    # --- 预检：跳过已 PASS 的章，只写需要修复的 ---
+    skip, rewrite = _pre_validate(write_cfg, start, end)
+    if skip:
+        print(f"  [SKIP] {len(skip)}章已PASS: {skip}")
+    if not rewrite:
+        print(f"  所有章已PASS，跳过写章")
+        return {}, {}
+    print(f"  [WRITE] {len(rewrite)}章需要写: {rewrite}")
+    # 只写需要修复的章
+    write_cfg["_rewrite_chapters"] = set(rewrite)
 
     ok, fail = batch_run(write_cfg, "write-chapter", start, end, workers, chapters_dir,
                          "ch_{ch:03d}.txt", skip_existing=True, state_mgr=state_mgr,

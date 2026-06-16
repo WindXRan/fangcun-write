@@ -3,6 +3,7 @@
 输出: rewrites_dir/styles/style_{N}.md  (人可读 + prompt 可嵌入)
 """
 
+import hashlib
 import json
 import time
 from pathlib import Path
@@ -12,6 +13,24 @@ from utils import get_source_text, debug_dump_prompt
 from lib.text_metrics import count_style_fingerprint, format_style_anchors
 from lib.api_client import get_api_url
 from prompt_loader import load_system_prompt, load_prompt_str, get_prompt_config_with_overrides
+
+
+def _text_hash(text):
+    """源文内容哈希（前 2000 字取 md5，防源文微调导致缓存失效）。"""
+    return hashlib.md5(text[:2000].encode("utf-8")).hexdigest()[:12]
+
+
+def _cache_valid(styles_dir, ch, src_text):
+    """检查缓存是否有效：文件存在 + 哈希匹配。"""
+    f = styles_dir / f"style_{ch:03d}.md"
+    if not f.exists():
+        return False
+    content = f.read_text(encoding="utf-8")
+    # 检查哈希标记 <!-- hash: xxx -->
+    if "<!-- hash:" in content:
+        cached_hash = content.split("<!-- hash:")[1].split("-->")[0].strip()
+        return cached_hash == _text_hash(src_text)
+    return False  # 旧格式无哈希，视为无效
 
 
 def phase_style_extract(config, start, end, workers=None):
@@ -29,13 +48,15 @@ def phase_style_extract(config, start, end, workers=None):
     print(f"Phase 1.5: 文笔指纹 (ch{start}-{end}, {w}w)")
     print("=" * 50)
 
-    # 扫描待处理章节
+    # 扫描待处理章节（哈希校验：源文变了重算）
     todo = []
     for ch in range(start, end + 1):
-        if (styles_dir / f"style_{ch:03d}.md").exists():
+        src_text = get_source_text(config, ch)
+        if not src_text:
             continue
-        if get_source_text(config, ch):
-            todo.append(ch)
+        if _cache_valid(styles_dir, ch, src_text):
+            continue
+        todo.append(ch)
 
     if not todo:
         print(f"  所有章节已完成，跳过")
@@ -87,7 +108,7 @@ def _algo_one(config, ch, styles_dir):
         f"- 标点: {fp.get('punct_style','?')}",
         f"- 开头: {fp.get('opening_type','?')} / 结尾: {fp.get('closing_type','?')}",
     ]
-    _write_md(styles_dir, ch, anchor="## 算法锚点\n" + "\n".join(items))
+    _write_md(styles_dir, ch, anchor="## 算法锚点\n" + "\n".join(items), src_text=text)
     return True
 
 
@@ -139,7 +160,7 @@ def _llm_one(config, ch, styles_dir, api_key, api_url, model):
         )
         if resp.status_code == 200:
             analysis = resp.json()["choices"][0]["message"]["content"].strip()
-            _write_md(styles_dir, ch, analysis=f"## LLM 风格分析\n{analysis}")
+            _write_md(styles_dir, ch, analysis=f"## LLM 风格分析\n{analysis}", src_text=text)
             print(f"  [STYLE] ch{ch:03d}")
             return True
     except Exception as e:
@@ -147,7 +168,7 @@ def _llm_one(config, ch, styles_dir, api_key, api_url, model):
     return False
 
 
-def _write_md(styles_dir, ch, anchor=None, analysis=None):
+def _write_md(styles_dir, ch, anchor=None, analysis=None, src_text=None):
     """合并写入 style_{N}.md。"""
     f = styles_dir / f"style_{ch:03d}.md"
     # 读已有内容
@@ -164,7 +185,11 @@ def _write_md(styles_dir, ch, anchor=None, analysis=None):
     if analysis:
         sections["analysis"] = analysis
 
-    content = f"# 第{ch}章 文笔指纹\n\n"
+    content = f"# 第{ch}章 文笔指纹\n"
+    # 源文哈希（缓存校验用）
+    if src_text:
+        content += f"<!-- hash: {_text_hash(src_text)} -->\n"
+    content += "\n"
     for key in ["anchor", "analysis"]:
         if key in sections:
             content += sections[key].strip() + "\n\n"
