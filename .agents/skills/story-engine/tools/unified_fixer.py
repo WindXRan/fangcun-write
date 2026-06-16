@@ -14,7 +14,7 @@ Agent 架构:
     python unified_fixer.py --config xxx.json --start 1 --end 188
 """
 
-import os, re, json, time, argparse, sys, warnings
+import os, re, json, time, argparse, warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="requests")
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -738,16 +738,7 @@ def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False):
             more = f"...共{len(info['chapters'])}章" if len(info['chapters']) > 5 else ""
             print(f"    {label}: {info['count']} 处 (第{','.join(map(str,ch_list))}章{more})", flush=True)
 
-    # 交互模式等待确认，非交互(loop/CI)自动继续
-    if sys.stdin.isatty():
-        print(f"\n  按 Enter 开始修复，或 Ctrl+C 取消...", end="", flush=True)
-        try:
-            input()
-        except KeyboardInterrupt:
-            print(f"\n  已取消", flush=True)
-            return {}, {str(k): v for k, v in summary.chapters.items()}
-    else:
-        print(f"\n  [AUTO] 非交互模式，自动开始修复", flush=True)
+    print(f"  [AUTO] 开始修复", flush=True)
 
     # ========== Step 4: Scatter — Fix Agents ==========
     print(f"\n{'='*40}", flush=True)
