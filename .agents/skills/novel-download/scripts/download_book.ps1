@@ -246,8 +246,19 @@ if (-not $NoArchive -and $completed -gt 0) {
     if ($downloadedFiles) {
         foreach ($f in $downloadedFiles) {
             $targetName = if ($f.Name -match $bookName) { $f.Name } else { "$bookName.txt" }
-            Move-Item $f.FullName "$cacheDir\$targetName" -Force
+            $targetPath = "$cacheDir\$targetName"
+            Move-Item $f.FullName $targetPath -Force
             Write-Ok "$targetName -> $Author/$bookName/_cache/"
+            
+            # 修复下载器 bug：去掉重复的章节标题
+            # 格式：第X章 标题 第X章 标题 → 第X章 标题
+            Write-Step "修复重复标题"
+            $content = Get-Content $targetPath -Raw -Encoding UTF8
+            $content = [regex]::Replace($content, '(第\d+章\s+.+?)\s+\1', '$1')
+            # 去掉重复的卷名
+            $content = [regex]::Replace($content, '(第.+?卷.+?)\s+\1\s+\1', '$1')
+            Set-Content $targetPath -Value $content -Encoding UTF8 -NoNewline
+            Write-Ok "重复标题已修复"
         }
     } else {
         Write-Warn "downloads 目录没有找到 txt 文件"
