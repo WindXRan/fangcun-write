@@ -36,6 +36,7 @@ def _cache_valid(styles_dir, ch, src_text):
 
 def phase_style_extract(config, start, end, workers=None):
     """并行提取源文每章文笔指纹，跳过已存在文件。"""
+    import os
     w = workers or config.get("workers", 30)
     # 风格缓存放源书级别（共享，不随仿写版本重复计算）
     source_book = config.get("source_book", "")
