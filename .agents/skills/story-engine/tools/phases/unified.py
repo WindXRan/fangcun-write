@@ -13,14 +13,9 @@ def phase_unified_check(config, start, end, workers=10, batch_size=25, state_mgr
     print("=" * 50)
 
     from unified_fixer import run_pipeline
-    from lib.api_client import get_api_url
-
-    api_key = config.get("api_key") or os.environ.get("API_KEY")
-    api_url = get_api_url(config)
-    model = config.get("model", "deepseek-chat")
 
     results, merged = run_pipeline(
-        config, start, end, api_key, api_url, model,
+        config, start, end,
         batch_size=batch_size, workers=workers, dry_run=True,
     )
 
@@ -39,17 +34,12 @@ def phase_unified_fix(config, start, end, workers=10, batch_size=25, dry_run=Fal
     print("=" * 50)
 
     from unified_fixer import run_pipeline
-    from lib.api_client import get_api_url
 
-    api_key = config.get("api_key") or os.environ.get("API_KEY")
-    api_url = get_api_url(config)
-    model = config.get("model", "deepseek-chat")
-
-    if not api_key:
+    if not (config.get("api_key") or os.environ.get("API_KEY")):
         print("[WARN] 未配置 API_KEY，将跳过 LLM 审核和修复")
 
     results, merged = run_pipeline(
-        config, start, end, api_key, api_url, model,
+        config, start, end,
         batch_size=batch_size, workers=workers, dry_run=dry_run,
     )
 
