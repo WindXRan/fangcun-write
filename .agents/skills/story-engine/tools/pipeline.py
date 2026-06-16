@@ -25,29 +25,15 @@ from mcp.phase_meta import PHASES
 
 
 GOAL_MAP = {
-    # 5 步主流程
     "import": {"prep"},
     "open": {"prep", "open_book", "extract"},
-    "write": {"style_extract", "guides", "write", "validate", "postfix"},  # 核心写章流程
-    "review": {"unified_review_fix"},  # 统一审改（审查+修复）
-    "export": set(),  # 导出在 _post_process 处理
-    # 写章后按需执行（选一个）
+    "write": {"style_extract", "guides", "write", "validate", "postfix"},
+    "review": {"unified_review_fix"},
+    "export": set(),
     "trim": {"trim"},
     "rewrite": {"rewrite"},
     "polish": {"polish"},
     "expand": {"expand"},
-    # 兼容旧名
-    "all": {"prep", "open_book", "extract", "style_extract", "guides", "write", "validate", "postfix", "unified_review_fix", "compare"},
-    "open-book": {"prep", "open_book", "extract"},
-    "unified": {"unified_review_fix"},
-    # 单步（调试用）
-    "prep": {"prep"},
-    "open_book": {"open_book", "extract"},
-    "guides": {"guides"},
-    "write-only": {"write"},
-    "validate": {"validate"},
-    "compare": {"compare"},
-    "postfix": {"postfix"},
 }
 
 
