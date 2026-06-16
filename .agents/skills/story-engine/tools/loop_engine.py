@@ -422,7 +422,7 @@ def _print_report(loop_num, metrics, improved, degraded, suggestions, best_loop)
         print(f"  → 无显著变化，可考虑下一轮或结束迭代")
 
 
-def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
+def run_loop(config_path, start, end, max_loops=5, auto_apply=False, target_score=90):
     """主循环：跑→测→比→改→版本。"""
     config = json.loads(open(config_path, encoding='utf-8').read())
     base_dir = config.get("base_dir", os.getcwd())
@@ -488,6 +488,9 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
                     shutil.rmtree(p)
         _log("写章...")
         t0 = time.time()
+        # 确保 book_data.json 存在（角色名等变量）
+        from extract_book_data import extract as extract_book_data
+        extract_book_data(config)
         phase_style_extract(config, start, end, workers=config.get("workers", 5))
         phase_guides(config, start, end, workers=config.get("workers", 5))
         phase_write(config, start, end, workers=config.get("workers", 5))
@@ -519,10 +522,23 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False):
                   (round_dir / "review.json").open("w", encoding="utf-8"), ensure_ascii=False, indent=2)
 
         # Convergence
-        if p0 == 0:
-            _log("P0=0 收敛！")
+        avg_score = 0
+        from phases.validate import validate_one
+        for ch in range(start, end + 1):
+            passed, report, metrics = validate_one(config, ch)
+            iss = report.count("*ISSUE*")
+            score = 100 - iss * 10 if passed else 50
+            avg_score += max(0, min(100, score))
+        avg_score = round(avg_score / max(end - start + 1, 1), 1)
+        _log(f"均分: {avg_score} (目标: {target_score})")
+
+        if p0 == 0 and avg_score >= target_score:
+            _log(f"P0=0 且均分≥{target_score}，收敛！")
             break
-        if p0 > prev_p0 or (p0 == prev_p0 and loop_num > 2):
+        if p0 == 0 and avg_score < target_score:
+            _log(f"P0=0 但均分<{target_score}，继续迭代...")
+            # 不退出，继续下一轮
+        elif p0 > prev_p0 or (p0 == prev_p0 and loop_num > 2):
             _log(f"P0 未改善 ({prev_p0}→{p0})，已达极限")
             break
 
@@ -563,10 +579,11 @@ def main():
     parser.add_argument("--start", type=int, default=1)
     parser.add_argument("--end", type=int, default=10)
     parser.add_argument("--max-loops", type=int, default=5)
+    parser.add_argument("--target-score", type=int, default=90, help="目标均分 (默认90)")
     parser.add_argument("--auto-apply", action="store_true", help="自动应用 prompt 修改 (默认仅建议)")
     args = parser.parse_args()
 
-    run_loop(args.config, args.start, args.end, args.max_loops, args.auto_apply)
+    run_loop(args.config, args.start, args.end, args.max_loops, args.auto_apply, args.target_score)
 
 
 if __name__ == "__main__":
