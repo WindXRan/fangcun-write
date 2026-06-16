@@ -105,10 +105,11 @@ TAG_NORMALIZE = {
 def parse_characters(text):
     """解析 settings/characters.md → characters 数组。
     
-    支持三种格式：
+    支持四种格式：
       A: `### 郝仁 (男主)`  —— 名字在前，tag括号内（markdown标题）
       B: `## 男主：郝仁`   —— tag在前，冒号分隔
       C: `宋云(女主)`       —— 名字在前，tag括号内（纯文本，无markdown标题）
+      D: `### 沈麦（宋遥）` —— 名字在前，括号内是别名（需从内容推断tag）
     """
     characters = []
     TAG_KEYWORDS = r'女[主二配]|男[主二配]|反派|[^\n]{0,4}(?:父亲|母亲|爷爷|奶奶|祖父|祖母|外公|外婆|闺蜜|好友|助理|管家|继母|继父|弟弟|妹妹|哥哥|姐姐)'
@@ -129,7 +130,6 @@ def parse_characters(text):
     )
     for m in pattern_b.finditer(text):
         role_tag, name, body = m.group(1), m.group(2), m.group(3)
-        # 格式A已处理则不重复
         if not any(c["name"] == name.strip() for c in characters):
             _add_character(characters, role_tag.strip(), name.strip(), body)
 
@@ -143,10 +143,66 @@ def parse_characters(text):
         if not any(c["name"] == name.strip() for c in characters):
             _add_character(characters, role_tag.strip(), name.strip(), body)
 
+    # 格式 D: ### 沈麦（宋遥）—— 名字在前，括号内是别名，需从内容推断tag
+    # 只匹配 ### 级别的标题，跳过 ## 级别的标题
+    pattern_d = re.compile(
+        r'^###\s+([\u4e00-\u9fa5]{2,8})(?:[（(]([\u4e00-\u9fa5]{2,8})[)）])?\s*\n(.*?)(?=\n^#{2,3}\s+|\Z)',
+        re.MULTILINE | re.DOTALL
+    )
+    for m in pattern_d.finditer(text):
+        name, alias, body = m.group(1), m.group(2), m.group(3)
+        # 跳过非角色标题
+        if name in ['主要角色', '重要配角', '出场规划表', '角色设定']:
+            continue
+        # 跳过已处理的角色
+        if any(c["name"] == name.strip() for c in characters):
+            continue
+        # 从内容推断角色标签
+        role_tag = _infer_role_tag(name, body, text)
+        if role_tag:
+            _add_character(characters, role_tag, name.strip(), body)
+            # 如果有别名，添加到 aliases
+            if alias:
+                for ch in characters:
+                    if ch["name"] == name.strip():
+                        ch["aliases"].append(alias.strip())
+
     # 解析表格格式的配角
     _parse_side_characters(text, characters)
 
     return characters
+
+
+def _infer_role_tag(name, body, full_text):
+    """从内容推断角色标签。只检查当前角色的 body。"""
+    # 只用 body 推断，不用 full_text
+    # 检查是否明确标注了角色类型
+    if re.search(r'女主|女主角|女一|穿越女主', body):
+        return "女主"
+    if re.search(r'男主|男主角|男一', body):
+        return "男主"
+    if re.search(r'反派|大反派|boss', body, re.IGNORECASE):
+        return "反派"
+    if re.search(r'女二|女二号|女配', body):
+        return "女二"
+    if re.search(r'男二|男二号|男配', body):
+        return "男二"
+    
+    # 根据描述推断
+    # 如果描述中有"将军"、"王爷"等，可能是男主
+    if re.search(r'将军|王爷|总裁|皇帝|皇上|少帅|军阀|将军', body):
+        return "男主"
+    
+    # 如果有"穿越"相关内容，可能是女主
+    if re.search(r'穿越|重生|现代.*博士|杀手', body):
+        return "女主"
+    
+    # 如果有"幼弟"、"弟弟"等，可能是配角
+    if re.search(r'幼弟|弟弟|妹妹|哥哥|姐姐', body):
+        return "配角"
+    
+    # 根据出场顺序推断：第一个是女主，其他默认为配角
+    return "配角"
 
 
 def _add_character(characters, role_tag, name, body):

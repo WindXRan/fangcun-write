@@ -530,23 +530,28 @@ def _parse_global_review(content, dimension):
 
 
 def _run_global_reviews(config, start, end, api_key, api_url, model):
-    """Layer 1b: 运行 3 个全局维度审查 agent（并行）。"""
-    sampled = _sample_global_chapters(config, start, end)
-    context = _load_global_context(config, sampled)
+    """Layer 1b: 全量分批审查（覆盖所有章节）。"""
+    chapters = list(range(start, end + 1))
+    batch_size = 10  # 每批 10 章
+    batches = [chapters[i:i+batch_size] for i in range(0, len(chapters), batch_size)]
 
     dimensions = ["character", "emotion", "rhythm"]
     results = []
 
-    with ThreadPoolExecutor(max_workers=2) as ex:
-        futures = {
-            ex.submit(_global_dimension_review, config, dim, context, api_key, api_url, model): dim
-            for dim in dimensions
-        }
-        for f in as_completed(futures):
-            try:
-                results.append(f.result())
-            except Exception as e:
-                print(f"    [全局审查] {futures[f]} 异常: {e}", flush=True)
+    for batch_idx, batch in enumerate(batches):
+        print(f"  [全局审查] 批次 {batch_idx+1}/{len(batches)}: 第{batch[0]}-{batch[-1]}章", flush=True)
+        context = _load_global_context(config, batch)
+
+        with ThreadPoolExecutor(max_workers=3) as ex:
+            futures = {
+                ex.submit(_global_dimension_review, config, dim, context, api_key, api_url, model): dim
+                for dim in dimensions
+            }
+            for f in as_completed(futures):
+                try:
+                    results.append(f.result())
+                except Exception as e:
+                    print(f"    [全局审查] {futures[f]} 异常: {e}", flush=True)
 
     return results
 
