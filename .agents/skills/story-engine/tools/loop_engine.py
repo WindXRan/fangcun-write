@@ -477,6 +477,7 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False, target_scor
 
         # [1] Write with current prompts (备份旧章后清除，确保新prompt生效)
         import shutil
+        # 只清除写章产出，保留 concept/settings/book_data
         for d in ["chapters", "guides", "styles"]:
             p = Path(config["rewrites_dir"]) / d
             if p.exists():
@@ -487,7 +488,9 @@ def run_loop(config_path, start, end, max_loops=5, auto_apply=False, target_scor
                 shutil.rmtree(p)
         _log("写章...")
         t0 = time.time()
-        # 确保 book_data.json 存在（角色名等变量）
+        # 确保 concept.md + settings/*.md + book_data.json 存在
+        from phases.open_book import phase_open_book
+        phase_open_book(config, state_mgr=None)
         from extract_book_data import extract as extract_book_data
         extract_book_data(config)
         phase_style_extract(config, start, end, workers=config.get("workers", 5))
