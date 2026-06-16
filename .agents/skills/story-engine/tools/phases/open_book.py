@@ -223,9 +223,6 @@ def _detect_curve(config, api_key, api_url):
         if config.get("debug"):
             from utils import debug_dump_prompt
             debug_dump_prompt(config, "toc-curve", 0, f"{prompts_dir}/toc-curve.md", "", curve_prompt, "N/A", pc)
-        if config.get("prompts_only"):
-            print("  [PROMPT] toc-curve — prompt 已保存至 _debug/")
-            return _heuristic_key_chapters(config)
         result = call_api(
             api_key, pc.get("model", "deepseek-v4-flash"), curve_prompt,
             max_tokens=pc.get("max_tokens", 4096), api_url=api_url,
