@@ -1,4 +1,4 @@
-"""Phase 3: 写章（含 key chapter 升级 + 风格自检 + 预检跳过）"""
+﻿"""Phase 3: 写章（含 key chapter 升级 + 风格自检 + 预检跳过）"""
 
 import os
 import re
@@ -48,7 +48,7 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
     t0 = time.time()
     run_id = None
     if state_mgr:
-        run_id = state_mgr.add_run("write", start, end, model=write_cfg.get("model", "deepseek-v4-flash"))
+        run_id = state_mgr.add_run("write", start, end, model=write_cfg.get("model", "deepseek-v4-pro"))
 
     # --- Key chapter 升级：开头章用 Pro ---
     pro_model = write_cfg.get("key_chapter_model")
@@ -194,6 +194,7 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
             state_mgr.finish_run(run_id, ok=len(ok), fail=len(fail))
 
     return ok, fail
+
 
 
 

@@ -1,4 +1,4 @@
-"""Phase 1.5: 文笔指纹 — 算法锚点 + LLM 分析，与 plot-guide 同级并行。
+﻿"""Phase 1.5: 文笔指纹 — 算法锚点 + LLM 分析，与 plot-guide 同级并行。
 
 输出: rewrites_dir/styles/style_{N}.md  (人可读 + prompt 可嵌入)
 """
@@ -83,7 +83,7 @@ def phase_style_extract(config, start, end, workers=None):
     if api_key:
         t0 = time.time()
         api_url = get_api_url(config)
-        model = config.get("model", "deepseek-v4-flash")
+        model = config.get("model", "deepseek-v4-pro")
         llm_count = 0
         with ThreadPoolExecutor(max_workers=min(w, len(todo))) as ex:
             futures = {ex.submit(_llm_one, config, ch, styles_dir, api_key, api_url, model): ch for ch in todo}
@@ -215,3 +215,4 @@ def load_style_text(config, ch):
     if local.exists():
         return local.read_text(encoding="utf-8")
     return None
+

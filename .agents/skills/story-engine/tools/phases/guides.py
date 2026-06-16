@@ -1,4 +1,4 @@
-"""Phase 2: plot-guide 生成"""
+﻿"""Phase 2: plot-guide 生成"""
 
 import os
 import re
@@ -101,7 +101,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         raise ValueError("未配置 API_KEY，请设置 $env:API_KEY")
 
     pc = get_prompt_config_with_overrides(f"{prompt_type}.md", config)
-    model = model or pc.get("model", "deepseek-v4-flash")
+    model = model or pc.get("model", "deepseek-v4-pro")
     reasoning_effort = reasoning_effort or pc.get("reasoning_effort", "low")
     prompts_dir = config.get("prompts_dir", ".agents/skills/story-engine/prompts")
     base_dir = config.get("base_dir", os.getcwd())
@@ -336,3 +336,4 @@ def _load_char_card(config):
             before = text[:idx].strip().split("\n")[-1]
             sections.append(f"{before.strip()} — {text[idx:idx+200].strip().split(chr(10))[0]}")
     return "\n".join(sections[:8]) if sections else "（角色设定中无行为卡片）"
+

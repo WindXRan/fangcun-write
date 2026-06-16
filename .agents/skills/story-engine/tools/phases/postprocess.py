@@ -1,4 +1,4 @@
-"""Phase 3.2-3.8: 后处理（后处理、精简、重写、润色、扩写）"""
+﻿"""Phase 3.2-3.8: 后处理（后处理、精简、重写、润色、扩写）"""
 
 import os
 import re
@@ -185,7 +185,7 @@ def phase_polish(config, start, end, workers=None, state_mgr=None):
 
     api_key = config.get("api_key") or os.environ.get("API_KEY")
     api_url = get_api_url(config)
-    model = config.get("model", "deepseek-v4-flash")
+    model = config.get("model", "deepseek-v4-pro")
 
     # 扫描存在的章节
     todo = []
@@ -272,7 +272,7 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=N
 
     api_key = config.get("api_key") or os.environ.get("API_KEY")
     api_url = get_api_url(config)
-    model = config.get("model", "deepseek-v4-flash")
+    model = config.get("model", "deepseek-v4-pro")
 
     # 扫描需要扩写的章节
     todo = []
@@ -352,3 +352,4 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=N
         state_mgr.save()
     print(f"  [OK] 扩写了 {expanded}/{len(todo)} 章 ({time.time()-t0:.0f}s)")
     return expanded
+

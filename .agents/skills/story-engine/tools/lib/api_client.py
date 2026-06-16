@@ -1,4 +1,4 @@
-"""API 客户端：带指数退避重试的 DeepSeek API 调用。"""
+﻿"""API 客户端：带指数退避重试的 DeepSeek API 调用。"""
 
 import os
 import time
@@ -115,7 +115,7 @@ def test_api_connection(config=None, timeout=10):
     
     api_key = get_api_key(config)
     api_url = get_api_url(config)
-    model = (config or {}).get("model", "deepseek-v4-flash")
+    model = (config or {}).get("model", "deepseek-v4-pro")
     
     if not api_key:
         return {
@@ -180,3 +180,4 @@ def test_api_connection(config=None, timeout=10):
             "latency_ms": None,
             "error": f"未知错误: {str(e)[:200]}"
         }
+

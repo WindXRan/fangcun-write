@@ -1,4 +1,4 @@
-"""Phase 0: Prep（提取元数据+章节目录）
+﻿"""Phase 0: Prep（提取元数据+章节目录）
 Phase 0.5: 曲线分析（读 _toc.txt → 选关键章节）
 Phase 1: 开书（生成 concept.md + settings/）"""
 
@@ -224,7 +224,7 @@ def _detect_curve(config, api_key, api_url):
             from utils import debug_dump_prompt
             debug_dump_prompt(config, "toc-curve", 0, f"{prompts_dir}/toc-curve.md", "", curve_prompt, "N/A", pc)
         result = call_api(
-            api_key, pc.get("model", "deepseek-v4-flash"), curve_prompt,
+            api_key, pc.get("model", "deepseek-v4-pro"), curve_prompt,
             max_tokens=pc.get("max_tokens", 4096), api_url=api_url,
             temperature=pc.get("temperature", 0.8),
         )
@@ -379,3 +379,4 @@ def parse_multi_file_output(text):
                 files[filepath] = content
 
     return files
+
