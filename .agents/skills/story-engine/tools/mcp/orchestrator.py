@@ -74,7 +74,8 @@ class Orchestrator:
         return self.results
 
     def _process_chapter(self, ch: int, chapter_phases: list[str]) -> list[TaskResult]:
-        """处理单章的全部章级 phase，按依赖顺序执行。"""
+        """处理单章的全部章级 phase，按依赖顺序执行，同波次并行。"""
+        import concurrent.futures
         results = []
 
         # 解析章级 phase 内部依赖（write 依赖 guides 等）
@@ -82,29 +83,45 @@ class Orchestrator:
         waves = resolve_order(ch_set)
 
         for wave in waves:
+            # 同一波次的 phase 可以并行
+            wave_phases = []
             for phase_name in wave:
                 m = PHASES.get(phase_name)
                 if not m or m.scope != "chapter":
                     continue
                 if self._is_done(phase_name, ch):
                     continue
+                wave_phases.append(phase_name)
 
-                # 带重试
-                for attempt in range(1, MAX_RETRIES + 1):
-                    r = self._execute(phase_name, ch, ch)
-                    r.chapter = ch
-                    r.retries = attempt - 1
-                    if r.status == "ok":
-                        results.append(r)
-                        break
-                    if attempt < MAX_RETRIES:
-                        r.status = "retry"
-                        r.error = f"retry {attempt}/{MAX_RETRIES}: {r.error}"
-                        results.append(r)
-                        time.sleep(2)
-                    else:
-                        results.append(r)
+            if not wave_phases:
+                continue
+
+            if len(wave_phases) == 1:
+                # 单 phase，直接执行
+                r = self._execute_with_retry(wave_phases[0], ch)
+                results.append(r)
+            else:
+                # 多 phase，并行执行
+                with concurrent.futures.ThreadPoolExecutor(max_workers=len(wave_phases)) as pool:
+                    futures = {pool.submit(self._execute_with_retry, name, ch): name for name in wave_phases}
+                    for future in concurrent.futures.as_completed(futures):
+                        results.append(future.result())
+
         return results
+
+    def _execute_with_retry(self, phase_name: str, ch: int) -> TaskResult:
+        """带重试的单 phase 执行。"""
+        for attempt in range(1, MAX_RETRIES + 1):
+            r = self._execute(phase_name, ch, ch)
+            r.chapter = ch
+            r.retries = attempt - 1
+            if r.status == "ok":
+                return r
+            if attempt < MAX_RETRIES:
+                r.status = "retry"
+                r.error = f"retry {attempt}/{MAX_RETRIES}: {r.error}"
+                time.sleep(2)
+        return r
 
     def _execute(self, phase: str, start: int, end: int) -> TaskResult:
         handler = self._handlers.get(phase)
