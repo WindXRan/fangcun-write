@@ -813,6 +813,21 @@ def _fix_llm(config, task, text, api_key, api_url, model):
     )
     if resp.status_code == 200:
         fixed = resp.json()["choices"][0]["message"]["content"]
+        # 提取修复后章节（跳过"修复策略"部分）
+        if "## 修复后章节" in fixed:
+            fixed = fixed.split("## 修复后章节")[-1].strip()
+        elif "## 修复策略" in fixed:
+            # 如果没有"修复后章节"标题，取"修复策略"之后的内容
+            parts = fixed.split("## 修复策略")
+            if len(parts) > 1:
+                fixed = parts[-1].strip()
+        # 去掉可能的代码块标记
+        if fixed.startswith("```"):
+            fixed = fixed.split("\n", 1)[-1]
+        if fixed.endswith("```"):
+            fixed = fixed.rsplit("```", 1)[0]
+        fixed = fixed.strip()
+        
         fixed_chars = len(re.sub(r'\s', '', fixed))
         target = max(task.target_chars, 1)
         if abs(fixed_chars - target) / target < 0.3:
@@ -971,7 +986,54 @@ def run_pipeline(cfg, start, end, api_key=None, api_url=None, model=None,
             status_icon = {"fixed": "✓", "unchanged": "~", "missing": "✗", "error": "!"}.get(status, "?")
             print(f"    [{done}/{total}] {status_icon} 第{ch}章 → {status} | {fixed} 章已修复 | {time.time()-t_start:.0f}s", flush=True)
 
-    # ========== Step 5: Gather — 最终报告 ==========
+    # ========== Step 5: 二次审查（只审改过的章） ==========
+    fixed_chs = [ch for ch, r in results.items() if r.status == "fixed"]
+    if fixed_chs and not dry_run:
+        print(f"\n{'='*40}", flush=True)
+        print(f"Step 5: 二次审查 ({len(fixed_chs)} 章改过)", flush=True)
+        print("="*40, flush=True)
+
+        # 只审改过的章
+        re_review = review_agent(cfg, fixed_chs, api_key, api_url, model, agent_id="re-check")
+        new_issues = []
+        for ch, data in re_review.chapters.items():
+            for iss in data.get("issues", []):
+                if iss.get("type") not in ("missing",):
+                    new_issues.append({"ch": ch, **iss})
+
+        if new_issues:
+            print(f"  发现 {len(new_issues)} 个新问题，修复中...", flush=True)
+            # 生成修复任务
+            re_tasks = {}
+            for iss in new_issues:
+                ch = iss["ch"]
+                if ch not in re_tasks:
+                    re_tasks[ch] = FixTask(ch=ch)
+                if iss.get("auto_fixable"):
+                    re_tasks[ch].mechanical.append(Issue(**{k: v for k, v in iss.items() if k != "ch"}))
+                else:
+                    re_tasks[ch].llm.append(Issue(**{k: v for k, v in iss.items() if k != "ch"}))
+
+            # 修复
+            re_results = {}
+            with ThreadPoolExecutor(max_workers=min(workers, len(re_tasks))) as ex:
+                futures = {
+                    ex.submit(fix_agent, cfg, task, api_key, api_url, model, False): ch
+                    for ch, task in re_tasks.items()
+                }
+                for f in as_completed(futures):
+                    ch = futures[f]
+                    try:
+                        re_results[ch] = f.result()
+                    except Exception as e:
+                        re_results[ch] = FixResult(ch=ch, status="error", error=str(e))
+
+            re_fixed = sum(1 for r in re_results.values() if r.status == "fixed")
+            print(f"  二次修复: {re_fixed} 章", flush=True)
+        else:
+            print(f"  无新问题", flush=True)
+
+    # ========== Step 6: 最终报告 ==========
     fixed = sum(1 for r in results.values() if r.status == "fixed")
     unchanged = sum(1 for r in results.values() if r.status == "unchanged")
     missing = sum(1 for r in results.values() if r.status == "missing")
