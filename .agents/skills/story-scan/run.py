@@ -4,12 +4,13 @@
 番茄指数一键运行脚本
 用法：python run.py [命令]
 命令：
-  scrape    - 运行爬虫采集数据
-  build     - 构建分析数据
-  serve     - 启动本地看板
-  all       - 完整流程（爬虫+构建+启动）
-  status    - 查看数据状态
-  help      - 显示帮助信息
+  scrape       - 运行爬虫采集数据
+  build        - 构建分析数据
+  serve        - 启动本地看板
+  all          - 完整流程（爬虫+构建+启动）
+  status       - 查看数据状态
+  sync-feishu  - 同步数据到飞书在线表格
+  help         - 显示帮助信息
 """
 
 import os
@@ -152,6 +153,11 @@ def serve():
     web_dir = ROOT_DIR.parent.parent / "skills" / "story-web"
     return run_cmd("python app.py", cwd=str(web_dir))
 
+def sync_feishu():
+    """同步数据到飞书"""
+    print("\n📊 开始同步数据到飞书...")
+    return run_cmd("python feishu_sync.py", timeout=60)
+
 def show_help():
     """显示帮助信息"""
     print(__doc__)
@@ -185,6 +191,9 @@ def main():
     
     elif command == "status":
         show_status()
+    
+    elif command == "sync-feishu":
+        sync_feishu()
     
     elif command == "help":
         show_help()

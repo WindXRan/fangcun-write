@@ -37,6 +37,7 @@ python run.py serve     # 启动书库（含排行榜）
 | `python run.py serve` | 启动书库 | 跳转到 story-web（端口5000） |
 | `python run.py all` | 完整流程 | 采集→构建→启动 |
 | `python run.py status` | 查看状态 | 显示数据文件状态 |
+| `python run.py sync-feishu` | 飞书同步 | 同步数据到飞书在线表格 |
 
 ---
 
@@ -104,6 +105,19 @@ API_KEY=your-api-key
 API_MODEL=your-model-name
 ```
 
+### 同步数据到飞书
+
+```bash
+# 设置飞书环境变量
+export FEISHU_APP_ID="your-app-id"
+export FEISHU_APP_SECRET="your-app-secret"
+export FEISHU_SPREADSHEET_TOKEN="your-spreadsheet-token"
+export FEISHU_SHEET_ID="your-sheet-id"
+
+# 同步数据到飞书
+python run.py sync-feishu
+```
+
 ---
 
 ## 故障排除
@@ -114,6 +128,7 @@ API_MODEL=your-model-name
 | 数据不更新 | 运行 `python run.py status` 查看状态 |
 | 页面无法访问 | 确保服务已启动：`python run.py serve` |
 | AI 分析不生效 | 检查 `.env` 配置，或使用规则摘要（默认） |
+| 飞书同步失败 | 检查飞书环境变量，确认应用权限和表格配置 |
 
 ---
 
@@ -134,6 +149,7 @@ API_MODEL=your-model-name
 FanqieZhiShu/
 ├── run.py                      # 一键运行脚本
 ├── scrape_fanqie_ranks.py      # 爬虫脚本
+├── feishu_sync.py              # 飞书在线表格同步脚本
 ├── scripts/build_latest.py     # 分析构建脚本
 ├── data/                       # 数据目录
 │   ├── fanqie_*_ranks_*.json   # 原始快照

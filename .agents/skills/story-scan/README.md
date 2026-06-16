@@ -48,6 +48,7 @@ python -m http.server 8000
 | 顶部导航 | 统一导航栏，一键切换四大榜单，齿轮图标可配置 API |
 | 历史回看 | 日期选择器支持查看任意历史日期的榜单数据 |
 | 数据接口 | 生成静态 JSON 接口，可按类型读取最新数据 |
+| 飞书同步 | 支持将数据同步到飞书在线表格，方便团队协作 |
 
 ---
 
@@ -107,6 +108,21 @@ python -m http.server 8000
 
 打开浏览器访问 `http://localhost:8000`，顶部导航栏可切换四大榜单。
 
+### 第六步：同步到飞书（可选）
+
+```bash
+# 设置飞书环境变量
+export FEISHU_APP_ID="your-app-id"
+export FEISHU_APP_SECRET="your-app-secret"
+export FEISHU_SPREADSHEET_TOKEN="your-spreadsheet-token"
+export FEISHU_SHEET_ID="your-sheet-id"
+
+# 同步数据到飞书
+python run.py sync-feishu
+```
+
+飞书同步功能需要先在飞书开放平台创建应用，获取App ID和App Secret，然后创建一个在线表格，获取表格token和工作表ID。
+
 ---
 
 ## API 配置
@@ -140,6 +156,7 @@ python -m http.server 8000
 FanqieZhiShu/
 ├── scrape_fanqie_ranks.py      # 番茄小说爬虫（Playwright）
 ├── verify_font_mapping.py      # 字体映射验证工具
+├── feishu_sync.py              # 飞书在线表格同步脚本
 ├── setup.bat                   # Windows 一键安装脚本
 ├── requirements.txt            # Python 依赖
 ├── .env / .env.example         # 环境变量配置
@@ -250,6 +267,20 @@ FanqieZhiShu/
 - Windows：使用任务计划程序，设置每天定时运行爬虫和构建脚本
 - Linux/Mac：使用 cron 定时任务
 - 详见 [TUTORIAL.md](TUTORIAL.md) 中的"进阶使用"章节
+
+**Q: 飞书同步失败怎么办？**
+- 检查飞书环境变量是否正确设置
+- 确认飞书应用有读写表格的权限
+- 检查表格token和工作表ID是否正确
+- 查看飞书开放平台的应用日志
+
+**Q: 可以同步哪些数据到飞书？**
+- 榜单数据：女频新书榜、男频新书榜等
+- 市场总结：高频题材、热度趋势
+- 市场数据：热门题材、书名模式、标签组合等
+
+**Q: 飞书同步支持定时自动运行吗？**
+可以，可以将飞书同步命令添加到定时任务中，实现数据自动同步。
 
 ---
 

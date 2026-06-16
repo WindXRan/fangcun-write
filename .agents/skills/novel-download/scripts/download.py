@@ -20,6 +20,7 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding='utf-8')
 
 SKILL_DIR = Path(__file__).parent.parent
+PROJECTS_DIR = Path.cwd() / "projects"  # 主 projects 目录
 DEFAULT_PORT = 18423
 
 
@@ -172,11 +173,11 @@ def fix_duplicate_titles(txt_path):
 
 
 def archive(txt_path, author, book_name):
-    """归档到 projects 目录。"""
+    """归档到主 projects 目录。"""
     safe_author = re.sub(r'[\\/:*?"<>|]', '_', author)
     safe_book_name = re.sub(r'[\\/:*?"<>|]', '_', book_name)
     
-    book_dir = SKILL_DIR / "projects" / safe_author / safe_book_name
+    book_dir = PROJECTS_DIR / safe_author / safe_book_name
     cache_dir = book_dir / "_cache"
     cache_dir.mkdir(parents=True, exist_ok=True)
     
