@@ -127,6 +127,13 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
                         m = re.search(rf'{role}[：:]\s*\**(\S+)\**', chars_text)
                         if m:
                             replacements[key] = m.group(1)
+        # 注入世界观（plot-guide 和 write-chapter 都需要）
+        if "世界观" not in replacements:
+            world_path = Path(config["rewrites_dir"]) / "world.md"
+            if world_path.exists():
+                replacements["世界观"] = world_path.read_text(encoding="utf-8")[:2000]
+            else:
+                replacements["世界观"] = "（世界观文件不存在，请参考源文设定）"
 
     # 写章时注入文笔指纹 + 角色行为卡片 + 源文段落锚点
     if prompt_type == "write-chapter" and chapter_num:
@@ -152,6 +159,13 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
                         m = re.search(rf'{role}[：:]\s*\**(\S+)\**', chars_text)
                         if m:
                             replacements[key] = m.group(1)
+        # 注入世界观
+        if "世界观" not in replacements:
+            world_path = Path(config["rewrites_dir"]) / "world.md"
+            if world_path.exists():
+                replacements["世界观"] = world_path.read_text(encoding="utf-8")[:2000]
+            else:
+                replacements["世界观"] = "（世界观文件不存在，请参考源文设定）"
         # 源文段落锚点（从指纹提取，做硬约束）
         src_text = get_source_text(config, chapter_num)
         if src_text:

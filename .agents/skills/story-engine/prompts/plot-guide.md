@@ -4,7 +4,7 @@ changelog: 模板内嵌到prompt，AI直接输出完整markdown，去掉template
 type: user
 phase: guides
 description: 章纲生成
-required_vars: ["N", "新书名", "作者名", "源书名", "源文全文", "目标字数", "目标字数_min", "目标字数_max", "源文字数", "女主名", "男主名"]
+required_vars: ["N", "新书名", "作者名", "源书名", "源文全文", "目标字数", "目标字数_min", "目标字数_max", "源文字数", "女主名", "男主名", "世界观"]
 optional_vars: ["genre"]
 system_prompt: system-generic.md
 defaults: {"model": "deepseek-v4-pro", "max_tokens": 8192, "reasoning_effort": "high", "temperature": 0.8}
@@ -17,6 +17,9 @@ defaults: {"model": "deepseek-v4-pro", "max_tokens": 8192, "reasoning_effort": "
 ## 角色名（铁律，节拍表里必须用这些名字，不可自编）
 - 女主：{女主名}
 - 男主：{男主名}
+
+## 世界观（必须遵守，不可自编时代/背景）
+{世界观}
 
 ## 源文示例（必须学习这种风格）
 - "1983年，上海，监狱门口。"（简洁直接）
@@ -70,8 +73,8 @@ defaults: {"model": "deepseek-v4-pro", "max_tokens": 8192, "reasoning_effort": "
 ## 排除项
 {排除项}
 
-【参考设定】projects/{作者名}/{源书名}/rewrites/{新书名}/settings/characters.md
-【参考剧情】projects/{作者名}/{源书名}/rewrites/{新书名}/settings/plot.md
-【参考世界观】projects/{作者名}/{源书名}/rewrites/{新书名}/settings/world.md
+【参考设定】projects/{作者名}/{源书名}/rewrites/{新书名}/characters.md
+【参考剧情】projects/{作者名}/{源书名}/rewrites/{新书名}/plot.md
+【参考世界观】projects/{作者名}/{源书名}/rewrites/{新书名}/world.md
 
 {源文全文}

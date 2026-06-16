@@ -8,6 +8,106 @@ from pathlib import Path
 from utils import count_source_chars, batch_run, get_source_text
 
 
+# 按失败类型派发修复动作
+def _dispatch_fix(config, ch, chapters_dir):
+    """根据失效类型选 trim/polish/rewrite。返回 (action_label, fix_func)。"""
+    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+    if not ch_file.exists():
+        return "missing", None
+
+    text = ch_file.read_text(encoding='utf-8')
+    body = re.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text)
+    chars = len(body)
+    target = count_source_chars(config, ch)
+    if target > 0:
+        deviation = (chars - target) / target
+    else:
+        deviation = 0.0
+
+    src_text = get_source_text(config, ch)
+    src_metrics = None
+    our_metrics = None
+    if src_text:
+        from lib.text_metrics import count_metrics
+        src_metrics = count_metrics(src_text)
+        our_metrics = count_metrics(text)
+
+    # 字数超标 → trim
+    if deviation > 0.3:
+        from phases.guides import run_one
+        return "trim", lambda: _fix_trim(config, ch, chapters_dir)
+
+    # 字数不足 → expand
+    if target > 0 and deviation < -0.2:
+        return "expand", lambda: _fix_expand(config, ch, text, chapters_dir)
+
+    # AI 路标词超标 → polish
+    if src_metrics and our_metrics:
+        limit = max(src_metrics["ai_markers"] + 1, 1)
+        if our_metrics["ai_markers"] > limit:
+            return "polish(ai)", lambda: _fix_polish(config, ch, text, chapters_dir, "AI路标词过多")
+
+        # 代词密度/句长偏离 → polish with style
+        if src_metrics.get("pronoun_density", 0) > 0:
+            ratio = our_metrics["pronoun_density"] / max(src_metrics["pronoun_density"], 0.001)
+            if ratio > 1.5 or ratio < 0.5:
+                return "polish(pronoun)", lambda: _fix_polish(config, ch, text, chapters_dir, "代词密度偏离源文")
+
+        if src_metrics.get("sent_len_stddev", 0) > 0:
+            ratio = our_metrics["sent_len_stddev"] / max(src_metrics["sent_len_stddev"], 0.001)
+            if ratio > 1.5 or ratio < 0.5:
+                return "polish(style)", lambda: _fix_polish(config, ch, text, chapters_dir, "句长节奏偏离源文")
+
+    # fallback: rewrite
+    from phases.guides import run_one
+    return "rewrite", lambda: _fix_rewrite(config, ch, chapters_dir)
+
+
+def _fix_trim(config, ch, chapters_dir):
+    """字数超标 → trim。"""
+    from phases.guides import run_one
+    result = run_one(config, "trim-chapter", ch)
+    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+    ch_file.write_text(result, encoding='utf-8')
+
+
+def _fix_expand(config, ch, text, chapters_dir):
+    """字数不足 → expand。"""
+    from prompt_loader import load_prompt_str, validate_prompt_variables
+    from lib.api_client import call_llm
+    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+    orig_chars = len(re.sub(r'\s', '', text))
+    target_chars = int(orig_chars * 1.3)
+    r = {"content": text, "orig_chars": orig_chars, "target_chars": target_chars,
+         "min_chars": int(target_chars * 0.9), "max_chars": int(target_chars * 1.1)}
+    prompt = load_prompt_str("expand-chapter.md")
+    validate_prompt_variables("expand-chapter.md", r)
+    result = call_llm(config, "expand-chapter", prompt.format(**r), "")
+    ch_file.write_text(result, encoding='utf-8')
+
+
+def _fix_polish(config, ch, text, chapters_dir, issue):
+    """AI痕迹/代词/句长 → 润色。"""
+    from prompt_loader import load_prompt_str, validate_prompt_variables
+    from lib.api_client import call_llm
+    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+    orig_chars = len(re.sub(r'\s', '', text))
+    r = {"content": text, "min_chars": int(orig_chars * 0.9), "max_chars": int(orig_chars * 1.1)}
+    prompt = load_prompt_str("polish-chapter.md")
+    validate_prompt_variables("polish-chapter.md", r)
+    sys_prompt = f"你是资深网文写手。精修以下章节，特别关注：{issue}。保持字数在 ±10% 内，不要增删情节。"
+    result = call_llm(config, "polish-chapter", prompt.format(**r), sys_prompt)
+    ch_file.write_text(result, encoding='utf-8')
+
+
+def _fix_rewrite(config, ch, chapters_dir):
+    """全章重写。"""
+    from phases.guides import run_one
+    result = run_one(config, "write-chapter", ch)
+    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+    ch_file.write_text(result, encoding='utf-8')
+
+
 def _pre_validate(config, start, end):
     """写前预检：已 PASS 的章跳过，只返回需要重写的章列表。"""
     from phases.validate import validate_one
@@ -93,91 +193,37 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
         print(f"  完成: 已生成 {len(ok)} 个 prompt | 耗时 {time.time()-t0:.0f}s")
         return ok, fail
 
-    # --- 字数重试 ---
+    # --- 按需修复：字数/风格/内容问题派发 trim/polish/expand/rewrite ---
     for retry_round in range(1, 3):
         retry_list = []
         for ch in range(start, end + 1):
             ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
             if not ch_file.exists():
                 continue
-            text = ch_file.read_text(encoding='utf-8')
-            target = count_source_chars(config, ch)
-            chars = len(re.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text))
-            if target > 0:
-                deviation = abs(chars - target) / target
-                if deviation > 0.3:
-                    retry_list.append((ch, f"字数{chars}/{target}"))
-            elif chars < 500:
-                retry_list.append((ch, f"字数{chars}/0(源文缺失)"))
+            action, fix_func = _dispatch_fix(write_cfg, ch, chapters_dir)
+            if fix_func:
+                retry_list.append((ch, action, fix_func))
 
         if not retry_list:
             break
 
-        print(f"  [RETRY R{retry_round}] {len(retry_list)}章: {[(c, w) for c,w in retry_list]}")
+        print(f"  [RETRY R{retry_round}] {len(retry_list)}章: {[(c, a) for c,a,_ in retry_list]}")
         t_retry = time.time()
-        for ch, reason in retry_list:
+        for ch, action, fix_func in retry_list:
             if state_mgr:
                 state_mgr.chapter_writing(ch)
             try:
-                result = run_one(write_cfg, "write-chapter", ch)
+                fix_func()
                 ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-                ch_file.parent.mkdir(parents=True, exist_ok=True)
-                ch_file.write_text(result, encoding='utf-8')
                 ok[ch] = str(ch_file)
                 fail.pop(ch, None)
                 if state_mgr:
                     state_mgr.chapter_completed(ch)
+                print(f"    [{action}] ch{ch:03d}")
             except Exception as e:
-                print(f"    [FAIL] retry ch{ch}: {e}")
-                fail[ch] = reason
+                print(f"    [FAIL] {action} ch{ch}: {e}")
+                fail[ch] = action
         print(f"  重试轮次 {retry_round} 完成 ({time.time()-t_retry:.0f}s)")
-
-    # --- 风格自检（朱雀防线）---
-    if not write_cfg.get("skip_style_check"):
-        from lib.text_metrics import count_metrics
-        style_retry_list = []
-        for ch in range(start, end + 1):
-            ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-            if not ch_file.exists():
-                continue
-            text = ch_file.read_text(encoding='utf-8')
-            metrics = count_metrics(text)
-            src_text = get_source_text(config, ch)
-            if not src_text:
-                continue
-            src = count_metrics(src_text)
-            issues = []
-            if src.get("pronoun_density", 0) > 0:
-                ratio = metrics["pronoun_density"] / src["pronoun_density"]
-                if ratio > 1.5 or ratio < 0.5:
-                    issues.append(f"代词密度{metrics['pronoun_density']}(源文{src['pronoun_density']})")
-            if src.get("sent_len_stddev", 0) > 0:
-                ratio = metrics["sent_len_stddev"] / src["sent_len_stddev"]
-                if ratio > 1.5 or ratio < 0.5:
-                    issues.append(f"句长标准差{metrics['sent_len_stddev']}(源文{src['sent_len_stddev']})")
-            if issues:
-                style_retry_list.append((ch, "风格偏离: " + ", ".join(issues)))
-
-        if style_retry_list:
-            print(f"  [STYLE-RETRY] {len(style_retry_list)}章风格偏离")
-            t_retry = time.time()
-            for ch, reason in style_retry_list:
-                if state_mgr:
-                    state_mgr.chapter_writing(ch)
-                try:
-                    result = run_one(write_cfg, "write-chapter", ch, retry_context=reason)
-                    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-                    ch_file.parent.mkdir(parents=True, exist_ok=True)
-                    ch_file.write_text(result, encoding='utf-8')
-                    ok[ch] = str(ch_file)
-                    fail.pop(ch, None)
-                    if state_mgr:
-                        state_mgr.chapter_completed(ch)
-                    print(f"    [STYLE-FIX] ch{ch:03d}")
-                except Exception as e:
-                    print(f"    [FAIL] style-retry ch{ch}: {e}")
-                    fail[ch] = reason
-            print(f"  风格重试完成 ({time.time()-t_retry:.0f}s)")
 
     total = sum(
         len(Path(path).read_text(encoding='utf-8').replace('\n', '').replace(' ', '').replace('\r', ''))
