@@ -4,6 +4,7 @@ import os
 import re
 import time
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from utils import count_source_chars, batch_run, get_source_text
 
@@ -268,20 +269,28 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
 
         print(f"  [RETRY R{retry_round}] {len(retry_list)}章: {[(c, a) for c,a,_ in retry_list]}")
         t_retry = time.time()
-        for ch, action, fix_func in retry_list:
-            if state_mgr:
-                state_mgr.chapter_writing(ch)
-            try:
-                fix_func()
-                ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-                ok[ch] = str(ch_file)
-                fail.pop(ch, None)
-                if state_mgr:
-                    state_mgr.chapter_completed(ch)
-                print(f"    [{action}] ch{ch:03d}")
-            except Exception as e:
-                print(f"    [FAIL] {action} ch{ch}: {e}")
-                fail[ch] = action
+        w = write_cfg.get("workers", 10)
+        with ThreadPoolExecutor(max_workers=min(w, len(retry_list) or 1)) as ex:
+            def _retry_one(ch_action_fix):
+                ch, action, fix_func = ch_action_fix
+                try:
+                    fix_func()
+                    return ch, action, None
+                except Exception as e:
+                    return ch, action, str(e)
+            futures = {ex.submit(_retry_one, item): item for item in retry_list}
+            for f in as_completed(futures):
+                ch, action, err = f.result()
+                if err:
+                    print(f"    [FAIL] {action} ch{ch:03d}: {err}")
+                    fail[ch] = action
+                else:
+                    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+                    ok[ch] = str(ch_file)
+                    fail.pop(ch, None)
+                    if state_mgr:
+                        state_mgr.chapter_completed(ch)
+                    print(f"    [{action}] ch{ch:03d}")
         print(f"  重试轮次 {retry_round} 完成 ({time.time()-t_retry:.0f}s)")
 
     total = sum(
