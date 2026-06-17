@@ -714,7 +714,7 @@ def generate_p012_report(summary, output_path):
     for ch, data in summary.chapters.items():
         for iss in data.get("issues", []):
             t = iss.get("type", "?")
-            type_counts.setdefault(t, {"count": 0, "p0": 0, "p1": 0, "p2": 0})
+            type_counts.setdefault(t, {"count": 0, "P0": 0, "P1": 0, "P2": 0})
             type_counts[t]["count"] += 1
             prio = iss.get("priority", "P2")
             if prio in type_counts[t]:
@@ -731,7 +731,7 @@ def generate_p012_report(summary, output_path):
     lines.append(f"|------|------|----|----|----|")
     for t, cnt in sorted(type_counts.items(), key=lambda x: -x[1]["count"]):
         label = type_label.get(t, t)
-        lines.append(f"| {label} | {cnt['count']} | {cnt['p0']} | {cnt['p1']} | {cnt['p2']} |")
+        lines.append(f"| {label} | {cnt['count']} | {cnt['P0']} | {cnt['P1']} | {cnt['P2']} |")
     lines.append("")
 
     _h(2, "各章评分")

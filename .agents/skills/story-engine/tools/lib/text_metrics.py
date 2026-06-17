@@ -36,7 +36,7 @@ def count_metrics(text):
 
     # 对话标签密度
     dialogue_lines = len(re.findall(r'[」""\u201c\u201d]\s*[\u4e00-\u9fff]{0,4}(?:说|道|问|答|喊|叫)', body))
-    total_dialogue = body.count('"') + body.count('"') + body.count('「')
+    total_dialogue = body.count('\u201c') + body.count('"') + body.count('「')
     tag_density = round(dialogue_lines / max(total_dialogue, 1), 2)
 
     # 连续排比（≥3 段以相同结构开头）
