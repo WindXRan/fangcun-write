@@ -115,6 +115,16 @@ def _algo_check(config, ch):
     src_metrics = count_metrics(src) if src else None
     src_chars = get_body_chars(src)
 
+    # 加载白名单（角色名/地名放行，避免误杀）
+    whitelist_path = Path(config.get('rewrites_dir', '')) / '_log' / 'deslop-whitelist.txt'
+    whitelist = set()
+    if whitelist_path.exists():
+        for line in whitelist_path.read_text(encoding='utf-8').splitlines():
+            line = line.strip().split('#')[0].strip()  # 支持 # 注释
+            if line:
+                whitelist.add(line)
+    _ok = lambda hits: [h for h in hits if h not in whitelist]
+
     issues = []
     score = 100
 
@@ -122,6 +132,7 @@ def _algo_check(config, ch):
     for marker in AI_MARKERS:
         pat = r'(?:^|[\n。！？])\s*' + re.escape(marker)
         found = re.findall(pat, text)
+        found = _ok(found)
         if found:
             ai_traces.append(f"{marker}x{len(found)}")
     if ai_traces:
@@ -267,6 +278,7 @@ def _algo_check(config, ch):
     god_hits = []
     for pat, label in god_patterns:
         found = re.findall(pat, text)
+        found = _ok(found)
         if found:
             god_hits.append(f"{label}x{len(found)}")
     if god_hits:

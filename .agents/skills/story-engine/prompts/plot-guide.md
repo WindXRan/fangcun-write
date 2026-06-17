@@ -5,7 +5,7 @@ type: user
 phase: guides
 description: 章纲生成
 required_vars: ["N", "新书名", "作者名", "源书名", "源文全文", "目标字数", "目标字数_min", "目标字数_max", "源文字数", "女主名", "男主名", "世界观"]
-optional_vars: ["genre"]
+optional_vars: []
 system_prompt: system-generic.md
 defaults: {"model": "deepseek-v4-pro", "reasoning_effort": "low", "temperature": 0.8}
 ---
@@ -60,16 +60,6 @@ defaults: {"model": "deepseek-v4-pro", "reasoning_effort": "low", "temperature":
 
 ## 时间锚点（必须标注，防止时间线混乱）
 本章时间点：{如"入府第3天"、"怀孕第5月"、"生子后第2年"}
-
-## 前章状态（写章前必须读，用于前章禁用清单）
-- 前章结尾方式：{对话/动作/心理/环境}
-- 前章已用意象：{如"石榴树、窗外的鸟"}
-- 前章高频词/句式：{如"手指攥紧"出现2次}
-- 前章角色状态：{如"孟桐刚入府，住在西院"}
-
-## 本章起始状态
-- 角色身份/称谓/住处：{从 characters.md 身份锚表复制}
-- 角色能力边界：{从 characters.md 能力区间表复制}
 
 ## 源文字数
 {源文字数}字 → 新书目标 {目标字数}字（1:1对标）

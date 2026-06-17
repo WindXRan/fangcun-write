@@ -5,9 +5,9 @@ type: user
 phase: write
 description: 写章
 required_vars: ["N", "新书名", "作者名", "源书名", "目标字数", "目标字数_min", "目标字数_max", "世界观"]
-optional_vars: ["genre", "女主名", "男主名", "文笔指纹", "角色行为卡片", "源文句长", "源文短句比", "源文段长", "源文对话比", "源文代词密度", "源文标点"]
+optional_vars: ["女主名", "男主名", "文笔指纹", "角色行为卡片", "源文句长", "源文短句比", "源文段长", "源文对话比", "源文代词密度", "源文标点"]
 system_prompt: system-generic.md
-defaults: {"model": "deepseek-v4-pro", "reasoning_effort": "low", "temperature": 0.8}
+defaults: {"model": "deepseek-v4-pro", "reasoning_effort": "low", "temperature": 0.5}
 ---
 写《{新书名}》第{N}章。正文第一行写"第{N}章 [章名]"（不加#）。章名取 plot_guide 中标注的，未标注则自拟。
 

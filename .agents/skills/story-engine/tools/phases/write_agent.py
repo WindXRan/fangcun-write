@@ -64,7 +64,6 @@ def phase_write_agent(config, start, end, workers=5, state_mgr=None):
             "作者名": config.get("author", ""),
             "源书名": config.get("source_book", ""),
             "总章数": str(total_ch),
-            "genre": config.get("genre", ""),
             "源文字数": str(src_chars),
             "目标字数": str(target),
             "目标字数_min": str(int(target * 0.9)),

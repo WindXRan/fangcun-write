@@ -314,7 +314,6 @@ def phase_open_book(config, state_mgr=None):
         "作者名": config.get("author", ""),
         "源书名": config.get("source_book", ""),
         "总章数": str(total_ch),
-        "genre": config.get("genre", ""),
         "源文样本": _build_sample_block(config, key_chapters),
     }
 

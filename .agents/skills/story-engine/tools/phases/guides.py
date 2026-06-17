@@ -134,7 +134,6 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         "作者名": config.get("author", ""),
         "源书名": config.get("source_book", ""),
         "总章数": str(total_ch),
-        "genre": config.get("genre", ""),
     }
 
     # 需要源文字数时，脚本计算（API 无法跑 PowerShell）

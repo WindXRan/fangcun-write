@@ -33,9 +33,6 @@ FILE_REF_PATTERN = re.compile(r'【(.+?)】(.+?\.(?:md|txt|json|ps1))', re.MULTI
 # 配置目录（相对于 story-engine）
 CONFIG_DIR = "config"
 
-# 品类级联警告缓存（防并行刷屏）
-_cascade_warned = set()
-
 
 def resolve_path(base_dir, ref_path):
     """将 prompt 中的相对路径解析为绝对路径。"""
@@ -123,8 +120,6 @@ def make_book_data_replacements(book_data):
         replacements["新书名"] = book_info["name"]
     if book_info.get("author") and "作者名" not in replacements:
         replacements["作者名"] = book_info["author"]
-    if book_info.get("genre") and "题材" not in replacements:
-        replacements["题材"] = book_info["genre"]
     return replacements
 
 
@@ -168,18 +163,6 @@ def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites
 
     raw_text = prompt_file.read_text(encoding='utf-8')
     _, raw_text = _parse_frontmatter(raw_text)
-
-    genre = (replacements or {}).get("genre", "")
-    if genre:
-        genre_file = prompt_file.with_name(f"{prompt_file.stem}.{genre}{prompt_file.suffix}")
-        if genre_file.exists():
-            genre_text = genre_file.read_text(encoding='utf-8')
-            raw_text += "\n\n" + genre_text
-        else:
-            global _cascade_warned
-            if genre not in _cascade_warned:
-                _cascade_warned.add(genre)
-                print(f"  [CASCADE] 品类文件 {genre_file.name} 不存在，使用通用 prompt")
 
     merged = {}
     if rewrites_dir:
