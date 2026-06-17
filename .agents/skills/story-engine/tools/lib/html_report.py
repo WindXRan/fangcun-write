@@ -111,6 +111,25 @@ th {{ text-align:left; padding:8px 12px; color:#636e72; font-weight:600; font-si
   <div class="demo">{datetime.now().strftime('%Y年%m月%d日')} · {n_ch}章 · {total_chars:,}字</div>
 </div>
 
+"""
+
+    # 封面图片检测
+    cover_html = ""
+    for ext in [".png", ".jpg", ".jpeg", ".webp"]:
+        for src_dir in [output_dir, rewrites_abs]:
+            f = Path(src_dir) / f"cover{ext}"
+            if f.exists():
+                # 复制到输出目录
+                import shutil
+                dest = Path(output_dir) / f"cover{ext}"
+                if f != dest:
+                    shutil.copy2(f, dest)
+                cover_html = f'<div style="text-align:center;margin-bottom:20px"><img src="cover{ext}" style="max-width:280px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.1)"></div>'
+                break
+        if cover_html:
+            break
+
+    html += f"""{cover_html}
 <div class="section">
   <h2>📖 本书简介</h2>
   <div class="sub">{intro_text[:200] if intro_text else ""}</div>
