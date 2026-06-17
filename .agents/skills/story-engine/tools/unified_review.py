@@ -241,11 +241,15 @@ def _algo_check(config, ch):
     elif metrics.get("repeat_density", 0) >= 100:
         medium += 1
 
-    # 7. 段长标准差（低=段落均匀像AI，高=变化丰富像人写）
+    # 7. 段长标准差（低=段落均匀像AI，高=变化过大致阅读体验差）
     para_stddev = metrics.get("para_stddev", 0)
     if para_stddev > 0 and para_stddev < 3:
         heavy += 1
     elif para_stddev > 0 and para_stddev < 5:
+        medium += 1
+    if para_stddev > 12:
+        heavy += 1
+    elif para_stddev > 8:
         medium += 1
 
     if heavy >= 1:
