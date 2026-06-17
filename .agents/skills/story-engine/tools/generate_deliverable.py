@@ -22,6 +22,7 @@ import sys
 import json
 import shutil
 import zipfile
+import re
 import argparse
 from pathlib import Path
 from datetime import datetime
@@ -90,120 +91,211 @@ def write_deliverable(config, output_dir, make_zip=False):
 
     # ── 准备目录 ──
     dirs = {
-        "04_chapters": out / "04_chapters",
-        "05_对比报告": out / "05_对比报告",
-        "06_设定资料": out / "06_设定资料",
-        "06_设定资料/guides": out / "06_设定资料" / "guides",
+        "chapters": out / "chapters",
+        "compare": out / "compare",
+        "settings": out / "settings",
+        "settings/guides": out / "settings" / "guides",
     }
     for d in dirs.values():
         d.mkdir(parents=True, exist_ok=True)
 
-    # ── 00_README.md ──
-    readme = f"""# 交付说明 — 《{new_book}》
+    # ── 读取设定文件 ──
+    concept_text = ""
+    book_info_text = ""
+    plot_text = ""
+    source_analysis_text = ""
+    characters_text = ""
+    world_text = ""
+    for fname in ["concept.md", "book_info.md", "plot.md", "source_analysis.md", "characters.md", "world.md"]:
+        fpath = rewrites_abs / fname
+        if fpath.exists():
+            txt = fpath.read_text(encoding="utf-8")
+            if fname == "concept.md":
+                concept_text = txt
+            elif fname == "book_info.md":
+                book_info_text = txt
+            elif fname == "plot.md":
+                plot_text = txt
+            elif fname == "source_analysis.md":
+                source_analysis_text = txt
+            elif fname == "characters.md":
+                characters_text = txt
+            elif fname == "world.md":
+                world_text = txt
 
-## 项目信息
-- **源文**：《{source_book}》（作者：{author}）
-- **仿写成品**：《{new_book}》
-- **生成时间**：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-- **生成工具**：方寸仿写引擎 v2.0
+    # ── 提取简介和书名 ──
+    intro_text = ""
+    if book_info_text:
+        in_intro = False
+        intro_lines = []
+        for line in book_info_text.split("\n"):
+            if "简介" in line and "##" in line:
+                in_intro = True
+                continue
+            if in_intro:
+                stripped = line.strip()
+                if stripped.startswith("##") or stripped.startswith("==="):
+                    break
+                if stripped and not stripped.startswith("|") and not stripped.startswith("---"):
+                    intro_lines.append(stripped)
+        intro_text = "\n".join(intro_lines[:5]) if intro_lines else ""
 
-## 目录结构
+    # ── 提取核心DNA ──
+    dna_table = ""
+    if source_analysis_text:
+        in_dna = False
+        dna_lines = []
+        for line in source_analysis_text.split("\n"):
+            if "核心DNA锁定" in line and "##" in line:
+                in_dna = True
+            elif in_dna and line.startswith("## "):
+                break
+            if in_dna:
+                dna_lines.append(line)
+        dna_table = "\n".join(dna_lines) if dna_lines else ""
+
+    # ── 章节统计 ──
+    ch_files = sorted(chapters_dir.glob("ch_*.txt")) if chapters_dir.exists() else []
+    total_chars = 0
+    ch_stats = []
+    for f in ch_files:
+        txt = f.read_text(encoding="utf-8")
+        body = re.sub(r'\s', '', txt.split("\n", 1)[1] if "\n" in txt else txt)
+        chars = len(body)
+        total_chars += chars
+        ch_stats.append((f.stem, chars))
+    total_ch = len(ch_files)
+
+    # ── 00_项目说明书.md ──
+    readme = f"""# 《{new_book}》仿写项目说明书
+
+## 📋 项目信息
+
+| 项目 | 内容 |
+|------|------|
+| 源文 | 《{source_book}》（作者：{author}） |
+| 仿写成品 | 《{new_book}》 |
+| 体量 | {total_ch} 章，{total_chars:,} 字 |
+| 生成时间 | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} |
+| 生成工具 | 方寸仿写引擎 v2.0 |
+
+## 📖 简介
+
+{intro_text if intro_text else "（未生成简介）"}
+
+## 🧬 核心DNA锁定
+
+{dna_table if dna_table else "（未生成核心DNA分析）"}
+
+## 📁 目录说明
+
 ```
 {out.name}/
-├── 00_README.md                     # 本文件
-├── 01_成品_{new_book}.txt          # 仿写成品（完整全书）
-├── 02_源文_{source_book}.txt       # 源文原文（完整全书）
-├── 03_交付报告.md                   # 综合数据报告（Token/时间/质量/风险评估）
-├── 04_chapters/                     # 逐章文件
-├── 05_对比报告/                     # 源文 vs 仿写逐批对比
-├── 06_设定资料/                     # concept.md + 前10后5章指南 + 设定
-└── 07_交付报告.html                 # HTML 可视化版（浏览器打开）
+├── 00_项目说明书.md        # 本文件（项目概览+设定+核心DNA）
+├── 01_成品.md              # 仿写全文（可直接发布版）
+├── 02_源文全文.md          # 源文全文（对照参考）
+├── 03_仿写对比报告.md      # 源文 vs 仿写量化对比
+├── chapters/               # 逐章文件
+├── compare/                # 对比报告详情
+└── settings/               # 设定资料（概念/角色/世界观/剧情/分析）
+    ├── guides/             # 章纲（前10+后5章）
+    ├── concept.md          # 定位+卖点+策略
+    ├── book_info.md        # 书名候选+赛道对标
+    ├── characters.md       # 角色设定+行为模式
+    ├── world.md            # 世界观设定
+    ├── plot.md             # 剧情规划
+    └── source_analysis.md  # 源文分析+评分
 ```
 
-## 关键保障
-- **换皮检验**：剥掉人名地名后认不出源文（plot-guide 阶段保障）
-- **冲突替换**：每章冲突类型不同（身份→利益/信息差/道德）
-- **台词 0 重合**：6 字以上连续匹配 → 违规（validate 检测）
+## ✅ 质量保障
+
+- **换皮检验**：剥掉人名地名后认不出源文
+- **台词 0 重合**：6 字以上连续匹配即违规
 - **AI 痕迹控制**：路标词数 ≤ 源文+1
+- **冲突替换**：每章冲突类型按规则轮换
 
-## 使用方式
-- Markdown 报告可直接阅读
-- HTML 报告用浏览器打开，更直观
-- 对比报告可喂给 AI 分析（`05_对比报告/对比_*_AI分析.md`）
-- 审核报告：每章定量指标 + pass/fail 判定
-- 改动报告：逐章换皮评分 + 字数/对话/风格变化
+## 📊 质量评分
+
+| 维度 | 说明 |
+|------|------|
+| P0 问题 | 严重问题，建议修复后再发布 |
+| P1 问题 | 中等问题，建议优化 |
+| P2 问题 | 轻微问题，可选修复 |
+
+详情见 `03_仿写对比报告.md` 和 `compare/` 目录。
 """
-    (out / "00_README.md").write_text(readme, encoding="utf-8")
-    print(f"  [OK] 00_README.md")
+    (out / "00_项目说明书.md").write_text(readme, encoding="utf-8")
+    print(f"  [OK] 00_项目说明书.md")
 
-    # ── 01_成品 ──
-    dest = out / f"01_成品_{new_book}.txt"
+    # ── 01_成品.md（合并全文） ──
+    dest = out / f"01_成品.md"
     export_files = sorted(export_dir.glob("*.txt")) if export_dir.exists() else []
     if export_files:
         best = max(export_files, key=lambda f: f.stat().st_size)
         if best.stat().st_size > 1000:
             shutil.copy2(best, dest)
             print(f"  [OK] 01_成品 (from export/{best.name}, {fmt_size(best.stat().st_size)})")
-            src_used = "export"
         else:
             book_text = merge_book_text(chapters_dir, "ch_*.txt", new_book)
             dest.write_text(book_text, encoding="utf-8")
             print(f"  [OK] 01_成品 (merged from chapters/)")
-            src_used = "chapters"
     else:
         book_text = merge_book_text(chapters_dir, "ch_*.txt", new_book)
         dest.write_text(book_text, encoding="utf-8")
         print(f"  [OK] 01_成品 (merged from chapters/)")
-        src_used = "chapters"
 
-    # ── 02_源文 ──
+    # ── 02_源文全文.md ──
     source_cache = base_dir / "projects" / author / source_book / "_cache" / "chapters"
-    dest_src = out / f"02_源文_{source_book}.txt"
+    dest_src = out / f"02_源文全文.md"
     source_text = merge_book_text(source_cache, "*.txt", source_book)
     dest_src.write_text(source_text, encoding="utf-8")
-    print(f"  [OK] 02_源文 ({fmt_size(len(source_text.encode('utf-8')))})")
+    print(f"  [OK] 02_源文全文 ({fmt_size(len(source_text.encode('utf-8')))})")
 
-    # ── 04_chapters ──
+    # ── metrics ──
+    metrics = collect_metrics(str(rewrites_abs))
+
+    # ── 03_仿写对比报告.md ──
+    report_md = build_report(config, rewrites_abs, out, metrics)
+    (out / "03_仿写对比报告.md").write_text(report_md, encoding="utf-8")
+    print(f"  [OK] 03_仿写对比报告.md")
+
+    # ── 07_交付报告.html ──
+    try:
+        html = generate_html(config, rewrites_abs, out)
+        (out / "07_交付报告.html").write_text(html, encoding="utf-8")
+        print(f"  [OK] 07_交付报告.html")
+    except Exception as e:
+        print(f"  [WARN] HTML 报告生成失败: {e}")
+
+    # ── chapters/ ──
     n_copied = 0
-    for f in sorted(chapters_dir.glob("ch_*.txt")):
+    for f in ch_files:
         try:
-            shutil.copy2(f, dirs["04_chapters"] / f.name)
+            shutil.copy2(f, dirs["chapters"] / f.name)
             n_copied += 1
         except Exception:
             pass
-    print(f"  [OK] 04_chapters ({n_copied} 章)")
+    print(f"  [OK] chapters/ ({n_copied} 章)")
 
-    # ── 05_对比报告 ──
+    # ── compare/ ──
     n_reports = 0
     if compare_dir.exists():
-        for f in sorted(compare_dir.glob("对比_*_*")):
-            try:
-                shutil.copy2(f, dirs["05_对比报告"] / f.name)
-                n_reports += 1
-            except Exception:
-                pass
-        # 新增：审核报告 + 改动报告
-        for f in sorted(compare_dir.glob("审核报告_*")):
-            try:
-                shutil.copy2(f, dirs["05_对比报告"] / f.name)
-                n_reports += 1
-            except Exception:
-                pass
-        for f in sorted(compare_dir.glob("改动报告_*")):
-            try:
-                shutil.copy2(f, dirs["05_对比报告"] / f.name)
-                n_reports += 1
-            except Exception:
-                pass
-    print(f"  [OK] 05_对比报告 ({n_reports} 文件)")
+        for f in sorted(compare_dir.glob("*")):
+            if f.is_file() and f.stat().st_size > 0:
+                try:
+                    shutil.copy2(f, dirs["compare"] / f.name)
+                    n_reports += 1
+                except Exception:
+                    pass
+    print(f"  [OK] compare/ ({n_reports} 文件)")
 
-    # ── 06_设定资料 ──
+    # ── settings/ ──
     n_settings = 0
-    for fname in ["concept.md", "world.md", "characters.md", "book_data.json"]:
+    for fname in ["concept.md", "book_info.md", "characters.md", "world.md", "plot.md", "source_analysis.md"]:
         src = rewrites_abs / fname
         if src.exists():
             try:
-                shutil.copy2(src, dirs["06_设定资料"] / fname)
+                shutil.copy2(src, dirs["settings"] / fname)
                 n_settings += 1
             except Exception:
                 pass
@@ -211,13 +303,13 @@ def write_deliverable(config, output_dir, make_zip=False):
         for f in settings_dir.glob("*"):
             if f.is_file():
                 try:
-                    shutil.copy2(f, dirs["06_设定资料"] / f.name)
+                    shutil.copy2(f, dirs["settings"] / f.name)
                     n_settings += 1
                 except Exception:
                     pass
     # guides（前10 + 后5）
     if guides_dir.exists():
-        plot_files = sorted(guides_dir.glob("plot_*.md"))
+        plot_files = sorted(guides_dir.glob("plot_*.md") if guides_dir.exists() else [])
         selected = set()
         for f in plot_files[:10]:
             selected.add(f.name)
@@ -225,23 +317,10 @@ def write_deliverable(config, output_dir, make_zip=False):
             selected.add(f.name)
         for fname in sorted(selected):
             try:
-                shutil.copy2(guides_dir / fname, dirs["06_设定资料/guides"] / fname)
+                shutil.copy2(guides_dir / fname, dirs["settings/guides"] / fname)
             except Exception:
                 pass
-        print(f"  [OK] 06_设定资料 ({n_settings} 文件 + {len(selected)} 指南)")
-
-    # ── metrics ──
-    metrics = collect_metrics(str(rewrites_abs))
-
-    # ── 03_交付报告.md ──
-    report_md = build_report(config, rewrites_abs, out, metrics)
-    (out / "03_交付报告.md").write_text(report_md, encoding="utf-8")
-    print(f"  [OK] 03_交付报告.md")
-
-    # ── 07_交付报告.html ──
-    html = generate_html(config, rewrites_abs, out)
-    (out / "07_交付报告.html").write_text(html, encoding="utf-8")
-    print(f"  [OK] 07_交付报告.html")
+        print(f"  [OK] settings/ ({n_settings} 文件 + {len(selected)} 指南)")
 
     total_size = sum(f.stat().st_size for f in out.rglob("*") if f.is_file())
     print(f"\n✅ 交付物已生成 → {out}")
