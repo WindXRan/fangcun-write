@@ -168,62 +168,86 @@ def write_deliverable(config, output_dir, make_zip=False):
     total_ch = len(ch_files)
 
     # ── 00_项目说明书.md ──
-    readme = f"""# 《{new_book}》仿写项目说明书
+    # 质量评分
+    p012_path = rewrites_abs / "compare" / "p012_issues_report.md"
+    quality_rating = "暂无数据"
+    if p012_path.exists():
+        txt = p012_path.read_text(encoding="utf-8")
+        m = re.search(r'总体评级:\s*([\w\s]+)', txt)
+        if m:
+            quality_rating = m.group(1).strip()
 
-## 📋 项目信息
+    # 章节字数统计表
+    ch_table_rows = []
+    for stem, chars in ch_stats:
+        ch_num = re.search(r'(\d+)', stem)
+        n = int(ch_num.group(1)) if ch_num else 0
+        ch_table_rows.append(f"| {n} | {chars:,} |")
+    ch_table = "\n".join(ch_table_rows)
+
+    readme = f"""<div style="text-align:center;padding:40px 0">
+<h1>《{new_book}》</h1>
+<p style="font-size:18px;color:#666">源文《{source_book}》· {author} 作品</p>
+<p style="font-size:14px;color:#999">方寸仿写引擎 · {datetime.now().strftime('%Y年%m月%d日')}</p>
+</div>
+
+---
+
+## 📋 项目概览
 
 | 项目 | 内容 |
 |------|------|
-| 源文 | 《{source_book}》（作者：{author}） |
+| 源文 | 《{source_book}》（{author}） |
 | 仿写成品 | 《{new_book}》 |
 | 体量 | {total_ch} 章，{total_chars:,} 字 |
-| 生成时间 | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} |
-| 生成工具 | 方寸仿写引擎 v2.0 |
+| 整体评级 | {quality_rating} |
 
 ## 📖 简介
 
 {intro_text if intro_text else "（未生成简介）"}
 
-## 🧬 核心DNA锁定
+## 🧬 核心设定
 
-{dna_table if dna_table else "（未生成核心DNA分析）"}
+{dna_table if dna_table else "（未生成核心设定分析）"}
 
-## 📁 目录说明
+## 📑 章节一览
+
+| 章 | 字数 |
+|----|------|
+{ch_table}
+
+## 📁 交付物目录
 
 ```
 {out.name}/
-├── 00_项目说明书.md        # 本文件（项目概览+设定+核心DNA）
-├── 01_成品.md              # 仿写全文（可直接发布版）
-├── 02_源文全文.md          # 源文全文（对照参考）
-├── 03_仿写对比报告.md      # 源文 vs 仿写量化对比
-├── chapters/               # 逐章文件
-├── compare/                # 对比报告详情
-└── settings/               # 设定资料（概念/角色/世界观/剧情/分析）
-    ├── guides/             # 章纲（前10+后5章）
-    ├── concept.md          # 定位+卖点+策略
-    ├── book_info.md        # 书名候选+赛道对标
-    ├── characters.md       # 角色设定+行为模式
-    ├── world.md            # 世界观设定
-    ├── plot.md             # 剧情规划
-    └── source_analysis.md  # 源文分析+评分
-```
+├── 00_项目说明书.md       ← 本文件
+├── 01_成品.md             ← 仿写全文
+├── 02_源文全文.md         ← 源文对照
+├── 03_仿写对比报告.md     ← 质量评估
+├── chapters/              ← 逐章文件（60章）
+├── compare/               ← 详细对比报告
+└── settings/              ← 完整设定
+    ├── concept.md          · 定位+卖点
+    ├── book_info.md        · 书名+赛道
+    ├── characters.md       · 角色设定
+    ├── world.md            · 世界观
+    ├── plot.md             · 剧情规划
+    └── source_analysis.md  · 源文分析
+"""
 
-## ✅ 质量保障
+    if characters_text:
+        import re as _re
+        char_names = _re.findall(r'### (.+?)[（(]', characters_text) or _re.findall(r'### (.+)', characters_text)
+        if char_names:
+            readme += "\n## 👥 主要角色\n\n"
+            for name in char_names[:8]:
+                readme += f"- {name.strip()}\n"
 
-- **换皮检验**：剥掉人名地名后认不出源文
-- **台词 0 重合**：6 字以上连续匹配即违规
-- **AI 痕迹控制**：路标词数 ≤ 源文+1
-- **冲突替换**：每章冲突类型按规则轮换
+    readme += """
 
-## 📊 质量评分
+---
 
-| 维度 | 说明 |
-|------|------|
-| P0 问题 | 严重问题，建议修复后再发布 |
-| P1 问题 | 中等问题，建议优化 |
-| P2 问题 | 轻微问题，可选修复 |
-
-详情见 `03_仿写对比报告.md` 和 `compare/` 目录。
+*本文件由方寸仿写引擎自动生成*
 """
     (out / "00_项目说明书.md").write_text(readme, encoding="utf-8")
     print(f"  [OK] 00_项目说明书.md")
