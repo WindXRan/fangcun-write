@@ -37,6 +37,22 @@ def generate(config, rewrites_abs, output_dir):
                     intro_text += line.strip() + " "
         intro_text = intro_text[:300]
 
+    # 读源文简介
+    src_intro = ""
+    src_header = Path(config.get("base_dir", ".")) / "projects" / author / source_book / "_cache" / "_header.txt"
+    if src_header.exists():
+        in_intro = False
+        for line in src_header.read_text(encoding="utf-8").split("\n"):
+            if "简介" in line and "：" in line:
+                in_intro = True
+                continue
+            if in_intro:
+                if line.strip().startswith("===") or line.strip().startswith("【"):
+                    break
+                if line.strip():
+                    src_intro += line.strip() + " "
+        src_intro = src_intro[:300]
+
     # 读书名候选
     book_names = []
     if book_info_path.exists():
@@ -152,8 +168,17 @@ th {{ text-align:left; padding:8px 12px; color:#636e72; font-weight:600; font-si
 
     html += f"""{cover_html}
 <div class="section">
-  <h2>📖 本书简介</h2>
-  <div class="sub">{intro_text[:200] if intro_text else ""}</div>
+  <h2>📖 简介对比</h2>
+  <div style="display:flex;gap:16px">
+    <div style="flex:1;background:#f1f2f6;border-radius:10px;padding:16px">
+      <div style="font-size:.78em;color:#636e72;margin-bottom:6px">源文《{source_book}》</div>
+      <div style="font-size:.85em;color:#2d3436;line-height:1.7">{src_intro[:200] if src_intro else ""}</div>
+    </div>
+    <div style="flex:1;background:#6c5ce7;border-radius:10px;padding:16px">
+      <div style="font-size:.78em;color:rgba(255,255,255,.7);margin-bottom:6px">仿写《{new_book}》</div>
+      <div style="font-size:.85em;color:#fff;line-height:1.7">{intro_text[:200] if intro_text else ""}</div>
+    </div>
+  </div>
 </div>
 
 <div class="book-row">
