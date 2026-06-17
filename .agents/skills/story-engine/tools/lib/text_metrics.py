@@ -27,6 +27,10 @@ def count_metrics(text):
 
     # 段落信息
     paras = [p for p in body.split('\n') if p.strip()]
+    para_lens = [len(re.sub(r'\s', '', p)) for p in paras]
+    para_avg = round(sum(para_lens) / max(len(para_lens), 1), 1)
+    para_var = sum((l - para_avg) ** 2 for l in para_lens) / max(len(para_lens), 1) if para_lens else 0
+    para_stddev = round(math.sqrt(para_var), 1)
     para_sent_counts = []
     for p in paras:
         p_sents = re.split(r'[。！？!?\n]', p)
@@ -78,6 +82,8 @@ def count_metrics(text):
         "max_consecutive": max_consecutive,
         "psych_ratio": psych_ratio,
         "avg_sent_per_para": avg_sent_per_para,
+        "para_avg": para_avg,
+        "para_stddev": para_stddev,
         "repeat_density": repeat_density,
     }
 
@@ -130,6 +136,7 @@ def count_style_fingerprint(text):
         "chars": total,
         "dialogue_ratio": dia_ratio,
         "paragraph_avg_len": para_avg,
+        "para_stddev": round(math.sqrt(sum((l - para_avg) ** 2 for l in para_lens) / max(len(para_lens), 1)), 1) if para_lens else 0,
         "single_sent_ratio": single_sent_ratio,
         "avg_sent_per_para": avg_sent_per_para,
         "pronoun_density": pronoun_density,
@@ -143,6 +150,8 @@ def format_style_anchors(fp):
     parts = []
     if fp.get("paragraph_avg_len"):
         parts.append(f"段长{fp['paragraph_avg_len']:.0f}字")
+    if fp.get("para_stddev"):
+        parts.append(f"段长差{fp['para_stddev']:.1f}")
     if fp.get("single_sent_ratio") is not None:
         parts.append(f"单句段{fp['single_sent_ratio']:.0%}")
     if fp.get("dialogue_ratio") is not None:
