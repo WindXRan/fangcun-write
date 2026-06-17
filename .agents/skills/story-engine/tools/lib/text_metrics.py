@@ -25,6 +25,47 @@ def count_metrics(text):
     avg_sent = sum(sent_lens) / n_sents
     var_sent = sum((l - avg_sent) ** 2 for l in sent_lens) / n_sents
 
+    # 段落信息
+    paras = [p for p in body.split('\n') if p.strip()]
+    para_sent_counts = []
+    for p in paras:
+        p_sents = re.split(r'[。！？!?\n]', p)
+        p_sent_lens = [len(re.sub(r'\s', '', s)) for s in p_sents if re.sub(r'\s', '', s)]
+        para_sent_counts.append(len(p_sent_lens))
+    avg_sent_per_para = round(sum(para_sent_counts) / max(len(para_sent_counts), 1), 1)
+
+    # 对话标签密度
+    dialogue_lines = len(re.findall(r'[」""\u201c\u201d]\s*[\u4e00-\u9fff]{0,4}(?:说|道|问|答|喊|叫)', body))
+    total_dialogue = body.count('"') + body.count('"') + body.count('「')
+    tag_density = round(dialogue_lines / max(total_dialogue, 1), 2)
+
+    # 连续排比（≥3 段以相同结构开头）
+    para_starts = [re.sub(r'\s', '', p)[:3] for p in paras if len(re.sub(r'\s', '', p)) >= 3]
+    max_consecutive = 0
+    current = 1
+    for i in range(1, len(para_starts)):
+        if para_starts[i] == para_starts[i-1]:
+            current += 1
+            max_consecutive = max(max_consecutive, current)
+        else:
+            current = 1
+
+    # 心理词占比
+    psych_words = re.findall(r'心想|暗道|觉得|感到|心[中里]|不由|忍不[住下]', body)
+    psych_ratio = round(len(psych_words) / max(total, 1), 4)
+
+    # 重复描写密度
+    trigrams = [clean[i:i+3] for i in range(len(clean)-2)]
+    unique_bigrams = set()
+    repeat_count = 0
+    seen = set()
+    for t in trigrams:
+        if t in seen:
+            repeat_count += 1
+        else:
+            seen.add(t)
+    repeat_density = round(repeat_count / max(total, 1) * 1000, 2)
+
     return {
         "chars": total,
         "dash": body.count('——'),
@@ -33,6 +74,11 @@ def count_metrics(text):
         "direct_emotion": len(re.findall(DIRECT_EMOTION_PATTERN, body)),
         "pronoun_density": round(len(re.findall(PRONOUN_PATTERN, clean)) / total * 1000, 1),
         "sent_len_stddev": round(math.sqrt(var_sent), 1),
+        "tag_density": tag_density,
+        "max_consecutive": max_consecutive,
+        "psych_ratio": psych_ratio,
+        "avg_sent_per_para": avg_sent_per_para,
+        "repeat_density": repeat_density,
     }
 
 

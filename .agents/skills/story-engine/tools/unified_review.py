@@ -189,28 +189,59 @@ def _algo_check(config, ch):
                            "auto_fixable": False})
             score -= 15
 
-    # === 反重复检查 ===
+    # === 6 指标量化评分（轻/中/重） ===
+    heavy = 0
+    medium = 0
 
-    # "顿了顿/停了停/愣了一下" 类过渡词
-    pause_patterns = re.findall(r'顿了顿|停了停|愣了一下|沉默了片刻|怔了怔|愣了愣|顿了片刻|停了一下', text)
-    if len(pause_patterns) > 2:
-        issues.append({"type": "repetition", "severity": "medium",
-                       "desc": f"过渡词重复 {len(pause_patterns)}次: {', '.join(set(pause_patterns))}",
-                       "fix": "删除或替换为具体动作", "auto_fixable": False})
-        score -= 5
+    # 1. 禁用词密度（AI路标词/千字）
+    banned_density = metrics["ai_markers"] / max(metrics["chars"], 1) * 1000
+    if banned_density > 15:
+        heavy += 1
+    elif banned_density > 5:
+        medium += 1
 
-    # 对话标签检查（说/道/问 占比）
-    dialogue_lines = re.findall(r'[」""\']\s*([^」""\']{0,6})(?:说|道|问|答|喊|叫)', text)
-    total_dialogue = text.count('"') // 2 + text.count('"') // 2 + text.count('「') 
-    if total_dialogue > 5 and len(dialogue_lines) > 0:
-        tag_ratio = len(dialogue_lines) / max(total_dialogue, 1)
-        if tag_ratio > 0.7:
-            issues.append({"type": "dialogue_tag", "severity": "medium",
-                           "desc": f"对话标签单一 ({len(dialogue_lines)}/{total_dialogue} 用说/道/问)",
-                           "fix": "用动作替代标签，如'XX咬了口包子：\"好吃\"'", "auto_fixable": False})
-            score -= 5
+    # 2. 连续排比
+    if metrics.get("max_consecutive", 0) >= 5:
+        heavy += 1
+    elif metrics.get("max_consecutive", 0) >= 3:
+        medium += 1
 
-    # 情绪表达重复（攥紧/眼眶红/鼻子酸）
+    # 3. 心理词占比
+    if metrics.get("psych_ratio", 0) > 0.25:
+        heavy += 1
+    elif metrics.get("psych_ratio", 0) > 0.10:
+        medium += 1
+
+    # 4. 对话标签密度
+    if metrics.get("tag_density", 0) > 0.5:
+        heavy += 1
+    elif metrics.get("tag_density", 0) > 0.3:
+        medium += 1
+
+    # 5. 段均句数
+    if metrics.get("avg_sent_per_para", 0) > 5:
+        heavy += 1
+    elif metrics.get("avg_sent_per_para", 0) > 3:
+        medium += 1
+
+    # 6. 重复描写密度
+    if metrics.get("repeat_density", 0) >= 4:
+        heavy += 1
+    elif metrics.get("repeat_density", 0) >= 2:
+        medium += 1
+
+    if heavy >= 1:
+        issues.append({"type": "ai_style_heavy", "severity": "high",
+                       "desc": f"AI文风重度 (heavy={heavy}, medium={medium}): 禁用词{banned_density:.0f}/千字 排比{metrics.get('max_consecutive',0)}段 心理词{metrics.get('psych_ratio',0):.0%} 标签{metrics.get('tag_density',0):.0%} 段均{metrics.get('avg_sent_per_para',0)}句 重复{metrics.get('repeat_density',0):.0f}/千字",
+                       "fix": "逐句重写AI痕迹段落", "auto_fixable": False})
+        score -= 20
+    elif medium >= 3:
+        issues.append({"type": "ai_style_medium", "severity": "medium",
+                       "desc": f"AI文风中度 (heavy={heavy}, medium={medium})",
+                       "fix": "重点优化超标指标", "auto_fixable": False})
+        score -= 10
+
+    # 情绪表达重复（保留，做轻量检查）
     emotion_patterns = {
         '紧张': len(re.findall(r'攥紧|攥了攥|蜷了蜷|指节发白|手指蜷', text)),
         '感动': len(re.findall(r'眼眶红|鼻子酸|眼泪没掉|泪水在眼眶', text)),
@@ -432,6 +463,14 @@ def _llm_batch_review(config, chapter_nums):
         "chapters_text": chapters_text[:6000],
         "source_context": source_context[:2000] if source_context else "（无）",
     })
+
+    # 加载平台专属审查标准
+    target_platform = config.get("target_platform", "")
+    if target_platform:
+        rubric_name = f"review-rubric-{target_platform}.md"
+        rubric_text = load_prompt_str(rubric_name)
+        if rubric_text:
+            prompt = prompt + "\n\n---\n\n## 平台专项审查（{target_platform}）\n\n".format(target_platform=target_platform) + rubric_text[:1500]
 
     sp_name = get_system_prompt_name("unified-review.md") or "system-generic.md"
     sys_prompt = load_system_prompt(sp_name) or ""

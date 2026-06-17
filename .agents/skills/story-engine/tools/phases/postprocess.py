@@ -47,6 +47,11 @@ def phase_postfix(config, start, end):
                 del lines[2]  # 顺便删空行
             fixed += 1
 
+        # 3. 删末尾字数行 【字数：XXX字】
+        if lines and re.match(r'^【字数[：:]\s*\d+\s*字?】', lines[-1].strip()):
+            lines = lines[:-1]
+            fixed += 1
+
         if fixed > 0:
             ch_file.write_text('\n'.join(lines) + '\n', encoding='utf-8')
             print(f"  ch{ch:03d}: {fixed}处修复")
