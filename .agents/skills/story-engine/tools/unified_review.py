@@ -241,9 +241,16 @@ def _algo_check(config, ch):
     elif metrics.get("repeat_density", 0) >= 100:
         medium += 1
 
+    # 7. 段长标准差（低=段落均匀像AI，高=变化丰富像人写）
+    para_stddev = metrics.get("para_stddev", 0)
+    if para_stddev > 0 and para_stddev < 3:
+        heavy += 1
+    elif para_stddev > 0 and para_stddev < 5:
+        medium += 1
+
     if heavy >= 1:
         issues.append({"type": "ai_style_heavy", "severity": "high",
-                       "desc": f"AI文风重度 (heavy={heavy}, medium={medium}): 禁用词{banned_density:.0f}/千字 排比{metrics.get('max_consecutive',0)}段 心理词{metrics.get('psych_ratio',0):.0%} 标签{metrics.get('tag_density',0):.0%} 段均{metrics.get('avg_sent_per_para',0)}句 重复{metrics.get('repeat_density',0):.0f}/千字",
+                       "desc": f"AI文风重度 (heavy={heavy}, medium={medium}): 禁用词{banned_density:.0f}/千字 排比{metrics.get('max_consecutive',0)}段 心理词{metrics.get('psych_ratio',0):.0%} 标签{metrics.get('tag_density',0):.0%} 段均{metrics.get('avg_sent_per_para',0)}句 重复{metrics.get('repeat_density',0):.0f}/千字 段长差{para_stddev}",
                        "fix": "逐句重写AI痕迹段落", "auto_fixable": False})
         score -= 20
     elif medium >= 3:
