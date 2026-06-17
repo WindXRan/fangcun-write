@@ -15,8 +15,7 @@ param(
     [string]$Range,                # 章节范围，如 "1-50"
     [string]$Author,               # 归档作者名（可选，留空自动检测）
     [switch]$NoArchive,
-    [switch]$KeepServer,
-    [switch]$Interactive           # 交互模式：搜索多结果时让用户选
+    [switch]$KeepServer = $true    # 默认常驻 server，不自动关闭
 )
 
 $ErrorActionPreference = "Stop"
@@ -168,26 +167,6 @@ if ($bookId) {
     $bookName = $match.title
     $Author = $match.author
     Write-Host "    匹配: $bookName (作者: $Author, ID: $bookId)" -ForegroundColor Green
-
-    # 如果有多个结果且开启了交互模式
-    if ($Interactive -and $searchData.items.Count -gt 1) {
-        Write-Host "`n    搜索结果:" -ForegroundColor Yellow
-        for ($i = 0; $i -lt $searchData.items.Count; $i++) {
-            $b = $searchData.items[$i]
-            Write-Host "    [$($i+1)] $($b.title) - $($b.author) ($($b.book_id))" -ForegroundColor Gray
-        }
-        $choice = Read-Host "    选择编号 (回车默认 1)"
-        if ($choice -and [int]::TryParse($choice, [ref]$null)) {
-            $idx = [int]$choice - 1
-            if ($idx -ge 0 -and $idx -lt $searchData.items.Count) {
-                $match = $searchData.items[$idx]
-                $bookId = $match.book_id
-                $bookName = $match.title
-                $Author = $match.author
-                Write-Host "    已选择: $bookName" -ForegroundColor Green
-            }
-        }
-    }
 }
 
 # 预览（可选，获取书名和封面）

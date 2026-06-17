@@ -45,12 +45,6 @@ powershell -ExecutionPolicy Bypass -File scripts/download_book.ps1 -Query "https
 
 # 指定章节范围
 powershell -ExecutionPolicy Bypass -File scripts/download_book.ps1 -Query "惊华庭" -Range "1-50"
-
-# 交互模式（多结果时手动选择）
-powershell -ExecutionPolicy Bypass -File scripts/download_book.ps1 -Query "惊华庭" -Interactive
-
-# 下载后保留 server（批量下载时避免重复启停）
-powershell -ExecutionPolicy Bypass -File scripts/download_book.ps1 -Query "惊华庭" -KeepServer
 ```
 
 ### 按作者批量下载
