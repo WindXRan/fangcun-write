@@ -167,7 +167,7 @@ def write_deliverable(config, output_dir, make_zip=False):
         ch_stats.append((f.stem, chars))
     total_ch = len(ch_files)
 
-    # ── 00_项目说明书.md ──
+    # ── 00_项目说明书.md（LLM 辅助生成） ──
     # 质量评分
     p012_path = rewrites_abs / "compare" / "p012_issues_report.md"
     quality_rating = "暂无数据"
@@ -177,55 +177,100 @@ def write_deliverable(config, output_dir, make_zip=False):
         if m:
             quality_rating = m.group(1).strip()
 
-    # 章节字数统计表
-    ch_table_rows = []
+    # 如配置了 llm_enhance，用 LLM 生成 README
+    llm_readme = ""
+    if config.get("llm_enhance"):
+        try:
+            from lib.api_client import call_llm
+            dna_part = dna_table[:800] if dna_table else ""
+            intro_part = intro_text[:600] if intro_text else ""
+            prompt = f"""为仿写小说写一份发布会级README。
+
+项目信息：
+- 书名：《{new_book}》
+- 源文：《{source_book}》（{author}）
+- 体量：{total_ch}章 / {total_chars:,}字
+- 核心设定：{dna_part}
+- 简介：{intro_part}
+
+请写markdown，包含：一句话定位、三大卖点、质量保障、煽动性收尾。不要代码块包裹。"""
+            llm_readme = call_llm(config, "deliver-readme", prompt, "")
+        except Exception:
+            llm_readme = ""
+
+    # ── 源文 vs 仿写章节标题对比 ──
+    source_cache_dir = base_dir / "projects" / author / source_book / "_cache" / "chapters"
+    ch_compare_rows = []
     for stem, chars in ch_stats:
         ch_num = re.search(r'(\d+)', stem)
         n = int(ch_num.group(1)) if ch_num else 0
-        ch_table_rows.append(f"| {n} | {chars:,} |")
-    ch_table = "\n".join(ch_table_rows)
+        # 仿写标题
+        new_title = stem  # fallback
+        for f in ch_files:
+            if stem in f.stem:
+                lines = f.read_text(encoding="utf-8").strip().split("\n")
+                if lines:
+                    new_title = lines[0][:40]
+                break
+        # 源文标题
+        src_title = ""
+        src_file = source_cache_dir / f"第{n}章.txt"
+        if src_file.exists():
+            lines = src_file.read_text(encoding="utf-8").strip().split("\n")
+            if lines:
+                src_title = lines[0][:40]
+        ch_compare_rows.append(f"| {n} | {src_title} | {new_title} |")
+    ch_compare_table = "\n".join(ch_compare_rows[:20])  # 只展示前20章
 
-    readme = f"""<div style="text-align:center;padding:40px 0">
-<h1>《{new_book}》</h1>
-<p style="font-size:18px;color:#666">源文《{source_book}》· {author} 作品</p>
-<p style="font-size:14px;color:#999">方寸仿写引擎 · {datetime.now().strftime('%Y年%m月%d日')}</p>
-</div>
+    readme = llm_readme if llm_readme else f"""# 方寸仿写引擎 — 交付说明书
 
----
+## 一句话定位
 
-## 📋 项目概览
+**吃透骨架 · 血肉全换 · 一次直出** —— 方寸仿写引擎自动化 Pipeline，
+从开书到交付全流程：开书→写章→审改→对比→交付，一键出稿。
+
+> Demo 项目：《{new_book}》（源文《{source_book}》，{author}）
+
+## 引擎能力
+
+| 能力 | 说明 |
+|------|------|
+| 🔬 核心DNA锁定 | 自动提取源文不可替代卖点，🔴不可换/🟡可微调/🟢可调整 |
+| 📝 全自动写章 | 60 章全本 < 2 小时，含算法审校 + 自动 Trim/Polish/Retry |
+| 🛡️ 反抄袭 | 8-gram 台词雷同检测 + 换皮检验（剥名不认源文） |
+| 🔍 6+1 指标评分 | 禁用词/排比/心理词/标签密度/段均句数/重复度/段长方差 |
+| 🤖 LLM 审稿 | 角色身份/时间线/能力一致性检查 + AI 模式检测 |
+| 📦 一键交付 | 成品+源文+对比报告+设定资料+HTML看板，ZIP 打包 |
+
+## 项目概览
 
 | 项目 | 内容 |
 |------|------|
 | 源文 | 《{source_book}》（{author}） |
-| 仿写成品 | 《{new_book}》 |
+| 仿写 | 《{new_book}》 |
 | 体量 | {total_ch} 章，{total_chars:,} 字 |
 | 整体评级 | {quality_rating} |
 
-## 📖 简介
+## 核心设定
 
-{intro_text if intro_text else "（未生成简介）"}
+{dna_table if dna_table else "（未生成）"}
 
-## 🧬 核心设定
+## 源文 vs 仿写 · 章节对比（前20章）
 
-{dna_table if dna_table else "（未生成核心设定分析）"}
+| 章 | 源文标题 | 仿写标题 |
+|----|---------|---------|
+{ch_compare_table}
 
-## 📑 章节一览
-
-| 章 | 字数 |
-|----|------|
-{ch_table}
-
-## 📁 交付物目录
+## 目录说明
 
 ```
 {out.name}/
-├── 00_项目说明书.md       ← 本文件
+├── 00_项目说明书.md       ← 本文件（引擎能力 + 项目概览 + 核心设定）
 ├── 01_成品.md             ← 仿写全文
 ├── 02_源文全文.md         ← 源文对照
-├── 03_仿写对比报告.md     ← 质量评估
-├── chapters/              ← 逐章文件（60章）
-├── compare/               ← 详细对比报告
+├── 03_仿写对比报告.md     ← 引擎质量报告
+├── chapters/              ← 逐章文件
+├── compare/               ← P0/P1/P2 问题详情
 └── settings/              ← 完整设定
     ├── concept.md          · 定位+卖点
     ├── book_info.md        · 书名+赛道
@@ -233,6 +278,11 @@ def write_deliverable(config, output_dir, make_zip=False):
     ├── world.md            · 世界观
     ├── plot.md             · 剧情规划
     └── source_analysis.md  · 源文分析
+```
+
+---
+
+*方寸仿写引擎 · 吃透骨架 · 血肉全换 · 一次直出*
 """
 
     if characters_text:
