@@ -235,10 +235,10 @@ def _algo_check(config, ch):
     elif metrics.get("avg_sent_per_para", 0) > 3:
         medium += 1
 
-    # 6. 重复描写密度
-    if metrics.get("repeat_density", 0) >= 4:
+    # 6. 重复描写密度（三字母重复检测，中文天然高频需高阈值）
+    if metrics.get("repeat_density", 0) >= 150:
         heavy += 1
-    elif metrics.get("repeat_density", 0) >= 2:
+    elif metrics.get("repeat_density", 0) >= 100:
         medium += 1
 
     if heavy >= 1:
@@ -366,20 +366,6 @@ def _algo_check(config, ch):
         issues.append({"type": "para_density", "severity": "medium",
                        "desc": f"段均句数 {sents_per_para:.1f} (中度3-5)",
                        "fix": "拆分长段落，增加单句段", "auto_fixable": False})
-        score -= 5
-
-    # 6. 重复描写密度（轻度≤1/千字，中度2-3，重度>3）
-    desc_patterns = re.findall(r'阳光|月光|风|雨|雪|夜|天[空色]|房间|窗外|街道|空气|灯光|石榴|老槐|杏树', text)
-    desc_density = len(desc_patterns) / max(metrics["chars"], 1) * 1000
-    if desc_density > 3:
-        issues.append({"type": "desc_repetition", "severity": "high",
-                       "desc": f"重复描写密度 {desc_density:.1f}/千字 (重度>3)",
-                       "fix": "每个意象只用一次，用过即弃", "auto_fixable": False})
-        score -= 10
-    elif desc_density > 2:
-        issues.append({"type": "desc_repetition", "severity": "medium",
-                       "desc": f"重复描写密度 {desc_density:.1f}/千字 (中度2-3)",
-                       "fix": "每个意象只用一次，用过即弃", "auto_fixable": False})
         score -= 5
 
     return {"score": max(0, score), "issues": issues, "metrics": metrics,
