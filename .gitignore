@@ -65,3 +65,8 @@ plan_*.md
 projects/
 # 兼容旧目录
 novel-download-authors/
+# Cover images
+# Cover images
+cover.png
+source_cover.png
+*_cover.png

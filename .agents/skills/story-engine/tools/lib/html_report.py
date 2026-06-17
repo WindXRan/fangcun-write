@@ -113,21 +113,42 @@ th {{ text-align:left; padding:8px 12px; color:#636e72; font-weight:600; font-si
 
 """
 
-    # 封面图片检测
+    # 封面图片检测（源文 + 新书）
     cover_html = ""
+    import shutil
+    # 新书封面
+    new_cover = ""
     for ext in [".png", ".jpg", ".jpeg", ".webp"]:
         for src_dir in [output_dir, rewrites_abs]:
             f = Path(src_dir) / f"cover{ext}"
             if f.exists():
-                # 复制到输出目录
-                import shutil
                 dest = Path(output_dir) / f"cover{ext}"
                 if f != dest:
                     shutil.copy2(f, dest)
-                cover_html = f'<div style="text-align:center;margin-bottom:20px"><img src="cover{ext}" style="max-width:280px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.1)"></div>'
+                new_cover = f"cover{ext}"
                 break
-        if cover_html:
+        if new_cover:
             break
+    # 源文封面
+    src_cover = ""
+    for ext in [".png", ".jpg", ".jpeg", ".webp"]:
+        for src_dir in [output_dir, rewrites_abs]:
+            f = Path(src_dir) / f"source_cover{ext}"
+            if f.exists():
+                dest = Path(output_dir) / f"source_cover{ext}"
+                if f != dest:
+                    shutil.copy2(f, dest)
+                src_cover = f"source_cover{ext}"
+                break
+        if src_cover:
+            break
+    if new_cover or src_cover:
+        cover_html = '<div style="display:flex;gap:16px;justify-content:center;margin-bottom:20px">'
+        if src_cover:
+            cover_html += f'<div style="text-align:center"><div style="font-size:.8em;color:#636e72;margin-bottom:6px">源文</div><img src="{src_cover}" style="max-width:200px;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.1)"></div>'
+        if new_cover:
+            cover_html += f'<div style="text-align:center"><div style="font-size:.8em;color:#6c5ce7;margin-bottom:6px">仿写</div><img src="{new_cover}" style="max-width:200px;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.1)"></div>'
+        cover_html += '</div>'
 
     html += f"""{cover_html}
 <div class="section">
