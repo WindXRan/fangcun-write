@@ -46,7 +46,8 @@ def merge_book_text(root_dir, file_pattern, title, strip=False):
     chapters_dir = Path(root_dir)
     if not chapters_dir.exists():
         return f"# {title}\n\n（目录不存在：{chapters_dir}）\n"
-    files = sorted(chapters_dir.glob(file_pattern))
+    files = sorted(chapters_dir.glob(file_pattern),
+                   key=lambda f: int(re.search(r'(\d+)', f.stem).group(1)) if re.search(r'(\d+)', f.stem) else 0)
     if not files:
         return f"# {title}\n\n（未找到匹配文件：{file_pattern}）\n"
     parts = [f"# {title}\n\n"]
