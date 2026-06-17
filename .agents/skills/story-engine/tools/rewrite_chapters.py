@@ -8,9 +8,10 @@
 from pipeline import main
 from state_manager import StateManager, atomic_write_json, atomic_write_text
 from config_validator import validate_config
+from lib.api_client import call_api
 from utils import (
     get_source_text, get_total_chapters, 
-    count_source_chars, call_api, get_source_title,
+    count_source_chars, get_source_title,
     print_progress, get_chapters_list, batch_run
 )
 from phases import *

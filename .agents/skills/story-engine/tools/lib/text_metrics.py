@@ -80,10 +80,6 @@ def count_style_fingerprint(text):
     # 标点指纹
     punct = _classify_punct(body, total)
 
-    # 开头/结尾
-    opening = _classify_opening(body)
-    closing = _classify_closing(body)
-
     return {
         "chars": total,
         "dialogue_ratio": dia_ratio,
@@ -93,8 +89,6 @@ def count_style_fingerprint(text):
         "pronoun_density": pronoun_density,
         "ttr": ttr,
         "punct_style": punct,
-        "opening_type": opening,
-        "closing_type": closing,
     }
 
 
@@ -113,7 +107,6 @@ def format_style_anchors(fp):
         parts.append(f"词汇丰富度{fp['ttr']:.2f}")
     if fp.get("punct_style"):
         parts.append(fp["punct_style"])
-    parts.append(f"开头:{fp.get('opening_type','?')} 结尾:{fp.get('closing_type','?')}")
     return '，'.join(parts)
 
 
@@ -143,32 +136,6 @@ def _classify_punct(body, total):
     if not tags:
         tags.append("标点克制")
     return '，'.join(tags)
-
-
-def _classify_opening(body):
-    sents = re.split(r'[。！？!?\n]', body)
-    head = ''.join(sents[:3])
-    if re.search(r'[「『""""‘’]', head[:50]):
-        return "dialogue"
-    if re.search(r'(?:突然|猛地|一把|伸手|脚步|转身|推开|睁[开眼]|坐起|站起|爬起|回头)', head[:80]):
-        return "action"
-    if re.search(r'(?:心想|暗道|觉得|感到|心[中里]|不由|忍不[住下])', head[:80]):
-        return "inner"
-    if re.search(r'(?:阳光|月光|风|雨|雪|夜|天[空色]|房间|窗外|街道|空气|灯光)', head[:80]):
-        return "description"
-    return "narrative"
-
-
-def _classify_closing(body):
-    sents = re.split(r'[。！？!?\n]', body)
-    tail = ''.join(sents[-5:]) if len(sents) >= 5 else ''.join(sents)
-    if re.search(r'(?:突然|忽然|猛地|就在这时|却[不见没]|竟然|居然|难道)', tail[-100:]):
-        return "cliffhanger"
-    if re.search(r'(?:心[中里]|眼泪|笑[了着]|温暖|幸福|难过|痛苦|终于|原来)', tail[-100:]):
-        return "emotion"
-    if re.search(r'(?:转身|离去|走[了出]|回头|关上|推开|停下|沉默|没说)', tail[-100:]):
-        return "action_cut"
-    return "neutral"
 
 
 def get_body_chars(text):

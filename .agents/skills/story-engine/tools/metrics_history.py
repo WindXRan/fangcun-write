@@ -10,25 +10,11 @@ from datetime import datetime
 from pathlib import Path
 
 _HISTORY_FILE = "metrics_history.json"
-_TAG_RE = re.compile(r'<!-- prompt:\s*([\w.-]+)@(\d+)\s*-->')
 
 
 def _collect_prompt_snapshot(rewrites_dir):
     """从 chapters/ 文件末行提取 prompt 版本分布。"""
-    chapters_dir = Path(rewrites_dir) / "chapters"
-    if not chapters_dir.exists():
-        return {}
-    snap = {}
-    for ch_file in sorted(chapters_dir.glob("ch_*.txt")):
-        try:
-            last = ch_file.read_text(encoding="utf-8").strip().split("\n")[-1]
-        except Exception:
-            continue
-        m = _TAG_RE.search(last)
-        if m:
-            key = f"{m.group(1)}@{m.group(2)}"
-            snap[key] = snap.get(key, 0) + 1
-    return snap
+    return {}
 
 
 def save_snapshot(rewrites_dir, chapter_metrics):

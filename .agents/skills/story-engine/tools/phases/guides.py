@@ -1,4 +1,4 @@
-﻿"""Phase 2: plot-guide 生成"""
+"""Phase 2: plot-guide 生成"""
 
 import os
 import re
@@ -6,10 +6,11 @@ import time
 from pathlib import Path
 
 from utils import (
-    get_total_chapters, count_source_chars, call_api, batch_run, debug_dump_prompt,
+    get_total_chapters, count_source_chars, batch_run, debug_dump_prompt,
     get_source_text
 )
-from prompt_loader import load_prompt, load_system_prompt, get_prompt_config_with_overrides, get_system_prompt_name
+from prompt_meta import load_system_prompt, get_prompt_config_with_overrides, get_system_prompt_name, safe_format
+from prompt_loader import load_prompt
 
 # 模块级缓存：book_data.json 每章都读，缓存一次
 _book_data_cache = None
@@ -31,6 +32,51 @@ def _get_book_data(rewrites_dir):
             return _book_data_cache
     _book_data_cache = {}
     return _book_data_cache
+
+
+def _extract_highlights(src_text, max_chars=300):
+    """从源文提取情绪密度最高的段落作为参考。"""
+    if not src_text:
+        return ""
+    
+    # 按段落分割
+    paragraphs = [p.strip() for p in src_text.split('\n') if p.strip() and len(p.strip()) > 20]
+    if not paragraphs:
+        return ""
+    
+    # 情绪关键词权重
+    emotion_words = {
+        '哭': 3, '泪': 3, '怕': 2, '紧': 2, '慌': 2, '急': 2, '抖': 2,
+        '死': 3, '命': 2, '血': 3, '痛': 2, '苦': 2, '惨': 2,
+        '笑': 1, '喜': 1, '乐': 1, '甜': 1, '暖': 1,
+        '怒': 2, '恨': 2, '骂': 2, '打': 2, '摔': 2,
+        '空': 2, '饿': 2, '冷': 2, '黑': 1, '暗': 1,
+    }
+    
+    # 计算每段的情绪分数
+    scored = []
+    for p in paragraphs:
+        score = sum(emotion_words.get(w, 0) for w in p if w in emotion_words)
+        # 对话加分（有引号）
+        if '"' in p or '"' in p or '「' in p:
+            score += 2
+        # 短句加分（节奏感）
+        short_sents = len([s for s in p.split('。') if 0 < len(s) < 20])
+        score += short_sents
+        scored.append((score, p))
+    
+    # 按分数排序，取前几段
+    scored.sort(key=lambda x: x[0], reverse=True)
+    
+    result = []
+    total = 0
+    for score, p in scored:
+        if total + len(p) > max_chars:
+            break
+        result.append(p)
+        total += len(p)
+    
+    return '\n\n'.join(result[:3])  # 最多3段
 
 
 # ============================================================
@@ -100,16 +146,10 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         replacements["目标字数_min"] = str(int(target_chars * 0.9))
         replacements["目标字数_max"] = str(int(target_chars * 1.1))
     
-    # plot-guide 注入脱敏版源文（防数据泄漏，但仍保留结构/节奏参考）
-    # write-chapter 不注入源文全文：writer 只通过 plot_guide 了解结构，防止按源文 paraphrase
+    # plot-guide 注入源文（供 LLM 分析结构/情绪/节奏，不注入给 write-chapter）
     if prompt_type == "plot-guide" and chapter_num:
-        from lib.source_stripper import strip_source_chapter
-        stripped = strip_source_chapter(config, chapter_num)
-        if stripped:
-            replacements["源文全文"] = stripped
-        else:
-            source_text = get_source_text(config, chapter_num)
-            replacements["源文全文"] = source_text or "（源文读取失败）"
+        source_text = get_source_text(config, chapter_num)
+        replacements["源文全文"] = source_text or "（源文读取失败）"
         # 注入角色名（plot-guide 也需要，否则角色名会乱）
         book_data = _get_book_data(config.get("rewrites_dir", ""))
         if book_data:
@@ -180,6 +220,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             replacements["源文段长"] = "40"; replacements["源文单句段比例"] = "50"
             replacements["源文对话比"] = "10"; replacements["源文代词密度"] = "15"
             replacements["源文标点"] = "标点克制"
+            replacements["源文高光"] = ""
 
     # 合并额外替换变量
     if extra_replacements:
@@ -210,7 +251,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
 
     t_req = time.time()
     try:
-        result = call_llm(config, prompt_type, user_prompt, system_prompt)
+        result = call_llm(config, prompt_type, user_prompt, system_prompt, ch=chapter_num)
         elapsed = time.time() - t_req
         print(f"  [OK] {label} ({elapsed:.0f}s)")
         return result
@@ -256,8 +297,7 @@ def process_plot_guide_output(config, chapter_num, ai_output):
                 if m and key not in replacements:
                     replacements[key] = m.group(1)
 
-    for key, value in replacements.items():
-        result = result.replace(f"{{{key}}}", str(value))
+    result = safe_format(result, replacements)
 
     # 事后校验：如果还有 {xxx} 占位符残留，告警但不阻塞
     remaining = re.findall(r'\{[a-zA-Z\u4e00-\u9fa5]+\}', result)

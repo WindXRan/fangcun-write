@@ -1,23 +1,26 @@
-﻿"""API 客户端：带指数退避重试的 DeepSeek API 调用。"""
+"""API 客户端：带指数退避重试的 DeepSeek API 调用。"""
 
 import os
 import time
+from pathlib import Path
 import requests
+from datetime import datetime
 
 DEFAULT_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
 
-def call_llm(config, prompt_type, user_prompt, system_prompt=None):
+def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None):
     """统一 LLM 调用入口。
 
     从 prompt 的 frontmatter + config.prompt_overrides 读取模型参数，
-    自动处理 api_key / api_url / model / temperature / max_tokens / reasoning_effort。
+    自动处理 api_key / api_url / model / temperature / reasoning_effort。
 
     Args:
         config: 项目配置字典
         prompt_type: prompt 文件名（如 "plot-guide", "write-chapter"）
         user_prompt: 已格式化的用户 prompt 文本
         system_prompt: 可选的 system prompt 覆盖
+        ch: 可选，当前章节号（用于 token 日志）
 
     Returns:
         str: API 返回文本
@@ -26,7 +29,7 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None):
         ValueError: API_KEY 未配置
         Exception: API 调用失败
     """
-    from prompt_loader import get_prompt_config_with_overrides, load_system_prompt, get_system_prompt_name
+    from prompt_meta import get_prompt_config_with_overrides, load_system_prompt, get_system_prompt_name
 
     api_key = config.get("api_key") or os.environ.get("API_KEY")
     if not api_key:
@@ -36,15 +39,35 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None):
     pc = get_prompt_config_with_overrides(f"{prompt_type}.md", config)
     model = pc.get("model", "deepseek-v4-pro")
     temperature = pc.get("temperature", 0.8)
-    max_tokens = pc.get("max_tokens", 8192)
-    reasoning_effort = pc.get("reasoning_effort", "high")
+    reasoning_effort = pc.get("reasoning_effort", "low")
 
     if not system_prompt:
         sp_name = get_system_prompt_name(f"{prompt_type}.md") or "system-generic.md"
         system_prompt = load_system_prompt(sp_name) or ""
 
-    return call_api(api_key, model, user_prompt, reasoning_effort, max_tokens,
-                    system_prompt, api_url, temperature=temperature)
+    rewrites_dir = config.get("rewrites_dir", "")
+    usage_log_path = str(Path(rewrites_dir) / "_log/api_usage.jsonl") if rewrites_dir else ""
+
+    content, usage = call_api(api_key, model, user_prompt, reasoning_effort,
+                              system_prompt, api_url, temperature=temperature,
+                              return_usage=True)
+
+    if usage and rewrites_dir:
+        try:
+            from lib.token_tracker import log_usage
+            log_usage(rewrites_dir, {
+                "prompt_type": prompt_type,
+                "ch": ch,
+                "model": model,
+                "prompt_tokens": usage.get("prompt_tokens", 0),
+                "completion_tokens": usage.get("completion_tokens", 0),
+                "total_tokens": usage.get("total_tokens", 0),
+                "timestamp": datetime.now().isoformat(timespec="seconds"),
+            })
+        except Exception:
+            pass
+
+    return content
 
 
 def get_api_url(config=None):
@@ -69,12 +92,19 @@ def get_api_key(config=None):
 
 
 def call_api(api_key, model, user_prompt, reasoning_effort="low",
-             max_tokens=8192, system_prompt=None, api_url=None, max_retries=3,
-             temperature=0.8):
+             system_prompt=None, api_url=None, max_retries=3,
+             temperature=0.8, return_usage=False):
     """调用 API，带指数退避重试。
 
     Args:
         temperature: 默认 0.8。审稿推荐 0.3，修复推荐 0.6。
+        return_usage: 是否返回 (content, usage_dict) 元组。
+
+    Returns:
+        str 或 (str, dict): 返回内容。return_usage=True 时额外返回 usage。
+        用法示例：
+            content = call_api(...)
+            content, usage = call_api(..., return_usage=True)
 
     重试策略：
     - 429 (限流): 指数退避 10/20/40 秒
@@ -82,7 +112,7 @@ def call_api(api_key, model, user_prompt, reasoning_effort="low",
     - 超时: 重试，超时时间翻倍
     - 其他错误: 不重试
     """
-    from prompt_loader import load_system_prompt
+    from prompt_meta import load_system_prompt
 
     url = api_url or DEFAULT_API_URL
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
@@ -94,7 +124,6 @@ def call_api(api_key, model, user_prompt, reasoning_effort="low",
             {"role": "user", "content": user_prompt}
         ],
         "temperature": temperature,
-        "max_tokens": max_tokens,
     }
     # reasoning_effort 仅对 reasoning 模型生效
     if reasoning_effort:
@@ -107,7 +136,12 @@ def call_api(api_key, model, user_prompt, reasoning_effort="low",
             resp = requests.post(url, headers=headers, json=data, timeout=timeout)
 
             if resp.status_code == 200:
-                return resp.json()["choices"][0]["message"]["content"]
+                body = resp.json()
+                content = body["choices"][0]["message"]["content"]
+                usage = body.get("usage", {})
+                if return_usage:
+                    return content, usage
+                return content
 
             if resp.status_code == 429:
                 wait = 10 * (2 ** attempt)

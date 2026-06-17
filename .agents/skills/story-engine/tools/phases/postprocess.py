@@ -1,4 +1,4 @@
-﻿"""Phase 3.2-3.8: 后处理（后处理、精简、重写、润色、扩写）"""
+"""Phase 3.2-3.8: 后处理（后处理、精简、重写、润色、扩写）"""
 
 import os
 import re
@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from utils import count_source_chars, get_source_title, print_progress, debug_dump_prompt
 from lib.api_client import call_llm
-from prompt_loader import load_prompt_str, validate_prompt_variables, tag_output, get_prompt_config_with_overrides
+from prompt_meta import load_prompt_str, validate_prompt_variables, get_prompt_config_with_overrides, load_system_prompt, get_system_prompt_name, safe_format
 
 
 # ============================================================
@@ -93,9 +93,12 @@ def phase_trim(config, start, end, workers=None):
 
     def _trim_one(ch, chars, target, title):
         try:
-            result = run_one(config, "trim-chapter", ch)
             ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-            ch_file.write_text(tag_output(title + '\n\n' + result.strip(), "trim-chapter.md"), encoding='utf-8')
+            content = ch_file.read_text(encoding='utf-8')
+            result = run_one(config, "trim-chapter", ch, extra_replacements={"内容": content})
+            # trim 结果已包含完整章头，无需重复追加 title
+            result = re.sub(r'【字数验证[^】]*】\s*', '', result.strip())
+            ch_file.write_text(result, encoding='utf-8')
             print(f"  [TRIM] ch{ch:03d}: {chars}→{target}")
             return True
         except Exception as e:
@@ -145,7 +148,7 @@ def phase_rewrite(config, start, end, workers=None, state_mgr=None):
                 state_mgr.chapter_writing(ch)
             result = run_one(config, "write-chapter", ch)
             title = f"第{ch}章"
-            ch_file.write_text(tag_output(title + '\n\n' + result.strip(), "write-chapter.md"), encoding='utf-8')
+            ch_file.write_text(title + '\n\n' + result.strip(), encoding='utf-8')
             if state_mgr:
                 state_mgr.chapter_completed(ch)
             print(f"  [REWRITE] ch{ch:03d}")
@@ -206,13 +209,16 @@ def phase_polish(config, start, end, workers=None, state_mgr=None):
 
             r = {"content": original, "min_chars": int(orig_chars * 0.9), "max_chars": int(orig_chars * 1.1)}
             validate_prompt_variables("polish-chapter.md", r)
-            prompt = prompt_template.format(**r)
+            prompt = safe_format(prompt_template, r)
+
+            sp_name = get_system_prompt_name("polish-chapter.md") or "system-generic.md"
+            sys_prompt = load_system_prompt(sp_name) or ""
 
             if config.get("debug"):
                 pc = get_prompt_config_with_overrides("polish-chapter.md", config)
-                debug_dump_prompt(config, "polish", ch, "prompts/polish-chapter.md", "", prompt, "N/A", pc)
+                debug_dump_prompt(config, "polish", ch, "prompts/polish-chapter.md", sys_prompt, prompt, sp_name, pc)
 
-            result = call_llm(config, "polish-chapter", prompt, "")
+            result = call_llm(config, "polish-chapter", prompt, sys_prompt)
 
             new_chars = len(result.replace('\n', '').replace(' ', ''))
             if orig_chars > 0 and abs(new_chars - orig_chars) / orig_chars > 0.15:
@@ -221,7 +227,7 @@ def phase_polish(config, start, end, workers=None, state_mgr=None):
                     state_mgr.chapter_failed(ch, error="字数差异过大")
                 return False
             else:
-                ch_file.write_text(tag_output(result, "polish-chapter.md"), encoding='utf-8')
+                ch_file.write_text(result, encoding='utf-8')
                 if state_mgr:
                     state_mgr.chapter_completed(ch)
                 print(f"  [POLISH] ch{ch:03d}: {orig_chars}→{new_chars}字")
@@ -292,13 +298,16 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=N
             r = {"content": original, "orig_chars": orig_chars, "target_chars": target_chars,
                  "min_chars": int(target_chars * 0.9), "max_chars": int(target_chars * 1.1)}
             validate_prompt_variables("expand-chapter.md", r)
-            prompt = prompt_template.format(**r)
+            prompt = safe_format(prompt_template, r)
+
+            sp_name = get_system_prompt_name("expand-chapter.md") or "system-generic.md"
+            sys_prompt = load_system_prompt(sp_name) or ""
 
             if config.get("debug"):
                 pc = get_prompt_config_with_overrides("expand-chapter.md", config)
-                debug_dump_prompt(config, "expand", ch, "prompts/expand-chapter.md", "", prompt, "N/A", pc)
+                debug_dump_prompt(config, "expand", ch, "prompts/expand-chapter.md", sys_prompt, prompt, sp_name, pc)
 
-            result = call_llm(config, "expand-chapter", prompt, "")
+            result = call_llm(config, "expand-chapter", prompt, sys_prompt)
 
             new_chars = len(result.replace('\n', '').replace(' ', ''))
             if new_chars < orig_chars * 1.1:
@@ -307,7 +316,7 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=N
                     state_mgr.chapter_failed(ch, error="扩写不足")
                 return False
             else:
-                ch_file.write_text(tag_output(result, "expand-chapter.md"), encoding='utf-8')
+                ch_file.write_text(result, encoding='utf-8')
                 if state_mgr:
                     state_mgr.chapter_completed(ch)
                 print(f"  [EXPAND] ch{ch:03d}: {orig_chars}→{new_chars}字 (+{(new_chars/orig_chars-1)*100:.0f}%)")

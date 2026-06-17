@@ -11,7 +11,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from lib.constants import CORRUPT_MARKERS
 from lib.text_metrics import get_body_chars
 from lib.source_locator import get_source_text as _lib_get_source_text, get_total_chapters as _lib_get_total_chapters
-from lib.api_client import call_api as _lib_call_api, get_api_url
+from lib.api_client import get_api_url
 from logger import log_info, log_warning, log_success, log_fail, log_progress
 
 # 源文缓存（进程内）
@@ -47,11 +47,6 @@ def count_source_chars(config, chapter_num):
     """统计源文章节的中文字数（去空白）。"""
     text = get_source_text(config, chapter_num)
     return get_body_chars(text)
-
-
-def call_api(api_key, model, user_prompt, reasoning_effort="low", max_tokens=8192, system_prompt=None, api_url=None, max_retries=3, temperature=0.8):
-    """调用 API（委托给 lib 模块）。"""
-    return _lib_call_api(api_key, model, user_prompt, reasoning_effort, max_tokens, system_prompt, api_url, max_retries, temperature=temperature)
 
 
 def get_source_title(config, chapter_num):
@@ -180,8 +175,6 @@ def _execute_batch(todo, config, prompt_type, output_dir, filename_fmt, workers,
                 if not content or len(content.strip()) < 50:
                     raise ValueError(f"内容为空或过短 ({len(content or '')} chars)")
                 path = Path(output_dir) / filename_fmt.format(ch=ch)
-                from prompt_loader import tag_output
-                content = tag_output(content, prompt_type)
                 from state_manager import atomic_write_text
                 atomic_write_text(path, content)
                 results[ch] = str(path)
@@ -218,8 +211,6 @@ def _retry_failed(retry_queue, config, prompt_type, output_dir, filename_fmt, wo
                 try:
                     content = future.result()
                     path = Path(output_dir) / filename_fmt.format(ch=ch)
-                    from prompt_loader import tag_output
-                    content = tag_output(content, prompt_type)
                     from state_manager import atomic_write_text
                     atomic_write_text(path, content)
                     results[ch] = str(path)
@@ -314,7 +305,6 @@ def debug_dump_prompt(config, prompt_type, chapter_num, prompt_path, system_prom
 **System Prompt**: `{sp_name}`
 **Model**: `{pc.get('model')}`
 **Temperature**: `{pc.get('temperature')}`
-**Max Tokens**: `{pc.get('max_tokens')}`
 
 ---
 

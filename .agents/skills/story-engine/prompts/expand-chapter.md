@@ -1,26 +1,26 @@
-﻿---
-version: 1
-changelog: 鍒濆鐗堟湰
+---
+version: 2
+changelog: 修复乱码，重新创建
 type: user
 phase: postprocess
-description: 鎵╁啓绔犺妭
+description: 扩写章节
 required_vars: ["content", "orig_chars", "target_chars", "min_chars", "max_chars"]
 system_prompt: system-generic.md
-defaults: {"model": "deepseek-v4-pro", "max_tokens": 10000, "reasoning_effort": "high", "temperature": 0.8}
+defaults: {"model": "deepseek-v4-pro", "reasoning_effort": "low", "temperature": 0.8}
 ---
 
-浣犳槸涓撲笟缃戞枃鍐欐墜銆傝鎵╁啓浠ヤ笅绔犺妭锛屽鍔犲唴瀹逛娇瀛楁暟杈惧埌{target_chars}瀛楀乏鍙炽€?
+你是专业网文写手。请扩写以下章节，增加内容使字数达到{target_chars}字左右。
 
-銆愭墿鍐欒姹傘€?
-1. 淇濇寔鍘熸湁鎯呰妭妗嗘灦鍜屼汉鐗╁叧绯?
-2. 澧炲姞缁嗚妭鎻忓啓锛堢幆澧冦€佸績鐞嗐€佸姩浣滐級
-3. 澧炲姞瀵硅瘽浜掑姩
-4. 澧炲姞鍦烘櫙杩囨浮
-5. 涓嶈澧炲姞鏂扮殑鎯呰妭绾?
-6. 瀛楁暟鎺у埗鍦▄min_chars}~{max_chars}瀛?
+【扩写要求】
+1. 保持原有情节框架和人物关系
+2. 增加细节描写（环境、心理、动作）
+3. 增加对话互动
+4. 增加场景过渡
+5. 不要增加新的情节线
+6. 字数控制在{min_chars}~{max_chars}字
 
-銆愬師鏂囷紙{orig_chars}瀛楋級銆?
+【原文（{orig_chars}字）】
 {content}
 
-銆愯緭鍑烘牸寮忋€?
-鐩存帴杈撳嚭鎵╁啓鍚庣殑瀹屾暣绔犺妭锛屼笉瑕佽В閲娿€?
+【输出格式】
+直接输出扩写后的完整章节，不要解释。

@@ -1,4 +1,4 @@
-﻿"""Phase 1.5: 文笔指纹 — 算法锚点 + LLM 分析，与 plot-guide 同级并行。
+"""Phase 1.5: 文笔指纹 — 算法锚点 + LLM 分析，与 plot-guide 同级并行。
 
 输出: rewrites_dir/styles/style_{N}.md  (人可读 + prompt 可嵌入)
 """
@@ -12,7 +12,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from utils import get_source_text
 from lib.text_metrics import count_style_fingerprint, format_style_anchors
-from prompt_loader import load_system_prompt, load_prompt_str
+from prompt_meta import load_system_prompt, load_prompt_str, get_system_prompt_name, safe_format
 
 
 def _text_hash(text):
@@ -21,7 +21,7 @@ def _text_hash(text):
 
 
 def _cache_valid(styles_dir, ch, src_text):
-    """检查缓存是否有效：文件存在 + 哈希匹配。"""
+    """检查缓存是否有效：文件存在 + 哈希匹配 + LLM 分析存在。"""
     f = styles_dir / f"style_{ch:03d}.md"
     if not f.exists():
         return False
@@ -29,8 +29,17 @@ def _cache_valid(styles_dir, ch, src_text):
     # 检查哈希标记 <!-- hash: xxx -->
     if "<!-- hash:" in content:
         cached_hash = content.split("<!-- hash:")[1].split("-->")[0].strip()
-        return cached_hash == _text_hash(src_text)
-    return False  # 旧格式无哈希，视为无效
+        if cached_hash != _text_hash(src_text):
+            return False
+    else:
+        return False  # 旧格式无哈希，视为无效
+    
+    # 检查 LLM 分析是否存在
+    llm_f = styles_dir / f"style_{ch:03d}_llm.md"
+    if not llm_f.exists():
+        return False  # LLM 分析不存在，需要重新运行
+    
+    return True
 
 
 def phase_style_extract(config, start, end, workers=None):
@@ -107,8 +116,6 @@ def _algo_one(config, ch, styles_dir):
         f"- 对话: {fp.get('dialogue_ratio',0):.0%}",
         f"- 代词密度: {fp.get('pronoun_density','?')}/千字",
         f"- 词汇丰富度: {fp.get('ttr','?')}",
-        f"- 标点: {fp.get('punct_style','?')}",
-        f"- 开头: {fp.get('opening_type','?')} / 结尾: {fp.get('closing_type','?')}",
     ]
     _write_md(styles_dir, ch, anchor="## 算法锚点\n" + "\n".join(items), src_text=text)
     return True
@@ -129,23 +136,21 @@ def _llm_one(config, ch, styles_dir):
     if not prompt_template:
         return False
 
-    prompt = prompt_template.format(
-        chapter_text=text[:3000],
-        style_anchors=anchors,
-    )
+    prompt = safe_format(prompt_template, {"chapter_text": text[:3000], "style_anchors": anchors})
 
+    sp_name = get_system_prompt_name("style-analyze.md") or "system-generic.md"
     if config.get("debug") and ch <= 3:
         from utils import debug_dump_prompt
         pc = get_prompt_config_with_overrides("style-analyze.md", config)
-        sys_prompt = load_system_prompt("system-generic.md") or ""
+        sys_prompt = load_system_prompt(sp_name) or ""
         debug_dump_prompt(config, "style-analyze", ch,
                           "prompts/style-analyze.md", sys_prompt,
-                          prompt, "system-generic.md", pc)
+                          prompt, sp_name, pc)
 
     if config.get("prompts_only"):
         return False
 
-    sys_prompt = load_system_prompt("system-generic.md") or "你是资深文学编辑，分析文笔风格。"
+    sys_prompt = load_system_prompt(sp_name) or "你是资深文学编辑，分析文笔风格。"
     try:
         analysis = call_llm(config, "style-analyze", prompt, sys_prompt).strip()
         _write_md(styles_dir, ch, analysis=f"## LLM 风格分析\n{analysis}", src_text=text)

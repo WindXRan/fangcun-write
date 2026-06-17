@@ -1,4 +1,4 @@
-﻿"""Phase 3: 写章（含 key chapter 升级 + 风格自检 + 预检跳过）"""
+"""Phase 3: 写章（含 key chapter 升级 + 风格自检 + 预检跳过）"""
 
 import os
 import re
@@ -58,22 +58,75 @@ def _dispatch_fix(config, ch, chapters_dir):
             if ratio > 1.5 or ratio < 0.5:
                 return "polish(style)", lambda: _fix_polish(config, ch, text, chapters_dir, "句长节奏偏离源文")
 
-    # fallback: rewrite
-    from phases.guides import run_one
-    return "rewrite", lambda: _fix_rewrite(config, ch, chapters_dir)
+    # fallback: polish（除非彻底没救，不走 rewrite）
+    return "polish(style)", lambda: _fix_polish(config, ch, text, chapters_dir, "整体风格需润色")
+
+
+def _dispatch_fix(config, ch, chapters_dir):
+    """根据失效类型选 trim/polish/rewrite。返回 (action_label, fix_func)。"""
+    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+    if not ch_file.exists():
+        return "missing", None
+
+    text = ch_file.read_text(encoding='utf-8')
+    body = re.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text)
+    chars = len(body)
+    target = count_source_chars(config, ch)
+    if target > 0:
+        deviation = (chars - target) / target
+    else:
+        deviation = 0.0
+
+    src_text = get_source_text(config, ch)
+    src_metrics = None
+    our_metrics = None
+    if src_text:
+        from lib.text_metrics import count_metrics
+        src_metrics = count_metrics(src_text)
+        our_metrics = count_metrics(text)
+
+    # 字数超标 >20% → trim（优先级最高，避免 fallback 到 rewrite）
+    if deviation > 0.2:
+        from phases.guides import run_one
+        return "trim", lambda: _fix_trim(config, ch, chapters_dir)
+
+    # 字数不足 <-20% → expand
+    if target > 0 and deviation < -0.2:
+        return "expand", lambda: _fix_expand(config, ch, text, chapters_dir)
+
+    # AI 路标词超标 → polish
+    if src_metrics and our_metrics:
+        limit = max(src_metrics["ai_markers"] + 1, 1)
+        if our_metrics["ai_markers"] > limit:
+            return "polish(ai)", lambda: _fix_polish(config, ch, text, chapters_dir, "AI路标词过多")
+
+        # 代词密度/句长偏离 → polish with style
+        if src_metrics.get("pronoun_density", 0) > 0:
+            ratio = our_metrics["pronoun_density"] / max(src_metrics["pronoun_density"], 0.001)
+            if ratio > 1.5 or ratio < 0.5:
+                return "polish(pronoun)", lambda: _fix_polish(config, ch, text, chapters_dir, "代词密度偏离源文")
+
+        if src_metrics.get("sent_len_stddev", 0) > 0:
+            ratio = our_metrics["sent_len_stddev"] / max(src_metrics["sent_len_stddev"], 0.001)
+            if ratio > 1.5 or ratio < 0.5:
+                return "polish(style)", lambda: _fix_polish(config, ch, text, chapters_dir, "句长节奏偏离源文")
+
+    # fallback: polish（除非彻底没救，不走 rewrite）
+    return "polish(style)", lambda: _fix_polish(config, ch, text, chapters_dir, "整体风格需润色")
 
 
 def _fix_trim(config, ch, chapters_dir):
     """字数超标 → trim。"""
     from phases.guides import run_one
-    result = run_one(config, "trim-chapter", ch)
     ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+    content = ch_file.read_text(encoding='utf-8')
+    result = run_one(config, "trim-chapter", ch, extra_replacements={"内容": content})
     ch_file.write_text(result, encoding='utf-8')
 
 
 def _fix_expand(config, ch, text, chapters_dir):
     """字数不足 → expand。"""
-    from prompt_loader import load_prompt_str, validate_prompt_variables
+    from prompt_meta import load_prompt_str, validate_prompt_variables, load_system_prompt, get_system_prompt_name, safe_format
     from lib.api_client import call_llm
     ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
     orig_chars = len(re.sub(r'\s', '', text))
@@ -82,21 +135,27 @@ def _fix_expand(config, ch, text, chapters_dir):
          "min_chars": int(target_chars * 0.9), "max_chars": int(target_chars * 1.1)}
     prompt = load_prompt_str("expand-chapter.md")
     validate_prompt_variables("expand-chapter.md", r)
-    result = call_llm(config, "expand-chapter", prompt.format(**r), "")
+    prompt = safe_format(prompt, r)
+    sp_name = get_system_prompt_name("expand-chapter.md") or "system-generic.md"
+    sys_prompt = load_system_prompt(sp_name) or ""
+    result = call_llm(config, "expand-chapter", prompt, sys_prompt, ch=ch)
     ch_file.write_text(result, encoding='utf-8')
 
 
 def _fix_polish(config, ch, text, chapters_dir, issue):
     """AI痕迹/代词/句长 → 润色。"""
-    from prompt_loader import load_prompt_str, validate_prompt_variables
+    from prompt_meta import load_prompt_str, validate_prompt_variables, load_system_prompt, get_system_prompt_name, safe_format
     from lib.api_client import call_llm
     ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
     orig_chars = len(re.sub(r'\s', '', text))
     r = {"content": text, "min_chars": int(orig_chars * 0.9), "max_chars": int(orig_chars * 1.1)}
     prompt = load_prompt_str("polish-chapter.md")
     validate_prompt_variables("polish-chapter.md", r)
-    sys_prompt = f"你是资深网文写手。精修以下章节，特别关注：{issue}。保持字数在 ±10% 内，不要增删情节。"
-    result = call_llm(config, "polish-chapter", prompt.format(**r), sys_prompt)
+    prompt = safe_format(prompt, r)
+    sp_name = get_system_prompt_name("polish-chapter.md") or "system-generic.md"
+    base = load_system_prompt(sp_name) or ""
+    sys_prompt = f"精修以下章节，特别关注：{issue}。保持字数在 ±10% 内，不要增删情节。\n\n{base}"
+    result = call_llm(config, "polish-chapter", prompt, sys_prompt, ch=ch)
     ch_file.write_text(result, encoding='utf-8')
 
 

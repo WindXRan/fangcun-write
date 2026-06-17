@@ -1,6 +1,7 @@
 """源文定位器：根据配置和章节号找到源文章节文件。"""
 
 import os
+import re
 import glob
 from pathlib import Path
 
@@ -58,10 +59,15 @@ def get_source_dir(config):
 
 
 def get_total_chapters(config):
-    """获取源文总章数。"""
-    import re
+    """获取源文总章数（从文件名提取最大章号）。"""
     src_dir = get_source_dir(config)
     if not src_dir:
         return 0
-    files = [f for f in os.listdir(src_dir) if f.endswith('.txt')]
-    return len(files)
+    max_ch = 0
+    for f in os.listdir(src_dir):
+        m = re.search(r'第(\d+)章', f)
+        if m:
+            ch = int(m.group(1))
+            if ch > max_ch:
+                max_ch = ch
+    return max_ch

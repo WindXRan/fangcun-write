@@ -1,4 +1,4 @@
-﻿"""Phase 0: Prep（提取元数据+章节目录）
+"""Phase 0: Prep（提取元数据+章节目录）
 Phase 0.5: 曲线分析（读 _toc.txt → 选关键章节）
 Phase 1: 开书（生成 concept.md + settings/）"""
 
@@ -12,7 +12,9 @@ from utils import (
     get_total_chapters, get_source_title, count_source_chars
 )
 from state_manager import atomic_write_text
-from prompt_loader import load_prompt, load_system_prompt, tag_output, get_prompt_config_with_overrides, get_system_prompt_name
+from prompt_meta import load_system_prompt, get_prompt_config_with_overrides, get_system_prompt_name
+from prompt_loader import load_prompt
+from lib.api_client import call_llm
 
 
 # ============================================================
@@ -343,13 +345,13 @@ def phase_open_book(config, state_mgr=None):
         if files:
             for filepath, content in files.items():
                 full_path = Path(config["rewrites_dir"]) / filepath
-                atomic_write_text(full_path, tag_output(content, "open-book.md"))
+                atomic_write_text(full_path, content)
                 print(f"[OK] {filepath} → {full_path}")
                 if filepath == "book_info.md":
                     book_info_content = content
         else:
             path = Path(config["rewrites_dir"]) / "concept.md"
-            atomic_write_text(path, tag_output(result, "open-book.md"))
+            atomic_write_text(path, result)
             print(f"[OK] concept.md → {path}")
 
         # === Stage 3: book_name=auto 时从书名候选中选择 ===
@@ -377,6 +379,15 @@ def phase_open_book(config, state_mgr=None):
             else:
                 print("[WARN] 未找到书名候选，请手动设置 book_name")
 
+        # === 用户确认方向 ===
+        if not config.get("prompts_only") and not config.get("skip_confirm"):
+            confirmed = _confirm_direction(config)
+            if not confirmed:
+                print("[STOP] 用户否决开书方向，可修改后重跑")
+                if state_mgr:
+                    state_mgr.phase_failed("open-book", error="用户否决方向")
+                return False
+
         if state_mgr:
             state_mgr.phase_done("open-book")
         return True
@@ -385,6 +396,84 @@ def phase_open_book(config, state_mgr=None):
         if state_mgr:
             state_mgr.phase_failed("open-book", error=str(e))
         return False
+
+
+def _confirm_direction(config):
+    """打印开书摘要，等用户确认方向。"""
+    rewrites_dir = Path(config.get("rewrites_dir", ""))
+    if not rewrites_dir.exists():
+        return True
+
+    # 读取关键文件
+    source_analysis = ""
+    concept = ""
+    book_info = ""
+    for fname, var in [("source_analysis.md", "source_analysis"), ("concept.md", "concept"), ("book_info.md", "book_info")]:
+        fpath = rewrites_dir / fname
+        if fpath.exists():
+            content = fpath.read_text(encoding="utf-8")
+            if fname == "source_analysis.md":
+                source_analysis = content
+            elif fname == "concept.md":
+                concept = content
+            elif fname == "book_info.md":
+                book_info = content
+
+    print("\n" + "=" * 60)
+    print("  开书方向确认")
+    print("=" * 60)
+
+    # 打印核心DNA锁定表
+    if source_analysis:
+        # 提取核心DNA表
+        in_table = False
+        dna_lines = []
+        for line in source_analysis.split("\n"):
+            if "核心DNA锁定" in line:
+                in_table = True
+            elif in_table and line.startswith("## "):
+                break
+            if in_table:
+                dna_lines.append(line)
+        if dna_lines:
+            print("\n  核心DNA锁定：")
+            for line in dna_lines:
+                print(f"  {line}")
+
+    # 打印书名和简介
+    if book_info:
+        import re
+        # 提取书名候选
+        names = re.findall(r'[《](.+?)[》]', book_info)
+        if names:
+            print(f"\n  书名候选：{' / '.join(names[:5])}")
+        # 提取简介（第一段非空行）
+        lines = [l.strip() for l in book_info.split("\n") if l.strip() and not l.strip().startswith("#") and not l.strip().startswith("|") and not l.strip().startswith("---")]
+        if lines:
+            # 找"简介"后面的内容
+            in_intro = False
+            intro_lines = []
+            for line in book_info.split("\n"):
+                if "简介" in line and "##" in line:
+                    in_intro = True
+                    continue
+                if in_intro:
+                    stripped = line.strip()
+                    if stripped.startswith("##") or stripped.startswith("==="):
+                        break
+                    if stripped and not stripped.startswith("|") and not stripped.startswith("---"):
+                        intro_lines.append(stripped)
+            if intro_lines:
+                print(f"\n  简介：{''.join(intro_lines[:3])}")
+
+    print("\n" + "=" * 60)
+
+    try:
+        answer = input("  方向OK？(y=继续 / n=重跑): ").strip().lower()
+        return answer in ("y", "yes", "是", "ok", "")
+    except (EOFError, KeyboardInterrupt):
+        print("\n  [INFO] 无法交互，默认通过")
+        return True
 
 
 def parse_multi_file_output(text):

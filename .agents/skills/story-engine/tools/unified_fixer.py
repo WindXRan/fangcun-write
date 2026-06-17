@@ -1,10 +1,7 @@
 """
-多 Agent 审改系统 v5 — 混合架构
+多 Agent 审改系统 v5 — 修复 + 编排层
 
 Agent 架构:
-  1a. Batch Review Agents (scatter)   — N个并行，每人审 X 章 (algo+LLM, 7维全检)
-  1b. Global Review Agents (scatter)  — 2个并行，通读全书关键章：人设一致性 + 全局节奏/伏笔
-  2.  Summary Agent (gather)          — 合并两层结果，去重分级 P0/P1/P2
   3.  Dispatch Agent (plan)           — 按章生成修复任务
   4.  Fix Agents (scatter)            — N个并行，每人修分配到的任务
   5.  Collect Results (gather)        — 汇总报告
@@ -14,46 +11,20 @@ Agent 架构:
     python unified_fixer.py --config xxx.json --start 1 --end 188
 """
 
-import os, re, json, time, argparse, warnings
-warnings.filterwarnings("ignore", category=UserWarning, module="requests")
+import os, re, json, time, argparse
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field, asdict
-from typing import Optional
 
-from lib.constants import AI_MARKERS, AI_MARKER_PATTERN
-from lib.text_metrics import count_metrics, get_body_chars
-from lib.plagiarism import find_plagiarism
 from lib.source_locator import get_source_text
-from prompt_loader import load_system_prompt, load_prompt_str, tag_output, get_prompt_config_with_overrides
-
-
-# ============================================================
-# 数据契约 (Agent 间通信协议)
-# ============================================================
-
-@dataclass
-class Issue:
-    type: str            # ai_marker|plagiarism|metaphor|emotion|hook|word_count|ai_trace|continuity|character|rhythm
-    severity: str        # high|medium|low
-    priority: str = ""   # P0|P1|P2  (summary_agent 填写)
-    desc: str = ""
-    fix: str = ""
-    auto_fixable: bool = False
-    ch: int = 0          # 所属章
-
-@dataclass
-class ReviewResult:
-    """单个 review agent 对一个 chapter batch 的输出"""
-    chapters: dict[int, dict] = field(default_factory=dict)  # {ch: {score, issues:[Issue_dict], metrics:{}}}
-    cross_issues: list[dict] = field(default_factory=list)
-
-@dataclass
-class SummaryReport:
-    """summary_agent 输出"""
-    chapters: dict[int, dict] = field(default_factory=dict)  # {ch: {score, issues:[Issue_dict]}}
-    cross_issues: list[Issue] = field(default_factory=list)
-    stats: dict = field(default_factory=dict)  # {total_ch, p0, p1, p2, avg_score}
+from lib.text_metrics import get_body_chars
+from lib.constants import AI_MARKERS, AI_MARKER_PATTERN
+from prompt_meta import load_system_prompt, load_prompt_str, get_prompt_config_with_overrides, get_system_prompt_name, safe_format
+from unified_review import Issue, ReviewResult, SummaryReport, review_agent, summary_agent, generate_p012_report
+try:
+    from logger import setup_pipeline_log
+except ImportError:
+    setup_pipeline_log = lambda cfg: None
 
 @dataclass
 class FixTask:
@@ -73,395 +44,6 @@ class FixResult:
     orig_chars: int = 0
     new_chars: int = 0
     error: str = ""
-
-# 便利函数
-def issue_dict(i):
-    return {"type": i.type, "severity": i.severity, "priority": i.priority,
-            "desc": i.desc, "fix": i.fix, "auto_fixable": i.auto_fixable, "ch": i.ch}
-
-
-# ============================================================
-# Agent 1: Review Agents (N 个并行，每批 X 章)
-# ============================================================
-
-# Prompt 见 prompts/unified-review.md，由 _llm_batch_review 加载
-
-
-def review_agent(config, chapter_batch, agent_id=0):
-    """单个审查 agent。在一批章节上运行 algo 检查 + LLM 批量审稿。
-
-    Input:  config, chapter_batch (list[int]), agent_id
-    Output: ReviewResult
-    """
-    result = ReviewResult()
-    n = len(chapter_batch)
-    done_algo = 0
-
-    # ---- 1a: 算法检查 (所有章并行) ----
-    with ThreadPoolExecutor(max_workers=len(chapter_batch)) as ex:
-        futures = {ex.submit(_algo_check, config, ch): ch for ch in chapter_batch}
-        for f in as_completed(futures):
-            ch = futures[f]
-            try:
-                result.chapters[ch] = f.result()
-            except Exception as e:
-                result.chapters[ch] = {"score": 0, "issues": [{"type": "error", "severity": "high", "desc": str(e)}]}
-            done_algo += 1
-            print(f"    [审查#{agent_id}] 算法检查: {done_algo}/{n} 章 (第{ch}章)", flush=True)
-
-    # ---- 1b: LLM 批量审稿 (有问题的章) ----
-    problem_chs = [ch for ch, d in result.chapters.items() if d.get("issues")]
-    if problem_chs:
-        print(f"    [审查#{agent_id}] LLM 审稿: {len(problem_chs)} 章...", flush=True)
-        try:
-            ch_data, cross = _llm_batch_review(config, problem_chs)
-            for ch_str, data in ch_data.items():
-                ch = int(ch_str)
-                if ch in result.chapters:
-                    existing = {i["desc"][:30] for i in result.chapters[ch].get("issues", [])}
-                    for issue in data.get("issues", []):
-                        if issue["desc"][:30] not in existing:
-                            result.chapters[ch]["issues"].append(issue)
-                            existing.add(issue["desc"][:30])
-                    result.chapters[ch]["score"] = min(
-                        result.chapters[ch].get("score", 100),
-                        data.get("score", 50)
-                    )
-            result.cross_issues.extend(cross)
-            print(f"    [审查#{agent_id}] LLM 审稿完成", flush=True)
-        except Exception as e:
-            print(f"    [审查#{agent_id}] LLM 审稿失败: {e}", flush=True)
-
-    return result
-
-
-def _algo_check(config, ch):
-    """单章算法检查。"""
-    ch_dir = Path(f"{config['rewrites_dir']}/chapters")
-    ch_file = ch_dir / f"ch_{ch:03d}.txt"
-    if not ch_file.exists():
-        return {"score": 0, "issues": [{"type": "missing", "severity": "high", "desc": "文件不存在", "auto_fixable": False}]}
-
-    text = ch_file.read_text(encoding='utf-8')
-    metrics = count_metrics(text)
-    src = get_source_text(config, ch)
-    src_metrics = count_metrics(src) if src else None
-    src_chars = get_body_chars(src)
-
-    issues = []
-    score = 100
-
-    # AI痕迹词 (句首)
-    ai_traces = []
-    for marker in AI_MARKERS:
-        pat = r'(?:^|[\n。！？])\s*' + re.escape(marker)
-        found = re.findall(pat, text)
-        if found:
-            ai_traces.append(f"{marker}x{len(found)}")
-    if ai_traces:
-        issues.append({"type": "ai_trace", "severity": "medium",
-                       "desc": f"AI痕迹词: {', '.join(ai_traces)}",
-                       "fix": "删除句首路标词", "auto_fixable": True})
-        score -= 5
-
-    # AI路标词 vs 源文
-    if src_metrics:
-        limit = max(src_metrics["ai_markers"] + 1, 1)
-        if metrics["ai_markers"] > limit:
-            issues.append({"type": "ai_marker", "severity": "high",
-                           "desc": f"AI路标词 {metrics['ai_markers']}处 (源文{src_metrics['ai_markers']})",
-                           "fix": "删除多余的路标词", "auto_fixable": True})
-            score -= 15
-
-    # 比喻
-    if src_metrics:
-        limit = src_metrics["metaphor"] + 3
-        if metrics["metaphor"] > limit:
-            issues.append({"type": "metaphor", "severity": "medium",
-                           "desc": f"比喻过多 {metrics['metaphor']}处 (源文{src_metrics['metaphor']})",
-                           "fix": "删除多余比喻", "auto_fixable": False})
-            score -= 10
-
-    # 直抒情
-    if src_metrics:
-        limit = max(src_metrics["direct_emotion"] + 2, 3)
-        if metrics["direct_emotion"] > limit:
-            issues.append({"type": "emotion", "severity": "medium",
-                           "desc": f"直抒情 {metrics['direct_emotion']}处 (源文{src_metrics['direct_emotion']})",
-                           "fix": "用动作细节代替", "auto_fixable": False})
-            score -= 10
-
-    # 代词密度（朱雀防线）
-    if src_metrics and src_metrics.get("pronoun_density", 0) > 0:
-        ratio = metrics["pronoun_density"] / src_metrics["pronoun_density"]
-        if ratio > 1.5 or ratio < 0.5:
-            issues.append({"type": "pronoun", "severity": "medium",
-                           "desc": f"代词密度 {metrics['pronoun_density']}/千字 (源文{src_metrics['pronoun_density']})",
-                           "fix": "交替使用名字/身份/零代词替代他/她", "auto_fixable": False})
-            score -= 10
-
-    # 句长标准差（朱雀防线）
-    if src_metrics and src_metrics.get("sent_len_stddev", 0) > 0:
-        ratio = metrics["sent_len_stddev"] / src_metrics["sent_len_stddev"]
-        if ratio > 1.5 or ratio < 0.5:
-            issues.append({"type": "sentence_stddev", "severity": "medium",
-                           "desc": f"句长标准差 {metrics['sent_len_stddev']} (源文{src_metrics['sent_len_stddev']})",
-                           "fix": "交错长短句，避免句长均匀", "auto_fixable": False})
-            score -= 10
-
-    # 字数
-    if src_chars > 0:
-        dev = (metrics["chars"] - src_chars) / src_chars
-        if abs(dev) > 0.15:
-            direction = "超标" if dev > 0 else "不足"
-            issues.append({"type": "word_count", "severity": "high",
-                           "desc": f"字数{direction} {metrics['chars']}/{src_chars} ({dev:+.0%})",
-                           "fix": f"目标{int(src_chars*0.9)}~{int(src_chars*1.1)}字",
-                           "auto_fixable": False})
-            score -= 15
-
-    # 台词雷同
-    if src:
-        plags = find_plagiarism(text, src)
-        if plags:
-            desc = f"台词雷同 {len(plags)}处: " + ", ".join(f"'{p['text']}...'" for p in plags[:3])
-            issues.append({"type": "plagiarism", "severity": "high",
-                           "desc": desc, "fix": "重写雷同台词",
-                           "auto_fixable": False})
-            score -= 15
-
-    return {"score": max(0, score), "issues": issues, "metrics": metrics,
-            "chars": metrics["chars"], "src_chars": src_chars}
-
-
-def _parse_review_output(text):
-    """解析 markdown 格式的审稿输出。
-
-    格式：
-      ### 章节 N
-      评分: XX
-      问题:
-      - 类型: X | 严重度: high|medium|low | 描述: X | 修复: X
-
-      ### 跨章问题
-      - 涉及章节: 1,2,3 | 类型: X | 严重度: X | 描述: X | 修复: X
-
-    返回 ({ch_str: {score, issues}}, [{type, severity, desc, fix}])
-    """
-    chapters = {}
-    cross = []
-
-    # 解析 ### 章节 N 块
-    ch_blocks = re.findall(r'###\s+章节\s+(\d+)\s*\n(.*?)(?=###\s+(?:章节|\u8de8\u7ae0\u95ee\u9898)|\Z)', text, re.DOTALL)
-    for ch_str, body in ch_blocks:
-        score_m = re.search(r'评分:\s*(\d+)', body)
-        score = int(score_m.group(1)) if score_m else 50
-
-        issues = []
-        # 找到 问题: 后面的列表项
-        in_issues = re.split(r'问题:', body, maxsplit=1)
-        if len(in_issues) > 1:
-            for line in in_issues[1].split('\n'):
-                line = line.strip()
-                m = re.match(r'-\s*类型:\s*(\S+)', line)
-                if m:
-                    typ = m.group(1)
-                    sev = _extract_field(line, '严重度', 'medium')
-                    desc = _extract_field(line, '描述', '')
-                    fix = _extract_field(line, '修复', '')
-                    issues.append({"type": typ, "severity": sev, "desc": desc, "fix": fix, "auto_fixable": False})
-
-        chapters[ch_str] = {"score": score, "issues": issues}
-
-    # 解析 ### 跨章问题 块
-    cross_block = re.search(r'###\s+跨章问题\s*\n(.*?)(?=###|\Z)', text, re.DOTALL)
-    if cross_block:
-        for line in cross_block.group(1).split('\n'):
-            line = line.strip()
-            m = re.match(r'-\s*涉及章节:\s*([\d,]+)', line)
-            if m:
-                chs = [int(x.strip()) for x in m.group(1).split(',') if x.strip()]
-                typ = _extract_field(line, '类型', 'continuity')
-                sev = _extract_field(line, '严重度', 'medium')
-                desc = _extract_field(line, '描述', '')
-                fix = _extract_field(line, '修复', '')
-                cross.append({"chapters": chs, "type": typ, "severity": sev, "desc": desc, "fix": fix})
-
-    return chapters, cross
-
-
-def _extract_field(line, label, default):
-    """从 '类型: X | 严重度: Y' 格式中提取字段值。"""
-    m = re.search(re.escape(label) + r':\s*([^|]+)', line)
-    return m.group(1).strip() if m else default
-
-
-def _llm_batch_review(config, chapter_nums):
-    """LLM 批量审稿一批章节。"""
-    from lib.api_client import call_llm
-
-    prompt_template = load_prompt_str("unified-review.md")
-    if not prompt_template:
-        return {}, []
-
-    # 章节文本
-    chapters_dir = f"{config['rewrites_dir']}/chapters"
-    parts = []
-    for ch in chapter_nums:
-        cf = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-        if cf.exists():
-            parts.append(f"=== 第{ch}章 ===\n{cf.read_text(encoding='utf-8')}")
-    chapters_text = '\n\n'.join(parts)
-
-    # 源文参考（首尾章+中间章）
-    src_samples = []
-    picks = [chapter_nums[0]]
-    if len(chapter_nums) > 2:
-        picks.append(chapter_nums[len(chapter_nums)//2])
-    if len(chapter_nums) > 1:
-        picks.append(chapter_nums[-1])
-    for ch in picks:
-        src = get_source_text(config, ch)
-        if src:
-            src_samples.append(f"--- 源文第{ch}章 ---\n{src[:1000]}")
-    source_context = '\n\n'.join(src_samples)
-
-    prompt = prompt_template.format(
-        count=len(chapter_nums),
-        chapters_text=chapters_text[:6000],
-        source_context=source_context[:2000] if source_context else "（无）",
-    )
-
-    if config.get("debug"):
-        from utils import debug_dump_prompt
-        pc = get_prompt_config_with_overrides("unified-review.md", config)
-        label = f"batch{chapter_nums[0]}-{chapter_nums[-1]}"
-        debug_dump_prompt(config, "unified-review", chapter_nums[0],
-                          "prompts/unified-review.md", "你是资深网文编辑。",
-                          prompt, "unified-review", pc)
-
-    content = call_llm(config, "unified-review", prompt,
-                       "你是资深网文编辑。按用户要求的格式输出审查结果。")
-    return _parse_review_output(content)
-
-
-# ============================================================
-# Agent 2: Summary Agent (合并、分级 P0/P1/P2、跨章模式匹配)
-# ============================================================
-
-_P0_TYPES = {"plagiarism", "continuity", "missing", "character", "timeline"}
-_P1_TYPES = {"ai_marker", "emotion", "hook", "rhythm", "word_count"}
-_P2_TYPES = {"metaphor", "ai_trace", "dialogue"}
-
-def severity_to_priority(severity, type_):
-    if type_ in _P0_TYPES:
-        return "P0"
-    if severity == "high":
-        return "P0"
-    if type_ in _P1_TYPES:
-        return "P1"
-    if severity == "medium" and type_ in _P2_TYPES:
-        return "P2"
-    if type_ in _P2_TYPES:
-        return "P2"
-    return "P1"  # fallback
-
-
-def summary_agent(review_results: list[ReviewResult]) -> SummaryReport:
-    """汇总 N 个 review agent 的输出。
-
-    Input:  [ReviewResult, ...]
-    Output: SummaryReport (去重、分级、跨章模式匹配)
-    """
-    merged = {}
-    all_cross = []
-
-    for rr in review_results:
-        for ch, data in rr.chapters.items():
-            if ch not in merged:
-                merged[ch] = {"score": 100, "issues": [], "sources": []}
-            merged[ch]["sources"].append("algo")
-            merged[ch]["score"] = min(merged[ch]["score"], data.get("score", 50))
-
-            existing = {i["desc"][:30] for i in merged[ch]["issues"]}
-            for issue in data.get("issues", []):
-                if issue["desc"][:30] not in existing:
-                    issue["priority"] = severity_to_priority(issue.get("severity", "low"), issue.get("type", ""))
-                    merged[ch]["issues"].append(issue)
-                    existing.add(issue["desc"][:30])
-
-        all_cross.extend(rr.cross_issues)
-
-    # 去重跨章问题 + 分级
-    _ISSUE_FIELDS = {"type", "severity", "priority", "desc", "fix", "auto_fixable", "ch"}
-    seen_cross = set()
-    cross_list = []
-    for c in all_cross:
-        key = c.get("desc", "")[:60]
-        if key not in seen_cross:
-            c["priority"] = severity_to_priority(c.get("severity", "medium"), c.get("type", "continuity"))
-            cross_list.append(Issue(**{k: v for k, v in c.items() if k in _ISSUE_FIELDS}))
-            seen_cross.add(key)
-
-    # 跨章模式匹配：同一 type 在 ≥3 章出现 → 生成跨章问题
-    type_ch_map = {}  # type -> list of ch with that type
-    for ch, data in merged.items():
-        for iss in data["issues"]:
-            t = iss.get("type", "")
-            type_ch_map.setdefault(t, set())
-            type_ch_map[t].add(ch)
-
-    type_label = {
-        "character": "人设",
-        "emotion": "情感",
-        "rhythm": "节奏",
-        "plagiarism": "台词雷同",
-        "word_count": "字数",
-        "hook": "钩子",
-        "ai_marker": "AI路标词",
-        "ai_trace": "AI痕迹",
-        "metaphor": "比喻",
-        "sentence_stddev": "句长",
-        "pronoun": "代词",
-    }
-    for t, ch_set in type_ch_map.items():
-        if len(ch_set) < 3:
-            continue
-        sorted_ch = sorted(ch_set)
-        label = type_label.get(t, t)
-        key = f"跨章{label}"
-        if key not in seen_cross:
-            cross_list.append(Issue(
-                type=t, severity="high", priority="P0" if t in _P0_TYPES else "P1",
-                desc=f"【跨章{label}】{len(ch_set)}章存在{label}类问题: 第{','.join(map(str,sorted_ch[:5]))}章"
-                      + (f"...共{len(ch_set)}章" if len(ch_set) > 5 else ""),
-                fix="各章问题综合修复",
-                auto_fixable=False,
-            ))
-            seen_cross.add(key)
-
-    # 排序 per chapter: P0 > P1 > P2
-    prio_order = {"P0": 0, "P1": 1, "P2": 2}
-    for ch in merged:
-        merged[ch]["issues"].sort(key=lambda i: prio_order.get(i.get("priority", "P2"), 9))
-
-    # 统计
-    total_p0 = sum(1 for d in merged.values() for i in d["issues"] if i.get("priority") == "P0")
-    total_p1 = sum(1 for d in merged.values() for i in d["issues"] if i.get("priority") == "P1")
-    total_p2 = sum(1 for d in merged.values() for i in d["issues"] if i.get("priority") == "P2")
-    scores = [d["score"] for d in merged.values()]
-    avg_score = round(sum(scores) / max(len(scores), 1), 1)
-
-    stats = {
-        "total_ch": len(merged),
-        "p0": total_p0,
-        "p1": total_p1,
-        "p2": total_p2,
-        "total_issues": total_p0 + total_p1 + total_p2,
-        "avg_score": avg_score,
-    }
-
-    return SummaryReport(chapters=merged, cross_issues=cross_list, stats=stats)
 
 
 # ============================================================
@@ -533,7 +115,7 @@ def fix_agent(config, task: FixTask, dry_run=False) -> FixResult:
                          new_chars=len(re.sub(r'\s', '', text)))
 
     if not dry_run:
-        ch_file.write_text(tag_output(text, "unified-fix.md"), encoding='utf-8')
+        ch_file.write_text(text, encoding='utf-8')
 
     return FixResult(ch=task.ch, status="fixed",
                      mech_count=mech_count, llm_used=llm_used,
@@ -587,31 +169,32 @@ def _fix_llm(config, task, text):
             adj_parts.append(f"【{label}】\n{adj_t[-500:]}" if offset == -1 else f"【{label}】\n{adj_t[:500]}")
     adj = '\n\n'.join(adj_parts)
 
-    # 读脱敏版源文
-    from lib.source_stripper import strip_source_chapter
-    source_text = strip_source_chapter(config, task.ch) or get_source_text(config, task.ch) or "（无源文）"
+    # 读源文
+    source_text = get_source_text(config, task.ch) or "（无源文）"
 
-    prompt = prompt_template.format(
-        issues_text=issues_text,
-        adjacent_context=adj,
-        orig_chars=len(re.sub(r'\s', '', text)),
-        target_chars=task.target_chars or len(re.sub(r'\s', '', text)),
-        min_chars=int((task.target_chars or len(re.sub(r'\s', '', text))) * 0.85),
-        max_chars=int((task.target_chars or len(re.sub(r'\s', '', text))) * 1.15),
-        chapter_content=text,
-        源文全文=source_text,
-    )
+    prompt = safe_format(prompt_template, {
+        "issues_text": issues_text,
+        "adjacent_context": adj,
+        "orig_chars": str(len(re.sub(r'\s', '', text))),
+        "target_chars": str(task.target_chars or len(re.sub(r'\s', '', text))),
+        "min_chars": str(int((task.target_chars or len(re.sub(r'\s', '', text))) * 0.85)),
+        "max_chars": str(int((task.target_chars or len(re.sub(r'\s', '', text))) * 1.15)),
+        "chapter_content": text,
+        "源文全文": source_text,
+    })
+
+    sp_name = get_system_prompt_name("unified-fix.md") or "system-generic.md"
+    sys_prompt = load_system_prompt(sp_name) or ""
 
     if config.get("debug"):
         from utils import debug_dump_prompt
         pc = get_prompt_config_with_overrides("unified-fix.md", config)
         debug_dump_prompt(config, "unified-fix", task.ch,
-                          "prompts/unified-fix.md", "你是资深网文写手。只输出修改后的章节。",
-                          prompt, "unified-fix", pc)
+                          "prompts/unified-fix.md", sys_prompt,
+                          prompt, sp_name, pc)
 
     try:
-        fixed = call_llm(config, "unified-fix", prompt,
-                         "你是资深网文写手。只输出修改后的章节。")
+        fixed = call_llm(config, "unified-fix", prompt, sys_prompt)
         # 提取修复后章节
         if "## 修复后章节" in fixed:
             fixed = fixed.split("## 修复后章节")[-1].strip()
@@ -634,10 +217,6 @@ def _fix_llm(config, task, text):
         print(f"      [修复] 第{task.ch}章 LLM 修复失败: {e}", flush=True)
         return None
 
-
-# ============================================================
-# Orchestrator (多 agent 编排)
-# ============================================================
 
 def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False):
     """多 Agent 审改流程。
@@ -679,7 +258,7 @@ def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False):
     print(f"Step 2: 总结 Agent", flush=True)
     print("="*40, flush=True)
 
-    summary = summary_agent(review_results)
+    summary = summary_agent(review_results, config=cfg)
     s = summary.stats
     print(f"  {s['total_ch']} 章有问题 | P0:{s['p0']} P1:{s['p1']} P2:{s['p2']} | 均分:{s['avg_score']}", flush=True)
 
@@ -687,6 +266,11 @@ def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False):
         print(f"  跨章问题: {len(summary.cross_issues)}", flush=True)
         for ci in summary.cross_issues:
             print(f"    [{ci.priority}] {ci.desc}", flush=True)
+
+    # 生成 P0/P1/P2 问题合集报告
+    report_path = os.path.join(cfg.get('rewrites_dir', ''), 'compare', 'p012_issues_report.md')
+    if cfg.get('rewrites_dir'):
+        generate_p012_report(summary, report_path)
 
     if not summary.chapters:
         print("  ✓ 无问题，无需修复", flush=True)
@@ -847,6 +431,9 @@ def main():
 
     cfg = json.loads(Path(args.config).read_text(encoding='utf-8'))
     cfg.setdefault("base_dir", os.getcwd())
+
+    # 加入 pipeline 日志采集
+    setup_pipeline_log(cfg)
 
     if args.start is None or args.end is None:
         ch_dir = Path(cfg['rewrites_dir']) / 'chapters'

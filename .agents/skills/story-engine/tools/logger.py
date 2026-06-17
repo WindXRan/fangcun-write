@@ -1,8 +1,11 @@
 """日志模块：统一管理日志输出。"""
 
 import sys
+import io
+import time
 import logging
 from pathlib import Path
+from contextlib import contextmanager
 
 
 class Logger:
@@ -79,6 +82,65 @@ class Logger:
 
 # 全局日志实例
 _logger = None
+
+# ============================================================
+# Pipeline 日志采集 — 将 stdout（含 [WARN]/[FAIL]/[ERROR]）写入文件
+# ============================================================
+
+class TeeStdout:
+    """Tee：替换 sys.stdout，所有输出同时写入文件和终端。"""
+
+    def __init__(self, log_path, mode='a'):
+        self._file = open(log_path, mode, encoding='utf-8')
+        self._file.write(f"\n===== {time.strftime('%Y-%m-%d %H:%M:%S')} =====\n")
+        self._file.flush()
+        self._terminal = sys.stdout
+
+    def write(self, msg):
+        self._terminal.write(msg)
+        self._terminal.flush()
+        self._file.write(msg)
+        self._file.flush()
+
+    def flush(self):
+        self._terminal.flush()
+        self._file.flush()
+
+    def close(self):
+        self._file.write(f"===== {time.strftime('%Y-%m-%d %H:%M:%S')} =====\n")
+        self._file.close()
+        sys.stdout = self._terminal
+
+
+_pipeline_tee = None
+
+
+def setup_pipeline_log(config):
+    """初始化 pipeline 日志：所有 stdout 同时写入 {rewrites_dir}/_log/pipeline.log。
+
+    多次调用只生效一次，自动跳过已启动的 tee。
+    """
+    global _pipeline_tee
+    if _pipeline_tee is not None:
+        return  # 已有 tee，不重复创建
+
+    rewrites_dir = config.get("rewrites_dir", "")
+    if not rewrites_dir:
+        return
+
+    log_path = Path(rewrites_dir) / "_log" / "pipeline.log"
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    _pipeline_tee = TeeStdout(str(log_path))
+    sys.stdout = _pipeline_tee
+    return _pipeline_tee
+
+
+def close_pipeline_log():
+    """关闭 pipeline 日志，恢复原 stdout。"""
+    global _pipeline_tee
+    if _pipeline_tee:
+        _pipeline_tee.close()
+        _pipeline_tee = None
 
 
 def get_logger(name="story-engine", log_file=None, level=logging.INFO):
