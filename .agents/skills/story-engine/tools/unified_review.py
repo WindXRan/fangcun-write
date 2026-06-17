@@ -223,6 +223,122 @@ def _algo_check(config, ch):
                            "fix": f"同一情绪最多2次，之后换表达方式", "auto_fixable": False})
             score -= 3
 
+    # === Gate G: 解释腔/上帝感（旁白跳出角色视角） ===
+    god_patterns = [
+        (r'她不知道的是|她不知道的是|殊不知|她万万没想到', '旁白剧透'),
+        (r'命运的齿轮|命运弄人|命运的安排|造化弄人', '命运上帝腔'),
+        (r'多年以后|后来她才知道|很久以后她才明白|若干年后', '跨时间剧透'),
+        (r'可怜的|可悲的|可叹的|不幸的是', '旁白评判'),
+        (r'原来是因为|之所以是因为|正是由于|归根结底', '解释因果'),
+        (r'这让她|这使得|这不禁|这也让|这倒让', '解释腔'),
+        (r'殊不知|岂不知|哪里知道|哪曾想', '旁白反转'),
+    ]
+    god_hits = []
+    for pat, label in god_patterns:
+        found = re.findall(pat, text)
+        if found:
+            god_hits.append(f"{label}x{len(found)}")
+    if god_hits:
+        issues.append({"type": "god_narrator", "severity": "high",
+                       "desc": f"解释腔/上帝感: {', '.join(god_hits)}",
+                       "fix": "删除旁白跳出角色视角的句式，改为角色自身感知",
+                       "auto_fixable": False})
+        score -= 15
+
+    # === 6指标量化评分（轻度/中度/重度） ===
+
+    # 1. 禁用词密度（轻度≤5/千字，中度6-15，重度>15）
+    ai_marker_density = metrics["ai_markers"] / max(metrics["chars"], 1) * 1000
+    if ai_marker_density > 15:
+        issues.append({"type": "ai_marker", "severity": "high",
+                       "desc": f"禁用词密度 {ai_marker_density:.1f}/千字 (重度>15)",
+                       "fix": "删除句首路标词", "auto_fixable": True})
+        score -= 15
+    elif ai_marker_density > 6:
+        issues.append({"type": "ai_marker", "severity": "medium",
+                       "desc": f"禁用词密度 {ai_marker_density:.1f}/千字 (中度6-15)",
+                       "fix": "删除句首路标词", "auto_fixable": True})
+        score -= 10
+
+    # 2. 连续排比（轻度≤2段，中度3-4段，重度>4段）
+    para_lines = [l for l in text.split('\n') if l.strip()]
+    consecutive_parallel = 0
+    max_parallel = 0
+    for i in range(len(para_lines) - 1):
+        if para_lines[i] and para_lines[i+1]:
+            if para_lines[i][:4] == para_lines[i+1][:4] and len(para_lines[i]) > 10:
+                consecutive_parallel += 1
+                max_parallel = max(max_parallel, consecutive_parallel)
+            else:
+                consecutive_parallel = 0
+    if max_parallel > 4:
+        issues.append({"type": "parallel", "severity": "high",
+                       "desc": f"连续排比 {max_parallel}段 (重度>4段)",
+                       "fix": "打破排比结构，增加变化", "auto_fixable": False})
+        score -= 10
+    elif max_parallel > 2:
+        issues.append({"type": "parallel", "severity": "medium",
+                       "desc": f"连续排比 {max_parallel}段 (中度3-4段)",
+                       "fix": "打破排比结构，增加变化", "auto_fixable": False})
+        score -= 5
+
+    # 3. 心理词占比（轻度≤10%，中度10-25%，重度>25%）
+    psych_words = len(re.findall(r'心想|暗道|觉得|感到|心[中里]|不由|忍不[住下]|想到|想起|意识到|明白|知道|感觉', text))
+    psych_ratio = psych_words / max(len(para_lines), 1)
+    if psych_ratio > 0.25:
+        issues.append({"type": "psych_ratio", "severity": "high",
+                       "desc": f"心理词占比 {psych_ratio:.0%} (重度>25%)",
+                       "fix": "用动作/对话替代心理描写", "auto_fixable": False})
+        score -= 10
+    elif psych_ratio > 0.10:
+        issues.append({"type": "psych_ratio", "severity": "medium",
+                       "desc": f"心理词占比 {psych_ratio:.0%} (中度10-25%)",
+                       "fix": "用动作/对话替代心理描写", "auto_fixable": False})
+        score -= 5
+
+    # 4. 对话标签密度（轻度≤30%，中度30-50%，重度>50%）
+    dialogue_lines = re.findall(r'[」""\']\s*([^」""\']{0,6})(?:说|道|问|答|喊|叫)', text)
+    total_dialogue = text.count('"') // 2 + text.count('"') // 2 + text.count('「') 
+    if total_dialogue > 5 and len(dialogue_lines) > 0:
+        tag_ratio = len(dialogue_lines) / max(total_dialogue, 1)
+        if tag_ratio > 0.5:
+            issues.append({"type": "dialogue_tag", "severity": "high",
+                           "desc": f"对话标签密度 {tag_ratio:.0%} (重度>50%)",
+                           "fix": "用动作替代标签，如'XX咬了口包子：\"好吃\"'", "auto_fixable": False})
+            score -= 10
+        elif tag_ratio > 0.3:
+            issues.append({"type": "dialogue_tag", "severity": "medium",
+                           "desc": f"对话标签密度 {tag_ratio:.0%} (中度30-50%)",
+                           "fix": "用动作替代标签，如'XX咬了口包子：\"好吃\"'", "auto_fixable": False})
+            score -= 5
+
+    # 5. 段均句数（轻度≤3，中度3-5，重度>5）
+    sents_per_para = len(re.split(r'[。！？!?\n]', text)) / max(len(para_lines), 1)
+    if sents_per_para > 5:
+        issues.append({"type": "para_density", "severity": "high",
+                       "desc": f"段均句数 {sents_per_para:.1f} (重度>5)",
+                       "fix": "拆分长段落，增加单句段", "auto_fixable": False})
+        score -= 10
+    elif sents_per_para > 3:
+        issues.append({"type": "para_density", "severity": "medium",
+                       "desc": f"段均句数 {sents_per_para:.1f} (中度3-5)",
+                       "fix": "拆分长段落，增加单句段", "auto_fixable": False})
+        score -= 5
+
+    # 6. 重复描写密度（轻度≤1/千字，中度2-3，重度>3）
+    desc_patterns = re.findall(r'阳光|月光|风|雨|雪|夜|天[空色]|房间|窗外|街道|空气|灯光|石榴|老槐|杏树', text)
+    desc_density = len(desc_patterns) / max(metrics["chars"], 1) * 1000
+    if desc_density > 3:
+        issues.append({"type": "desc_repetition", "severity": "high",
+                       "desc": f"重复描写密度 {desc_density:.1f}/千字 (重度>3)",
+                       "fix": "每个意象只用一次，用过即弃", "auto_fixable": False})
+        score -= 10
+    elif desc_density > 2:
+        issues.append({"type": "desc_repetition", "severity": "medium",
+                       "desc": f"重复描写密度 {desc_density:.1f}/千字 (中度2-3)",
+                       "fix": "每个意象只用一次，用过即弃", "auto_fixable": False})
+        score -= 5
+
     return {"score": max(0, score), "issues": issues, "metrics": metrics,
             "chars": metrics["chars"], "src_chars": src_chars}
 
