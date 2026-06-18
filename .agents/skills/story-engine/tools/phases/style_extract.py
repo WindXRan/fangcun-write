@@ -104,9 +104,6 @@ def phase_style_extract(config, start, end, workers=None):
     total = list(styles_dir.glob("style_*.md"))
     print(f"  完成: {len(total)} styles 文件")
 
-    # Layer 3: 锚点原文（0 token，取全书 5 段情绪代表性段落）
-    generate_anchors(config, start, end)
-
 
 def _algo_one(config, ch, styles_dir):
     """算法锚点 → 写入 style_{N}.md 前半部分。"""
@@ -194,17 +191,12 @@ def _write_md(styles_dir, ch, anchor=None, analysis=None, src_text=None):
 
 
 def load_style_text(config, ch):
-    """加载 style_{N}.md + style_{N}_llm.md + 文风.md（供写章 prompt 注入）。"""
+    """加载 style_{N}.md + style_{N}_llm.md（供写章 prompt 注入）。"""
     source_book = config.get("source_book", "")
     author = config.get("author", "")
     base_dir = config.get("base_dir", os.getcwd())
     
     parts = []
-    
-    # 锚点原文（全书共享，写章时做 few-shot）
-    anchor_file = Path(base_dir) / "projects" / author / source_book / "_cache" / "styles" / "anchors.md"
-    if anchor_file.exists():
-        parts.append(anchor_file.read_text(encoding="utf-8"))
     
     # 算法锚点
     shared = Path(base_dir) / "projects" / author / source_book / "_cache" / "styles" / f"style_{ch:03d}.md"
@@ -224,47 +216,4 @@ def load_style_text(config, ch):
     if local.exists():
         return local.read_text(encoding="utf-8")
     return None
-
-
-def generate_anchors(config, start, end):
-    """从源文提取 5 段情绪代表性段落 → _cache/styles/anchors.md。"""
-    source_book = config.get("source_book", "")
-    author = config.get("author", "")
-    base_dir = config.get("base_dir", os.getcwd())
-    styles_dir = Path(base_dir) / "projects" / author / source_book / "_cache" / "styles"
-    anchors_path = styles_dir / "anchors.md"
-
-    tone_keywords = {
-        '紧张': ['紧张', '害怕', '恐惧', '危险', '心跳', '发抖', '后背发凉'],
-        '悲伤': ['哭', '泪', '心酸', '难过', '痛苦', '绝望'],
-        '轻松': ['笑', '开心', '轻松', '舒服', '惬意', '酒窝'],
-        '热血': ['咬牙', '握拳', '拼', '豁出去', '暴怒'],
-        '温暖': ['温柔', '温暖', '心疼', '呵护', '拥抱', '陪伴'],
-    }
-    anchors = {}
-    for ch in range(start, end + 1):
-        text = get_source_text(config, ch)
-        if not text:
-            continue
-        for para in [p.strip() for p in text.split('\n') if len(p.strip()) > 80]:
-            for tone, keywords in tone_keywords.items():
-                if tone in anchors:
-                    continue
-                if any(kw in para for kw in keywords):
-                    anchors[tone] = (ch, para[:400])
-                    break
-        if len(anchors) >= 4:
-            break
-
-    if not anchors:
-        return
-
-    lines = ["# 源文锚点原文（写章时按情绪匹配取一段做 few-shot）\n"]
-    for tone, (ch, excerpt) in sorted(anchors.items()):
-        lines.append(f"## {tone}基调 — 第{ch}章\n")
-        lines.append(f"```\n{excerpt}\n```\n")
-
-    anchors_path.parent.mkdir(parents=True, exist_ok=True)
-    anchors_path.write_text('\n'.join(lines), encoding='utf-8')
-    print(f"  [ANCHORS] 锚点原文已生成 ({len(anchors)}段)")
 

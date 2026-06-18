@@ -174,12 +174,8 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             else:
                 replacements["世界观"] = "（世界观文件不存在，请参考源文设定）"
 
-    # 写章时注入文笔指纹 + 角色行为卡片 + 源文段落锚点
+    # 写章时注入源文段落锚点
     if prompt_type == "write-chapter" and chapter_num:
-        from phases.style_extract import load_style_text
-        style_md = load_style_text(config, chapter_num)
-        replacements["文笔指纹"] = style_md or "（文笔指纹未生成）"
-        replacements["角色行为卡片"] = _load_char_card(config)
         # 注入角色名（女主名、男主名等）
         book_data = _get_book_data(config.get("rewrites_dir", ""))
         if book_data:

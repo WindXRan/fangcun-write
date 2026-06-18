@@ -1,4 +1,4 @@
-"""API 客户端：带指数退避重试的 DeepSeek API 调用。"""
+"""API 客户端：带指数退避重试的 MiMo API 调用。"""
 
 import os
 import time
@@ -6,7 +6,7 @@ from pathlib import Path
 import requests
 from datetime import datetime
 
-DEFAULT_API_URL = "https://api.deepseek.com/v1/chat/completions"
+DEFAULT_API_URL = "https://token-plan-cn.xiaomimimo.com/v1/chat/completions"
 
 
 def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None):
@@ -37,7 +37,7 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None):
 
     api_url = get_api_url(config)
     pc = get_prompt_config_with_overrides(f"{prompt_type}.md", config)
-    model = pc.get("model", "deepseek-v4-pro")
+    model = pc.get("model", "mimo-v2.5-pro")
     temperature = pc.get("temperature", 0.8)
 
     if not system_prompt:
@@ -114,7 +114,7 @@ def call_api(api_key, model, user_prompt,
     from prompt_meta import load_system_prompt
 
     url = api_url or DEFAULT_API_URL
-    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    headers = {"api-key": api_key, "Content-Type": "application/json"}
     sys_prompt = system_prompt or load_system_prompt("system-generic.md") or ""
     data = {
         "model": model,
@@ -199,7 +199,7 @@ def test_api_connection(config=None, timeout=10):
             "error": "未配置 API_KEY"
         }
     
-    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    headers = {"api-key": api_key, "Content-Type": "application/json"}
     data = {
         "model": model,
         "messages": [

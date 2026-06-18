@@ -1,16 +1,4 @@
 """Token 用量追踪 — 按项目记录每次 API 调用的 token 消耗。
-
-用法（自动接入，无需手动调用）：
-  from lib.token_tracker import log_usage, get_usage, aggregate_by_phase
-
-数据存储在 {rewrites_dir}/_log/api_usage.jsonl，每行一条 JSON：
-  {"prompt_type":"write-chapter","ch":1,"model":"deepseek-v4-pro",
-   "prompt_tokens":1234,"completion_tokens":5678,"total_tokens":6912,
-   "timestamp":"2026-06-17T12:00:00"}
-
-单价配置（DeepSeek 官方定价）：
-  - deepseek-v4-pro: 输入 ¥0.004/1k tokens, 输出 ¥0.012/1k tokens
-  - deepseek-v4-flash: 输入 ¥0.0005/1k tokens, 输出 ¥0.002/1k tokens
 """
 
 import json
@@ -22,7 +10,7 @@ _LOG_FILE = "_log/api_usage.jsonl"
 
 # 模型单价（元/千 token）
 _MODEL_PRICES = {
-    "deepseek-v4-pro": {"input": 0.004, "output": 0.012},
+    "mimo-v2.5-pro": {"input": 0.004, "output": 0.012},
     "deepseek-v4-flash": {"input": 0.0005, "output": 0.002},
     "deepseek-chat": {"input": 0.004, "output": 0.012},
 }
