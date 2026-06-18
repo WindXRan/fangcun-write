@@ -637,7 +637,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Cover
             const coverHtml = book.cover
-                ? `<div class="book-cover"><img src="${escapeAttr(book.cover)}" alt="${escapeAttr(book.title)}" loading="lazy"></div>`
+                ? `<div class="book-cover"><img src="${escapeAttr(book.cover)}" alt="${escapeAttr(book.title)}" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'no-cover\\'>暂无封面</div>'"></div>`
                 : `<div class="book-cover"><div class="no-cover">暂无封面</div></div>`;
 
             const statusBadge = book.status
