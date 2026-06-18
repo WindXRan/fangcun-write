@@ -19,7 +19,8 @@ docs/plans/
 !.agents/skills/novel-download/TomatoNovelDownloader-Win64-v2.4.11.exe
 
 # === configs 目录 ===
-configs/
+configs/*.json
+!configs/example.json
 
 # === 日志 ===
 logs/
@@ -27,7 +28,6 @@ logs/
 # === 个人配置 ===
 config.yml
 eggy.json
-configs/*.json
 .env
 
 # === 临时文件 ===
@@ -70,3 +70,6 @@ novel-download-authors/
 cover.png
 source_cover.png
 *_cover.png
+
+# Reference repo (not tracked)
+.agents/skills/oh-story-claudecode/

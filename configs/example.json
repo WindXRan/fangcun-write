@@ -1,0 +1,12 @@
+{
+  "book_name": "新书名",
+  "author": "源文作者",
+  "source_book": "源文书名",
+  "rewrites_dir": "projects/作者/源书/rewrites/新书",
+  "model": "deepseek-v4-pro",
+  "reasoning_effort": "low",
+  "base_dir": ".",
+  "prompts_dir": ".agents/skills/story-engine/prompts",
+  "api_key": null,
+  "execution_mode": "api"
+}

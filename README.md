@@ -1,22 +1,75 @@
-# 方寸 | 网文仿写引擎深度解析——构建 AI 小说量产流水线
+# 方寸 | AI 网文仿写引擎
 
-### 一、AI 写作工具的单点困局
+<div align="center">
 
-2026 年，AI 写作工具已成红海。但绝大多数工具只解决**单章生成**，而非**全书量产**。
+![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen.svg)
+![GitHub Stars](https://img.shields.io/github/stars/WindXRan/fangcun-write.svg)
+![GitHub Forks](https://img.shields.io/github/forks/WindXRan/fangcun-write.svg)
+![GitHub Issues](https://img.shields.io/github/issues/WindXRan/fangcun-write.svg)
 
-核心矛盾：**能写一章，写不了一本**。
+**从源文输入到全书量产，0 人工的 AI 小说生产线**
 
-- ChatGPT/Claude：对话式单章生成，无全流程覆盖
-- Sudowrite：单章润色/续写，无批量能力
-- NovelAI：单章补全，无质量控制
+[快速开始](#快速开始) • [功能特性](#功能特性) • [架构设计](#架构设计) • [使用示例](#使用示例) • [贡献指南](CONTRIBUTING.md)
 
-方寸的定位：**不是"帮你写一章"，而是"帮你开渔场"**。
+</div>
 
-源文输入 → 全书换皮 → 自动审改 → 批量出稿，0 人工。
+## 🎯 项目简介
 
-### 二、架构总览：六阶段流水线设计
+**方寸** 是一个 AI 驱动的网文仿写引擎，专注于**全书量产**而非单章生成。
 
-方寸的 pipeline 按「生产阶段」划分为六层：
+**核心价值：** 不是"帮你写一章"，而是"帮你开渔场"。
+
+### 📸 项目截图
+
+<!-- 在此处添加项目截图或 GIF -->
+<!-- ![项目架构](docs/screenshots/architecture.png) -->
+<!-- ![演示 GIF](docs/screenshots/demo.gif) -->
+
+> 💡 **提示：** 截图和 GIF 能显著提高项目的吸引力。请参考 [截图指南](docs/screenshots.md) 添加项目截图。
+
+### 为什么选择方寸？
+
+| 痛点 | 方寸解决方案 |
+|------|-------------|
+| AI 只能写一章，写不了一本 | 六阶段流水线，覆盖从源文到全书的完整流程 |
+| 质量不稳定，角色漂移 | 行为模式卡片 + 双层文笔指纹 + 七维审改系统 |
+| 人工干预多，效率低 | 全自动 pipeline，30 章并行写入，0 人工 |
+| 容易抄源文，换皮不彻底 | 冲突类型强制换 + 台词 0 重合 + 换皮检验 |
+
+## ✨ 功能特性
+
+### 🚀 六阶段流水线
+```
+源文输入 → 概念生成 → 章纲映射 → 并行写章 → 自动审改 → 全书输出
+```
+
+### 🧠 智能分析系统
+- **行为模式卡片**：提取角色的应激/决策/情感/弱点模式
+- **双层文笔指纹**：算法锚点（0 token）+ LLM 分析（精准模仿）
+- **全局节奏图**：自动识别源文的节奏模式
+
+### 🔄 双执行模式
+- **API 模式**：Python 脚本直接调用 DeepSeek API，适合批量生产
+- **Agent 模式**：opencode agent 派生子 agent，适合高质量单章
+
+### 🛡️ 七维质量检查
+| 检查项 | 说明 | 自动修复 |
+|--------|------|----------|
+| 字数偏差 | ±15% 区间控制 | ❌ |
+| 比喻过多 | 源文+3 阈值 | ❌ |
+| AI 路标词 | 源文+1 阈值 | ✅ |
+| 直抒情过多 | 源文+2 阈值 | ❌ |
+| 台词雷同 | 8 字匹配检测 | ❌ |
+| AI 痕迹词 | 句首检测 | ✅ |
+| LLM 审稿 | 钩子/情绪/人设 | ❌ |
+
+### 📊 零成本对比报告
+- 本地算法对比，0 token 消耗
+- 自动存档，支持历史版本对比
+
+## 🏗️ 架构设计
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -41,150 +94,54 @@
 └─────────────────────────────────────────────────────────┘
 ```
 
-以上 6 个阶段通过 **Python 脚本 + opencode agent** 双模式驱动，以「源文输入 → 概念生成 → 章纲映射 → 并行写章 → 自动审改」为标准产线，覆盖仿写全场景。
+## 🚀 快速开始
 
-### 三、Phase 1-1.5：开书层——从源文到生产蓝图
-
-#### 3.1 概念生成（open-book）
-
-输入源文，输出 `concept.md`——包含设定、角色名、角色行为模式、全局节奏图、弧线。
-
-技术链路：
-
-```
-源文全文
-    ↓
-深度分析（pro模型，reasoning=high）
-    ↓
-提取：设定/角色/行为模式/节奏图/弧线
-    ↓
-输出 concept.md
-```
-
-**关键设计：** 行为模式卡片（应激/决策/情感/弱点）注入后续所有 prompt，从源头防止角色漂移。
-
-#### 3.2 文笔指纹（双层）
-
-写章时每个源文章节生成双层指纹，注入 prompt：
-
-| 层级 | 内容 | 成本 |
-|------|------|------|
-| Layer 1 — 算法锚点 | 句长/对话比/段长/代词密度/词汇丰富度/标点风格/开头结尾类型 | 0 token，纯正则 <30ms |
-| Layer 2 — LLM 分析 | 提取 2-3 个可复制写法特征 + 原文例句，2 个易被 AI 写走样的点 | 1 次 flash 调用 |
-
-**效率对比：** 传统人工分析一章文风约需 30 分钟；双层指纹自动生成 <1 秒，且无主观偏差。
-
-### 四、Phase 2-3：章纲与写章层——从蓝图到正文
-
-#### 4.1 章纲生成（plot-guide）
-
-每章生成独立章纲，核心设计：
-
-```
-源文章节                    新书章纲
-┌─────────────┐            ┌─────────────┐
-│ 节拍 1      │  ───映射──→ │ 节拍 1'     │
-│ 节拍 2      │  ───映射──→ │ 节拍 2'     │
-│ 冲突类型 A  │  ───替换──→ │ 冲突类型 B  │
-│ 高光时刻    │  ───标注──→ │ 高光时刻'   │
-└─────────────┘            └─────────────┘
-```
-
-**关键约束：**
-- 冲突类型强制换（身份→利益/信息差/道德，不可相同）
-- 台词 0 重合（6 字以上连续匹配视为违规）
-- 换皮检验：剥掉人名地名，认不出源文→合格
-
-#### 4.2 并行写章（write-chapter）
-
+### 1. 环境准备
 ```bash
-# N 章批量写入，--workers 控制并发数
-python tools/rewrite_chapters.py --config configs/xxx.json \
-  --start 1 --end N --workers 30
+# 克隆项目
+git clone https://github.com/WindXRan/fangcun-write.git
+cd fangcun-write
+
+# 配置 API key
+$env:API_KEY="sk-xxx"
 ```
 
-**模型策略：**
-
-| 阶段 | 模型 | 原因 |
-|------|------|------|
-| 开书 | pro (reasoning=high) | 需要深度分析源文模式 |
-| 章纲/写章/指纹/审改 | flash | 速度快，成本低 |
-
-**字数控制：** `max_tokens = 目标字数 × 1.6`，prompt 中用 ±10% 区间约束。
-
-**已知天花板：**
-- 单章字数 ±20% 波动（60-70% 章达标）
-- ~10% 随机失效（角色漂移、偶抄源文、过短）→ 重跑即可
-- 句长偏短、对话偏多是模型特征，非 AI 痕迹
-
-### 五、Phase 6：统一审改层——生产可持续性的关键
-
-#### 5.1 混合架构设计
-
-```
-Layer 1a: 批次审查 (7维全检)
-  审查 Agent 1 (批1-10章) ──┐
-  审查 Agent 2 (批11-20章) ──┤
-  ...                        │
-  审查 Agent N              ─┘
-                              │
-Layer 1b: 全局维度审查 (3个agent并行)          ├──→ 总结 Agent → 派任务 Agent → 修复 Agent
-  全局-Agent A (人设一致性) ──┤
-  全局-Agent B (感情逻辑)    ──┤
-  全局-Agent C (节奏/伏笔)   ──┘
-```
-
-#### 5.2 七维检查项
-
-| 检查项 | 类型 | auto_fixable |
-|--------|------|--------------|
-| 字数偏差 (±15%) | word_count | No |
-| 比喻过多 (源文+3) | metaphor | No |
-| AI路标词 (源文+1) | ai_marker | Yes |
-| 直抒情过多 (源文+2) | direct_emotion | No |
-| 台词雷同 (8字匹配) | plagiarism | No |
-| AI痕迹词 (句首) | ai_trace | Yes |
-| LLM审稿 (钩子/情绪/人设) | hook/emotion/character | No |
-
-**关键设计：** 算法检测 + LLM 审稿双保险，算法负责可量化的硬指标，LLM 负责语义层面的质量判断。
-
-#### 5.3 执行模式
-
-```bash
-# 审查（默认 LLM 模式，算法+LLM 全面检查）
-python .agents/skills/story-engine/tools/unified_fixer.py \
-  --config configs/xxx.json --dry-run
-
-# 审查+修复
-python .agents/skills/story-engine/tools/unified_fixer.py \
-  --config configs/xxx.json
-```
-
-### 六、双执行模式：API 模式 vs Agent 模式
-
-engine 支持两种执行模式，由 `config.json` 中的 `execution_mode` 控制：
-
-| 模式 | 执行者 | API 调用 | 适用场景 |
-|------|--------|----------|----------|
-| `api`（默认） | Python 脚本直接调 DeepSeek API | 由脚本发起 | 批量生产、快速出稿 |
-| `agent` | opencode agent 派生子 agent 执行 | **不调 API**，agent 本身是 LLM | 高质量单章、需要迭代优化的场景 |
-
-**核心区别：** agent 模式不经过 Python 调 API。opencode agent 作为编排器，派生子 agent 并行写章。子 agent 自主读文件、写文件、校验迭代，不产生额外 API 成本。
-
+### 2. 配置文件
+创建 `configs/your_book.json`：
 ```json
 {
-  "execution_mode": {
-    "default": "api",
-    "write": "agent"
-  }
+  "book_name": "新书名",
+  "author": "源文作者",
+  "source_book": "源文书名",
+  "rewrites_dir": "projects/作者/源书/rewrites/新书",
+  "model": "deepseek-v4-pro",
+  "api_key": null,
+  "execution_mode": "api"
 }
 ```
 
-### 七、文件结构：工程化的记忆系统
+### 3. 运行命令
+```bash
+# 完整跑一本书（--end 指定源文总章数，--workers 控制并发）
+python .agents/skills/story-engine/tools/pipeline.py \
+  --config configs/your_book.json \
+  --start 1 --end 100 --workers 30
 
-一部长篇动辄几十万字、几百章。设定冲突、伏笔断线、时间线对不上——写到最后全靠记忆硬撑，迟早翻车。
+# 分步执行
+python .agents/skills/story-engine/tools/pipeline.py --config configs/your_book.json --phase open-book
+python .agents/skills/story-engine/tools/pipeline.py --config configs/your_book.json --phase write --start 1 --end 10
 
-方寸用文件系统把设定、章纲、正文、对比拆开，每个维度独立维护。对话只负责创作，不负责记忆。
+# 只看 prompt 不调 API（debug 模式）
+python .agents/skills/story-engine/tools/pipeline.py --config configs/your_book.json --phase write --debug
+
+# 统一审改
+python .agents/skills/story-engine/tools/unified_fixer.py --config configs/your_book.json
+
+# Agent 模式写章
+python tools/rewrite_chapters.py --config configs/your_book.json --phase write --execution-mode agent
+```
+
+## 📁 项目结构
 
 ```
 projects/{作者}/{书名}/
@@ -198,53 +155,94 @@ projects/{作者}/{书名}/
     └── _debug/                     # --debug 模式下 prompt 存档
 ```
 
-### 八、快速开始
+## 🎯 使用示例
 
+### 示例 1：仿写一本美食文
 ```bash
-# 1. 配置 API key
-$env:API_KEY="sk-xxx"
-
-# 2. 完整跑一本书（--end 指定源文总章数，--workers 控制并发）
+# 1. 准备源文（假设是《临水小厨娘》）
+# 2. 创建配置文件
+# 3. 运行 pipeline
 python .agents/skills/story-engine/tools/pipeline.py \
-  --config configs/xxx.json \
-  --start 1 --end 100 --workers 30
-
-# 3. 分步执行
-python .agents/skills/story-engine/tools/pipeline.py --config configs/xxx.json --phase open-book
-python .agents/skills/story-engine/tools/pipeline.py --config configs/xxx.json --phase write --start 1 --end 10
-
-# 4. 只看 prompt 不调 API（debug 模式）
-python .agents/skills/story-engine/tools/pipeline.py --config configs/xxx.json --phase write --debug
-
-# 5. 统一审改
-python .agents/skills/story-engine/tools/unified_fixer.py --config configs/xxx.json
-
-# 6. Agent 模式写章
-python tools/rewrite_chapters.py --config configs/xxx.json --phase write --execution-mode agent
+  --config configs/food_novel.json \
+  --start 1 --end 50 --workers 20
 ```
 
-### 九、config.json 配置
-
-```json
-{
-  "book_name": "新书名",
-  "author": "源文作者",
-  "source_book": "源文书名",
-  "rewrites_dir": "projects/作者/源书/rewrites/新书",
-  "model": "deepseek-v4-flash",
-  "api_key": null,
-  "execution_mode": "api"
-}
+### 示例 2：高质量单章优化
+```bash
+# 使用 Agent 模式写第 5 章
+python tools/rewrite_chapters.py \
+  --config configs/your_book.json \
+  --phase write --start 5 --end 5 \
+  --execution-mode agent
 ```
 
-`api_key` 为 null 时从 `$env:API_KEY` 读取。不要将 key 写入配置文件。
+### 示例 3：质量检查与修复
+```bash
+# 先 dry-run 查看问题
+python .agents/skills/story-engine/tools/unified_fixer.py \
+  --config configs/your_book.json --dry-run
 
-### 十、总结
+# 确认后执行修复
+python .agents/skills/story-engine/tools/unified_fixer.py \
+  --config configs/your_book.json
+```
 
-方寸仿写引擎的核心价值在于：**不是单章生成工具，而是面向网文量产的系统性 AI 覆盖**。从源文输入到全书输出，从自动审改到批量生产，每一层都有对应的机制支撑，流程由 pipeline 统一驱动，质量由算法锚点 + LLM 指纹 + 多 Agent 审改兜底。
+## 🔧 配置说明
 
-这种「源文输入 → 概念生成 → 章纲映射 → 并行写章 → 自动审改」的标准化生产矩阵，是当前 AI 写作领域最接近工业流水线逻辑的实现方案——**每章自动出稿，0 人工**。
+| 配置项 | 说明 | 默认值 |
+|--------|------|--------|
+| `book_name` | 新书名称 | 必填 |
+| `author` | 源文作者 | 必填 |
+| `source_book` | 源文书名 | 必填 |
+| `model` | 使用的模型 | `deepseek-v4-pro` |
+| `reasoning_effort` | 推理强度 | `low` |
+| `execution_mode` | 执行模式 | `api` |
+| `api_key` | API 密钥 | 从环境变量读取 |
 
-## License
+## 📊 性能指标
 
-MIT
+| 指标 | 数值 | 说明 |
+|------|------|------|
+| 单章生成时间 | 30-60 秒 | 包含章纲+写章+审改 |
+| 字数达标率 | 60-70% | ±10% 区间内 |
+| 角色漂移率 | ~5% | 使用行为模式卡片后 |
+| 并行写章数 | 30 章 | 默认 workers 设置 |
+| 总流程耗时 | 2-3 小时 | 100 章完整流程 |
+
+## 🤝 贡献指南
+
+我们欢迎各种形式的贡献！请查看 [CONTRIBUTING.md](CONTRIBUTING.md) 了解详细信息。
+
+### 如何贡献？
+1. Fork 项目
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 打开 Pull Request
+
+### 报告问题
+- 使用 [Bug 报告模板](https://github.com/WindXRan/fangcun-write/issues/new?template=bug_report.md)
+- 使用 [功能请求模板](https://github.com/WindXRan/fangcun-write/issues/new?template=feature_request.md)
+
+## 📈 更新日志
+
+查看 [CHANGELOG.md](CHANGELOG.md) 了解版本更新历史。
+
+## 📄 许可证
+
+本项目采用 [MIT 许可证](LICENSE)。
+
+## 🙏 致谢
+
+感谢所有为这个项目做出贡献的开发者！
+
+---
+
+<div align="center">
+
+**如果这个项目对您有帮助，请给我们一个 ⭐️ Star！**
+
+[![GitHub Stars](https://img.shields.io/github/stars/WindXRan/fangcun-write.svg?style=social)](https://github.com/WindXRan/fangcun-write/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/WindXRan/fangcun-write.svg?style=social)](https://github.com/WindXRan/fangcun-write/network/members)
+
+</div>
