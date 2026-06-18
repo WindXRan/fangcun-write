@@ -3,106 +3,532 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>番茄指数</title>
-    <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
-    <meta name="description" content="番茄小说排行榜趋势分析与数据指数">
+    <title>AI网文书库</title>
+    <style>
+        :root {
+            --bg: #f3f6fb;
+            --surface: #ffffff;
+            --surface-soft: #f8fafc;
+            --border: #dbe4ef;
+            --text-primary: #172033;
+            --text-secondary: #475569;
+            --text-muted: #7b8798;
+            --accent: #f04f38;
+            --accent-soft: rgba(240, 79, 56, 0.1);
+            --green: #10b981;
+            --green-soft: rgba(16, 185, 129, 0.12);
+            --blue: #0ea5e9;
+            --blue-soft: rgba(14, 165, 233, 0.1);
+            --shadow-card: 0 18px 46px rgba(25, 39, 64, 0.1);
+            --radius-xl: 18px;
+            --radius-lg: 14px;
+            --radius-md: 10px;
+            --radius-sm: 7px;
+            --sidebar-w: 280px;
+            --font-body: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, rgba(240, 79, 56, 0.08), transparent 360px),
+                        radial-gradient(circle at 85% 0, rgba(14, 165, 233, 0.08), transparent 320px),
+                        linear-gradient(180deg, var(--bg) 0%, #eef3f9 100%);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 15px;
+            line-height: 1.55;
+        }
+
+        .app-container { display: flex; min-height: 100vh; }
+
+        /* 侧边栏 */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .sidebar-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .sidebar-stats {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .stat-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .category-nav {
+            flex: 1;
+            padding: 12px 0;
+            overflow-y: auto;
+        }
+
+        .category-nav ul {
+            list-style: none;
+        }
+
+        .category-nav li {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-nav li:hover {
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .category-nav li.active {
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .category-count {
+            font-size: 12px;
+            background: var(--surface-soft);
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: var(--text-muted);
+        }
+
+        .nav-links {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 10px 16px;
+            margin-bottom: 8px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-w);
+            padding: 24px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-left h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            width: 260px;
+            background: var(--surface);
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+
+        .filter-select {
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            background: var(--surface);
+            cursor: pointer;
+        }
+
+        .export-btn {
+            padding: 10px 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .export-btn:hover {
+            background: var(--accent);
+            opacity: 0.9;
+        }
+
+        /* 书籍网格 */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .book-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-card);
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 1px solid transparent;
+            display: flex;
+            gap: 16px;
+        }
+
+        .book-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 22px 54px rgba(25, 39, 64, 0.16);
+            border-color: var(--accent);
+        }
+
+        .book-cover {
+            width: 80px;
+            height: 110px;
+            border-radius: 6px;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+            text-align: center;
+            padding: 8px;
+            line-height: 1.3;
+            word-break: break-all;
+        }
+
+        .book-card-body { flex: 1; min-width: 0; }
+
+        .book-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .book-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .book-genre {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .genre-甜宠 { background: #fce7f3; color: #be185d; }
+        .genre-虐文 { background: #fee2e2; color: #dc2626; }
+        .genre-穿书\/重生 { background: #e0e7ff; color: #4338ca; }
+        .genre-总裁文 { background: #fef3c7; color: #b45309; }
+        .genre-校园 { background: #d1fae5; color: #059669; }
+        .genre-娱乐圈 { background: #f3e8ff; color: #7c3aed; }
+        .genre-其他 { background: var(--surface-soft); color: var(--text-muted); }
+
+        .book-author {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .book-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .book-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .book-synopsis {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .book-tags {
+            display: flex;
+            gap: 6px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .book-tag {
+            font-size: 11px;
+            padding: 2px 8px;
+            background: var(--surface-soft);
+            border-radius: 4px;
+            color: var(--text-muted);
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; }
+            .books-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-    <nav class="top-nav" id="top-nav"></nav>
     <div class="app-container">
-        <!-- 侧边栏 -->
-        <aside class="sidebar" id="sidebar">
+        <aside class="sidebar">
             <div class="sidebar-header">
-                <h1>番茄指数</h1>
-                <p class="sidebar-subtitle">女频新书榜追踪</p>
-                <p id="update-date" class="update-date">加载中...</p>
+                <h1>📚 AI网文书库</h1>
+                <p class="sidebar-subtitle">本地书籍管理与检索</p>
             </div>
+            
+            <div class="sidebar-stats">
+                <div class="stat-row">
+                    <span class="stat-label">书籍总数</span>
+                    <span class="stat-value" id="totalBooks">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">总字数</span>
+                    <span class="stat-value" id="totalChars">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">题材分类</span>
+                    <span class="stat-value" id="totalGenres">0</span>
+                </div>
+            </div>
+
             <nav class="category-nav">
-                <ul id="category-list">
-                    <li class="loading-item">加载中...</li>
+                <ul id="categoryList">
+                    <li class="active" onclick="filterByGenre('')">全部 <span class="category-count" id="countAll">0</span></li>
                 </ul>
             </nav>
+
+            <div class="nav-links">
+                <a href="/">📖 书库</a>
+                <a href="/compare">⚖️ 对比阅读</a>
+                <a href="/ranks/index.html">📊 扫榜</a>
+            </div>
         </aside>
 
-        <!-- 主内容区 -->
         <main class="main-content">
             <header class="main-header">
-                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="菜单">☰</button>
                 <div class="header-left">
-                    <h2 id="current-category-title">全部分类</h2>
+                    <h2 id="currentGenre">全部书籍</h2>
                 </div>
                 <div class="header-right">
-                    <a class="trend-link-btn" href="trend.html">风向标</a>
-                    <a class="trend-link-btn author-link-btn" href="author.html">创作灵感</a>
-                    <div class="export-dropdown">
-                        <button class="export-toggle-btn" id="export-toggle-btn">导出</button>
-                        <div class="export-dropdown-menu" id="export-dropdown-menu">
-                            <button class="export-btn-item" data-format="excel">Excel</button>
-                            <button class="export-btn-item" data-format="csv">CSV</button>
-                            <button class="export-btn-item" data-format="json">JSON</button>
-                        </div>
-                    </div>
-                    <div class="date-presets" id="date-presets">
-                        <button class="preset-btn active" data-preset="latest">最新</button>
-                        <button class="preset-btn" data-preset="yesterday">昨日</button>
-                    </div>
-                    <div class="date-picker-wrap">
-                        <button class="date-nav-btn" id="date-prev" aria-label="前一天" title="前一天">◀</button>
-                        <button class="date-picker-btn" id="date-picker-btn">
-                            <span class="date-icon">DATE</span>
-                            <span id="date-display">加载中...</span>
-                        </button>
-                        <button class="date-nav-btn" id="date-next" aria-label="后一天" title="后一天">▶</button>
-                        <input type="date" id="date-input" class="date-input-hidden">
-                    </div>
+                    <input type="text" class="search-input" id="searchInput" placeholder="搜索书名、作者、简介...">
+                    <select class="filter-select" id="sortSelect" onchange="sortBooks()">
+                        <option value="chars">按字数</option>
+                        <option value="title">按书名</option>
+                        <option value="chapters">按章节数</option>
+                    </select>
+                    <button class="export-btn" onclick="exportJSON()">导出 JSON</button>
                 </div>
             </header>
 
-            <!-- 风向标区域 -->
-            <section class="trend-panel" id="trend-panel">
-                <div class="trend-stats" id="trend-stats"></div>
-                <div class="trend-ai" id="trend-ai">
-                    <div class="ai-label">AI Signal Brief</div>
-                    <div class="ai-content" id="ai-content"></div>
-                </div>
+            <section class="books-grid" id="booksGrid">
+                
             </section>
 
-            <!-- 搜索筛选栏 -->
-            <section class="book-toolbar" id="book-toolbar">
-                <div class="toolbar-search">
-                    <input type="text" id="book-search" class="search-input" placeholder="搜索书名或作者...">
-                </div>
-                <div class="toolbar-filters">
-                    <select id="book-filter" class="filter-select">
-                        <option value="all">全部书籍</option>
-                        <option value="new">仅新上榜</option>
-                        <option value="risers">仅排名上升</option>
-                        <option value="top10">Top 10</option>
-                        <option value="top20">Top 20</option>
-                        <option value="ongoing">仅连载中</option>
-                        <option value="finished">仅已完结</option>
-                    </select>
-                    <select id="book-sort" class="filter-select">
-                        <option value="rank">按排名</option>
-                        <option value="reads">按阅读量</option>
-                        <option value="words">按字数</option>
-                        <option value="title">按书名</option>
-                    </select>
-                </div>
-            </section>
-
-            <!-- 书籍瀑布流 -->
-            <section class="books-waterfall" id="books-waterfall">
-                <!-- 书籍卡片由 JS 动态渲染 -->
-            </section>
+            
+            <div class="empty-state">
+                <h3>书库为空</h3>
+                <p>请先 <a href="/scan">扫描书库</a></p>
+            </div>
+            
         </main>
     </div>
 
-    <script src="js/config.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/nav.js"></script>
-    <script src="js/export.js"></script>
-    <script src="js/app.js"></script>
+    <script>
+        let allBooks = [];
+        let currentGenre = '';
+
+        // 初始化统计
+        document.getElementById('totalBooks').textContent = allBooks.length;
+        const totalChars = allBooks.reduce((sum, b) => sum + b.char_count, 0);
+        document.getElementById('totalChars').textContent = (totalChars / 10000).toFixed(1) + '万';
+        
+        // 统计题材
+        const genres = {};
+        allBooks.forEach(b => {
+            const g = b.genre || '其他';
+            genres[g] = (genres[g] || 0) + 1;
+        });
+        document.getElementById('totalGenres').textContent = Object.keys(genres).length;
+        document.getElementById('countAll').textContent = allBooks.length;
+
+        // 生成题材导航
+        const categoryList = document.getElementById('categoryList');
+        Object.entries(genres).sort((a, b) => b[1] - a[1]).forEach(([genre, count]) => {
+            const li = document.createElement('li');
+            li.innerHTML = `${genre} <span class="category-count">${count}</span>`;
+            li.onclick = () => filterByGenre(genre);
+            categoryList.appendChild(li);
+        });
+
+        // 搜索功能
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            filterBooks(query, currentGenre);
+        });
+
+        // 题材筛选
+        function filterByGenre(genre) {
+            currentGenre = genre;
+            document.getElementById('currentGenre').textContent = genre || '全部书籍';
+            
+            document.querySelectorAll('.category-nav li').forEach(li => {
+                li.classList.remove('active');
+            });
+            event.target.closest('li').classList.add('active');
+            
+            filterBooks(document.getElementById('searchInput').value.toLowerCase(), genre);
+        }
+
+        function filterBooks(query, genre) {
+            const cards = document.querySelectorAll('.book-card');
+            cards.forEach(card => {
+                const book = allBooks.find(b => card.querySelector('.book-title').textContent === b.title);
+                const matchQuery = !query || 
+                    book.title.toLowerCase().includes(query) ||
+                    book.author.toLowerCase().includes(query) ||
+                    (book.synopsis || '').toLowerCase().includes(query);
+                const matchGenre = !genre || book.genre === genre;
+                card.style.display = (matchQuery && matchGenre) ? '' : 'none';
+            });
+        }
+
+        // 排序
+        function sortBooks() {
+            const sort = document.getElementById('sortSelect').value;
+            const grid = document.getElementById('booksGrid');
+            const cards = Array.from(grid.children);
+            
+            cards.sort((a, b) => {
+                const bookA = allBooks.find(bk => bk.title === a.querySelector('.book-title').textContent);
+                const bookB = allBooks.find(bk => bk.title === b.querySelector('.book-title').textContent);
+                
+                if (sort === 'chars') return bookB.char_count - bookA.char_count;
+                if (sort === 'title') return bookA.title.localeCompare(bookB.title);
+                if (sort === 'chapters') return (bookB.chapter_count || 0) - (bookA.chapter_count || 0);
+                return 0;
+            });
+            
+            cards.forEach(card => grid.appendChild(card));
+        }
+
+        // 打开书籍
+        function openBook(bookIdx) {
+            window.location.href = '/book/' + bookIdx;
+        }
+
+        // 导出
+        function exportJSON() {
+            const data = JSON.stringify(allBooks, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'book_library.json';
+            a.click();
+        }
+    </script>
 </body>
 </html>

@@ -1,0 +1,62 @@
+{
+  "date": "2026-06-01",
+  "prev_date": "2026-05-29",
+  "rank_type": "女频阅读榜",
+  "trends": {
+    "古风世情": {
+      "new_count": 10,
+      "dropped_count": 0,
+      "new_books": [
+        "卿与日月",
+        "三国：乱世女枭雄",
+        "听说我命克百官",
+        "小道姑一身反骨",
+        "嫡长女今日登基了吗"
+      ],
+      "dropped_books": [],
+      "top_risers": [
+        {
+          "title": "乱世逃亡后，我成了开国女帝",
+          "change": "+2"
+        },
+        {
+          "title": "替婚夫妻",
+          "change": "+2"
+        },
+        {
+          "title": "掌上娇娇",
+          "change": "+1"
+        }
+      ],
+      "top_fallers": [
+        {
+          "title": "今生不误君",
+          "change": "-3"
+        },
+        {
+          "title": "男人？只会影响我出枪的速度",
+          "change": "-3"
+        },
+        {
+          "title": "攀高枝",
+          "change": "-1"
+        }
+      ],
+      "reads_growth": [
+        {
+          "title": "替婚夫妻",
+          "growth": "+9000"
+        },
+        {
+          "title": "纨绔郡主得宠日常",
+          "growth": "+6000"
+        },
+        {
+          "title": "掌上娇娇",
+          "growth": "+4000"
+        }
+      ],
+      "summary": ""
+    }
+  }
+}
