@@ -10,22 +10,42 @@ description: |
 ## 启动
 
 ```bash
-python -m .agents.skills.story-web.app
-# 或
+# 方式1：后台启动（推荐，不会卡死终端）
+cd .agents/skills/story-web
+Start-Process python -ArgumentList "app.py" -WindowStyle Hidden
+
+# 方式2：前台启动（会阻塞终端，按 Ctrl+C 停止）
 python .agents/skills/story-web/app.py
 ```
 
 默认端口 5000，浏览器访问 http://127.0.0.1:5000/
 
+### 停止服务
+
+```bash
+# 查找并终止 Python 进程
+Get-Process python | Where-Object {$_.Path -like "*story-web*"} | Stop-Process
+```
+
 ## 功能
 
 | 页面 | 路由 | 说明 |
 |------|------|------|
-| 书库首页 | `/` | 所有书籍卡片，支持搜索/筛选/排序 |
+| 书库首页 | `/` | 大池子（本地书库）+ 番茄排行榜，支持搜索/筛选/排序 |
 | 阅读器 | `/book/<idx>` | 阅读指定书籍，支持源文/仿写版本切换 |
 | 对比阅读 | `/compare` | 左右对照两个版本，支持版本选择、章节同步 |
 | 扫描书库 | `/scan` | 重新扫描 projects/ 生成索引 |
 | 番茄排行榜 | `/ranks/` | 榜单看板、趋势风向、创作灵感 |
+
+### 大池子功能
+
+书库首页左侧导航分为两个区域：
+
+1. **大池子**：显示本地 `projects/` 目录的所有书籍
+2. **番茄排行**：显示番茄排行榜数据
+   - 男频新书、男频在读等
+   - 点击后左侧展开题材分类（西方奇幻、东方仙侠、科幻末世等）
+   - 点击题材分类筛选对应书籍
 
 ## 排行榜功能
 
@@ -60,6 +80,8 @@ python run.py build
 | `/api/chapters?file=` | GET | 获取单文件书籍的章节列表 |
 | `/api/content?file=&chapter=` | GET | 获取指定章节内容 |
 | `/api/scan` | POST | 扫描书库 |
+| `/api/pools` | GET | 获取可用的排行榜列表 |
+| `/api/pools/<type>` | GET | 获取指定排行榜数据（male_new, male_read 等） |
 
 ## 对比阅读功能
 

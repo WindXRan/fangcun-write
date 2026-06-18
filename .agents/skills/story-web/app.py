@@ -157,17 +157,6 @@ def serve_scan_api(filepath):
     return send_from_directory(str(SCAN_DATA_DIR / "api" / "latest"), filepath)
 
 
-# ── 大池子（跨分类对比） ──
-
-@app.route('/pools/')
-def pools_index():
-    return render_template('pools.html')
-
-@app.route('/pools/data/<path:filepath>')
-def serve_pools_data(filepath):
-    return send_from_directory(str(SCAN_DATA_DIR / "data" / "pools"), filepath)
-
-
 # ── 排行榜 ──
 
 @app.route('/ranks/')
@@ -270,6 +259,61 @@ def api_scan():
         "total_chars": index["total_chars"],
         "genres": index.get("genres", {})
     })
+
+
+# ── 排行榜（大池子） ──
+
+@app.route('/api/pools')
+def api_pools_list():
+    """返回可用的排行榜列表"""
+    import glob
+    data_dir = SCAN_DATA_DIR / "data"
+    
+    # 扫描所有 fanqie_*_ranks_*.json 文件
+    pools = []
+    seen_types = set()
+    
+    for f in sorted(data_dir.glob("fanqie_*_ranks_*.json"), reverse=True):
+        # 解析文件名: fanqie_male_new_ranks_20260618.json
+        parts = f.stem.split('_')
+        if len(parts) >= 4:
+            gender = parts[1]  # male/female
+            rank_kind = parts[2]  # new/read
+            rank_type = f"{gender}_{rank_kind}"
+            
+            if rank_type not in seen_types:
+                seen_types.add(rank_type)
+                # 显示名称映射
+                name_map = {
+                    "male_new": "男频新书",
+                    "male_read": "男频在读",
+                    "female_new": "女频新书",
+                    "female_read": "女频在读",
+                }
+                pools.append({
+                    "type": rank_type,
+                    "name": name_map.get(rank_type, rank_type),
+                    "file": f.name,
+                })
+    
+    return jsonify(pools)
+
+
+@app.route('/api/pools/<rank_type>')
+def api_pools_data(rank_type):
+    """返回指定排行榜的数据"""
+    import glob
+    data_dir = SCAN_DATA_DIR / "data"
+    
+    # 找到最新的匹配文件
+    pattern = f"fanqie_{rank_type}_ranks_*.json"
+    files = sorted(data_dir.glob(pattern), reverse=True)
+    
+    if not files:
+        return jsonify({"error": f"未找到 {rank_type} 排行榜数据"}), 404
+    
+    # 返回最新的数据文件
+    return send_from_directory(str(data_dir), files[0].name)
 
 
 DOWNLOADER_URL = "http://127.0.0.1:18423"

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>番茄指数</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
     <meta name="description" content="番茄小说排行榜趋势分析与数据指数">
 </head>
 <body>
@@ -35,38 +34,8 @@
                 <div class="header-right">
                     <a class="trend-link-btn" href="trend.html">风向标</a>
                     <a class="trend-link-btn author-link-btn" href="author.html">创作灵感</a>
-                    <div class="export-dropdown">
-                        <button class="export-toggle-btn" id="export-toggle-btn">导出</button>
-                        <div class="export-dropdown-menu" id="export-dropdown-menu">
-                            <button class="export-btn-item" data-format="excel">Excel</button>
-                            <button class="export-btn-item" data-format="csv">CSV</button>
-                            <button class="export-btn-item" data-format="json">JSON</button>
-                        </div>
-                    </div>
-                    <div class="date-presets" id="date-presets">
-                        <button class="preset-btn active" data-preset="latest">最新</button>
-                        <button class="preset-btn" data-preset="yesterday">昨日</button>
-                    </div>
-                    <div class="date-picker-wrap">
-                        <button class="date-nav-btn" id="date-prev" aria-label="前一天" title="前一天">◀</button>
-                        <button class="date-picker-btn" id="date-picker-btn">
-                            <span class="date-icon">DATE</span>
-                            <span id="date-display">加载中...</span>
-                        </button>
-                        <button class="date-nav-btn" id="date-next" aria-label="后一天" title="后一天">▶</button>
-                        <input type="date" id="date-input" class="date-input-hidden">
-                    </div>
                 </div>
             </header>
-
-            <!-- 风向标区域 -->
-            <section class="trend-panel" id="trend-panel">
-                <div class="trend-stats" id="trend-stats"></div>
-                <div class="trend-ai" id="trend-ai">
-                    <div class="ai-label">AI Signal Brief</div>
-                    <div class="ai-content" id="ai-content"></div>
-                </div>
-            </section>
 
             <!-- 搜索筛选栏 -->
             <section class="book-toolbar" id="book-toolbar">
@@ -76,8 +45,6 @@
                 <div class="toolbar-filters">
                     <select id="book-filter" class="filter-select">
                         <option value="all">全部书籍</option>
-                        <option value="new">仅新上榜</option>
-                        <option value="risers">仅排名上升</option>
                         <option value="top10">Top 10</option>
                         <option value="top20">Top 20</option>
                         <option value="ongoing">仅连载中</option>
@@ -102,7 +69,6 @@
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/nav.js"></script>
-    <script src="js/export.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
