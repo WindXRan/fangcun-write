@@ -7,7 +7,7 @@ description: 开书设定生成
 required_vars: ["作者名", "源书名", "新书名"]
 optional_vars: ["源文样本"]
 system_prompt: system-generic.md
-defaults: {"model": "deepseek-v4-pro", "reasoning_effort": "low", "temperature": 0.8}
+defaults: {"model": "deepseek-v4-pro", "temperature": 0.8}
 ---
 为仿写项目设计新书设定——**吃透源文，同赛道做到位**。
 

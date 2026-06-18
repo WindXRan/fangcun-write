@@ -6,7 +6,7 @@ phase: postprocess
 description: 精简超字数章
 required_vars: ["目标字数", "内容", "N", "N03d"]
 system_prompt: system-generic.md
-defaults: {"model": "deepseek-v4-pro", "reasoning_effort": "low", "temperature": 0.8}
+defaults: {"model": "deepseek-v4-pro", "temperature": 0.8}
 ---
 
 精简以下章节到约 {目标字数} 字（允许 ±10% 波动）：

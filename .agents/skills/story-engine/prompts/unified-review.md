@@ -7,7 +7,7 @@ description: 批量审稿
 system_prompt: system-generic.md
 required_vars: ["count", "chapters_text"]
 optional_vars: ["source_context"]
-defaults: {"model": "deepseek-v4-pro", "reasoning_effort": "low", "temperature": 0.3}
+defaults: {"model": "deepseek-v4-pro", "temperature": 0.3}
 ---
 
 你是资深网文编辑。请审稿以下 {count} 个章节，输出审稿意见。

@@ -6,7 +6,7 @@ phase: postprocess
 description: 扩写章节
 required_vars: ["content", "orig_chars", "target_chars", "min_chars", "max_chars"]
 system_prompt: system-generic.md
-defaults: {"model": "deepseek-v4-pro", "reasoning_effort": "low", "temperature": 0.8}
+defaults: {"model": "deepseek-v4-pro", "temperature": 0.8}
 ---
 
 你是专业网文写手。请扩写以下章节，增加内容使字数达到{target_chars}字左右。

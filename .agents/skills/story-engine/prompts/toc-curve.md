@@ -6,7 +6,7 @@ phase: open_book
 description: 目录情绪曲线分析
 required_vars: ["作者名", "源书名"]
 system_prompt: system-generic.md
-defaults: {"model": "deepseek-v4-pro", "reasoning_effort": "low", "temperature": 0.8}
+defaults: {"model": "deepseek-v4-pro", "temperature": 0.8}
 ---
 
 读源文的章节目录，分析全书情绪曲线和情节结构。

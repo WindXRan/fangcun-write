@@ -7,7 +7,7 @@ description: 章纲生成
 required_vars: ["N", "新书名", "作者名", "源书名", "源文全文", "目标字数", "目标字数_min", "目标字数_max", "源文字数", "女主名", "男主名", "世界观"]
 optional_vars: []
 system_prompt: system-generic.md
-defaults: {"model": "deepseek-v4-pro", "reasoning_effort": "low", "temperature": 0.8}
+defaults: {"model": "deepseek-v4-pro", "temperature": 0.8}
 ---
 
 为《{新书名}》第{N}章生成写章指南（章纲）。

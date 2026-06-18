@@ -6,7 +6,7 @@ phase: unified
 description: 全局修复（分析→方案→重写）
 system_prompt: system-generic.md
 required_vars: ["issues_text", "adjacent_context", "orig_chars", "target_chars", "min_chars", "max_chars", "chapter_content", "源文全文"]
-defaults: {"model": "deepseek-v4-pro", "reasoning_effort": "low", "temperature": 0.6}
+defaults: {"model": "deepseek-v4-pro", "temperature": 0.6}
 ---
 
 你是资深网文写手。收到一章和它的问题清单后，**先分析所有问题的关联性，制定全局修复方案，然后一次性重写整章**。

@@ -7,7 +7,7 @@ description: 网文书名+简介生成，对标番茄爆款风格
 required_vars: ["作者名", "源书名", "新书名"]
 optional_vars: []
 system_prompt: system-generic.md
-defaults: {"model": "deepseek-v4-pro", "reasoning_effort": "low", "temperature": 0.9}
+defaults: {"model": "deepseek-v4-pro", "temperature": 0.9}
 ---
 
 为仿写项目生成书名和简介——真人感第一，AI感零容忍。

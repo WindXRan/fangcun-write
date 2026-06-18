@@ -4,7 +4,7 @@ version: 6
 changelog: 正面从2-3条增加到7-8条，反面从2条增加到2-3条
 description: 提取可复制的写法操作手册（正面指令+反面避坑+多样性指标）
 system_prompt: system-generic.md
-defaults: {"model": "deepseek-v4-pro", "reasoning_effort": "low", "temperature": 0.3}
+defaults: {"model": "deepseek-v4-pro", "temperature": 0.3}
 ---
 
 读这一章，输出仿写操作手册。不要描述文本，要给出可以直接执行的写法指令。

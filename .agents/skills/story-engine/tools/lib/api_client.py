@@ -13,7 +13,7 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None):
     """统一 LLM 调用入口。
 
     从 prompt 的 frontmatter + config.prompt_overrides 读取模型参数，
-    自动处理 api_key / api_url / model / temperature / reasoning_effort。
+    自动处理 api_key / api_url / model / temperature。
 
     Args:
         config: 项目配置字典
@@ -39,7 +39,6 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None):
     pc = get_prompt_config_with_overrides(f"{prompt_type}.md", config)
     model = pc.get("model", "deepseek-v4-pro")
     temperature = pc.get("temperature", 0.8)
-    reasoning_effort = pc.get("reasoning_effort", "low")
 
     if not system_prompt:
         sp_name = get_system_prompt_name(f"{prompt_type}.md") or "system-generic.md"
@@ -48,7 +47,7 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None):
     rewrites_dir = config.get("rewrites_dir", "")
     usage_log_path = str(Path(rewrites_dir) / "_log/api_usage.jsonl") if rewrites_dir else ""
 
-    content, usage = call_api(api_key, model, user_prompt, reasoning_effort,
+    content, usage = call_api(api_key, model, user_prompt,
                               system_prompt, api_url, temperature=temperature,
                               return_usage=True)
 
@@ -91,7 +90,7 @@ def get_api_key(config=None):
     return os.environ.get("API_KEY")
 
 
-def call_api(api_key, model, user_prompt, reasoning_effort="low",
+def call_api(api_key, model, user_prompt,
              system_prompt=None, api_url=None, max_retries=3,
              temperature=0.8, return_usage=False):
     """调用 API，带指数退避重试。
@@ -125,9 +124,6 @@ def call_api(api_key, model, user_prompt, reasoning_effort="low",
         ],
         "temperature": temperature,
     }
-    # reasoning_effort 仅对 reasoning 模型生效
-    if reasoning_effort:
-        data["reasoning_effort"] = reasoning_effort
 
     timeout = 120
 
