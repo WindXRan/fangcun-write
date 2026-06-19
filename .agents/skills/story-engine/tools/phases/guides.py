@@ -424,6 +424,50 @@ def process_plot_guide_output(config, chapter_num, ai_output):
     return result
 
 
+def _strip_source_text(plot_guide_text):
+    """从 plot_guide 中去掉源文全文部分，防止 write-chapter 照抄。
+    
+    源文全文通常在"排除项"之后，以大段正文形式出现。
+    只保留节拍映射、分析结果、排除项等结构化内容。
+    """
+    # 方式1：去掉"排除项"之后的所有内容（源文全文通常在最后）
+    markers = ["## 排除项", "## 地点约束", "---\n\n第"]
+    cut_pos = len(plot_guide_text)
+    for marker in markers:
+        pos = plot_guide_text.find(marker)
+        if pos != -1:
+            # 找到标记后，保留标记本身，去掉后面的大段文字
+            if marker == "---\n\n第":
+                cut_pos = min(cut_pos, pos)
+            else:
+                # 保留标记行，去掉标记后的内容
+                end_of_line = plot_guide_text.find("\n", pos + len(marker))
+                if end_of_line != -1:
+                    # 检查标记后是否有大量文字（源文全文）
+                    after = plot_guide_text[end_of_line:]
+                    if len(after) > 500:  # 超过500字认为是源文全文
+                        cut_pos = min(cut_pos, end_of_line)
+
+    if cut_pos < len(plot_guide_text):
+        return plot_guide_text[:cut_pos].rstrip()
+
+    # 方式2：如果上面没找到，尝试去掉超过2000字的连续段落（源文全文特征）
+    lines = plot_guide_text.split("\n")
+    result = []
+    buffer = []
+    for line in lines:
+        buffer.append(line)
+        current_text = "\n".join(buffer)
+        if len(current_text) > 2000:
+            # 这段太长，可能是源文全文，截断
+            result.append("（源文已省略，请根据以上节拍映射创作）")
+            buffer = []
+    if buffer:
+        result.extend(buffer)
+
+    return "\n".join(result)
+
+
 def run_one_with_template(config, prompt_type, chapter_num=None, **kwargs):
     """包装 run_one，自动处理模板合并和 XML 提取。"""
     result = run_one(config, prompt_type, chapter_num, **kwargs)
@@ -451,6 +495,8 @@ def run_one_with_template(config, prompt_type, chapter_num=None, **kwargs):
     # plot-guide 模板合并
     if prompt_type == "plot-guide":
         result = process_plot_guide_output(config, chapter_num, result)
+        # 去掉源文全文（防止 write-chapter 照抄）
+        result = _strip_source_text(result)
 
     return result
 
