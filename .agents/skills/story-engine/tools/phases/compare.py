@@ -20,8 +20,9 @@ def phase_compare(config, start, end, batch_size=10):
     """
     rewrites_dir = config["rewrites_dir"]
     compare_dir = f"{rewrites_dir}/compare"
-    compare_script = ".agents/skills/story-compare/compare.py"
-    local_compare_script = ".agents/skills/story-compare/local_compare.py"
+    _skills_dir = Path(__file__).parent.parent.parent.parent
+    compare_script = str(_skills_dir / "story-compare" / "compare.py")
+    local_compare_script = str(_skills_dir / "story-compare" / "local_compare.py")
 
     base_dir = Path(config.get("base_dir", ".")).resolve()
 

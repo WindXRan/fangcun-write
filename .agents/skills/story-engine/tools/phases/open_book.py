@@ -276,7 +276,7 @@ def phase_open_book(config, state_mgr=None):
 
     # === Stage 1: 源文分析 ===
     book_name = config.get("book_name", "auto")
-    prompts_dir = config.get("prompts_dir", ".agents/skills/story-engine/prompts")
+    prompts_dir = config.get("prompts_dir", str(Path(__file__).parent.parent.parent / "prompts"))
 
     replacements_stage1 = {
         "新书名": book_name if book_name != "auto" else "（待生成）",

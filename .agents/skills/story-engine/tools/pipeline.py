@@ -434,7 +434,7 @@ def main():
         print(f"配置文件不存在: {args.config}"); sys.exit(1)
 
     config = json.loads(config_path.read_text(encoding="utf-8"))
-    config.setdefault("prompts_dir", ".agents/skills/story-engine/prompts")
+    config.setdefault("prompts_dir", str(Path(__file__).parent.parent / "prompts"))
     config.setdefault("base_dir", os.getcwd())
     config["workers"] = args.workers
     config["debug"] = args.debug or args.mode == "debug"
