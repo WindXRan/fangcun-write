@@ -248,6 +248,72 @@ def _extract_book_name_candidates(book_info_content):
     return candidates
 
 
+def _enforce_unique_names(rewrites_dir):
+    """强制去重：characters.md 中与源文同名的角色自动改名。"""
+    chars_path = Path(rewrites_dir) / "settings" / "characters.md"
+    if not chars_path.exists():
+        chars_path = Path(rewrites_dir) / "characters.md"
+    if not chars_path.exists():
+        return
+
+    chars_text = chars_path.read_text(encoding="utf-8")
+    changed = False
+    replacements = {}
+
+    # 找出所有未改名的角色
+    for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars_text):
+        new_name = m.group(1).strip()
+        old_name = m.group(2).strip()
+        if new_name == old_name:
+            # 生成新名：加姓氏前缀（从角色上下文推断）
+            role_section = chars_text[m.end():m.end()+500]
+            if re.search(r'女性|女孩|女儿|女主|小姐|姐姐|妹妹', role_section):
+                # 女性角色：加"苏"姓（与女主同族）
+                generated = f"苏{old_name}" if not old_name.startswith("苏") else f"林{old_name}"
+            elif re.search(r'男性|男孩|男主|先生|哥哥|弟弟', role_section):
+                # 男性角色：加"秦"姓（与养父同族）
+                generated = f"秦{old_name}" if not old_name.startswith("秦") else f"凌{old_name}"
+            else:
+                # 默认：加"顾"姓
+                generated = f"顾{old_name}" if not old_name.startswith("顾") else f"沈{old_name}"
+
+            # 确保新名不与已有角色冲突
+            existing = [m2.group(1) for m2 in re.finditer(r'【(.+?)】', chars_text)]
+            if generated in existing:
+                generated = f"{generated}儿"
+
+            replacements[old_name] = generated
+            changed = True
+            print(f"  [RENAME] {old_name} → {generated}")
+
+    if not changed:
+        return
+
+    # 替换 characters.md
+    for old, new in replacements.items():
+        chars_text = chars_text.replace(f"【{old}】", f"【{new}】")
+        # 正文中也替换（但只替换独立出现的名字，避免误替换）
+        chars_text = re.sub(rf'(?<![【\w]){re.escape(old)}(?![】\w])', new, chars_text)
+
+    chars_path.write_text(chars_text, encoding="utf-8")
+    print(f"  [OK] characters.md 已更新 {len(replacements)} 个角色名")
+
+    # 替换其他设定文件中的角色名
+    settings_dir = Path(rewrites_dir) / "settings"
+    for f in settings_dir.glob("*.md"):
+        if f.name == "characters.md":
+            continue
+        text = f.read_text(encoding="utf-8")
+        modified = False
+        for old, new in replacements.items():
+            if old in text:
+                text = text.replace(old, new)
+                modified = True
+        if modified:
+            f.write_text(text, encoding="utf-8")
+            print(f"  [OK] {f.name} 已同步更新")
+
+
 def phase_open_book(config, state_mgr=None):
     """开书：全读关键章节全文 → 源文分析 → 生成设定文件。"""
     print("\n" + "=" * 50)
@@ -386,6 +452,9 @@ def phase_open_book(config, state_mgr=None):
                 output_file, content = future.result()
                 if output_file == "book_info.md" and content:
                     book_info_content = content
+
+        # === Stage 2.5: 强制去重角色名 ===
+        _enforce_unique_names(rewrites_dir)
 
         # === Stage 3: book_name=auto 时从书名候选中选择 ===
         if book_name == "auto" and book_info_content:
