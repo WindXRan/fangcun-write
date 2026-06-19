@@ -79,6 +79,29 @@ def _extract_gender_info(chars_text):
     return "、".join(genders) if genders else ""
 
 
+def _build_name_list(chars_text):
+    """从 characters.md 构建完整角色名列表。格式：苏念（女，源文：李观澜）、凌霄（男，源文：江流）..."""
+    items = []
+    for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars_text):
+        new_name = m.group(1).strip()
+        old_name = m.group(2).strip()
+        start = m.end()
+        section = chars_text[start:start+300]
+        gender = ""
+        if re.search(r'女性|女孩|女儿|她\b|女主|小姐|姐姐|妹妹', section):
+            gender = "女"
+        elif re.search(r'男性|男孩|儿子|他\b|男主|先生|哥哥|弟弟', section):
+            gender = "男"
+        if new_name == old_name:
+            entry = new_name
+        elif gender:
+            entry = f"{new_name}（{gender}，源文：{old_name}）"
+        else:
+            entry = f"{new_name}（源文：{old_name}）"
+        items.append(entry)
+    return "、".join(items) if items else ""
+
+
 def _extract_highlights(src_text, max_chars=300):
     """从源文提取情绪密度最高的段落作为参考。"""
     if not src_text:
@@ -257,23 +280,16 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             replacements["源文全文"] = source_text
         else:
             replacements["源文全文"] = "（源文读取失败）"
-        # 注入角色名（plot-guide 也需要，否则角色名会乱）
-        book_data = _get_book_data(config.get("rewrites_dir", ""))
-        if book_data:
-            from prompt_loader import make_book_data_replacements
-            bd_replacements = make_book_data_replacements(book_data)
-            for k, v in bd_replacements.items():
-                if k not in replacements:
-                    replacements[k] = v
-        # 注入角色名（从 book_data.json）
-        if "女主名" not in replacements or "男主名" not in replacements:
-            book_data = _get_book_data(config.get("rewrites_dir", ""))
-            if book_data:
-                char_vars = book_data.get("meta", {}).get("character_variables", {})
-                if "女主名" not in replacements and "女主名" in char_vars:
-                    replacements["女主名"] = char_vars["女主名"]
-                if "男主名" not in replacements and "男主名" in char_vars:
-                    replacements["男主名"] = char_vars["男主名"]
+        # 注入角色名列表（plot-guide 也需要，否则角色名会乱）
+        if "角色名列表" not in replacements:
+            chars_path = Path(config["rewrites_dir"]) / "settings" / "characters.md"
+            if not chars_path.exists():
+                chars_path = Path(config["rewrites_dir"]) / "characters.md"
+            if chars_path.exists():
+                chars_text = chars_path.read_text(encoding="utf-8")
+                name_list = _build_name_list(chars_text)
+                if name_list:
+                    replacements["角色名列表"] = name_list
         # 注入世界观（plot-guide 和 write-chapter 都需要）
         if "世界观" not in replacements:
             world_path = Path(config["rewrites_dir"]) / "world.md"
@@ -284,31 +300,16 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
 
     # 写章时注入角色信息
     if prompt_type == "write-chapter" and chapter_num:
-        # 注入角色名（女主名、男主名等）
-        book_data = _get_book_data(config.get("rewrites_dir", ""))
-        if book_data:
-            from prompt_loader import make_book_data_replacements
-            bd_replacements = make_book_data_replacements(book_data)
-            for k, v in bd_replacements.items():
-                if k not in replacements:
-                    replacements[k] = v
-        # Fallback: 直接从 characters.md 提取
-        if "女主名" not in replacements or "男主名" not in replacements:
-            chars_path = Path(config["rewrites_dir"]) / "characters.md"
+        # 注入角色名列表（全部角色，不只男女主）
+        if "角色名列表" not in replacements:
+            chars_path = Path(config["rewrites_dir"]) / "settings" / "characters.md"
+            if not chars_path.exists():
+                chars_path = Path(config["rewrites_dir"]) / "characters.md"
             if chars_path.exists():
                 chars_text = chars_path.read_text(encoding="utf-8")
-                for role, key in [("女主", "女主名"), ("男主", "男主名")]:
-                    if key not in replacements:
-                        m = re.search(rf'{role}[：:]\s*\**(\S+)\**', chars_text)
-                        if m:
-                            replacements[key] = m.group(1)
-        # 注入角色性别（防止 LLM 搞错性别）
-        chars_path = Path(config["rewrites_dir"]) / "characters.md"
-        if chars_path.exists() and "角色性别" not in replacements:
-            chars_text = chars_path.read_text(encoding="utf-8")
-            gender_info = _extract_gender_info(chars_text)
-            if gender_info:
-                replacements["角色性别"] = gender_info
+                name_list = _build_name_list(chars_text)
+                if name_list:
+                    replacements["角色名列表"] = name_list
         # 注入世界观
         if "世界观" not in replacements:
             world_path = Path(config["rewrites_dir"]) / "world.md"

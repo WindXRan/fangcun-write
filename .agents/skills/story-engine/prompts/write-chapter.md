@@ -99,7 +99,7 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 3. 配角的能力边界必须与 characters.md 一致，不可跨章波动
 
 ## 角色名
-女主={女主名}，男主={男主名}。
+{角色名列表}
 
 ## 世界观
 {世界观}
