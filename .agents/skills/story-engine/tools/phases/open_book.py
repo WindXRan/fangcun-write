@@ -243,11 +243,9 @@ def _enforce_unique_names(rewrites_dir):
     if not changed:
         return
 
-    # 替换 characters.md
+    # 替换 characters.md（只改角色名，不改源文对应名）
     for old, new in replacements.items():
         chars_text = chars_text.replace(f"【{old}】", f"【{new}】")
-        # 正文中也替换（但只替换独立出现的名字，避免误替换）
-        chars_text = re.sub(rf'(?<![【\w]){re.escape(old)}(?![】\w])', new, chars_text)
 
     chars_path.write_text(chars_text, encoding="utf-8")
     print(f"  [OK] characters.md 已更新 {len(replacements)} 个角色名")

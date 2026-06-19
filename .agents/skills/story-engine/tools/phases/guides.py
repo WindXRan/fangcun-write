@@ -39,7 +39,7 @@ _name_map_cache = None
 
 
 def _build_name_map(config):
-    """从 characters.md 构建源文名→新名映射（模块级缓存）。"""
+    """从 characters.md 构建源文名→新名映射（模块级缓存）。支持合并条目如 高慧云/林秋敏。"""
     global _name_map_cache
     if _name_map_cache is not None:
         return _name_map_cache
@@ -52,12 +52,15 @@ def _build_name_map(config):
         return _name_map_cache
 
     chars_text = chars_path.read_text(encoding="utf-8")
-    # 匹配 【新名】（源文对应：旧名）
     for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars_text):
         new_name = m.group(1).strip()
-        old_name = m.group(2).strip()
-        if old_name != new_name and old_name and new_name:
-            _name_map_cache[old_name] = new_name
+        old_names_raw = m.group(2).strip()
+        # 拆分合并条目：高慧云/林秋敏 → [高慧云, 林秋敏]
+        old_names = re.split(r'[/、]', old_names_raw)
+        for old_name in old_names:
+            old_name = old_name.strip()
+            if old_name and old_name != new_name:
+                _name_map_cache[old_name] = new_name
 
     return _name_map_cache
 
@@ -306,7 +309,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     if prompt_type == "plot-guide" and chapter_num:
         source_text = get_source_text(config, chapter_num)
         if source_text:
-            # 替换源文角色名为新角色名（防止 LLM 照搬源文名字）
+            # 用全量角色映射替换源文角色名（不只本章出场角色）
             name_map = _build_name_map(config)
             if name_map:
                 for old_name, new_name in name_map.items():
