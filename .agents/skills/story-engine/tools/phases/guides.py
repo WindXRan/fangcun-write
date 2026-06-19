@@ -102,6 +102,40 @@ def _build_name_list(chars_text):
     return "、".join(items) if items else ""
 
 
+def _get_chapter_characters(config, ch_num):
+    """从 events.json 提取本章出场角色，映射为新名。"""
+    from file_io import load_events
+    events = load_events(config)
+    name_map = _build_name_map(config)
+
+    # 找本章事件
+    chars = set()
+    for e in events:
+        if e.get("id") == ch_num or e.get("chapter_index") == ch_num:
+            event_text = e.get("event", "")
+            # 事件格式：| 第X章 标题 | 角色1、角色2 | 事件 | ...
+            parts = event_text.split("|")
+            if len(parts) >= 3:
+                raw_chars = parts[2].strip()
+                for c in re.split(r"[、，,]", raw_chars):
+                    c = c.strip()
+                    if c:
+                        # 替换为新名
+                        chars.add(name_map.get(c, c))
+            break
+
+    if not chars:
+        # fallback: 返回全部角色
+        chars_path = Path(config["rewrites_dir"]) / "settings" / "characters.md"
+        if not chars_path.exists():
+            chars_path = Path(config["rewrites_dir"]) / "characters.md"
+        if chars_path.exists():
+            return _build_name_list(chars_path.read_text(encoding="utf-8"))
+        return ""
+
+    return "、".join(sorted(chars))
+
+
 def _extract_highlights(src_text, max_chars=300):
     """从源文提取情绪密度最高的段落作为参考。"""
     if not src_text:
@@ -280,16 +314,9 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             replacements["源文全文"] = source_text
         else:
             replacements["源文全文"] = "（源文读取失败）"
-        # 注入角色名列表（plot-guide 也需要，否则角色名会乱）
-        if "角色名列表" not in replacements:
-            chars_path = Path(config["rewrites_dir"]) / "settings" / "characters.md"
-            if not chars_path.exists():
-                chars_path = Path(config["rewrites_dir"]) / "characters.md"
-            if chars_path.exists():
-                chars_text = chars_path.read_text(encoding="utf-8")
-                name_list = _build_name_list(chars_text)
-                if name_list:
-                    replacements["角色名列表"] = name_list
+        # 注入本章出场角色名（替换源文角色名）
+        if "角色名列表" not in replacements and chapter_num:
+            replacements["角色名列表"] = _get_chapter_characters(config, chapter_num)
         # 注入世界观（plot-guide 和 write-chapter 都需要）
         if "世界观" not in replacements:
             world_path = Path(config["rewrites_dir"]) / "world.md"
@@ -300,16 +327,9 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
 
     # 写章时注入角色信息
     if prompt_type == "write-chapter" and chapter_num:
-        # 注入角色名列表（全部角色，不只男女主）
+        # 注入本章出场角色名（从 events.json 提取，替换为新名）
         if "角色名列表" not in replacements:
-            chars_path = Path(config["rewrites_dir"]) / "settings" / "characters.md"
-            if not chars_path.exists():
-                chars_path = Path(config["rewrites_dir"]) / "characters.md"
-            if chars_path.exists():
-                chars_text = chars_path.read_text(encoding="utf-8")
-                name_list = _build_name_list(chars_text)
-                if name_list:
-                    replacements["角色名列表"] = name_list
+            replacements["角色名列表"] = _get_chapter_characters(config, chapter_num)
         # 注入世界观
         if "世界观" not in replacements:
             world_path = Path(config["rewrites_dir"]) / "world.md"
