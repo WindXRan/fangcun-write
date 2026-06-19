@@ -241,6 +241,105 @@ def _split_character_cards(rewrites_dir):
         print(f"  [OK] 拆分 {count} 个角色卡 → {cards_dir}")
 
 
+def _fix_unrenamed_characters(rewrites_dir):
+    """检查角色卡，自动给未改名的角色换姓（不加前缀，换一个不同的姓）。"""
+    cards_dir = Path(rewrites_dir) / "characters"
+    if not cards_dir.exists():
+        return
+
+    SURNAMES = ["陈", "周", "吴", "孙", "赵", "钱", "郑", "冯", "褚", "卫",
+                "沈", "韩", "杨", "朱", "秦", "许", "何", "吕", "施", "张",
+                "孔", "曹", "严", "华", "金", "魏", "陶", "姜", "戚", "谢",
+                "邹", "苏", "潘", "范", "彭", "鲁", "韦", "昌", "马", "苗",
+                "凤", "花", "方", "俞", "任", "袁", "柳", "唐", "罗", "薛"]
+
+    # 收集已使用的姓氏
+    used_surnames = set()
+    for f in cards_dir.glob("*.md"):
+        text = f.read_text(encoding="utf-8")
+        m = re.search(r'【(.+?)】[（(]源文对应', text)
+        if m:
+            name = m.group(1).strip()
+            if len(name) >= 2:
+                used_surnames.add(name[0])
+
+    # 扫描未改名的角色
+    replacements = {}
+    for f in sorted(cards_dir.glob("*.md")):
+        text = f.read_text(encoding="utf-8")
+        m = re.search(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', text)
+        if not m:
+            continue
+        new_name = m.group(1).strip()
+        old_name = m.group(2).strip()
+        if new_name != old_name:
+            continue
+        if len(old_name) < 2:
+            continue
+
+        new_surname = None
+        for s in SURNAMES:
+            if s not in used_surnames:
+                new_surname = s
+                break
+        if not new_surname:
+            new_surname = "顾"
+
+        generated = new_surname + old_name[1:]
+        used_surnames.add(new_surname)
+        replacements[old_name] = generated
+
+    if not replacements:
+        return
+
+    print(f"  [FIX] {len(replacements)} 个角色自动换姓:")
+    for old, new in replacements.items():
+        print(f"    {old} → {new}")
+
+    # 替换 characters.md
+    chars_path = Path(rewrites_dir) / "settings" / "characters.md"
+    if not chars_path.exists():
+        chars_path = Path(rewrites_dir) / "characters.md"
+    if chars_path.exists():
+        chars_text = chars_path.read_text(encoding="utf-8")
+        for old, new in replacements.items():
+            chars_text = chars_text.replace(f"【{old}】", f"【{new}】")
+        chars_path.write_text(chars_text, encoding="utf-8")
+        print(f"  [OK] characters.md 已更新")
+
+    # 替换角色卡文件
+    for f in cards_dir.glob("*.md"):
+        text = f.read_text(encoding="utf-8")
+        modified = False
+        for old, new in replacements.items():
+            if f"【{old}】" in text:
+                text = text.replace(f"【{old}】", f"【{new}】")
+                modified = True
+        if modified:
+            f.write_text(text, encoding="utf-8")
+            m = re.search(r'【(.+?)】', text)
+            if m:
+                new_name = m.group(1).strip()
+                new_path = f.parent / f"{new_name}.md"
+                if new_path != f:
+                    f.rename(new_path)
+
+    # 替换其他设定文件
+    settings_dir = Path(rewrites_dir) / "settings"
+    for f in settings_dir.glob("*.md"):
+        if f.name == "characters.md":
+            continue
+        text = f.read_text(encoding="utf-8")
+        modified = False
+        for old, new in replacements.items():
+            if old in text:
+                text = text.replace(old, new)
+                modified = True
+        if modified:
+            f.write_text(text, encoding="utf-8")
+            print(f"  [OK] {f.name} 已同步更新")
+
+
 def _enforce_unique_names(rewrites_dir):
     """强制去重：characters.md 中与源文同名的角色自动改名。"""
     chars_path = Path(rewrites_dir) / "settings" / "characters.md"
@@ -423,8 +522,9 @@ def phase_open_book(config, state_mgr=None):
             if output_file == "book_info.md" and content:
                 book_info_content = content
 
-    # === Stage 2.5: 拆分角色卡 ===
+    # === Stage 2.5: 拆分角色卡 + 补全未改名角色 ===
     _split_character_cards(rewrites_dir)
+    _fix_unrenamed_characters(rewrites_dir)
 
     # === Stage 3: book_name=auto 时从书名候选中选择 ===
     if book_name == "auto" and book_info_content:
