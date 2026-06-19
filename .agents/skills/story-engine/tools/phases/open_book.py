@@ -374,6 +374,7 @@ def phase_open_book(config, state_mgr=None):
         "作者名": config.get("author", ""),
         "源书名": config.get("source_book", ""),
         "源文分析": source_analysis[:6000],
+        "源文角色清单": "、".join(sorted(all_source_chars)),
     }
 
     print(f"\n  [STAGE 2] 生成设定文件（5 并行 agent）...")

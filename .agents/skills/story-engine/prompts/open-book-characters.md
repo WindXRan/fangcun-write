@@ -3,7 +3,7 @@ version: 2
 type: user
 phase: open_book_characters
 description: 开书 - 角色设定生成（结构锁定）
-required_vars: ["作者名", "源书名", "新书名", "源文分析"]
+required_vars: ["作者名", "源书名", "新书名", "源文分析", "源文角色清单"]
 system_prompt: system-generic.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
@@ -13,6 +13,10 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ## 源文分析（已锁定，不可更改）
 
 {源文分析}
+
+## 源文角色清单（必须全部覆盖，每个角色都必须起新名）
+
+{源文角色清单}
 
 ## ⚠️ 角色锁定铁律
 
