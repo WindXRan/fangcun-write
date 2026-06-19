@@ -195,8 +195,16 @@ def _execute_batch(todo, config, prompt_type, output_dir, filename_fmt, workers,
 
 
 def _retry_failed(retry_queue, config, prompt_type, output_dir, filename_fmt, workers, run_one_func, state_mgr, results, errors, max_retries):
-    """重试失败章节，最多 max_retries 轮。"""
+    """重试失败章节，最多 max_retries 轮。连续失败3次自动跳过。"""
+    skip_chapters = set()  # 连续失败3次的章节
+    fail_counts = {}  # 每章失败次数
+    
     for retry_round in range(max_retries):
+        if not retry_queue:
+            break
+
+        # 过滤掉应该跳过的章节
+        retry_queue = [ch for ch in retry_queue if ch not in skip_chapters]
         if not retry_queue:
             break
 
@@ -215,17 +223,27 @@ def _retry_failed(retry_queue, config, prompt_type, output_dir, filename_fmt, wo
                     atomic_write_text(path, content)
                     results[ch] = str(path)
                     errors.pop(ch, None)
+                    fail_counts.pop(ch, None)  # 重置失败计数
                     if state_mgr:
                         state_mgr.chapter_completed(ch, model=config.get("model", ""))
                     log_success(f"ch{ch} 重试成功")
                 except Exception as e:
                     errors[ch] = str(e)
+                    fail_counts[ch] = fail_counts.get(ch, 0) + 1
+                    
+                    if fail_counts[ch] >= 3:
+                        skip_chapters.add(ch)
+                        log_fail(f"ch{ch} 连续失败3次，跳过")
+                    elif retry_round < max_retries - 1:
+                        retry_queue.append(ch)
+                    
                     if state_mgr:
                         state_mgr.chapter_failed(ch, error=str(e), retries=retry_round + 1)
-                    if retry_round < max_retries - 1:
-                        retry_queue.append(ch)
                     log_fail(f"ch{ch} 重试失败: {e}")
 
+    # 汇总报告
+    if skip_chapters:
+        log_warning(f"{len(skip_chapters)} 章连续失败3次已跳过: {sorted(skip_chapters)}")
     if retry_queue:
         log_warning(f"{len(retry_queue)} 章在 {max_retries} 次重试后仍然失败: {retry_queue}")
 

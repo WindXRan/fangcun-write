@@ -139,7 +139,9 @@ def _fix_expand(config, ch, text, chapters_dir):
     prompt = safe_format(prompt, r)
     sp_name = get_system_prompt_name("expand-chapter.md") or "system-generic.md"
     sys_prompt = load_system_prompt(sp_name) or ""
-    result = call_llm(config, "expand-chapter", prompt, sys_prompt, ch=ch)
+    # 计算 max_tokens（目标字数 × 1.6，防止超时）
+    max_tokens = int(target_chars * 1.6) if target_chars > 100 else None
+    result = call_llm(config, "expand-chapter", prompt, sys_prompt, ch=ch, max_tokens=max_tokens)
     ch_file.write_text(result, encoding='utf-8')
 
 
@@ -156,7 +158,9 @@ def _fix_polish(config, ch, text, chapters_dir, issue):
     sp_name = get_system_prompt_name("polish-chapter.md") or "system-generic.md"
     base = load_system_prompt(sp_name) or ""
     sys_prompt = f"精修以下章节，特别关注：{issue}。保持字数在 ±10% 内，不要增删情节。\n\n{base}"
-    result = call_llm(config, "polish-chapter", prompt, sys_prompt, ch=ch)
+    # 计算 max_tokens（目标字数 × 1.6，防止超时）
+    max_tokens = int(orig_chars * 1.6) if orig_chars > 100 else None
+    result = call_llm(config, "polish-chapter", prompt, sys_prompt, ch=ch, max_tokens=max_tokens)
     ch_file.write_text(result, encoding='utf-8')
 
 

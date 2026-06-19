@@ -292,6 +292,7 @@ knowledge/
 | Skill | 用途 | 触发词 | engine 委托 |
 |-------|------|--------|------------|
 | `story-import` | 标准化导入（拆章+生成header/toc） | 「导入」「import」 | Phase 0 |
+| `story-export` | 标准化导出（合并章节为完整txt） | 「导出」「export」 | Phase export |
 | `story-trend` | 热梗调研+知识库构建 | 「热梗调研」「搜热梗」「热点调研」 | Phase 1（可选） |
 | `story-review` | 审稿（分批+汇总）、修复、审改闭环 | 「审稿」「review」 | Phase 4.5/5 |
 | `story-compare` | 对比报告、抄袭风险分析 | 「跑对比」「对比」 | Phase 4 |
@@ -299,13 +300,17 @@ knowledge/
 | `story-cover` | 封面生成（默认输出prompt） | 「封面」「生成封面」 | — |
 | `story-scan` | 番茄排行榜分析 | 「番茄扫描」「番茄数据」 | — |
 
-## 对比
+## 导入
 
 ```bash
-python .agents/skills/story-compare/compare.py "<项目目录>" <起始章> <结束章>
+python .agents/skills/story-import/story_import.py "projects/作者/书名/书名.txt"
 ```
 
 ## 导出
+
+```bash
+python .agents/skills/story-export/story_export.py "projects/作者/书名/rewrites/新书名"
+```
 
 ```bash
 python tools/merge_chapters.py <项目目录>/chapters/ <项目目录>/export/新书.txt

@@ -205,7 +205,7 @@ th {{ text-align:left; padding:8px 12px; color:#636e72; font-weight:600; font-si
 
     html += f"""
 <div class="grid">
-  <div class="card"><div class="emoji">🎯</div><div class="title">核心DNA锁定</div><div class="desc">🔴不可换/🟡可微调/🟢可调整</div></div>
+  <div class="card"><div class="emoji">🎯</div><div class="title">源文锁定</div><div class="desc">🔴不可换/🟡可微调/🟢可调整</div></div>
   <div class="card"><div class="emoji">🔄</div><div class="title">全自动Pipeline</div><div class="desc">开书→写章→审改→交付</div></div>
   <div class="card"><div class="emoji">🔍</div><div class="title">算法+LLM双层审查</div><div class="desc">抄袭/AI痕迹/身份一致性</div></div>
   <div class="card"><div class="emoji">📊</div><div class="title">量化评分体系</div><div class="desc">7大指标自动检测</div></div>

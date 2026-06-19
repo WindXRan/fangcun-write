@@ -1,41 +1,33 @@
 ---
 name: story-import
 description: |
-  标准化导入工具。替代手动拆章，自动完成：
-  1. 解析原始txt（书名、作者、简介、章节）
-  2. 拆章到 chapters/ 目录
-  3. 生成 _header.txt 和 _toc.txt
+  用 LLM 导入小说。读取源文件，自动识别书名、作者、章节、番外，输出到标准目录结构。
   触发方式：/story-import、/导入小说、「导入这本书」「帮我导入」
 ---
 
-# story-import · 标准化导入
+# story-import · LLM 导入
 
 ## 功能
 
-- 自动解析原始txt文件的书籍信息（书名、作者、简介等）
-- 自动按"第X章"拆分章节
-- 生成标准的 `_header.txt` 和 `_toc.txt`
-- 输出到 `projects/{作者}/{书名}/_cache/` 目录
+用 LLM 读取源文件，自动识别：
+- 书名、作者、简介
+- 正文章节（第X章）
+- 番外章节
+- 输出到标准目录结构
 
 ## 使用
 
-```bash
-# 基本用法
-python .agents/skills/story-import/story_import.py <txt文件路径>
-
-# 指定输出目录
-python .agents/skills/story-import/story_import.py <txt文件路径> --output <输出目录>
+```
+/story-import <txt文件路径>
 ```
 
-## 示例
+## 执行步骤
 
-```bash
-# 导入下载的小说
-python .agents/skills/story-import/story_import.py "projects/闻栖/将门有朵病娇花/将门有朵病娇花.txt"
-
-# 指定输出目录
-python .agents/skills/story-import/story_import.py "downloads/春深锁惊鸿.txt" --output "projects/暴躁123/春深锁惊鸿/_cache"
-```
+1. 读取源文件前 2000 字，识别书名、作者、简介
+2. 读取源文件全文，识别章节和番外
+3. 拆分章节到 chapters/ 目录
+4. 拆分番外到 fanwai/ 目录
+5. 生成 _header.txt 和 _toc.txt
 
 ## 输出结构
 
@@ -44,20 +36,45 @@ projects/{作者}/{书名}/
 └── _cache/
     ├── _header.txt          # 书籍信息
     ├── _toc.txt             # 目录
-    └── chapters/
-        ├── 第1章.txt
-        ├── 第2章.txt
+    ├── chapters/
+    │   ├── 第001章.txt
+    │   └── ...
+    └── fanwai/
+        ├── 番外1.txt
         └── ...
 ```
 
-## 支持的格式
+## LLM 提示词
 
-- 番茄小说下载的txt格式
-- 标准的"第X章"章节格式
-- UTF-8 或 GBK 编码
+读取源文件后，用以下 prompt 让 LLM 识别：
+
+```
+读取以下小说文件，识别：
+1. 书名
+2. 作者
+3. 简介（前200字）
+4. 正文章节列表（章节号+标题）
+5. 番外章节列表（标题）
+
+输出 JSON 格式：
+{
+  "title": "书名",
+  "author": "作者",
+  "synopsis": "简介",
+  "chapters": [
+    {"num": 1, "title": "第1章 标题"},
+    {"num": 2, "title": "第2章 标题"}
+  ],
+  "fanwai": [
+    {"title": "番外1 标题"},
+    {"title": "番外2 标题"}
+  ]
+}
+```
 
 ## 注意事项
 
-- 如果无法解析书名，会使用文件名作为书名
-- 章节必须以"第X章"开头才能被识别
-- 简介会自动截取到第一个"==="或"【第"之前
+- 源文件可能是 UTF-8 或 GBK 编码
+- 章节格式可能是"第X章"、"第 X章"、"第X 章"等
+- 番外可能在全文完之后，也可能在正文中
+- 如果无法识别书名，使用文件名

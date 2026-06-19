@@ -124,7 +124,7 @@ def fix_agent(config, task: FixTask, dry_run=False) -> FixResult:
 
 
 def _fix_mechanical(text, issues):
-    """机械修复 AI 痕迹词。"""
+    """机械修复 AI 痕迹词 + 角色名漂移 + 梗重复。"""
     count = 0
     for iss in issues:
         if iss.type == "ai_trace":
@@ -139,6 +139,21 @@ def _fix_mechanical(text, issues):
             if found:
                 count += len(found)
                 text = re.sub(AI_MARKER_PATTERN, '', text)
+        elif iss.type == "char_name_drift":
+            # 角色名漂移修复：将变体替换为标准名
+            # 例如：将"张三哥"替换为"张三"
+            desc = iss.desc
+            if "被写成" in desc:
+                parts = desc.split("被写成")
+                if len(parts) == 2:
+                    standard = parts[0].strip().strip("'")
+                    variant = parts[1].strip().strip("'")
+                    if variant in text:
+                        count += text.count(variant)
+                        text = text.replace(variant, standard)
+        elif iss.type == "trope_repetition":
+            # 梗重复：这里不做自动修复，需要LLM处理
+            pass
     text = re.sub(r'\n{3,}', '\n\n', text)
     return text, count
 

@@ -103,284 +103,74 @@ def review_agent(config, chapter_batch, agent_id=0):
 
 
 def _algo_check(config, ch):
-    """单章算法检查。"""
-    ch_dir = Path(f"{config['rewrites_dir']}/chapters")
-    ch_file = ch_dir / f"ch_{ch:03d}.txt"
-    if not ch_file.exists():
-        return {"score": 0, "issues": [{"type": "missing", "severity": "high", "desc": "文件不存在", "auto_fixable": False}]}
-
-    text = ch_file.read_text(encoding='utf-8')
-    metrics = count_metrics(text)
-    src = get_source_text(config, ch)
-    src_metrics = count_metrics(src) if src else None
-    src_chars = get_body_chars(src)
-
-    # 加载白名单（角色名/地名放行，避免误杀）
-    whitelist_path = Path(config.get('rewrites_dir', '')) / '_log' / 'deslop-whitelist.txt'
-    whitelist = set()
-    if whitelist_path.exists():
-        for line in whitelist_path.read_text(encoding='utf-8').splitlines():
-            line = line.strip().split('#')[0].strip()  # 支持 # 注释
-            if line:
-                whitelist.add(line)
-    _ok = lambda hits: [h for h in hits if h not in whitelist]
-
+    """单章算法检查（复用 validate.py 的 validate_one）。"""
+    from phases.validate import validate_one
+    passed, report, metrics = validate_one(config, ch)
+    
+    # 转换为统一格式
     issues = []
-    score = 100
+    if not passed:
+        for line in report.split('\n'):
+            if '*ISSUE*' in line:
+                desc = line.replace('*ISSUE*', '').strip()
+                issues.append({"type": "algo", "severity": "high", "desc": desc, "auto_fixable": False})
+            elif '*WARN*' in line:
+                desc = line.replace('*WARN*', '').strip()
+                issues.append({"type": "algo", "severity": "medium", "desc": desc, "auto_fixable": False})
+    
+    score = 100 if passed else 60
+    return {"score": score, "issues": issues}
 
-    ai_traces = []
-    for marker in AI_MARKERS:
-        pat = r'(?:^|[\n。！？])\s*' + re.escape(marker)
-        found = re.findall(pat, text)
-        found = _ok(found)
-        if found:
-            ai_traces.append(f"{marker}x{len(found)}")
-    if ai_traces:
-        issues.append({"type": "ai_trace", "severity": "medium",
-                       "desc": f"AI痕迹词: {', '.join(ai_traces)}",
-                       "fix": "删除句首路标词", "auto_fixable": True})
-        score -= 5
 
-    if src_metrics:
-        limit = max(src_metrics["ai_markers"] + 1, 1)
-        if metrics["ai_markers"] > limit:
-            issues.append({"type": "ai_marker", "severity": "high",
-                           "desc": f"AI路标词 {metrics['ai_markers']}处 (源文{src_metrics['ai_markers']})",
-                           "fix": "删除多余的路标词", "auto_fixable": True})
-            score -= 15
+def _check_character_names_in_review(config, text, ch):
+    """在审查中检查角色名一致性。"""
+    issues = []
+    
+    # 加载 book_data.json 获取角色名
+    rewrites_dir = config.get("rewrites_dir", "")
+    if not rewrites_dir:
+        return issues
+    
+    book_data_path = Path(rewrites_dir) / "book_data.json"
+    if not book_data_path.exists():
+        return issues
+    
+    try:
+        book_data = json.loads(book_data_path.read_text(encoding="utf-8"))
+    except Exception:
+        return issues
+    
+    # 获取所有角色名
+    characters = book_data.get("characters", [])
+    if not characters:
+        return issues
+    
+    # 构建角色名列表
+    all_char_names = []
+    for ch_data in characters:
+        name = ch_data.get("name", "")
+        if name:
+            all_char_names.append(name)
+    
+    # 检查文本中是否出现角色名的变体
+    for name in all_char_names:
+        if not name:
+            continue
+        suffixes = ["哥", "爷", "姐", "嫂", "叔", "婶", "伯", "姨", "弟", "妹"]
+        for suffix in suffixes:
+            variant = name + suffix
+            if variant in text and variant != name:
+                issues.append({"type": "char_name_drift", "severity": "high",
+                               "desc": f"角色名漂移：'{name}' 被写成 '{variant}'",
+                               "fix": f"将'{variant}'替换为'{name}'",
+                               "auto_fixable": True})
+    
+    return issues
 
-    if src_metrics:
-        limit = src_metrics["metaphor"] + 3
-        if metrics["metaphor"] > limit:
-            issues.append({"type": "metaphor", "severity": "medium",
-                           "desc": f"比喻过多 {metrics['metaphor']}处 (源文{src_metrics['metaphor']})",
-                           "fix": "删除多余比喻", "auto_fixable": False})
-            score -= 10
 
-    if src_metrics:
-        limit = max(src_metrics["direct_emotion"] + 2, 3)
-        if metrics["direct_emotion"] > limit:
-            issues.append({"type": "emotion", "severity": "medium",
-                           "desc": f"直抒情 {metrics['direct_emotion']}处 (源文{src_metrics['direct_emotion']})",
-                           "fix": "用动作细节代替", "auto_fixable": False})
-            score -= 10
-
-    if src_metrics and src_metrics.get("pronoun_density", 0) > 0:
-        ratio = metrics["pronoun_density"] / src_metrics["pronoun_density"]
-        if ratio > 1.5 or ratio < 0.5:
-            issues.append({"type": "pronoun", "severity": "medium",
-                           "desc": f"代词密度 {metrics['pronoun_density']}/千字 (源文{src_metrics['pronoun_density']})",
-                           "fix": "交替使用名字/身份/零代词替代他/她", "auto_fixable": False})
-            score -= 10
-
-    if src_metrics and src_metrics.get("sent_len_stddev", 0) > 0:
-        ratio = metrics["sent_len_stddev"] / src_metrics["sent_len_stddev"]
-        if ratio > 1.5 or ratio < 0.5:
-            issues.append({"type": "sentence_stddev", "severity": "medium",
-                           "desc": f"句长标准差 {metrics['sent_len_stddev']} (源文{src_metrics['sent_len_stddev']})",
-                           "fix": "交错长短句，避免句长均匀", "auto_fixable": False})
-            score -= 10
-
-    if src_chars > 0:
-        dev = (metrics["chars"] - src_chars) / src_chars
-        if abs(dev) > 0.15:
-            direction = "超标" if dev > 0 else "不足"
-            issues.append({"type": "word_count", "severity": "high",
-                           "desc": f"字数{direction} {metrics['chars']}/{src_chars} ({dev:+.0%})",
-                           "fix": f"目标{int(src_chars*0.9)}~{int(src_chars*1.1)}字",
-                           "auto_fixable": False})
-            score -= 15
-
-    if src:
-        plags = find_plagiarism(text, src)
-        if plags:
-            desc = f"台词雷同 {len(plags)}处: " + ", ".join(f"'{p['text']}...'" for p in plags[:3])
-            issues.append({"type": "plagiarism", "severity": "high",
-                           "desc": desc, "fix": "重写雷同台词",
-                           "auto_fixable": False})
-            score -= 15
-
-    # === 6 指标量化评分（轻/中/重） ===
-    heavy = 0
-    medium = 0
-
-    # 1. 禁用词密度（AI路标词/千字）
-    banned_density = metrics["ai_markers"] / max(metrics["chars"], 1) * 1000
-    if banned_density > 15:
-        heavy += 1
-    elif banned_density > 5:
-        medium += 1
-
-    # 2. 连续排比
-    if metrics.get("max_consecutive", 0) >= 5:
-        heavy += 1
-    elif metrics.get("max_consecutive", 0) >= 3:
-        medium += 1
-
-    # 3. 心理词占比
-    if metrics.get("psych_ratio", 0) > 0.25:
-        heavy += 1
-    elif metrics.get("psych_ratio", 0) > 0.10:
-        medium += 1
-
-    # 4. 对话标签密度
-    if metrics.get("tag_density", 0) > 0.5:
-        heavy += 1
-    elif metrics.get("tag_density", 0) > 0.3:
-        medium += 1
-
-    # 5. 段均句数
-    if metrics.get("avg_sent_per_para", 0) > 5:
-        heavy += 1
-    elif metrics.get("avg_sent_per_para", 0) > 3:
-        medium += 1
-
-    # 6. 重复描写密度（三字母重复检测，中文天然高频需高阈值）
-    if metrics.get("repeat_density", 0) >= 150:
-        heavy += 1
-    elif metrics.get("repeat_density", 0) >= 100:
-        medium += 1
-
-    # 7. 段长标准差（低=段落均匀像AI，高=变化过大致阅读体验差）
-    para_stddev = metrics.get("para_stddev", 0)
-    if para_stddev > 0 and para_stddev < 3:
-        heavy += 1
-    elif para_stddev > 0 and para_stddev < 5:
-        medium += 1
-    if para_stddev > 12:
-        heavy += 1
-    elif para_stddev > 8:
-        medium += 1
-
-    if heavy >= 1:
-        issues.append({"type": "ai_style_heavy", "severity": "high",
-                       "desc": f"AI文风重度 (heavy={heavy}, medium={medium}): 禁用词{banned_density:.0f}/千字 排比{metrics.get('max_consecutive',0)}段 心理词{metrics.get('psych_ratio',0):.0%} 标签{metrics.get('tag_density',0):.0%} 段均{metrics.get('avg_sent_per_para',0)}句 重复{metrics.get('repeat_density',0):.0f}/千字 段长差{para_stddev}",
-                       "fix": "逐句重写AI痕迹段落", "auto_fixable": False})
-        score -= 20
-    elif medium >= 3:
-        issues.append({"type": "ai_style_medium", "severity": "medium",
-                       "desc": f"AI文风中度 (heavy={heavy}, medium={medium})",
-                       "fix": "重点优化超标指标", "auto_fixable": False})
-        score -= 10
-
-    # 情绪表达重复（保留，做轻量检查）
-    emotion_patterns = {
-        '紧张': len(re.findall(r'攥紧|攥了攥|蜷了蜷|指节发白|手指蜷', text)),
-        '感动': len(re.findall(r'眼眶红|鼻子酸|眼泪没掉|泪水在眼眶', text)),
-        '害怕': len(re.findall(r'后背发凉|汗毛竖|打了个寒|缩了缩脖子', text)),
-    }
-    for emo, count in emotion_patterns.items():
-        if count > 2:
-            issues.append({"type": "emotion_repetition", "severity": "low",
-                           "desc": f"情绪表达重复: {emo}类表达{count}次",
-                           "fix": f"同一情绪最多2次，之后换表达方式", "auto_fixable": False})
-            score -= 3
-
-    # === Gate G: 解释腔/上帝感（旁白跳出角色视角） ===
-    god_patterns = [
-        (r'她不知道的是|她不知道的是|殊不知|她万万没想到', '旁白剧透'),
-        (r'命运的齿轮|命运弄人|命运的安排|造化弄人', '命运上帝腔'),
-        (r'多年以后|后来她才知道|很久以后她才明白|若干年后', '跨时间剧透'),
-        (r'可怜的|可悲的|可叹的|不幸的是', '旁白评判'),
-        (r'原来是因为|之所以是因为|正是由于|归根结底', '解释因果'),
-        (r'这让她|这使得|这不禁|这也让|这倒让', '解释腔'),
-        (r'殊不知|岂不知|哪里知道|哪曾想', '旁白反转'),
-    ]
-    god_hits = []
-    for pat, label in god_patterns:
-        found = re.findall(pat, text)
-        found = _ok(found)
-        if found:
-            god_hits.append(f"{label}x{len(found)}")
-    if god_hits:
-        issues.append({"type": "god_narrator", "severity": "high",
-                       "desc": f"解释腔/上帝感: {', '.join(god_hits)}",
-                       "fix": "删除旁白跳出角色视角的句式，改为角色自身感知",
-                       "auto_fixable": False})
-        score -= 15
-
-    # === 6指标量化评分（轻度/中度/重度） ===
-
-    # 1. 禁用词密度（轻度≤5/千字，中度6-15，重度>15）
-    ai_marker_density = metrics["ai_markers"] / max(metrics["chars"], 1) * 1000
-    if ai_marker_density > 15:
-        issues.append({"type": "ai_marker", "severity": "high",
-                       "desc": f"禁用词密度 {ai_marker_density:.1f}/千字 (重度>15)",
-                       "fix": "删除句首路标词", "auto_fixable": True})
-        score -= 15
-    elif ai_marker_density > 6:
-        issues.append({"type": "ai_marker", "severity": "medium",
-                       "desc": f"禁用词密度 {ai_marker_density:.1f}/千字 (中度6-15)",
-                       "fix": "删除句首路标词", "auto_fixable": True})
-        score -= 10
-
-    # 2. 连续排比（轻度≤2段，中度3-4段，重度>4段）
-    para_lines = [l for l in text.split('\n') if l.strip()]
-    consecutive_parallel = 0
-    max_parallel = 0
-    for i in range(len(para_lines) - 1):
-        if para_lines[i] and para_lines[i+1]:
-            if para_lines[i][:4] == para_lines[i+1][:4] and len(para_lines[i]) > 10:
-                consecutive_parallel += 1
-                max_parallel = max(max_parallel, consecutive_parallel)
-            else:
-                consecutive_parallel = 0
-    if max_parallel > 4:
-        issues.append({"type": "parallel", "severity": "high",
-                       "desc": f"连续排比 {max_parallel}段 (重度>4段)",
-                       "fix": "打破排比结构，增加变化", "auto_fixable": False})
-        score -= 10
-    elif max_parallel > 2:
-        issues.append({"type": "parallel", "severity": "medium",
-                       "desc": f"连续排比 {max_parallel}段 (中度3-4段)",
-                       "fix": "打破排比结构，增加变化", "auto_fixable": False})
-        score -= 5
-
-    # 3. 心理词占比（轻度≤10%，中度10-25%，重度>25%）
-    psych_words = len(re.findall(r'心想|暗道|觉得|感到|心[中里]|不由|忍不[住下]|想到|想起|意识到|明白|知道|感觉', text))
-    psych_ratio = psych_words / max(len(para_lines), 1)
-    if psych_ratio > 0.25:
-        issues.append({"type": "psych_ratio", "severity": "high",
-                       "desc": f"心理词占比 {psych_ratio:.0%} (重度>25%)",
-                       "fix": "用动作/对话替代心理描写", "auto_fixable": False})
-        score -= 10
-    elif psych_ratio > 0.10:
-        issues.append({"type": "psych_ratio", "severity": "medium",
-                       "desc": f"心理词占比 {psych_ratio:.0%} (中度10-25%)",
-                       "fix": "用动作/对话替代心理描写", "auto_fixable": False})
-        score -= 5
-
-    # 4. 对话标签密度（轻度≤30%，中度30-50%，重度>50%）
-    dialogue_lines = re.findall(r'[」""\']\s*([^」""\']{0,6})(?:说|道|问|答|喊|叫)', text)
-    total_dialogue = text.count('"') // 2 + text.count('"') // 2 + text.count('「') 
-    if total_dialogue > 5 and len(dialogue_lines) > 0:
-        tag_ratio = len(dialogue_lines) / max(total_dialogue, 1)
-        if tag_ratio > 0.5:
-            issues.append({"type": "dialogue_tag", "severity": "high",
-                           "desc": f"对话标签密度 {tag_ratio:.0%} (重度>50%)",
-                           "fix": "用动作替代标签，如'XX咬了口包子：\"好吃\"'", "auto_fixable": False})
-            score -= 10
-        elif tag_ratio > 0.3:
-            issues.append({"type": "dialogue_tag", "severity": "medium",
-                           "desc": f"对话标签密度 {tag_ratio:.0%} (中度30-50%)",
-                           "fix": "用动作替代标签，如'XX咬了口包子：\"好吃\"'", "auto_fixable": False})
-            score -= 5
-
-    # 5. 段均句数（轻度≤3，中度3-5，重度>5）
-    sents_per_para = len(re.split(r'[。！？!?\n]', text)) / max(len(para_lines), 1)
-    if sents_per_para > 5:
-        issues.append({"type": "para_density", "severity": "high",
-                       "desc": f"段均句数 {sents_per_para:.1f} (重度>5)",
-                       "fix": "拆分长段落，增加单句段", "auto_fixable": False})
-        score -= 10
-    elif sents_per_para > 3:
-        issues.append({"type": "para_density", "severity": "medium",
-                       "desc": f"段均句数 {sents_per_para:.1f} (中度3-5)",
-                       "fix": "拆分长段落，增加单句段", "auto_fixable": False})
-        score -= 5
-
-    return {"score": max(0, score), "issues": issues, "metrics": metrics,
-            "chars": metrics["chars"], "src_chars": src_chars}
+def _check_trope_repetition_in_review(config, text, ch):
+    """在审查中检查梗重复。"""
+    return []  # 硬编码检查已禁用，由LLM审查处理
 
 
 def _parse_review_output(text):
@@ -653,36 +443,22 @@ def summary_agent(review_results: list[ReviewResult], config=None) -> SummaryRep
 # ============================================================
 
 def generate_p012_report(summary, output_path):
-    """从 SummaryReport 生成 P0/P1/P2 问题合集 Markdown 报告。"""
+    """从 SummaryReport 生成简化版 P0/P1/P2 报告。"""
     s = summary.stats
     lines = []
-    _h = lambda t, l: lines.append(f"{'#'*t} {l}")
-
-    _h(1, "P0/P1/P2 问题合集报告")
+    
+    lines.append("# 审查报告")
     lines.append(f"生成时间: {time.strftime('%Y-%m-%d %H:%M:%S')}")
     lines.append("")
-
-    _h(2, "概览")
-    ch_with_issues = [ch for ch, d in summary.chapters.items() if d.get("issues")]
-    total_ch = len(summary.chapters)
-    lines.append(f"- 审查范围: {total_ch} 章")
-    lines.append(f"- 存在问题: {len(ch_with_issues)} 章")
+    lines.append("## 概览")
+    lines.append(f"- 审查范围: {s['total_ch']} 章")
     lines.append(f"- P0 (严重): **{s['p0']}** 处")
     lines.append(f"- P1 (中等): **{s['p1']}** 处")
     lines.append(f"- P2 (轻微): **{s['p2']}** 处")
-    lines.append(f"- 问题总计: {s['total_issues']} 处")
     lines.append(f"- 平均分: {s['avg_score']}")
-    if s['avg_score'] >= 80:
-        lines.append(f"- 总体评级: ⭐ A (良好)")
-    elif s['avg_score'] >= 60:
-        lines.append(f"- 总体评级: B (一般)")
-    else:
-        lines.append(f"- 总体评级: C (需大幅改进)")
     lines.append("")
-
-    prio_order = {"P0": 0, "P1": 1, "P2": 2}
-    labels = {"P0": "P0 — 严重问题，须修复", "P1": "P1 — 中等问题，建议修复", "P2": "P2 — 轻微问题"}
-
+    
+    # 按优先级列出问题
     for prio in ("P0", "P1", "P2"):
         prio_issues = []
         for ch in sorted(summary.chapters.keys()):
@@ -692,75 +468,24 @@ def generate_p012_report(summary, output_path):
                     prio_issues.append((ch, iss))
         if not prio_issues:
             continue
-        _h(2, labels[prio])
-        lines.append(f"共 {len(prio_issues)} 处问题")
+        
+        lines.append(f"## {prio} 问题 ({len(prio_issues)}处)")
+        for ch, iss in prio_issues[:20]:  # 最多显示20条
+            lines.append(f"- 第{ch}章: [{iss.get('type')}] {iss.get('desc')}")
+        if len(prio_issues) > 20:
+            lines.append(f"- ... 共{len(prio_issues)}处")
         lines.append("")
-        ch_map = {}
-        for ch, iss in prio_issues:
-            ch_map.setdefault(ch, []).append(iss)
-        for ch in sorted(ch_map.keys()):
-            data = summary.chapters[ch]
-            score = data.get("score", 0)
-            lines.append(f"### 第{ch}章 (评分: {score})")
-            for iss in ch_map[ch]:
-                typ = iss.get("type", "?")
-                sev = iss.get("severity", "?")
-                desc = iss.get("desc", "?")
-                fix = iss.get("fix", "")
-                lines.append(f"- **[{typ}]** ({sev}) {desc}")
-                if fix:
-                    lines.append(f"  - 修复: {fix}")
-            lines.append("")
-
+    
+    # 跨章问题
     if summary.cross_issues:
-        _h(2, "跨章问题")
-        for ci in summary.cross_issues:
-            lines.append(f"- [{ci.priority}] **{ci.type}** — {ci.desc}")
-            if ci.fix:
-                lines.append(f"  - 修复: {ci.fix}")
+        lines.append("## 跨章问题")
+        for ci in summary.cross_issues[:10]:  # 最多显示10条
+            lines.append(f"- [{ci.priority}] {ci.desc}")
         lines.append("")
-
-    _h(2, "问题类型分布")
-    type_counts = {}
-    for ch, data in summary.chapters.items():
-        for iss in data.get("issues", []):
-            t = iss.get("type", "?")
-            type_counts.setdefault(t, {"count": 0, "P0": 0, "P1": 0, "P2": 0})
-            type_counts[t]["count"] += 1
-            prio = iss.get("priority", "P2")
-            if prio in type_counts[t]:
-                type_counts[t][prio] += 1
-
-    type_label = {
-        "character": "人设漂移", "emotion": "直抒情过多", "rhythm": "节奏问题",
-        "plagiarism": "台词雷同", "word_count": "字数偏差", "hook": "钩子不足",
-        "ai_marker": "AI路标词", "ai_trace": "AI痕迹词", "metaphor": "比喻过多",
-        "sentence_stddev": "句长异常", "pronoun": "代词密度", "continuity": "连贯性",
-        "missing": "文件缺失", "dialogue": "对话问题",
-    }
-    lines.append(f"| 类型 | 合计 | P0 | P1 | P2 |")
-    lines.append(f"|------|------|----|----|----|")
-    for t, cnt in sorted(type_counts.items(), key=lambda x: -x[1]["count"]):
-        label = type_label.get(t, t)
-        lines.append(f"| {label} | {cnt['count']} | {cnt['P0']} | {cnt['P1']} | {cnt['P2']} |")
-    lines.append("")
-
-    _h(2, "各章评分")
-    score_list = [(ch, summary.chapters[ch].get("score", 0)) for ch in sorted(summary.chapters.keys())]
-    low = [(ch, sc) for ch, sc in score_list if sc < 60]
-    mid = [(ch, sc) for ch, sc in score_list if 60 <= sc < 80]
-    high = [(ch, sc) for ch, sc in score_list if sc >= 80]
-    if low:
-        lines.append(f"- ⚠ 低分 (<60): **{len(low)}** 章 — 第{'、'.join(str(c) for c, _ in low)}章")
-    if mid:
-        lines.append(f"- 中等 (60-80): **{len(mid)}** 章")
-    if high:
-        lines.append(f"- 良好 (≥80): **{len(high)}** 章")
-    lines.append("")
-
+    
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
     Path(output_path).write_text("\n".join(lines), encoding='utf-8')
-    print(f"  P0/P1/P2 报告已保存: {output_path}")
+    print(f"  审查报告已保存: {output_path}")
 
 
 # ============================================================

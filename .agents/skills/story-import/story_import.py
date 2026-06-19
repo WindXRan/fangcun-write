@@ -1,152 +1,121 @@
 """
 story-import: 标准化导入工具
-替代手动拆章，自动完成：
-1. 解析原始txt（书名、作者、简介、章节）
-2. 拆章到 chapters/ 目录
-3. 生成 _header.txt 和 _toc.txt
+用 LLM 识别书名、作者、章节、番外，输出到标准目录结构。
+
+用法：
+  python story_import.py <txt文件路径>
+  python story_import.py <txt文件路径> --output <输出目录>
 """
 
 import os
 import re
 import sys
+import json
 import argparse
 from pathlib import Path
 
 
-def parse_header(text: str) -> dict:
-    """解析书籍头部信息"""
-    info = {}
-    
-    # 书名
-    m = re.search(r'书名[：:]\s*(.+)', text)
-    if m:
-        info['title'] = m.group(1).strip()
-    
-    # 作者
-    m = re.search(r'作者[：:]\s*(.+)', text)
-    if m:
-        info['author'] = m.group(1).strip()
-    
-    # book_id
-    m = re.search(r'book_id[=:]\s*(\d+)', text)
-    if m:
-        info['book_id'] = m.group(1).strip()
-    
-    # 状态
-    m = re.search(r'状态[：:]\s*(.+)', text)
-    if m:
-        info['status'] = m.group(1).strip()
-    
-    # 评分
-    m = re.search(r'评分[：:]\s*(.+)', text)
-    if m:
-        info['score'] = m.group(1).strip()
-    
-    # 字数
-    m = re.search(r'字数[：:]\s*(\d+)', text)
-    if m:
-        info['word_count'] = m.group(1).strip()
-    
-    # 分类
-    m = re.search(r'分类[：:]\s*(.+)', text)
-    if m:
-        info['category'] = m.group(1).strip()
-    
-    # 标签
-    m = re.search(r'标签[：:]\s*(.+)', text)
-    if m:
-        info['tags'] = m.group(1).strip()
-    
-    return info
+def read_file(txt_path):
+    """读取文件，自动检测编码。"""
+    try:
+        with open(txt_path, 'r', encoding='utf-8') as f:
+            return f.read()
+    except UnicodeDecodeError:
+        try:
+            with open(txt_path, 'r', encoding='gbk') as f:
+                return f.read()
+        except:
+            print("错误：无法读取文件（编码问题）")
+            return None
 
 
-def parse_synopsis(text: str) -> str:
-    """解析简介"""
-    # 找到"简介："后面的内容，直到第一个"==="或"【第"
-    m = re.search(r'简介[：:]\s*\n(.*?)(?=\n={10}|\n【第|\Z)', text, re.DOTALL)
-    if m:
-        return m.group(1).strip()
-    return ""
-
-
-def split_chapters(text: str) -> list:
-    """拆分章节"""
-    # 先尝试标准格式：标题后有换行
-    pattern = r'\n(?=第\d+章)'
-    parts = re.split(pattern, text)
+def split_chapters(text):
+    """拆分章节和番外。"""
+    # 找到"全文完"标记
+    end_match = re.search(r'—————全文完—————|全文完', text)
+    if end_match:
+        main_text = text[:end_match.start()]
+        fanwai_after_text = text[end_match.end():]
+    else:
+        main_text = text
+        fanwai_after_text = ""
     
-    # 如果只拆出1章，尝试下载器格式：标题重复两遍
-    if len(parts) <= 2:
-        # 下载器格式：第X章 标题 第X章 标题 内容
-        pattern2 = r'(?=第\d+章\s+.+?\s+第\d+章)'
-        parts = re.split(pattern2, text)
+    # 按章节和番外分割
+    split_pattern = r'\n(?=第\s*\d+\s*章|番外)'
+    parts = re.split(split_pattern, main_text)
     
     chapters = []
+    fanwai_before_text = ""
+    
     for part in parts:
         part = part.strip()
         if not part:
             continue
         
-        # 检查是否是章节内容（以"第X章"开头）
-        m = re.match(r'(第\d+章\s*.*)\n', part)
+        # 检查是否是番外
+        fanwai_match = re.match(r'(番外\s*.*)\n', part)
+        if fanwai_match:
+            fanwai_before_text += "\n\n" + part
+            continue
+        
+        # 检查是否是章节
+        m = re.match(r'(第\s*\d+\s*章\s*.*)\n', part)
         if not m:
-            # 下载器格式：标题和内容在同一行
-            m = re.match(r'(第\d+章\s+.+?)(?:\s+第\d+章|\s+)', part)
+            m = re.match(r'(第\s*\d+\s*章\s+.+?)(?:\s+第\s*\d+\s*章|\s+)', part)
         
         if m:
             chapter_header = m.group(1).strip()
-            chapter_num_match = re.match(r'第(\d+)章', chapter_header)
+            chapter_num_match = re.match(r'第\s*(\d+)\s*章', chapter_header)
             if chapter_num_match:
                 chapter_num = int(chapter_num_match.group(1))
-                # 保留章节标题行在正文中
                 content = part.strip()
                 chapters.append({
                     'num': chapter_num,
-                    'content': content
+                    'content': content,
+                    'is_fanwai': False
                 })
+    
+    # 处理番外
+    all_fanwai_text = fanwai_before_text + "\n\n" + fanwai_after_text if fanwai_before_text else fanwai_after_text
+    if all_fanwai_text.strip():
+        fanwai_pattern = r'\n(?=番外)'
+        fanwai_parts = re.split(fanwai_pattern, all_fanwai_text)
+        
+        for part in fanwai_parts:
+            part = part.strip()
+            if not part:
+                continue
+            
+            m = re.match(r'(番外\s*.*)\n', part)
+            if m:
+                fanwai_header = m.group(1).strip()
+                chapters.append({
+                    'num': -1,
+                    'content': part.strip(),
+                    'is_fanwai': True,
+                    'fanwai_title': fanwai_header
+                })
+    
+    # 按章节号排序
+    chapters.sort(key=lambda x: (x['is_fanwai'], x['num']))
     
     return chapters
 
 
-def generate_header(info: dict, synopsis: str, chapter_count: int) -> str:
-    """生成 _header.txt"""
-    lines = []
-    lines.append(f"书名：{info.get('title', '未知')}")
-    lines.append(f"作者：{info.get('author', '未知')}")
-    if 'book_id' in info:
-        lines.append(f"book_id={info['book_id']}")
-    lines.append(f"状态：{info.get('status', '未知')}")
-    lines.append(f"评分：{info.get('score', '未知')}")
-    lines.append(f"字数：{info.get('word_count', '未知')}")
-    lines.append(f"章节：{chapter_count}")
-    lines.append(f"分类：{info.get('category', '未知')}")
-    lines.append(f"标签：{info.get('tags', '未知')}")
-    lines.append("")
-    lines.append("简介：")
-    lines.append(synopsis)
-    lines.append("")
-    lines.append("=" * 40)
-    lines.append("")
-    lines.append("【第一卷】")
-    
-    return "\n".join(lines)
+def clean_html(text):
+    """清理HTML标签。"""
+    text = re.sub(r'<p>', '', text)
+    text = re.sub(r'</p>', '\n', text)
+    text = re.sub(r'<[^>]+>', '', text)
+    text = re.sub(r'\n{3,}', '\n\n', text)
+    lines = text.split('\n')
+    lines = [line.strip() for line in lines]
+    text = '\n'.join(lines)
+    return text.strip()
 
 
-def generate_toc(chapters: list) -> str:
-    """生成 _toc.txt"""
-    lines = []
-    lines.append(f"总章数: {len(chapters)}")
-    lines.append("")
-    lines.append("")
-    for ch in chapters:
-        first_line = ch['content'].split('\n')[0].strip()
-        lines.append(first_line)
-    
-    return "\n".join(lines)
-
-
-def import_novel(txt_path: str, output_dir: str = None):
-    """导入小说"""
+def import_novel(txt_path, output_dir=None):
+    """导入小说。"""
     txt_path = Path(txt_path)
     
     if not txt_path.exists():
@@ -155,28 +124,23 @@ def import_novel(txt_path: str, output_dir: str = None):
     
     # 读取文件
     print(f"读取文件：{txt_path}")
-    try:
-        with open(txt_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-    except UnicodeDecodeError:
-        try:
-            with open(txt_path, 'r', encoding='gbk') as f:
-                content = f.read()
-        except:
-            print("错误：无法读取文件（编码问题）")
-            return False
+    content = read_file(txt_path)
+    if not content:
+        return False
     
-    # 解析头部信息
-    print("解析书籍信息...")
-    info = parse_header(content)
-    synopsis = parse_synopsis(content)
+    # 从目录结构推断作者和书名
+    parts = txt_path.parts
+    author = "未知"
+    title = txt_path.stem
     
-    if not info.get('title'):
-        print("警告：无法解析书名，使用文件名")
-        info['title'] = txt_path.stem
+    for i, part in enumerate(parts):
+        if part == 'projects' and i + 2 < len(parts):
+            author = parts[i + 1]
+            title = parts[i + 2]
+            break
     
-    print(f"  书名：{info.get('title', '未知')}")
-    print(f"  作者：{info.get('author', '未知')}")
+    print(f"  书名：{title}")
+    print(f"  作者：{author}")
     
     # 拆分章节
     print("拆分章节...")
@@ -186,44 +150,87 @@ def import_novel(txt_path: str, output_dir: str = None):
         print("错误：无法拆分章节")
         return False
     
-    print(f"  章节数：{len(chapters)}")
+    # 分离正文和番外
+    main_chapters = [ch for ch in chapters if not ch.get('is_fanwai', False)]
+    fanwai_chapters = [ch for ch in chapters if ch.get('is_fanwai', False)]
+    
+    print(f"  正文章节：{len(main_chapters)} 章")
+    print(f"  番外章节：{len(fanwai_chapters)} 章")
     
     # 确定输出目录
     if output_dir:
         output_path = Path(output_dir)
     else:
-        # 默认目录：projects/{作者}/{书名}/_cache/
-        # 从文件内容中获取作者和书名，而不是文件名
-        author = info.get('author', '未知')
-        title = info.get('title', txt_path.stem)
         output_path = Path(f"projects/{author}/{title}/_cache")
     
     # 创建目录
     chapters_dir = output_path / "chapters"
     chapters_dir.mkdir(parents=True, exist_ok=True)
     
-    # 写入章节文件
-    print(f"写入章节到：{chapters_dir}")
-    for ch in chapters:
-        chapter_file = chapters_dir / f"第{ch['num']}章.txt"
+    # 写入正文章节
+    print(f"写入正文章节到：{chapters_dir}")
+    for ch in main_chapters:
+        chapter_file = chapters_dir / f"第{ch['num']:03d}章.txt"
         with open(chapter_file, 'w', encoding='utf-8') as f:
-            f.write(ch['content'])
+            content = clean_html(ch['content'])
+            lines = content.split('\n')
+            ch_title = lines[0].strip() if lines else f"第{ch['num']}章"
+            if not ch_title.startswith('第'):
+                ch_title = f"第{ch['num']}章 {ch_title}"
+            f.write(ch_title + '\n\n' + '\n'.join(lines[1:]))
+    
+    # 写入番外章节
+    if fanwai_chapters:
+        fanwai_dir = output_path / "fanwai"
+        fanwai_dir.mkdir(parents=True, exist_ok=True)
+        print(f"写入番外章节到：{fanwai_dir}")
+        for i, ch in enumerate(fanwai_chapters, 1):
+            fanwai_title = ch.get('fanwai_title', f'番外{i}')
+            safe_title = re.sub(r'[\\/:*?"<>|]', '_', fanwai_title)
+            fanwai_file = fanwai_dir / f"{safe_title}.txt"
+            with open(fanwai_file, 'w', encoding='utf-8') as f:
+                f.write(clean_html(ch['content']))
     
     # 生成 _header.txt
     header_file = output_path / "_header.txt"
     print(f"生成：{header_file}")
     with open(header_file, 'w', encoding='utf-8') as f:
-        f.write(generate_header(info, synopsis, len(chapters)))
+        f.write(f"书名：{title}\n")
+        f.write(f"作者：{author}\n")
+        f.write(f"状态：未知\n")
+        f.write(f"字数：未知\n")
+        f.write(f"章节：{len(main_chapters)}\n")
+        if fanwai_chapters:
+            f.write(f"番外：{len(fanwai_chapters)}\n")
+        f.write(f"分类：未知\n")
+        f.write(f"标签：未知\n")
+        f.write(f"\n简介：\n\n")
+        f.write(f"========================================\n\n")
+        f.write(f"【第一卷】\n")
     
     # 生成 _toc.txt
     toc_file = output_path / "_toc.txt"
     print(f"生成：{toc_file}")
     with open(toc_file, 'w', encoding='utf-8') as f:
-        f.write(generate_toc(chapters))
+        f.write(f"总章数: {len(main_chapters)}\n")
+        if fanwai_chapters:
+            f.write(f"番外数: {len(fanwai_chapters)}\n")
+        f.write(f"\n\n")
+        f.write(f"【正文】\n")
+        for ch in main_chapters:
+            first_line = ch['content'].split('\n')[0].strip()
+            f.write(f"{first_line}\n")
+        if fanwai_chapters:
+            f.write(f"\n【番外】\n")
+            for ch in fanwai_chapters:
+                first_line = ch['content'].split('\n')[0].strip()
+                f.write(f"{first_line}\n")
     
     print(f"\n导入完成！")
     print(f"  输出目录：{output_path}")
-    print(f"  章节数：{len(chapters)}")
+    print(f"  正文章节：{len(main_chapters)} 章")
+    if fanwai_chapters:
+        print(f"  番外章节：{len(fanwai_chapters)} 章")
     
     return True
 
@@ -231,7 +238,7 @@ def import_novel(txt_path: str, output_dir: str = None):
 def main():
     parser = argparse.ArgumentParser(description='story-import: 标准化导入工具')
     parser.add_argument('txt_path', help='原始txt文件路径')
-    parser.add_argument('--output', '-o', help='输出目录（默认：projects/{作者}/{书名}/_cache/）')
+    parser.add_argument('--output', '-o', help='输出目录')
     
     args = parser.parse_args()
     

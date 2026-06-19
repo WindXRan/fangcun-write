@@ -84,7 +84,7 @@ def _extract_highlights(src_text, max_chars=300):
 # ============================================================
 
 def phase_guides(config, start, end, workers=5, state_mgr=None):
-    """生成 plot_guide + style_guide（引用 templates）。"""
+    """生成 plot_guide（含文笔指纹提取）。"""
     from lib.api_client import get_api_url
     
     guides_dir = f"{config['rewrites_dir']}/guides"
@@ -92,9 +92,16 @@ def phase_guides(config, start, end, workers=5, state_mgr=None):
     if state_mgr:
         state_mgr.phase_start("guides")
 
+    # 先提取文笔指纹（如果还没有提取）
+    print(f"\n{'=' * 50}")
+    print(f"Phase 2: 文笔指纹 + plot_guide (ch{start}-{end}, {workers}w)")
+    print("=" * 50)
+    
+    _extract_style_fingerprints(config, start, end, workers)
+
     # plot-guide（JSON 输出 + 模板合并）
     print(f"\n{'=' * 50}")
-    print(f"Phase 2: plot_guide (flash, ch{start}-{end}, 并行)")
+    print(f"Phase 2: plot_guide (ch{start}-{end}, {workers}w)")
     print("=" * 50)
 
     ok, fail = batch_run(config, "plot-guide", start, end, workers, guides_dir,
@@ -103,11 +110,59 @@ def phase_guides(config, start, end, workers=5, state_mgr=None):
 
     print(f"plot_guide: OK={len(ok)} FAIL={len(fail)}")
 
+    # 验证 Guide 质量
+    if ok:
+        print(f"\n{'=' * 50}")
+        print(f"Guide 质量验证")
+        print("=" * 50)
+        _validate_guides(config, ok)
+
     if state_mgr:
         if fail:
             state_mgr.phase_failed("guides", error=f"{len(fail)} fail")
         else:
             state_mgr.phase_done("guides")
+
+
+def _validate_guides(config, ok_guides):
+    """验证 Guide 质量。"""
+    issues = []
+    for ch, path in ok_guides.items():
+        try:
+            content = Path(path).read_text(encoding="utf-8")
+            
+            # 检查是否有占位符
+            placeholders = re.findall(r'\{[a-zA-Z\u4e00-\u9fa5]+\}', content)
+            if placeholders:
+                issues.append(f"ch{ch}: 有占位符 {set(placeholders)}")
+            
+            # 检查是否有角色名占位符
+            if '【女主】' in content or '【男主】' in content:
+                issues.append(f"ch{ch}: 角色名还是占位符")
+            
+            # 检查节拍表是否有内容
+            if '| # |' in content and content.count('|') < 20:
+                issues.append(f"ch{ch}: 节拍表可能不完整")
+            
+            # 检查是否有"待确认"
+            if '待确认' in content:
+                issues.append(f"ch{ch}: 有待确认内容")
+                
+        except Exception as e:
+            issues.append(f"ch{ch}: 读取失败 {e}")
+    
+    if issues:
+        print(f"  [WARN] {len(issues)} 个问题:")
+        for issue in issues[:10]:  # 最多显示10个
+            print(f"    - {issue}")
+    else:
+        print(f"  [OK] 全部通过")
+
+
+def _extract_style_fingerprints(config, start, end, workers):
+    """提取源文文笔指纹（算法锚点 + LLM分析）。"""
+    from phases.style_extract import phase_style_extract
+    phase_style_extract(config, start, end, workers)
 
 
 def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=None, 
@@ -145,10 +200,13 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         replacements["目标字数_min"] = str(int(target_chars * 0.9))
         replacements["目标字数_max"] = str(int(target_chars * 1.1))
     
-    # plot-guide 注入源文（供 LLM 分析结构/情绪/节奏，不注入给 write-chapter）
+    # plot-guide 注入源文全文（章纲需要完整分析结构和节拍）
     if prompt_type == "plot-guide" and chapter_num:
         source_text = get_source_text(config, chapter_num)
-        replacements["源文全文"] = source_text or "（源文读取失败）"
+        if source_text:
+            replacements["源文全文"] = source_text
+        else:
+            replacements["源文全文"] = "（源文读取失败）"
         # 注入角色名（plot-guide 也需要，否则角色名会乱）
         book_data = _get_book_data(config.get("rewrites_dir", ""))
         if book_data:
@@ -157,15 +215,15 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             for k, v in bd_replacements.items():
                 if k not in replacements:
                     replacements[k] = v
+        # 注入角色名（从 book_data.json）
         if "女主名" not in replacements or "男主名" not in replacements:
-            chars_path = Path(config["rewrites_dir"]) / "characters.md"
-            if chars_path.exists():
-                chars_text = chars_path.read_text(encoding="utf-8")
-                for role, key in [("女主", "女主名"), ("男主", "男主名"), ("主角", "女主名")]:
-                    if key not in replacements:
-                        m = re.search(rf'{role}[：:]\s*\**(\S+)\**', chars_text)
-                        if m:
-                            replacements[key] = m.group(1)
+            book_data = _get_book_data(config.get("rewrites_dir", ""))
+            if book_data:
+                char_vars = book_data.get("meta", {}).get("character_variables", {})
+                if "女主名" not in replacements and "女主名" in char_vars:
+                    replacements["女主名"] = char_vars["女主名"]
+                if "男主名" not in replacements and "男主名" in char_vars:
+                    replacements["男主名"] = char_vars["男主名"]
         # 注入世界观（plot-guide 和 write-chapter 都需要）
         if "世界观" not in replacements:
             world_path = Path(config["rewrites_dir"]) / "world.md"
@@ -211,11 +269,25 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             replacements["源文对话比"] = str(int(fp.get("dialogue_ratio", 0.1) * 100))
             replacements["源文代词密度"] = str(fp.get("pronoun_density", 15))
             replacements["源文标点"] = fp.get("punct_style", "标点克制")
+            
+            # 注入文笔指纹（从style_extract提取）
+            from phases.style_extract import load_style_text
+            style_text = load_style_text(config, chapter_num)
+            if style_text:
+                replacements["文笔指纹"] = style_text
+            else:
+                replacements["文笔指纹"] = "（文笔指纹未提取）"
         else:
             replacements["源文段长"] = "40"; replacements["源文单句段比例"] = "50"
             replacements["源文对话比"] = "10"; replacements["源文代词密度"] = "15"
             replacements["源文标点"] = "标点克制"
             replacements["源文高光"] = ""
+            replacements["文笔指纹"] = "（源文读取失败）"
+    
+    # 注入角色行为卡片（写章时需要）
+    if prompt_type == "write-chapter" and "角色行为卡片" not in replacements:
+        char_card = _load_char_card(config)
+        replacements["角色行为卡片"] = char_card
 
     # 合并额外替换变量
     if extra_replacements:
@@ -234,6 +306,13 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
 
     pc = get_prompt_config_with_overrides(f"{prompt_type}.md", config)
 
+    # 计算 max_tokens（目标字数 × 1.6，防止超时）
+    max_tokens = None
+    if prompt_type in ("write-chapter", "trim-chapter", "expand-chapter", "polish-chapter") and chapter_num:
+        src_chars = count_source_chars(config, chapter_num)
+        target_chars = src_chars if src_chars > 100 else 1500
+        max_tokens = int(target_chars * 1.6)
+
     # === Debug: 保存最终发给 API 的完整 prompt ===
     if config.get("debug") and chapter_num and chapter_num <= 3:
         debug_dump_prompt(config, prompt_type, chapter_num, prompt_path, system_prompt, user_prompt, sp_name, pc)
@@ -246,7 +325,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
 
     t_req = time.time()
     try:
-        result = call_llm(config, prompt_type, user_prompt, system_prompt, ch=chapter_num)
+        result = call_llm(config, prompt_type, user_prompt, system_prompt, ch=chapter_num, max_tokens=max_tokens)
         elapsed = time.time() - t_req
         print(f"  [OK] {label} ({elapsed:.0f}s)")
         return result
@@ -294,11 +373,6 @@ def process_plot_guide_output(config, chapter_num, ai_output):
 
     result = safe_format(result, replacements)
 
-    # 事后校验：如果还有 {xxx} 占位符残留，告警但不阻塞
-    remaining = re.findall(r'\{[a-zA-Z\u4e00-\u9fa5]+\}', result)
-    if remaining:
-        print(f"  [WARN] 以下模板变量未填充: {set(remaining)}")
-
     return result
 
 
@@ -331,7 +405,7 @@ def get_source_metrics(config, ch):
 
 
 def _load_char_card(config):
-    """从 characters.md 读取角色行为卡片，注入写章 prompt。"""
+    """从 characters.md 读取角色行为卡片（主角+配角），注入写章 prompt。"""
     rewrites_dir = Path(config["rewrites_dir"])
     # 优先 settings/ 目录，fallback 到 rewrites_dir 根目录
     chars_path = rewrites_dir / "settings" / "characters.md"
@@ -340,13 +414,32 @@ def _load_char_card(config):
     if not chars_path.exists():
         return "（角色设定文件不存在）"
     text = chars_path.read_text(encoding="utf-8")
-    # 提取行为模式相关内容
+    
+    # 按角色分块：找到所有 ## 开头的角色名行
+    import re
+    blocks = re.split(r'^(## .+)$', text, flags=re.MULTILINE)
+    
     sections = []
-    for keyword in ["应激模式", "决策方式", "情感表达", "致命弱点", "行为模式"]:
-        idx = text.find(keyword)
-        if idx > 0:
-            # 往前找角色名
-            before = text[:idx].strip().split("\n")[-1]
-            sections.append(f"{before.strip()} — {text[idx:idx+200].strip().split(chr(10))[0]}")
-    return "\n".join(sections[:8]) if sections else "（角色设定中无行为卡片）"
+    for i, block in enumerate(blocks):
+        if block.startswith("## "):
+            role_name = block.strip().lstrip("#").strip()
+            # 获取该角色的完整内容（直到下一个 ## 或文件结尾）
+            content = ""
+            for j in range(i+1, min(i+10, len(blocks))):
+                if blocks[j].startswith("## "):
+                    break
+                content += blocks[j]
+            
+            # 提取行为模式字段
+            card_lines = []
+            for keyword in ["应激模式", "决策方式", "情感表达", "致命弱点", "核心动机", "能力边界"]:
+                idx = content.find(keyword)
+                if idx >= 0:
+                    line = content[idx:idx+200].strip().split("\n")[0]
+                    card_lines.append(line)
+            
+            if card_lines:
+                sections.append(f"【{role_name}】\n" + "\n".join(card_lines))
+    
+    return "\n\n".join(sections[:12]) if sections else "（角色设定中无行为卡片）"
 

@@ -141,13 +141,13 @@ def write_deliverable(config, output_dir, make_zip=False):
                     intro_lines.append(stripped)
         intro_text = "\n".join(intro_lines[:5]) if intro_lines else ""
 
-    # ── 提取核心DNA ──
+    # ── 提取源文锁定表 ──
     dna_table = ""
     if source_analysis_text:
         in_dna = False
         dna_lines = []
         for line in source_analysis_text.split("\n"):
-            if "核心DNA锁定" in line and "##" in line:
+            if ("源文锁定" in line or "核心DNA锁定" in line) and "##" in line:
                 in_dna = True
             elif in_dna and line.startswith("## "):
                 break
@@ -235,7 +235,7 @@ def write_deliverable(config, output_dir, make_zip=False):
 
 | 能力 | 说明 |
 |------|------|
-| 🔬 核心DNA锁定 | 自动提取源文不可替代卖点，🔴不可换/🟡可微调/🟢可调整 |
+| 🔬 源文锁定 | 自动提取源文不可替代卖点，🔴不可换/🟡可微调/🟢可调整 |
 | 📝 全自动写章 | 60 章全本 < 2 小时，含算法审校 + 自动 Trim/Polish/Retry |
 | 🛡️ 反抄袭 | 8-gram 台词雷同检测 + 换皮检验（剥名不认源文） |
 | 🔍 6+1 指标评分 | 禁用词/排比/心理词/标签密度/段均句数/重复度/段长方差 |

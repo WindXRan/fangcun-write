@@ -100,39 +100,68 @@ TAG_NORMALIZE = {
     "男主角": "男主", "女主角": "女主", "男二号": "男二", "女二号": "女二",
     "男配": "男配", "女配": "女配", "反派": "反派",
     "主角": "女主", "正妻": "女主", "男配角": "男配", "女配角": "女配",
+    # 关系型角色
+    "婆婆": "婆婆", "公公": "公公", "小姑子": "小姑子", "小叔子": "小叔子",
+    "大姑姐": "大姑姐", "嫂子": "嫂子", "弟媳": "弟媳", "姐夫": "姐夫",
+    "妹夫": "妹夫", "大伯": "大伯", "小舅子": "小舅子", "大姨子": "大姨子",
+    "岳父": "岳父", "岳母": "岳母", "女婿": "女婿", "儿媳": "儿媳",
+    "继母": "继母", "继父": "继父", "继子": "继子", "继女": "继女",
+    "养母": "养母", "养父": "养父", "养子": "养子", "养女": "养女",
 }
 
 
 def parse_characters(text):
     """解析 settings/characters.md → characters 数组。
     
-    支持四种格式：
+    支持五种格式：
       A: `### 郝仁 (男主)`  —— 名字在前，tag括号内（markdown标题）
       B: `## 男主：郝仁`   —— tag在前，冒号分隔
       C: `宋云(女主)`       —— 名字在前，tag括号内（纯文本，无markdown标题）
       D: `### 沈麦（宋遥）` —— 名字在前，括号内是别名（需从内容推断tag）
+      E: `## 角色卡：沈鹿（女主）` —— 角色卡格式，名字在前，tag在括号内
     """
     characters = []
-    TAG_KEYWORDS = r'女[主二配]|男[主二配]|反派|主角|正妻|[^\n]{0,4}(?:父亲|母亲|爷爷|奶奶|祖父|祖母|外公|外婆|闺蜜|好友|助理|管家|继母|继父|弟弟|妹妹|哥哥|姐姐)'
+    TAG_KEYWORDS = r'女[主二配]|男[主二配]|反派|主角|正妻|[^\n]{0,4}(?:父亲|母亲|爷爷|奶奶|祖父|祖母|外公|外婆|闺蜜|好友|助理|管家|继母|继父|弟弟|妹妹|哥哥|姐姐|婆婆|公公|小姑子|小叔子|大姑姐|嫂子|弟媳|姐夫|妹夫|大伯|小舅子|大姨子|岳父|岳母|女婿|儿媳|继子|继女|养母|养父|养子|养女)'
     
+    # 非角色标题列表（跳过这些）
+    NON_ROLE_HEADERS = [
+        '主要角色', '重要配角', '出场规划表', '角色设定', '核心角色', '配角',
+        '主要角色总览', '附：次要角色', '人物关系图谱', '关系型角色',
+        '基本信息', '身份锚表', '行为模式卡片', '能力区间表', '角色关系'
+    ]
+    
+    # 格式 E: ## 角色卡：沈鹿（女主）—— 角色卡格式，名字在前，tag在括号内（优先）
+    pattern_e = re.compile(
+        r'^##\s*角色卡[：:]\s*([\u4e00-\u9fa5]{2,8})[^\n]*?[(（]\s*(' + TAG_KEYWORDS + r')[^\n)]*?[)）]\s*\n(.*?)(?=\n^##\s+|\Z)',
+        re.MULTILINE | re.DOTALL
+    )
+    for m in pattern_e.finditer(text):
+        name, role_tag, body = m.group(1), m.group(2), m.group(3)
+        if name not in NON_ROLE_HEADERS:
+            if not any(c["name"] == name.strip() for c in characters):
+                _add_character(characters, role_tag.strip(), name.strip(), body)
+
     # 格式 A: ### 郝仁 (男主) —— 名字在前，(tag) 在括号内
     pattern_a = re.compile(
-        r'^#{2,4}\s+([\u4e00-\u9fa5]{2,8})[^\n]*?[(（]\s*(' + TAG_KEYWORDS + r')[^\n)]*?[)）]\s*\n(.*?)(?=\n^#{2,4}\s+|\Z)',
+        r'^###\s+([\u4e00-\u9fa5]{2,8})[^\n]*?[(（]\s*(' + TAG_KEYWORDS + r')[^\n)]*?[)）]\s*\n(.*?)(?=\n^#{2,4}\s+|\Z)',
         re.MULTILINE | re.DOTALL
     )
     for m in pattern_a.finditer(text):
         name, role_tag, body = m.group(1), m.group(2), m.group(3)
-        _add_character(characters, role_tag.strip(), name.strip(), body)
+        if name not in NON_ROLE_HEADERS:
+            if not any(c["name"] == name.strip() for c in characters):
+                _add_character(characters, role_tag.strip(), name.strip(), body)
 
     # 格式 B: ## 男主：郝仁 —— tag在前，冒号分隔
     pattern_b = re.compile(
-        r'^#{2,4}\s+(' + TAG_KEYWORDS + r')[^\n]*?[：:]\s*([\u4e00-\u9fa5]{2,8})(?:[^\n]*?)\s*\n(.*?)(?=\n^#{2,4}\s+|\Z)',
+        r'^##\s+(' + TAG_KEYWORDS + r')[^\n]*?[：:]\s*([\u4e00-\u9fa5]{2,8})(?:[^\n]*?)\s*\n(.*?)(?=\n^##\s+|\Z)',
         re.MULTILINE | re.DOTALL
     )
     for m in pattern_b.finditer(text):
         role_tag, name, body = m.group(1), m.group(2), m.group(3)
-        if not any(c["name"] == name.strip() for c in characters):
-            _add_character(characters, role_tag.strip(), name.strip(), body)
+        if name not in NON_ROLE_HEADERS:
+            if not any(c["name"] == name.strip() for c in characters):
+                _add_character(characters, role_tag.strip(), name.strip(), body)
 
     # 格式 C: 宋云(女主) —— 名字在前，(tag) 在括号内，纯文本无markdown标题
     pattern_c = re.compile(
@@ -141,11 +170,11 @@ def parse_characters(text):
     )
     for m in pattern_c.finditer(text):
         name, role_tag, body = m.group(1), m.group(2), m.group(3)
-        if not any(c["name"] == name.strip() for c in characters):
-            _add_character(characters, role_tag.strip(), name.strip(), body)
+        if name not in NON_ROLE_HEADERS:
+            if not any(c["name"] == name.strip() for c in characters):
+                _add_character(characters, role_tag.strip(), name.strip(), body)
 
     # 格式 D: ### 沈麦（宋遥）—— 名字在前，括号内是别名，需从内容推断tag
-    # 只匹配 ### 级别的标题，跳过 ## 级别的标题
     pattern_d = re.compile(
         r'^###\s+([\u4e00-\u9fa5]{2,8})(?:[（(]([\u4e00-\u9fa5]{2,8})[)）])?\s*\n(.*?)(?=\n^#{2,3}\s+|\Z)',
         re.MULTILINE | re.DOTALL
@@ -153,7 +182,7 @@ def parse_characters(text):
     for m in pattern_d.finditer(text):
         name, alias, body = m.group(1), m.group(2), m.group(3)
         # 跳过非角色标题
-        if name in ['主要角色', '重要配角', '出场规划表', '角色设定']:
+        if name in NON_ROLE_HEADERS:
             continue
         # 跳过已处理的角色
         if any(c["name"] == name.strip() for c in characters):
@@ -170,25 +199,6 @@ def parse_characters(text):
 
     # 解析表格格式的配角
     _parse_side_characters(text, characters)
-
-    # 格式 E: ## 角色名（无标签，用顺序推断）
-    if not characters:
-        pattern_e = re.compile(
-            r'^##\s+([\u4e00-\u9fa5]{2,8})\s*\n(.*?)(?=\n^##\s+|\Z)',
-            re.MULTILINE | re.DOTALL
-        )
-        for i, m in enumerate(pattern_e.finditer(text)):
-            name, body = m.group(1), m.group(2)
-            if name in ['主要角色', '重要配角', '出场规划表', '角色设定', '核心角色', '配角']:
-                continue
-            # 顺序推断：第一个=女主，第二个=男主，其余=配角
-            if i == 0:
-                role_tag = "女主"
-            elif i == 1:
-                role_tag = "男主"
-            else:
-                role_tag = "配角"
-            _add_character(characters, role_tag, name.strip(), body)
 
     return characters
 
@@ -207,6 +217,56 @@ def _infer_role_tag(name, body, full_text):
         return "女二"
     if re.search(r'男二|男二号|男配', body):
         return "男二"
+    
+    # 关系型角色检测
+    if re.search(r'婆婆|婆母|丈夫.*母亲|老公.*妈妈', body):
+        return "婆婆"
+    if re.search(r'公公|婆公|丈夫.*父亲|老公.*爸爸', body):
+        return "公公"
+    if re.search(r'小姑子|丈夫.*妹妹|老公.*妹妹', body):
+        return "小姑子"
+    if re.search(r'小叔子|丈夫.*弟弟|老公.*弟弟', body):
+        return "小叔子"
+    if re.search(r'大姑姐|丈夫.*姐姐|老公.*姐姐', body):
+        return "大姑姐"
+    if re.search(r'嫂子|丈夫.*嫂子|老公.*嫂子', body):
+        return "嫂子"
+    if re.search(r'弟媳|弟弟.*妻子', body):
+        return "弟媳"
+    if re.search(r'姐夫|姐姐.*丈夫', body):
+        return "姐夫"
+    if re.search(r'妹夫|妹妹.*丈夫', body):
+        return "妹夫"
+    if re.search(r'大伯|丈夫.*哥哥|老公.*哥哥', body):
+        return "大伯"
+    if re.search(r'小舅子|妻子.*弟弟', body):
+        return "小舅子"
+    if re.search(r'大姨子|妻子.*姐姐', body):
+        return "大姨子"
+    if re.search(r'岳父|妻子.*父亲|老婆.*爸爸', body):
+        return "岳父"
+    if re.search(r'岳母|妻子.*母亲|老婆.*妈妈', body):
+        return "岳母"
+    if re.search(r'女婿|女儿.*丈夫', body):
+        return "女婿"
+    if re.search(r'儿媳|儿子.*妻子', body):
+        return "儿媳"
+    if re.search(r'继母|后妈|父亲.*再婚.*妻子', body):
+        return "继母"
+    if re.search(r'继父|后爸|母亲.*再婚.*丈夫', body):
+        return "继父"
+    if re.search(r'继子|再婚.*儿子', body):
+        return "继子"
+    if re.search(r'继女|再婚.*女儿', body):
+        return "继女"
+    if re.search(r'养母|领养.*母亲', body):
+        return "养母"
+    if re.search(r'养父|领养.*父亲', body):
+        return "养父"
+    if re.search(r'养子|领养.*儿子', body):
+        return "养子"
+    if re.search(r'养女|领养.*女儿', body):
+        return "养女"
     
     # 根据描述推断
     # 如果描述中有"将军"、"王爷"等，可能是男主
@@ -242,8 +302,58 @@ def _add_character(characters, role_tag, name, body):
         "weaknesses": [],
         "archetype": "",
         "first_appearance": 1,
-        "frequency": ""
+        "frequency": "",
+        # 增强字段
+        "behavior_card": {
+            "stress_response": "",    # 应激模式
+            "decision_style": "",     # 决策方式
+            "emotion_expression": "", # 情感表达
+            "fatal_weakness": "",     # 致命弱点
+            "core_motivation": "",    # 核心动机
+            "ability_boundary": "",   # 能力边界
+        },
+        "identity_anchor": {
+            "status": "",             # 身份
+            "title": "",              # 称谓
+            "residence": "",          # 住处
+        },
     }
+    
+    # 解析行为模式卡片
+    behavior_section = re.search(r'###\s*行为模式卡片\s*\n(.*?)(?=\n###|\n##|\Z)', body, re.DOTALL)
+    if behavior_section:
+        btext = behavior_section.group(1)
+        for m in re.finditer(r'\*\*(.+?)\*\*\s*[：:]\s*(.+)', btext):
+            key = m.group(1).strip()
+            val = m.group(2).strip()
+            if '应激' in key:
+                char["behavior_card"]["stress_response"] = val
+            elif '决策' in key:
+                char["behavior_card"]["decision_style"] = val
+            elif '情感' in key:
+                char["behavior_card"]["emotion_expression"] = val
+            elif '弱点' in key or '软肋' in key:
+                char["behavior_card"]["fatal_weakness"] = val
+            elif '动机' in key:
+                char["behavior_card"]["core_motivation"] = val
+            elif '能力' in key or '边界' in key:
+                char["behavior_card"]["ability_boundary"] = val
+    
+    # 解析身份锚表
+    anchor_section = re.search(r'###\s*身份锚表\s*\n(.*?)(?=\n###|\n##|\Z)', body, re.DOTALL)
+    if anchor_section:
+        atext = anchor_section.group(1)
+        for m in re.finditer(r'\|\s*(身份|称谓|住处)\s*\|\s*(.+?)\s*\|', atext):
+            key = m.group(1).strip()
+            val = m.group(2).strip()
+            if '身份' in key:
+                char["identity_anchor"]["status"] = val
+            elif '称谓' in key:
+                char["identity_anchor"]["title"] = val
+            elif '住处' in key:
+                char["identity_anchor"]["residence"] = val
+    
+    # 解析 KV 格式
     kv = re.compile(r'[-*]\s*\*\*(.+?)\*\*\s*[：:]\s*(.+)')
     for m in kv.finditer(body):
         key = m.group(1).strip()
@@ -264,6 +374,7 @@ def _add_character(characters, role_tag, name, body):
             nums = re.findall(r'\d+', val)
             if nums:
                 char["first_appearance"] = int(nums[0])
+    
     arc_match = re.search(r'弧线[：:](.*?)(?=\n[-*]|\Z)', body, re.DOTALL)
     if arc_match:
         char["arc"] = arc_match.group(1).strip()
@@ -506,10 +617,25 @@ def build_character_variables(characters):
     同名角色只取第一个（写在前的是核心角色）。
     
     如果没有明确的女主/男主标签，用第一个角色作为女主，第二个作为男主。
+    
+    配角生成 {配角1名}, {配角2名} 等变量，确保所有角色名都可用于 prompt。
     """
     vars_map = {}
     seen_tags = set()
     first_name = None
+    
+    # 主要角色：女主/男主/女二/男二/反派 + 关系型角色（每种只取第一个）
+    MAIN_TAGS = {
+        "女主", "男主", "女二", "男二", "反派",
+        # 关系型角色
+        "婆婆", "公公", "小姑子", "小叔子", "大姑姐", "嫂子",
+        "弟媳", "姐夫", "妹夫", "大伯", "小舅子", "大姨子",
+        "岳父", "岳母", "女婿", "儿媳",
+        "继母", "继父", "继子", "继女",
+        "养母", "养父", "养子", "养女",
+    }
+    side_chars = []
+    
     for ch in characters:
         tag = ch.get("tag_short", ch.get("tag", ""))
         name = ch.get("name", "")
@@ -517,9 +643,14 @@ def build_character_variables(characters):
             continue
         if first_name is None:
             first_name = name
-        if tag and tag not in seen_tags:
+        
+        # 主要角色：按 tag 去重
+        if tag in MAIN_TAGS and tag not in seen_tags:
             vars_map[f"{tag}名"] = name
             seen_tags.add(tag)
+        elif tag not in MAIN_TAGS:
+            # 配角：收集起来后面编号
+            side_chars.append({"tag": tag, "name": name})
     
     # Fallback: 没有明确的女主/男主时，用第一个角色作为女主
     if "女主名" not in vars_map and first_name:
@@ -529,6 +660,14 @@ def build_character_variables(characters):
         second = characters[1].get("name", "")
         if second:
             vars_map["男主名"] = second
+    
+    # 配角：生成 {配角1名}, {配角2名} 等变量
+    for i, sc in enumerate(side_chars, 1):
+        vars_map[f"配角{i}名"] = sc["name"]
+        # 同时按 tag 生成变量（如 {闺蜜名}, {助理名}），只取第一个
+        tag = sc["tag"]
+        if tag and f"{tag}名" not in vars_map:
+            vars_map[f"{tag}名"] = sc["name"]
     
     return vars_map
 
@@ -541,7 +680,10 @@ def extract(config_or_dir):
         rewrites_dir = config_or_dir
 
     rewrites_dir = Path(rewrites_dir)
+    # 支持 settings/ 和 _settings/ 两种目录名
     settings_dir = rewrites_dir / "settings"
+    if not settings_dir.exists():
+        settings_dir = rewrites_dir / "_settings"
 
     # 读取各文件
     files_used = []

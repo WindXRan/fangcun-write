@@ -9,7 +9,7 @@ from datetime import datetime
 DEFAULT_API_URL = "https://token-plan-cn.xiaomimimo.com/v1/chat/completions"
 
 
-def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None):
+def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None, max_tokens=None):
     """统一 LLM 调用入口。
 
     从 prompt 的 frontmatter + config.prompt_overrides 读取模型参数，
@@ -21,6 +21,7 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None):
         user_prompt: 已格式化的用户 prompt 文本
         system_prompt: 可选的 system prompt 覆盖
         ch: 可选，当前章节号（用于 token 日志）
+        max_tokens: 可选，最大输出 token 数（覆盖 prompt 配置）
 
     Returns:
         str: API 返回文本
@@ -36,9 +37,12 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None):
         raise ValueError("未配置 API_KEY，请设置 $env:API_KEY 或 config.api_key")
 
     api_url = get_api_url(config)
+    provider = config.get("provider", "")
     pc = get_prompt_config_with_overrides(f"{prompt_type}.md", config)
     model = pc.get("model", "mimo-v2.5-pro")
     temperature = pc.get("temperature", 0.8)
+    if max_tokens is None:
+        max_tokens = pc.get("max_tokens", None)
 
     if not system_prompt:
         sp_name = get_system_prompt_name(f"{prompt_type}.md") or "system-generic.md"
@@ -49,7 +53,8 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None):
 
     content, usage = call_api(api_key, model, user_prompt,
                               system_prompt, api_url, temperature=temperature,
-                              return_usage=True)
+                              max_tokens=max_tokens,
+                              return_usage=True, provider=provider)
 
     if usage and rewrites_dir:
         try:
@@ -92,29 +97,35 @@ def get_api_key(config=None):
 
 def call_api(api_key, model, user_prompt,
              system_prompt=None, api_url=None, max_retries=3,
-             temperature=0.8, return_usage=False):
+             temperature=0.8, max_tokens=None, return_usage=False, provider=None):
     """调用 API，带指数退避重试。
 
     Args:
         temperature: 默认 0.8。审稿推荐 0.3，修复推荐 0.6。
+        max_tokens: 最大输出 token 数。None 表示不限制。
         return_usage: 是否返回 (content, usage_dict) 元组。
+        provider: API 提供商（"deepseek", "openai", "mimo" 等）
 
     Returns:
         str 或 (str, dict): 返回内容。return_usage=True 时额外返回 usage。
-        用法示例：
-            content = call_api(...)
-            content, usage = call_api(..., return_usage=True)
 
     重试策略：
     - 429 (限流): 指数退避 10/20/40 秒
     - 5xx (服务端错误): 指数退避 5/10/20 秒
+    - 402 (余额不足): 立即停止，不重试
     - 超时: 重试，超时时间翻倍
     - 其他错误: 不重试
     """
     from prompt_meta import load_system_prompt
 
     url = api_url or DEFAULT_API_URL
-    headers = {"api-key": api_key, "Content-Type": "application/json"}
+    
+    # 根据 provider 选择不同的 header 格式
+    if provider == "deepseek" or "deepseek" in url:
+        headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    else:
+        headers = {"api-key": api_key, "Content-Type": "application/json"}
+    
     sys_prompt = system_prompt or load_system_prompt("system-generic.md") or ""
     data = {
         "model": model,
@@ -124,8 +135,10 @@ def call_api(api_key, model, user_prompt,
         ],
         "temperature": temperature,
     }
+    if max_tokens:
+        data["max_tokens"] = max_tokens
 
-    timeout = 120
+    timeout = 300  # 初始超时 5 分钟
 
     for attempt in range(max_retries + 1):
         try:
@@ -138,6 +151,16 @@ def call_api(api_key, model, user_prompt,
                 if return_usage:
                     return content, usage
                 return content
+
+            # 402 余额不足 - 立即停止
+            if resp.status_code == 402:
+                error_msg = resp.text[:200]
+                raise Exception(f"余额不足，请充值后重试: {error_msg}")
+
+            # 401 认证失败 - 立即停止
+            if resp.status_code == 401:
+                error_msg = resp.text[:200]
+                raise Exception(f"API Key 无效: {error_msg}")
 
             if resp.status_code == 429:
                 wait = 10 * (2 ** attempt)
@@ -159,15 +182,11 @@ def call_api(api_key, model, user_prompt,
                 timeout *= 2
                 print(f"    [TIMEOUT] 超时，重试 (timeout={timeout}s)...")
                 continue
-            raise
+            raise Exception(f"请求超时，已重试 {max_retries} 次")
 
         except requests.exceptions.ConnectionError:
-            if attempt < max_retries:
-                wait = 5 * (2 ** attempt)
-                print(f"    [CONN] 连接失败，等待 {wait}s...")
-                time.sleep(wait)
-                continue
-            raise
+            # 连接失败 - 快速失败，不重试（可能是断网）
+            raise Exception(f"连接失败，请检查网络: {str(e)[:100]}")
 
     raise Exception(f"API 调用失败，已重试 {max_retries} 次")
 

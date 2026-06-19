@@ -126,8 +126,12 @@ def phase_trim(config, start, end, workers=None):
 # Phase 3.6: 整章重写（人设崩塌、节奏失控时使用）
 # ============================================================
 
-def phase_rewrite(config, start, end, workers=None, state_mgr=None):
-    """整章重写：保留guide，从头重写正文。并行执行。"""
+def phase_rewrite(config, start, end, workers=None, state_mgr=None, chapters=None):
+    """整章重写：保留guide，从头重写正文。并行执行。
+    
+    Args:
+        chapters: 指定要重写的章节列表，如果为None则重写start-end范围内的所有章节
+    """
     from phases.guides import run_one
 
     chapters_dir = f"{config['rewrites_dir']}/chapters"
@@ -137,10 +141,14 @@ def phase_rewrite(config, start, end, workers=None, state_mgr=None):
     print(f"Phase 3.6: 整章重写 (ch{start}-{end}, {w}w)")
     print("=" * 50)
 
-    todo = []
-    for ch in range(start, end + 1):
-        if Path(chapters_dir, f"ch_{ch:03d}.txt").exists():
-            todo.append(ch)
+    # 如果指定了chapters列表，只重写这些章节
+    if chapters:
+        todo = [ch for ch in chapters if Path(chapters_dir, f"ch_{ch:03d}.txt").exists()]
+    else:
+        todo = []
+        for ch in range(start, end + 1):
+            if Path(chapters_dir, f"ch_{ch:03d}.txt").exists():
+                todo.append(ch)
 
     if not todo:
         print(f"  无章节可重写")
@@ -223,7 +231,9 @@ def phase_polish(config, start, end, workers=None, state_mgr=None):
                 pc = get_prompt_config_with_overrides("polish-chapter.md", config)
                 debug_dump_prompt(config, "polish", ch, "prompts/polish-chapter.md", sys_prompt, prompt, sp_name, pc)
 
-            result = call_llm(config, "polish-chapter", prompt, sys_prompt)
+            # 计算 max_tokens（目标字数 × 1.6，防止超时）
+            max_tokens = int(orig_chars * 1.6) if orig_chars > 100 else None
+            result = call_llm(config, "polish-chapter", prompt, sys_prompt, ch=ch, max_tokens=max_tokens)
 
             new_chars = len(result.replace('\n', '').replace(' ', ''))
             if orig_chars > 0 and abs(new_chars - orig_chars) / orig_chars > 0.15:
@@ -312,7 +322,9 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=N
                 pc = get_prompt_config_with_overrides("expand-chapter.md", config)
                 debug_dump_prompt(config, "expand", ch, "prompts/expand-chapter.md", sys_prompt, prompt, sp_name, pc)
 
-            result = call_llm(config, "expand-chapter", prompt, sys_prompt)
+            # 计算 max_tokens（目标字数 × 1.6，防止超时）
+            max_tokens = int(target_chars * 1.6) if target_chars > 100 else None
+            result = call_llm(config, "expand-chapter", prompt, sys_prompt, ch=ch, max_tokens=max_tokens)
 
             new_chars = len(result.replace('\n', '').replace(' ', ''))
             if new_chars < orig_chars * 1.1:

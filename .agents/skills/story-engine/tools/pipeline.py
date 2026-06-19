@@ -13,12 +13,9 @@ from utils import get_chapters_list
 from logger import setup_pipeline_log, close_pipeline_log
 from phases import (
     phase_prep, phase_open_book,
-    phase_style_extract,
     phase_guides,
     phase_write, phase_write_agent,
-    phase_validate,
     phase_postfix, phase_trim, phase_rewrite, phase_polish, phase_expand,
-    phase_compare,
     phase_unified_check, phase_unified_fix, phase_unified_review_fix,
 )
 import generate_deliverable
@@ -27,9 +24,9 @@ import generate_deliverable
 GOAL_MAP = {
     "import": {"prep"},
     "open": {"prep", "open_book", "extract"},
-    "write": {"style_extract", "guides", "write", "validate", "postfix"},
+    "write": {"guides", "write", "postfix"},
     "review": {"unified_review_fix"},
-    "export": set(),
+    "export": {"export"},
     "trim": {"trim"},
     "rewrite": {"rewrite"},
     "polish": {"polish"},
@@ -42,13 +39,13 @@ _GLOBAL_PHASE_ORDER = [
     "prep", "open_book", "extract",
     "unified_review_fix",
     "deliver",
+    "export",
 ]
 
 # 章级 phase 按此顺序执行（每章顺序跑）
 _CHAPTER_PHASE_ORDER = [
-    "style_extract", "guides", "write",
-    "validate", "trim",
-    "compare", "rewrite", "polish", "expand",
+    "guides", "write",
+    "trim", "rewrite", "polish", "expand",
     "unified_check", "unified_fix",
     "postfix",
 ]
@@ -104,6 +101,32 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
     """构建 {phase_name: handler_fn} 映射。handler 签名 (config, start, end)。"""
     h = {}
 
+    def _import_novel(cfg, s, e):
+        """导入小说。"""
+        from story_import import import_novel
+        source_book = cfg.get("source_book", "")
+        author = cfg.get("author", "")
+        base_dir = cfg.get("base_dir", os.getcwd())
+        
+        # 查找源文件
+        candidates = [
+            f"{base_dir}/projects/{author}/{source_book}/{source_book}.txt",
+            f"{base_dir}/projects/{author}/{source_book}/original.txt",
+        ]
+        
+        txt_path = None
+        for path in candidates:
+            if os.path.exists(path):
+                txt_path = path
+                break
+        
+        if not txt_path:
+            print(f"  [ERROR] 未找到源文件: {candidates}")
+            return
+        
+        output_dir = f"{base_dir}/projects/{author}/{source_book}/_cache"
+        import_novel(txt_path, output_dir)
+
     def _extract(cfg, s, e):
         if cfg.get("prompts_only"):
             print("  [SKIP] extract — prompts_only 模式跳过")
@@ -117,6 +140,7 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
         print(f"  [OK] book_data.json: {len(cv)} 变量")
 
     def _write_handler(cfg, s, e):
+        """写章 + 自动 validate→智能修复 循环。"""
         phase_write(cfg, s, e, cfg.get("workers", 30))
         phase_postfix(cfg, s, e)
 
@@ -135,17 +159,15 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
         phase_guides(cfg, s, e, workers=g_workers, state_mgr=state_mgr)
 
     h["prep"] = lambda cfg, s, e: phase_prep(cfg)
+    h["import"] = _import_novel
     h["open_book"] = lambda cfg, s, e: phase_open_book(cfg, state_mgr=state_mgr)
     h["extract"] = _extract
-    h["style_extract"] = lambda cfg, s, e: phase_style_extract(cfg, s, e)
     h["guides"] = _guide_handler
     if _get_execution_mode(config, "write") == "agent":
         h["write"] = _write_handler_agent
         print(f"  [MODE] write \u2192 agent")
     else:
         h["write"] = _write_handler
-    h["validate"] = phase_validate
-    h["compare"] = phase_compare
     h["trim"] = phase_trim
     h["rewrite"] = phase_rewrite
     h["polish"] = phase_polish
@@ -155,15 +177,166 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
     h["unified_fix"] = phase_unified_fix
     h["unified_review_fix"] = lambda cfg, s, e: phase_unified_review_fix(
         cfg, cfg.get("_chapter_start", s), cfg.get("_chapter_end", e), state_mgr=state_mgr)
+    h["export"] = lambda cfg, s, e: _export_novel(cfg)
     h["deliver"] = lambda cfg, s, e: generate_deliverable.phase_deliver(cfg, s, e, state_mgr=state_mgr)
 
     return h
+
+
+def _export_novel(config):
+    """导出小说为完整 txt 文件。"""
+    from story_export import export_novel
+    rewrites_dir = config.get("rewrites_dir", "")
+    book_name = config.get("book_name", "未命名")
+    output_file = f"{rewrites_dir}/export/{book_name}.txt"
+    export_novel(rewrites_dir, output_file)
+
+
+def _check_plot_confirmation(config):
+    """检查 plot 确认点：open_book 后、guides 前，让用户确认设定。"""
+    rewrites_dir = config.get("rewrites_dir", "")
+    if not rewrites_dir:
+        return True
+    
+    # 检查是否已确认过
+    confirm_file = Path(rewrites_dir) / ".plot_confirmed"
+    if confirm_file.exists():
+        return True
+    
+    # 检查关键文件是否存在
+    concept_path = Path(rewrites_dir) / "concept.md"
+    characters_path = Path(rewrites_dir) / "settings" / "characters.md"
+    plot_path = Path(rewrites_dir) / "settings" / "plot.md"
+    
+    if not concept_path.exists():
+        print(f"  [WARN] concept.md 不存在，跳过确认")
+        return True
+    
+    # 输出确认信息
+    print(f"\n{'=' * 60}")
+    print(f"📋 PLOT 确认点 — 请检查以下文件")
+    print(f"{'=' * 60}")
+    
+    # 显示 concept.md 摘要
+    try:
+        concept_content = concept_path.read_text(encoding="utf-8")
+        # 提取核心信息
+        lines = concept_content.split('\n')
+        print(f"\n📄 concept.md 摘要:")
+        for line in lines[:30]:  # 只显示前30行
+            if line.strip():
+                print(f"  {line}")
+        if len(lines) > 30:
+            print(f"  ... (共 {len(lines)} 行)")
+    except Exception as e:
+        print(f"  [WARN] 读取 concept.md 失败: {e}")
+    
+    # 显示 characters.md 中的角色列表
+    if characters_path.exists():
+        try:
+            chars_content = characters_path.read_text(encoding="utf-8")
+            import re
+            # 提取角色名
+            char_names = re.findall(r'^###?\s*(.+)$', chars_content, re.MULTILINE)
+            char_names = [n.strip() for n in char_names if n.strip() and not n.startswith('#')]
+            if char_names:
+                print(f"\n👥 角色列表:")
+                for name in char_names[:15]:  # 只显示前15个
+                    print(f"  • {name}")
+                if len(char_names) > 15:
+                    print(f"  ... (共 {len(char_names)} 个角色)")
+        except Exception as e:
+            print(f"  [WARN] 读取 characters.md 失败: {e}")
+    
+    # 显示 plot.md 中的章节规划
+    if plot_path.exists():
+        try:
+            plot_content = plot_path.read_text(encoding="utf-8")
+            import re
+            # 提取前10章锚点
+            anchor_match = re.search(r'前10章.*?(?:\n\|.*?\n){1,10}', plot_content, re.DOTALL)
+            if anchor_match:
+                print(f"\n📊 前10章规划:")
+                print(anchor_match.group(0)[:500])
+        except Exception as e:
+            print(f"  [WARN] 读取 plot.md 失败: {e}")
+    
+    print(f"\n{'=' * 60}")
+    print(f"⚠️  请确认以上设定是否正确！")
+    print(f"  确认后将开始生成章纲和正文。")
+    print(f"{'=' * 60}")
+    
+    # 如果配置了 skip_confirm，自动确认
+    if config.get("skip_confirm"):
+        print(f"  [AUTO] skip_confirm=True，自动确认")
+        confirm_file.write_text("confirmed", encoding="utf-8")
+        return True
+    
+    # 等待用户确认
+    while True:
+        try:
+            response = input("\n是否继续？(y=确认/n=取消/q=退出): ").strip().lower()
+            if response in ('y', 'yes', '是', '确认'):
+                confirm_file.write_text("confirmed", encoding="utf-8")
+                print(f"  [OK] 已确认，继续执行")
+                return True
+            elif response in ('n', 'no', '否', '取消'):
+                print(f"  [STOP] 用户取消，请修改设定后重新运行")
+                return False
+            elif response in ('q', 'quit', '退出'):
+                print(f"  [EXIT] 用户退出")
+                sys.exit(0)
+            else:
+                print(f"  请输入 y/n/q")
+        except KeyboardInterrupt:
+            print(f"\n  [EXIT] 用户中断")
+            sys.exit(0)
+
+
+def _check_required_files(config, goal):
+    """检查关键文件是否存在，缺失则报错。"""
+    rewrites_dir = config.get("rewrites_dir", "")
+    if not rewrites_dir:
+        return True
+    
+    rw = Path(rewrites_dir)
+    
+    # guides 或 write 需要的文件
+    if "guides" in goal or "write" in goal:
+        required = [
+            ("concept.md", "开书阶段产物"),
+            ("characters.md", "角色设定"),
+            ("world.md", "世界观设定"),
+        ]
+        for fname, desc in required:
+            fpath = rw / fname
+            if not fpath.exists():
+                # 也检查 settings/ 子目录
+                alt_path = rw / "settings" / fname
+                if not alt_path.exists():
+                    print(f"  [ERROR] {desc}不存在: {fpath}")
+                    print(f"  请先运行开书阶段: --phase open")
+                    return False
+    
+    # write 需要的文件
+    if "write" in goal:
+        guides_dir = rw / "guides"
+        if not guides_dir.exists():
+            print(f"  [ERROR] guides目录不存在: {guides_dir}")
+            print(f"  请先运行Guide阶段: --phase guides")
+            return False
+    
+    return True
 
 
 def _run_phases(handlers, config, goal, start, end):
     """顺序执行所有 phase，先全局后章级。返回 (results, errors)。"""
     results = []
     errors = []
+
+    # ── 前置检查 ──
+    if not _check_required_files(config, goal):
+        return results, ["missing_required_files"]
 
     def _exec(name, s, e):
         h = handlers.get(name)
@@ -191,6 +364,12 @@ def _run_phases(handlers, config, goal, start, end):
         print(f"\n{'=' * 50}\n全局阶段: {', '.join(global_names)}\n{'=' * 50}")
         for name in global_names:
             _exec(name, start, end)
+
+    # ── Plot 确认点 ──（在章级 phase 之前，让用户确认设定）
+    if "guides" in goal or "write" in goal:
+        if not _check_plot_confirmation(config):
+            print(f"\n[STOP] 用户未确认 plot，停止执行")
+            return results, ["plot_not_confirmed"]
 
     # ── 章级 phase ──（每个 phase 并行跑所有章，不是每章串行跑所有 phase）
     chapter_names = [n for n in _CHAPTER_PHASE_ORDER if n in goal]
