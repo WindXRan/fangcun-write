@@ -184,7 +184,7 @@ def call_api(api_key, model, user_prompt,
                 continue
             raise Exception(f"请求超时，已重试 {max_retries} 次")
 
-        except requests.exceptions.ConnectionError:
+        except requests.exceptions.ConnectionError as e:
             # 连接失败 - 快速失败，不重试（可能是断网）
             raise Exception(f"连接失败，请检查网络: {str(e)[:100]}")
 
