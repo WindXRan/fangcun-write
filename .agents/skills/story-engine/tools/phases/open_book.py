@@ -242,29 +242,45 @@ def _split_character_cards(rewrites_dir):
 
 
 def _fix_unrenamed_characters(rewrites_dir):
-    """检查角色卡，自动给未改名的角色换姓（不加前缀，换一个不同的姓）。"""
+    """检查角色卡，自动给未改名的角色生成完整新名。"""
     cards_dir = Path(rewrites_dir) / "characters"
     if not cards_dir.exists():
         return
 
-    SURNAMES = ["陈", "周", "吴", "孙", "赵", "钱", "郑", "冯", "褚", "卫",
-                "沈", "韩", "杨", "朱", "秦", "许", "何", "吕", "施", "张",
-                "孔", "曹", "严", "华", "金", "魏", "陶", "姜", "戚", "谢",
-                "邹", "苏", "潘", "范", "彭", "鲁", "韦", "昌", "马", "苗",
-                "凤", "花", "方", "俞", "任", "袁", "柳", "唐", "罗", "薛"]
+    # 完整名字池（避免AI审美，用接地气的名字）
+    NAME_POOL = [
+        "陈大勇", "周小梅", "吴铁柱", "孙翠花", "赵有才", "钱秀英", "郑国强", "冯玉兰",
+        "卫东来", "沈月娥", "韩志远", "杨桂花", "朱富贵", "秦淑芬", "许金凤", "何建设",
+        "吕国庆", "张春花", "孔令辉", "曹德旺", "严守一", "华明珠", "金刚强", "魏红霞",
+        "陶大伟", "姜小燕", "戚志强", "谢美玲", "邹明亮", "苏小红", "潘巧云", "范进财",
+        "彭大海", "鲁智深", "韦小宝", "昌平生", "马兰花", "苗翠翠", "方志明", "任盈盈",
+        "袁秀秀", "柳如烟", "唐国栋", "罗玉凤", "薛宝钗", "顾惜朝", "宋青书", "林平之",
+        "胡一刀", "丁春秋", "白展堂", "郭芙蓉", "吕轻侯", "佟湘玉", "莫小贝", "燕小六",
+        "邢捕头", "李大嘴", "钱掌柜", "姬无命", "公孙策", "展昭飞", "包拯天", "王朝云",
+        "马汉文", "张龙飞", "赵虎啸", "苏乞儿", "黄飞鸿", "霍元甲", "陈真勇", "叶问天",
+        "方世玉", "洪熙官", "黄麒英", "梁赞伟", "严咏春", "李小龙", "成龙杰", "甄子丹",
+    ]
 
-    # 收集已使用的姓氏
-    used_surnames = set()
+    # 收集已使用的名字
+    used_names = set()
     for f in cards_dir.glob("*.md"):
         text = f.read_text(encoding="utf-8")
         m = re.search(r'【(.+?)】[（(]源文对应', text)
         if m:
-            name = m.group(1).strip()
-            if len(name) >= 2:
-                used_surnames.add(name[0])
+            used_names.add(m.group(1).strip())
+
+    # 收集源文名（避免新名与源文重名）
+    source_names = set()
+    for f in cards_dir.glob("*.md"):
+        text = f.read_text(encoding="utf-8")
+        m = re.search(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', text)
+        if m:
+            for n in re.split(r'[/、]', m.group(2)):
+                source_names.add(n.strip())
 
     # 扫描未改名的角色
     replacements = {}
+    pool_idx = 0
     for f in sorted(cards_dir.glob("*.md")):
         text = f.read_text(encoding="utf-8")
         m = re.search(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', text)
@@ -277,22 +293,28 @@ def _fix_unrenamed_characters(rewrites_dir):
         if len(old_name) < 2:
             continue
 
-        new_surname = None
-        for s in SURNAMES:
-            if s not in used_surnames:
-                new_surname = s
+        # 从名字池中找一个未使用的名字
+        generated = None
+        for _ in range(len(NAME_POOL)):
+            candidate = NAME_POOL[pool_idx % len(NAME_POOL)]
+            pool_idx += 1
+            if candidate not in used_names and candidate not in source_names:
+                generated = candidate
                 break
-        if not new_surname:
-            new_surname = "顾"
 
-        generated = new_surname + old_name[1:]
-        used_surnames.add(new_surname)
+        if not generated:
+            # fallback: 用"顾"+序号
+            generated = f"顾{len(replacements)+1}"
+            while generated in used_names:
+                generated = f"顾{len(replacements)+1}号"
+
+        used_names.add(generated)
         replacements[old_name] = generated
 
     if not replacements:
         return
 
-    print(f"  [FIX] {len(replacements)} 个角色自动换姓:")
+    print(f"  [FIX] {len(replacements)} 个角色自动改名:")
     for old, new in replacements.items():
         print(f"    {old} → {new}")
 
