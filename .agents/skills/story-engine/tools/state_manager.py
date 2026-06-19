@@ -250,6 +250,29 @@ class StateManager:
                 return True
         return False
 
+    # ---- 断点续传（从 drama-engine 迁移）----
+
+    def get_resume_phase(self):
+        """获取断点续传的 phase。返回 None 表示全部完成。"""
+        # 按优先级检查 phase 状态
+        phase_order = ["prep", "open_book", "extract", "guides", "write", "unified_review_fix", "export"]
+        for phase in phase_order:
+            info = self.state.get("phases", {}).get(phase, {})
+            status = info.get("status", "pending")
+            if status in ("pending", "running", "failed"):
+                return phase
+        return None
+
+    def get_phase_progress(self, phase_name):
+        """获取某个 phase 的进度。"""
+        info = self.state.get("phases", {}).get(phase_name, {})
+        return {
+            "status": info.get("status", "pending"),
+            "started": info.get("started"),
+            "finished": info.get("finished"),
+            "error": info.get("error"),
+        }
+
     # ---- 摘要 ----
 
     def summary(self):

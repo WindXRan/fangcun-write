@@ -92,12 +92,22 @@ def phase_style_extract(config, start, end, workers=None):
     if api_key:
         t0 = time.time()
         llm_count = 0
+        llm_errors = []
         with ThreadPoolExecutor(max_workers=min(w, len(todo))) as ex:
             futures = {ex.submit(_llm_one, config, ch, styles_dir): ch for ch in todo}
             for f in as_completed(futures):
-                if f.result():
-                    llm_count += 1
+                ch = futures[f]
+                try:
+                    if f.result():
+                        llm_count += 1
+                    else:
+                        llm_errors.append(ch)
+                except Exception as e:
+                    llm_errors.append(ch)
+                    print(f"  [STYLE] ch{ch:03d} exception: {e}")
         print(f"  Layer2 LLM分析: {llm_count}/{len(todo)} ({time.time() - t0:.1f}s)")
+        if llm_errors:
+            print(f"  [WARN] LLM分析失败: {llm_errors}")
     else:
         print(f"  Layer2 LLM分析: 跳过 (无 API_KEY)")
 
@@ -138,6 +148,7 @@ def _llm_one(config, ch, styles_dir):
 
     text = get_source_text(config, ch)
     if not text:
+        print(f"  [STYLE] ch{ch:03d} err: 源文不存在")
         return False
 
     fp = count_style_fingerprint(text)
@@ -145,6 +156,7 @@ def _llm_one(config, ch, styles_dir):
 
     prompt_template = load_prompt_str("style-analyze.md")
     if not prompt_template:
+        print(f"  [STYLE] ch{ch:03d} err: style-analyze.md 不存在")
         return False
 
     prompt = safe_format(prompt_template, {"chapter_text": text[:3000], "style_anchors": anchors})
@@ -165,7 +177,7 @@ def _llm_one(config, ch, styles_dir):
     try:
         analysis = call_llm(config, "style-analyze", prompt, sys_prompt).strip()
         _write_md(styles_dir, ch, analysis=f"## LLM 风格分析\n{analysis}", src_text=text)
-        print(f"  [STYLE] ch{ch:03d}")
+        print(f"  [STYLE] ch{ch:03d} OK")
         return True
     except Exception as e:
         print(f"  [STYLE] ch{ch:03d} err: {e}")

@@ -300,6 +300,15 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         sp_name = get_system_prompt_name(f"{prompt_type}.md") or "system-generic.md"
         system_prompt = load_system_prompt(sp_name) or ""
 
+    # XML 标签注入（drama-engine 同款）
+    xml_tags = {
+        "plot-guide": "<plotGuide>章纲内容</plotGuide>",
+        "write-chapter": "<chapter>正文内容</chapter>",
+        "style-guide": "<styleGuide>风格指南内容</styleGuide>",
+    }
+    if prompt_type in xml_tags:
+        system_prompt += f"\n\n你必须使用如下XML格式输出全部内容：\n{xml_tags[prompt_type]}"
+
     # 重试修正提示：注入 system_prompt 前端
     if retry_context:
         system_prompt = f"【修正提示】上一次写这章存在以下问题：{retry_context}。这次务必修正。\n\n{system_prompt}"
@@ -377,14 +386,30 @@ def process_plot_guide_output(config, chapter_num, ai_output):
 
 
 def run_one_with_template(config, prompt_type, chapter_num=None, **kwargs):
-    """包装 run_one，自动处理模板合并（用于 plot-guide）。"""
+    """包装 run_one，自动处理模板合并和 XML 提取。"""
     result = run_one(config, prompt_type, chapter_num, **kwargs)
 
-    # prompts_only 跳过模板合并
+    # prompts_only 跳过处理
     if config.get("prompts_only"):
         return result
 
-    # 只对 plot-guide 使用模板合并
+    # XML 标签提取（drama-engine 同款）
+    xml_tag_map = {
+        "plot-guide": "plotGuide",
+        "write-chapter": "chapter",
+        "style-guide": "styleGuide",
+    }
+    if prompt_type in xml_tag_map:
+        tag = xml_tag_map[prompt_type]
+        m = re.search(rf"<{tag}[^>]*>([\s\S]*?)</{tag}>", result)
+        if m:
+            result = m.group(1).strip()
+        else:
+            m_open = re.search(rf"<{tag}[^>]*>", result)
+            if m_open:
+                result = result[m_open.end():].strip()
+
+    # plot-guide 模板合并
     if prompt_type == "plot-guide":
         result = process_plot_guide_output(config, chapter_num, result)
 

@@ -1,4 +1,11 @@
-"""Pipeline：全局 phase 顺序 → 章级 phase 单线程流水线。"""
+"""Pipeline：全局 phase 顺序 → 章级 phase 单线程流水线。
+
+优化项（从 drama-engine 迁移）：
+  - 按阶段配置模型（model_overrides）
+  - 断点续传（state.json）
+  - 增量保存
+  - 输出校验
+"""
 
 import os
 import sys
@@ -12,7 +19,7 @@ from config_validator import validate_config
 from utils import get_chapters_list
 from logger import setup_pipeline_log, close_pipeline_log
 from phases import (
-    phase_prep, phase_open_book,
+    phase_prep, phase_open_book, phase_source_analysis,
     phase_guides,
     phase_write, phase_write_agent,
     phase_postfix, phase_trim, phase_rewrite, phase_polish, phase_expand,
@@ -21,9 +28,29 @@ from phases import (
 import generate_deliverable
 
 
+# ─── 模型解析（从 drama-engine 迁移）──────────────────────────────────────
+
+def get_phase_model(config: dict, phase: str) -> str:
+    """按阶段解析模型。优先级：model_overrides.{phase} > model。"""
+    overrides = config.get("model_overrides", {})
+    if phase in overrides:
+        return overrides[phase]
+    return config.get("model", "mimo-v2.5-pro")
+
+
+def get_phase_api(config: dict, phase: str) -> tuple:
+    """返回 (api_key, api_url, model)。"""
+    from lib.api_client import get_api_key, get_api_url
+    api_key = get_api_key(config)
+    api_url = get_api_url(config)
+    model = get_phase_model(config, phase)
+    return api_key, api_url, model
+
+
 GOAL_MAP = {
     "import": {"prep"},
-    "open": {"prep", "open_book", "extract"},
+    "source": {"source_analysis"},
+    "open": {"prep", "source_analysis", "open_book", "extract"},
     "write": {"guides", "write", "postfix"},
     "review": {"unified_review_fix"},
     "export": {"export"},
@@ -36,7 +63,7 @@ GOAL_MAP = {
 
 # 全局 phase 按此顺序执行（一次跑完）
 _GLOBAL_PHASE_ORDER = [
-    "prep", "open_book", "extract",
+    "prep", "source_analysis", "open_book", "extract",
     "unified_review_fix",
     "deliver",
     "export",
@@ -439,6 +466,20 @@ def main():
     if args.status:
         state_mgr and state_mgr.print_status() or print("未初始化状态管理")
         return
+
+    # --resume: 断点续传（从 drama-engine 迁移）
+    if args.phase == "resume":
+        if state_mgr:
+            resume_phase = state_mgr.get_resume_phase()
+            if resume_phase is None:
+                print("全部完成，无需续传")
+                state_mgr.print_status()
+                return
+            print(f"断点续传: 从 {resume_phase} 阶段继续")
+            args.phase = resume_phase
+        else:
+            print("未初始化状态管理，无法续传")
+            return
 
     if args.health_check or "health-check" in args.phase.split(","):
         from health_check import run_health_check

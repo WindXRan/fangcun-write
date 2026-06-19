@@ -28,7 +28,7 @@ def phase_prep(config):
     cache_dir = Path(base_dir) / "projects" / author / source_book / "_cache"
     os.makedirs(cache_dir, exist_ok=True)
 
-    # 1. 提取原始 TXT 头部（书名/作者/简介/标签/等级体系）
+    # 提取原始 TXT 头部（书名/作者/简介/标签/等级体系）
     header_file = cache_dir / "_header.txt"
     if not header_file.exists():
         raw_txt = _find_source_txt(base_dir, author, source_book)
@@ -50,7 +50,7 @@ def phase_prep(config):
         else:
             print(f"[WARN] 未找到原始 TXT，_header.txt 跳过")
 
-    # 2. 生成章节目录（从已拆分的章节）
+    # 生成章节目录（从已拆分的章节）
     toc_file = cache_dir / "_toc.txt"
     if not toc_file.exists():
         chapters_dirs = [
@@ -97,6 +97,17 @@ def _find_source_txt(base_dir, author, source_book):
     return None
 
 
+def _extract_xml_content(text, tag):
+    """从 LLM 输出中提取 XML 标签内容。drama-engine 同款。"""
+    m = re.search(rf"<{tag}[^>]*>([\s\S]*?)</{tag}>", text)
+    if m:
+        return m.group(1).strip()
+    m_open = re.search(rf"<{tag}[^>]*>", text)
+    if m_open:
+        return text[m_open.end():].strip()
+    return ""
+
+
 # ============================================================
 # 选章 + 全文读取
 # ============================================================
@@ -117,8 +128,8 @@ def _select_chapters(total_ch, max_chapters=20):
     return sorted(selected)
 
 
-def _read_chapters_full_text(config, chapter_numbers, max_chars_per_ch=4000):
-    """全读指定章节的完整文本（截断到 max_chars_per_ch）。"""
+def _read_chapters_full_text(config, chapter_numbers):
+    """全读指定章节的完整文本。"""
     base_dir = config.get("base_dir", os.getcwd())
     author = config.get("author", "")
     source_book = config.get("source_book", "")
@@ -134,11 +145,96 @@ def _read_chapters_full_text(config, chapter_numbers, max_chars_per_ch=4000):
 
         text = file_path.read_text(encoding='utf-8').strip()
         title = text.split('\n')[0].strip()[:60]
-        # 截断到指定长度（保留全文的前 max_chars_per_ch 字）
-        body = text[:max_chars_per_ch] if len(text) > max_chars_per_ch else text
-        blocks.append(f"【第{ch}章】{title}\n{body}")
+        blocks.append(f"【第{ch}章】{title}\n{text}")
 
     return "\n\n---\n\n".join(blocks)
+
+
+def _generate_source_analysis(config):
+    """源书级分析（events + skeleton + adaptation），存入 _cache/。独立于开书，可单独调用。"""
+    from source_analysis import (
+        load_events, extract_events, build_skeleton, build_adaptation,
+        load_skeleton, load_adaptation, get_cache_dir,
+    )
+    from lib.api_client import get_api_key, get_api_url
+
+    cache_dir = get_cache_dir(config)
+    api_key = get_api_key(config)
+    api_url = get_api_url(config)
+    model = config.get("model", "mimo-v2.5-pro")
+
+    if not api_key:
+        print("  [SKIP] 未设置 API_KEY，跳过源书级分析")
+        return
+
+    prompts_dir = Path(__file__).parent.parent.parent / "prompts"
+
+    # Events
+    events = load_events(config)
+    if not events:
+        print("\n  [源书分析] 事件提取...")
+        prompt_file = prompts_dir / "event_extraction.md"
+        if prompt_file.exists():
+            prompt_text = prompt_file.read_text(encoding="utf-8")
+            events = extract_events(config, api_key, api_url, model, prompt_text, workers=5)
+        else:
+            print("  [SKIP] event_extraction.md 不存在")
+    else:
+        print(f"\n  [源书分析] 事件表已有 {len(events)} 章，跳过")
+
+    # Skeleton
+    skeleton = load_skeleton(config)
+    if not skeleton:
+        print("\n  [源书分析] 故事骨架...")
+        prompt_file = prompts_dir / "skeleton.md"
+        if prompt_file.exists():
+            system_prompt = prompt_file.read_text(encoding="utf-8")
+            system_prompt += "\n\n你必须使用如下XML格式写入工作区：\n<storySkeleton>故事骨架内容</storySkeleton>"
+            build_skeleton(config, api_key, api_url, model, system_prompt, config.get("source_book", ""))
+        else:
+            print("  [SKIP] skeleton.md 不存在")
+    else:
+        print(f"\n  [源书分析] 故事骨架已有，跳过")
+
+    # Adaptation
+    adaptation = load_adaptation(config)
+    if not adaptation:
+        print("\n  [源书分析] 改编策略...")
+        prompt_file = prompts_dir / "adaptation.md"
+        if prompt_file.exists():
+            system_prompt = prompt_file.read_text(encoding="utf-8")
+            system_prompt += "\n\n你必须使用如下XML格式写入工作区：\n<adaptationStrategy>改编策略内容</adaptationStrategy>"
+            build_adaptation(config, api_key, api_url, model, system_prompt, config.get("source_book", ""))
+        else:
+            print("  [SKIP] adaptation.md 不存在")
+    else:
+        print(f"\n  [源书分析] 改编策略已有，跳过")
+
+    print(f"\n  [OK] 源书级产物: {cache_dir}")
+
+
+def phase_source_analysis(config, state_mgr=None):
+    """独立 phase：源书级分析。在 open-book 之前调用。"""
+    print("\n" + "=" * 50)
+    print("Phase 0.5: 源书级分析 (events + skeleton + adaptation)")
+    print("=" * 50)
+
+    if state_mgr:
+        if state_mgr.is_phase_done("source-analysis"):
+            print("源书分析已完成，跳过")
+            return True
+        state_mgr.phase_start("source-analysis")
+
+    try:
+        _generate_source_analysis(config)
+        if state_mgr:
+            state_mgr.phase_done("source-analysis")
+        return True
+    except Exception as e:
+        print(f"\n  [FAIL] source-analysis: {e}")
+        if state_mgr:
+            state_mgr.phase_failed("source-analysis", error=str(e))
+        return False
 
 
 # ============================================================
@@ -175,7 +271,7 @@ def phase_open_book(config, state_mgr=None):
     key_chapters = _select_chapters(total_ch, max_chapters=20)
     print(f"  选定 {len(key_chapters)} 章（等距分布）: {key_chapters}")
 
-    source_text = _read_chapters_full_text(config, key_chapters, max_chars_per_ch=4000)
+    source_text = _read_chapters_full_text(config, key_chapters)
     print(f"  全文读取完成: {len(source_text)} 字")
 
     # === Stage 1: 源文分析 ===
@@ -199,6 +295,7 @@ def phase_open_book(config, state_mgr=None):
         )
         sp_name = get_system_prompt_name("open-book.md") or "system-generic.md"
         system_prompt = load_system_prompt(sp_name) or ""
+        system_prompt += "\n\n你必须使用如下XML格式输出全部内容：\n<sourceAnalysis>源文分析内容</sourceAnalysis>"
 
         if config.get("debug"):
             from utils import debug_dump_prompt
@@ -211,59 +308,86 @@ def phase_open_book(config, state_mgr=None):
 
         result_1 = call_llm(config, "open-book", user_prompt_1, system_prompt)
 
-        # 解析输出
-        files_1 = parse_multi_file_output(result_1)
-        source_analysis = ""
-        if files_1:
-            for filepath, content in files_1.items():
-                full_path = rewrites_dir / filepath
-                atomic_write_text(full_path, content)
-                print(f"  [OK] {filepath}")
-                if filepath == "source_analysis.md":
-                    source_analysis = content
-        else:
-            source_analysis = result_1
-            atomic_write_text(rewrites_dir / "source_analysis.md", result_1)
+        # 解析输出（优先 XML 标签，兼容 FILE 分隔符）
+        source_analysis = _extract_xml_content(result_1, "sourceAnalysis")
+        if source_analysis:
+            atomic_write_text(rewrites_dir / "source_analysis.md", source_analysis)
             print("  [OK] source_analysis.md")
+        else:
+            # 兼容旧格式 ===FILE: path===
+            files_1 = parse_multi_file_output(result_1)
+            if files_1:
+                for filepath, content in files_1.items():
+                    full_path = rewrites_dir / filepath
+                    atomic_write_text(full_path, content)
+                    print(f"  [OK] {filepath}")
+                    if filepath == "source_analysis.md":
+                        source_analysis = content
+            else:
+                source_analysis = result_1
+                atomic_write_text(rewrites_dir / "source_analysis.md", result_1)
+                print("  [OK] source_analysis.md")
 
         if not source_analysis:
             print("  [WARN] 源文分析为空，使用默认值")
             source_analysis = "（源文分析失败，请手动填写）"
 
-        # === Stage 2: 生成设定文件 ===
-        print("\n  [STAGE 2] 生成设定文件...")
+        # === Stage 2: 5 个并行 agent 生成设定文件 ===
+        print("\n  [STAGE 2] 生成设定文件（5 并行 agent）...")
         replacements_stage2 = {
             "新书名": book_name if book_name != "auto" else "（待生成）",
             "作者名": config.get("author", ""),
             "源书名": config.get("source_book", ""),
-            "源文分析": source_analysis[:3000],
+            "源文分析": source_analysis,
         }
 
-        user_prompt_2 = load_prompt(
-            f"{prompts_dir}/open-book-settings.md",
-            base_dir, replacements_stage2, mode="api",
-            rewrites_dir=config.get("rewrites_dir"),
-        )
-        sp_name_2 = get_system_prompt_name("open-book-settings.md") or "system-generic.md"
-        system_prompt_2 = load_system_prompt(sp_name_2) or ""
+        # 5 个 agent 定义：(prompt文件, XML标签, 输出文件名)
+        agents = [
+            ("open-book-bookinfo.md",    "bookInfo",    "book_info.md"),
+            ("open-book-characters.md",  "characters",  "characters.md"),
+            ("open-book-world.md",       "world",       "world.md"),
+            ("open-book-plot.md",        "plot",        "plot.md"),
+            ("open-book-concept.md",     "concept",     "concept.md"),
+        ]
 
-        if config.get("debug"):
-            debug_dump_prompt(config, "open-book-settings", 0, f"{prompts_dir}/open-book-settings.md", system_prompt_2, user_prompt_2, sp_name_2, {})
+        def run_setting_agent(prompt_file, xml_tag, output_file):
+            """单个设定 agent：读 prompt → 调 LLM → 提取 XML → 写文件。"""
+            try:
+                user_prompt = load_prompt(
+                    f"{prompts_dir}/{prompt_file}",
+                    base_dir, replacements_stage2, mode="api",
+                    rewrites_dir=config.get("rewrites_dir"),
+                )
+                sp_name = get_system_prompt_name(prompt_file) or "system-generic.md"
+                system_prompt = load_system_prompt(sp_name) or ""
+                system_prompt += f"\n\n你必须使用如下XML格式输出全部内容：\n<{xml_tag}>内容</{xml_tag}>"
 
-        result_2 = call_llm(config, "open-book-settings", user_prompt_2, system_prompt_2)
+                result = call_llm(config, prompt_file.replace(".md", ""), user_prompt, system_prompt)
 
-        files_2 = parse_multi_file_output(result_2)
-        book_info_content = None
-        if files_2:
-            for filepath, content in files_2.items():
-                full_path = rewrites_dir / filepath
+                # 提取 XML 标签内容
+                m = re.search(rf"<{xml_tag}[^>]*>([\s\S]*?)</{xml_tag}>", result)
+                content = m.group(1).strip() if m else result.strip()
+
+                full_path = rewrites_dir / output_file
                 atomic_write_text(full_path, content)
-                print(f"  [OK] {filepath}")
-                if filepath == "book_info.md":
+                print(f"  [OK] {output_file}")
+                return output_file, content
+            except Exception as e:
+                print(f"  [FAIL] {output_file}: {e}")
+                return output_file, None
+
+        # 5 个 agent 并行执行
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        book_info_content = None
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            futures = {
+                executor.submit(run_setting_agent, pf, tag, out): out
+                for pf, tag, out in agents
+            }
+            for future in as_completed(futures):
+                output_file, content = future.result()
+                if output_file == "book_info.md" and content:
                     book_info_content = content
-        else:
-            atomic_write_text(rewrites_dir / "concept.md", result_2)
-            print("  [OK] concept.md")
 
         # === Stage 3: book_name=auto 时从书名候选中选择 ===
         if book_name == "auto" and book_info_content:
