@@ -1,8 +1,8 @@
 ---
-version: 1
+version: 2
 type: user
 phase: open_book_bookinfo
-description: 开书 - 书籍信息生成
+description: 开书 - 书籍信息生成（结构锁定）
 required_vars: ["作者名", "源书名", "新书名", "源文分析"]
 system_prompt: system-generic.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
@@ -35,15 +35,16 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 | 爽点模式 | | |
 | 情感基调 | | |
 
+**赛道必须一致**（题材、频道、爽点模式、情感基调不变，只换时代背景和阶层定位的具体表现）
+
 ### 书名候选（5个）
 
 ### 简介（100-150字）
 - 核心冲突+悬念钩子
-- 体现核心卖点机制
+- 体现与源文同构的核心卖点
 
 ## 自查清单（生成后内部校验，不输出）
 
-- [ ] 赛道表 6 维度已填充
-- [ ] 5 个书名候选已给出，与源文不相似
-- [ ] 简介 100-150 字，含核心冲突+悬念钩子
-- [ ] 无 AI 模板书名（重生之/穿越之/我在XX当/被XX后我）
+- [ ] 赛道表中题材/频道/爽点模式/情感基调与源文一致
+- [ ] 5个书名候选已给出
+- [ ] 简介体现与源文同构的核心冲突

@@ -22,7 +22,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from lib.api_client import call_api, get_api_key, get_api_url
 from source_analysis import extract_events, build_skeleton, build_adaptation
-from file_io import load_events, load_skeleton, load_adaptation, get_cache_dir, get_events_text
+from source_io import load_events, load_skeleton, load_adaptation, get_cache_dir, get_events_text
 
 # prompt 目录
 PROMPTS_DIR = Path(__file__).parent.parent / "prompts"

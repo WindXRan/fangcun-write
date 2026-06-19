@@ -62,7 +62,7 @@ source-engine/
 │   ├── skeleton.md            # 故事骨架 prompt
 │   └── adaptation.md          # 改编策略 prompt
 └── tools/
-    ├── file_io.py             # 源书级 I/O（_cache/ 读写）
+    ├── source_io.py             # 源书级 I/O（_cache/ 读写）
     ├── source_analysis.py     # 生成逻辑（events/skeleton/adaptation）
     └── pipeline.py            # CLI 入口
 ```

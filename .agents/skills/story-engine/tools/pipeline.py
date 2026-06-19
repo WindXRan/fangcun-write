@@ -14,6 +14,11 @@ import time
 import argparse
 from pathlib import Path
 
+# source-engine 共享模块（必须在 file_io 导入之前）
+_SOURCE_ENGINE_TOOLS = str(Path(__file__).parent.parent.parent / "source-engine" / "tools")
+if _SOURCE_ENGINE_TOOLS not in sys.path:
+    sys.path.insert(0, _SOURCE_ENGINE_TOOLS)
+
 from state_manager import StateManager
 from config_validator import validate_config
 from utils import get_chapters_list
