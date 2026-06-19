@@ -257,7 +257,8 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
     # --- 按需修复：字数/风格/内容问题派发 trim/polish/expand/rewrite ---
     # 默认禁用（质量不稳定），需 config.enable_post_retry=true 才开启
     if not write_cfg.get("enable_post_retry"):
-        print(f"  完成: OK={len(ok)} FAIL={len(fail)} 总字数≈{total} | 耗时 {time.time()-t0:.0f}s")
+        total_chars = sum(len(Path(p).read_text(encoding='utf-8')) for p in ok.values()) if ok else 0
+        print(f"  完成: OK={len(ok)} FAIL={len(fail)} 总字数≈{total_chars} | 耗时 {time.time()-t0:.0f}s")
         return ok, fail
 
     for retry_round in range(1, 3):
