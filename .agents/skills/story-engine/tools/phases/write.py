@@ -118,9 +118,14 @@ def _fix_trim(config, ch, chapters_dir):
     from phases.guides import run_one
     ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
     content = ch_file.read_text(encoding='utf-8')
+    current_chars = len(re.sub(r'\s', '', content))
+    target = 2500
+    to_delete = max(0, current_chars - target)
     result = run_one(config, "trim-chapter", ch, extra_replacements={
         "内容": content,
-        "目标字数": "2500",
+        "目标字数": str(target),
+        "当前字数": str(current_chars),
+        "需删减": str(to_delete),
     })
     ch_file.write_text(result, encoding='utf-8')
 
