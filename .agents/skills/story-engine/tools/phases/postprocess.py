@@ -98,7 +98,10 @@ def phase_trim(config, start, end, workers=None):
         try:
             ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
             content = ch_file.read_text(encoding='utf-8')
-            result = run_one(config, "trim-chapter", ch, extra_replacements={"内容": content})
+            result = run_one(config, "trim-chapter", ch, extra_replacements={
+                "内容": content,
+                "目标字数": "2500",
+            })
             # trim 结果已包含完整章头，无需重复追加 title
             result = re.sub(r'【字数验证[^】]*】\s*', '', result.strip())
             ch_file.write_text(result, encoding='utf-8')
@@ -303,10 +306,10 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=N
                 state_mgr.chapter_writing(ch)
             original = ch_file.read_text(encoding='utf-8')
             orig_chars = len(original.replace('\n', '').replace(' ', ''))
-            target_chars = int(orig_chars * target_ratio)
+            target_chars = 2500
 
             r = {"content": original, "orig_chars": orig_chars, "target_chars": target_chars,
-                 "min_chars": int(target_chars * 0.9), "max_chars": int(target_chars * 1.1)}
+                 "min_chars": 2000, "max_chars": 3000}
             validate_prompt_variables("expand-chapter.md", r)
             prompt = safe_format(prompt_template, r)
 

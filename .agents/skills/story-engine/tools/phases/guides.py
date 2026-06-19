@@ -340,13 +340,19 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     }
 
     # 需要源文字数时，脚本计算（API 无法跑 PowerShell）
-    if prompt_type in ("plot-guide", "write-chapter", "trim-chapter") and chapter_num:
+    if prompt_type in ("plot-guide", "write-chapter") and chapter_num:
         src_chars = count_source_chars(config, chapter_num)
         target_chars = src_chars if src_chars > 0 else 1500  # 源文缺失则用默认值
         replacements["源文字数"] = str(src_chars)
         replacements["目标字数"] = str(target_chars)
         replacements["目标字数_min"] = str(int(target_chars * 0.9))
         replacements["目标字数_max"] = str(int(target_chars * 1.1))
+    
+    # trim/expand 目标字数硬编码 2000-3000
+    if prompt_type in ("trim-chapter", "expand-chapter") and chapter_num:
+        replacements.setdefault("目标字数", "2500")
+        replacements.setdefault("目标字数_min", "2000")
+        replacements.setdefault("目标字数_max", "3000")
     
     # plot-guide 注入源文全文（章纲需要完整分析结构和节拍）
     if prompt_type == "plot-guide" and chapter_num:
