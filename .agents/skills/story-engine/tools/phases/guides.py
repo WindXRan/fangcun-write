@@ -62,6 +62,23 @@ def _build_name_map(config):
     return _name_map_cache
 
 
+def _extract_gender_info(chars_text):
+    """从 characters.md 提取角色性别信息。返回格式："{角色名}（{性别}）、..."。"""
+    genders = []
+    for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars_text):
+        name = m.group(1).strip()
+        start = m.end()
+        next_section = chars_text[start:start+500]
+        gender = "未知"
+        if re.search(r'女主|女性|女孩|姑娘|小姐|姐姐|妹妹|女儿|她\b', next_section):
+            gender = "女"
+        elif re.search(r'男主|男性|男孩|小子|先生|哥哥|弟弟|儿子|他\b', next_section):
+            gender = "男"
+        if gender != "未知":
+            genders.append(f"{name}（{gender}）")
+    return "、".join(genders) if genders else ""
+
+
 def _extract_highlights(src_text, max_chars=300):
     """从源文提取情绪密度最高的段落作为参考。"""
     if not src_text:
@@ -265,7 +282,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             else:
                 replacements["世界观"] = "（世界观文件不存在，请参考源文设定）"
 
-    # 写章时注入源文段落锚点
+    # 写章时注入角色信息
     if prompt_type == "write-chapter" and chapter_num:
         # 注入角色名（女主名、男主名等）
         book_data = _get_book_data(config.get("rewrites_dir", ""))
@@ -285,6 +302,13 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
                         m = re.search(rf'{role}[：:]\s*\**(\S+)\**', chars_text)
                         if m:
                             replacements[key] = m.group(1)
+        # 注入角色性别（防止 LLM 搞错性别）
+        chars_path = Path(config["rewrites_dir"]) / "characters.md"
+        if chars_path.exists() and "角色性别" not in replacements:
+            chars_text = chars_path.read_text(encoding="utf-8")
+            gender_info = _extract_gender_info(chars_text)
+            if gender_info:
+                replacements["角色性别"] = gender_info
         # 注入世界观
         if "世界观" not in replacements:
             world_path = Path(config["rewrites_dir"]) / "world.md"
@@ -292,7 +316,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
                 replacements["世界观"] = world_path.read_text(encoding="utf-8")[:2000]
             else:
                 replacements["世界观"] = "（世界观文件不存在，请参考源文设定）"
-        # 源文段落锚点（从指纹提取，做硬约束）
+        # 源文风格指标（段长/对话比/代词密度，供仿写对齐用）
         src_text = get_source_text(config, chapter_num)
         if src_text:
             from lib.text_metrics import count_style_fingerprint
@@ -303,10 +327,15 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             replacements["源文代词密度"] = str(fp.get("pronoun_density", 15))
             replacements["源文标点"] = fp.get("punct_style", "标点克制")
             
-            # 注入文笔指纹（从 _cache/styles/ 读取）
+            # 注入文笔指纹（从 _cache/styles/ 读取，替换源文角色名）
             from file_io import load_style_text
             style_text = load_style_text(config, chapter_num)
             if style_text:
+                # 替换源文角色名（防止 LLM 从文笔指纹中抄回源文名）
+                name_map = _build_name_map(config)
+                if name_map:
+                    for old_name, new_name in name_map.items():
+                        style_text = style_text.replace(old_name, new_name)
                 replacements["文笔指纹"] = style_text
             else:
                 replacements["文笔指纹"] = "（文笔指纹未提取）"
