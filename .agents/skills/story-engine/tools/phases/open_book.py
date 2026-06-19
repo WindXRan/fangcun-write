@@ -152,10 +152,8 @@ def _read_chapters_full_text(config, chapter_numbers):
 
 def _generate_source_analysis(config):
     """源书级分析（events + skeleton + adaptation），存入 _cache/。独立于开书，可单独调用。"""
-    from source_analysis import (
-        load_events, extract_events, build_skeleton, build_adaptation,
-        load_skeleton, load_adaptation, get_cache_dir,
-    )
+    from source_analysis import extract_events, build_skeleton, build_adaptation
+    from file_io import load_events, load_skeleton, load_adaptation, get_cache_dir
     from lib.api_client import get_api_key, get_api_url
 
     cache_dir = get_cache_dir(config)
