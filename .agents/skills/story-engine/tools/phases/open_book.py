@@ -202,6 +202,37 @@ def _extract_book_name_candidates(book_info_content):
     return candidates
 
 
+def _split_character_cards(rewrites_dir):
+    """将 characters.md 拆分为独立角色卡文件 characters/{名}.md。"""
+    chars_path = Path(rewrites_dir) / "settings" / "characters.md"
+    if not chars_path.exists():
+        chars_path = Path(rewrites_dir) / "characters.md"
+    if not chars_path.exists():
+        return
+
+    chars_text = chars_path.read_text(encoding="utf-8")
+    cards_dir = Path(rewrites_dir) / "characters"
+    cards_dir.mkdir(parents=True, exist_ok=True)
+
+    # 按 【角色名】 分割
+    sections = re.split(r'(?=【[^】]+】)', chars_text)
+    count = 0
+    for section in sections:
+        section = section.strip()
+        if not section:
+            continue
+        m = re.match(r'【(.+?)】', section)
+        if not m:
+            continue
+        name = m.group(1).strip()
+        card_path = cards_dir / f"{name}.md"
+        card_path.write_text(section, encoding="utf-8")
+        count += 1
+
+    if count > 0:
+        print(f"  [OK] 拆分 {count} 个角色卡 → {cards_dir}")
+
+
 def _enforce_unique_names(rewrites_dir):
     """强制去重：characters.md 中与源文同名的角色自动改名。"""
     chars_path = Path(rewrites_dir) / "settings" / "characters.md"
@@ -383,8 +414,9 @@ def phase_open_book(config, state_mgr=None):
             if output_file == "book_info.md" and content:
                 book_info_content = content
 
-    # === Stage 2.5: 强制去重角色名 ===
+    # === Stage 2.5: 强制去重角色名 + 拆分角色卡 ===
     _enforce_unique_names(rewrites_dir)
+    _split_character_cards(rewrites_dir)
 
     # === Stage 3: book_name=auto 时从书名候选中选择 ===
     if book_name == "auto" and book_info_content:
