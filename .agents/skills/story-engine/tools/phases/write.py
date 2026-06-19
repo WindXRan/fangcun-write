@@ -118,7 +118,10 @@ def _fix_trim(config, ch, chapters_dir):
     from phases.guides import run_one
     ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
     content = ch_file.read_text(encoding='utf-8')
-    result = run_one(config, "trim-chapter", ch, extra_replacements={"内容": content})
+    result = run_one(config, "trim-chapter", ch, extra_replacements={
+        "内容": content,
+        "目标字数": "2500",
+    })
     ch_file.write_text(result, encoding='utf-8')
 
 
@@ -254,30 +257,26 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
         print(f"  完成: 已生成 {len(ok)} 个 prompt | 耗时 {time.time()-t0:.0f}s")
         return ok, fail
 
-    # --- 按需修复：字数/风格/内容问题派发 trim/polish/expand/rewrite ---
-    # 默认禁用（质量不稳定），需 config.enable_post_retry=true 才开启
-    if not write_cfg.get("enable_post_retry"):
-        total_chars = sum(len(Path(p).read_text(encoding='utf-8')) for p in ok.values()) if ok else 0
-        print(f"  完成: OK={len(ok)} FAIL={len(fail)} 总字数≈{total_chars} | 耗时 {time.time()-t0:.0f}s")
-        return ok, fail
-
+    # --- 按需修复：字数超标时自动 trim（expand/polish 禁用，质量不稳定）---
     for retry_round in range(1, 3):
         retry_list = []
         for ch in range(start, end + 1):
             ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
             if not ch_file.exists():
                 continue
-            action, fix_func = _dispatch_fix(write_cfg, ch, chapters_dir)
-            if fix_func:
-                retry_list.append((ch, action, fix_func))
+            text = ch_file.read_text(encoding='utf-8')
+            body = re.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text)
+            chars = len(body)
+            # 只处理字数超标（>3000），不处理字数不足和风格问题
+            if chars > 3000:
+                retry_list.append((ch, "trim", lambda c=ch: _fix_trim(config, c, chapters_dir)))
 
         if not retry_list:
             break
 
-        print(f"  [RETRY R{retry_round}] {len(retry_list)}章: {[(c, a) for c,a,_ in retry_list]}")
+        print(f"  [RETRY R{retry_round}] {len(retry_list)}章需trim: {[c for c,_,_ in retry_list]}")
         t_retry = time.time()
-        w = write_cfg.get("workers", 10)
-        with ThreadPoolExecutor(max_workers=min(w, len(retry_list) or 1)) as ex:
+        with ThreadPoolExecutor(max_workers=min(5, len(retry_list) or 1)) as ex:
             def _retry_one(ch_action_fix):
                 ch, action, fix_func = ch_action_fix
                 try:
@@ -285,19 +284,14 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
                     return ch, action, None
                 except Exception as e:
                     return ch, action, str(e)
-            futures = {ex.submit(_retry_one, item): item for item in retry_list}
-            for f in as_completed(futures):
-                ch, action, err = f.result()
+
+            for result in ex.map(_retry_one, retry_list):
+                ch, action, err = result
                 if err:
                     print(f"    [FAIL] {action} ch{ch:03d}: {err}")
-                    fail[ch] = action
                 else:
-                    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-                    ok[ch] = str(ch_file)
-                    fail.pop(ch, None)
-                    if state_mgr:
-                        state_mgr.chapter_completed(ch)
-                    print(f"    [{action}] ch{ch:03d}")
+                    print(f"    [{action.upper()}] ch{ch:03d}")
+
         print(f"  重试轮次 {retry_round} 完成 ({time.time()-t_retry:.0f}s)")
 
     total = sum(
