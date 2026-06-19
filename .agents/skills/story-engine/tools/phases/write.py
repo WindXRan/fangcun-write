@@ -19,14 +19,13 @@ def _dispatch_fix(config, ch, chapters_dir):
     text = ch_file.read_text(encoding='utf-8')
     body = re.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text)
     chars = len(body)
-    # 目标字数：从 config 推算
-    project = config.get("project", {})
-    duration = project.get("episode_duration", 2)
-    target = int(duration * 150) if duration else count_source_chars(config, ch)
-    if target > 0:
-        deviation = (chars - target) / target
-    else:
-        deviation = 0.0
+
+    # 硬卡点：2000-3000
+    deviation = 0.0
+    if chars > 3000:
+        deviation = (chars - 2500) / 2500
+    elif chars < 2000:
+        deviation = (chars - 2500) / 2500
 
     src_text = get_source_text(config, ch)
     src_metrics = None
@@ -37,12 +36,12 @@ def _dispatch_fix(config, ch, chapters_dir):
         our_metrics = count_metrics(text)
 
     # 字数超标 → trim
-    if deviation > 0.3:
+    if chars > 3000:
         from phases.guides import run_one
         return "trim", lambda: _fix_trim(config, ch, chapters_dir)
 
     # 字数不足 → expand
-    if target > 0 and deviation < -0.2:
+    if chars < 2000:
         return "expand", lambda: _fix_expand(config, ch, text, chapters_dir)
 
     # AI 路标词超标 → polish
@@ -75,14 +74,6 @@ def _dispatch_fix(config, ch, chapters_dir):
     text = ch_file.read_text(encoding='utf-8')
     body = re.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text)
     chars = len(body)
-    # 目标字数：从 config 推算
-    project = config.get("project", {})
-    duration = project.get("episode_duration", 2)
-    target = int(duration * 150) if duration else count_source_chars(config, ch)
-    if target > 0:
-        deviation = (chars - target) / target
-    else:
-        deviation = 0.0
 
     src_text = get_source_text(config, ch)
     src_metrics = None
@@ -92,13 +83,13 @@ def _dispatch_fix(config, ch, chapters_dir):
         src_metrics = count_metrics(src_text)
         our_metrics = count_metrics(text)
 
-    # 字数超标 >20% → trim（优先级最高，避免 fallback 到 rewrite）
-    if deviation > 0.2:
+    # 字数超标 → trim
+    if chars > 3000:
         from phases.guides import run_one
         return "trim", lambda: _fix_trim(config, ch, chapters_dir)
 
-    # 字数不足 <-20% → expand
-    if target > 0 and deviation < -0.2:
+    # 字数不足 → expand
+    if chars < 2000:
         return "expand", lambda: _fix_expand(config, ch, text, chapters_dir)
 
     # AI 路标词超标 → polish

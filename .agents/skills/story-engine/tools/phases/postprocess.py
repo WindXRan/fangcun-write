@@ -66,20 +66,14 @@ def phase_postfix(config, start, end):
 # ============================================================
 
 def phase_trim(config, start, end, workers=None):
-    """超字数章节自动精简。目标字数从 config.project.episode_duration 推算，或默认 2000-3000。"""
+    """超字数章节自动精简（>3000字触发）。"""
     from phases.guides import run_one
 
     chapters_dir = f"{config['rewrites_dir']}/chapters"
     w = workers or config.get("workers", 30)
 
-    # 目标字数：从 config 推算，或默认 2000-3000
-    project = config.get("project", {})
-    duration = project.get("episode_duration", 2)
-    target_chars = int(duration * 150) if duration else 2500
-    max_chars = int(target_chars * 1.3)
-
     print(f"\n{'=' * 50}")
-    print(f"Phase 3.5: 字数精简 (ch{start}-{end}, 目标≤{max_chars}字)")
+    print(f"Phase 3.5: 字数精简 (ch{start}-{end}, 上限3000字)")
     print("=" * 50)
 
     candidates = []
@@ -91,8 +85,8 @@ def phase_trim(config, start, end, workers=None):
         lines = text.strip().split('\n')
         body = '\n'.join(lines[1:]) if lines and lines[0].startswith('第') else text
         chars = len(re.sub(r'\s', '', body))
-        if chars > max_chars:
-            candidates.append((ch, chars, target_chars, lines[0] if lines and lines[0].startswith('第') else f"第{ch}章"))
+        if chars > 3000:
+            candidates.append((ch, chars, 2500, lines[0] if lines and lines[0].startswith('第') else f"第{ch}章"))
 
     if not candidates:
         print(f"  所有章节在 ±20% 内，无需精简")
@@ -276,18 +270,12 @@ def phase_polish(config, start, end, workers=None, state_mgr=None):
 # ============================================================
 
 def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=None):
-    """扩写：字数不足时自动扩充。目标字数从 config 推算，或默认 2000-3000。"""
+    """扩写：字数不足时自动扩充（<2000字触发）。"""
     chapters_dir = f"{config['rewrites_dir']}/chapters"
     w = workers or config.get("workers", 30)
 
-    # 目标字数
-    project = config.get("project", {})
-    duration = project.get("episode_duration", 2)
-    target_chars = int(duration * 150) if duration else 2500
-    min_chars = int(target_chars * 0.7)
-
     print(f"\n{'=' * 50}")
-    print(f"Phase 3.8: 扩写 (ch{start}-{end}, 目标≥{min_chars}字)")
+    print(f"Phase 3.8: 扩写 (ch{start}-{end}, 下限2000字)")
     print("=" * 50)
 
     todo = []
@@ -297,7 +285,7 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=N
             continue
         original = ch_file.read_text(encoding='utf-8')
         orig_chars = len(original.replace('\n', '').replace(' ', ''))
-        if orig_chars < min_chars:
+        if orig_chars < 2000:
             todo.append(ch)
 
     if not todo:
