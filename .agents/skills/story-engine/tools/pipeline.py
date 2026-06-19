@@ -187,6 +187,7 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
 
     h["prep"] = lambda cfg, s, e: phase_prep(cfg)
     h["import"] = _import_novel
+    h["source_analysis"] = lambda cfg, s, e: phase_source_analysis(cfg, state_mgr=state_mgr)
     h["open_book"] = lambda cfg, s, e: phase_open_book(cfg, state_mgr=state_mgr)
     h["extract"] = _extract
     h["guides"] = _guide_handler
