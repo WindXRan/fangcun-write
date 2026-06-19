@@ -4,6 +4,7 @@ type: user
 phase: open_book_world
 description: 开书 - 世界观设定生成（结构锁定）
 required_vars: ["作者名", "源书名", "新书名", "源文分析"]
+optional_vars: ["角色名映射", "characters.md内容"]
 system_prompt: system-generic.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
@@ -13,6 +14,10 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ## 源文分析（已锁定，不可更改）
 
 {源文分析}
+
+## 角色名映射（必须使用这些名字，不可自编）
+
+{角色名映射}
 
 ## ⚠️ 世界观锁定铁律
 
@@ -39,4 +44,5 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 
 - [ ] 阶层结构与源文同构
 - [ ] 权力关系与源文一致
+- [ ] 角色名全部使用映射表中的名字
 - [ ] 没有引入源文不存在的社会结构

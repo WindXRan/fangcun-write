@@ -163,6 +163,9 @@ def import_novel(txt_path, output_dir=None):
     else:
         output_path = Path(f"projects/{author}/{title}/_cache")
     
+    # 检查是否有重要文件需要保护
+    _check_and_backup_important_files(output_path)
+    
     # 创建目录
     chapters_dir = output_path / "chapters"
     chapters_dir.mkdir(parents=True, exist_ok=True)
@@ -191,21 +194,39 @@ def import_novel(txt_path, output_dir=None):
             with open(fanwai_file, 'w', encoding='utf-8') as f:
                 f.write(clean_html(ch['content']))
     
+    # 尝试从status.json获取元信息（番茄下载器输出）
+    status_info = _load_status_json(txt_path, output_path)
+    
     # 生成 _header.txt
     header_file = output_path / "_header.txt"
     print(f"生成：{header_file}")
     with open(header_file, 'w', encoding='utf-8') as f:
-        f.write(f"书名：{title}\n")
-        f.write(f"作者：{author}\n")
-        f.write(f"状态：未知\n")
-        f.write(f"字数：未知\n")
-        f.write(f"章节：{len(main_chapters)}\n")
-        if fanwai_chapters:
-            f.write(f"番外：{len(fanwai_chapters)}\n")
-        f.write(f"分类：未知\n")
-        f.write(f"标签：未知\n")
-        f.write(f"\n简介：\n\n")
-        f.write(f"========================================\n\n")
+        if status_info:
+            # 使用status.json中的信息
+            f.write(f"书名：{status_info.get('book_name', title)}\n")
+            f.write(f"作者：{status_info.get('author', author)}\n")
+            f.write(f"状态：连载中\n")
+            f.write(f"评分：{status_info.get('score', '未知')}\n")
+            f.write(f"字数：{status_info.get('word_count', '未知')}\n")
+            f.write(f"章节：{len(main_chapters)}\n")
+            if fanwai_chapters:
+                f.write(f"番外：{len(fanwai_chapters)}\n")
+            f.write(f"分类：{status_info.get('category', '未知')}\n")
+            f.write(f"标签：{status_info.get('tags', '未知')}\n")
+            f.write(f"\n简介：\n{status_info.get('description', '未知')}\n")
+        else:
+            # 使用解析的信息
+            f.write(f"书名：{title}\n")
+            f.write(f"作者：{author}\n")
+            f.write(f"状态：未知\n")
+            f.write(f"字数：未知\n")
+            f.write(f"章节：{len(main_chapters)}\n")
+            if fanwai_chapters:
+                f.write(f"番外：{len(fanwai_chapters)}\n")
+            f.write(f"分类：未知\n")
+            f.write(f"标签：未知\n")
+            f.write(f"\n简介：未知\n")
+        f.write(f"\n========================================\n\n")
         f.write(f"【第一卷】\n")
     
     # 生成 _toc.txt
@@ -233,6 +254,56 @@ def import_novel(txt_path, output_dir=None):
         print(f"  番外章节：{len(fanwai_chapters)} 章")
     
     return True
+
+
+def _load_status_json(txt_path, output_path):
+    """尝试加载status.json（番茄下载器输出）。"""
+    # 可能的位置：同目录下、父目录下、output_path下
+    candidates = [
+        txt_path.parent / "status.json",
+        txt_path.parent.parent / "status.json",
+        output_path.parent / "status.json",
+    ]
+    
+    for path in candidates:
+        if path.exists():
+            try:
+                with open(path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                if data.get('book_name') or data.get('author'):
+                    print(f"  从 status.json 读取元信息: {path}")
+                    return data
+            except Exception:
+                pass
+    
+    return None
+
+
+def _check_and_backup_important_files(output_path):
+    """检查并备份重要文件，防止导入时丢失。"""
+    import shutil
+    
+    important_files = [
+        "events.json",
+        "story_skeleton.md",
+        "adaptation_strategy.md",
+        "book_data.json",
+    ]
+    
+    backup_dir = output_path / "_backup"
+    has_important = False
+    
+    for fname in important_files:
+        file_path = output_path / fname
+        if file_path.exists():
+            if not has_important:
+                backup_dir.mkdir(parents=True, exist_ok=True)
+                has_important = True
+                print(f"  [备份] 检测到重要文件，备份到 {backup_dir}/")
+            
+            backup_path = backup_dir / fname
+            shutil.copy2(file_path, backup_path)
+            print(f"    - {fname}")
 
 
 def main():

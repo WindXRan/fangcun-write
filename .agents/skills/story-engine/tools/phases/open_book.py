@@ -498,11 +498,61 @@ def phase_open_book(config, state_mgr=None):
         "源文角色清单": "、".join(sorted(all_source_chars)),
     }
 
-    print(f"\n  [STAGE 2] 生成设定文件（5 并行 agent）...")
+    print(f"\n  [STAGE 2] 生成设定文件...")
+
+    # === Stage 2a: 先生成 characters.md（角色名映射表）===
+    print(f"  [STAGE 2a] 生成角色设定...")
+    try:
+        user_prompt = load_prompt(
+            f"{prompts_dir}/open-book-characters.md",
+            base_dir, replacements_stage2, mode="api",
+            rewrites_dir=config.get("rewrites_dir"),
+        )
+        sp_name = get_system_prompt_name("open-book-characters.md") or "system-generic.md"
+        system_prompt = load_system_prompt(sp_name) or ""
+        system_prompt += "\n\n你必须使用如下XML格式输出全部内容：\n<characters>内容</characters>"
+        
+        result = call_llm(config, "open-book-characters", user_prompt, system_prompt)
+        m = re.search(r"<characters[^>]*>([\s\S]*?)</characters>", result)
+        content = m.group(1).strip() if m else result.strip()
+        atomic_write_text(rewrites_dir / "characters.md", content)
+        print(f"  [OK] characters.md")
+    except Exception as e:
+        print(f"  [FAIL] characters.md: {e}")
+        content = None
+
+    # === Stage 2b: 生成其他文件，注入角色名映射 ===
+    print(f"  [STAGE 2b] 生成其他设定文件（4 并行 agent）...")
+
+    # 从 characters.md 提取角色名映射，注入到其他 prompt
+    characters_content = ""
+    chars_path = rewrites_dir / "characters.md"
+    if chars_path.exists():
+        characters_content = chars_path.read_text(encoding="utf-8")
+    
+    # 提取角色名映射表
+    char_mapping = {}
+    for m in re.finditer(r'\|\s*(\S+)\s*\|\s*(\S+)\s*\|\s*[男女]\s*\|', characters_content):
+        old_name = m.group(1).strip()
+        new_name = m.group(2).strip()
+        if old_name != "源文名" and new_name != "新名":  # 跳过表头
+            char_mapping[old_name] = new_name
+    
+    # 构建角色名注入文本
+    char_names_text = ""
+    if char_mapping:
+        char_names_lines = ["## 角色名映射（必须使用这些名字，不可自编）"]
+        for old, new in char_mapping.items():
+            char_names_lines.append(f"- {old} → {new}")
+        char_names_text = "\n".join(char_names_lines)
+    
+    # 更新 replacements，注入角色名
+    replacements_stage2_with_chars = replacements_stage2.copy()
+    replacements_stage2_with_chars["角色名映射"] = char_names_text
+    replacements_stage2_with_chars["characters.md内容"] = characters_content[:3000]
 
     agents = [
         ("open-book-bookinfo.md",    "bookInfo",    "book_info.md"),
-        ("open-book-characters.md",  "characters",  "characters.md"),
         ("open-book-world.md",       "world",       "world.md"),
         ("open-book-plot.md",        "plot",        "plot.md"),
         ("open-book-concept.md",     "concept",     "concept.md"),
@@ -512,7 +562,7 @@ def phase_open_book(config, state_mgr=None):
         try:
             user_prompt = load_prompt(
                 f"{prompts_dir}/{prompt_file}",
-                base_dir, replacements_stage2, mode="api",
+                base_dir, replacements_stage2_with_chars, mode="api",
                 rewrites_dir=config.get("rewrites_dir"),
             )
             sp_name = get_system_prompt_name(prompt_file) or "system-generic.md"
@@ -534,7 +584,7 @@ def phase_open_book(config, state_mgr=None):
 
     from concurrent.futures import ThreadPoolExecutor, as_completed
     book_info_content = None
-    with ThreadPoolExecutor(max_workers=5) as executor:
+    with ThreadPoolExecutor(max_workers=4) as executor:
         futures = {
             executor.submit(run_setting_agent, pf, tag, out): out
             for pf, tag, out in agents

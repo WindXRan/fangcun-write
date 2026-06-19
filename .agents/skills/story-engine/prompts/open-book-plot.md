@@ -4,6 +4,7 @@ type: user
 phase: open_book_plot
 description: 开书 - 剧情设定生成（结构锁定）
 required_vars: ["作者名", "源书名", "新书名", "源文分析"]
+optional_vars: ["角色名映射", "characters.md内容"]
 system_prompt: system-generic.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
@@ -13,6 +14,10 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ## 源文分析（已锁定，不可更改）
 
 {源文分析}
+
+## 角色名映射（必须使用这些名字，不可自编）
+
+{角色名映射}
 
 ## ⚠️ 结构锁定铁律（最高优先级）
 
@@ -45,6 +50,7 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 
 ### 3. 人物关系图
 **角色数量、关系结构必须与源文一致。** 只换名字和设定，不换功能位。
+**必须使用上面的角色名映射表中的名字，不可自编。**
 
 ### 4. 前10章锚点
 **每章的核心事件必须与源文对应章同功能。** 格式：
@@ -60,5 +66,6 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 - [ ] 前10章锚点每章都能指出源文对应章
 - [ ] 关键转折点位置与源文对齐
 - [ ] 角色数量和关系结构与源文一致
+- [ ] 角色名全部使用映射表中的名字，没有自编
 - [ ] 没有引入源文不存在的主线冲突
 - [ ] 没有跳过源文的关键剧情节点
