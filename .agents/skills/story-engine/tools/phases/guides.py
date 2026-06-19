@@ -34,6 +34,34 @@ def _get_book_data(rewrites_dir):
     return _book_data_cache
 
 
+# 模块级缓存：角色名映射
+_name_map_cache = None
+
+
+def _build_name_map(config):
+    """从 characters.md 构建源文名→新名映射（模块级缓存）。"""
+    global _name_map_cache
+    if _name_map_cache is not None:
+        return _name_map_cache
+
+    _name_map_cache = {}
+    chars_path = Path(config.get("rewrites_dir", "")) / "settings" / "characters.md"
+    if not chars_path.exists():
+        chars_path = Path(config.get("rewrites_dir", "")) / "characters.md"
+    if not chars_path.exists():
+        return _name_map_cache
+
+    chars_text = chars_path.read_text(encoding="utf-8")
+    # 匹配 【新名】（源文对应：旧名）
+    for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars_text):
+        new_name = m.group(1).strip()
+        old_name = m.group(2).strip()
+        if old_name != new_name and old_name and new_name:
+            _name_map_cache[old_name] = new_name
+
+    return _name_map_cache
+
+
 def _extract_highlights(src_text, max_chars=300):
     """从源文提取情绪密度最高的段落作为参考。"""
     if not src_text:
@@ -204,6 +232,11 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     if prompt_type == "plot-guide" and chapter_num:
         source_text = get_source_text(config, chapter_num)
         if source_text:
+            # 替换源文角色名为新角色名（防止 LLM 照搬源文名字）
+            name_map = _build_name_map(config)
+            if name_map:
+                for old_name, new_name in name_map.items():
+                    source_text = source_text.replace(old_name, new_name)
             replacements["源文全文"] = source_text
         else:
             replacements["源文全文"] = "（源文读取失败）"
