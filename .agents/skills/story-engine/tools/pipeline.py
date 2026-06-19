@@ -75,9 +75,9 @@ _GLOBAL_PHASE_ORDER = [
 ]
 
 # 章级 phase 按此顺序执行（每章顺序跑）
+# 注意：trim/expand/polish 不自动运行（质量不稳定），需手动 --phase trim 等
 _CHAPTER_PHASE_ORDER = [
     "guides", "write",
-    "trim", "rewrite", "polish", "expand",
     "unified_check", "unified_fix",
     "postfix",
 ]
