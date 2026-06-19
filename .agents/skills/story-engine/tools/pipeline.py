@@ -30,6 +30,7 @@ from phases import (
     phase_postfix, phase_trim, phase_rewrite, phase_polish, phase_expand,
     phase_unified_check, phase_unified_fix, phase_unified_review_fix,
 )
+from phases.compare import phase_compare
 import generate_deliverable
 
 
@@ -206,6 +207,7 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
     h["polish"] = phase_polish
     h["expand"] = phase_expand
     h["postfix"] = phase_postfix
+    h["compare"] = lambda cfg, s, e: phase_compare(cfg, s, e)
     h["unified_check"] = phase_unified_check
     h["unified_fix"] = phase_unified_fix
     h["unified_review_fix"] = lambda cfg, s, e: phase_unified_review_fix(
