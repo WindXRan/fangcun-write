@@ -225,9 +225,17 @@ def _split_character_cards(rewrites_dir):
         if not m:
             continue
         name = m.group(1).strip()
-        card_path = cards_dir / f"{name}.md"
-        card_path.write_text(section, encoding="utf-8")
-        count += 1
+        # 处理合并条目：【林建华 / 林远征 / 林兴源】→ 拆成多个文件
+        names = re.split(r'\s*/\s*', name)
+        for n in names:
+            n = n.strip()
+            if not n:
+                continue
+            # 清理文件名中的非法字符
+            safe_name = re.sub(r'[\\/:*?"<>|]', '_', n)
+            card_path = cards_dir / f"{safe_name}.md"
+            card_path.write_text(section, encoding="utf-8")
+            count += 1
 
     if count > 0:
         print(f"  [OK] 拆分 {count} 个角色卡 → {cards_dir}")
@@ -414,8 +422,7 @@ def phase_open_book(config, state_mgr=None):
             if output_file == "book_info.md" and content:
                 book_info_content = content
 
-    # === Stage 2.5: 强制去重角色名 + 拆分角色卡 ===
-    _enforce_unique_names(rewrites_dir)
+    # === Stage 2.5: 拆分角色卡 ===
     _split_character_cards(rewrites_dir)
 
     # === Stage 3: book_name=auto 时从书名候选中选择 ===
