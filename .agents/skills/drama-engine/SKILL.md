@@ -14,20 +14,24 @@ description: |
 ## 核心流程
 
 ```
-小说原文 → 事件提取 → 故事骨架 → 改编策略 → 剧本编写 → 质量审核 → 导出
-  (Phase)    event     skeleton   adaptation   script     review    export
+小说原文 → 事件提取 → 故事骨架 → 审核骨架 → 改编策略 → 审核策略 → 剧本编写 → 导出
+  (Phase)    event     skeleton   review    adaptation   review    script    export
 ```
+
+审核前置：骨架/策略产出后立即审核，不通过则修正后再进入下一阶段。避免基于错误骨架写剧本。
 
 ## 用法
 
 ```bash
-# 完整流程
+# 完整流程（骨架→审核→改编→审核→剧本→导出）
 python .agents/skills/drama-engine/tools/pipeline.py --config configs/drama_xxx.json
 
 # 分步执行
 python .agents/skills/drama-engine/tools/pipeline.py --config configs/drama_xxx.json --phase event       # 事件提取
 python .agents/skills/drama-engine/tools/pipeline.py --config configs/drama_xxx.json --phase skeleton    # 故事骨架
+python .agents/skills/drama-engine/tools/pipeline.py --config configs/drama_xxx.json --phase review --review-target skeleton  # 审核骨架
 python .agents/skills/drama-engine/tools/pipeline.py --config configs/drama_xxx.json --phase adaptation  # 改编策略
+python .agents/skills/drama-engine/tools/pipeline.py --config configs/drama_xxx.json --phase review --review-target adaptation  # 审核策略
 python .agents/skills/drama-engine/tools/pipeline.py --config configs/drama_xxx.json --phase script --start 1 --end 10  # 剧本编写
 python .agents/skills/drama-engine/tools/pipeline.py --config configs/drama_xxx.json --phase review      # 质量审核
 python .agents/skills/drama-engine/tools/pipeline.py --config configs/drama_xxx.json --phase export      # 合并导出

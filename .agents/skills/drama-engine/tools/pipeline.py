@@ -28,12 +28,12 @@ import argparse
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# 添加 story-engine tools 到 path 以复用 api_client 和共享模块
-_story_engine_tools = str(Path(__file__).parent.parent.parent / "story-engine" / "tools")
-sys.path.insert(0, _story_engine_tools)
+# 添加 source-engine tools 到 path 以复用共享模块
+_source_engine_tools = str(Path(__file__).parent.parent.parent / "source-engine" / "tools")
+sys.path.insert(0, _source_engine_tools)
 from lib.api_client import call_api, get_api_key, get_api_url
 from source_analysis import (
-    load_events, save_events, get_events_text, get_novel_chapters, get_novel_text as get_novel_text_sa,
+    load_events, save_events, get_events_text, get_source_chapters, get_source_text,
     load_skeleton, save_skeleton, load_adaptation, save_adaptation,
     extract_events, build_skeleton, build_adaptation,
     get_cache_dir,
@@ -498,13 +498,14 @@ def _run_phase(state, phase_name, fn):
 
 
 def _run_all(config, state, args):
-    """全流程执行，每步自动记录状态。"""
+    """全流程执行：骨架→审核→改编→审核→剧本→导出。审核前置，避免基于错误骨架写剧本。"""
     phases = [
-        ("event",      lambda: phase_event(config, args.workers)),
-        ("skeleton",   lambda: phase_skeleton(config, args.dry_run)),
-        ("adaptation", lambda: phase_adaptation(config, args.dry_run)),
-        ("script",     lambda: phase_script(config, args.start, args.end, args.dry_run, state)),
-        ("review",     lambda: phase_review(config, "all")),
+        ("event",           lambda: phase_event(config, args.workers)),
+        ("skeleton",        lambda: phase_skeleton(config, args.dry_run)),
+        ("skeleton_review", lambda: phase_review(config, "skeleton")),
+        ("adaptation",      lambda: phase_adaptation(config, args.dry_run)),
+        ("adaptation_review", lambda: phase_review(config, "adaptation")),
+        ("script",          lambda: phase_script(config, args.start, args.end, args.dry_run, state)),
     ]
     for name, fn in phases:
         if not _run_phase(state, name, fn):

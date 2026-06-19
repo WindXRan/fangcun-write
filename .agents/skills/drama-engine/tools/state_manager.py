@@ -31,7 +31,7 @@ class StateManager:
     }
     """
 
-    PHASE_ORDER = ["event", "skeleton", "adaptation", "script", "review", "export"]
+    PHASE_ORDER = ["event", "skeleton", "skeleton_review", "adaptation", "adaptation_review", "script", "export"]
 
     def __init__(self, output_dir):
         self.state_path = Path(output_dir) / "state.json"
