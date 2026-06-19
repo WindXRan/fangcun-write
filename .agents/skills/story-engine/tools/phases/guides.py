@@ -300,10 +300,9 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         sp_name = get_system_prompt_name(f"{prompt_type}.md") or "system-generic.md"
         system_prompt = load_system_prompt(sp_name) or ""
 
-    # XML 标签注入（drama-engine 同款）
+    # XML 标签注入（drama-engine 同款，write-chapter 用 markdown+△ 格式不注入）
     xml_tags = {
         "plot-guide": "<plotGuide>章纲内容</plotGuide>",
-        "write-chapter": "<chapter>正文内容</chapter>",
         "style-guide": "<styleGuide>风格指南内容</styleGuide>",
     }
     if prompt_type in xml_tags:
