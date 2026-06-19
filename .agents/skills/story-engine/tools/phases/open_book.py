@@ -97,55 +97,9 @@ def _find_source_txt(base_dir, author, source_book):
     return None
 
 
-def _extract_xml_content(text, tag):
-    """从 LLM 输出中提取 XML 标签内容。drama-engine 同款。"""
-    m = re.search(rf"<{tag}[^>]*>([\s\S]*?)</{tag}>", text)
-    if m:
-        return m.group(1).strip()
-    m_open = re.search(rf"<{tag}[^>]*>", text)
-    if m_open:
-        return text[m_open.end():].strip()
-    return ""
-
-
 # ============================================================
-# 选章 + 全文读取
+# 源书级分析（独立 phase，调用 source-engine）
 # ============================================================
-
-def _select_chapters(total_ch, max_chapters=20):
-    """简单等距选章：首章 + 末章 + 均匀分布。不依赖标题关键词。"""
-    if total_ch <= max_chapters:
-        return list(range(1, total_ch + 1))
-
-    # 首章 + 末章 + 中间均匀分布
-    selected = {1, total_ch}
-    step = max(1, (total_ch - 2) // (max_chapters - 2))
-    for i in range(2, total_ch, step):
-        selected.add(i)
-        if len(selected) >= max_chapters:
-            break
-
-    return sorted(selected)
-
-
-def _read_chapters_full_text(config, chapter_numbers):
-    """全读指定章节的完整文本。"""
-    base_dir = config.get("base_dir", os.getcwd())
-    author = config.get("author", "")
-    source_book = config.get("source_book", "")
-    chapters_dir = Path(base_dir) / "projects" / author / source_book / "_cache" / "chapters"
-
-    blocks = []
-    for ch in chapter_numbers:
-        file_path = chapters_dir / f"第{ch:03d}章.txt"
-        if not file_path.exists():
-            file_path = chapters_dir / f"第{ch}章.txt"
-        if not file_path.exists():
-            continue
-
-        text = file_path.read_text(encoding='utf-8').strip()
-        title = text.split('\n')[0].strip()[:60]
-        blocks.append(f"【第{ch}章】{title}\n{text}")
 
     return "\n\n---\n\n".join(blocks)
 
@@ -315,9 +269,9 @@ def _enforce_unique_names(rewrites_dir):
 
 
 def phase_open_book(config, state_mgr=None):
-    """开书：全读关键章节全文 → 源文分析 → 生成设定文件。"""
+    """开书：从 source-engine 产物生成设定文件。不重新读源文。"""
     print("\n" + "=" * 50)
-    print("Phase 1: 开书 (全读全文 → 源文分析 → 设定生成)")
+    print("Phase 1: 开书 (source-engine 产物 → 设定生成)")
     print("=" * 50)
 
     if state_mgr:
@@ -330,171 +284,144 @@ def phase_open_book(config, state_mgr=None):
     rewrites_dir = Path(config.get("rewrites_dir", ""))
     rewrites_dir.mkdir(parents=True, exist_ok=True)
 
-    # === 选章 + 全文读取 ===
-    total_ch = get_total_chapters(config)
-    key_chapters = _select_chapters(total_ch, max_chapters=20)
-    print(f"  选定 {len(key_chapters)} 章（等距分布）: {key_chapters}")
+    # === 读取 source-engine 产物（不重新读源文）===
+    from file_io import load_events, load_skeleton, load_adaptation, get_events_text
 
-    source_text = _read_chapters_full_text(config, key_chapters)
-    print(f"  全文读取完成: {len(source_text)} 字")
+    events = load_events(config)
+    skeleton = load_skeleton(config)
+    adaptation = load_adaptation(config)
+    events_text = get_events_text(config)
 
-    # === Stage 1: 源文分析 ===
+    if not events:
+        print("  [FAIL] events.json 不存在，请先运行 source-engine: --phase event")
+        if state_mgr:
+            state_mgr.phase_failed("open-book", error="events.json 不存在")
+        return False
+
+    # 从事件表提取角色列表（源文所有具名角色）
+    all_source_chars = set()
+    for e in events:
+        event_text = e.get("event", "")
+        parts = event_text.split("|")
+        if len(parts) >= 3:
+            for c in re.split(r"[、，,]", parts[2].strip()):
+                c = c.strip()
+                if c:
+                    all_source_chars.add(c)
+
+    # 构建 source_analysis.md（从已有产物组装，不调 LLM）
+    source_analysis = f"""# 源文分析
+
+## 事件表（{len(events)}章）
+{events_text}
+
+## 故事骨架
+{skeleton if skeleton else "（未生成，请先运行 source-engine: --phase skeleton）"}
+
+## 改编策略
+{adaptation if adaptation else "（未生成，请先运行 source-engine: --phase adaptation）"}
+
+## 源文角色清单
+{"、".join(sorted(all_source_chars))}
+"""
+
+    atomic_write_text(rewrites_dir / "source_analysis.md", source_analysis)
+    print(f"  [OK] source_analysis.md（从 source-engine 产物组装，{len(source_analysis)}字）")
+
+    # === Stage 2: 5 个并行 agent 生成设定文件 ===
     book_name = config.get("book_name", "auto")
     prompts_dir = config.get("prompts_dir", str(Path(__file__).parent.parent.parent / "prompts"))
 
-    replacements_stage1 = {
+    replacements_stage2 = {
         "新书名": book_name if book_name != "auto" else "（待生成）",
         "作者名": config.get("author", ""),
         "源书名": config.get("source_book", ""),
-        "总章数": str(total_ch),
-        "源文样本": source_text,
+        "源文分析": source_analysis[:6000],
     }
 
-    try:
-        print("\n  [STAGE 1] 源文分析...")
-        user_prompt_1 = load_prompt(
-            f"{prompts_dir}/open-book.md",
-            base_dir, replacements_stage1, mode="api",
-            rewrites_dir=config.get("rewrites_dir"),
-        )
-        sp_name = get_system_prompt_name("open-book.md") or "system-generic.md"
-        system_prompt = load_system_prompt(sp_name) or ""
-        system_prompt += "\n\n你必须使用如下XML格式输出全部内容：\n<sourceAnalysis>源文分析内容</sourceAnalysis>"
+    print(f"\n  [STAGE 2] 生成设定文件（5 并行 agent）...")
 
-        if config.get("debug"):
-            from utils import debug_dump_prompt
-            debug_dump_prompt(config, "open-book", 0, f"{prompts_dir}/open-book.md", system_prompt, user_prompt_1, sp_name, {})
-        if config.get("prompts_only"):
-            print("  [PROMPT] open-book — prompt 已保存至 _debug/")
-            if state_mgr:
-                state_mgr.phase_done("open-book")
-            return True
+    agents = [
+        ("open-book-bookinfo.md",    "bookInfo",    "book_info.md"),
+        ("open-book-characters.md",  "characters",  "characters.md"),
+        ("open-book-world.md",       "world",       "world.md"),
+        ("open-book-plot.md",        "plot",        "plot.md"),
+        ("open-book-concept.md",     "concept",     "concept.md"),
+    ]
 
-        result_1 = call_llm(config, "open-book", user_prompt_1, system_prompt)
+    def run_setting_agent(prompt_file, xml_tag, output_file):
+        try:
+            user_prompt = load_prompt(
+                f"{prompts_dir}/{prompt_file}",
+                base_dir, replacements_stage2, mode="api",
+                rewrites_dir=config.get("rewrites_dir"),
+            )
+            sp_name = get_system_prompt_name(prompt_file) or "system-generic.md"
+            system_prompt = load_system_prompt(sp_name) or ""
+            system_prompt += f"\n\n你必须使用如下XML格式输出全部内容：\n<{xml_tag}>内容</{xml_tag}>"
 
-        # 解析输出（优先 XML 标签，兼容 FILE 分隔符）
-        source_analysis = _extract_xml_content(result_1, "sourceAnalysis")
-        if source_analysis:
-            atomic_write_text(rewrites_dir / "source_analysis.md", source_analysis)
-            print("  [OK] source_analysis.md")
-        else:
-            # 兼容旧格式 ===FILE: path===
-            files_1 = parse_multi_file_output(result_1)
-            if files_1:
-                for filepath, content in files_1.items():
-                    full_path = rewrites_dir / filepath
-                    atomic_write_text(full_path, content)
-                    print(f"  [OK] {filepath}")
-                    if filepath == "source_analysis.md":
-                        source_analysis = content
-            else:
-                source_analysis = result_1
-                atomic_write_text(rewrites_dir / "source_analysis.md", result_1)
-                print("  [OK] source_analysis.md")
+            result = call_llm(config, prompt_file.replace(".md", ""), user_prompt, system_prompt)
 
-        if not source_analysis:
-            print("  [WARN] 源文分析为空，使用默认值")
-            source_analysis = "（源文分析失败，请手动填写）"
+            m = re.search(rf"<{xml_tag}[^>]*>([\s\S]*?)</{xml_tag}>", result)
+            content = m.group(1).strip() if m else result.strip()
 
-        # === Stage 2: 5 个并行 agent 生成设定文件 ===
-        print("\n  [STAGE 2] 生成设定文件（5 并行 agent）...")
-        replacements_stage2 = {
-            "新书名": book_name if book_name != "auto" else "（待生成）",
-            "作者名": config.get("author", ""),
-            "源书名": config.get("source_book", ""),
-            "源文分析": source_analysis,
+            full_path = rewrites_dir / output_file
+            atomic_write_text(full_path, content)
+            print(f"  [OK] {output_file}")
+            return output_file, content
+        except Exception as e:
+            print(f"  [FAIL] {output_file}: {e}")
+            return output_file, None
+
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    book_info_content = None
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        futures = {
+            executor.submit(run_setting_agent, pf, tag, out): out
+            for pf, tag, out in agents
         }
+        for future in as_completed(futures):
+            output_file, content = future.result()
+            if output_file == "book_info.md" and content:
+                book_info_content = content
 
-        # 5 个 agent 定义：(prompt文件, XML标签, 输出文件名)
-        agents = [
-            ("open-book-bookinfo.md",    "bookInfo",    "book_info.md"),
-            ("open-book-characters.md",  "characters",  "characters.md"),
-            ("open-book-world.md",       "world",       "world.md"),
-            ("open-book-plot.md",        "plot",        "plot.md"),
-            ("open-book-concept.md",     "concept",     "concept.md"),
-        ]
+    # === Stage 2.5: 强制去重角色名 ===
+    _enforce_unique_names(rewrites_dir)
 
-        def run_setting_agent(prompt_file, xml_tag, output_file):
-            """单个设定 agent：读 prompt → 调 LLM → 提取 XML → 写文件。"""
-            try:
-                user_prompt = load_prompt(
-                    f"{prompts_dir}/{prompt_file}",
-                    base_dir, replacements_stage2, mode="api",
-                    rewrites_dir=config.get("rewrites_dir"),
-                )
-                sp_name = get_system_prompt_name(prompt_file) or "system-generic.md"
-                system_prompt = load_system_prompt(sp_name) or ""
-                system_prompt += f"\n\n你必须使用如下XML格式输出全部内容：\n<{xml_tag}>内容</{xml_tag}>"
+    # === Stage 3: book_name=auto 时从书名候选中选择 ===
+    if book_name == "auto" and book_info_content:
+        candidates = _extract_book_name_candidates(book_info_content)
+        if candidates:
+            selected_name = candidates[0]
+            config["book_name"] = selected_name
+            print(f"\n  [AUTO] 书名候选: {candidates}")
+            print(f"  [AUTO] 选定书名: {selected_name}")
+            old_dir = config.get("rewrites_dir", "")
+            if old_dir and "/rewrites/" in old_dir:
+                parts = old_dir.split("/rewrites/")
+                if len(parts) == 2:
+                    new_dir = f"{parts[0]}/rewrites/{selected_name}"
+                    config["rewrites_dir"] = new_dir
+                    old_path = Path(old_dir)
+                    new_path = Path(new_dir)
+                    if old_path.exists() and not new_path.exists():
+                        old_path.rename(new_path)
+                        print(f"  [OK] 目录重命名: {old_path} → {new_path}")
+        else:
+            print("\n  [WARN] 未找到书名候选，请手动设置 book_name")
 
-                result = call_llm(config, prompt_file.replace(".md", ""), user_prompt, system_prompt)
+    # === 用户确认方向 ===
+    if not config.get("prompts_only") and not config.get("skip_confirm"):
+        confirmed = _confirm_direction(config)
+        if not confirmed:
+            print("\n  [STOP] 用户否决开书方向，可修改后重跑")
+            if state_mgr:
+                state_mgr.phase_failed("open-book", error="用户否决方向")
+            return False
 
-                # 提取 XML 标签内容
-                m = re.search(rf"<{xml_tag}[^>]*>([\s\S]*?)</{xml_tag}>", result)
-                content = m.group(1).strip() if m else result.strip()
-
-                full_path = rewrites_dir / output_file
-                atomic_write_text(full_path, content)
-                print(f"  [OK] {output_file}")
-                return output_file, content
-            except Exception as e:
-                print(f"  [FAIL] {output_file}: {e}")
-                return output_file, None
-
-        # 5 个 agent 并行执行
-        from concurrent.futures import ThreadPoolExecutor, as_completed
-        book_info_content = None
-        with ThreadPoolExecutor(max_workers=5) as executor:
-            futures = {
-                executor.submit(run_setting_agent, pf, tag, out): out
-                for pf, tag, out in agents
-            }
-            for future in as_completed(futures):
-                output_file, content = future.result()
-                if output_file == "book_info.md" and content:
-                    book_info_content = content
-
-        # === Stage 2.5: 强制去重角色名 ===
-        _enforce_unique_names(rewrites_dir)
-
-        # === Stage 3: book_name=auto 时从书名候选中选择 ===
-        if book_name == "auto" and book_info_content:
-            candidates = _extract_book_name_candidates(book_info_content)
-            if candidates:
-                selected_name = candidates[0]
-                config["book_name"] = selected_name
-                print(f"\n  [AUTO] 书名候选: {candidates}")
-                print(f"  [AUTO] 选定书名: {selected_name}")
-                old_dir = config.get("rewrites_dir", "")
-                if old_dir and "/rewrites/" in old_dir:
-                    parts = old_dir.split("/rewrites/")
-                    if len(parts) == 2:
-                        new_dir = f"{parts[0]}/rewrites/{selected_name}"
-                        config["rewrites_dir"] = new_dir
-                        old_path = Path(old_dir)
-                        new_path = Path(new_dir)
-                        if old_path.exists() and not new_path.exists():
-                            old_path.rename(new_path)
-                            print(f"  [OK] 目录重命名: {old_path} → {new_path}")
-            else:
-                print("\n  [WARN] 未找到书名候选，请手动设置 book_name")
-
-        # === 用户确认方向 ===
-        if not config.get("prompts_only") and not config.get("skip_confirm"):
-            confirmed = _confirm_direction(config)
-            if not confirmed:
-                print("\n  [STOP] 用户否决开书方向，可修改后重跑")
-                if state_mgr:
-                    state_mgr.phase_failed("open-book", error="用户否决方向")
-                return False
-
-        if state_mgr:
-            state_mgr.phase_done("open-book")
-        return True
-    except Exception as e:
-        print(f"\n  [FAIL] open-book: {e}")
-        if state_mgr:
-            state_mgr.phase_failed("open-book", error=str(e))
-        return False
+    if state_mgr:
+        state_mgr.phase_done("open-book")
+    return True
 
 
 def _confirm_direction(config):
