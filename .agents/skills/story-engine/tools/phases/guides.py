@@ -402,6 +402,13 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
                 if name_map:
                     for old_name, new_name in name_map.items():
                         style_text = style_text.replace(old_name, new_name)
+                # 去掉例句行（防止 LLM 照抄源文原句）
+                filtered_lines = []
+                for line in style_text.split("\n"):
+                    if re.match(r'^\s*(例句|例|示例)[：:]', line.strip()):
+                        continue
+                    filtered_lines.append(line)
+                style_text = "\n".join(filtered_lines)
                 replacements["文笔指纹"] = style_text
             else:
                 replacements["文笔指纹"] = "（文笔指纹未提取）"
