@@ -5,7 +5,7 @@ type: user
 phase: write
 description: 写章
 required_vars: ["N", "新书名", "作者名", "源书名", "目标字数", "目标字数_min", "目标字数_max", "世界观"]
-optional_vars: ["genre", "女主名", "男主名", "文笔指纹", "角色行为卡片"]
+optional_vars: ["genre", "女主名", "男主名", "文笔指纹", "角色行为卡片", "本章事件", "全局结构", "改写原则"]
 system_prompt: system-generic.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
@@ -21,6 +21,17 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 **字数** — 目标 **{目标字数}字**（{目标字数_min}~{目标字数_max}）。末尾加 `【字数：XXX字】`。
 
 **时间线/地点** — 与 plot_guide 时间锚点一致，不允许倒退。地点必须在世界观设定内。
+
+## 全局上下文
+
+### 本章事件（源文发生了什么）
+{本章事件}
+
+### 全局结构（本章在全书中的位置）
+{全局结构}
+
+### 改写原则（全书统一）
+{改写原则}
 
 ## 风格规则（必须执行，不是参考）
 

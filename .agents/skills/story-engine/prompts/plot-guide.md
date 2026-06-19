@@ -5,7 +5,7 @@ type: user
 phase: guides
 description: 章纲生成
 required_vars: ["N", "新书名", "作者名", "源书名", "源文全文", "目标字数", "目标字数_min", "目标字数_max", "源文字数", "女主名", "男主名", "世界观"]
-optional_vars: ["genre"]
+optional_vars: ["genre", "本章事件"]
 system_prompt: system-generic.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
@@ -20,6 +20,9 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 
 ## 世界观（必须遵守，不可自编时代/背景）
 {世界观}
+
+## 本章事件（快速参考，用于校验节拍完整性）
+{本章事件}
 
 **禁止：** 禁止文学化描写、禁止抽象描写、禁止过于细腻的描写。要简洁直接。
 

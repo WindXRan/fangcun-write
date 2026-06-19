@@ -283,7 +283,14 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             replacements["源文标点"] = "标点克制"
             replacements["源文高光"] = ""
             replacements["文笔指纹"] = "（源文读取失败）"
-    
+
+    # 注入源书级产物（从 _cache/ 读取）
+    if chapter_num:
+        from source_analysis import get_chapter_event, get_skeleton_context, get_adaptation_principles
+        replacements.setdefault("本章事件", get_chapter_event(config, chapter_num) or "（事件未提取）")
+        replacements.setdefault("全局结构", get_skeleton_context(config, chapter_num) or "（骨架未生成）")
+        replacements.setdefault("改写原则", get_adaptation_principles(config) or "（改编策略未生成）")
+
     # 注入角色行为卡片（写章时需要）
     if prompt_type == "write-chapter" and "角色行为卡片" not in replacements:
         char_card = _load_char_card(config)
