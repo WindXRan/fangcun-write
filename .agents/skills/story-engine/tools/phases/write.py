@@ -127,40 +127,29 @@ def _fix_trim(config, ch, chapters_dir):
 
 def _fix_expand(config, ch, text, chapters_dir):
     """字数不足 → expand。"""
-    from prompt_meta import load_prompt_str, validate_prompt_variables, load_system_prompt, get_system_prompt_name, safe_format
-    from lib.api_client import call_llm
+    from phases.guides import run_one
     ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
     orig_chars = len(re.sub(r'\s', '', text))
-    target_chars = int(orig_chars * 1.3)
-    r = {"content": text, "orig_chars": orig_chars, "target_chars": target_chars,
-         "min_chars": int(target_chars * 0.9), "max_chars": int(target_chars * 1.1)}
-    prompt = load_prompt_str("expand-chapter.md")
-    validate_prompt_variables("expand-chapter.md", r)
-    prompt = safe_format(prompt, r)
-    sp_name = get_system_prompt_name("expand-chapter.md") or "system-generic.md"
-    sys_prompt = load_system_prompt(sp_name) or ""
-    # 计算 max_tokens（目标字数 × 1.6，防止超时）
-    max_tokens = int(target_chars * 1.6) if target_chars > 100 else None
-    result = call_llm(config, "expand-chapter", prompt, sys_prompt, ch=ch, max_tokens=max_tokens)
+    result = run_one(config, "expand-chapter", ch, extra_replacements={
+        "content": text,
+        "orig_chars": str(orig_chars),
+        "target_chars": "2500",
+        "min_chars": "2000",
+        "max_chars": "3000",
+    })
     ch_file.write_text(result, encoding='utf-8')
 
 
 def _fix_polish(config, ch, text, chapters_dir, issue):
     """AI痕迹/代词/句长 → 润色。"""
-    from prompt_meta import load_prompt_str, validate_prompt_variables, load_system_prompt, get_system_prompt_name, safe_format
-    from lib.api_client import call_llm
+    from phases.guides import run_one
     ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
     orig_chars = len(re.sub(r'\s', '', text))
-    r = {"content": text, "min_chars": int(orig_chars * 0.9), "max_chars": int(orig_chars * 1.1)}
-    prompt = load_prompt_str("polish-chapter.md")
-    validate_prompt_variables("polish-chapter.md", r)
-    prompt = safe_format(prompt, r)
-    sp_name = get_system_prompt_name("polish-chapter.md") or "system-generic.md"
-    base = load_system_prompt(sp_name) or ""
-    sys_prompt = f"精修以下章节，特别关注：{issue}。保持字数在 ±10% 内，不要增删情节。\n\n{base}"
-    # 计算 max_tokens（目标字数 × 1.6，防止超时）
-    max_tokens = int(orig_chars * 1.6) if orig_chars > 100 else None
-    result = call_llm(config, "polish-chapter", prompt, sys_prompt, ch=ch, max_tokens=max_tokens)
+    result = run_one(config, "polish-chapter", ch, extra_replacements={
+        "content": text,
+        "min_chars": str(int(orig_chars * 0.9)),
+        "max_chars": str(int(orig_chars * 1.1)),
+    })
     ch_file.write_text(result, encoding='utf-8')
 
 
@@ -257,7 +246,7 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
         print(f"  完成: 已生成 {len(ok)} 个 prompt | 耗时 {time.time()-t0:.0f}s")
         return ok, fail
 
-    # --- 按需修复：字数超标时自动 trim（expand/polish 禁用，质量不稳定）---
+    # --- 按需修复：字数/风格问题 ---
     for retry_round in range(1, 3):
         retry_list = []
         for ch in range(start, end + 1):
@@ -267,9 +256,11 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
             text = ch_file.read_text(encoding='utf-8')
             body = re.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text)
             chars = len(body)
-            # 只处理字数超标（>3000），不处理字数不足和风格问题
+
             if chars > 3000:
                 retry_list.append((ch, "trim", lambda c=ch: _fix_trim(config, c, chapters_dir)))
+            elif chars < 2000:
+                retry_list.append((ch, "expand", lambda c=ch, t=text: _fix_expand(config, c, t, chapters_dir)))
 
         if not retry_list:
             break
