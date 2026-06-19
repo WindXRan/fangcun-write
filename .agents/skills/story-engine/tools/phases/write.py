@@ -19,7 +19,10 @@ def _dispatch_fix(config, ch, chapters_dir):
     text = ch_file.read_text(encoding='utf-8')
     body = re.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text)
     chars = len(body)
-    target = count_source_chars(config, ch)
+    # 目标字数：从 config 推算
+    project = config.get("project", {})
+    duration = project.get("episode_duration", 2)
+    target = int(duration * 150) if duration else count_source_chars(config, ch)
     if target > 0:
         deviation = (chars - target) / target
     else:
@@ -72,7 +75,10 @@ def _dispatch_fix(config, ch, chapters_dir):
     text = ch_file.read_text(encoding='utf-8')
     body = re.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text)
     chars = len(body)
-    target = count_source_chars(config, ch)
+    # 目标字数：从 config 推算
+    project = config.get("project", {})
+    duration = project.get("episode_duration", 2)
+    target = int(duration * 150) if duration else count_source_chars(config, ch)
     if target > 0:
         deviation = (chars - target) / target
     else:
