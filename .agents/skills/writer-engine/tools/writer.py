@@ -74,14 +74,14 @@ def write_chapter(config, ch_num, context=None, auto_fix=True):
     variables = {
         "book_name": config.get("book_name", ""),
         "ch_num": str(ch_num),
-        "characters": characters[:1500],
-        "guide": guide[:2000] if guide != "（无章纲）" else "（无章纲，自由发挥）",
+        "characters": characters,
+        "guide": guide if guide != "（无章纲）" else "（无章纲，自由发挥）",
         "prev_context": prev_context if prev_context else "（第一章，无前文）",
     }
     
     # 添加续写等额外上下文
     if context:
-        variables["context"] = context[:1000]
+        variables["context"] = context
     else:
         variables["context"] = ""
     
@@ -451,8 +451,8 @@ def rewrite_chapter(config, ch_num, reason=""):
     variables = {
         "book_name": config.get("book_name", ""),
         "ch_num": str(ch_num),
-        "characters": characters[:1500],
-        "guide": guide[:2000] if guide != "（无章纲）" else "（无章纲，自由发挥）",
+        "characters": characters,
+        "guide": guide if guide != "（无章纲）" else "（无章纲，自由发挥）",
         "prev_context": prev_context if prev_context else "（第一章，无前文）",
         "reason": reason if reason else "（无具体原因，整章重写）",
     }
