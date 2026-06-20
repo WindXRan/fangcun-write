@@ -46,9 +46,11 @@ def _build_name_map(config):
         return _name_map_cache
 
     _name_map_cache = {}
-    chars_path = Path(config.get("rewrites_dir", "")) / "settings" / "characters.md"
+    base_dir = Path(config.get("base_dir", "."))
+    rewrites_dir = base_dir / config.get("rewrites_dir", "")
+    chars_path = rewrites_dir / "settings" / "characters.md"
     if not chars_path.exists():
-        chars_path = Path(config.get("rewrites_dir", "")) / "characters.md"
+        chars_path = rewrites_dir / "characters.md"
     if not chars_path.exists():
         return _name_map_cache
 
@@ -163,7 +165,9 @@ def _load_character_cards(config, ch_num):
         return "（无角色信息）"
 
     # 读取角色卡文件
-    cards_dir = Path(config.get("rewrites_dir", "")) / "characters"
+    base_dir = Path(config.get("base_dir", "."))
+    rewrites_dir = base_dir / config.get("rewrites_dir", "")
+    cards_dir = rewrites_dir / "characters"
     cards = []
     for name in sorted(chars):
         card_path = cards_dir / f"{name}.md"
@@ -171,9 +175,9 @@ def _load_character_cards(config, ch_num):
             cards.append(card_path.read_text(encoding="utf-8"))
         else:
             # fallback: 从 characters.md 中提取该角色
-            chars_path = Path(config.get("rewrites_dir", "")) / "settings" / "characters.md"
+            chars_path = rewrites_dir / "settings" / "characters.md"
             if not chars_path.exists():
-                chars_path = Path(config.get("rewrites_dir", "")) / "characters.md"
+                chars_path = rewrites_dir / "characters.md"
             if chars_path.exists():
                 chars_text = chars_path.read_text(encoding="utf-8")
                 m = re.search(rf'【{re.escape(name)}】[\s\S]*?(?=【[^】]|$)', chars_text)
