@@ -11,7 +11,7 @@ Agent 架构:
     python unified_fixer.py --config xxx.json --start 1 --end 188
 """
 
-import os, re, json, time, argparse
+import os, re, json, sys, time, argparse
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field, asdict
@@ -19,6 +19,11 @@ from dataclasses import dataclass, field, asdict
 from lib.source_locator import get_source_text
 from lib.text_metrics import get_body_chars
 from lib.constants import AI_MARKERS, AI_MARKER_PATTERN
+
+# 确保导入 story-engine 的 prompt_meta（而非 source-engine 的）
+_story_engine_tools = str(Path(__file__).resolve().parent)
+if _story_engine_tools not in sys.path:
+    sys.path.insert(0, _story_engine_tools)
 from prompt_meta import load_system_prompt, load_prompt_str, get_prompt_config_with_overrides, get_system_prompt_name, safe_format
 from unified_review import Issue, ReviewResult, SummaryReport, review_agent, summary_agent, generate_p012_report
 try:

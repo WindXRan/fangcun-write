@@ -7,12 +7,18 @@ import hashlib
 import json
 import os
 import re
+import sys
 import time
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from utils import get_source_text
 from lib.text_metrics import count_style_fingerprint, format_style_anchors
+
+# 确保导入 story-engine 的 prompt_meta（而非 source-engine 的）
+_story_engine_tools = str(Path(__file__).resolve().parent.parent)
+if _story_engine_tools not in sys.path:
+    sys.path.insert(0, _story_engine_tools)
 from prompt_meta import load_system_prompt, load_prompt_str, get_system_prompt_name, safe_format
 
 

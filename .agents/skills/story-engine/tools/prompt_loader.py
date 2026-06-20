@@ -15,9 +15,14 @@
 
 import os
 import re
+import sys
 import json
 from pathlib import Path
 
+# 确保导入 story-engine 的 prompt_meta（而非 source-engine 的）
+_story_engine_tools = str(Path(__file__).resolve().parent)
+if _story_engine_tools not in sys.path:
+    sys.path.insert(0, _story_engine_tools)
 from prompt_meta import _parse_frontmatter, safe_format
 
 

@@ -1,10 +1,16 @@
 """API 客户端：带指数退避重试的 MiMo API 调用。"""
 
 import os
+import sys
 import time
 from pathlib import Path
 import requests
 from datetime import datetime
+
+# 确保导入 story-engine 的 prompt_meta（而非 source-engine 的）
+_story_engine_tools = str(Path(__file__).resolve().parent.parent)
+if _story_engine_tools not in sys.path:
+    sys.path.insert(0, _story_engine_tools)
 
 DEFAULT_API_URL = "https://token-plan-cn.xiaomimimo.com/v1/chat/completions"
 

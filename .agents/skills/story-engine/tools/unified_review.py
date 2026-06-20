@@ -7,7 +7,7 @@ Agent 架构:
   2.  Summary Agent (gather)          — 合并两层结果，去重分级 P0/P1/P2
 """
 
-import os, re, json, time, argparse, warnings
+import os, re, json, sys, time, argparse, warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="requests")
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -18,6 +18,11 @@ from lib.constants import AI_MARKERS, AI_MARKER_PATTERN
 from lib.text_metrics import count_metrics, get_body_chars
 from lib.plagiarism import find_plagiarism
 from lib.source_locator import get_source_text
+
+# 确保导入 story-engine 的 prompt_meta（而非 source-engine 的）
+_story_engine_tools = str(Path(__file__).resolve().parent)
+if _story_engine_tools not in sys.path:
+    sys.path.insert(0, _story_engine_tools)
 from prompt_meta import load_system_prompt, load_prompt_str, get_prompt_config_with_overrides, get_system_prompt_name, safe_format
 try:
     from logger import setup_pipeline_log

@@ -2,12 +2,18 @@
 
 import os
 import re
+import sys
 import time
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from utils import count_source_chars, get_source_title, print_progress, debug_dump_prompt
 from lib.api_client import call_llm
+
+# 确保导入 story-engine 的 prompt_meta（而非 source-engine 的）
+_story_engine_tools = str(Path(__file__).resolve().parent.parent)
+if _story_engine_tools not in sys.path:
+    sys.path.insert(0, _story_engine_tools)
 from prompt_meta import load_prompt_str, validate_prompt_variables, get_prompt_config_with_overrides, load_system_prompt, get_system_prompt_name, safe_format
 
 
