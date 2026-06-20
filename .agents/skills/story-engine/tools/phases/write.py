@@ -184,8 +184,8 @@ def _pre_validate(config, start, end):
 
 
 def phase_write(config, start, end, workers=10, state_mgr=None):
-    """并行写章 + 字数重试 + 风格自检重试。"""
-    from phases.guides import run_one
+    """并行写章 + 字数重试 + 风格自检重试。调用 writer-engine。"""
+    writer = _get_writer_module()
 
     chapters_dir = f"{config['rewrites_dir']}/chapters"
     write_cfg = {**config}
@@ -201,7 +201,7 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
     t0 = time.time()
     run_id = None
     if state_mgr:
-        run_id = state_mgr.add_run("write", start, end, model=write_cfg.get("model", "deepseek-v4-pro"))
+        run_id = state_mgr.add_run("write", start, end, model=write_cfg.get("model", "mimo-v2.5-pro"))
 
     # --- Key chapter 升级：开头章用 Pro ---
     pro_model = write_cfg.get("key_chapter_model")
@@ -216,7 +216,8 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
             if state_mgr:
                 state_mgr.chapter_writing(ch)
             try:
-                result = run_one(write_cfg, "write-chapter", ch, model=pro_model)
+                key_config = {**write_cfg, "model": pro_model, "rewrites_dir": str(Path(chapters_dir).parent)}
+                result = writer.write_chapter(key_config, ch, auto_fix=True)
                 ch_file.parent.mkdir(parents=True, exist_ok=True)
                 ch_file.write_text(result, encoding='utf-8')
                 if state_mgr:
@@ -233,100 +234,34 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
         print(f"  所有章已PASS，跳过写章")
         return {}, {}
     print(f"  [WRITE] {len(rewrite)}章需要写: {rewrite}")
-    # 只写需要修复的章
-    write_cfg["_rewrite_chapters"] = set(rewrite)
 
-    ok, fail = batch_run(write_cfg, "write-chapter", start, end, workers, chapters_dir,
-                         "ch_{ch:03d}.txt", skip_existing=True, state_mgr=state_mgr,
-                         run_one_func=run_one)
+    # --- 并行写章（调用 writer-engine）---
+    ok = {}
+    fail = {}
+    
+    def _write_one(ch):
+        ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+        try:
+            write_config = {**write_cfg, "rewrites_dir": str(Path(chapters_dir).parent)}
+            result = writer.write_chapter(write_config, ch, auto_fix=True)
+            ch_file.parent.mkdir(parents=True, exist_ok=True)
+            ch_file.write_text(result, encoding='utf-8')
+            if state_mgr:
+                state_mgr.chapter_completed(ch)
+            return ch, True, None
+        except Exception as e:
+            return ch, False, str(e)
 
-    # prompts_only 跳过字数检查和重试
-    if write_cfg.get("prompts_only"):
-        total = sum(len(Path(path).read_text(encoding='utf-8')) for path in ok.values()) if ok else 0
-        print(f"  完成: 已生成 {len(ok)} 个 prompt | 耗时 {time.time()-t0:.0f}s")
-        return ok, fail
-
-    # --- 按需修复：字数/风格问题 ---
-    for retry_round in range(1, 4):  # 最多3轮
-        retry_list = []
-        rewrite_list = []  # 字数太短需要重写的章节
-        for ch in range(start, end + 1):
-            ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-            if not ch_file.exists():
-                continue
-            text = ch_file.read_text(encoding='utf-8')
-            body = re.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text)
-            chars = len(body)
-
-            # 字数极短（<500字）→ 直接重写，不expand
-            if chars < 500:
-                rewrite_list.append(ch)
-            # 字数不足 → expand
-            elif chars < 2000:
-                retry_list.append((ch, "expand", lambda c=ch, t=text: _fix_expand(config, c, t, chapters_dir)))
-            # 字数超标 → trim
-            elif chars > 3000:
-                retry_list.append((ch, "trim", lambda c=ch: _fix_trim(config, c, chapters_dir)))
-
-        # 字数极短的章节直接重写
-        if rewrite_list:
-            print(f"  [REWRITE] {len(rewrite_list)}章字数极短，直接重写: {rewrite_list}")
-            t_rewrite = time.time()
-            for ch in rewrite_list:
-                ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-                try:
-                    result = run_one(config, "write-chapter", ch)
-                    ch_file.write_text(result, encoding='utf-8')
-                    print(f"    [OK] ch{ch:03d} 重写完成")
-                except Exception as e:
-                    print(f"    [FAIL] ch{ch:03d} 重写失败: {e}")
-            print(f"  重写完成 ({time.time()-t_rewrite:.0f}s)")
-
-        if not retry_list and not rewrite_list:
-            break
-
-        if retry_list:
-            print(f"  [RETRY R{retry_round}] {len(retry_list)}章需调整: {[c for c,_,_ in retry_list]}")
-            t_retry = time.time()
-            with ThreadPoolExecutor(max_workers=min(5, len(retry_list) or 1)) as ex:
-                def _retry_one(ch_action_fix):
-                    ch, action, fix_func = ch_action_fix
-                    try:
-                        fix_func()
-                        return ch, action, None
-                    except Exception as e:
-                        return ch, action, str(e)
-
-                for result in ex.map(_retry_one, retry_list):
-                    ch, action, err = result
-                    if err:
-                        print(f"    [FAIL] {action} ch{ch:03d}: {err}")
-                    else:
-                        print(f"    [{action.upper()}] ch{ch:03d}")
-
-            print(f"  重试轮次 {retry_round} 完成 ({time.time()-t_retry:.0f}s)")
-
-    # --- 自动润色：对比源文修正风格 ---
-    if config.get("auto_polish", True):  # 默认开启
-        print(f"\n  [POLISH] 对比源文润色...")
-        t_polish = time.time()
-        polished = 0
-        with ThreadPoolExecutor(max_workers=min(5, end - start + 1)) as ex:
-            polish_futures = {}
-            for ch in range(start, end + 1):
-                ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-                if ch_file.exists():
-                    polish_futures[ex.submit(_auto_polish, config, ch, chapters_dir)] = ch
-            
-            for f in as_completed(polish_futures):
-                ch = polish_futures[f]
-                try:
-                    if f.result():
-                        polished += 1
-                except Exception as e:
-                    print(f"    [FAIL] polish ch{ch}: {e}")
-        
-        print(f"  [POLISH] 润色了 {polished} 章 ({time.time()-t_polish:.0f}s)")
+    with ThreadPoolExecutor(max_workers=min(workers, len(rewrite))) as ex:
+        futures = {ex.submit(_write_one, ch): ch for ch in rewrite}
+        for future in as_completed(futures):
+            ch, success, error = future.result()
+            if success:
+                ok[ch] = str(Path(chapters_dir) / f"ch_{ch:03d}.txt")
+                print(f"  [OK] ch{ch:03d}")
+            else:
+                fail[ch] = error
+                print(f"  [FAIL] ch{ch:03d}: {error}")
 
     total = sum(
         len(Path(path).read_text(encoding='utf-8').replace('\n', '').replace(' ', '').replace('\r', ''))
