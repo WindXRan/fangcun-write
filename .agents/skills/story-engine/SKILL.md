@@ -60,53 +60,25 @@ projects/{作者}/{源书名}/
 └── configs/{config}.json      ← 配置文件
 ```
 
-## 流程（按顺序，每步有依赖）
+## 流程（agent 自动执行，用户不需要记）
 
-```
-source-engine: event → skeleton → adaptation    ← 源书级，只跑一次
-story-engine:  open_book → guides → write       ← 仿写级，可反复跑
-```
-
-### Step 1: 源书分析（只跑一次，结果缓存在 _cache/）
+### 一键全流程（推荐）
 
 ```bash
-python .agents/skills/source-engine/tools/pipeline.py --config {config} --phase event       # 事件提取
-python .agents/skills/source-engine/tools/pipeline.py --config {config} --phase skeleton     # 故事骨架
-python .agents/skills/source-engine/tools/pipeline.py --config {config} --phase adaptation   # 改编策略
+# 用户只需说："仿写这本书"，agent 执行：
+python .agents/skills/story-engine/tools/pipeline.py --config {config} --phase open_book --skip-confirm  # 开书
+python .agents/skills/story-engine/tools/pipeline.py --config {config} --phase write --start 1 --end {N} --skip-confirm  # 写章
 ```
 
-产物：`_cache/events.json` + `_cache/story_skeleton.md` + `_cache/adaptation_strategy.md`
+### 分步执行（需要时用）
 
-### Step 2: 开书（生成设定，只跑一次）
-
-```bash
-python .agents/skills/story-engine/tools/pipeline.py --config {config} --phase open_book --skip-confirm
-```
-
-产物：`rewrites/{新书名}/settings/` + `rewrites/{新书名}/characters/`
-
-### Step 3: 写章（可反复跑，支持增量）
-
-```bash
-python .agents/skills/story-engine/tools/pipeline.py --config {config} --phase write --start {N} --end {M} --skip-confirm
-```
-
-产物：`rewrites/{新书名}/chapters/ch_{N}.txt`
-
-### Step 4: 对比审核（可选）
-
-```bash
-python .agents/skills/story-engine/tools/pipeline.py --config {config} --phase compare --start {N} --end {M} --skip-confirm
-```
-
-产物：`rewrites/{新书名}/compare/`
-
-### 断点续传
-
-```bash
-python .agents/skills/story-engine/tools/pipeline.py --config {config} --phase write --skip-confirm
-# 自动从 state.json 读取上次进度，跳过已完成章节
-```
+| 用户说 | agent 做 |
+|--------|----------|
+| "仿写这本书" | 配置参数 → 开书 → 写前3章 → 展示结果 |
+| "写第5章" | 跑 write --start 5 --end 5 |
+| "继续写" | 读 state.json → 从断点继续 |
+| "看看写得怎么样" | 读 chapters/ → 跑 compare → 汇报结果 |
+| "改一下第3章" | 删除 ch_003.txt → 重跑 write --start 3 --end 3 |
 
 ## 配置文件格式
 
