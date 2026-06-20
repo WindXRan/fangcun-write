@@ -22,6 +22,18 @@ def get_writer_dirs(config):
     }
 
 
+def _load_prompt_template(prompt_name):
+    """加载prompt模板"""
+    prompts_dir = Path(__file__).parent.parent / "prompts"
+    prompt_file = prompts_dir / f"{prompt_name}.md"
+    
+    if prompt_file.exists():
+        return prompt_file.read_text(encoding="utf-8")
+    
+    # 如果没有找到模板，返回默认模板
+    return "你是一个专业的小说写手。请根据以下要求写作。"
+
+
 def write_chapter(config, ch_num, context=None, auto_fix=True):
     """
     写单章（含自动修复）。
@@ -42,6 +54,7 @@ def write_chapter(config, ch_num, context=None, auto_fix=True):
     sys.path.insert(0, str(shared_engine_llm))
     
     from llm.api_client import call_llm
+    from llm.prompt_meta import safe_format
     
     dirs = get_writer_dirs(config)
     
@@ -54,8 +67,26 @@ def write_chapter(config, ch_num, context=None, auto_fix=True):
     # 读取章纲
     guide = _load_guide(dirs["guides_dir"], ch_num)
     
-    # 构建 prompt
-    prompt = _build_write_prompt(config, ch_num, characters, guide, prev_context, context)
+    # 加载prompt模板
+    prompt_template = _load_prompt_template("write")
+    
+    # 构建变量映射
+    variables = {
+        "book_name": config.get("book_name", ""),
+        "ch_num": str(ch_num),
+        "characters": characters[:1500],
+        "guide": guide[:2000] if guide != "（无章纲）" else "（无章纲，自由发挥）",
+        "prev_context": prev_context if prev_context else "（第一章，无前文）",
+    }
+    
+    # 添加续写等额外上下文
+    if context:
+        variables["context"] = context[:1000]
+    else:
+        variables["context"] = ""
+    
+    # 替换变量
+    prompt = safe_format(prompt_template, variables)
     
     # 调用 LLM
     try:
@@ -82,6 +113,7 @@ def _auto_fix_chapter(config, ch_num, content, characters, guide, prev_context, 
     sys.path.insert(0, str(shared_engine_llm))
     
     from llm.api_client import call_llm
+    from llm.prompt_meta import safe_format
     
     # 计算字数
     chars = len(content.replace(" ", "").replace("\n", ""))
@@ -97,24 +129,14 @@ def _auto_fix_chapter(config, ch_num, content, characters, guide, prev_context, 
     # 字数不足 → 扩写
     if chars < min_chars:
         target_chars = 2500
-        prompt = f"""请扩写以下章节，目标字数约{target_chars}字。
-
-## 扩写要求
-
-1. **保持原有情节框架和人物关系**
-2. **增加细节描写**（五感、环境、动作）
-3. **增加对话互动**
-4. **不要增加新的情节线**
-5. **字数控制**：{target_chars}字左右（±10%）
-
-## 原文（{chars}字）
-
-{content}
-
-## 输出格式
-
-直接输出扩写后的完整章节，不要解释。
-"""
+        prompt_template = _load_prompt_template("expand")
+        variables = {
+            "content": content,
+            "orig_chars": str(chars),
+            "target_chars": str(target_chars),
+        }
+        prompt = safe_format(prompt_template, variables)
+        
         try:
             result = call_llm(config, "expand-chapter", prompt,
                              system_prompt="你是一个专业的小说写手，擅长扩写。",
@@ -127,23 +149,13 @@ def _auto_fix_chapter(config, ch_num, content, characters, guide, prev_context, 
     # 字数超标 → 精简
     if chars > max_chars:
         target_chars = 2500
-        prompt = f"""请精简以下章节，目标字数约{target_chars}字。
-
-## 精简要求
-
-1. **保留所有剧情节点和关键对话**
-2. **删冗余**：重复描写、过度修饰
-3. **合短句**：连续的短句合并
-4. **字数控制**：{target_chars}字左右（±10%）
-
-## 原文
-
-{content}
-
-## 输出格式
-
-直接输出精简后的完整章节，不要解释。
-"""
+        prompt_template = _load_prompt_template("trim")
+        variables = {
+            "content": content,
+            "target_chars": str(target_chars),
+        }
+        prompt = safe_format(prompt_template, variables)
+        
         try:
             result = call_llm(config, "trim-chapter", prompt,
                              system_prompt="你是一个专业的小说编辑，擅长精简文字。",
@@ -257,9 +269,12 @@ def trim_chapter(config, ch_num):
     """
     import sys
     shared_engine = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
+    shared_engine_llm = shared_engine / "llm"
     sys.path.insert(0, str(shared_engine))
+    sys.path.insert(0, str(shared_engine_llm))
     
     from llm.api_client import call_llm
+    from llm.prompt_meta import safe_format
     
     dirs = get_writer_dirs(config)
     ch_file = dirs["chapters_dir"] / f"ch_{ch_num:03d}.txt"
@@ -274,24 +289,12 @@ def trim_chapter(config, ch_num):
     # 目标字数：原文的80%
     target_chars = int(original_chars * 0.8)
     
-    prompt = f"""请精简以下章节，目标字数约{target_chars}字。
-
-## 精简要求
-
-1. **保留所有剧情节点和关键对话**，一个都不能丢
-2. **删冗余**：重复描写、过度修饰、可有可无的副词（微微/轻轻/淡淡/缓缓）
-3. **合短句**：连续的2-3个极短句如果表达同一件事，合并
-4. **砍废话**：角色内心独白如果已经用动作表达过了，删掉独白
-5. **字数控制**：{target_chars}字左右（±10%）
-
-## 原文
-
-{original}
-
-## 输出格式
-
-直接输出精简后的完整章节，不要解释。
-"""
+    prompt_template = _load_prompt_template("trim")
+    variables = {
+        "content": original,
+        "target_chars": str(target_chars),
+    }
+    prompt = safe_format(prompt_template, variables)
     
     try:
         result = call_llm(config, "trim-chapter", prompt,
@@ -322,9 +325,12 @@ def polish_chapter(config, ch_num):
     """
     import sys
     shared_engine = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
+    shared_engine_llm = shared_engine / "llm"
     sys.path.insert(0, str(shared_engine))
+    sys.path.insert(0, str(shared_engine_llm))
     
     from llm.api_client import call_llm
+    from llm.prompt_meta import safe_format
     
     dirs = get_writer_dirs(config)
     ch_file = dirs["chapters_dir"] / f"ch_{ch_num:03d}.txt"
@@ -336,25 +342,13 @@ def polish_chapter(config, ch_num):
     original = ch_file.read_text(encoding="utf-8")
     original_chars = len(original.replace(" ", "").replace("\n", ""))
     
-    prompt = f"""请润色以下章节，提升文笔质量。
-
-## 润色要求
-
-1. **不改变情节、人物、对话内容**
-2. **删除AI痕迹**（"仿佛"、"似乎"、"不禁"、"心中涌起"等）
-3. **增加细节描写**（五感、环境、动作）
-4. **优化句式**，避免排比句连续超过3句
-5. **对话标签**至少30%用动作替代"XX说/XX道"
-6. **字数控制**：原文±10%（{int(original_chars*0.9)}~{int(original_chars*1.1)}字）
-
-## 原文
-
-{original}
-
-## 输出格式
-
-直接输出润色后的完整章节，不要解释。
-"""
+    prompt_template = _load_prompt_template("polish")
+    variables = {
+        "content": original,
+        "min_chars": str(int(original_chars * 0.9)),
+        "max_chars": str(int(original_chars * 1.1)),
+    }
+    prompt = safe_format(prompt_template, variables)
     
     try:
         result = call_llm(config, "polish-chapter", prompt,
@@ -380,9 +374,12 @@ def expand_chapter(config, ch_num, target_chars=None):
     """
     import sys
     shared_engine = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
+    shared_engine_llm = shared_engine / "llm"
     sys.path.insert(0, str(shared_engine))
+    sys.path.insert(0, str(shared_engine_llm))
     
     from llm.api_client import call_llm
+    from llm.prompt_meta import safe_format
     
     dirs = get_writer_dirs(config)
     ch_file = dirs["chapters_dir"] / f"ch_{ch_num:03d}.txt"
@@ -397,25 +394,13 @@ def expand_chapter(config, ch_num, target_chars=None):
     if target_chars is None:
         target_chars = int(original_chars * 1.3)
     
-    prompt = f"""请扩写以下章节，目标字数约{target_chars}字。
-
-## 扩写要求
-
-1. **保持原有情节框架和人物关系**
-2. **增加细节描写**（五感、环境、动作）
-3. **增加对话互动**
-4. **增加场景过渡**
-5. **不要增加新的情节线**
-6. **字数控制**：{target_chars}字左右（±10%）
-
-## 原文（{original_chars}字）
-
-{original}
-
-## 输出格式
-
-直接输出扩写后的完整章节，不要解释。
-"""
+    prompt_template = _load_prompt_template("expand")
+    variables = {
+        "content": original,
+        "orig_chars": str(original_chars),
+        "target_chars": str(target_chars),
+    }
+    prompt = safe_format(prompt_template, variables)
     
     try:
         result = call_llm(config, "expand-chapter", prompt,
@@ -439,9 +424,48 @@ def rewrite_chapter(config, ch_num, reason=""):
     Returns:
         str: 重写后的内容，失败返回 None
     """
-    # 重写就是调用 write_chapter，但传入重写原因
-    context = ""
-    if reason:
-        context = f"重写原因：{reason}\n\n请根据以上原因重写这章，解决存在的问题。"
+    import sys
+    shared_engine = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
+    shared_engine_llm = shared_engine / "llm"
+    sys.path.insert(0, str(shared_engine))
+    sys.path.insert(0, str(shared_engine_llm))
     
-    return write_chapter(config, ch_num, context=context)
+    from llm.api_client import call_llm
+    from llm.prompt_meta import safe_format
+    
+    dirs = get_writer_dirs(config)
+    
+    # 读取角色卡
+    characters = _load_characters(config)
+    
+    # 读取前文（最多3章）
+    prev_context = _load_previous_chapters(dirs["chapters_dir"], ch_num, max_chapters=3)
+    
+    # 读取章纲
+    guide = _load_guide(dirs["guides_dir"], ch_num)
+    
+    # 加载prompt模板
+    prompt_template = _load_prompt_template("rewrite")
+    
+    # 构建变量映射
+    variables = {
+        "book_name": config.get("book_name", ""),
+        "ch_num": str(ch_num),
+        "characters": characters[:1500],
+        "guide": guide[:2000] if guide != "（无章纲）" else "（无章纲，自由发挥）",
+        "prev_context": prev_context if prev_context else "（第一章，无前文）",
+        "reason": reason if reason else "（无具体原因，整章重写）",
+    }
+    
+    # 替换变量
+    prompt = safe_format(prompt_template, variables)
+    
+    # 调用 LLM
+    try:
+        result = call_llm(config, "rewrite-chapter", prompt,
+                         system_prompt="你是一个专业的小说写手。重写时必须解决上述问题，保持角色一致性。不要废话，直接写正文。",
+                         max_tokens=4096)
+        return result
+    except Exception as e:
+        print(f"    [ERROR] 重写失败: {e}")
+        return None
