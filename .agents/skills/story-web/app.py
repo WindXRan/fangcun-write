@@ -269,21 +269,25 @@ def api_pools_list():
     import glob
     data_dir = SCAN_DATA_DIR / "data"
     
-    # 扫描所有 fanqie_*_ranks_*.json 文件
     pools = []
     seen_types = set()
     
+    # 全榜混排（所有题材混在一起）
+    pools.append({
+        "type": "all",
+        "name": "全榜混排",
+        "file": "",
+    })
+    
     for f in sorted(data_dir.glob("fanqie_*_ranks_*.json"), reverse=True):
-        # 解析文件名: fanqie_male_new_ranks_20260618.json
         parts = f.stem.split('_')
         if len(parts) >= 4:
-            gender = parts[1]  # male/female
-            rank_kind = parts[2]  # new/read
+            gender = parts[1]
+            rank_kind = parts[2]
             rank_type = f"{gender}_{rank_kind}"
             
             if rank_type not in seen_types:
                 seen_types.add(rank_type)
-                # 显示名称映射
                 name_map = {
                     "male_new": "男频新书",
                     "male_read": "男频在读",
@@ -299,13 +303,63 @@ def api_pools_list():
     return jsonify(pools)
 
 
+@app.route('/api/pools/all')
+def api_pools_all():
+    """全榜混排：所有题材混在一起，统一排序"""
+    data_dir = SCAN_DATA_DIR / "data"
+    
+    all_books = []
+    seen = set()
+    
+    # 读取所有排行榜文件，合并去重
+    for f in sorted(data_dir.glob("fanqie_*_ranks_*.json"), reverse=True):
+        parts = f.stem.split('_')
+        if len(parts) >= 4:
+            gender = parts[1]  # male/female
+            rank_kind = parts[2]  # new/read
+            
+            try:
+                data = json.loads(f.read_text(encoding='utf-8'))
+                books = data if isinstance(data, list) else data.get('books', data.get('data', []))
+                
+                for book in books:
+                    title = book.get('title', book.get('bookName', ''))
+                    if not title or title in seen:
+                        continue
+                    seen.add(title)
+                    
+                    all_books.append({
+                        "title": title,
+                        "author": book.get('author', book.get('authorName', '')),
+                        "category": book.get('category', book.get('categoryName', '')),
+                        "gender": "男频" if gender == "male" else "女频",
+                        "rank_type": "新书榜" if rank_kind == "new" else "在读榜",
+                        "rank": book.get('rank', 0),
+                        "readCount": book.get('readCount', book.get('readCountStr', '')),
+                        "wordCount": book.get('wordCount', book.get('wordCountStr', '')),
+                        "description": book.get('description', book.get('bookDesc', ''))[:200],
+                    })
+            except Exception:
+                continue
+    
+    # 按阅读量排序（如果有的话）
+    all_books.sort(key=lambda x: x.get('rank', 999))
+    
+    return jsonify({
+        "total": len(all_books),
+        "books": all_books,
+    })
+
+
 @app.route('/api/pools/<rank_type>')
 def api_pools_data(rank_type):
     """返回指定排行榜的数据"""
+    if rank_type == "all":
+        return api_pools_all()
+    
     import glob
     data_dir = SCAN_DATA_DIR / "data"
     
-    # 找到最新的匹配文件
     pattern = f"fanqie_{rank_type}_ranks_*.json"
     files = sorted(data_dir.glob(pattern), reverse=True)
     
