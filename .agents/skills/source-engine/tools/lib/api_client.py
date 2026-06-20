@@ -120,12 +120,12 @@ def call_api(api_key, model, user_prompt,
     from prompt_meta import load_system_prompt
 
     url = api_url or DEFAULT_API_URL
-    
-    # 根据 provider 选择不同的 header 格式
-    if provider == "deepseek" or "deepseek" in url:
-        headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-    else:
+
+    # 认证格式：MiMo 用 api-key，其他用 Authorization: Bearer
+    if "mimo" in url or "xiaomimimo" in url:
         headers = {"api-key": api_key, "Content-Type": "application/json"}
+    else:
+        headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     
     sys_prompt = system_prompt or load_system_prompt("system-generic.md") or ""
     data = {
