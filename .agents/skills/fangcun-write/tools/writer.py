@@ -75,6 +75,51 @@ def _load_characters(config):
     return "（无角色卡）"
 
 
+def _load_fanfic_config(config):
+    """加载同人配置"""
+    import sys
+    sys.path.insert(0, str(Path(__file__).parent))
+    from fanfic_config import FanficConfig, CharacterVoice
+    
+    fanfic_cfg = FanficConfig()
+    fanfic_cfg.mode = config.get("fanfic_mode", "canon")
+    
+    # 加载正典参照
+    rewrites_dir = Path(config.get("rewrites_dir", ""))
+    canon_candidates = [
+        rewrites_dir / "fanfic_canon.md",
+        rewrites_dir / "analysis" / "fanfic_canon.md",
+        rewrites_dir / "canon.md",
+    ]
+    for path in canon_candidates:
+        if path.exists():
+            fanfic_cfg.fanfic_canon = path.read_text(encoding="utf-8")
+            break
+    
+    # 加载角色语音档案
+    voice_candidates = [
+        rewrites_dir / "character_voices.json",
+        rewrites_dir / "analysis" / "character_voices.json",
+    ]
+    for path in voice_candidates:
+        if path.exists():
+            try:
+                voices_data = json.loads(path.read_text(encoding="utf-8"))
+                for name, voice_dict in voices_data.items():
+                    fanfic_cfg.character_voices[name] = CharacterVoice(
+                        name=name,
+                        catchphrases=voice_dict.get("catchphrases", []),
+                        speaking_style=voice_dict.get("speaking_style", ""),
+                        typical_behavior=voice_dict.get("typical_behavior", ""),
+                        forbidden_phrases=voice_dict.get("forbidden_phrases", []),
+                    )
+            except Exception:
+                pass
+            break
+    
+    return fanfic_cfg
+
+
 def _load_previous_chapters(chapters_dir, current_ch, max_chapters=3):
     context_parts = []
     for i in range(max(1, current_ch - max_chapters), current_ch):
@@ -120,6 +165,9 @@ def _build_variables(config, ch_num, mode, **extra):
     characters_brief = _extract_character_brief(characters_full, ch_num)
     source_chars = len(source_text.replace(" ", "").replace("\n", "")) if source_text else 0
 
+    # 加载同人配置
+    fanfic_cfg = _load_fanfic_config(config)
+    
     variables = {
         "book_name": config.get("book_name", ""),
         "ch_num": str(ch_num), "N": str(ch_num), "N03d": f"{ch_num:03d}",
@@ -148,6 +196,11 @@ def _build_variables(config, ch_num, mode, **extra):
         "目标字数": str(source_chars or config.get("source_chars", 2500)),
         "目标字数_min": str(int((source_chars or config.get("source_chars", 2500)) * 0.9)),
         "目标字数_max": str(int((source_chars or config.get("source_chars", 2500)) * 1.1)),
+        # 同人模式变量
+        "fanfic_section": fanfic_cfg.build_fanfic_section(),
+        "chapter_memo_section": fanfic_cfg.build_chapter_memo_section(),
+        "audit_dimensions": fanfic_cfg.build_audit_dimensions(),
+        "fanfic_mode": fanfic_cfg.mode,
     }
     variables["characters"] = characters_brief
     variables["角色约束"] = characters_brief
