@@ -427,6 +427,46 @@ def _enforce_unique_names(rewrites_dir):
             print(f"  [OK] {f.name} 已同步更新")
 
 
+def _format_events_table(events):
+    """格式化事件表为可读的markdown表格。"""
+    if not events:
+        return "（无事件数据）"
+    
+    # 表头
+    lines = ["| 章 | 章名 | 角色 | 事件 | 强度 | 情绪 | 时长 | 类型 |"]
+    lines.append("|---|------|------|------|------|------|------|------|")
+    
+    for e in events:
+        ch = e.get("id", "")
+        event_text = e.get("event", "")
+        
+        # 解析event字段（格式：| 章名 | 角色 | 事件 | 强度 | 情绪 | 时长 | 类型 |）
+        if event_text.startswith("|"):
+            parts = [p.strip() for p in event_text.split("|") if p.strip()]
+            if len(parts) >= 7:
+                chapter_name = parts[0]
+                characters = parts[1]
+                description = parts[2]
+                intensity = parts[3]
+                emotion = parts[4]
+                duration = parts[5]
+                genre = parts[6]
+                
+                # 截断过长的描述
+                if len(description) > 50:
+                    description = description[:47] + "..."
+                
+                lines.append(f"| {ch} | {chapter_name} | {characters} | {description} | {intensity} | {emotion} | {duration} | {genre} |")
+            else:
+                # 格式不正确，直接显示原文
+                lines.append(f"| {ch} | - | - | {event_text[:80]}... | - | - | - | - |")
+        else:
+            # 非标准格式，直接显示原文
+            lines.append(f"| {ch} | - | - | {event_text[:80]}... | - | - | - | - |")
+    
+    return "\n".join(lines)
+
+
 def phase_open_book(config, state_mgr=None):
     """开书：从 source-engine 产物生成设定文件。不重新读源文。"""
     print("\n" + "=" * 50)
@@ -469,19 +509,24 @@ def phase_open_book(config, state_mgr=None):
                     all_source_chars.add(c)
 
     # 构建 source_analysis.md（从已有产物组装，不调 LLM）
+    # 格式化事件表
+    formatted_events = _format_events_table(events)
+    
     source_analysis = f"""# 源文分析
 
-## 事件表（{len(events)}章）
-{events_text}
+## 统计信息
+- 总章数：{len(events)} 章
+- 源文角色：{"、".join(sorted(all_source_chars))}
+
+## 事件表
+
+{formatted_events}
 
 ## 故事骨架
 {skeleton if skeleton else "（未生成，请先运行 source-engine: --phase skeleton）"}
 
 ## 改编策略
 {adaptation if adaptation else "（未生成，请先运行 source-engine: --phase adaptation）"}
-
-## 源文角色清单
-{"、".join(sorted(all_source_chars))}
 """
 
     atomic_write_text(rewrites_dir / "source_analysis.md", source_analysis)
