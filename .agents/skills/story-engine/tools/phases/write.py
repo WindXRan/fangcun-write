@@ -259,8 +259,9 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
         return ok, fail
 
     # --- 按需修复：字数/风格问题 ---
-    for retry_round in range(1, 3):
+    for retry_round in range(1, 4):  # 最多3轮
         retry_list = []
+        rewrite_list = []  # 字数太短需要重写的章节
         for ch in range(start, end + 1):
             ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
             if not ch_file.exists():
@@ -269,34 +270,53 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
             body = re.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text)
             chars = len(body)
 
-            # 硬卡点：2000-3000
-            if chars > 3000:
-                retry_list.append((ch, "trim", lambda c=ch: _fix_trim(config, c, chapters_dir)))
+            # 字数极短（<500字）→ 直接重写，不expand
+            if chars < 500:
+                rewrite_list.append(ch)
+            # 字数不足 → expand
             elif chars < 2000:
                 retry_list.append((ch, "expand", lambda c=ch, t=text: _fix_expand(config, c, t, chapters_dir)))
+            # 字数超标 → trim
+            elif chars > 3000:
+                retry_list.append((ch, "trim", lambda c=ch: _fix_trim(config, c, chapters_dir)))
 
-        if not retry_list:
+        # 字数极短的章节直接重写
+        if rewrite_list:
+            print(f"  [REWRITE] {len(rewrite_list)}章字数极短，直接重写: {rewrite_list}")
+            t_rewrite = time.time()
+            for ch in rewrite_list:
+                ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+                try:
+                    result = run_one(config, "write-chapter", ch)
+                    ch_file.write_text(result, encoding='utf-8')
+                    print(f"    [OK] ch{ch:03d} 重写完成")
+                except Exception as e:
+                    print(f"    [FAIL] ch{ch:03d} 重写失败: {e}")
+            print(f"  重写完成 ({time.time()-t_rewrite:.0f}s)")
+
+        if not retry_list and not rewrite_list:
             break
 
-        print(f"  [RETRY R{retry_round}] {len(retry_list)}章需trim: {[c for c,_,_ in retry_list]}")
-        t_retry = time.time()
-        with ThreadPoolExecutor(max_workers=min(5, len(retry_list) or 1)) as ex:
-            def _retry_one(ch_action_fix):
-                ch, action, fix_func = ch_action_fix
-                try:
-                    fix_func()
-                    return ch, action, None
-                except Exception as e:
-                    return ch, action, str(e)
+        if retry_list:
+            print(f"  [RETRY R{retry_round}] {len(retry_list)}章需调整: {[c for c,_,_ in retry_list]}")
+            t_retry = time.time()
+            with ThreadPoolExecutor(max_workers=min(5, len(retry_list) or 1)) as ex:
+                def _retry_one(ch_action_fix):
+                    ch, action, fix_func = ch_action_fix
+                    try:
+                        fix_func()
+                        return ch, action, None
+                    except Exception as e:
+                        return ch, action, str(e)
 
-            for result in ex.map(_retry_one, retry_list):
-                ch, action, err = result
-                if err:
-                    print(f"    [FAIL] {action} ch{ch:03d}: {err}")
-                else:
-                    print(f"    [{action.upper()}] ch{ch:03d}")
+                for result in ex.map(_retry_one, retry_list):
+                    ch, action, err = result
+                    if err:
+                        print(f"    [FAIL] {action} ch{ch:03d}: {err}")
+                    else:
+                        print(f"    [{action.upper()}] ch{ch:03d}")
 
-        print(f"  重试轮次 {retry_round} 完成 ({time.time()-t_retry:.0f}s)")
+            print(f"  重试轮次 {retry_round} 完成 ({time.time()-t_retry:.0f}s)")
 
     total = sum(
         len(Path(path).read_text(encoding='utf-8').replace('\n', '').replace(' ', '').replace('\r', ''))

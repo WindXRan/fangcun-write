@@ -1,63 +1,39 @@
 {
   "version": 1,
-  "created": "2026-06-20T14:18:41",
-  "updated": "2026-06-20T14:28:37",
+  "created": "2026-06-20T15:08:45",
+  "updated": "2026-06-20T15:13:12",
   "phases": {
     "script": {
-      "status": "running",
-      "started": "2026-06-20T14:19:54"
+      "status": "done",
+      "started": "2026-06-20T15:08:45",
+      "finished": "2026-06-20T15:13:12"
     }
   },
   "episodes": {
     "1": {
       "status": "completed",
-      "chars": 1497,
-      "timestamp": "2026-06-20T14:20:46"
+      "chars": 1304,
+      "timestamp": "2026-06-20T15:09:39"
     },
     "2": {
       "status": "completed",
-      "chars": 1593,
-      "timestamp": "2026-06-20T14:21:28"
+      "chars": 1397,
+      "timestamp": "2026-06-20T15:10:40"
     },
     "3": {
       "status": "completed",
-      "chars": 17,
-      "timestamp": "2026-06-20T14:21:54"
+      "chars": 1401,
+      "timestamp": "2026-06-20T15:11:30"
     },
     "4": {
       "status": "completed",
-      "chars": 1525,
-      "timestamp": "2026-06-20T14:22:51"
+      "chars": 1422,
+      "timestamp": "2026-06-20T15:12:21"
     },
     "5": {
       "status": "completed",
-      "chars": 1513,
-      "timestamp": "2026-06-20T14:23:50"
-    },
-    "6": {
-      "status": "completed",
-      "chars": 1445,
-      "timestamp": "2026-06-20T14:24:38"
-    },
-    "7": {
-      "status": "completed",
-      "chars": 1080,
-      "timestamp": "2026-06-20T14:25:10"
-    },
-    "8": {
-      "status": "completed",
-      "chars": 1994,
-      "timestamp": "2026-06-20T14:26:24"
-    },
-    "9": {
-      "status": "completed",
-      "chars": 2249,
-      "timestamp": "2026-06-20T14:27:34"
-    },
-    "10": {
-      "status": "completed",
-      "chars": 1925,
-      "timestamp": "2026-06-20T14:28:37"
+      "chars": 1230,
+      "timestamp": "2026-06-20T15:13:12"
     }
   }
 }

@@ -1,18 +1,21 @@
-"""统一路径设置：source-engine 共享层 + story-engine 本地。
+"""统一路径设置：story-engine / source-engine 三级路径一次性注入。
 
-共享模块（api_client, prompt_meta, state_manager, text_metrics 等）统一在 source-engine/tools/。
-story-engine 只保留自己特有的模块。
+所有需要导入 prompt_meta / utils / lib 的模块，只需：
+    import _path_setup  # noqa: F401  (副作用：设置 sys.path)
+    from prompt_meta import ...
 """
 
 import sys
 from pathlib import Path
 
-# source-engine 共享层（lib/ + 工具模块）
-_SOURCE_ENGINE = Path(__file__).resolve().parent.parent.parent / "source-engine" / "tools"
+_THIS_DIR = Path(__file__).resolve().parent          # story-engine/tools/
+_PARENT = _THIS_DIR.parent                           # story-engine/
+_SOURCE_ENGINE_TOOLS = _PARENT.parent / "source-engine" / "tools"
 
+# 按优先级从高到低插入（insert(0) 会让后插入的排在前面）
 _DIRS = [
-    str(_SOURCE_ENGINE),          # prompt_meta, source_io, state_manager, source_analysis
-    str(_SOURCE_ENGINE / "lib"),  # api_client, text_metrics, constants, ...
+    str(_SOURCE_ENGINE_TOOLS),  # source-engine/tools/ (最低优先级)
+    str(_THIS_DIR),             # story-engine/tools/  (最高优先级)
 ]
 
 for _d in _DIRS:
