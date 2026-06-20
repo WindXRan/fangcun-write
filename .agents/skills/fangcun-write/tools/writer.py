@@ -13,13 +13,17 @@ from pathlib import Path
 def _setup_imports():
     """设置导入路径，返回需要的模块"""
     import sys
-    shared_engine = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
-    shared_engine_llm = shared_engine / "llm"
-    sys.path.insert(0, str(shared_engine))
-    sys.path.insert(0, str(shared_engine_llm))
+    # fangcun-analyze/tools 有 lib/api_client.py, lib/text_metrics.py
+    analyze_tools = Path(__file__).parent.parent.parent / "fangcun-analyze" / "tools"
+    # fangcun-novel/tools 有 prompt_meta.py
+    novel_tools = Path(__file__).parent.parent.parent / "fangcun-novel" / "tools"
     
-    from llm.api_client import call_llm
-    from llm.prompt_meta import safe_format
+    for d in [str(analyze_tools), str(novel_tools)]:
+        if d not in sys.path:
+            sys.path.insert(0, d)
+    
+    from lib.api_client import call_llm
+    from prompt_meta import safe_format
     return call_llm, safe_format
 
 
@@ -321,14 +325,7 @@ def _auto_fix(config, content, mode, call_llm, safe_format):
 
 def _check_quality_imitation(config, content):
     """仿写模式质量检查（对比源文）"""
-    import sys
-    shared_engine = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
-    sys.path.insert(0, str(shared_engine))
-    
-    try:
-        from analysis.text_metrics import count_metrics
-    except ImportError:
-        return None
+    from lib.text_metrics import count_metrics
     
     our_metrics = count_metrics(content)
     

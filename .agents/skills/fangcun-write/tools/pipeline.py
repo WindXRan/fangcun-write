@@ -11,8 +11,8 @@ import argparse
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# 添加 shared-engine 到 path
-_SHARED_ENGINE = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
+# 添加 fangcun-analyze 到 path
+_SHARED_ENGINE = Path(__file__).parent.parent.parent / "fangcun-analyze" / "tools"
 _SHARED_ENGINE_LLM = _SHARED_ENGINE / "llm"
 sys.path.insert(0, str(_SHARED_ENGINE))
 sys.path.insert(0, str(_SHARED_ENGINE_LLM))

@@ -20,7 +20,7 @@ description: |
 ## 与其他引擎的关系
 
 ```
-shared-engine (底层：API/IO/分析)
+fangcun-analyze (底层：API/IO/分析)
        ↑
 fangcun-write (写作能力)
        ↑

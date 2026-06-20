@@ -5,7 +5,7 @@ type: user
 phase: postprocess
 description: 精简超字数章
 required_vars: ["目标字数", "内容", "N", "N03d"]
-system_prompt: system-generic.md
+system_prompt: system.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
 

@@ -18,8 +18,8 @@ import json
 import argparse
 from pathlib import Path
 
-# 添加 shared-engine 和 fangcun-analyze 到 path
-_SHARED_ENGINE = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
+# 添加 fangcun-analyze 和 fangcun-analyze 到 path
+_SHARED_ENGINE = Path(__file__).parent.parent.parent / "fangcun-analyze" / "tools"
 _SHARED_ENGINE_LLM = _SHARED_ENGINE / "llm"  # 添加 llm 目录
 _SOURCE_ENGINE = Path(__file__).parent.parent.parent / "fangcun-analyze" / "tools"
 sys.path.insert(0, str(_SHARED_ENGINE))
