@@ -114,12 +114,15 @@ def _dispatch_fix(config, ch, chapters_dir):
 
 
 def _fix_trim(config, ch, chapters_dir):
-    """字数超标 → trim。"""
+    """字数超标 → trim。目标 = min(源文字数, 3000)。"""
     from phases.guides import run_one
+    from utils import count_source_chars
     ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
     content = ch_file.read_text(encoding='utf-8')
     current_chars = len(re.sub(r'\s', '', content))
-    target = 2500
+    src_chars = count_source_chars(config, ch)
+    target = min(src_chars, 3000) if src_chars > 0 else 2500
+    target = max(target, 2000)  # 下限 2000
     to_delete = max(0, current_chars - target)
     result = run_one(config, "trim-chapter", ch, extra_replacements={
         "内容": content,
@@ -131,14 +134,18 @@ def _fix_trim(config, ch, chapters_dir):
 
 
 def _fix_expand(config, ch, text, chapters_dir):
-    """字数不足 → expand。"""
+    """字数不足 → expand。目标 = max(源文字数, 2000)。"""
     from phases.guides import run_one
+    from utils import count_source_chars
     ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
     orig_chars = len(re.sub(r'\s', '', text))
+    src_chars = count_source_chars(config, ch)
+    target = max(src_chars, 2000) if src_chars > 0 else 2500
+    target = min(target, 3000)  # 上限 3000
     result = run_one(config, "expand-chapter", ch, extra_replacements={
         "content": text,
         "orig_chars": str(orig_chars),
-        "target_chars": "2500",
+        "target_chars": str(target),
         "min_chars": "2000",
         "max_chars": "3000",
     })
@@ -262,6 +269,7 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
             body = re.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text)
             chars = len(body)
 
+            # 硬卡点：2000-3000
             if chars > 3000:
                 retry_list.append((ch, "trim", lambda c=ch: _fix_trim(config, c, chapters_dir)))
             elif chars < 2000:
