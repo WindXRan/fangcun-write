@@ -186,6 +186,12 @@ def phase_script(config: dict, start: int = 1, end: int = 3, dry_run: bool = Fal
     target_words = int(duration * 150)
 
     system_prompt = load_prompt("script.md")
+    # 加载写作方法论作为参考上下文
+    try:
+        writing_methods = load_prompt("writing-methods.md")
+        system_prompt += f"\n\n## 写作方法论参考（仅供创意参考，不写进剧本）\n\n{writing_methods}"
+    except FileNotFoundError:
+        pass
     format_prompt = '\n你必须使用如下XML格式写入工作区：\n<scriptItem name="剧本名称">剧本内容</scriptItem>'
 
     existing_scripts = get_all_scripts(output_dir)
