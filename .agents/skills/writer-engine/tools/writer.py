@@ -1,486 +1,337 @@
 """
-writer-engine: 通用写章模块
+writer-engine: 通用写作流水线
 
-支持两种模式：
-- imitation（仿写）：有源文参照，对比源文质量指标
-- continue（续写）：无源文，自由创作，延续前文风格
+接受 prompt 文件路径 + context，执行：加载 prompt → 注入 context → 调 LLM → 校验 → 保存。
 """
 
-import os
+import re
+import json
 from pathlib import Path
+from datetime import datetime
+
+PROMPTS_DIR = Path(__file__).parent.parent / "prompts"
 
 
-def _setup_imports():
-    """设置导入路径，返回需要的模块"""
-    import sys
-    shared_engine = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
-    shared_engine_llm = shared_engine / "llm"
-    sys.path.insert(0, str(shared_engine))
-    sys.path.insert(0, str(shared_engine_llm))
-    
-    from llm.api_client import call_llm
-    from llm.prompt_meta import safe_format
-    return call_llm, safe_format
+def list_prompts():
+    """列出所有可用的 prompt 模板。"""
+    prompts = []
+    for p in sorted(PROMPTS_DIR.rglob("*.md")):
+        rel = p.relative_to(PROMPTS_DIR)
+        prompts.append(str(rel))
+    return prompts
 
 
-def get_writer_dirs(config):
-    """获取写作相关的目录结构"""
-    rewrites_dir = Path(config.get("rewrites_dir", ""))
-    return {
-        "rewrites_dir": rewrites_dir,
-        "chapters_dir": rewrites_dir / "chapters",
-        "guides_dir": rewrites_dir / "guides",
-        "analysis_dir": rewrites_dir / "analysis",
-    }
+def load_prompt(prompt_path: str) -> str:
+    """加载 prompt 模板。支持相对路径和绝对路径。"""
+    p = Path(prompt_path)
+    if p.is_absolute() and p.exists():
+        return p.read_text(encoding="utf-8")
+    # 相对于 prompts/ 目录
+    full = PROMPTS_DIR / prompt_path
+    if full.exists():
+        return full.read_text(encoding="utf-8")
+    raise FileNotFoundError(f"Prompt 不存在: {prompt_path}")
 
 
-def _load_prompt_template(mode, action="write"):
-    """加载prompt模板（去掉frontmatter）
-    
-    Args:
-        mode: "imitation" 或 "continue"
-        action: "write", "trim", "polish", "expand", "rewrite"
+def inject_context(prompt: str, context: dict) -> str:
+    """将 context 中的变量注入 prompt 模板。"""
+    for key, value in context.items():
+        if isinstance(value, str):
+            prompt = prompt.replace(f"{{{key}}}", value)
+        elif isinstance(value, (int, float)):
+            prompt = prompt.replace(f"{{{key}}}", str(value))
+    return prompt
+
+
+def validate_output(output: str, rules: dict = None) -> list[str]:
+    """校验输出质量。返回问题列表，空=合格。"""
+    if not rules:
+        return []
+
+    issues = []
+
+    # 字数校验
+    if "字数" in rules:
+        min_w, max_w = rules["字数"]
+        chars = len(re.sub(r'\s', '', output))
+        if chars < min_w:
+            issues.append(f"字数不足: {chars} < {min_w}")
+        elif chars > max_w:
+            issues.append(f"字数超标: {chars} > {max_w}")
+
+    # 禁用词校验
+    if "禁用词" in rules:
+        for word in rules["禁用词"]:
+            if word in output:
+                issues.append(f"包含禁用词: {word}")
+
+    # 角色名校验
+    if "禁止源文名" in rules:
+        for name in rules["禁止源文名"]:
+            if name in output:
+                issues.append(f"包含源文角色名: {name}")
+
+    # △ 标记校验（剧本专用）
+    if rules.get("必须有△"):
+        if "△" not in output:
+            issues.append("缺少△场景描述标记")
+
+    # XML 标签校验
+    if rules.get("必须有scriptItem"):
+        if "<scriptItem" not in output:
+            issues.append("缺少<scriptItem>标签")
+
+    return issues
+
+
+def auto_fix(output: str, issues: list[str], rules: dict = None) -> str:
+    """自动修复简单问题。"""
+    # 替换源文角色名
+    if rules and "替换角色名" in rules:
+        for old, new in rules["替换角色名"].items():
+            output = output.replace(old, new)
+
+    # 去掉尾部元数据
+    output = re.sub(r'\n*【字数[：:]\s*\d+\s*字?】\s*$', '', output)
+
+    return output
+
+
+def execute(
+    prompt: str,
+    context: dict = None,
+    rules: dict = None,
+    output_path: str = None,
+    system_prompt: str = None,
+    api_key: str = None,
+    api_url: str = None,
+    model: str = "deepseek-chat",
+    temperature: float = 0.8,
+    max_tokens: int = 4096,
+) -> dict:
     """
-    prompts_dir = Path(__file__).parent.parent / "prompts"
-    
-    # 先找模式特定的模板
-    prompt_file = prompts_dir / mode / f"{action}.md"
-    if not prompt_file.exists():
-        # 再找通用模板
-        prompt_file = prompts_dir / f"{action}.md"
-    if not prompt_file.exists():
-        return "你是一个专业的小说写手。请根据以下要求写作。"
-    
-    content = prompt_file.read_text(encoding="utf-8")
-    # 去掉 frontmatter
-    if content.startswith("---"):
-        parts = content.split("---", 2)
-        if len(parts) >= 3:
-            return parts[2].strip()
-    return content.strip()
+    执行一次写作任务。
 
-
-def _load_system_prompt(mode):
-    """加载系统提示词"""
-    prompts_dir = Path(__file__).parent.parent / "prompts"
-    
-    # 先找模式特定的系统提示词
-    prompt_file = prompts_dir / mode / "system.md"
-    if prompt_file.exists():
-        content = prompt_file.read_text(encoding="utf-8")
-        if content.startswith("---"):
-            parts = content.split("---", 2)
-            if len(parts) >= 3:
-                return parts[2].strip()
-        return content.strip()
-    
-    # 再找通用系统提示词
-    prompt_file = prompts_dir / "system.md"
-    if prompt_file.exists():
-        content = prompt_file.read_text(encoding="utf-8")
-        if content.startswith("---"):
-            parts = content.split("---", 2)
-            if len(parts) >= 3:
-                return parts[2].strip()
-        return content.strip()
-    
-    return ""
-
-
-def _load_characters(config):
-    """加载角色卡"""
-    rewrites_dir = Path(config.get("rewrites_dir", ""))
-    candidates = [
-        rewrites_dir / "analysis" / "characters.md",
-        rewrites_dir / "characters.md",
-        rewrites_dir / "settings" / "characters.md",
-    ]
-    for path in candidates:
-        if path.exists():
-            return path.read_text(encoding="utf-8")
-    return "（无角色卡）"
-
-
-def _load_previous_chapters(chapters_dir, current_ch, max_chapters=3):
-    """加载前文"""
-    context_parts = []
-    for i in range(max(1, current_ch - max_chapters), current_ch):
-        ch_file = chapters_dir / f"ch_{i:03d}.txt"
-        if ch_file.exists():
-            content = ch_file.read_text(encoding="utf-8")
-            context_parts.append(f"【第{i}章】\n{content[-500:]}")
-    return "\n\n".join(context_parts)
-
-
-def _load_guide(guides_dir, ch_num):
-    """加载章纲"""
-    candidates = [
-        guides_dir / f"plot_{ch_num:03d}.md",
-        guides_dir / f"plot_{ch_num}.md",
-    ]
-    for path in candidates:
-        if path.exists():
-            return path.read_text(encoding="utf-8")
-    return "（无章纲）"
-
-
-def _load_source_text(config, ch_num):
-    """加载源文（仿写模式专用）"""
-    source_dir = Path(config.get("source_dir", ""))
-    if not source_dir:
-        return None
-    
-    cache_dir = source_dir / "_cache" / "chapters"
-    candidates = [
-        cache_dir / f"第{ch_num:03d}章.txt",
-        cache_dir / f"第{ch_num}章.txt",
-    ]
-    for path in candidates:
-        if path.exists():
-            return path.read_text(encoding="utf-8")
-    return None
-
-
-def _build_variables(config, ch_num, mode, **extra):
-    """构建变量映射（兼容 story-engine 的 prompt 变量名）"""
-    dirs = get_writer_dirs(config)
-    source_text = _load_source_text(config, ch_num) if mode == "imitation" else None
-    source_chars = len(source_text.replace(" ", "").replace("\n", "")) if source_text else 0
-    
-    variables = {
-        # 基础变量
-        "book_name": config.get("book_name", ""),
-        "ch_num": str(ch_num),
-        "N": str(ch_num),
-        "N03d": f"{ch_num:03d}",
-        # story-engine 兼容变量
-        "新书名": config.get("book_name", ""),
-        "作者名": config.get("author_name", ""),
-        "源书名": config.get("source_book_name", ""),
-        "源文字数": str(config.get("source_chars", 2500)),
-        "源文句长": str(config.get("source_sent_len", 15)),
-        "源文短句比": str(config.get("source_short_ratio", 0.3)),
-        "源文段长": str(config.get("source_para_len", 60)),
-        "源文对话比": str(config.get("source_dialog_ratio", 40)),
-        "源文代词密度": str(config.get("source_pronoun_density", 0.05)),
-        "源文标点": config.get("source_punctuation", ""),
-        "genre": config.get("genre", ""),
-        "女主名": config.get("female_lead", ""),
-        "男主名": config.get("male_lead", ""),
-        "世界观": config.get("worldview", ""),
-        "文笔指纹": config.get("writing_fingerprint", ""),
-        "风格类型": config.get("style_type", ""),
-        "场景运作机制": config.get("scene_mechanism", ""),
-        "信息释放时机": config.get("info_release", ""),
-        "角色行为卡片": config.get("character_cards", ""),
-        "全局结构": config.get("global_structure", ""),
-        "改写原则": config.get("rewrite_principles", ""),
-    }
-    
-    # 加载角色卡
-    characters = _load_characters(config)
-    variables["characters"] = characters
-    variables["角色约束"] = characters  # story-engine 兼容
-    
-    # 加载章纲
-    guide = _load_guide(dirs["guides_dir"], ch_num)
-    variables["guide"] = guide if guide != "（无章纲）" else "（无章纲，自由发挥）"
-    
-    # 加载前文
-    prev_context = _load_previous_chapters(dirs["chapters_dir"], ch_num)
-    variables["prev_context"] = prev_context if prev_context else "（第一章，无前文）"
-    
-    # 仿写模式：加载源文
-    if source_text:
-        variables["source_text"] = source_text
-    else:
-        variables["source_text"] = "（无源文）"
-    
-    # 合并额外变量
-    if extra:
-        variables.update(extra)
-    
-    return variables
-
-
-def _auto_fix(config, content, mode, call_llm, safe_format):
-    """自动修复"""
-    chars = len(content.replace(" ", "").replace("\n", ""))
-    min_chars, max_chars = 1800, 3000
-    
-    # 字数检查
-    if chars < min_chars:
-        target_chars = 2500
-        prompt_template = _load_prompt_template(mode, "expand")
-        prompt = safe_format(prompt_template, {
-            "content": content,
-            "orig_chars": str(chars),
-            "target_chars": str(target_chars),
-            "min_chars": str(int(target_chars * 0.9)),
-            "max_chars": str(int(target_chars * 1.1)),
-        })
-        try:
-            return call_llm(config, "expand-chapter", prompt, system_prompt="扩写，保持风格一致。", max_tokens=int(target_chars * 1.5))
-        except Exception as e:
-            print(f"    [WARN] 扩写失败: {e}")
-            return content
-    
-    if chars > max_chars:
-        target_chars = 2500
-        need_cut = chars - target_chars
-        prompt_template = _load_prompt_template(mode, "trim")
-        prompt = safe_format(prompt_template, {
-            "content": content,
-            "内容": content,
-            "target_chars": str(target_chars),
-            "目标字数": str(target_chars),
-            "当前字数": str(chars),
-            "需删减": str(need_cut),
-        })
-        try:
-            return call_llm(config, "trim-chapter", prompt, system_prompt="精简，保留剧情。", max_tokens=int(target_chars * 2))
-        except Exception as e:
-            print(f"    [WARN] 精简失败: {e}")
-            return content
-    
-    # 仿写模式：质量检查
-    if mode == "imitation":
-        quality_issue = _check_quality_imitation(config, content)
-        if quality_issue:
-            source_text = _load_source_text(config, config.get("_current_ch_num"))
-            prompt_template = _load_prompt_template(mode, "polish")
-            prompt = safe_format(prompt_template, {
-                "content": content,
-                "source_text": source_text or "（无源文）",
-                "源文句长": str(config.get("source_sent_len", 15)),
-                "源文对话比": str(config.get("source_dialog_ratio", 40)),
-                "源文段长": str(config.get("source_para_len", 60)),
-                "min_chars": str(int(chars * 0.9)),
-                "max_chars": str(int(chars * 1.1)),
-            })
-            try:
-                return call_llm(config, "polish-chapter", prompt, 
-                               system_prompt=f"修复：{quality_issue}",
-                               max_tokens=int(chars * 1.5))
-            except Exception as e:
-                print(f"    [WARN] 润色失败: {e}")
-                return content
-    
-    return content
-
-
-def _check_quality_imitation(config, content):
-    """仿写模式质量检查（对比源文）"""
-    import sys
-    shared_engine = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
-    sys.path.insert(0, str(shared_engine))
-    
-    try:
-        from analysis.text_metrics import count_metrics
-    except ImportError:
-        return None
-    
-    our_metrics = count_metrics(content)
-    
-    # 获取源文指标
-    ch_num = config.get("_current_ch_num")
-    source_text = _load_source_text(config, ch_num) if ch_num else None
-    
-    if source_text:
-        src_metrics = count_metrics(source_text)
-        
-        # AI路标词检查
-        limit = max(src_metrics.get("ai_markers", 0) + 1, 1)
-        if our_metrics.get("ai_markers", 0) > limit:
-            return "AI路标词过多"
-        
-        # 代词密度检查
-        if src_metrics.get("pronoun_density", 0) > 0:
-            ratio = our_metrics.get("pronoun_density", 0) / max(src_metrics["pronoun_density"], 0.001)
-            if ratio > 1.5 or ratio < 0.5:
-                return "代词密度偏离源文"
-        
-        # 句长偏离检查
-        if src_metrics.get("sent_len_stddev", 0) > 0:
-            ratio = our_metrics.get("sent_len_stddev", 0) / max(src_metrics["sent_len_stddev"], 0.001)
-            if ratio > 1.5 or ratio < 0.5:
-                return "句长节奏偏离源文"
-    
-    # 通用检查
-    if our_metrics.get("ai_markers", 0) > 5:
-        return "AI路标词过多"
-    
-    return None
-
-
-def write_chapter(config, ch_num, mode="imitation", context=None, auto_fix=True):
-    """写单章（含自动修复）
-    
     Args:
-        config: 配置字典
+        prompt: prompt 模板路径（如 "novel/imitation/write.md"）
+        context: 注入 prompt 的变量字典
+        rules: 校验规则
+        output_path: 输出文件路径
+        system_prompt: 系统提示词（可选）
+        api_key: API key
+        api_url: API URL
+        model: 模型名
+        temperature: 温度
+        max_tokens: 最大 token 数
+
+    Returns:
+        {"output": str, "issues": list, "saved": str}
+    """
+    # 1. 加载 prompt
+    prompt_template = load_prompt(prompt)
+
+    # 2. 注入 context
+    if context:
+        user_prompt = inject_context(prompt_template, context)
+    else:
+        user_prompt = prompt_template
+
+    # 3. 调 LLM
+    _ensure_path()
+    from lib.api_client import call_api
+
+    output = call_api(
+        api_key=api_key,
+        model=model,
+        user_prompt=user_prompt,
+        system_prompt=system_prompt or "",
+        api_url=api_url,
+        temperature=temperature,
+        max_tokens=max_tokens,
+    )
+
+    # 4. 校验
+    issues = validate_output(output, rules)
+
+    # 5. 自动修复
+    if issues and rules:
+        output = auto_fix(output, issues, rules)
+        # 重新校验
+        issues = validate_output(output, rules)
+
+    # 6. 保存
+    saved_path = None
+    if output_path and not issues:
+        p = Path(output_path)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(output, encoding="utf-8")
+        saved_path = str(p)
+
+    return {
+        "output": output,
+        "issues": issues,
+        "saved": saved_path,
+        "chars": len(re.sub(r'\s', '', output)),
+    }
+
+
+def write_chapter(config: dict, ch_num: int, mode: str = "imitation") -> dict:
+    """
+    高层写章接口。自动选择 prompt + 组装 context + 调 LLM + 校验 + 保存。
+
+    Args:
+        config: 项目配置
         ch_num: 章节号
         mode: "imitation"（仿写）或 "continue"（续写）
-        context: 额外上下文
-        auto_fix: 是否自动修复
+
+    Returns:
+        {"output": str, "issues": list, "saved": str, "chars": int}
     """
-    call_llm, safe_format = _setup_imports()
-    
-    # 构建变量
-    extra = {}
-    if context:
-        extra["context"] = context
-    variables = _build_variables(config, ch_num, mode, **extra)
-    
-    # 加载prompt
-    prompt_template = _load_prompt_template(mode, "write")
-    prompt = safe_format(prompt_template, variables)
-    
-    # 加载system prompt
-    system_prompt = _load_system_prompt(mode)
-    
-    # 传递当前章节号给_auto_fix
-    fix_config = {**config, "_current_ch_num": ch_num}
-    
-    try:
-        result = call_llm(config, f"write-chapter-{mode}", prompt,
-                         system_prompt=system_prompt,
-                         max_tokens=4096)
-        if auto_fix and result:
-            result = _auto_fix(fix_config, result, mode, call_llm, safe_format)
-        return result
-    except Exception as e:
-        print(f"    [ERROR] 写章失败: {e}")
-        return None
+    _ensure_path()
+    from file_io import (
+        get_source_text, load_characters, load_plot_guide,
+        load_style_text, load_chapter, get_rewrites_dir,
+    )
+
+    rewrites_dir = str(get_rewrites_dir(config))
+    api_key = config.get("api_key") or os.environ.get("API_KEY", "")
+    api_url = config.get("api_base_url") or os.environ.get("API_BASE_URL", "")
+    model = config.get("model", "deepseek-chat")
+
+    # 1. 选择 prompt
+    prompt_path = _resolve_prompt(mode)
+
+    # 2. 组装 context
+    context = _build_context(config, ch_num, mode)
+
+    # 3. 校验规则
+    rules = _build_rules(config, mode)
+
+    # 4. 输出路径
+    output_path = str(Path(rewrites_dir) / "chapters" / f"ch_{ch_num:03d}.txt")
+
+    # 5. 执行
+    return execute(
+        prompt=prompt_path,
+        context=context,
+        rules=rules,
+        output_path=output_path,
+        system_prompt=config.get("system_prompt", ""),
+        api_key=api_key,
+        api_url=api_url,
+        model=model,
+        temperature=config.get("temperature", 0.8),
+        max_tokens=config.get("max_tokens", 4096),
+    )
 
 
-def trim_chapter(config, ch_num, mode="imitation"):
-    """精简章节"""
-    call_llm, safe_format = _setup_imports()
-    dirs = get_writer_dirs(config)
-    ch_file = dirs["chapters_dir"] / f"ch_{ch_num:03d}.txt"
-    
-    if not ch_file.exists():
-        print(f"    [ERROR] 章节不存在: {ch_file}")
-        return None
-    
-    original = ch_file.read_text(encoding="utf-8")
-    current_chars = len(original.replace(" ", "").replace("\n", ""))
-    target_chars = int(current_chars * 0.8)
-    need_cut = current_chars - target_chars
-    
-    prompt_template = _load_prompt_template(mode, "trim")
-    prompt = safe_format(prompt_template, {
-        "content": original,
-        "内容": original,
-        "target_chars": str(target_chars),
-        "目标字数": str(target_chars),
-        "当前字数": str(current_chars),
-        "需删减": str(need_cut),
+def _resolve_prompt(mode: str) -> str:
+    """根据 mode 选择 prompt 文件路径。"""
+    # 先找 mode 特定的 write.md
+    mode_prompt = PROMPTS_DIR / mode / "write.md"
+    if mode_prompt.exists():
+        return str(mode_prompt)
+    # fallback: 通用 write.md
+    generic = PROMPTS_DIR / "write.md"
+    if generic.exists():
+        return str(generic)
+    raise FileNotFoundError(f"找不到 prompt: {mode}/write.md 或 write.md")
+
+
+def _build_context(config: dict, ch_num: int, mode: str) -> dict:
+    """根据 mode 组装 context 变量。"""
+    _ensure_path()
+    from file_io import (
+        get_source_text, load_characters, load_plot_guide,
+        load_style_text, load_chapter, get_rewrites_dir,
+        get_chapter_event, get_skeleton_context, get_adaptation_principles,
+    )
+
+    rewrites_dir = str(get_rewrites_dir(config))
+    context = {
         "N": str(ch_num),
         "N03d": f"{ch_num:03d}",
-    })
-    
-    system_prompt = _load_system_prompt(mode)
-    
-    try:
-        return call_llm(config, "trim-chapter", prompt,
-                       system_prompt=system_prompt,
-                       max_tokens=int(target_chars * 2))
-    except Exception as e:
-        print(f"    [ERROR] 精简失败: {e}")
-        return None
+        "新书名": config.get("book_name", ""),
+        "作者名": config.get("author", ""),
+        "源书名": config.get("source_book", ""),
+    }
+
+    if mode == "imitation":
+        # 仿写模式：需要源文参照
+        src = get_source_text(config, ch_num)
+        context["源文全文"] = src or ""
+        context["源文字数"] = str(len(re.sub(r'\s', '', src))) if src else "0"
+
+        plot = load_plot_guide(config, ch_num)
+        context["章纲"] = plot or ""
+
+        style = load_style_text(config, ch_num)
+        context["文笔指纹"] = style or ""
+
+        chars = load_characters(config)
+        context["角色卡"] = chars or ""
+
+        context["本章事件"] = get_chapter_event(config, ch_num) or ""
+        context["全局结构"] = get_skeleton_context(config, ch_num) or ""
+        context["改写原则"] = get_adaptation_principles(config) or ""
+
+        # 上一章
+        prev = load_chapter(config, ch_num - 1) if ch_num > 1 else ""
+        context["前文"] = prev or ""
+
+    elif mode == "continue":
+        # 续写模式：无源文，靠前文延续
+        chars = load_characters(config)
+        context["角色卡"] = chars or ""
+
+        plot = load_plot_guide(config, ch_num)
+        context["章纲"] = plot or ""
+
+        # 上一章
+        prev = load_chapter(config, ch_num - 1) if ch_num > 1 else ""
+        context["前文"] = prev or ""
+
+        context["源文全文"] = ""
+        context["文笔指纹"] = ""
+        context["本章事件"] = ""
+        context["全局结构"] = ""
+        context["改写原则"] = ""
+
+    return context
 
 
-def polish_chapter(config, ch_num, mode="imitation"):
-    """润色章节（对比源文风格）"""
-    call_llm, safe_format = _setup_imports()
-    dirs = get_writer_dirs(config)
-    ch_file = dirs["chapters_dir"] / f"ch_{ch_num:03d}.txt"
-    
-    if not ch_file.exists():
-        print(f"    [ERROR] 章节不存在: {ch_file}")
-        return None
-    
-    original = ch_file.read_text(encoding="utf-8")
-    original_chars = len(original.replace(" ", "").replace("\n", ""))
-    
-    # 加载源文（仿写模式）
-    source_text = _load_source_text(config, ch_num) if mode == "imitation" else None
-    
-    prompt_template = _load_prompt_template(mode, "polish")
-    prompt = safe_format(prompt_template, {
-        "content": original,
-        "source_text": source_text or "（无源文，通用润色）",
-        "源文句长": str(config.get("source_sent_len", 15)),
-        "源文对话比": str(config.get("source_dialog_ratio", 40)),
-        "源文段长": str(config.get("source_para_len", 60)),
-        "min_chars": str(int(original_chars * 0.9)),
-        "max_chars": str(int(original_chars * 1.1)),
-    })
-    
-    system_prompt = _load_system_prompt(mode)
-    
-    try:
-        return call_llm(config, "polish-chapter", prompt,
-                       system_prompt=system_prompt,
-                       max_tokens=int(original_chars * 1.5))
-    except Exception as e:
-        print(f"    [ERROR] 润色失败: {e}")
-        return None
+def _build_rules(config: dict, mode: str) -> dict:
+    """根据 mode 构建校验规则。"""
+    rules = {
+        "字数": (2000, 3000),
+    }
+
+    # 仿写模式：禁止源文角色名
+    if mode == "imitation":
+        _ensure_path()
+        from file_io import load_characters
+        chars = load_characters(config)
+        if chars:
+            # 提取源文角色名
+            source_names = []
+            for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars):
+                old_names = re.split(r'[/、]', m.group(2))
+                for n in old_names:
+                    n = n.strip()
+                    if n and n != m.group(1).strip():
+                        source_names.append(n)
+            if source_names:
+                rules["禁止源文名"] = source_names
+
+    return rules
 
 
-def expand_chapter(config, ch_num, mode="imitation", target_chars=None):
-    """扩写章节"""
-    call_llm, safe_format = _setup_imports()
-    dirs = get_writer_dirs(config)
-    ch_file = dirs["chapters_dir"] / f"ch_{ch_num:03d}.txt"
-    
-    if not ch_file.exists():
-        print(f"    [ERROR] 章节不存在: {ch_file}")
-        return None
-    
-    original = ch_file.read_text(encoding="utf-8")
-    original_chars = len(original.replace(" ", "").replace("\n", ""))
-    
-    if target_chars is None:
-        target_chars = int(original_chars * 1.3)
-    
-    prompt_template = _load_prompt_template(mode, "expand")
-    prompt = safe_format(prompt_template, {
-        "content": original,
-        "orig_chars": str(original_chars),
-        "target_chars": str(target_chars),
-        "min_chars": str(int(target_chars * 0.9)),
-        "max_chars": str(int(target_chars * 1.1)),
-    })
-    
-    system_prompt = _load_system_prompt(mode)
-    
-    try:
-        return call_llm(config, "expand-chapter", prompt,
-                       system_prompt=system_prompt,
-                       max_tokens=int(target_chars * 1.5))
-    except Exception as e:
-        print(f"    [ERROR] 扩写失败: {e}")
-        return None
-
-
-def rewrite_chapter(config, ch_num, mode="imitation", reason=""):
-    """重写章节"""
-    call_llm, safe_format = _setup_imports()
-    
-    extra = {"reason": reason or "（无具体原因，整章重写）"}
-    variables = _build_variables(config, ch_num, mode, **extra)
-    
-    prompt_template = _load_prompt_template(mode, "rewrite")
-    prompt = safe_format(prompt_template, variables)
-    
-    system_prompt = _load_system_prompt(mode)
-    
-    try:
-        return call_llm(config, f"rewrite-chapter-{mode}", prompt,
-                       system_prompt=system_prompt,
-                       max_tokens=4096)
-    except Exception as e:
-        print(f"    [ERROR] 重写失败: {e}")
-        return None
+def _ensure_path():
+    """确保 lib/ 在 path 中。"""
+    import sys
+    lib_dir = Path(__file__).parent.parent.parent / "source-engine" / "tools"
+    if str(lib_dir) not in sys.path:
+        sys.path.insert(0, str(lib_dir))
+    lib_sub = lib_dir / "lib"
+    if str(lib_sub) not in sys.path:
+        sys.path.insert(0, str(lib_sub))
