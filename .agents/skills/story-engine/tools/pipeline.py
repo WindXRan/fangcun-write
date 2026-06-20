@@ -54,6 +54,7 @@ GOAL_MAP = {
     "source": {"source_analysis"},
     "open": {"prep", "source_analysis", "open_book", "extract"},
     "write": {"guides", "write", "postfix"},
+    "full": {"source_analysis", "open_book", "extract", "guides", "write", "postfix"},  # 全流程
     "review": {"unified_review_fix"},
     "export": {"export"},
     "trim": {"trim"},
@@ -525,7 +526,7 @@ def main():
             mode_str += f" ({', '.join(phase_modes)})"
 
     phase_display = {
-        "import": "导入", "open": "开书", "write": "写章",
+        "import": "导入", "open": "开书", "write": "写章", "full": "全流程",
         "review": "审改", "export": "导出",
         "prep": "导入", "open_book": "开书", "extract": "提取",
         "guides": "指南", "write-only": "写章", "trim": "精简",

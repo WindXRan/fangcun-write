@@ -65,9 +65,11 @@ projects/{作者}/{源书名}/
 ### 一键全流程（推荐）
 
 ```bash
-# 用户只需说："仿写这本书"，agent 执行：
-python .agents/skills/story-engine/tools/pipeline.py --config {config} --phase open_book --skip-confirm  # 开书
-python .agents/skills/story-engine/tools/pipeline.py --config {config} --phase write --start 1 --end {N} --skip-confirm  # 写章
+# 用户只需说："仿写这本书"，agent 执行一条命令：
+python .agents/skills/story-engine/tools/pipeline.py --config {config} --phase full --end {N} --skip-confirm
+
+# 自动执行：源书分析 → 开书 → 写章
+# 已完成的阶段自动跳过（state.json 记录进度）
 ```
 
 ### 分步执行（需要时用）
