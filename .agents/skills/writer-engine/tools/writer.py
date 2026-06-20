@@ -41,6 +41,21 @@ def _load_prompt_template(prompt_name):
     return "你是一个专业的小说写手。请根据以下要求写作。"
 
 
+def _load_system_prompt(system_name):
+    """加载系统提示词"""
+    prompts_dir = Path(__file__).parent.parent / "prompts"
+    prompt_file = prompts_dir / f"system-{system_name}.md"
+    if prompt_file.exists():
+        # 跳过 frontmatter
+        content = prompt_file.read_text(encoding="utf-8")
+        if content.startswith("---"):
+            parts = content.split("---", 2)
+            if len(parts) >= 3:
+                return parts[2].strip()
+        return content.strip()
+    return ""
+
+
 def _load_characters(config):
     """加载角色卡"""
     rewrites_dir = Path(config.get("rewrites_dir", ""))
@@ -137,9 +152,11 @@ def write_chapter(config, ch_num, context=None, auto_fix=True):
     variables = _build_variables(config, ch_num, characters, guide, prev_context, context)
     prompt = safe_format(prompt_template, variables)
     
+    system_prompt = _load_system_prompt("writer")
+    
     try:
         result = call_llm(config, "write-chapter", prompt,
-                         system_prompt="你是一个专业的小说写手。续写时必须保持原作风格和角色一致性。不要废话，直接写正文。",
+                         system_prompt=system_prompt,
                          max_tokens=4096)
         if auto_fix and result:
             result = _auto_fix(config, result, call_llm, safe_format)
@@ -165,9 +182,11 @@ def trim_chapter(config, ch_num):
     prompt_template = _load_prompt_template("trim")
     prompt = safe_format(prompt_template, {"content": original, "target_chars": str(target_chars)})
     
+    system_prompt = _load_system_prompt("editor")
+    
     try:
         return call_llm(config, "trim-chapter", prompt,
-                       system_prompt="你是一个专业的小说编辑，擅长精简文字。",
+                       system_prompt=system_prompt,
                        max_tokens=int(target_chars * 2))
     except Exception as e:
         print(f"    [ERROR] 精简失败: {e}")
@@ -194,9 +213,11 @@ def polish_chapter(config, ch_num):
         "max_chars": str(int(original_chars * 1.1)),
     })
     
+    system_prompt = _load_system_prompt("editor")
+    
     try:
         return call_llm(config, "polish-chapter", prompt,
-                       system_prompt="你是一个专业的小说编辑，擅长润色文笔。",
+                       system_prompt=system_prompt,
                        max_tokens=int(original_chars * 1.5))
     except Exception as e:
         print(f"    [ERROR] 润色失败: {e}")
@@ -226,9 +247,11 @@ def expand_chapter(config, ch_num, target_chars=None):
         "target_chars": str(target_chars),
     })
     
+    system_prompt = _load_system_prompt("writer")
+    
     try:
         return call_llm(config, "expand-chapter", prompt,
-                       system_prompt="你是一个专业的小说写手，擅长扩写。",
+                       system_prompt=system_prompt,
                        max_tokens=int(target_chars * 1.5))
     except Exception as e:
         print(f"    [ERROR] 扩写失败: {e}")
@@ -249,9 +272,11 @@ def rewrite_chapter(config, ch_num, reason=""):
                                  extra={"reason": reason or "（无具体原因，整章重写）"})
     prompt = safe_format(prompt_template, variables)
     
+    system_prompt = _load_system_prompt("writer")
+    
     try:
         return call_llm(config, "rewrite-chapter", prompt,
-                       system_prompt="你是一个专业的小说写手。重写时必须解决上述问题，保持角色一致性。",
+                       system_prompt=system_prompt,
                        max_tokens=4096)
     except Exception as e:
         print(f"    [ERROR] 重写失败: {e}")
