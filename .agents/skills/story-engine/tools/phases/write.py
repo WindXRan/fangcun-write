@@ -152,6 +152,52 @@ def _fix_expand(config, ch, text, chapters_dir):
     ch_file.write_text(result, encoding='utf-8')
 
 
+def _auto_polish(config, ch, chapters_dir):
+    """自动润色：对比源文修正风格。"""
+    from phases.guides import run_one
+    from utils import get_source_text
+    from lib.text_metrics import count_metrics
+    
+    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+    if not ch_file.exists():
+        return False
+    
+    try:
+        original = ch_file.read_text(encoding='utf-8')
+        orig_chars = len(re.sub(r'\s', '', original))
+        
+        # 加载源文
+        source_text = get_source_text(config, ch) or ""
+        if not source_text:
+            return False
+        
+        # 计算源文风格指标
+        src_metrics = count_metrics(source_text)
+        
+        result = run_one(config, "polish-chapter", ch, extra_replacements={
+            "content": original,
+            "source_text": source_text[:3000],
+            "源文句长": str(int(src_metrics.get("avg_sent_len", 25))),
+            "源文对话比": str(int(src_metrics.get("dialogue_ratio", 0.1) * 100)),
+            "源文段长": str(int(src_metrics.get("paragraph_avg_len", 40))),
+            "min_chars": str(int(orig_chars * 0.9)),
+            "max_chars": str(int(orig_chars * 1.1)),
+        })
+        
+        new_chars = len(re.sub(r'\s', '', result))
+        # 如果字数差异太大，跳过
+        if abs(new_chars - orig_chars) / orig_chars > 0.15:
+            print(f"    [SKIP] ch{ch:03d}: 字数差异过大 ({orig_chars}→{new_chars})")
+            return False
+        
+        ch_file.write_text(result, encoding='utf-8')
+        print(f"    [OK] ch{ch:03d} 润色完成")
+        return True
+    except Exception as e:
+        print(f"    [FAIL] ch{ch:03d}: {e}")
+        return False
+
+
 def _fix_polish(config, ch, text, chapters_dir, issue):
     """AI痕迹/代词/句长 → 润色。"""
     from phases.guides import run_one
@@ -331,6 +377,28 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
                         print(f"    [{action.upper()}] ch{ch:03d}")
 
             print(f"  重试轮次 {retry_round} 完成 ({time.time()-t_retry:.0f}s)")
+
+    # --- 自动润色：对比源文修正风格 ---
+    if config.get("auto_polish", True):  # 默认开启
+        print(f"\n  [POLISH] 对比源文润色...")
+        t_polish = time.time()
+        polished = 0
+        with ThreadPoolExecutor(max_workers=min(5, end - start + 1)) as ex:
+            polish_futures = {}
+            for ch in range(start, end + 1):
+                ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+                if ch_file.exists():
+                    polish_futures[ex.submit(_auto_polish, config, ch, chapters_dir)] = ch
+            
+            for f in as_completed(polish_futures):
+                ch = polish_futures[f]
+                try:
+                    if f.result():
+                        polished += 1
+                except Exception as e:
+                    print(f"    [FAIL] polish ch{ch}: {e}")
+        
+        print(f"  [POLISH] 润色了 {polished} 章 ({time.time()-t_polish:.0f}s)")
 
     total = sum(
         len(Path(path).read_text(encoding='utf-8').replace('\n', '').replace(' ', '').replace('\r', ''))
