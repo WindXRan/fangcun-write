@@ -200,6 +200,11 @@ def auto_rollback_if_degraded(rewrites_dir):
     print(f"[DEGRADE] {'; '.join(degrade_reasons)}")
     print(f"[ROLLBACK] 回滚 {', '.join(changed)}")
 
+    import shutil
+    if not shutil.which("git"):
+        print("  [SKIP] git 未安装，跳过回滚")
+        return False
+
     prompts_dir = Path(__file__).resolve().parent.parent / "prompts"
     rolled_back = []
     for name in changed:

@@ -38,6 +38,9 @@ def get_output_path(prompt_text, replacements=None):
 
 def _get_git_diff_summary(path):
     """自动提取 prompt 的 git diff 摘要作为 changelog。"""
+    import shutil
+    if not shutil.which("git"):
+        return ""
     try:
         result = subprocess.run(
             ["git", "diff", "--unified=1", "--", str(path)],

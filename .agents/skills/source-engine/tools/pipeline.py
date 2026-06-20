@@ -16,10 +16,7 @@ import json
 import argparse
 from pathlib import Path
 
-# 确保 lib/ 在 path 中
-sys.path.insert(0, str(Path(__file__).parent / "lib"))
-sys.path.insert(0, str(Path(__file__).parent))
-
+import _path_setup  # noqa: F401
 from lib.api_client import call_api, get_api_key, get_api_url
 from source_analysis import extract_events, build_skeleton, build_adaptation
 from source_io import load_events, load_skeleton, load_adaptation, get_cache_dir, get_events_text

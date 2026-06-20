@@ -60,7 +60,6 @@ def count_metrics(text):
 
     # 重复描写密度
     trigrams = [clean[i:i+3] for i in range(len(clean)-2)]
-    unique_bigrams = set()
     repeat_count = 0
     seen = set()
     for t in trigrams:

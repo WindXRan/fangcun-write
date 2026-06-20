@@ -14,8 +14,7 @@ _SOURCE_ENGINE_TOOLS = _PARENT.parent / "source-engine" / "tools"
 
 _DIRS = [
     str(_THIS_DIR),          # story-engine/tools/  (prompt_meta, utils, ...)
-    str(_THIS_DIR / "lib"),  # story-engine/tools/lib/
-    str(_SOURCE_ENGINE_TOOLS),  # source-engine/tools/  (共享模块)
+    str(_SOURCE_ENGINE_TOOLS),  # source-engine/tools/  (共享模块, 含 lib/)
 ]
 
 for _d in _DIRS:

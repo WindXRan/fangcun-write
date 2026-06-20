@@ -6,7 +6,7 @@ from pathlib import Path
 import requests
 from datetime import datetime
 
-DEFAULT_API_URL = "https://token-plan-cn.xiaomimimo.com/v1/chat/completions"
+DEFAULT_API_URL = os.environ.get("DEFAULT_API_URL", "https://token-plan-cn.xiaomimimo.com/v1/chat/completions")
 
 
 def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None, max_tokens=None):
@@ -34,7 +34,7 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None, max_
 
     api_key = config.get("api_key") or os.environ.get("API_KEY")
     if not api_key:
-        raise ValueError("未配置 API_KEY，请设置 $env:API_KEY 或 config.api_key")
+        raise ValueError("未配置 API_KEY，请设置环境变量 API_KEY 或 config.api_key")
 
     api_url = get_api_url(config)
     provider = config.get("provider", "")
@@ -203,8 +203,6 @@ def test_api_connection(config=None, timeout=10):
             "error": str or None
         }
     """
-    import requests
-    
     api_key = get_api_key(config)
     api_url = get_api_url(config)
     model = (config or {}).get("model", "deepseek-v4-pro")
@@ -218,7 +216,12 @@ def test_api_connection(config=None, timeout=10):
             "error": "未配置 API_KEY"
         }
     
-    headers = {"api-key": api_key, "Content-Type": "application/json"}
+    # 根据 provider 选择不同的 header 格式
+    provider = (config or {}).get("provider", "")
+    if provider == "deepseek" or "deepseek" in api_url:
+        headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    else:
+        headers = {"api-key": api_key, "Content-Type": "application/json"}
     data = {
         "model": model,
         "messages": [
