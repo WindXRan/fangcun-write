@@ -155,10 +155,24 @@ def _fix_expand(config, ch, text, chapters_dir):
 def _fix_polish(config, ch, text, chapters_dir, issue):
     """AI痕迹/代词/句长 → 润色。"""
     from phases.guides import run_one
+    from utils import get_source_text
+    from lib.text_metrics import count_metrics
+    
     ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
     orig_chars = len(re.sub(r'\s', '', text))
+    
+    # 加载源文用于对比
+    source_text = get_source_text(config, ch) or ""
+    src_metrics = {}
+    if source_text:
+        src_metrics = count_metrics(source_text)
+    
     result = run_one(config, "polish-chapter", ch, extra_replacements={
         "content": text,
+        "source_text": source_text[:3000] if source_text else "（源文不可用）",
+        "源文句长": str(int(src_metrics.get("avg_sent_len", 25))),
+        "源文对话比": str(int(src_metrics.get("dialogue_ratio", 0.1) * 100)),
+        "源文段长": str(int(src_metrics.get("paragraph_avg_len", 40))),
         "min_chars": str(int(orig_chars * 0.9)),
         "max_chars": str(int(orig_chars * 1.1)),
     })

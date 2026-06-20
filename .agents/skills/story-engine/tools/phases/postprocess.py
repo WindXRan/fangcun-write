@@ -222,7 +222,25 @@ def phase_polish(config, start, end, workers=None, state_mgr=None):
             original = ch_file.read_text(encoding='utf-8')
             orig_chars = len(original.replace('\n', '').replace(' ', ''))
 
-            r = {"content": original, "min_chars": int(orig_chars * 0.9), "max_chars": int(orig_chars * 1.1)}
+            # 加载源文用于对比
+            from utils import get_source_text
+            from lib.text_metrics import count_metrics
+            source_text = get_source_text(config, ch) or ""
+            
+            # 计算源文风格指标
+            src_metrics = {}
+            if source_text:
+                src_metrics = count_metrics(source_text)
+            
+            r = {
+                "content": original,
+                "source_text": source_text[:3000] if source_text else "（源文不可用）",
+                "源文句长": str(int(src_metrics.get("avg_sent_len", 25))),
+                "源文对话比": str(int(src_metrics.get("dialogue_ratio", 0.1) * 100)),
+                "源文段长": str(int(src_metrics.get("paragraph_avg_len", 40))),
+                "min_chars": int(orig_chars * 0.9),
+                "max_chars": int(orig_chars * 1.1),
+            }
             validate_prompt_variables("polish-chapter.md", r)
             prompt = safe_format(prompt_template, r)
 
