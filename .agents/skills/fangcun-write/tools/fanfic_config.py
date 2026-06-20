@@ -176,10 +176,10 @@ class FanficConfig:
         return '\n'.join(lines)
     
     def build_audit_dimensions(self) -> str:
-        """构建审核维度prompt段"""
+        """构建审核维度prompt段（参考inkos的5维度审核）"""
         mode_obj = self.get_mode()
         
-        lines = ["## 同人审核维度"]
+        lines = ["## 审核维度（写完后自检）"]
         
         severity_map = {
             "critical": "（严格检查，违反即不合格）",
@@ -187,16 +187,29 @@ class FanficConfig:
             "info": "（仅记录，不判定失败）",
         }
         
-        dims = [
+        # 通用维度（5个）
+        general_dims = [
+            ("核心冲突", "critical", "是否有清晰且有足够张力的核心冲突？"),
+            ("开篇节奏", "critical", "前几章能否形成翻页驱动力？"),
+            ("世界一致性", "warning", "世界观是否内洽且具体？"),
+            ("角色区分度", "warning", "主要角色的声音和动机是否各不相同？"),
+            ("节奏可行性", "warning", "是否避免连续多章同一种节拍？"),
+        ]
+        
+        # 同人/续写专用维度（4个）
+        fanfic_dims = [
             ("角色还原度", mode_obj.character_fidelity, "检查角色的语癖、说话风格、行为模式是否与正典一致"),
             ("世界规则遵守", mode_obj.world_rules, "检查是否违反正典中的世界规则"),
             ("关系动态", mode_obj.relationship_dynamics, "检查角色之间的关系互动是否合理"),
             ("正典事件一致性", mode_obj.canon_consistency, "检查是否与正典关键事件时间线矛盾"),
         ]
         
-        for name, severity, desc in dims:
+        # 合并维度
+        all_dims = general_dims + fanfic_dims
+        
+        for i, (name, severity, desc) in enumerate(all_dims, 1):
             severity_label = severity_map.get(severity, "")
-            lines.append(f"- **{name}** {severity_label}: {desc}")
+            lines.append(f"{i}. **{name}** {severity_label}: {desc}")
         
         return '\n'.join(lines)
     
