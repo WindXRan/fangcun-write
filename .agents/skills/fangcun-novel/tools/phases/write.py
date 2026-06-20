@@ -119,11 +119,6 @@ def _auto_polish(config, ch, chapters_dir):
         print(f"    [OK] ch{ch:03d} 润色完成")
         return True
     return False
-        print(f"    [OK] ch{ch:03d} 润色完成")
-        return True
-    except Exception as e:
-        print(f"    [FAIL] ch{ch:03d}: {e}")
-        return False
 
 
 def _pre_validate(config, start, end):

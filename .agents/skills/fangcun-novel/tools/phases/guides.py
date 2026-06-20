@@ -549,12 +549,8 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
 
     pc = get_prompt_config_with_overrides(f"{prompt_type}.md", config)
 
-    # 计算 max_tokens（目标字数 × 1.6，防止超时）
+    # 不限制 max_tokens
     max_tokens = None
-    if prompt_type in ("write-chapter", "trim-chapter", "expand-chapter", "polish-chapter") and chapter_num:
-        src_chars = count_source_chars(config, chapter_num)
-        target_chars = src_chars if src_chars > 100 else 1500
-        max_tokens = int(target_chars * 1.6)
 
     # === Debug: 保存最终发给 API 的完整 prompt ===
     if config.get("debug") and chapter_num and chapter_num <= 3:
@@ -692,6 +688,11 @@ def run_one_with_template(config, prompt_type, chapter_num=None, **kwargs):
         result = process_plot_guide_output(config, chapter_num, result)
         # 去掉源文全文（防止 write-chapter 照抄）
         result = _strip_source_text(result)
+        # 替换源文角色名（LLM 产出中可能残留源文角色名）
+        name_map = _build_name_map(config)
+        if name_map:
+            for old_name, new_name in sorted(name_map.items(), key=lambda x: -len(x[0])):
+                result = result.replace(old_name, new_name)
 
     return result
 
