@@ -27,9 +27,7 @@ import argparse
 from pathlib import Path
 from datetime import datetime
 
-_TOOLS_DIR = Path(__file__).resolve().parent
-sys.path.insert(0, str(_TOOLS_DIR))
-sys.path.insert(0, str(_TOOLS_DIR / "lib"))
+import _path_setup  # noqa: F401
 
 from lib.token_tracker import get_usage
 from lib.report_builder import build_report, collect_metrics, fmt_size

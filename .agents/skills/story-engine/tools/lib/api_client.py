@@ -8,9 +8,9 @@ import requests
 from datetime import datetime
 
 # 确保导入 story-engine 的 prompt_meta（而非 source-engine 的）
-_story_engine_tools = str(Path(__file__).resolve().parent.parent)
-if _story_engine_tools not in sys.path:
-    sys.path.insert(0, _story_engine_tools)
+_this_dir = Path(__file__).resolve().parent.parent
+if str(_this_dir) not in sys.path:
+    sys.path.insert(0, str(_this_dir))
 
 DEFAULT_API_URL = "https://token-plan-cn.xiaomimimo.com/v1/chat/completions"
 
@@ -40,7 +40,7 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None, max_
 
     api_key = config.get("api_key") or os.environ.get("API_KEY")
     if not api_key:
-        raise ValueError("未配置 API_KEY，请设置 $env:API_KEY 或 config.api_key")
+        raise ValueError("未配置 API_KEY，请设置环境变量 API_KEY 或 config.api_key")
 
     api_url = get_api_url(config)
     provider = config.get("provider", "")
@@ -190,7 +190,7 @@ def call_api(api_key, model, user_prompt,
                 continue
             raise Exception(f"请求超时，已重试 {max_retries} 次")
 
-        except requests.exceptions.ConnectionError:
+        except requests.exceptions.ConnectionError as e:
             # 连接失败 - 快速失败，不重试（可能是断网）
             raise Exception(f"连接失败，请检查网络: {str(e)[:100]}")
 
@@ -224,7 +224,12 @@ def test_api_connection(config=None, timeout=10):
             "error": "未配置 API_KEY"
         }
     
-    headers = {"api-key": api_key, "Content-Type": "application/json"}
+    # 根据 provider 选择不同的 header 格式
+    provider = (config or {}).get("provider", "")
+    if provider == "deepseek" or "deepseek" in api_url:
+        headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    else:
+        headers = {"api-key": api_key, "Content-Type": "application/json"}
     data = {
         "model": model,
         "messages": [

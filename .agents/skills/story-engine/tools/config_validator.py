@@ -48,10 +48,10 @@ def validate_config(config):
         if not isinstance(val, expected_type):
             errors.append(f"字段 {key} 类型错误: 期望 {expected_type.__name__}, 实际 {type(val).__name__}")
 
-    # API Key
+    # API Key（仅警告，部分 phase 无需 LLM）
     api_key = config.get("api_key") or os.environ.get("API_KEY")
     if not api_key:
-        errors.append("未配置 API_KEY（config.api_key 或 $env:API_KEY）")
+        config["_api_key_missing"] = True  # 标记，供需要 LLM 的 phase 检查
 
     # channel 枚举
     channel = config.get("channel")

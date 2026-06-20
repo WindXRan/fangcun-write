@@ -8,9 +8,7 @@ import sys
 from pathlib import Path
 from datetime import datetime
 
-_TOOLS = Path(__file__).resolve().parent.parent
-if str(_TOOLS) not in sys.path:
-    sys.path.insert(0, str(_TOOLS))
+import _path_setup  # noqa: F401
 
 from lib.token_tracker import get_usage, aggregate, format_report
 from state_manager import StateManager

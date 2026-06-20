@@ -14,11 +14,7 @@ import time
 import argparse
 from pathlib import Path
 
-# source-engine 共享模块（必须在 file_io 导入之前）
-_SOURCE_ENGINE_TOOLS = str(Path(__file__).parent.parent.parent / "source-engine" / "tools")
-if _SOURCE_ENGINE_TOOLS not in sys.path:
-    sys.path.insert(0, _SOURCE_ENGINE_TOOLS)
-
+import _path_setup  # noqa: F401
 from state_manager import StateManager
 from config_validator import validate_config
 from utils import get_chapters_list
@@ -443,7 +439,8 @@ def main():
 
     config = json.loads(config_path.read_text(encoding="utf-8"))
     config.setdefault("prompts_dir", str(Path(__file__).parent.parent / "prompts"))
-    config.setdefault("base_dir", os.getcwd())
+    # 默认 base_dir 为配置文件所在目录（而非 cwd），确保换机器后路径依然正确
+    config.setdefault("base_dir", str(config_path.resolve().parent))
     config["workers"] = args.workers
     config["debug"] = args.debug or args.mode == "debug"
     config["prompts_only"] = config["debug"]

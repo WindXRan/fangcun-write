@@ -14,7 +14,7 @@ import argparse
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-sys.path.insert(0, str(Path(__file__).parent))
+import _path_setup  # noqa: F401
 from unified_review import review_agent, summary_agent, ReviewResult, SummaryReport
 from unified_fixer import (run_pipeline, dispatch_agent, fix_agent)
 

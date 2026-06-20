@@ -5,6 +5,7 @@
 """
 
 # 导入新的模块化结构
+import _path_setup  # noqa: F401
 from pipeline import main
 from state_manager import StateManager, atomic_write_json, atomic_write_text
 from config_validator import validate_config

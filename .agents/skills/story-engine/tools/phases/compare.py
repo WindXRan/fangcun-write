@@ -7,9 +7,7 @@ import subprocess
 import time
 from pathlib import Path
 
-_SCRIPTS_DIR = Path(__file__).resolve().parent.parent
-if str(_SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(_SCRIPTS_DIR))
+import _path_setup  # noqa: F401
 
 
 def phase_compare(config, start, end, batch_size=10):
@@ -68,7 +66,7 @@ def _run_basic_compare(rewrites_dir, compare_dir, compare_script, start, end, ba
     for batch_start in range(start, end + 1, batch_size):
         batch_end = min(batch_start + batch_size - 1, end)
         print(f"\n  [基础对比] 第{batch_start}-{batch_end}章...")
-        cmd = ["python", compare_script, rewrites_dir, str(batch_start), str(batch_end)]
+        cmd = [sys.executable, compare_script, rewrites_dir, str(batch_start), str(batch_end)]
         try:
             result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', timeout=120)
             if result.stdout:

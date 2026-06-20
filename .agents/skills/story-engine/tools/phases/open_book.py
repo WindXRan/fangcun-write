@@ -4,18 +4,13 @@ Phase 1: 开书（全读全文 → 源文分析 → 生成设定文件）"""
 import json
 import os
 import re
-import sys
 from pathlib import Path
 
+import _path_setup  # noqa: F401
 from utils import (
     get_total_chapters, get_source_title, count_source_chars
 )
 from state_manager import atomic_write_text
-
-# 确保导入 story-engine 的 prompt_meta（而非 source-engine 的）
-_story_engine_tools = str(Path(__file__).resolve().parent.parent)
-if _story_engine_tools not in sys.path:
-    sys.path.insert(0, _story_engine_tools)
 from prompt_meta import load_system_prompt, get_prompt_config_with_overrides, get_system_prompt_name
 from prompt_loader import load_prompt
 from lib.api_client import call_llm

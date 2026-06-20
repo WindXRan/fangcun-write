@@ -3,13 +3,9 @@
 import os
 import re
 import subprocess
-import sys
 from pathlib import Path
 
-# 确保导入 story-engine 的 prompt_meta（而非 source-engine 的）
-_story_engine_tools = str(Path(__file__).resolve().parent)
-if _story_engine_tools not in sys.path:
-    sys.path.insert(0, _story_engine_tools)
+import _path_setup  # noqa: F401
 from prompt_meta import _PROMPTS_DIR, _FRONTMATTER_RE, get_prompt_version
 
 
