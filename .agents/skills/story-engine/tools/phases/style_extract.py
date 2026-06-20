@@ -155,6 +155,13 @@ def _llm_one(config, ch, styles_dir):
     fp = count_style_fingerprint(text)
     anchors = format_style_anchors(fp)
 
+    # Debug: check which prompt_meta is being used
+    import prompt_meta as _pm
+    if not hasattr(_pm, '_DEBUG_printed'):
+        print(f"  [DEBUG] prompt_meta file: {_pm.__file__}")
+        print(f"  [DEBUG] _PROMPTS_DIR: {_pm._PROMPTS_DIR}")
+        _pm._DEBUG_printed = True
+    
     prompt_template = load_prompt_str("style-analyze.md")
     if not prompt_template:
         print(f"  [STYLE] ch{ch:03d} err: style-analyze.md 不存在")
