@@ -68,4 +68,14 @@ foreach ($s in $skills) {
 
 Write-Host "`n=== 配置完成 ===" -ForegroundColor Cyan
 Write-Host "用法: $python .agents/skills/story-engine/tools/pipeline.py --config {config.json} --phase {phase}" -ForegroundColor White
+
+# 自动启动 story-web 并打开浏览器
+$webApp = Join-Path $base ".agents\skills\story-web\app.py"
+if (Test-Path $webApp) {
+    Write-Host "`n启动书库 Web..." -ForegroundColor Yellow
+    Start-Process $python -ArgumentList $webApp -WindowStyle Hidden -WorkingDirectory (Split-Path $webApp)
+    Start-Sleep -Seconds 2
+    Start-Process "http://127.0.0.1:5000/"
+    Write-Host "  ✓ 书库已启动: http://127.0.0.1:5000/" -ForegroundColor Green
+}
 Write-Host ""
