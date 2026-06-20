@@ -2,11 +2,62 @@
 
 import os
 import re
+import sys
 import time
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from utils import count_source_chars, batch_run, get_source_text
+
+# 添加 writer-engine 到 path
+_WRITER_ENGINE = Path(__file__).parent.parent.parent / "writer-engine" / "tools"
+sys.path.insert(0, str(_WRITER_ENGINE))
+
+
+def _get_writer_module():
+    """延迟导入 writer-engine 模块"""
+    import importlib
+    return importlib.import_module("writer")
+
+
+def _fix_trim(config, ch, chapters_dir):
+    """字数超标 → trim。调用 writer-engine。"""
+    writer = _get_writer_module()
+    fix_config = {**config, "rewrites_dir": str(Path(chapters_dir).parent)}
+    result = writer.trim_chapter(fix_config, ch)
+    if result:
+        ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+        ch_file.write_text(result, encoding='utf-8')
+
+
+def _fix_expand(config, ch, text, chapters_dir):
+    """字数不足 → expand。调用 writer-engine。"""
+    writer = _get_writer_module()
+    fix_config = {**config, "rewrites_dir": str(Path(chapters_dir).parent)}
+    result = writer.expand_chapter(fix_config, ch)
+    if result:
+        ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+        ch_file.write_text(result, encoding='utf-8')
+
+
+def _fix_polish(config, ch, text, chapters_dir, issue=""):
+    """润色修复。调用 writer-engine。"""
+    writer = _get_writer_module()
+    fix_config = {**config, "rewrites_dir": str(Path(chapters_dir).parent)}
+    result = writer.polish_chapter(fix_config, ch)
+    if result:
+        ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+        ch_file.write_text(result, encoding='utf-8')
+
+
+def _fix_rewrite(config, ch, chapters_dir):
+    """全章重写。调用 writer-engine。"""
+    writer = _get_writer_module()
+    fix_config = {**config, "rewrites_dir": str(Path(chapters_dir).parent)}
+    result = writer.rewrite_chapter(fix_config, ch)
+    if result:
+        ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+        ch_file.write_text(result, encoding='utf-8')
 
 
 # 按失败类型派发修复动作
@@ -20,13 +71,6 @@ def _dispatch_fix(config, ch, chapters_dir):
     body = re.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text)
     chars = len(body)
 
-    # 硬卡点：2000-3000
-    deviation = 0.0
-    if chars > 3000:
-        deviation = (chars - 2500) / 2500
-    elif chars < 2000:
-        deviation = (chars - 2500) / 2500
-
     src_text = get_source_text(config, ch)
     src_metrics = None
     our_metrics = None
@@ -37,7 +81,6 @@ def _dispatch_fix(config, ch, chapters_dir):
 
     # 字数超标 → trim
     if chars > 3000:
-        from phases.guides import run_one
         return "trim", lambda: _fix_trim(config, ch, chapters_dir)
 
     # 字数不足 → expand
@@ -63,144 +106,19 @@ def _dispatch_fix(config, ch, chapters_dir):
 
     # fallback: polish（除非彻底没救，不走 rewrite）
     return "polish(style)", lambda: _fix_polish(config, ch, text, chapters_dir, "整体风格需润色")
-
-
-def _dispatch_fix(config, ch, chapters_dir):
-    """根据失效类型选 trim/polish/rewrite。返回 (action_label, fix_func)。"""
-    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-    if not ch_file.exists():
-        return "missing", None
-
-    text = ch_file.read_text(encoding='utf-8')
-    body = re.sub(r'\s', '', text.split('\n', 1)[1] if '\n' in text else text)
-    chars = len(body)
-
-    src_text = get_source_text(config, ch)
-    src_metrics = None
-    our_metrics = None
-    if src_text:
-        from lib.text_metrics import count_metrics
-        src_metrics = count_metrics(src_text)
-        our_metrics = count_metrics(text)
-
-    # 字数超标 → trim
-    if chars > 3000:
-        from phases.guides import run_one
-        return "trim", lambda: _fix_trim(config, ch, chapters_dir)
-
-    # 字数不足 → expand
-    if chars < 2000:
-        return "expand", lambda: _fix_expand(config, ch, text, chapters_dir)
-
-    # AI 路标词超标 → polish
-    if src_metrics and our_metrics:
-        limit = max(src_metrics["ai_markers"] + 1, 1)
-        if our_metrics["ai_markers"] > limit:
-            return "polish(ai)", lambda: _fix_polish(config, ch, text, chapters_dir, "AI路标词过多")
-
-        # 代词密度/句长偏离 → polish with style
-        if src_metrics.get("pronoun_density", 0) > 0:
-            ratio = our_metrics["pronoun_density"] / max(src_metrics["pronoun_density"], 0.001)
-            if ratio > 1.5 or ratio < 0.5:
-                return "polish(pronoun)", lambda: _fix_polish(config, ch, text, chapters_dir, "代词密度偏离源文")
-
-        if src_metrics.get("sent_len_stddev", 0) > 0:
-            ratio = our_metrics["sent_len_stddev"] / max(src_metrics["sent_len_stddev"], 0.001)
-            if ratio > 1.5 or ratio < 0.5:
-                return "polish(style)", lambda: _fix_polish(config, ch, text, chapters_dir, "句长节奏偏离源文")
-
-    # fallback: polish（除非彻底没救，不走 rewrite）
-    return "polish(style)", lambda: _fix_polish(config, ch, text, chapters_dir, "整体风格需润色")
-
-
-def _fix_trim(config, ch, chapters_dir):
-    """字数超标 → trim。目标 = min(源文字数, 3000)。"""
-    from phases.guides import run_one
-    from utils import count_source_chars
-    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-    content = ch_file.read_text(encoding='utf-8')
-    current_chars = len(re.sub(r'\s', '', content))
-    src_chars = count_source_chars(config, ch)
-    target = min(src_chars, 3000) if src_chars > 0 else 2500
-    target = max(target, 2000)  # 下限 2000
-    to_delete = max(0, current_chars - target)
-    result = run_one(config, "trim-chapter", ch, extra_replacements={
-        "内容": content,
-        "目标字数": str(target),
-        "当前字数": str(current_chars),
-        "需删减": str(to_delete),
-    })
-    ch_file.write_text(result, encoding='utf-8')
-
-
-def _fix_expand(config, ch, text, chapters_dir):
-    """字数不足 → expand。目标 = max(源文字数, 2000)。"""
-    from phases.guides import run_one
-    from utils import count_source_chars
-    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-    orig_chars = len(re.sub(r'\s', '', text))
-    src_chars = count_source_chars(config, ch)
-    target = max(src_chars, 2000) if src_chars > 0 else 2500
-    target = min(target, 3000)  # 上限 3000
-    result = run_one(config, "expand-chapter", ch, extra_replacements={
-        "content": text,
-        "orig_chars": str(orig_chars),
-        "target_chars": str(target),
-        "min_chars": "2000",
-        "max_chars": "3000",
-    })
-    ch_file.write_text(result, encoding='utf-8')
 
 
 def _auto_polish(config, ch, chapters_dir):
-    """自动润色：对比源文修正风格。"""
-    from phases.guides import run_one
-    from utils import get_source_text
-    from lib.text_metrics import count_metrics
-    
-    ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
-    if not ch_file.exists():
-        return False
-    
-    try:
-        original = ch_file.read_text(encoding='utf-8')
-        orig_chars = len(re.sub(r'\s', '', original))
-        
-        # 加载源文
-        source_text = get_source_text(config, ch) or ""
-        if not source_text:
-            return False
-        
-        # 计算源文风格指标
-        src_metrics = count_metrics(source_text)
-        
-        result = run_one(config, "polish-chapter", ch, extra_replacements={
-            "content": original,
-            "source_text": source_text[:3000],
-            "源文句长": str(int(src_metrics.get("avg_sent_len", 25))),
-            "源文对话比": str(int(src_metrics.get("dialogue_ratio", 0.1) * 100)),
-            "源文段长": str(int(src_metrics.get("paragraph_avg_len", 40))),
-            "min_chars": str(int(orig_chars * 0.9)),
-            "max_chars": str(int(orig_chars * 1.1)),
-        })
-        
-        new_chars = len(re.sub(r'\s', '', result))
-        # 如果字数差异太大，检查是否更接近源文字数
-        src_chars = count_source_chars(config, ch)
-        orig_diff = abs(orig_chars - src_chars) if src_chars > 0 else 0
-        new_diff = abs(new_chars - src_chars) if src_chars > 0 else 0
-        
-        # 如果润色后更接近源文字数，接受
-        if new_diff < orig_diff:
-            ch_file.write_text(result, encoding='utf-8')
-            print(f"    [OK] ch{ch:03d} 润色完成 ({orig_chars}→{new_chars}, 源文{src_chars}字)")
-            return True
-        # 否则检查字数差异是否在可接受范围内
-        elif abs(new_chars - orig_chars) / orig_chars > 0.25:
-            print(f"    [SKIP] ch{ch:03d}: 字数差异过大 ({orig_chars}→{new_chars})")
-            return False
-        
+    """自动润色：对比源文修正风格。调用 writer-engine。"""
+    writer = _get_writer_module()
+    fix_config = {**config, "rewrites_dir": str(Path(chapters_dir).parent)}
+    result = writer.polish_chapter(fix_config, ch)
+    if result:
+        ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         ch_file.write_text(result, encoding='utf-8')
+        print(f"    [OK] ch{ch:03d} 润色完成")
+        return True
+    return False
         print(f"    [OK] ch{ch:03d} 润色完成")
         return True
     except Exception as e:
