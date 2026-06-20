@@ -342,9 +342,23 @@ def api_pools_all():
             except Exception:
                 continue
     
-    # 按阅读量排序（如果有的话）
-    all_books.sort(key=lambda x: x.get('rank', 999))
-    
+    # 按阅读量统一排序（跨题材混排）
+    def parse_read_count(x):
+        val = x.get("readCount", "0")
+        if isinstance(val, str):
+            val = val.replace("万", "0000").replace(",", "").strip()
+            try:
+                return float(val)
+            except:
+                return 0
+        return float(val) if val else 0
+
+    all_books.sort(key=lambda x: parse_read_count(x), reverse=True)
+
+    # 生成统一排名
+    for i, book in enumerate(all_books):
+        book["unified_rank"] = i + 1
+
     return jsonify({
         "total": len(all_books),
         "books": all_books,
