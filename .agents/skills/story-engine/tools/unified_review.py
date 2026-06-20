@@ -170,8 +170,31 @@ def _check_character_names_in_review(config, text, ch):
 
 
 def _check_trope_repetition_in_review(config, text, ch):
-    """在审查中检查梗重复。"""
-    return []  # 硬编码检查已禁用，由LLM审查处理
+    """在审查中检查梗重复（从源文动态提取模式）。"""
+    from lib.trope_extractor import get_trope_patterns_for_validation
+    import re
+    
+    issues = []
+    try:
+        trope_patterns = get_trope_patterns_for_validation(config)
+    except Exception:
+        return issues  # 提取失败时降级为空
+    
+    for trope_name, patterns in trope_patterns.items():
+        count = 0
+        for pattern in patterns:
+            matches = re.findall(pattern, text)
+            count += len(matches)
+        if count >= 5:  # 审查阶段阈值更宽松（5次）
+            issues.append({
+                "type": "trope_repetition",
+                "severity": "medium",
+                "desc": f"梗重复：'{trope_name}' 在本章出现 {count} 次",
+                "fix": f"减少'{trope_name}'相关描写，增加其他类型的桥段",
+                "auto_fixable": False
+            })
+    
+    return issues
 
 
 def _parse_review_output(text):
@@ -315,12 +338,16 @@ def _check_cross_chapter_imagery(config, merged):
     if not chapters_dir.exists():
         return issues
 
-    # 意象关键词
-    imagery_keywords = [
-        '石榴', '歪脖子', '老槐', '杏树', '枣树', '槐树',
-        '窗外', '鸟雀', '井水', '月光', '星光', '灯火',
-        '花瓣', '落叶', '雪花', '雨滴', '蝉鸣', '蛙声',
-    ]
+    # 从源文动态提取意象关键词（替代硬编码）
+    from lib.trope_extractor import get_imagery_keywords_for_review
+    try:
+        imagery_keywords = get_imagery_keywords_for_review(config)
+    except Exception:
+        # 降级到通用意象
+        imagery_keywords = [
+            '阳光', '月光', '星光', '灯火', '窗外',
+            '雨', '雪', '风', '花', '树', '叶',
+        ]
 
     # 收集每章出现的意象
     chapter_imagery = {}

@@ -104,37 +104,14 @@ def _check_trope_repetition(config, text, ch):
     if not rewrites_dir:
         return issues
     
-    # 定义常见梗/桥段模式
-    trope_patterns = {
-        "吃东西": [
-            r"吃[了着着]?\w+",
-            r"喝[了着着]?\w+",
-            r"馋[着嘴]?",
-            r"肚子[饿叫咕]",
-            r"红薯|鸡蛋|咸菜|红糖|糖水|桃酥|馍|粥|饭",
-        ],
-        "怀孕反应": [
-            r"孕[吐反]?",
-            r"恶心|干呕|吐[了]?",
-            r"肚子[大隆起]",
-            r"胎[动]?",
-        ],
-        "婆婆训话": [
-            r"婆婆[说骂训念叨]",
-            r"陈刘氏[说骂训]",
-            r"[严肃板着]脸",
-        ],
-        "丈夫关心": [
-            r"陈建国[看递塞拿给]",
-            r"[沉默寡言不说]话",
-            r"看了[她一眼]",
-        ],
-        "工分/劳动": [
-            r"工分",
-            r"下地|干活|出工",
-            r"记[工分账]",
-        ],
-    }
+    # 从源文动态提取梗模式（替代硬编码）
+    from lib.trope_extractor import get_trope_patterns_for_validation
+    try:
+        trope_patterns = get_trope_patterns_for_validation(config)
+    except Exception:
+        # 降级到通用模式
+        from lib.trope_extractor import GENERIC_TROPE_CATEGORIES
+        trope_patterns = {k: v for k, v in GENERIC_TROPE_CATEGORIES.items()}
     
     # 统计当前章中各类梗的出现次数
     trope_counts = {}
@@ -150,9 +127,6 @@ def _check_trope_repetition(config, text, ch):
     for trope_name, count in trope_counts.items():
         if count >= 3:
             issues.append(f"梗重复：'{trope_name}' 在本章出现 {count} 次")
-    
-    # 跨章节检查需要读取其他章节，这里只做单章检查
-    # 如果需要跨章节检查，需要在 phase_validate 中实现
     
     return issues
 
@@ -440,7 +414,55 @@ def _check_global_consistency(config, start, end):
     
     # 检查角色名一致性
     # 如果某个角色名在前几章频繁出现，但后面突然消失，可能是名字变了
-    # 这里可以添加更复杂的检查逻辑
+    if all_char_mentions:
+        # 统计每个角色名在各章出现的频率
+        name_chapter_freq = {}  # {名字: {章号: 出现次数}}
+        for ch, names in all_char_mentions.items():
+            for name in names:
+                if name not in name_chapter_freq:
+                    name_chapter_freq[name] = {}
+                name_chapter_freq[name][ch] = name_chapter_freq[name].get(ch, 0) + 1
+        
+        # 检测突然消失的角色名（前5章高频出现，后面消失）
+        sorted_chapters = sorted(all_char_mentions.keys())
+        if len(sorted_chapters) >= 6:
+            early_chapters = set(sorted_chapters[:5])
+            late_chapters = set(sorted_chapters[5:])
+            
+            for name, freq in name_chapter_freq.items():
+                early_count = sum(freq.get(ch, 0) for ch in early_chapters)
+                late_count = sum(freq.get(ch, 0) for ch in late_chapters)
+                
+                # 如果前5章高频出现（>=5次），但后面完全消失
+                if early_count >= 5 and late_count == 0:
+                    # 检查是否是配角（配角消失是正常的）
+                    # 配角特征：出现频率低、不在所有早期章节出现
+                    early_appearance = sum(1 for ch in early_chapters if ch in freq)
+                    if early_appearance >= 3:  # 至少在3章出现才报警
+                        issues.append(f"角色名一致性：'{name}' 在前5章频繁出现（{early_count}次），但后续章节消失")
+        
+        # 检测名字变体（如"陈墨"变成"墨爷"、"小墨"）
+        # 这需要更复杂的NLP，这里做简单检测
+        all_names = set()
+        for names in all_char_mentions.values():
+            all_names.update(names)
+        
+        # 检查相似名字（编辑距离<=1）
+        name_list = sorted(all_names)
+        for i in range(len(name_list)):
+            for j in range(i+1, len(name_list)):
+                n1, n2 = name_list[i], name_list[j]
+                # 简单检查：一个名字包含另一个
+                if len(n1) >= 2 and len(n2) >= 2:
+                    if n1 in n2 or n2 in n1:
+                        # 排除常见后缀组合
+                        if not (n1.endswith(('哥', '爷', '姐', '嫂', '叔', '婶')) or 
+                                n2.endswith(('哥', '爷', '姐', '嫂', '叔', '婶'))):
+                            # 检查是否在不同章节使用
+                            n1_chapters = set(ch for ch, freq in name_chapter_freq.items() if n1 in freq)
+                            n2_chapters = set(ch for ch, freq in name_chapter_freq.items() if n2 in freq)
+                            if n1_chapters and n2_chapters and not n1_chapters.intersection(n2_chapters):
+                                issues.append(f"角色名变体：'{n1}' 和 '{n2}' 可能是同一角色的不同称呼，在不同章节使用")
     
     # 检查时间线连续性
     chapters_with_time = sorted(all_time_anchors.keys())
