@@ -306,6 +306,24 @@ def api_pools_list():
 @app.route('/api/pools/all')
 def api_pools_all():
     """全榜混排：所有题材混在一起，统一排序"""
+    
+    def _parse_read_count(val):
+        """解析阅读量字符串（如"19.8万"→198000）"""
+        if isinstance(val, (int, float)):
+            return float(val)
+        if isinstance(val, str):
+            val = val.replace(",", "").strip()
+            if "万" in val:
+                try:
+                    return float(val.replace("万", "")) * 10000
+                except:
+                    return 0
+            try:
+                return float(val)
+            except:
+                return 0
+        return 0
+    
     data_dir = SCAN_DATA_DIR / "data"
     
     all_books = []
@@ -321,9 +339,11 @@ def api_pools_all():
             try:
                 data = json.loads(f.read_text(encoding='utf-8'))
                 
-                # 数据格式：{categories: {类别名: [书籍列表]}}
-                categories = data.get("categories", {})
-                for cat_name, books in categories.items():
+                # 数据格式：{categories: [{name: "题材名", books: [书籍列表]}]}
+                categories = data.get("categories", [])
+                for cat in categories:
+                    cat_name = cat.get("name", "未知")
+                    books = cat.get("books", [])
                     if not isinstance(books, list):
                         continue
                     for book in books:
@@ -332,6 +352,10 @@ def api_pools_all():
                             continue
                         seen.add(title)
                         
+                        # 解析阅读量字符串（如"19.8万"→198000）
+                        read_count = book.get("readCount", book.get("readCountStr", ""))
+                        read_num = _parse_read_count(read_count)
+                        
                         all_books.append({
                             "title": title,
                             "author": book.get("author", book.get("authorName", "")),
@@ -339,25 +363,16 @@ def api_pools_all():
                             "gender": "男频" if gender == "male" else "女频",
                             "rank_type": "新书榜" if rank_kind == "new" else "在读榜",
                             "rank": book.get("rank", 0),
-                            "readCount": book.get("readCount", book.get("readCountStr", "")),
+                            "readCount": read_count,
+                            "readNum": read_num,
                             "wordCount": book.get("wordCount", book.get("wordCountStr", "")),
                             "description": book.get("description", book.get("bookDesc", ""))[:200],
                         })
-            except Exception:
+            except Exception as e:
                 continue
     
     # 按阅读量统一排序（跨题材混排）
-    def parse_read_count(x):
-        val = x.get("readCount", "0")
-        if isinstance(val, str):
-            val = val.replace("万", "0000").replace(",", "").strip()
-            try:
-                return float(val)
-            except:
-                return 0
-        return float(val) if val else 0
-
-    all_books.sort(key=lambda x: parse_read_count(x), reverse=True)
+    all_books.sort(key=lambda x: x.get("readNum", 0), reverse=True)
 
     # 生成统一排名
     for i, book in enumerate(all_books):
