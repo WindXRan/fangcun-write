@@ -199,3 +199,22 @@ class FanficConfig:
             lines.append(f"- **{name}** {severity_label}: {desc}")
         
         return '\n'.join(lines)
+    
+    def build_hook_ledger_section(self) -> str:
+        """构建hook账本prompt段"""
+        if not self.hook_ledger:
+            return ""
+        
+        lines = ["## 伏笔账本"]
+        lines.append("")
+        lines.append("| ID | 描述 | 种下章节 | 状态 | 兑现章节 |")
+        lines.append("|---|------|---------|------|---------|")
+        
+        for hook in self.hook_ledger:
+            resolve_ch = str(hook.resolve_chapter) if hook.resolve_chapter else "-"
+            lines.append(f"| {hook.hook_id} | {hook.description} | 第{hook.planted_chapter}章 | {hook.status} | {resolve_ch} |")
+        
+        lines.append("")
+        lines.append("**硬对应规则：** advance/resolve 下面列出的每一个 hook_id 都必须在正文里有一个具体可定位的兑现段——写明人物对着什么物件/事件/信息做出什么可观察的动作或交谈。不允许"侧面暗示""留给下章"。")
+        
+        return '\n'.join(lines)

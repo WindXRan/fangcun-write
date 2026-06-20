@@ -200,6 +200,7 @@ def _build_variables(config, ch_num, mode, **extra):
         "fanfic_section": fanfic_cfg.build_fanfic_section(),
         "chapter_memo_section": fanfic_cfg.build_chapter_memo_section(),
         "audit_dimensions": fanfic_cfg.build_audit_dimensions(),
+        "hook_ledger_section": fanfic_cfg.build_hook_ledger_section(),
         "fanfic_mode": fanfic_cfg.mode,
     }
     variables["characters"] = characters_brief

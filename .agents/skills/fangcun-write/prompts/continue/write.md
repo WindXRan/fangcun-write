@@ -25,6 +25,8 @@ description: 续写模式写章（基于inkos方法论+同人模式）
 
 {chapter_memo_section}
 
+{hook_ledger_section}
+
 ## 写作铁律
 
 - **情绪**：用动作外化，不写"他感到愤怒"，写"他捏碎了茶杯，滚烫的茶水流过指缝"
