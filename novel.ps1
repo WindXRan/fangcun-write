@@ -14,7 +14,7 @@
 
 param(
     [Parameter(Position=0, Mandatory=$true)]
-    [ValidateSet("analyze", "open", "write", "compare", "trim", "expand", "drama", "drama-status", "status", "export")]
+    [ValidateSet("analyze", "open", "write", "compare", "trim", "expand", "drama", "drama-status", "status", "export", "setup")]
     [string]$Action,
     
     [string]$Config,
@@ -27,6 +27,23 @@ param(
 
 $ErrorActionPreference = "Stop"
 $base = Split-Path $PSScriptRoot -Parent
+
+# 自动检测 FreeLLMAPI（本地免费 API 聚合）
+$freellmUrl = "http://localhost:3001/v1"
+try {
+    $test = Invoke-WebRequest -Uri "$freellmUrl/models" -Method GET -TimeoutSec 3 -ErrorAction SilentlyContinue
+    if ($test.StatusCode -eq 200) {
+        Write-Host "✓ FreeLLMAPI 已检测到: $freellmUrl" -ForegroundColor Green
+        if (-not $env:API_KEY) {
+            $env:API_KEY = "freellmapi-local"
+        }
+        if (-not $env:API_BASE_URL) {
+            $env:API_BASE_URL = $freellmUrl
+        }
+    }
+} catch {
+    # FreeLLMAPI 未运行，使用默认配置
+}
 
 # 自动查找 config
 if (-not $Config) {

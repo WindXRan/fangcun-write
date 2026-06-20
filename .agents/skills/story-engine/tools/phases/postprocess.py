@@ -256,7 +256,19 @@ def phase_polish(config, start, end, workers=None, state_mgr=None):
             result = call_llm(config, "polish-chapter", prompt, sys_prompt, ch=ch, max_tokens=max_tokens)
 
             new_chars = len(result.replace('\n', '').replace(' ', ''))
-            if orig_chars > 0 and abs(new_chars - orig_chars) / orig_chars > 0.15:
+            src_chars = count_source_chars(config, ch)
+            orig_diff = abs(orig_chars - src_chars) if src_chars > 0 else 0
+            new_diff = abs(new_chars - src_chars) if src_chars > 0 else 0
+            
+            # 如果润色后更接近源文字数，接受
+            if new_diff < orig_diff:
+                ch_file.write_text(result, encoding='utf-8')
+                if state_mgr:
+                    state_mgr.chapter_completed(ch)
+                print(f"  [POLISH] ch{ch:03d}: {orig_chars}→{new_chars} (源文{src_chars}字)")
+                return True
+            # 否则检查字数差异是否在可接受范围内
+            elif orig_chars > 0 and abs(new_chars - orig_chars) / orig_chars > 0.25:
                 print(f"  [SKIP] ch{ch:03d}: 字数差异过大 ({orig_chars}→{new_chars})")
                 if state_mgr:
                     state_mgr.chapter_failed(ch, error="字数差异过大")

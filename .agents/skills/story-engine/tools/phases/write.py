@@ -185,8 +185,18 @@ def _auto_polish(config, ch, chapters_dir):
         })
         
         new_chars = len(re.sub(r'\s', '', result))
-        # 如果字数差异太大，跳过
-        if abs(new_chars - orig_chars) / orig_chars > 0.15:
+        # 如果字数差异太大，检查是否更接近源文字数
+        src_chars = count_source_chars(config, ch)
+        orig_diff = abs(orig_chars - src_chars) if src_chars > 0 else 0
+        new_diff = abs(new_chars - src_chars) if src_chars > 0 else 0
+        
+        # 如果润色后更接近源文字数，接受
+        if new_diff < orig_diff:
+            ch_file.write_text(result, encoding='utf-8')
+            print(f"    [OK] ch{ch:03d} 润色完成 ({orig_chars}→{new_chars}, 源文{src_chars}字)")
+            return True
+        # 否则检查字数差异是否在可接受范围内
+        elif abs(new_chars - orig_chars) / orig_chars > 0.25:
             print(f"    [SKIP] ch{ch:03d}: 字数差异过大 ({orig_chars}→{new_chars})")
             return False
         
