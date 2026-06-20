@@ -26,10 +26,14 @@ for _d in [str(_NOVEL_TOOLS), str(_ANALYZE_TOOLS)]:
 from lib.text_metrics import count_metrics
 from utils import get_source_text, count_source_chars
 
-
+# 延迟导入，避免 __init__.py 自动导入其他模块导致冲突
+_run_one = None
 def _get_run_one():
-    from phases.guides import run_one
-    return run_one
+    global _run_one
+    if _run_one is None:
+        from phases.guides import run_one
+        _run_one = run_one
+    return _run_one
 
 
 def get_writer_dirs(config):
@@ -49,13 +53,15 @@ def _get_text_chars(text):
 # 写章主入口（与原版 phase_write 一致）
 # ============================================================
 
-def write_chapter(config, ch_num, mode="imitation", context=None, auto_fix=True, max_retries=0):
+def write_chapter(config, ch_num, mode="imitation", context=None, plot_guide=None, auto_fix=True, max_retries=0):
     """写单章（不含后处理，后处理由 pipeline 统一调度）。"""
     run_one = _get_run_one()
     try:
         extra = {}
         if context:
             extra["context"] = context
+        if plot_guide:
+            extra["plot_guide"] = plot_guide
         return run_one(config, "write-chapter", ch_num, extra_replacements=extra if extra else None)
     except Exception as e:
         print(f"    [ERROR] ch{ch_num:03d} 写章失败: {e}")

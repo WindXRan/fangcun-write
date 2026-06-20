@@ -15,6 +15,8 @@ fangcun-continue pipeline: 小说续写/第二部引擎
 import os
 import sys
 import json
+import re
+import shutil
 import argparse
 from pathlib import Path
 
@@ -352,6 +354,161 @@ def _generate_plans(config, characters, relationships, ending_state, plot_lines)
 
 # ─── Phase 3: 确认方案 ──────────────────────────────────────────────────────
 
+def _generate_character_cards(config, rewrites_dir):
+    """用 LLM 生成角色卡（含行为模式卡片），续写模式不改名。"""
+    analysis_dir = rewrites_dir / "analysis"
+    chars_simple = (analysis_dir / "characters.md").read_text(encoding='utf-8')
+    relationships = (analysis_dir / "relationships.md").read_text(encoding='utf-8')
+    
+    # 取前20个角色
+    import re as _re
+    char_names = []
+    for line in chars_simple.split("\n"):
+        m = _re.match(r'\|\s*(.+?)\s*\|\s*\d+\s*\|', line)
+        if m:
+            name = m.group(1).strip()
+            if name != "角色":
+                char_names.append(name)
+    char_names = char_names[:20]
+    
+    source_book = config.get("source_book", "")
+    
+    prompt = f"""你是小说角色分析师。为续写小说生成角色卡。
+
+## 原著：《{source_book}》
+
+## 角色列表（续写模式，保留原名，不改名）
+{"、".join(char_names)}
+
+## 关系线
+{relationships[:1500]}
+
+## 输出格式
+
+每个角色用如下格式，一个都不能漏：
+
+【角色名】
+- 功能位：（女主/男主/配角/反派等）
+- 性格内核：（2-3句，描述性格本质）
+- 应激模式：（遇到冲突时的本能反应）
+- 决策方式：（做决定的风格：冲动/理性/依赖他人等）
+- 情感表达：（如何表达感情：直接/含蓄/用行动等）
+- 致命弱点：（最大的软肋是什么）
+- 核心动机：（最想要什么）
+- 能力边界：（擅长什么、不擅长什么）
+- 关系：（与主角/其他角色的关系）
+
+**铁律：**
+- 续写模式，角色名保持原名不改
+- 每个角色都必须写，不分主次
+- 应激模式、决策方式、情感表达、致命弱点、核心动机、能力边界 六项必须填写
+- 用中文输出"""
+
+    try:
+        result = call_llm(config, "character-cards", prompt,
+                         system_prompt="你是专业的小说角色分析师。输出必须覆盖所有角色，格式严格按要求。",
+                         max_tokens=6000)
+        
+        # 保存 characters.md
+        chars_path = rewrites_dir / "characters.md"
+        chars_path.write_text(result, encoding='utf-8')
+        print(f"    [OK] characters.md（{len(result)}字）")
+        
+        # 拆分角色卡到 characters/ 目录
+        cards_dir = rewrites_dir / "characters"
+        cards_dir.mkdir(parents=True, exist_ok=True)
+        
+        sections = _re.split(r'(?=【[^】]+】)', result)
+        count = 0
+        for section in sections:
+            section = section.strip()
+            if not section:
+                continue
+            m = _re.match(r'【(.+?)】', section)
+            if not m:
+                continue
+            name = m.group(1).strip()
+            safe_name = _re.sub(r'[\\/:*?"<>|]', '_', name)
+            card_path = cards_dir / f"{safe_name}.md"
+            card_path.write_text(section, encoding='utf-8')
+            count += 1
+        
+        if count > 0:
+            print(f"    [OK] 拆分 {count} 个角色卡 → {cards_dir}")
+        
+    except Exception as e:
+        print(f"    [FAIL] 角色卡生成失败: {e}")
+        # fallback: 复制简单版
+        shutil.copy2(analysis_dir / "characters.md", rewrites_dir / "characters.md")
+
+
+def _generate_basic_concept(config, rewrites_dir, plan_content):
+    """生成基础 concept.md（供run_one读取风格类型）。"""
+    source_book = config.get("source_book", "")
+    book_name = config.get("book_name", "")
+    
+    # 从方案中提取风格信息
+    import re as _re
+    genre = "（参考原作）"
+    if "治愈" in plan_content or "温馨" in plan_content:
+        genre = "治愈温馨"
+    elif "虐" in plan_content:
+        genre = "虐心"
+    elif "搞笑" in plan_content or "喜剧" in plan_content:
+        genre = "搞笑喜剧"
+    elif "悬疑" in plan_content:
+        genre = "悬疑"
+    
+    concept = f"""# 《{book_name}》设定
+
+## 风格类型
+{genre}（延续原作《{source_book}》基调）
+
+## 定位
+续写/第二部，延续原作的核心卖点和情感基调。
+
+## 续写方案摘要
+{plan_content[:800]}
+"""
+    concept_path = rewrites_dir / "concept.md"
+    concept_path.write_text(concept, encoding='utf-8')
+    print(f"    [OK] concept.md")
+
+
+def _generate_basic_world(config, rewrites_dir):
+    """生成基础 world.md（供run_one读取世界观）。"""
+    source_book = config.get("source_book", "")
+    analysis_dir = rewrites_dir / "analysis"
+    
+    # 从结局状态和关系线中提取世界观信息
+    ending = ""
+    ending_path = analysis_dir / "ending_state.md"
+    if ending_path.exists():
+        ending = ending_path.read_text(encoding='utf-8')[:500]
+    
+    relationships = ""
+    rel_path = analysis_dir / "relationships.md"
+    if rel_path.exists():
+        relationships = rel_path.read_text(encoding='utf-8')[:500]
+    
+    world = f"""# 世界观
+
+## 原著：《{source_book}》
+
+## 结局状态
+{ending}
+
+## 关系线
+{relationships}
+
+## 说明
+续写世界观与原作一致，具体细节请参考源文。
+"""
+    world_path = rewrites_dir / "world.md"
+    world_path.write_text(world, encoding='utf-8')
+    print(f"    [OK] world.md")
+
+
 def phase_confirm(config, plan_num=1):
     """用户确认方案，生成续写配置"""
     print("\n" + "=" * 50)
@@ -398,24 +555,17 @@ def phase_confirm(config, plan_num=1):
     
     # 复制分析结果到rewrites_dir
     analysis_dir = dirs["analysis_dir"]
-    import shutil
     shutil.copytree(analysis_dir, rewrites_dir / "analysis", dirs_exist_ok=True)
     
-    # 复制characters.md到rewrites_dir根目录（供run_one读取）
-    chars_src = analysis_dir / "characters.md"
-    if chars_src.exists():
-        shutil.copy2(chars_src, rewrites_dir / "characters.md")
-        print(f"  [OK] 复制 characters.md 到 {rewrites_dir}")
+    # 生成角色卡（LLM，含行为模式卡片）
+    print("  生成角色卡...")
+    _generate_character_cards(config, rewrites_dir)
     
-    # 复制world.md到rewrites_dir根目录（供run_one读取）
-    world_src = analysis_dir / "world.md"
-    if world_src.exists():
-        shutil.copy2(world_src, rewrites_dir / "world.md")
+    # 生成基础 concept.md（供run_one读取风格类型）
+    _generate_basic_concept(config, rewrites_dir, plan_content)
     
-    # 复制plot.md到rewrites_dir根目录（供run_one读取）
-    plot_src = analysis_dir / "plot.md"
-    if plot_src.exists():
-        shutil.copy2(plot_src, rewrites_dir / "plot.md")
+    # 生成基础 world.md（供run_one读取世界观）
+    _generate_basic_world(config, rewrites_dir)
     
     print(f"[OK] 确认完成")
     print(f"  书名: {book_name}")
@@ -508,7 +658,7 @@ def _generate_chapter(config, ch_num, characters, relationships, ending_state, p
     
     from writer import write_chapter
     
-    # 构建续写上下文（注入到角色约束中）
+    # 构建续写上下文
     context = f"""## 角色名映射（必须使用这些名字，不可自编）
 {characters[:2000]}
 
@@ -519,8 +669,9 @@ def _generate_chapter(config, ch_num, characters, relationships, ending_state, p
 {relationships[:1000]}
 """
     
-    # 调用 fangcun-write 的续写模式
-    result = write_chapter(config, ch_num, mode="continue", context=context, auto_fix=True)
+    # plot_guide 用续写方案代替（续写模式没有单独的 plot_guide）
+    result = write_chapter(config, ch_num, mode="continue", context=context, 
+                          plot_guide=plan_content[:3000], auto_fix=True)
     return result
 
 

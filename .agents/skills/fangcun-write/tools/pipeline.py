@@ -15,15 +15,17 @@ from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # 添加依赖路径
-_SHARED = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
-_SHARED_LLM = _SHARED / "llm"
-sys.path.insert(0, str(_SHARED))
-sys.path.insert(0, str(_SHARED_LLM))
+_NOVEL = Path(__file__).parent.parent.parent / "fangcun-novel" / "tools"
+_ANALYZE = Path(__file__).parent.parent.parent / "fangcun-analyze" / "tools"
+for _d in [str(_NOVEL), str(_ANALYZE)]:
+    if _d not in sys.path:
+        sys.path.insert(0, _d)
 
 from writer import (
     write_chapter, trim_chapter, expand_chapter, polish_chapter, rewrite_chapter,
-    get_writer_dirs, _get_text_chars, count_source_chars, get_source_text
+    get_writer_dirs, _get_text_chars
 )
+from utils import get_source_text, count_source_chars
 
 
 def load_config(config_path):
