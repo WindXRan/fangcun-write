@@ -22,7 +22,18 @@ from writer import write_chapter, trim_chapter, polish_chapter, expand_chapter, 
 def load_config(config_path):
     """加载配置文件"""
     with open(config_path, 'r', encoding='utf-8') as f:
-        return json.load(f)
+        config = json.load(f)
+    
+    # 自动检测 base_dir（如果未指定）
+    if "base_dir" not in config:
+        # 从 config_path 推断：.agents/skills/writer-engine/config/xxx.json -> 项目根目录
+        config["base_dir"] = str(Path(config_path).parent.parent.parent.parent.parent)
+    
+    # 如果 rewrites_dir 是相对路径，基于 base_dir 解析
+    if "rewrites_dir" in config and not Path(config["rewrites_dir"]).is_absolute():
+        config["rewrites_dir"] = str(Path(config["base_dir"]) / config["rewrites_dir"])
+    
+    return config
 
 
 def phase_write(config, start, end):

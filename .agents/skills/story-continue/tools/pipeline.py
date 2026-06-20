@@ -33,7 +33,14 @@ from source_io import load_events, get_source_text
 def load_config(config_path):
     """加载配置文件"""
     with open(config_path, 'r', encoding='utf-8') as f:
-        return json.load(f)
+        config = json.load(f)
+    
+    # 自动检测 base_dir（如果未指定）
+    if "base_dir" not in config:
+        # 从 config_path 推断：.agents/skills/story-continue/config/xxx.json -> 项目根目录
+        config["base_dir"] = str(Path(config_path).parent.parent.parent.parent.parent)
+    
+    return config
 
 
 def get_dirs(config):
