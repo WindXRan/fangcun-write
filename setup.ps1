@@ -14,6 +14,13 @@ $ErrorActionPreference = "Stop"
 
 Write-Host "`n=== fangcun-novel 环境配置 ===" -ForegroundColor Cyan
 
+# 0. 修复 Python 依赖
+$checkScript = Join-Path $PSScriptRoot "check-env.ps1"
+if (Test-Path $checkScript) {
+    Write-Host "`n[0/4] 检查 Python 环境..." -ForegroundColor Yellow
+    & $checkScript
+}
+
 # 1. 检查 Python
 Write-Host "`n[1/4] 检查 Python..." -ForegroundColor Yellow
 $python = $null
