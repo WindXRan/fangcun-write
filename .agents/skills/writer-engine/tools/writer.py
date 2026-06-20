@@ -22,22 +22,24 @@ def get_writer_dirs(config):
     }
 
 
-def write_chapter(config, ch_num, context=None):
+def write_chapter(config, ch_num, context=None, auto_fix=True):
     """
-    写单章。
+    写单章（含自动修复）。
     
     Args:
         config: 配置字典
         ch_num: 章节号
         context: 额外上下文（可选，用于续写等场景）
+        auto_fix: 是否自动修复字数问题（默认True）
     
     Returns:
         str: 章节内容，失败返回 None
     """
     import sys
-    # 添加 shared-engine 到 path
     shared_engine = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
+    shared_engine_llm = shared_engine / "llm"
     sys.path.insert(0, str(shared_engine))
+    sys.path.insert(0, str(shared_engine_llm))
     
     from llm.api_client import call_llm
     
@@ -60,10 +62,98 @@ def write_chapter(config, ch_num, context=None):
         result = call_llm(config, "write-chapter", prompt,
                          system_prompt="你是一个专业的小说写手。续写时必须保持原作风格和角色一致性。不要废话，直接写正文。",
                          max_tokens=4096)
+        
+        # 自动修复：字数检查
+        if auto_fix and result:
+            result = _auto_fix_chapter(config, ch_num, result, characters, guide, prev_context, context)
+        
         return result
     except Exception as e:
         print(f"    [ERROR] 写章失败: {e}")
         return None
+
+
+def _auto_fix_chapter(config, ch_num, content, characters, guide, prev_context, context=None):
+    """自动修复章节（字数检查+trim/expand）"""
+    import sys
+    shared_engine = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
+    shared_engine_llm = shared_engine / "llm"
+    sys.path.insert(0, str(shared_engine))
+    sys.path.insert(0, str(shared_engine_llm))
+    
+    from llm.api_client import call_llm
+    
+    # 计算字数
+    chars = len(content.replace(" ", "").replace("\n", ""))
+    
+    # 目标字数范围
+    min_chars = 1800
+    max_chars = 3000
+    
+    # 如果字数在范围内，直接返回
+    if min_chars <= chars <= max_chars:
+        return content
+    
+    # 字数不足 → 扩写
+    if chars < min_chars:
+        target_chars = 2500
+        prompt = f"""请扩写以下章节，目标字数约{target_chars}字。
+
+## 扩写要求
+
+1. **保持原有情节框架和人物关系**
+2. **增加细节描写**（五感、环境、动作）
+3. **增加对话互动**
+4. **不要增加新的情节线**
+5. **字数控制**：{target_chars}字左右（±10%）
+
+## 原文（{chars}字）
+
+{content}
+
+## 输出格式
+
+直接输出扩写后的完整章节，不要解释。
+"""
+        try:
+            result = call_llm(config, "expand-chapter", prompt,
+                             system_prompt="你是一个专业的小说写手，擅长扩写。",
+                             max_tokens=int(target_chars * 1.5))
+            return result
+        except Exception as e:
+            print(f"    [WARN] 扩写失败: {e}")
+            return content
+    
+    # 字数超标 → 精简
+    if chars > max_chars:
+        target_chars = 2500
+        prompt = f"""请精简以下章节，目标字数约{target_chars}字。
+
+## 精简要求
+
+1. **保留所有剧情节点和关键对话**
+2. **删冗余**：重复描写、过度修饰
+3. **合短句**：连续的短句合并
+4. **字数控制**：{target_chars}字左右（±10%）
+
+## 原文
+
+{content}
+
+## 输出格式
+
+直接输出精简后的完整章节，不要解释。
+"""
+        try:
+            result = call_llm(config, "trim-chapter", prompt,
+                             system_prompt="你是一个专业的小说编辑，擅长精简文字。",
+                             max_tokens=int(target_chars * 2))
+            return result
+        except Exception as e:
+            print(f"    [WARN] 精简失败: {e}")
+            return content
+    
+    return content
 
 
 def _load_characters(config):
