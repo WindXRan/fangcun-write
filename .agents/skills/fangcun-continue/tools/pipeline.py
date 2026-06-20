@@ -18,15 +18,15 @@ import json
 import argparse
 from pathlib import Path
 
-# 添加 fangcun-analyze 和 fangcun-analyze 到 path
-_SHARED_ENGINE = Path(__file__).parent.parent.parent / "fangcun-analyze" / "tools"
-_SHARED_ENGINE_LLM = _SHARED_ENGINE / "llm"  # 添加 llm 目录
-_SOURCE_ENGINE = Path(__file__).parent.parent.parent / "fangcun-analyze" / "tools"
-sys.path.insert(0, str(_SHARED_ENGINE))
-sys.path.insert(0, str(_SHARED_ENGINE_LLM))  # 添加 llm 目录
-sys.path.insert(0, str(_SOURCE_ENGINE))
+# 添加 fangcun-analyze 和 fangcun-novel 到 path
+_ANALYZE_TOOLS = Path(__file__).parent.parent.parent / "fangcun-analyze" / "tools"
+_ANALYZE_LIB = _ANALYZE_TOOLS / "lib"
+_NOVEL_TOOLS = Path(__file__).parent.parent.parent / "fangcun-novel" / "tools"
+sys.path.insert(0, str(_ANALYZE_TOOLS))
+sys.path.insert(0, str(_ANALYZE_LIB))
+sys.path.insert(0, str(_NOVEL_TOOLS))
 
-from llm.api_client import call_llm, get_api_key, get_api_url
+from lib.api_client import call_llm, get_api_key, get_api_url
 from source_io import load_events, get_source_text
 
 
