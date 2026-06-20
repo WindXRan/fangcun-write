@@ -435,6 +435,25 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             replacements["源文高光"] = ""
             replacements["文笔指纹"] = "（源文读取失败）"
 
+    # 注入风格类型（从 concept.md 提取）
+    concept_path = Path(config.get("rewrites_dir", "")) / "concept.md"
+    if concept_path.exists():
+        concept_text = concept_path.read_text(encoding="utf-8")
+        # 提取风格类型块
+        import re as _re
+        genre_match = _re.search(r'## 风格类型.*?\n(.*?)(?=\n##|\Z)', concept_text, _re.DOTALL)
+        if genre_match:
+            replacements.setdefault("风格类型", genre_match.group(1).strip())
+        else:
+            # 兼容旧格式：从"定位"行提取
+            pos_match = _re.search(r'定位[：:]\s*(.+)', concept_text)
+            if pos_match:
+                replacements.setdefault("风格类型", f"题材类型：{pos_match.group(1).strip()}")
+            else:
+                replacements.setdefault("风格类型", "（风格类型未提取，请参考源文基调）")
+    else:
+        replacements.setdefault("风格类型", "（concept.md 不存在）")
+
     # 注入源书级产物（从 _cache/ 读取）
     if chapter_num:
         from file_io import get_chapter_event, get_skeleton_context, get_adaptation_principles
