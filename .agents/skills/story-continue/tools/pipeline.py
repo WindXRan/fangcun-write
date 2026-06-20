@@ -45,8 +45,8 @@ def get_dirs(config):
     # 源文目录
     source_dir = base_dir / "projects" / author / source_book
     
-    # 续写专用目录（不在cache下）
-    continue_dir = base_dir / "projects" / author / source_book / "续写引擎"
+    # 续写专用目录（在source_dir下，不在cache下）
+    continue_dir = source_dir / "续写引擎"
     
     return {
         "source_dir": source_dir,
@@ -54,7 +54,6 @@ def get_dirs(config):
         "continue_dir": continue_dir,
         "analysis_dir": continue_dir / "analysis",
         "plans_dir": continue_dir / "plans",
-        "output_dir": continue_dir / "output",
     }
 
 
@@ -371,14 +370,14 @@ def phase_confirm(config, plan_num=1):
     time_match = re.search(r'时间跳跃[：:]\s*(.+)', plan_content)
     time_jump = time_match.group(1).strip() if time_match else "多年后"
     
-    # 生成续写配置
+    # 生成续写配置（使用projects架构：projects/{作者}/{源书}/rewrites/{续写书名}/）
     source_dir = dirs["source_dir"]
-    output_dir = dirs["output_dir"] / book_name
-    output_dir.mkdir(parents=True, exist_ok=True)
+    rewrites_dir = source_dir / "rewrites" / book_name
+    rewrites_dir.mkdir(parents=True, exist_ok=True)
     
     continue_config = {
         "source_dir": str(source_dir),
-        "output_dir": str(output_dir),
+        "rewrites_dir": str(rewrites_dir),
         "book_name": book_name,
         "time_jump": time_jump,
         "plan_file": str(plan_path),
@@ -387,13 +386,13 @@ def phase_confirm(config, plan_num=1):
         "model": config.get("model", "mimo-v2.5-pro"),
     }
     
-    config_path = output_dir / "continue_config.json"
+    config_path = rewrites_dir / "continue_config.json"
     config_path.write_text(json.dumps(continue_config, ensure_ascii=False, indent=2), encoding='utf-8')
     
-    # 复制分析结果
+    # 复制分析结果到rewrites_dir
     analysis_dir = dirs["analysis_dir"]
     import shutil
-    shutil.copytree(analysis_dir, output_dir / "analysis", dirs_exist_ok=True)
+    shutil.copytree(analysis_dir, rewrites_dir / "analysis", dirs_exist_ok=True)
     
     print(f"[OK] 确认完成")
     print(f"  书名: {book_name}")
@@ -413,13 +412,13 @@ def phase_write(config, start=1, end=20):
     print("Phase 4: 逐章写作")
     print("=" * 50)
     
-    output_dir = Path(config.get("output_dir", ""))
-    if not output_dir.exists():
-        print(f"[FAIL] 输出目录不存在: {output_dir}")
+    rewrites_dir = Path(config.get("rewrites_dir", ""))
+    if not rewrites_dir.exists():
+        print(f"[FAIL] 输出目录不存在: {rewrites_dir}")
         return False
     
     # 读取分析结果
-    analysis_dir = output_dir / "analysis"
+    analysis_dir = rewrites_dir / "analysis"
     characters = (analysis_dir / "characters.md").read_text(encoding='utf-8')
     relationships = (analysis_dir / "relationships.md").read_text(encoding='utf-8')
     ending_state = (analysis_dir / "ending_state.md").read_text(encoding='utf-8')
@@ -432,7 +431,7 @@ def phase_write(config, start=1, end=20):
         plan_content = "（无方案）"
     
     # 创建章节目录
-    chapters_dir = output_dir / "chapters"
+    chapters_dir = rewrites_dir / "chapters"
     chapters_dir.mkdir(parents=True, exist_ok=True)
     
     # 逐章写作
