@@ -126,6 +126,25 @@ def _save_memory_db(config, memory_db):
     memory_db.save(str(memory_path))
 
 
+def _load_style_fingerprint(config, ch_num):
+    """加载文风指纹（自动提取）"""
+    import sys
+    sys.path.insert(0, str(Path(__file__).parent))
+    from style_analyzer import load_style_from_cache, generate_and_save_style
+    
+    # 先尝试从缓存加载
+    style = load_style_from_cache(config, ch_num)
+    if style:
+        return style
+    
+    # 缓存没有，自动生成
+    style = generate_and_save_style(config, ch_num)
+    if style:
+        return style
+    
+    return "（文风指纹未提取）"
+
+
 
 
 def _get_text_chars(text):
@@ -248,7 +267,7 @@ def _dispatch_fix(config, ch_num, text, mode):
 
 
 def _do_trim(config, ch_num, text, mode):
-    """执行 trim（用 run_one）"""
+    """执行 trim（用 run_one，带二次校验）"""
     imports = _setup_imports()
     run_one = imports[3]
     chars = _get_text_chars(text)
@@ -262,8 +281,12 @@ def _do_trim(config, ch_num, text, mode):
         })
         if result:
             result_chars = _get_text_chars(result)
-            if result_chars < target_chars * 0.8 or result_chars > chars * 0.95:
-                print(f"    [WARN] trim 结果异常 ({result_chars}/{target_chars})，跳过")
+            # 砍太多或砍太少 → 跳过
+            if result_chars < target_chars * 0.75:
+                print(f"    [WARN] trim 砍太多 ({result_chars}/{target_chars})，跳过")
+                return None
+            if result_chars > chars * 0.98:
+                print(f"    [WARN] trim 没效果 ({result_chars}/{chars})，跳过")
                 return None
         return result
     except Exception as e:
