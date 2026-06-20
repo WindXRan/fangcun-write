@@ -485,46 +485,24 @@ def _get_previous_context(chapters_dir, current_ch, max_chapters=3):
 
 
 def _generate_chapter(config, ch_num, characters, relationships, ending_state, plan_content, prev_context):
-    """生成单章内容"""
-    prompt = f"""你是一个专业的小说写手。请续写《{config.get('book_name', '')}》第{ch_num}章。
-
-## 原著角色库
-{characters[:1000]}
+    """生成单章内容（调用 writer-engine 续写模式）"""
+    import sys
+    writer_engine = Path(__file__).parent.parent.parent / "writer-engine" / "tools"
+    sys.path.insert(0, str(writer_engine))
+    
+    from writer import write_chapter
+    
+    # 构建续写上下文
+    context = f"""## 续写方案
+{plan_content[:2000]}
 
 ## 原著关系线
-{relationships[:500]}
-
-## 续写方案
-{plan_content[:1000]}
-
-## 前文内容
-{prev_context if prev_context else "（第一章，无前文）"}
-
-## 写作要求
-
-1. **风格一致**：延续原作的文笔风格（对话比例、段长、描写特点）
-2. **角色一致**：角色名字、性格、说话方式必须与原作一致
-3. **情节连贯**：承接前文情节，不出现矛盾
-4. **字数控制**：2000-3000字
-5. **章末钩子**：每章结尾留一个钩子，吸引读者继续看
-
-## 输出格式
-
-第{ch_num}章 [章名]
-
-[正文内容]
-
-【字数：XXX字】
+{relationships[:1000]}
 """
     
-    try:
-        result = call_llm(config, "write-chapter", prompt,
-                         system_prompt="你是一个专业的小说写手。续写时必须保持原作风格和角色一致性。不要废话，直接写正文。",
-                         max_tokens=4096)
-        return result
-    except Exception as e:
-        print(f"    [ERROR] {e}")
-        return None
+    # 调用 writer-engine 的续写模式
+    result = write_chapter(config, ch_num, mode="continue", context=context, auto_fix=True)
+    return result
 
 
 # ─── Main ────────────────────────────────────────────────────────────────────

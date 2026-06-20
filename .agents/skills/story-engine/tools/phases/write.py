@@ -21,40 +21,40 @@ def _get_writer_module():
 
 
 def _fix_trim(config, ch, chapters_dir):
-    """字数超标 → trim。调用 writer-engine。"""
+    """字数超标 → trim。调用 writer-engine（仿写模式）。"""
     writer = _get_writer_module()
     fix_config = {**config, "rewrites_dir": str(Path(chapters_dir).parent)}
-    result = writer.trim_chapter(fix_config, ch)
+    result = writer.trim_chapter(fix_config, ch, mode="imitation")
     if result:
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         ch_file.write_text(result, encoding='utf-8')
 
 
 def _fix_expand(config, ch, text, chapters_dir):
-    """字数不足 → expand。调用 writer-engine。"""
+    """字数不足 → expand。调用 writer-engine（仿写模式）。"""
     writer = _get_writer_module()
     fix_config = {**config, "rewrites_dir": str(Path(chapters_dir).parent)}
-    result = writer.expand_chapter(fix_config, ch)
+    result = writer.expand_chapter(fix_config, ch, mode="imitation")
     if result:
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         ch_file.write_text(result, encoding='utf-8')
 
 
 def _fix_polish(config, ch, text, chapters_dir, issue=""):
-    """润色修复。调用 writer-engine。"""
+    """润色修复。调用 writer-engine（仿写模式）。"""
     writer = _get_writer_module()
     fix_config = {**config, "rewrites_dir": str(Path(chapters_dir).parent)}
-    result = writer.polish_chapter(fix_config, ch)
+    result = writer.polish_chapter(fix_config, ch, mode="imitation")
     if result:
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         ch_file.write_text(result, encoding='utf-8')
 
 
 def _fix_rewrite(config, ch, chapters_dir):
-    """全章重写。调用 writer-engine。"""
+    """全章重写。调用 writer-engine（仿写模式）。"""
     writer = _get_writer_module()
     fix_config = {**config, "rewrites_dir": str(Path(chapters_dir).parent)}
-    result = writer.rewrite_chapter(fix_config, ch)
+    result = writer.rewrite_chapter(fix_config, ch, mode="imitation")
     if result:
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         ch_file.write_text(result, encoding='utf-8')
