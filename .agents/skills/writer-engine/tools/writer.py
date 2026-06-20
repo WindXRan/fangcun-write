@@ -335,3 +335,188 @@ def _ensure_path():
     lib_sub = lib_dir / "lib"
     if str(lib_sub) not in sys.path:
         sys.path.insert(0, str(lib_sub))
+
+
+def _get_api_config(config):
+    """从配置中获取API参数"""
+    api_key = config.get("api_key") or os.environ.get("API_KEY", "")
+    api_url = config.get("api_base_url") or os.environ.get("API_BASE_URL", "")
+    model = config.get("model", "deepseek-chat")
+    return api_key, api_url, model
+
+
+def trim_chapter(config, ch_num, mode="imitation"):
+    """精简章节"""
+    _ensure_path()
+    from file_io import load_chapter, get_rewrites_dir
+    
+    rewrites_dir = str(get_rewrites_dir(config))
+    ch_file = Path(rewrites_dir) / "chapters" / f"ch_{ch_num:03d}.txt"
+    
+    if not ch_file.exists():
+        print(f"    [ERROR] 章节不存在: {ch_file}")
+        return None
+    
+    original = ch_file.read_text(encoding="utf-8")
+    target_chars = int(len(original.replace(" ", "").replace("\n", "")) * 0.8)
+    
+    # 加载prompt
+    prompt_path = PROMPTS_DIR / mode / "trim.md"
+    if not prompt_path.exists():
+        prompt_path = PROMPTS_DIR / "trim.md"
+    
+    prompt_template = load_prompt(str(prompt_path))
+    context = {
+        "content": original,
+        "target_chars": str(target_chars),
+    }
+    prompt = inject_context(prompt_template, context)
+    
+    api_key, api_url, model = _get_api_config(config)
+    
+    try:
+        result = execute(
+            prompt=prompt,
+            output_path=str(ch_file),
+            system_prompt="你是一个专业的小说编辑，擅长精简文字。",
+            api_key=api_key,
+            api_url=api_url,
+            model=model,
+            max_tokens=int(target_chars * 2),
+        )
+        return result.get("output")
+    except Exception as e:
+        print(f"    [ERROR] 精简失败: {e}")
+        return None
+
+
+def polish_chapter(config, ch_num, mode="imitation"):
+    """润色章节"""
+    _ensure_path()
+    from file_io import load_chapter, get_rewrites_dir
+    
+    rewrites_dir = str(get_rewrites_dir(config))
+    ch_file = Path(rewrites_dir) / "chapters" / f"ch_{ch_num:03d}.txt"
+    
+    if not ch_file.exists():
+        print(f"    [ERROR] 章节不存在: {ch_file}")
+        return None
+    
+    original = ch_file.read_text(encoding="utf-8")
+    original_chars = len(original.replace(" ", "").replace("\n", ""))
+    
+    # 加载prompt
+    prompt_path = PROMPTS_DIR / mode / "polish.md"
+    if not prompt_path.exists():
+        prompt_path = PROMPTS_DIR / "polish.md"
+    
+    prompt_template = load_prompt(str(prompt_path))
+    context = {
+        "content": original,
+        "min_chars": str(int(original_chars * 0.9)),
+        "max_chars": str(int(original_chars * 1.1)),
+    }
+    prompt = inject_context(prompt_template, context)
+    
+    api_key, api_url, model = _get_api_config(config)
+    
+    try:
+        result = execute(
+            prompt=prompt,
+            output_path=str(ch_file),
+            system_prompt="你是一个专业的小说编辑，擅长润色文笔。",
+            api_key=api_key,
+            api_url=api_url,
+            model=model,
+            max_tokens=int(original_chars * 1.5),
+        )
+        return result.get("output")
+    except Exception as e:
+        print(f"    [ERROR] 润色失败: {e}")
+        return None
+
+
+def expand_chapter(config, ch_num, mode="imitation", target_chars=None):
+    """扩写章节"""
+    _ensure_path()
+    from file_io import load_chapter, get_rewrites_dir
+    
+    rewrites_dir = str(get_rewrites_dir(config))
+    ch_file = Path(rewrites_dir) / "chapters" / f"ch_{ch_num:03d}.txt"
+    
+    if not ch_file.exists():
+        print(f"    [ERROR] 章节不存在: {ch_file}")
+        return None
+    
+    original = ch_file.read_text(encoding="utf-8")
+    original_chars = len(original.replace(" ", "").replace("\n", ""))
+    
+    if target_chars is None:
+        target_chars = int(original_chars * 1.3)
+    
+    # 加载prompt
+    prompt_path = PROMPTS_DIR / mode / "expand.md"
+    if not prompt_path.exists():
+        prompt_path = PROMPTS_DIR / "expand.md"
+    
+    prompt_template = load_prompt(str(prompt_path))
+    context = {
+        "content": original,
+        "orig_chars": str(original_chars),
+        "target_chars": str(target_chars),
+    }
+    prompt = inject_context(prompt_template, context)
+    
+    api_key, api_url, model = _get_api_config(config)
+    
+    try:
+        result = execute(
+            prompt=prompt,
+            output_path=str(ch_file),
+            system_prompt="你是一个专业的小说写手，擅长扩写。",
+            api_key=api_key,
+            api_url=api_url,
+            model=model,
+            max_tokens=int(target_chars * 1.5),
+        )
+        return result.get("output")
+    except Exception as e:
+        print(f"    [ERROR] 扩写失败: {e}")
+        return None
+
+
+def rewrite_chapter(config, ch_num, mode="imitation", reason=""):
+    """重写章节"""
+    _ensure_path()
+    from file_io import load_chapter, get_rewrites_dir
+    
+    rewrites_dir = str(get_rewrites_dir(config))
+    
+    # 加载prompt
+    prompt_path = PROMPTS_DIR / mode / "rewrite.md"
+    if not prompt_path.exists():
+        prompt_path = PROMPTS_DIR / "rewrite.md"
+    
+    prompt_template = load_prompt(str(prompt_path))
+    context = _build_context(config, ch_num, mode)
+    context["reason"] = reason or "（无具体原因，整章重写）"
+    prompt = inject_context(prompt_template, context)
+    
+    api_key, api_url, model = _get_api_config(config)
+    
+    output_path = str(Path(rewrites_dir) / "chapters" / f"ch_{ch_num:03d}.txt")
+    
+    try:
+        result = execute(
+            prompt=prompt,
+            output_path=output_path,
+            system_prompt="你是一个专业的小说写手。重写时必须解决上述问题，保持角色一致性。",
+            api_key=api_key,
+            api_url=api_url,
+            model=model,
+            max_tokens=4096,
+        )
+        return result.get("output")
+    except Exception as e:
+        print(f"    [ERROR] 重写失败: {e}")
+        return None
