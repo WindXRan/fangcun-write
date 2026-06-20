@@ -40,15 +40,19 @@ def get_dirs(config):
     source_book = config.get("source_book", "")
     author = config.get("author", "")
     
-    # 从source_book和author构建source_dir
+    # 源文目录
     source_dir = base_dir / "projects" / author / source_book
-    cache_dir = source_dir / "_cache"
+    
+    # 续写专用目录（不在cache下）
+    continue_dir = base_dir / "projects" / author / source_book / "续写引擎"
     
     return {
         "source_dir": source_dir,
-        "cache_dir": cache_dir,
-        "analysis_dir": cache_dir / "continue_analysis",
-        "plans_dir": cache_dir / "continue_plans",
+        "cache_dir": source_dir / "_cache",
+        "continue_dir": continue_dir,
+        "analysis_dir": continue_dir / "analysis",
+        "plans_dir": continue_dir / "plans",
+        "output_dir": continue_dir / "output",
     }
 
 
@@ -64,7 +68,7 @@ def phase_analyze(config):
     analysis_dir = dirs["analysis_dir"]
     analysis_dir.mkdir(parents=True, exist_ok=True)
     
-    # 读取事件表
+    # 读取事件表（从cache中读取）
     events = load_events(config)
     if not events:
         print("[FAIL] 未找到事件表，请先运行 source-engine")
@@ -367,12 +371,12 @@ def phase_confirm(config, plan_num=1):
     
     # 生成续写配置
     source_dir = dirs["source_dir"]
-    rewrites_dir = source_dir / "rewrites" / book_name
-    rewrites_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = dirs["output_dir"] / book_name
+    output_dir.mkdir(parents=True, exist_ok=True)
     
     continue_config = {
         "source_dir": str(source_dir),
-        "rewrites_dir": str(rewrites_dir),
+        "output_dir": str(output_dir),
         "book_name": book_name,
         "time_jump": time_jump,
         "plan_file": str(plan_path),
@@ -381,13 +385,13 @@ def phase_confirm(config, plan_num=1):
         "model": config.get("model", "mimo-v2.5-pro"),
     }
     
-    config_path = rewrites_dir / "continue_config.json"
+    config_path = output_dir / "continue_config.json"
     config_path.write_text(json.dumps(continue_config, ensure_ascii=False, indent=2), encoding='utf-8')
     
     # 复制分析结果
     analysis_dir = dirs["analysis_dir"]
     import shutil
-    shutil.copytree(analysis_dir, rewrites_dir / "analysis", dirs_exist_ok=True)
+    shutil.copytree(analysis_dir, output_dir / "analysis", dirs_exist_ok=True)
     
     print(f"[OK] 确认完成")
     print(f"  书名: {book_name}")
@@ -399,6 +403,122 @@ def phase_confirm(config, plan_num=1):
     return True
 
 
+# ─── Phase 4: 逐章写作 ──────────────────────────────────────────────────────
+
+def phase_write(config, start=1, end=20):
+    """逐章写作"""
+    print("\n" + "=" * 50)
+    print("Phase 4: 逐章写作")
+    print("=" * 50)
+    
+    output_dir = Path(config.get("output_dir", ""))
+    if not output_dir.exists():
+        print(f"[FAIL] 输出目录不存在: {output_dir}")
+        return False
+    
+    # 读取分析结果
+    analysis_dir = output_dir / "analysis"
+    characters = (analysis_dir / "characters.md").read_text(encoding='utf-8')
+    relationships = (analysis_dir / "relationships.md").read_text(encoding='utf-8')
+    ending_state = (analysis_dir / "ending_state.md").read_text(encoding='utf-8')
+    
+    # 读取方案
+    plan_file = config.get("plan_file", "")
+    if plan_file and Path(plan_file).exists():
+        plan_content = Path(plan_file).read_text(encoding='utf-8')
+    else:
+        plan_content = "（无方案）"
+    
+    # 创建章节目录
+    chapters_dir = output_dir / "chapters"
+    chapters_dir.mkdir(parents=True, exist_ok=True)
+    
+    # 逐章写作
+    print(f"  写第{start}章到第{end}章...")
+    
+    for ch_num in range(start, end + 1):
+        ch_file = chapters_dir / f"ch_{ch_num:03d}.txt"
+        
+        # 检查是否已存在
+        if ch_file.exists():
+            print(f"    [SKIP] 第{ch_num}章已存在")
+            continue
+        
+        # 读取前文（最多3章）
+        prev_context = _get_previous_context(chapters_dir, ch_num, max_chapters=3)
+        
+        # 生成章节
+        print(f"    [WRITE] 第{ch_num}章...")
+        chapter_content = _generate_chapter(config, ch_num, characters, relationships, 
+                                           ending_state, plan_content, prev_context)
+        
+        if chapter_content:
+            ch_file.write_text(chapter_content, encoding='utf-8')
+            print(f"    [OK] 第{ch_num}章 ({len(chapter_content)}字)")
+        else:
+            print(f"    [FAIL] 第{ch_num}章")
+    
+    print(f"\n[OK] 写章完成 → {chapters_dir}")
+    return True
+
+
+def _get_previous_context(chapters_dir, current_ch, max_chapters=3):
+    """获取前文内容"""
+    context_parts = []
+    for i in range(max(1, current_ch - max_chapters), current_ch):
+        ch_file = chapters_dir / f"ch_{i:03d}.txt"
+        if ch_file.exists():
+            content = ch_file.read_text(encoding='utf-8')
+            # 只取最后500字作为上下文
+            if len(content) > 500:
+                content = "..." + content[-500:]
+            context_parts.append(f"【第{i}章】\n{content}")
+    return "\n\n".join(context_parts)
+
+
+def _generate_chapter(config, ch_num, characters, relationships, ending_state, plan_content, prev_context):
+    """生成单章内容"""
+    prompt = f"""你是一个专业的小说写手。请续写《{config.get('book_name', '')}》第{ch_num}章。
+
+## 原著角色库
+{characters[:1000]}
+
+## 原著关系线
+{relationships[:500]}
+
+## 续写方案
+{plan_content[:1000]}
+
+## 前文内容
+{prev_context if prev_context else "（第一章，无前文）"}
+
+## 写作要求
+
+1. **风格一致**：延续原作的文笔风格（对话比例、段长、描写特点）
+2. **角色一致**：角色名字、性格、说话方式必须与原作一致
+3. **情节连贯**：承接前文情节，不出现矛盾
+4. **字数控制**：2000-3000字
+5. **章末钩子**：每章结尾留一个钩子，吸引读者继续看
+
+## 输出格式
+
+第{ch_num}章 [章名]
+
+[正文内容]
+
+【字数：XXX字】
+"""
+    
+    try:
+        result = call_llm(config, "write-chapter", prompt,
+                         system_prompt="你是一个专业的小说写手。续写时必须保持原作风格和角色一致性。不要废话，直接写正文。",
+                         max_tokens=4096)
+        return result
+    except Exception as e:
+        print(f"    [ERROR] {e}")
+        return None
+
+
 # ─── Main ────────────────────────────────────────────────────────────────────
 
 def main():
@@ -408,6 +528,8 @@ def main():
                        choices=["analyze", "plan", "confirm", "outline", "write", "review"],
                        help="执行阶段")
     parser.add_argument("--plan", type=int, default=1, help="选择的方案编号")
+    parser.add_argument("--start", type=int, default=1, help="开始章节")
+    parser.add_argument("--end", type=int, default=20, help="结束章节")
     
     args = parser.parse_args()
     config = load_config(args.config)
@@ -418,6 +540,8 @@ def main():
         phase_plan(config)
     elif args.phase == "confirm":
         phase_confirm(config, args.plan)
+    elif args.phase == "write":
+        phase_write(config, args.start, args.end)
     else:
         print(f"[TODO] {args.phase} 阶段待实现")
 
