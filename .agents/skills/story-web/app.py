@@ -353,7 +353,7 @@ def api_pools_all():
                         seen.add(title)
                         
                         # 解析阅读量字符串（如"19.8万"→198000）
-                        read_count = book.get("readCount", book.get("readCountStr", ""))
+                        read_count = book.get("reads", book.get("readCount", book.get("readCountStr", "")))
                         read_num = _parse_read_count(read_count)
                         
                         all_books.append({
@@ -365,8 +365,12 @@ def api_pools_all():
                             "rank": book.get("rank", 0),
                             "readCount": read_count,
                             "readNum": read_num,
-                            "wordCount": book.get("wordCount", book.get("wordCountStr", "")),
-                            "description": book.get("description", book.get("bookDesc", ""))[:200],
+                            "wordCount": book.get("word_count", book.get("wordCount", "")),
+                            "description": book.get("intro", book.get("description", book.get("bookDesc", "")))[:200],
+                            "status": book.get("status", ""),
+                            "lastChapter": book.get("last_chapter", ""),
+                            "cover": book.get("cover", ""),
+                            "url": book.get("url", ""),
                         })
             except Exception as e:
                 continue
