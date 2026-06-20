@@ -401,6 +401,22 @@ def phase_confirm(config, plan_num=1):
     import shutil
     shutil.copytree(analysis_dir, rewrites_dir / "analysis", dirs_exist_ok=True)
     
+    # 复制characters.md到rewrites_dir根目录（供run_one读取）
+    chars_src = analysis_dir / "characters.md"
+    if chars_src.exists():
+        shutil.copy2(chars_src, rewrites_dir / "characters.md")
+        print(f"  [OK] 复制 characters.md 到 {rewrites_dir}")
+    
+    # 复制world.md到rewrites_dir根目录（供run_one读取）
+    world_src = analysis_dir / "world.md"
+    if world_src.exists():
+        shutil.copy2(world_src, rewrites_dir / "world.md")
+    
+    # 复制plot.md到rewrites_dir根目录（供run_one读取）
+    plot_src = analysis_dir / "plot.md"
+    if plot_src.exists():
+        shutil.copy2(plot_src, rewrites_dir / "plot.md")
+    
     print(f"[OK] 确认完成")
     print(f"  书名: {book_name}")
     print(f"  时间跳跃: {time_jump}")
