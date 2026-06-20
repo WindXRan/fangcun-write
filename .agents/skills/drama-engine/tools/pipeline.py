@@ -28,9 +28,11 @@ import argparse
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# 添加 source-engine tools 到 path 以复用共享模块
+# 添加 shared-engine 和 source-engine tools 到 path 以复用共享模块
+_shared_engine_tools = str(Path(__file__).parent.parent.parent / "shared-engine" / "tools")
 _source_engine_tools = str(Path(__file__).parent.parent.parent / "source-engine" / "tools")
-sys.path.insert(0, _source_engine_tools)
+sys.path.insert(0, _shared_engine_tools)  # shared-engine 优先
+sys.path.insert(0, _source_engine_tools)  # source-engine 兼容
 from lib.api_client import call_api, get_api_key, get_api_url
 from source_analysis import (
     load_events, save_events, get_events_text, get_source_chapters, get_source_text,
