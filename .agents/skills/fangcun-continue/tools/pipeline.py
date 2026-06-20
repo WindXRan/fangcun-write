@@ -492,8 +492,11 @@ def _generate_chapter(config, ch_num, characters, relationships, ending_state, p
     
     from writer import write_chapter
     
-    # 构建续写上下文
-    context = f"""## 续写方案
+    # 构建续写上下文（注入到角色约束中）
+    context = f"""## 角色名映射（必须使用这些名字，不可自编）
+{characters[:2000]}
+
+## 续写方案
 {plan_content[:2000]}
 
 ## 原著关系线

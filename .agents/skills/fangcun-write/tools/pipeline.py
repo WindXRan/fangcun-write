@@ -1,301 +1,214 @@
 ﻿"""
 fangcun-write pipeline: 通用写作能力引擎
 
-支持独立使用或被其他引擎调用。
+流程（与原版 fangcun-novel 一致）：
+Phase 3: 写章（并行）→ 按需 trim/expand（3轮）→ 统一 polish
 """
 
 import os
+import re
 import sys
 import json
+import time
 import argparse
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# 添加 fangcun-analyze 到 path
-_SHARED_ENGINE = Path(__file__).parent.parent.parent / "fangcun-analyze" / "tools"
-_SHARED_ENGINE_LLM = _SHARED_ENGINE / "llm"
-sys.path.insert(0, str(_SHARED_ENGINE))
-sys.path.insert(0, str(_SHARED_ENGINE_LLM))
+# 添加依赖路径
+_SHARED = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
+_SHARED_LLM = _SHARED / "llm"
+sys.path.insert(0, str(_SHARED))
+sys.path.insert(0, str(_SHARED_LLM))
 
-from writer import write_chapter, trim_chapter, polish_chapter, expand_chapter, rewrite_chapter
+from writer import (
+    write_chapter, trim_chapter, expand_chapter, polish_chapter, rewrite_chapter,
+    get_writer_dirs, _get_text_chars, count_source_chars, get_source_text
+)
 
 
 def load_config(config_path):
-    """加载配置文件"""
     with open(config_path, 'r', encoding='utf-8') as f:
         config = json.load(f)
-    
-    # 自动检测 base_dir（如果未指定）
     if "base_dir" not in config:
         config["base_dir"] = str(Path(config_path).parent.parent.parent.parent.parent)
-    
-    # 如果 rewrites_dir 是相对路径，基于 base_dir 解析
     if "rewrites_dir" in config and not Path(config["rewrites_dir"]).is_absolute():
         config["rewrites_dir"] = str(Path(config["base_dir"]) / config["rewrites_dir"])
-    
     return config
 
 
-def _write_single(config, ch_num, mode):
-    """写单章（用于并发）"""
-    rewrites_dir = Path(config.get("rewrites_dir", ""))
-    ch_file = rewrites_dir / "chapters" / f"ch_{ch_num:03d}.txt"
-    
-    if ch_file.exists():
-        return ch_num, "SKIP", f"已存在"
-    
-    result = write_chapter(config, ch_num, mode=mode)
-    if result:
-        ch_file.write_text(result, encoding='utf-8')
-        return ch_num, "OK", f"{len(result)}字"
-    return ch_num, "FAIL", ""
-
-
-def _process_single(config, ch_num, mode, action):
-    """处理单章（trim/polish/expand，用于并发）"""
-    rewrites_dir = Path(config.get("rewrites_dir", ""))
-    ch_file = rewrites_dir / "chapters" / f"ch_{ch_num:03d}.txt"
-    
-    if not ch_file.exists():
-        return ch_num, "SKIP", "不存在"
-    
-    fn_map = {"trim": trim_chapter, "polish": polish_chapter, "expand": expand_chapter}
-    result = fn_map[action](config, ch_num, mode=mode)
-    if result:
-        ch_file.write_text(result, encoding='utf-8')
-        return ch_num, "OK", ""
-    return ch_num, "FAIL", ""
-
-
-def _rewrite_single(config, ch_num, mode, reason):
-    """重写单章"""
-    result = rewrite_chapter(config, ch_num, mode=mode, reason=reason)
-    if result:
-        rewrites_dir = Path(config.get("rewrites_dir", ""))
-        ch_file = rewrites_dir / "chapters" / f"ch_{ch_num:03d}.txt"
-        ch_file.write_text(result, encoding='utf-8')
-        return ch_num, "OK", f"{len(result)}字"
-    return ch_num, "FAIL", ""
-
-
 def phase_write(config, start, end, mode="imitation", workers=1):
-    """写章"""
+    """写章 + 按需 trim/expand + 统一 polish（与原版 phase_write 一致）"""
+    dirs = get_writer_dirs(config)
+    chapters_dir = dirs["chapters_dir"]
+    chapters_dir.mkdir(parents=True, exist_ok=True)
+
     print(f"\n{'='*50}")
-    print(f"Phase: 写章 (mode={mode}, workers={workers})")
-    print(f"{'='*50}")
-    
-    rewrites_dir = Path(config.get("rewrites_dir", ""))
-    (rewrites_dir / "chapters").mkdir(parents=True, exist_ok=True)
-    
+    print(f"Phase 3: 写章 (ch{start}-{end}, {workers}w)")
+    print("="*50)
+
+    t0 = time.time()
+
+    # --- 写章 ---
     chapters = list(range(start, end + 1))
-    ok, fail, skip = 0, 0, 0
-    
+    ok = {}
+    fail = {}
+
+    def _write_one(ch):
+        ch_file = chapters_dir / f"ch_{ch:03d}.txt"
+        if ch_file.exists() and ch_file.stat().st_size >= 500:
+            return ch, "SKIP", "已存在"
+        try:
+            result = write_chapter(config, ch, mode=mode)
+            if result:
+                ch_file.write_text(result, encoding='utf-8')
+                return ch, "OK", f"{_get_text_chars(result)}字"
+            return ch, "FAIL", ""
+        except Exception as e:
+            return ch, "FAIL", str(e)
+
     if workers <= 1:
-        for ch_num in chapters:
-            ch_num, status, info = _write_single(config, ch_num, mode)
+        for ch in chapters:
+            ch, status, info = _write_one(ch)
             if status == "OK":
-                print(f"    [OK] 第{ch_num}章 ({info})")
-                ok += 1
+                print(f"  [OK] ch{ch:03d} ({info})")
+                ok[ch] = str(chapters_dir / f"ch_{ch:03d}.txt")
             elif status == "SKIP":
-                print(f"    [SKIP] 第{ch_num}章 ({info})")
-                skip += 1
+                print(f"  [SKIP] ch{ch:03d} ({info})")
+                ok[ch] = str(chapters_dir / f"ch_{ch:03d}.txt")
             else:
-                print(f"    [FAIL] 第{ch_num}章")
-                fail += 1
+                print(f"  [FAIL] ch{ch:03d}: {info}")
+                fail[ch] = info
     else:
-        with ThreadPoolExecutor(max_workers=workers) as executor:
-            futures = {executor.submit(_write_single, config, ch_num, mode): ch_num for ch_num in chapters}
-            for future in as_completed(futures):
-                ch_num, status, info = future.result()
-                if status == "OK":
-                    print(f"    [OK] 第{ch_num}章 ({info})")
-                    ok += 1
-                elif status == "SKIP":
-                    print(f"    [SKIP] 第{ch_num}章 ({info})")
-                    skip += 1
+        with ThreadPoolExecutor(max_workers=workers) as ex:
+            futures = {ex.submit(_write_one, ch): ch for ch in chapters}
+            for f in as_completed(futures):
+                ch, status, info = f.result()
+                if status in ("OK", "SKIP"):
+                    print(f"  [{status}] ch{ch:03d} ({info})")
+                    ok[ch] = str(chapters_dir / f"ch_{ch:03d}.txt")
                 else:
-                    print(f"    [FAIL] 第{ch_num}章")
-                    fail += 1
-    
-    print(f"\n  完成: {ok} OK / {skip} SKIP / {fail} FAIL")
+                    print(f"  [FAIL] ch{ch:03d}: {info}")
+                    fail[ch] = info
 
+    # --- 按需修复：字数 trim/expand（3轮）---
+    for retry_round in range(1, 4):
+        retry_list = []
+        rewrite_list = []
+        for ch in range(start, end + 1):
+            ch_file = chapters_dir / f"ch_{ch:03d}.txt"
+            if not ch_file.exists():
+                continue
+            text = ch_file.read_text(encoding='utf-8')
+            chars = _get_text_chars(text)
 
-def phase_trim(config, start, end, mode="imitation", workers=1):
-    """精简"""
-    print(f"\n{'='*50}")
-    print(f"Phase: 精简 (mode={mode}, workers={workers})")
-    print(f"{'='*50}")
-    
-    chapters = list(range(start, end + 1))
-    ok, fail, skip = 0, 0, 0
-    
-    if workers <= 1:
-        for ch_num in chapters:
-            ch_num, status, info = _process_single(config, ch_num, mode, "trim")
-            if status == "OK":
-                print(f"    [OK] 第{ch_num}章")
-                ok += 1
-            elif status == "SKIP":
-                print(f"    [SKIP] 第{ch_num}章 ({info})")
-                skip += 1
-            else:
-                print(f"    [FAIL] 第{ch_num}章")
-                fail += 1
-    else:
-        with ThreadPoolExecutor(max_workers=workers) as executor:
-            futures = {executor.submit(_process_single, config, ch_num, mode, "trim"): ch_num for ch_num in chapters}
-            for future in as_completed(futures):
-                ch_num, status, info = future.result()
-                if status == "OK":
-                    print(f"    [OK] 第{ch_num}章")
-                    ok += 1
-                elif status == "SKIP":
-                    print(f"    [SKIP] 第{ch_num}章 ({info})")
-                    skip += 1
-                else:
-                    print(f"    [FAIL] 第{ch_num}章")
-                    fail += 1
-    
-    print(f"\n  完成: {ok} OK / {skip} SKIP / {fail} FAIL")
+            if chars < 500:
+                rewrite_list.append(ch)
+            elif chars < 2000:
+                retry_list.append((ch, "expand"))
+            elif chars > 3000:
+                retry_list.append((ch, "trim"))
 
+        if rewrite_list:
+            print(f"\n  [REWRITE] {len(rewrite_list)}章字数极短: {rewrite_list}")
+            for ch in rewrite_list:
+                try:
+                    result = write_chapter(config, ch, mode=mode)
+                    if result:
+                        (chapters_dir / f"ch_{ch:03d}.txt").write_text(result, encoding='utf-8')
+                        print(f"    [OK] ch{ch:03d} 重写完成")
+                except Exception as e:
+                    print(f"    [FAIL] ch{ch:03d}: {e}")
 
-def phase_polish(config, start, end, mode="imitation", workers=1):
-    """润色"""
-    print(f"\n{'='*50}")
-    print(f"Phase: 润色 (mode={mode}, workers={workers})")
-    print(f"{'='*50}")
-    
-    chapters = list(range(start, end + 1))
-    ok, fail, skip = 0, 0, 0
-    
-    if workers <= 1:
-        for ch_num in chapters:
-            ch_num, status, info = _process_single(config, ch_num, mode, "polish")
-            if status == "OK":
-                print(f"    [OK] 第{ch_num}章")
-                ok += 1
-            elif status == "SKIP":
-                print(f"    [SKIP] 第{ch_num}章 ({info})")
-                skip += 1
-            else:
-                print(f"    [FAIL] 第{ch_num}章")
-                fail += 1
-    else:
-        with ThreadPoolExecutor(max_workers=workers) as executor:
-            futures = {executor.submit(_process_single, config, ch_num, mode, "polish"): ch_num for ch_num in chapters}
-            for future in as_completed(futures):
-                ch_num, status, info = future.result()
-                if status == "OK":
-                    print(f"    [OK] 第{ch_num}章")
-                    ok += 1
-                elif status == "SKIP":
-                    print(f"    [SKIP] 第{ch_num}章 ({info})")
-                    skip += 1
-                else:
-                    print(f"    [FAIL] 第{ch_num}章")
-                    fail += 1
-    
-    print(f"\n  完成: {ok} OK / {skip} SKIP / {fail} FAIL")
+        if not retry_list and not rewrite_list:
+            break
 
+        if retry_list:
+            print(f"\n  [RETRY R{retry_round}] {len(retry_list)}章需调整: {[c for c,_ in retry_list]}")
+            for ch, action in retry_list:
+                ch_file = chapters_dir / f"ch_{ch:03d}.txt"
+                try:
+                    if action == "trim":
+                        result = trim_chapter(config, ch, mode=mode)
+                    else:
+                        result = expand_chapter(config, ch, mode=mode)
+                    if result:
+                        ch_file.write_text(result, encoding='utf-8')
+                        print(f"    [{action.upper()}] ch{ch:03d} OK")
+                    else:
+                        print(f"    [{action.upper()}] ch{ch:03d} 跳过")
+                except Exception as e:
+                    print(f"    [{action.upper()}] ch{ch:03d} FAIL: {e}")
 
-def phase_expand(config, start, end, mode="imitation", workers=1):
-    """扩写"""
-    print(f"\n{'='*50}")
-    print(f"Phase: 扩写 (mode={mode}, workers={workers})")
-    print(f"{'='*50}")
-    
-    chapters = list(range(start, end + 1))
-    ok, fail, skip = 0, 0, 0
-    
-    if workers <= 1:
-        for ch_num in chapters:
-            ch_num, status, info = _process_single(config, ch_num, mode, "expand")
-            if status == "OK":
-                print(f"    [OK] 第{ch_num}章")
-                ok += 1
-            elif status == "SKIP":
-                print(f"    [SKIP] 第{ch_num}章 ({info})")
-                skip += 1
-            else:
-                print(f"    [FAIL] 第{ch_num}章")
-                fail += 1
-    else:
-        with ThreadPoolExecutor(max_workers=workers) as executor:
-            futures = {executor.submit(_process_single, config, ch_num, mode, "expand"): ch_num for ch_num in chapters}
-            for future in as_completed(futures):
-                ch_num, status, info = future.result()
-                if status == "OK":
-                    print(f"    [OK] 第{ch_num}章")
-                    ok += 1
-                elif status == "SKIP":
-                    print(f"    [SKIP] 第{ch_num}章 ({info})")
-                    skip += 1
-                else:
-                    print(f"    [FAIL] 第{ch_num}章")
-                    fail += 1
-    
-    print(f"\n  完成: {ok} OK / {skip} SKIP / {fail} FAIL")
+    # --- 统一润色：每章必 polish ---
+    print(f"\n  [POLISH] 对比源文润色...")
+    t_polish = time.time()
+    polished = 0
+    for ch in range(start, end + 1):
+        ch_file = chapters_dir / f"ch_{ch:03d}.txt"
+        if not ch_file.exists():
+            continue
+        try:
+            result = polish_chapter(config, ch, mode=mode)
+            if result:
+                ch_file.write_text(result, encoding='utf-8')
+                polished += 1
+                print(f"    [OK] ch{ch:03d} 润色完成")
+        except Exception as e:
+            print(f"    [FAIL] ch{ch:03d}: {e}")
+    print(f"  [POLISH] 润色完成 {polished} 章 ({time.time()-t_polish:.0f}s)")
 
-
-def phase_rewrite(config, start, end, mode="imitation", reason="", workers=1):
-    """重写"""
-    print(f"\n{'='*50}")
-    print(f"Phase: 重写 (mode={mode}, workers={workers})")
-    print(f"{'='*50}")
-    
-    chapters = list(range(start, end + 1))
-    ok, fail = 0, 0
-    
-    if workers <= 1:
-        for ch_num in chapters:
-            ch_num, status, info = _rewrite_single(config, ch_num, mode, reason)
-            if status == "OK":
-                print(f"    [OK] 第{ch_num}章 ({info})")
-                ok += 1
-            else:
-                print(f"    [FAIL] 第{ch_num}章")
-                fail += 1
-    else:
-        with ThreadPoolExecutor(max_workers=workers) as executor:
-            futures = {executor.submit(_rewrite_single, config, ch_num, mode, reason): ch_num for ch_num in chapters}
-            for future in as_completed(futures):
-                ch_num, status, info = future.result()
-                if status == "OK":
-                    print(f"    [OK] 第{ch_num}章 ({info})")
-                    ok += 1
-                else:
-                    print(f"    [FAIL] 第{ch_num}章")
-                    fail += 1
-    
-    print(f"\n  完成: {ok} OK / {fail} FAIL")
+    total = sum(
+        _get_text_chars(Path(p).read_text(encoding='utf-8'))
+        for p in ok.values() if Path(p).exists()
+    )
+    print(f"\n  完成: OK={len(ok)} FAIL={len(fail)} 总字数≈{total} | 耽误 {time.time()-t0:.0f}s")
+    return ok, fail
 
 
 def main():
-    parser = argparse.ArgumentParser(description="fangcun-write: 通用写作能力引擎")
-    parser.add_argument("--config", required=True, help="配置文件路径")
-    parser.add_argument("--phase", required=True, 
-                       choices=["write", "trim", "polish", "expand", "rewrite"],
-                       help="执行阶段")
-    parser.add_argument("--start", type=int, required=True, help="开始章节")
-    parser.add_argument("--end", type=int, required=True, help="结束章节")
-    parser.add_argument("--mode", default="imitation", choices=["imitation", "continue"],
-                       help="模式: imitation(仿写) 或 continue(续写)")
-    parser.add_argument("--workers", type=int, default=1, help="并发数")
-    parser.add_argument("--reason", default="", help="重写原因")
-    
+    parser = argparse.ArgumentParser(description="fangcun-write pipeline")
+    parser.add_argument("--config", required=True)
+    parser.add_argument("--phase", required=True,
+                       choices=["write", "trim", "polish", "expand", "rewrite"])
+    parser.add_argument("--start", type=int, required=True)
+    parser.add_argument("--end", type=int, required=True)
+    parser.add_argument("--mode", default="imitation", choices=["imitation", "continue"])
+    parser.add_argument("--workers", type=int, default=1)
+    parser.add_argument("--reason", default="")
+
     args = parser.parse_args()
     config = load_config(args.config)
-    
+
     if args.phase == "write":
         phase_write(config, args.start, args.end, mode=args.mode, workers=args.workers)
     elif args.phase == "trim":
-        phase_trim(config, args.start, args.end, mode=args.mode, workers=args.workers)
+        for ch in range(args.start, args.end + 1):
+            result = trim_chapter(config, ch, mode=args.mode)
+            if result:
+                ch_file = Path(config["rewrites_dir"]) / "chapters" / f"ch_{ch:03d}.txt"
+                ch_file.write_text(result, encoding='utf-8')
+                print(f"  [OK] ch{ch:03d}")
     elif args.phase == "polish":
-        phase_polish(config, args.start, args.end, mode=args.mode, workers=args.workers)
+        for ch in range(args.start, args.end + 1):
+            result = polish_chapter(config, ch, mode=args.mode)
+            if result:
+                ch_file = Path(config["rewrites_dir"]) / "chapters" / f"ch_{ch:03d}.txt"
+                ch_file.write_text(result, encoding='utf-8')
+                print(f"  [OK] ch{ch:03d}")
     elif args.phase == "expand":
-        phase_expand(config, args.start, args.end, mode=args.mode, workers=args.workers)
+        for ch in range(args.start, args.end + 1):
+            result = expand_chapter(config, ch, mode=args.mode)
+            if result:
+                ch_file = Path(config["rewrites_dir"]) / "chapters" / f"ch_{ch:03d}.txt"
+                ch_file.write_text(result, encoding='utf-8')
+                print(f"  [OK] ch{ch:03d}")
     elif args.phase == "rewrite":
-        phase_rewrite(config, args.start, args.end, mode=args.mode, reason=args.reason, workers=args.workers)
+        for ch in range(args.start, args.end + 1):
+            result = rewrite_chapter(config, ch, mode=args.mode, reason=args.reason)
+            if result:
+                ch_file = Path(config["rewrites_dir"]) / "chapters" / f"ch_{ch:03d}.txt"
+                ch_file.write_text(result, encoding='utf-8')
+                print(f"  [OK] ch{ch:03d}")
 
 
 if __name__ == "__main__":
