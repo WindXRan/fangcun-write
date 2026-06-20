@@ -102,13 +102,11 @@ def _find_source_txt(base_dir, author, source_book):
 # 源书级分析（独立 phase，调用 fangcun-analyze）
 # ============================================================
 
-    return "\n\n---\n\n".join(blocks)
-
 
 def _generate_source_analysis(config):
     """源书级分析（events + skeleton + adaptation），存入 _cache/。独立于开书，可单独调用。"""
     from source_analysis import extract_events, build_skeleton, build_adaptation
-    from file_io import load_events, load_skeleton, load_adaptation, get_cache_dir
+    from source_io import load_events, load_skeleton, load_adaptation, get_cache_dir
     from lib.api_client import get_api_key, get_api_url
 
     cache_dir = get_cache_dir(config)
@@ -484,7 +482,7 @@ def phase_open_book(config, state_mgr=None):
     rewrites_dir.mkdir(parents=True, exist_ok=True)
 
     # === 读取 fangcun-analyze 产物（不重新读源文）===
-    from file_io import load_events, load_skeleton, load_adaptation, get_events_text
+    from source_io import load_events, load_skeleton, load_adaptation, get_events_text
 
     events = load_events(config)
     skeleton = load_skeleton(config)

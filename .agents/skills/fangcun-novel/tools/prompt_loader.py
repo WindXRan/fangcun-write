@@ -19,7 +19,7 @@ import json
 from pathlib import Path
 
 import _path_setup  # noqa: F401
-from prompt_meta import _parse_frontmatter, safe_format
+from prompt_meta import parse_frontmatter, safe_format
 
 
 # 需要嵌入内容的标签（输入类），不包含的标签只保留路径引用
@@ -163,7 +163,7 @@ def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites
         raise FileNotFoundError(f"Prompt 文件不存在: {prompt_file}")
 
     raw_text = prompt_file.read_text(encoding='utf-8')
-    _, raw_text = _parse_frontmatter(raw_text)
+    _, raw_text = parse_frontmatter(raw_text)
 
     merged = {}
     if rewrites_dir:

@@ -150,11 +150,11 @@ def extract_events(config, api_key, api_url, model, prompt_text, workers=5):
             if result:
                 results[ch_num] = result
                 existing[ch_num] = result
-                print(f"    [{done}/{total}] ✓ 第{ch_num}章")
+                print(f"    [{done}/{total}] V 第{ch_num}章")
             else:
                 fail_count += 1
                 results[ch_num] = {"id": ch_num, "chapter_index": ch_num, "chapter": "", "event": ""}
-                print(f"    [{done}/{total}] ✗ 第{ch_num}章 ({status})")
+                print(f"    [{done}/{total}] X 第{ch_num}章 ({status})")
             save_events(config, [results[k] for k in sorted(results.keys())])
 
     elapsed = time.time() - t0
@@ -196,7 +196,7 @@ def build_skeleton(config, api_key, api_url, model, system_prompt, novel_name=""
     if len(valid_events) < total_ch:
         incremental_note = f"""
 
-⚠️ 增量模式：当前只有 {len(valid_events)}/{total_ch} 章事件数据。
+[注意] 增量模式：当前只有 {len(valid_events)}/{total_ch} 章事件数据。
 只为有事件支撑的章节规划，未覆盖部分标注"待补充"。"""
 
     user_prompt = f"""## 作品名称

@@ -9,10 +9,12 @@ import sys
 from pathlib import Path
 
 _THIS_DIR = Path(__file__).resolve().parent          # fangcun-analyze/tools/
+_NOVEL_DIR = _THIS_DIR.parent.parent / "fangcun-novel" / "tools"  # fallback to fangcun-novel/tools/
 
 _DIRS = [
-    str(_THIS_DIR),          # fangcun-analyze/tools/  (prompt_meta, source_io, ...)
+    str(_THIS_DIR),          # fangcun-analyze/tools/  (source_io, ...)
     str(_THIS_DIR / "lib"),  # fangcun-analyze/tools/lib/
+    str(_NOVEL_DIR),         # fangcun-novel/tools/ (prompt_meta, ...)
 ]
 
 for _d in _DIRS:

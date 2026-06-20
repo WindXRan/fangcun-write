@@ -73,9 +73,10 @@ def _check_character_names(config, text):
     author = config.get("author", "")
     if source_book and author:
         # 尝试从源文的 characters.md 获取角色名
-        source_chars_path = Path("projects") / author / source_book / "characters.md"
+        base_dir = Path(config.get("base_dir", "."))
+        source_chars_path = base_dir / "projects" / author / source_book / "characters.md"
         if not source_chars_path.exists():
-            source_chars_path = Path("projects") / author / source_book / "settings" / "characters.md"
+            source_chars_path = base_dir / "projects" / author / source_book / "settings" / "characters.md"
         
         if source_chars_path.exists():
             try:

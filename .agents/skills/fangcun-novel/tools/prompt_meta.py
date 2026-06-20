@@ -6,11 +6,11 @@ import json
 from pathlib import Path
 
 
-_PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
-_FRONTMATTER_RE = re.compile(r'^---\s*\n(.*?)\n---\s*\n', re.DOTALL)
+PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
+FRONTMATTER_RE = re.compile(r'^---\s*\n(.*?)\n---\s*\n', re.DOTALL)
 
 
-def _parse_frontmatter(text):
+def parse_frontmatter(text):
     """解析 YAML frontmatter，返回 (meta: dict, body: str)。
 
     meta 至少包含 version (int) 和 changelog (str)。
@@ -19,7 +19,7 @@ def _parse_frontmatter(text):
     if text.startswith('\ufeff'):
         text = text[1:]
     meta = {"version": 1, "changelog": ""}
-    m = _FRONTMATTER_RE.match(text)
+    m = FRONTMATTER_RE.match(text)
     if not m:
         return meta, text
     body = text[m.end():]
@@ -63,10 +63,10 @@ def load_system_prompt(name, visited=None):
     if name in visited:
         return ""
     visited.add(name)
-    p = _PROMPTS_DIR / name
+    p = PROMPTS_DIR / name
     if not p.exists():
         return ""
-    meta, body = _parse_frontmatter(p.read_text(encoding="utf-8"))
+    meta, body = parse_frontmatter(p.read_text(encoding="utf-8"))
     parent = meta.get("system_prompt", "")
     if parent:
         parent_body = load_system_prompt(parent, visited)
@@ -77,10 +77,10 @@ def load_system_prompt(name, visited=None):
 
 def load_prompt_str(name, with_tag=False):
     """从 prompts/ 按名加载 prompt，去掉 frontmatter。"""
-    p = _PROMPTS_DIR / name
+    p = PROMPTS_DIR / name
     if not p.exists():
         return ("", 0) if with_tag else ""
-    meta, body = _parse_frontmatter(p.read_text(encoding="utf-8"))
+    meta, body = parse_frontmatter(p.read_text(encoding="utf-8"))
     if with_tag:
         return body.strip(), meta["version"]
     return body.strip()
@@ -88,10 +88,10 @@ def load_prompt_str(name, with_tag=False):
 
 def get_prompt_meta(name):
     """读取 prompts/{name} 文件的 frontmatter，返回 meta 字典。"""
-    p = _PROMPTS_DIR / name
+    p = PROMPTS_DIR / name
     if not p.exists():
         return {}
-    meta, _ = _parse_frontmatter(p.read_text(encoding="utf-8"))
+    meta, _ = parse_frontmatter(p.read_text(encoding="utf-8"))
     return meta
 
 

@@ -159,7 +159,7 @@ def _llm_one(config, ch, styles_dir):
     import prompt_meta as _pm
     if not hasattr(_pm, '_DEBUG_printed'):
         print(f"  [DEBUG] prompt_meta file: {_pm.__file__}")
-        print(f"  [DEBUG] _PROMPTS_DIR: {_pm._PROMPTS_DIR}")
+        print(f"  [DEBUG] PROMPTS_DIR: {_pm.PROMPTS_DIR}")
         _pm._DEBUG_printed = True
     
     prompt_template = load_prompt_str("style-analyze.md")

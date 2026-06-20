@@ -14,7 +14,7 @@ import _path_setup  # noqa: F401
 from utils import get_source_title
 
 # 添加 fangcun-write 到 path
-_WRITER_ENGINE = Path(__file__).parent.parent.parent / "fangcun-write" / "tools"
+_WRITER_ENGINE = Path(__file__).parent.parent.parent.parent / "fangcun-write" / "tools"
 sys.path.insert(0, str(_WRITER_ENGINE))
 
 
@@ -255,7 +255,7 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=N
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         if not ch_file.exists():
             continue
-        source_chars = 0
+        source_chars = count_source_chars(config, ch)
         if source_chars > 0:
             original = ch_file.read_text(encoding='utf-8')
             orig_chars = len(original.replace('\n', '').replace(' ', ''))

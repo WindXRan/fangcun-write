@@ -15,6 +15,11 @@ import argparse
 from pathlib import Path
 
 import _path_setup  # noqa: F401
+import io
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except (AttributeError, ValueError):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 from state_manager import StateManager
 from config_validator import validate_config
 from utils import get_chapters_list
@@ -246,7 +251,7 @@ def _check_plot_confirmation(config):
     
     # 输出确认信息
     print(f"\n{'=' * 60}")
-    print(f"📋 PLOT 确认点 — 请检查以下文件")
+    print(f"[PLOT] 确认点 — 请检查以下文件")
     print(f"{'=' * 60}")
     
     # 显示 concept.md 摘要
@@ -254,7 +259,7 @@ def _check_plot_confirmation(config):
         concept_content = concept_path.read_text(encoding="utf-8")
         # 提取核心信息
         lines = concept_content.split('\n')
-        print(f"\n📄 concept.md 摘要:")
+        print(f"\n[concept.md] 摘要:")
         for line in lines[:30]:  # 只显示前30行
             if line.strip():
                 print(f"  {line}")
@@ -272,7 +277,7 @@ def _check_plot_confirmation(config):
             char_names = re.findall(r'^###?\s*(.+)$', chars_content, re.MULTILINE)
             char_names = [n.strip() for n in char_names if n.strip() and not n.startswith('#')]
             if char_names:
-                print(f"\n👥 角色列表:")
+                print(f"\n角色列表:")
                 for name in char_names[:15]:  # 只显示前15个
                     print(f"  • {name}")
                 if len(char_names) > 15:
@@ -288,13 +293,13 @@ def _check_plot_confirmation(config):
             # 提取前10章锚点
             anchor_match = re.search(r'前10章.*?(?:\n\|.*?\n){1,10}', plot_content, re.DOTALL)
             if anchor_match:
-                print(f"\n📊 前10章规划:")
+                print(f"\n前10章规划:")
                 print(anchor_match.group(0)[:500])
         except Exception as e:
             print(f"  [WARN] 读取 plot.md 失败: {e}")
     
     print(f"\n{'=' * 60}")
-    print(f"⚠️  请确认以上设定是否正确！")
+    print(f"[提示] 请确认以上设定是否正确！")
     print(f"  确认后将开始生成章纲和正文。")
     print(f"{'=' * 60}")
     

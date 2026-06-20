@@ -6,7 +6,7 @@ import subprocess
 from pathlib import Path
 
 import _path_setup  # noqa: F401
-from prompt_meta import _PROMPTS_DIR, _FRONTMATTER_RE, get_prompt_version
+from prompt_meta import PROMPTS_DIR, FRONTMATTER_RE, get_prompt_version
 
 
 def _make_tag(name, version):
@@ -89,7 +89,7 @@ def bump_prompt_version(name, changelog_msg=""):
     Returns:
         (旧版本, 新版本) 元组，文件不存在返回 (0, 0)
     """
-    p = _PROMPTS_DIR / name
+    p = PROMPTS_DIR / name
     if not p.exists():
         print(f"[WARN] prompt 文件不存在: {name}")
         return 0, 0
@@ -100,7 +100,7 @@ def bump_prompt_version(name, changelog_msg=""):
             changelog_msg = "版本更新"
 
     text = p.read_text(encoding="utf-8")
-    m = _FRONTMATTER_RE.match(text)
+    m = FRONTMATTER_RE.match(text)
     if not m:
         new_text = f"---\nversion: 1\nchangelog: {changelog_msg}\n---\n\n{text}"
         p.write_text(new_text, encoding="utf-8")
