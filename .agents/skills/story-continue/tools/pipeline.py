@@ -20,8 +20,10 @@ from pathlib import Path
 
 # 添加 shared-engine 和 source-engine 到 path
 _SHARED_ENGINE = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
+_SHARED_ENGINE_LLM = _SHARED_ENGINE / "llm"  # 添加 llm 目录
 _SOURCE_ENGINE = Path(__file__).parent.parent.parent / "source-engine" / "tools"
 sys.path.insert(0, str(_SHARED_ENGINE))
+sys.path.insert(0, str(_SHARED_ENGINE_LLM))  # 添加 llm 目录
 sys.path.insert(0, str(_SOURCE_ENGINE))
 
 from llm.api_client import call_llm, get_api_key, get_api_url
