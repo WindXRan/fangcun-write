@@ -109,13 +109,11 @@ def _build_variables(config, ch_num, characters, guide, prev_context, context=No
 
 
 def _auto_fix(config, content, call_llm, safe_format):
-    """自动修复字数问题"""
+    """自动修复字数问题 + 质量检查"""
     chars = len(content.replace(" ", "").replace("\n", ""))
     min_chars, max_chars = 1800, 3000
     
-    if min_chars <= chars <= max_chars:
-        return content
-    
+    # 字数检查
     if chars < min_chars:
         target_chars = 2500
         prompt_template = _load_prompt_template("expand")
@@ -136,7 +134,76 @@ def _auto_fix(config, content, call_llm, safe_format):
             print(f"    [WARN] 精简失败: {e}")
             return content
     
+    # 质量检查（如果有源文）
+    quality_issue = _check_quality(config, content)
+    if quality_issue:
+        prompt_template = _load_prompt_template("polish")
+        prompt = safe_format(prompt_template, {
+            "content": content,
+            "min_chars": str(int(chars * 0.9)),
+            "max_chars": str(int(chars * 1.1)),
+        })
+        try:
+            return call_llm(config, "polish-chapter", prompt, 
+                           system_prompt=f"你是一个专业的小说编辑。重点修复：{quality_issue}",
+                           max_tokens=int(chars * 1.5))
+        except Exception as e:
+            print(f"    [WARN] 润色失败: {e}")
+            return content
+    
     return content
+
+
+def _check_quality(config, content):
+    """检查文本质量，返回问题描述（如果没有问题返回None）"""
+    import sys
+    shared_engine = Path(__file__).parent.parent.parent / "shared-engine" / "tools"
+    sys.path.insert(0, str(shared_engine))
+    
+    try:
+        from analysis.text_metrics import count_metrics
+    except ImportError:
+        return None
+    
+    # 计算当前文本的指标
+    our_metrics = count_metrics(content)
+    
+    # 获取源文指标（如果有）
+    rewrites_dir = Path(config.get("rewrites_dir", ""))
+    source_dir = Path(config.get("source_dir", ""))
+    
+    # 尝试获取源文
+    ch_num = config.get("_current_ch_num")
+    if ch_num and source_dir:
+        src_file = source_dir / "_cache" / "chapters" / f"第{ch_num:03d}章.txt"
+        if src_file.exists():
+            src_text = src_file.read_text(encoding="utf-8")
+            src_metrics = count_metrics(src_text)
+            
+            # AI路标词检查
+            limit = max(src_metrics.get("ai_markers", 0) + 1, 1)
+            if our_metrics.get("ai_markers", 0) > limit:
+                return "AI路标词过多"
+            
+            # 代词密度检查
+            if src_metrics.get("pronoun_density", 0) > 0:
+                ratio = our_metrics.get("pronoun_density", 0) / max(src_metrics["pronoun_density"], 0.001)
+                if ratio > 1.5 or ratio < 0.5:
+                    return "代词密度偏离源文"
+            
+            # 句长偏离检查
+            if src_metrics.get("sent_len_stddev", 0) > 0:
+                ratio = our_metrics.get("sent_len_stddev", 0) / max(src_metrics["sent_len_stddev"], 0.001)
+                if ratio > 1.5 or ratio < 0.5:
+                    return "句长节奏偏离源文"
+    
+    # 通用检查（无源文时）
+    # AI路标词检查
+    ai_markers = our_metrics.get("ai_markers", 0)
+    if ai_markers > 5:
+        return "AI路标词过多"
+    
+    return None
 
 
 def write_chapter(config, ch_num, context=None, auto_fix=True):
@@ -154,12 +221,15 @@ def write_chapter(config, ch_num, context=None, auto_fix=True):
     
     system_prompt = _load_system_prompt("writer")
     
+    # 传递当前章节号给_auto_fix
+    fix_config = {**config, "_current_ch_num": ch_num}
+    
     try:
         result = call_llm(config, "write-chapter", prompt,
                          system_prompt=system_prompt,
                          max_tokens=4096)
         if auto_fix and result:
-            result = _auto_fix(config, result, call_llm, safe_format)
+            result = _auto_fix(fix_config, result, call_llm, safe_format)
         return result
     except Exception as e:
         print(f"    [ERROR] 写章失败: {e}")
