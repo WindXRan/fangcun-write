@@ -7,8 +7,17 @@
 import json
 import re
 import time
+import sys
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
+
+# 确保 source-engine/tools 在 path 中（兼容直接调用和被其他 engine 导入）
+_THIS_DIR = str(Path(__file__).resolve().parent)
+if _THIS_DIR not in sys.path:
+    sys.path.insert(0, _THIS_DIR)
+_LIB_DIR = str(Path(__file__).resolve().parent / "lib")
+if _LIB_DIR not in sys.path:
+    sys.path.insert(0, _LIB_DIR)
 
 from source_io import (
     get_cache_dir, get_source_chapters, get_source_text,
