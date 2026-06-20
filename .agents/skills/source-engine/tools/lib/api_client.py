@@ -39,7 +39,8 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None, max_
     api_url = get_api_url(config)
     provider = config.get("provider", "")
     pc = get_prompt_config_with_overrides(f"{prompt_type}.md", config)
-    model = pc.get("model", "mimo-v2.5-pro")
+    # 优先级：config.json 的 model > prompt defaults 的 model > 默认值
+    model = config.get("model") or pc.get("model") or "mimo-v2.5-pro"
     temperature = pc.get("temperature", 0.8)
     if max_tokens is None:
         max_tokens = pc.get("max_tokens", None)
