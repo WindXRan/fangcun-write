@@ -345,14 +345,23 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         "总章数": str(total_ch),
     }
 
-    # 需要源文字数时，脚本计算（API 无法跑 PowerShell）
+    # 需要源文字数时，脚本计算
     if prompt_type in ("plot-guide", "write-chapter") and chapter_num:
         src_chars = count_source_chars(config, chapter_num)
-        target_chars = src_chars if src_chars > 0 else 1500  # 源文缺失则用默认值
+        target_chars = src_chars if src_chars > 0 else 1500
         replacements["源文字数"] = str(src_chars)
         replacements["目标字数"] = str(target_chars)
         replacements["目标字数_min"] = str(int(target_chars * 0.9))
         replacements["目标字数_max"] = str(int(target_chars * 1.1))
+        # 源文句长（从文笔指纹提取，供仿写对标）
+        if "源文句长" not in replacements:
+            src_text = get_source_text(config, chapter_num)
+            if src_text:
+                from lib.text_metrics import count_metrics
+                src_metrics = count_metrics(src_text)
+                replacements["源文句长"] = str(int(src_metrics.get("avg_sent_len", 25)))
+            else:
+                replacements["源文句长"] = "25"
     
     # trim/expand 目标字数硬编码 2000-3000
     if prompt_type in ("trim-chapter", "expand-chapter") and chapter_num:
