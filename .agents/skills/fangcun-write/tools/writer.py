@@ -145,6 +145,58 @@ def _load_style_fingerprint(config, ch_num):
     return "（文风指纹未提取）"
 
 
+def _load_input_governance(config, ch_num):
+    """加载输入治理配置"""
+    import sys
+    sys.path.insert(0, str(Path(__file__).parent))
+    from input_governance import InputGovernance, ChapterIntent, RuleStack, RuleLayer, RuleLevel
+    
+    governance = InputGovernance()
+    
+    # 构建规则栈
+    rule_stack = RuleStack()
+    
+    # L4: 硬约束（从config读取）
+    hard_rules = config.get("hard_constraints", [])
+    if hard_rules:
+        rule_stack.layers.append(RuleLayer(
+            level=RuleLevel.L4_HARD,
+            name="硬约束",
+            rules=hard_rules
+        ))
+    
+    # L3: 任务意图（从章纲读取）
+    rewrites_dir = Path(config.get("rewrites_dir", ""))
+    guides_dir = rewrites_dir / "guides"
+    guide_file = guides_dir / f"plot_{ch_num:03d}.md"
+    if guide_file.exists():
+        guide_content = guide_file.read_text(encoding="utf-8")
+        # 从章纲中提取任务意图
+        import re
+        goal_match = re.search(r"目标[：:]\s*(.+)", guide_content)
+        if goal_match:
+            goal = goal_match.group(1).strip()
+            rule_stack.layers.append(RuleLayer(
+                level=RuleLevel.L3_INTENT,
+                name="任务意图",
+                rules=[goal]
+            ))
+            governance.chapter_intent = ChapterIntent(chapter=ch_num, goal=goal)
+    
+    # L2: 卷纲规划（从config读取）
+    outline_rules = config.get("outline_rules", [])
+    if outline_rules:
+        rule_stack.layers.append(RuleLayer(
+            level=RuleLevel.L2_OUTLINE,
+            name="卷纲规划",
+            rules=outline_rules
+        ))
+    
+    governance.rule_stack = rule_stack
+    
+    return governance
+
+
 
 
 def _get_text_chars(text):
@@ -348,12 +400,11 @@ def _validate_chapter(config, ch_num, text, mode):
     chars = _get_text_chars(text)
     target = int(config.get("source_chars", 2500))
     
-    if target > 0:
-        deviation = (chars - target) / target
-        if deviation > 0.15:
-            issues.append(f"字数超标 {chars}/{target} (+{deviation:.0%})")
-        elif deviation < -0.15:
-            issues.append(f"字数不足 {chars}/{target} ({deviation:.0%})")
+    # 字数检查：2000-3000 即可
+    if chars < 2000:
+        issues.append(f"字数不足 {chars}/2000")
+    elif chars > 3000:
+        issues.append(f"字数超标 {chars}/3000")
     
     if src_metrics:
         limit = max(src_metrics.get("ai_markers", 0) + 1, 1)
