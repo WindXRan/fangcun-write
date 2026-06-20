@@ -283,8 +283,8 @@ def _llm_batch_review(config, chapter_nums):
 
     prompt = safe_format(prompt_template, {
         "count": len(chapter_nums),
-        "chapters_text": chapters_text[:6000],
-        "source_context": source_context[:2000] if source_context else "（无）",
+        "chapters_text": chapters_text,
+        "source_context": source_context if source_context else "（无）",
     })
 
     # 加载平台专属审查标准

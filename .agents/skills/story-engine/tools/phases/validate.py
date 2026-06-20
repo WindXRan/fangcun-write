@@ -278,14 +278,21 @@ def validate_one(config, ch):
         elif ratio > 1.3 or ratio < 0.7:
             warnings.append(f"句长标准差偏离 {metrics['sent_len_stddev']} (源文{src['sent_len_stddev']})")
 
-    # 7. 台词抄袭检测（连续8字以上与源文重合）
+    # 7. 台词抄袭检测（连续8字以上与源文重合 + 结构性抄袭）
     if src_text:
-        from lib.plagiarism import find_plagiarism
+        from lib.plagiarism import find_plagiarism, check_structural_plagiarism
         plagiarisms = find_plagiarism(text, src_text)
         if plagiarisms:
             issues.append(f"台词雷同 {len(plagiarisms)}处（连续≥8字匹配）")
             for p in plagiarisms[:3]:
                 issues.append(f"  '{p['text']}...' ({p['length']}字重合)")
+        
+        # 结构性抄袭检测（换皮检验）
+        struct_result = check_structural_plagiarism(text, src_text)
+        if struct_result["is_plagiarism"]:
+            issues.append(f"结构性抄袭 (综合评分{struct_result['score']:.0%}): {struct_result['reason']}")
+        elif struct_result["score"] > 0.5:
+            warnings.append(f"结构相似度偏高 (综合评分{struct_result['score']:.0%}): {struct_result['reason']}")
 
     # 8. 角色名称漂移检测
     char_issues = _check_character_names(config, text)

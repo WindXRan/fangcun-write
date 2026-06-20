@@ -372,8 +372,39 @@ def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False):
         print(f"Step 5: 二次审查 ({len(fixed_chs)} 章改过)", flush=True)
         print("="*40, flush=True)
 
+        # 保存原始问题（用于回归检查）
+        original_issues = {}
+        for ch in fixed_chs:
+            if ch in summary.chapters:
+                original_issues[ch] = summary.chapters[ch].get("issues", [])
+
         # 只审改过的章
         re_review = review_agent(cfg, fixed_chs, agent_id="re-check")
+        
+        # 回归检查：验证原始问题是否解决
+        unresolved_count = 0
+        for ch in fixed_chs:
+            if ch not in original_issues or ch not in re_review.chapters:
+                continue
+            old_issues = original_issues[ch]
+            new_data = re_review.chapters[ch]
+            new_issues = new_data.get("issues", [])
+            
+            # 检查原始问题类型是否仍然存在
+            old_types = {iss.get("type") for iss in old_issues}
+            new_types = {iss.get("type") for iss in new_issues}
+            unresolved = old_types & new_types  # 交集 = 未解决的问题类型
+            
+            if unresolved:
+                unresolved_count += 1
+                print(f"  [WARN] 第{ch}章: 原始问题类型 {unresolved} 仍未解决", flush=True)
+        
+        if unresolved_count > 0:
+            print(f"  [WARN] {unresolved_count} 章的原始问题未完全解决", flush=True)
+        else:
+            print(f"  [OK] 所有原始问题已解决", flush=True)
+
+        # 检查是否有新问题
         new_issues = []
         for ch, data in re_review.chapters.items():
             for iss in data.get("issues", []):
