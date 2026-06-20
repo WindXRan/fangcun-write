@@ -15,6 +15,26 @@ allowed-tools: Bash(python *) Bash(cat *) Bash(ls *) Bash(mkdir *) Bash(rm *)
 3. **检查输出质量**（读生成的文件，告诉用户结果）
 4. **处理错误**（如果命令失败，读错误信息，修复后重跑）
 
+## 环境准备
+
+```powershell
+# 首次使用：安装依赖
+.\setup.ps1
+
+# 设置 API Key
+$env:API_KEY = "sk-xxx"
+```
+
+## 快捷命令（推荐，不用记完整路径）
+
+```powershell
+.\novel.ps1 analyze                    # 源书分析
+.\novel.ps1 open                      # 开书
+.\novel.ps1 write --start 1 --end 10  # 写章
+.\novel.ps1 compare --start 1 --end 3 # 对比审核
+.\novel.ps1 status                    # 查看状态
+```
+
 ## 项目结构
 
 ```
