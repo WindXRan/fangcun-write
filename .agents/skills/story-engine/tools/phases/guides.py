@@ -426,6 +426,20 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
                     filtered_lines.append(line)
                 style_text = "\n".join(filtered_lines)
                 replacements["文笔指纹"] = style_text
+                
+                # 提取"信息释放时机"段落（单独注入）
+                info_timing_match = re.search(r'## 信息释放时机.*?(?=\n## |\Z)', style_text, re.DOTALL)
+                if info_timing_match:
+                    replacements.setdefault("信息释放时机", info_timing_match.group(0).strip())
+                else:
+                    replacements.setdefault("信息释放时机", "（信息释放时机未提取）")
+                
+                # 提取"场景运作机制"段落（单独注入）
+                scene_mech_match = re.search(r'## 场景运作机制.*?(?=\n## 信息释放时机|\Z)', style_text, re.DOTALL)
+                if scene_mech_match:
+                    replacements.setdefault("场景运作机制", scene_mech_match.group(0).strip())
+                else:
+                    replacements.setdefault("场景运作机制", "（场景运作机制未提取）")
             else:
                 replacements["文笔指纹"] = "（文笔指纹未提取）"
         else:
@@ -434,6 +448,8 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             replacements["源文标点"] = "标点克制"
             replacements["源文高光"] = ""
             replacements["文笔指纹"] = "（源文读取失败）"
+            replacements.setdefault("信息释放时机", "（源文读取失败）")
+            replacements.setdefault("场景运作机制", "（源文读取失败）")
 
     # 注入风格类型（从 concept.md 提取）
     concept_path = Path(config.get("rewrites_dir", "")) / "concept.md"

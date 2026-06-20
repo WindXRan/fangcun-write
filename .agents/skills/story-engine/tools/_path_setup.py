@@ -13,11 +13,11 @@ _PARENT = _THIS_DIR.parent                           # story-engine/
 _SHARED_ENGINE_TOOLS = _PARENT.parent / "shared-engine" / "tools"
 _SOURCE_ENGINE_TOOLS = _PARENT.parent / "source-engine" / "tools"
 
-# 按优先级从低到高插入（insert(0) 会让后插入的排在前面）
+# 按优先级从高到低插入（insert(0) 会让后插入的排在前面）
 _DIRS = [
-    str(_SOURCE_ENGINE_TOOLS),  # source-engine/tools/ (最低优先级)
-    str(_THIS_DIR),             # story-engine/tools/  (中等优先级)
-    str(_SHARED_ENGINE_TOOLS),  # shared-engine/tools/ (最高优先级)
+    str(_SHARED_ENGINE_TOOLS),  # shared-engine/tools/ (最低优先级)
+    str(_SOURCE_ENGINE_TOOLS),  # source-engine/tools/ (中等优先级)
+    str(_THIS_DIR),             # story-engine/tools/  (最高优先级)
 ]
 
 for _d in _DIRS:
