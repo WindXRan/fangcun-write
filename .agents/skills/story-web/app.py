@@ -320,25 +320,29 @@ def api_pools_all():
             
             try:
                 data = json.loads(f.read_text(encoding='utf-8'))
-                books = data if isinstance(data, list) else data.get('books', data.get('data', []))
                 
-                for book in books:
-                    title = book.get('title', book.get('bookName', ''))
-                    if not title or title in seen:
+                # 数据格式：{categories: {类别名: [书籍列表]}}
+                categories = data.get("categories", {})
+                for cat_name, books in categories.items():
+                    if not isinstance(books, list):
                         continue
-                    seen.add(title)
-                    
-                    all_books.append({
-                        "title": title,
-                        "author": book.get('author', book.get('authorName', '')),
-                        "category": book.get('category', book.get('categoryName', '')),
-                        "gender": "男频" if gender == "male" else "女频",
-                        "rank_type": "新书榜" if rank_kind == "new" else "在读榜",
-                        "rank": book.get('rank', 0),
-                        "readCount": book.get('readCount', book.get('readCountStr', '')),
-                        "wordCount": book.get('wordCount', book.get('wordCountStr', '')),
-                        "description": book.get('description', book.get('bookDesc', ''))[:200],
-                    })
+                    for book in books:
+                        title = book.get("title", book.get("bookName", ""))
+                        if not title or title in seen:
+                            continue
+                        seen.add(title)
+                        
+                        all_books.append({
+                            "title": title,
+                            "author": book.get("author", book.get("authorName", "")),
+                            "category": cat_name,
+                            "gender": "男频" if gender == "male" else "女频",
+                            "rank_type": "新书榜" if rank_kind == "new" else "在读榜",
+                            "rank": book.get("rank", 0),
+                            "readCount": book.get("readCount", book.get("readCountStr", "")),
+                            "wordCount": book.get("wordCount", book.get("wordCountStr", "")),
+                            "description": book.get("description", book.get("bookDesc", ""))[:200],
+                        })
             except Exception:
                 continue
     
