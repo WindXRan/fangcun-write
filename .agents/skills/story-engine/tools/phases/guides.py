@@ -148,6 +148,20 @@ def _load_character_cards(config, ch_num):
     events = load_events(config)
     name_map = _build_name_map(config)
 
+    # 构建角色最早出场章节映射
+    char_first_ch = {}
+    for e in events:
+        ch = e.get("id") or e.get("chapter_index")
+        event_text = e.get("event", "")
+        parts = event_text.split("|")
+        if len(parts) >= 3:
+            for c in re.split(r"[、，,]", parts[2].strip()):
+                c = c.strip()
+                if c:
+                    new_name = name_map.get(c, c)
+                    if new_name not in char_first_ch:
+                        char_first_ch[new_name] = ch
+
     # 从 events.json 提取本章出场角色
     chars = set()
     for e in events:
@@ -169,6 +183,16 @@ def _load_character_cards(config, ch_num):
     rewrites_dir = base_dir / config.get("rewrites_dir", "")
     cards_dir = rewrites_dir / "characters"
     cards = []
+    
+    # 添加出场角色列表（含最早出场章节）
+    char_list = []
+    for name in sorted(chars):
+        first_ch = char_first_ch.get(name, "?")
+        char_list.append(f"- {name}（第{first_ch}章首次出场）")
+    
+    cards.append(f"## 本章出场角色（第{ch_num}章）\n" + "\n".join(char_list))
+    cards.append("")
+    
     for name in sorted(chars):
         card_path = cards_dir / f"{name}.md"
         if card_path.exists():
