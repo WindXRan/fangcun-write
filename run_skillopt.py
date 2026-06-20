@@ -1,9 +1,9 @@
-"""SkillOpt training for novel rewrite prompts."""
+﻿"""SkillOpt training for novel rewrite prompts."""
 
 import sys, os, json, re, time
 
 sys.path.insert(0, "SkillOpt")
-sys.path.insert(0, ".agents/skills/story-engine/tools")
+sys.path.insert(0, ".agents/skills/fangcun-novel/tools")
 
 os.environ["OPENAI_API_KEY"] = os.environ.get("API_KEY", "sk-ad9450b1670b485c8a456a52520dc5a8")
 
@@ -70,7 +70,7 @@ class NovelAdapter(EnvAdapter):
             return []
 
         # Write skill to prompt
-        pp = Path(".agents/skills/story-engine/prompts/write-chapter.md")
+        pp = Path(".agents/skills/fangcun-novel/prompts/write-chapter.md")
         old = pp.read_text(encoding="utf-8")
         if skill_content and skill_content.strip().startswith("---"):
             pp.write_text(skill_content, encoding="utf-8")
@@ -145,7 +145,7 @@ from skillopt.engine.trainer import ReflACTTrainer
 # 复制 skill 到 SkillOpt 输出目录，用英文路径防 GBK
 import shutil
 os.makedirs("_skillopt_train", exist_ok=True)
-shutil.copy(".agents/skills/story-engine/prompts/write-chapter.md",
+shutil.copy(".agents/skills/fangcun-novel/prompts/write-chapter.md",
             "_skillopt_train/initial_skill.md")
 
 cfg = {

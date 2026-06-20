@@ -1,4 +1,4 @@
-"""
+﻿"""
 story-optimize: 审稿→沉淀→修复
 
 用法:
@@ -13,7 +13,7 @@ import argparse
 import concurrent.futures
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / 'story-engine' / 'tools'))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / 'fangcun-novel' / 'tools'))
 from lib.api_client import call_api, get_api_key, get_api_url
 
 BATCH_SIZE = 5  # 每批5章

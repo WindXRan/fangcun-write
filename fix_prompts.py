@@ -1,7 +1,7 @@
-import os
+﻿import os
 import re
 
-prompts_dir = r'C:\Users\Administrator\Documents\trae_projects\fangcun-write\.agents\skills\story-engine\prompts'
+prompts_dir = r'C:\Users\Administrator\Documents\trae_projects\fangcun-write\.agents\skills\fangcun-novel\prompts'
 
 for filename in os.listdir(prompts_dir):
     if not filename.endswith('.md'):

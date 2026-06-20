@@ -1,6 +1,6 @@
-<# 
+﻿<# 
 .SYNOPSIS
-    一键配置 story-engine / source-engine / drama-engine 环境
+    一键配置 fangcun-novel / fangcun-analyze / fangcun-drama 环境
 .DESCRIPTION
     1. 检查 Python 版本
     2. 安装依赖（requests）
@@ -12,7 +12,7 @@
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "`n=== story-engine 环境配置 ===" -ForegroundColor Cyan
+Write-Host "`n=== fangcun-novel 环境配置 ===" -ForegroundColor Cyan
 
 # 1. 检查 Python
 Write-Host "`n[1/4] 检查 Python..." -ForegroundColor Yellow
@@ -56,7 +56,7 @@ if ($env:API_KEY) {
 # 4. 检查项目结构
 Write-Host "`n[4/4] 检查项目结构..." -ForegroundColor Yellow
 $base = Split-Path $PSScriptRoot -Parent
-$skills = @("story-engine", "source-engine", "drama-engine")
+$skills = @("fangcun-novel", "fangcun-analyze", "fangcun-drama")
 foreach ($s in $skills) {
     $skillPath = Join-Path $base ".agents\skills\$s"
     if (Test-Path $skillPath) {
@@ -67,7 +67,7 @@ foreach ($s in $skills) {
 }
 
 Write-Host "`n=== 配置完成 ===" -ForegroundColor Cyan
-Write-Host "用法: $python .agents/skills/story-engine/tools/pipeline.py --config {config.json} --phase {phase}" -ForegroundColor White
+Write-Host "用法: $python .agents/skills/fangcun-novel/tools/pipeline.py --config {config.json} --phase {phase}" -ForegroundColor White
 
 # 自动启动 story-web 并打开浏览器
 $webApp = Join-Path $base ".agents\skills\story-web\app.py"

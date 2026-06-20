@@ -1,6 +1,6 @@
-<# 
+﻿<# 
 .SYNOPSIS
-    交互式配置向导 - 生成 story-engine / source-engine / drama-engine 配置文件
+    交互式配置向导 - 生成 fangcun-novel / fangcun-analyze / fangcun-drama 配置文件
 .EXAMPLE
     .\config.ps1
 #>
@@ -12,8 +12,8 @@ Write-Host "`n=== 配置向导 ===" -ForegroundColor Cyan
 
 # 1. 选择引擎
 Write-Host "`n选择引擎:" -ForegroundColor Yellow
-Write-Host "  1) story-engine  (仿写小说)"
-Write-Host "  2) drama-engine  (小说转短剧)"
+Write-Host "  1) fangcun-novel  (仿写小说)"
+Write-Host "  2) fangcun-drama  (小说转短剧)"
 $engineChoice = Read-Host "选择 (1/2)"
 $engine = if ($engineChoice -eq "2") { "drama" } else { "story" }
 

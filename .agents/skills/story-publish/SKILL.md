@@ -1,4 +1,4 @@
----
+﻿---
 name: story-publish
 description: |
   蛙蛙写作投稿助手。从项目自动提取投稿表单所需信息（书名/简介/标签/封面等），生成投稿预览并指导提交。
@@ -121,7 +121,7 @@ description: |
 ### TXT 导出
 
 ```bash
-python .agents/skills/story-engine/tools/merge_chapters.py \
+python .agents/skills/fangcun-novel/tools/merge_chapters.py \
   chapters/ export/{book_name}.txt
 ```
 

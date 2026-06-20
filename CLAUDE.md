@@ -1,4 +1,4 @@
-# AI网文小说项目 — 仿写引擎
+﻿# AI网文小说项目 — 仿写引擎
 
 ## 核心原则
 
@@ -62,16 +62,16 @@ Layer 1b 每个 agent 读全书关键章（头3+每20%分位+尾3，~10章）+ c
 
 ```bash
 # 审查（默认 LLM 模式，算法+LLM 全面检查）
-python .agents/skills/story-engine/tools/unified_fixer.py --config configs/xxx.json --dry-run
+python .agents/skills/fangcun-novel/tools/unified_fixer.py --config configs/xxx.json --dry-run
 
 # 审查+修复
-python .agents/skills/story-engine/tools/unified_fixer.py --config configs/xxx.json
+python .agents/skills/fangcun-novel/tools/unified_fixer.py --config configs/xxx.json
 
 # Debug 模式：输出发给 API 的完整 prompt 到 _debug/ 目录（各阶段 1 样本，写章前 3 章）
-python .agents/skills/story-engine/tools/pipeline.py --config configs/xxx.json --phase all --debug
+python .agents/skills/fangcun-novel/tools/pipeline.py --config configs/xxx.json --phase all --debug
 
 # pipeline 集成
-python .agents/skills/story-engine/tools/rewrite_chapters.py --config configs/xxx.json --phase unified
+python .agents/skills/fangcun-novel/tools/rewrite_chapters.py --config configs/xxx.json --phase unified
 ```
 
 ## 文件结构
@@ -181,8 +181,8 @@ python tools/rewrite_chapters.py --config configs/xxx.json --status
 python tools/rewrite_chapters.py --config configs/xxx.json --diff
 
 # 改 prompt 后记录版本
-python .agents/skills/story-engine/tools/prompt_loader.py bump write-chapter.md
-python .agents/skills/story-engine/tools/prompt_loader.py bump write-chapter.md "手动说明"
+python .agents/skills/fangcun-novel/tools/prompt_loader.py bump write-chapter.md
+python .agents/skills/fangcun-novel/tools/prompt_loader.py bump write-chapter.md "手动说明"
 
 # 按prompt覆盖模型参数（在config.json中添加）
 # "prompt_overrides": {"unified-review.md": {"temperature": 0.1, "model": "deepseek-v4-pro"}}

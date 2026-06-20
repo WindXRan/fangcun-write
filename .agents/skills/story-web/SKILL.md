@@ -1,4 +1,4 @@
----
+﻿---
 name: story-web
 description: |
   书库 Web 应用。Flask 服务，提供书库浏览、阅读器（支持版本切换）、对比阅读、番茄排行榜分析。
@@ -155,6 +155,6 @@ python .agents/skills/story-web/tools/book_library.py search "关键词"
 封面保存在 `projects/{作者}/{书名}/_cache/cover.jpg`，下载器自动保存。
 扫描时自动检测 `cover.{jpg,jpeg,png,webp}`。
 
-## 与 story-engine 集成
+## 与 fangcun-novel 集成
 
-story-engine 的 `pipeline.py` 在写章完成后会自动启动书库服务，方便用户阅读和对比。
+fangcun-novel 的 `pipeline.py` 在写章完成后会自动启动书库服务，方便用户阅读和对比。

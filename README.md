@@ -1,4 +1,4 @@
-# 方寸 | AI 网文仿写引擎
+﻿# 方寸 | AI 网文仿写引擎
 
 <div align="center">
 
@@ -123,19 +123,19 @@ $env:API_KEY="sk-xxx"
 ### 3. 运行命令
 ```bash
 # 完整跑一本书（--end 指定源文总章数，--workers 控制并发）
-python .agents/skills/story-engine/tools/pipeline.py \
+python .agents/skills/fangcun-novel/tools/pipeline.py \
   --config configs/your_book.json \
   --start 1 --end 100 --workers 30
 
 # 分步执行
-python .agents/skills/story-engine/tools/pipeline.py --config configs/your_book.json --phase open-book
-python .agents/skills/story-engine/tools/pipeline.py --config configs/your_book.json --phase write --start 1 --end 10
+python .agents/skills/fangcun-novel/tools/pipeline.py --config configs/your_book.json --phase open-book
+python .agents/skills/fangcun-novel/tools/pipeline.py --config configs/your_book.json --phase write --start 1 --end 10
 
 # 只看 prompt 不调 API（debug 模式）
-python .agents/skills/story-engine/tools/pipeline.py --config configs/your_book.json --phase write --debug
+python .agents/skills/fangcun-novel/tools/pipeline.py --config configs/your_book.json --phase write --debug
 
 # 统一审改
-python .agents/skills/story-engine/tools/unified_fixer.py --config configs/your_book.json
+python .agents/skills/fangcun-novel/tools/unified_fixer.py --config configs/your_book.json
 
 # Agent 模式写章
 python tools/rewrite_chapters.py --config configs/your_book.json --phase write --execution-mode agent
@@ -162,7 +162,7 @@ projects/{作者}/{书名}/
 # 1. 准备源文（假设是《临水小厨娘》）
 # 2. 创建配置文件
 # 3. 运行 pipeline
-python .agents/skills/story-engine/tools/pipeline.py \
+python .agents/skills/fangcun-novel/tools/pipeline.py \
   --config configs/food_novel.json \
   --start 1 --end 50 --workers 20
 ```
@@ -179,11 +179,11 @@ python tools/rewrite_chapters.py \
 ### 示例 3：质量检查与修复
 ```bash
 # 先 dry-run 查看问题
-python .agents/skills/story-engine/tools/unified_fixer.py \
+python .agents/skills/fangcun-novel/tools/unified_fixer.py \
   --config configs/your_book.json --dry-run
 
 # 确认后执行修复
-python .agents/skills/story-engine/tools/unified_fixer.py \
+python .agents/skills/fangcun-novel/tools/unified_fixer.py \
   --config configs/your_book.json
 ```
 

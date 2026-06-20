@@ -1,4 +1,4 @@
-# Skill: story-optimize
+﻿# Skill: story-optimize
 
 # story-optimize：审稿→沉淀→修复
 
@@ -37,7 +37,7 @@
 python .agents/skills/story-optimize/optimize.py --config configs/xxx.json --start 1 --end 10
 
 # Pipeline 集成（Phase 3.9）
-python .agents/skills/story-engine/tools/pipeline.py --config configs/xxx.json --phase optimize
+python .agents/skills/fangcun-novel/tools/pipeline.py --config configs/xxx.json --phase optimize
 
 # 只审不修
 python .agents/skills/story-optimize/optimize.py --config configs/xxx.json --dry-run

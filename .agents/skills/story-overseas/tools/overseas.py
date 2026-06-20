@@ -1,4 +1,4 @@
-"""出海引擎：中文章节 → 英文翻译 → Webnovel/Wattpad 格式导出。
+﻿"""出海引擎：中文章节 → 英文翻译 → Webnovel/Wattpad 格式导出。
 
 用法：
   python overseas.py --config configs/xxx.json --start 1 --end 100
@@ -13,7 +13,7 @@ from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "story-engine" / "tools"))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "fangcun-novel" / "tools"))
 
 from utils import call_api, get_source_text
 from prompt_loader import load_prompt_str, get_prompt_config_with_overrides
