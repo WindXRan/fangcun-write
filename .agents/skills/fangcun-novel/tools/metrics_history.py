@@ -5,16 +5,10 @@ python tools/metrics_history.py --diff 查看最后一次的指标变化。
 """
 
 import json
-import re
 from datetime import datetime
 from pathlib import Path
 
 _HISTORY_FILE = "metrics_history.json"
-
-
-def _collect_prompt_snapshot(rewrites_dir):
-    """从 chapters/ 文件末行提取 prompt 版本分布。"""
-    return {}
 
 
 def save_snapshot(rewrites_dir, chapter_metrics):
@@ -29,7 +23,6 @@ def save_snapshot(rewrites_dir, chapter_metrics):
 
     entry = {
         "timestamp": datetime.now().isoformat(timespec="seconds"),
-        "prompts": _collect_prompt_snapshot(rewrites_dir),
         "chapters": chapter_metrics,
     }
     # 聚合统计

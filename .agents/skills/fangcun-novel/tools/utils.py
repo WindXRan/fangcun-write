@@ -74,11 +74,6 @@ def get_source_title(config, chapter_num):
 def print_progress(done, total, t_start, prefix="  "):
     """打印进度条。"""
     if done % max(1, total // 20) == 0 or done == total:
-        elapsed = time.time() - t_start
-        speed = elapsed / done if done > 0 else 0
-        eta = speed * (total - done)
-        pct = done * 100 // total if total > 0 else 0
-        bar = '=' * (pct // 5) + '>' + ' ' * (20 - pct // 5)
         log_progress(done, total, t_start, prefix)
 
 

@@ -25,13 +25,13 @@ from config_validator import validate_config
 from utils import get_chapters_list
 from logger import setup_pipeline_log, close_pipeline_log
 from phases import (
+    phase_compare,
     phase_prep, phase_open_book, phase_source_analysis,
     phase_guides,
     phase_write, phase_write_agent,
     phase_postfix, phase_trim, phase_rewrite, phase_polish, phase_expand,
     phase_unified_check, phase_unified_fix, phase_unified_review_fix,
 )
-from phases.compare import phase_compare
 import generate_deliverable
 
 

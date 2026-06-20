@@ -9,6 +9,7 @@
 import os
 import sys
 import json
+import re
 import time
 import argparse
 from pathlib import Path
@@ -72,5 +73,4 @@ def main():
 
 
 if __name__ == "__main__":
-    import re
     main()
