@@ -49,12 +49,23 @@ python .agents/skills/source-engine/tools/pipeline.py --config {config} --phase 
   "source_book": "源书名",
   "api_key": "sk-xxx",
   "api_base_url": "https://api.deepseek.com/v1",
-  "model": "deepseek-chat",
-  "model_overrides": {
-    "event": "deepseek-chat"
-  }
+  "model": "deepseek-chat"
 }
 ```
+
+### 使用 FreeLLMAPI（免费额度聚合）
+
+部署 FreeLLMAPI 后，配置改为：
+
+```json
+{
+  "api_key": "freellmapi-xxx",
+  "api_base_url": "http://localhost:3001/v1",
+  "model": "auto"
+}
+```
+
+FreeLLMAPI 自动选择最佳可用模型，一个 provider 限流时自动切换到下一个。详见 [FreeLLMAPI 文档](https://github.com/tashfeenahmed/freellmapi)。
 
 ## 质量检查（agent 自动执行）
 
