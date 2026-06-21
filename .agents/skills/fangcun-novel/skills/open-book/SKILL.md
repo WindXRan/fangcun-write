@@ -91,7 +91,7 @@ metadata:
 - 冲突类型保持一致
 - 情绪基调保持一致
 
-**加载指令：** `references/imitate.md`
+**⚠️ 必须读取：** `references/imitate.md`（包含角色名映射格式、起名铁律、设定文件模板）
 
 ---
 

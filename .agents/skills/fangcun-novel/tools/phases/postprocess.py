@@ -26,11 +26,11 @@ def _get_writer_module():
 
 
 # ============================================================
-# Phase 3.2: Post-Fix（机械后处理——不调LLM）
+# Phase 3.2: Post-Fix（全靠大模型一次生成正确内容，不做兜底处理）
 # ============================================================
 
 def phase_postfix(config, start, end):
-    """机械修复：解析XML格式、去#号、砍超标字数。不调LLM。"""
+    """后处理：全靠大模型一次生成正确内容，不做兜底处理。"""
     chapters_dir = f"{config['rewrites_dir']}/chapters"
 
     print(f"\n{'=' * 50}")
@@ -43,51 +43,13 @@ def phase_postfix(config, start, end):
             continue
 
         text = ch_file.read_text(encoding='utf-8')
-        fixed = 0
-
-        # 检测XML格式
-        if '<chapter>' in text and '</chapter>' in text:
-            # XML格式：提取<content>内容
-            content_match = re.search(r'<content>(.*?)</content>', text, re.DOTALL)
-            if content_match:
-                content = content_match.group(1).strip()
-                # 提取标题
-                title_match = re.search(r'<title>(.*?)</title>', text)
-                title = title_match.group(1).strip() if title_match else f"第{ch}章"
-                # 写入纯内容
-                ch_file.write_text(f"{title}\n\n{content}\n", encoding='utf-8')
-                fixed += 1
-                print(f"  ch{ch:03d}: XML格式提取完成")
-            else:
-                print(f"  ch{ch:03d}: XML格式但缺少<content>标签")
-        else:
-            # 旧格式兼容
-            lines = text.strip().split('\n')
-            
-            # 1. 去标题 # 号；过滤源文标题；删重复标题行
-            if lines and lines[0].startswith('# '):
-                lines[0] = lines[0][2:]
-                fixed += 1
-            src_title = get_source_title(config, ch)
-            if src_title and lines and lines[0].strip() == src_title.strip():
-                lines[0] = f"第{ch}章"
-                fixed += 1
-            if len(lines) >= 3 and lines[2].startswith('第') and '章' in lines[2][:10]:
-                del lines[2]
-                if len(lines) > 2 and lines[2].strip() == '':
-                    del lines[2]
-                fixed += 1
-
-            # 2. 删末尾字数行
-            if lines and re.match(r'^【字数[：:]\s*\d+\s*字?】', lines[-1].strip()):
-                lines = lines[:-1]
-                fixed += 1
-
-            if fixed > 0:
-                ch_file.write_text('\n'.join(lines) + '\n', encoding='utf-8')
-                print(f"  ch{ch:03d}: {fixed}处修复")
-            else:
-                print(f"  ch{ch:03d}: 无需修复")
+        
+        # 检查是否为空或过短
+        if len(text.strip()) < 50:
+            print(f"  ch{ch:03d}: 内容过短，跳过")
+            continue
+        
+        print(f"  ch{ch:03d}: 无需修复（大模型一次生成正确内容）")
 
     return True
 

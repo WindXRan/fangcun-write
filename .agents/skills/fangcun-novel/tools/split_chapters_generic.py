@@ -3,69 +3,61 @@ import re
 import os
 import sys
 
-def detect_separator(content):
-    """检测章节分隔符。"""
-    # 常见分隔符模式
-    patterns = [
-        (r'\-{40,}', '---'),  # 40个以上短横线
-        (r'={40,}', '==='),   # 40个以上等号
-        (r'\*{40,}', '***'),  # 40个以上星号
-    ]
-    
-    for pattern, name in patterns:
-        matches = re.findall(pattern, content)
-        if len(matches) > 5:  # 至少5个分隔符才算有效
-            return pattern, name
-    
-    # 如果没有明显分隔符，尝试按"第X章"拆分
-    return None, 'chapter_pattern'
-
 def split_chapters(input_file, output_dir, encoding='utf-8'):
     """拆分章节。"""
     with open(input_file, 'r', encoding=encoding) as f:
         content = f.read()
     
-    # 检测分隔符
-    sep_pattern, sep_name = detect_separator(content)
-    
-    if sep_pattern:
-        # 按分隔符拆分
-        chapters = re.split(sep_pattern, content)
-    else:
-        # 按"第X章"拆分
-        chapters = re.split(r'(?=第\d+章\s+)', content)
-    
     os.makedirs(output_dir, exist_ok=True)
     
-    # 章节标题模式
-    chapter_pattern = re.compile(r'第(\d+)章\s+(.+)')
+    # 按"第X章"拆分
+    chapters = re.split(r'(?=第\d+章\s+)', content)
     
-    chapter_count = 0
+    # 记录已保存的章节，避免重复
+    saved_chapters = {}
+    
     for chapter in chapters:
         chapter = chapter.strip()
         if not chapter:
             continue
         
+        # 章节标题模式
+        chapter_pattern = re.compile(r'第(\d+)章\s+(.+)')
         match = chapter_pattern.search(chapter)
         if match:
             chapter_num = match.group(1)
             chapter_title = match.group(2).strip()
-            chapter_content = chapter[match.end():].strip()
             
-            # 清理标题中的特殊字符
-            safe_title = re.sub(r'[<>:"/\\|?*]', '', chapter_title)
-            safe_title = safe_title[:50]  # 限制长度
+            # 如果只有标题没有正文，跳过
+            if not chapter_title:
+                continue
             
+            # 如果已有同章节号，检查是否需要替换
+            if chapter_num in saved_chapters:
+                # 检查当前片段是否只有标题（标题+空格+标题）
+                # 如果当前片段长度小于50字，可能是重复标题
+                if len(chapter) < 50:
+                    continue
+                # 当前片段有正文，替换之前只有标题的版本
+                saved_chapters[chapter_num] = chapter
+                # 更新文件
+                filename = f"第{chapter_num}章.txt"
+                filepath = os.path.join(output_dir, filename)
+                with open(filepath, 'w', encoding=encoding) as f:
+                    f.write(chapter.strip())
+                continue
+            
+            # 保存完整章节内容（标题+正文）
             filename = f"第{chapter_num}章.txt"
             filepath = os.path.join(output_dir, filename)
             
             with open(filepath, 'w', encoding=encoding) as f:
-                f.write(f"第{chapter_num}章 {chapter_title}\n\n")
-                f.write(chapter_content)
+                f.write(chapter.strip())
             
-            chapter_count += 1
+            saved_chapters[chapter_num] = chapter
             print(f"已保存: {filename}")
     
+    chapter_count = len(saved_chapters)
     print(f"拆章完成，共 {chapter_count} 章")
     return chapter_count
 
