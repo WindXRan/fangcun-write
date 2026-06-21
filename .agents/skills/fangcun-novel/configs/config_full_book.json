@@ -1,9 +1,0 @@
-{
-  "book_name": "染指枭雄仿写",
-  "author": "初点点",
-  "source_book": "染指枭雄",
-  "api_key": null,
-  "system_prompt": "你是一个专业的网文写手，擅长仿写风格迁移。根据提供的guide，严格按照要求写章。",
-  "prompts_dir": ".agents/skills/story-engine/prompts",
-  "rewrites_dir": "projects/初点点/染指枭雄/rewrites/染指枭雄仿写"
-}

@@ -197,6 +197,10 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
         return {}, {}
     print(f"  [WRITE] {len(rewrite)}章需要写: {rewrite}")
 
+    # --- 构建角色名映射（用于后处理兜底）---
+    from phases.guides import _build_name_map
+    name_map = _build_name_map(write_cfg)
+
     # --- 并行写章（调用 fangcun-write）---
     ok = {}
     fail = {}
@@ -216,6 +220,16 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
                     trim_result = writer.trim_chapter(write_config, ch)
                     if trim_result:
                         ch_file.write_text(trim_result, encoding='utf-8')
+                # 后处理兜底：强制替换源文角色名
+                if name_map:
+                    final_text = ch_file.read_text(encoding='utf-8')
+                    changed = False
+                    for old_name, new_name in sorted(name_map.items(), key=lambda x: -len(x[0])):
+                        if old_name in final_text:
+                            final_text = final_text.replace(old_name, new_name)
+                            changed = True
+                    if changed:
+                        ch_file.write_text(final_text, encoding='utf-8')
                 if state_mgr:
                     state_mgr.chapter_completed(ch)
             return ch, True, None
