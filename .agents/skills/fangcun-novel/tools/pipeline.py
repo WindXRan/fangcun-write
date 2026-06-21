@@ -24,8 +24,8 @@ from logger import setup_pipeline_log, close_pipeline_log
 from phases import (
     phase_guides,
     phase_write, phase_write_agent,
-    phase_postfix, phase_trim, phase_rewrite, phase_polish, phase_expand,
-    phase_unified_check, phase_unified_fix, phase_unified_review_fix,
+    phase_postfix,
+    phase_unified_review_fix,
 )
 
 
@@ -52,18 +52,14 @@ def get_phase_api(config: dict, phase: str) -> tuple:
 
 GOAL_MAP = {
     "guides": {"guides"},
-    "write": {"guides", "write", "trim", "postfix"},
+    "write": {"guides", "write", "postfix"},
     "review": {"unified_review_fix"},
-    "trim": {"trim"},
-    "rewrite": {"rewrite"},
-    "polish": {"polish"},
-    "expand": {"expand"},
     "postfix": {"postfix"},
 }
 
 # 章级 phase 按此顺序执行
 _CHAPTER_PHASE_ORDER = [
-    "guides", "write", "trim", "compare",
+    "guides", "write", "compare",
     "unified_check", "unified_fix",
     "postfix",
 ]
@@ -131,13 +127,7 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
         print(f"  [MODE] write → agent")
     else:
         h["write"] = _write_handler
-    h["trim"] = phase_trim
-    h["rewrite"] = phase_rewrite
-    h["polish"] = phase_polish
-    h["expand"] = phase_expand
     h["postfix"] = phase_postfix
-    h["unified_check"] = phase_unified_check
-    h["unified_fix"] = phase_unified_fix
     h["unified_review_fix"] = lambda cfg, s, e: phase_unified_review_fix(
         cfg, cfg.get("_chapter_start", s), cfg.get("_chapter_end", e), state_mgr=state_mgr)
     return h
@@ -330,13 +320,7 @@ def main():
     phase_display = {
         "guides": "章纲",
         "write": "写章",
-        "trim": "精简",
         "postfix": "后处理",
-        "rewrite": "重写",
-        "polish": "润色",
-        "expand": "扩写",
-        "unified_check": "统一审查",
-        "unified_fix": "统一修复",
         "unified_review_fix": "统一审改",
     }
     display_names = [phase_display.get(p, p) for p in sorted(goal)]

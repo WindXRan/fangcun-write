@@ -2,7 +2,7 @@
 name: fangcun-write
 description: |
   通用写作能力引擎。提供 write/trim/polish/expand/rewrite 五大写作能力。
-  其他 skill（fangcun-novel、fangcun-continue、fangcun-drama）通过 import 方式调用。
+  其他 skill（fangcun-novel、fangcun-drama）通过 import 方式调用。
   触发方式：/fangcun-write、/写章、/精简、/润色、/扩写、/重写
 ---
 
@@ -24,10 +24,8 @@ fangcun-analyze (底层：API/IO/分析)
        ↑
 fangcun-write (写作能力)
        ↑
-       ├── fangcun-novel (长篇仿写)
-       ├── fangcun-continue (续写)
-       ├── fangcun-drama (短剧改编)
-       └── drama-continue (剧本续写)
+       ├── fangcun-novel (长篇仿写/续写)
+       └── fangcun-drama (短剧改编)
 ```
 
 ## 双模式

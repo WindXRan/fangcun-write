@@ -572,7 +572,7 @@ projects/{作者}/{源书名}/
 | 时机 | 跳转到 | 命令 |
 |------|--------|------|
 | 想分析源文 | fangcun-analyze | `/fangcun-analyze` |
-| 想续写第二部 | fangcun-continue | `/fangcun-continue` |
+| 想续写第二部 | open-book | 选择续写模式 |
 | 想改编短剧 | fangcun-drama | `/fangcun-drama` |
 | 想生成封面 | story-cover | `/story-cover` |
 | 想导出小说 | story-export | `/story-export` |
