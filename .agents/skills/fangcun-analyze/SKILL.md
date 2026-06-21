@@ -10,9 +10,9 @@ description: |
 ## 你是 agent，负责：
 
 1. **理解用户意图**（"分析这本书" → 跑全流程；"重新提取事件" → 只跑 event）
-2. **读取源文和 prompt**
-3. **派生子 agent 执行分析任务**
-4. **检查输出质量**
+2. **组装正确的命令**
+3. **检查输出质量**
+4. **处理错误**
 
 ## 产物（存放在 _cache/，两套引擎共用）
 
@@ -22,76 +22,50 @@ description: |
 | `story_skeleton.md` | 故事骨架（三幕/分集/付费卡点/反转） |
 | `adaptation_strategy.md` | 改编策略（8大要点/删减决策/世界观） |
 
-## 目录结构
+## 流程（混合模式）
 
-```
-projects/{author}/{source_book}/
-├── _cache/
-│   ├── chapters/           # 源文章节（已拆章）
-│   │   ├── 第1章.txt
-│   │   └── ...
-│   ├── events.json         # 事件表
-│   ├── story_skeleton.md   # 故事骨架
-│   └── adaptation_strategy.md  # 改编策略
+### Phase 1: 事件提取（Python，高效并行）
+
+```bash
+python .agents/skills/fangcun-analyze/tools/pipeline.py --config {config} --phase event
 ```
 
-## 流程
+- 滑窗上下文（前2章摘要）
+- 并行处理（默认5线程）
+- 增量保存（已有跳过）
+- 格式严格（一行 `|` 分隔 7 字段）
 
-### Phase 1: 事件提取
+### Phase 2: 故事骨架（agent，可迭代优化）
 
-**任务**：读取源文章节，提取每章的结构化事件信息。
-
-**步骤**：
-1. 读取 `_cache/chapters/` 目录，获取章节目录
-2. 读取 `prompts/event_extraction.md`，获取提取规则
-3. 派生子 agent（每批 5-10 章），子 agent 任务：
-   - 读取章节文件
-   - 按 prompt 格式输出事件行（一行，`|` 分隔 7 个字段）
-   - 返回事件行
-4. 收集所有事件行，写入 `_cache/events.json`
-
-**事件格式**：
-```json
-[
-  {"id": 1, "chapter_index": 1, "chapter": "第1章 标题", "event": "| 第1章 标题 | 角色 | 事件 | 关系 | 密度 | 时长 | 情绪 |"}
-]
-```
-
-### Phase 2: 故事骨架
-
-**任务**：基于事件表，生成故事骨架。
-
-**步骤**：
+agent 自己执行：
 1. 读取 `_cache/events.json`
 2. 读取 `prompts/skeleton.md`
-3. 派生子 agent，任务：
-   - 分析事件表，提取故事核、人物小传、三幕结构
-   - 按 prompt 格式输出 story_skeleton.md
-   - 返回结果
+3. 分析事件表，生成骨架
 4. 写入 `_cache/story_skeleton.md`
 
-### Phase 3: 改编策略
+### Phase 3: 改编策略（agent，可迭代优化）
 
-**任务**：基于事件表和故事骨架，生成改编策略。
-
-**步骤**：
+agent 自己执行：
 1. 读取 `_cache/events.json`
 2. 读取 `_cache/story_skeleton.md`
 3. 读取 `prompts/adaptation.md`
-4. 派生子 agent，任务：
-   - 分析事件表和骨架，制定改编策略
-   - 按 prompt 格式输出 adaptation_strategy.md
-   - 返回结果
+4. 生成改编策略
 5. 写入 `_cache/adaptation_strategy.md`
 
-## 配置
+## 配置文件
 
-用户需要提供：
-- `author`：作者名
-- `source_book`：源书名
-- `base_dir`：项目根目录（默认 "."）
+```json
+{
+  "base_dir": ".",
+  "author": "作者名",
+  "source_book": "源书名",
+  "api_key": null,
+  "api_base_url": "https://api.deepseek.com/v1",
+  "model": "deepseek-chat"
+}
+```
 
-## 质量检查
+## 质量检查（agent 自动执行）
 
 跑完后 agent 应该：
 1. 读 `_cache/events.json`，检查有效事件数是否等于总章数
@@ -103,6 +77,6 @@ projects/{author}/{source_book}/
 | 用户说 | agent 做 |
 |--------|----------|
 | "分析这本书" | 跑全流程（event → skeleton → adaptation） |
-| "重新提取事件" | 只跑 event |
-| "骨架有问题" | 重新跑 skeleton |
+| "重新提取事件" | 跑 --phase event（增量，已有跳过） |
+| "骨架有问题" | 重新跑 skeleton（agent 模式） |
 | "看看分析结果" | 读 events.json + story_skeleton.md，汇报 |
