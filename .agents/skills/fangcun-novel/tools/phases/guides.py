@@ -450,6 +450,102 @@ def _extract_highlights(src_text, max_chars=300):
 
 
 # ============================================================
+# 续写模式支持
+# ============================================================
+
+def _is_continue_mode(config):
+    """判断是否是续写模式。"""
+    return config.get("mode") == "continue"
+
+
+def _get_continue_plan_event(config, ch_num):
+    """从续写方案（plan.md）中提取本章事件。
+    
+    续写方案格式：
+    | 卷/段 | 章节范围 | 核心事件 | 情绪基调 | 爽点 |
+    |-------|----------|----------|----------|------|
+    | 第一卷 | 1-50章 | {核心事件} | {延续原作基调} | {爽点} |
+    
+    或者：
+    **关键事件：**
+    1. 第1-10章：{事件}
+    2. 第11-20章：{事件}
+    """
+    rewrites_dir = Path(config.get("rewrites_dir", ""))
+    
+    # 尝试读取续写方案
+    plan_files = [
+        rewrites_dir / "续写方案.md",
+        rewrites_dir / "plan.md",
+    ]
+    
+    # 也检查plans目录
+    plans_dir = rewrites_dir.parent / "续写引擎" / "plans"
+    if plans_dir.exists():
+        for f in plans_dir.glob("plan_*.md"):
+            plan_files.append(f)
+    
+    plan_text = None
+    for pf in plan_files:
+        if pf.exists():
+            plan_text = pf.read_text(encoding="utf-8")
+            break
+    
+    if not plan_text:
+        return None
+    
+    # 提取情节线表格中的事件
+    # 格式：| 第一卷 | 1-50章 | {核心事件} | ...
+    import re
+    for line in plan_text.split('\n'):
+        if not line.startswith('|'):
+            continue
+        cells = [c.strip() for c in line.split('|') if c.strip()]
+        if len(cells) < 3:
+            continue
+        
+        # 解析章节范围
+        range_cell = cells[1]  # 如 "1-50章"
+        range_match = re.search(r'(\d+)[-~](\d+)', range_cell)
+        if range_match:
+            start = int(range_match.group(1))
+            end = int(range_match.group(2))
+            if start <= ch_num <= end:
+                return cells[2]  # 核心事件
+    
+    # 提取关键事件
+    # 格式：1. 第1-10章：{事件}
+    for line in plan_text.split('\n'):
+        match = re.match(r'\d+\.\s*第(\d+)[-~](\d+)章[：:]\s*(.+)', line.strip())
+        if match:
+            start = int(match.group(1))
+            end = int(match.group(2))
+            if start <= ch_num <= end:
+                return match.group(3).strip()
+    
+    return None
+
+
+def _get_continue_style(config, ch_num):
+    """续写模式的风格参考：从原作前3章提取。"""
+    from lib.text_metrics import count_style_fingerprint
+    
+    # 使用原作前3章作为风格参考
+    style_parts = []
+    for i in range(1, 4):
+        src_text = get_source_text(config, i)
+        if src_text:
+            fp = count_style_fingerprint(src_text)
+            if fp:
+                style_parts.append(f"第{i}章风格：句长{fp.get('avg_sent_len', '?')}字，"
+                                  f"对话占比{fp.get('dialogue_ratio', '?')}%")
+    
+    if style_parts:
+        return "续写风格参考（原作前3章）：\n" + "\n".join(style_parts)
+    return None
+
+
+# ============================================================
 # Phase 2: Guide 生成
 # ============================================================
 
@@ -662,32 +758,48 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         # 注入世界观（使用缓存）
         if "世界观" not in replacements:
             replacements["世界观"] = _get_world_text(config)
-        # 注入源文（用于风格模仿，替换角色名，截断到1000字避免写太长）
-        source_text = get_source_text(config, chapter_num)
-        if source_text:
-            name_map = _build_name_map(config)
-            if name_map:
-                for old_name, new_name in name_map.items():
-                    source_text = source_text.replace(old_name, new_name)
-            # 截断到1000字
-            if len(source_text) > 1000:
-                source_text = source_text[:1000] + "\n\n（源文已截断，只供风格参考）"
-            replacements["源文参考"] = source_text
+        
+        # 判断是否是续写模式
+        is_continue = _is_continue_mode(config)
+        
+        if is_continue:
+            # 续写模式：使用原作风格参考，不注入源文全文
+            continue_style = _get_continue_style(config, chapter_num)
+            replacements["源文参考"] = continue_style or "（续写模式：延续原作风格）"
+            # 续写模式的文笔指纹从原作前几章提取
+            replacements["文笔指纹"] = continue_style or "（续写模式：延续原作风格）"
         else:
-            replacements["源文参考"] = "（源文读取失败）"
-        # 注入写法指令（从 style-analyze 输出）
-        style_text = _get_style_text_mapped(config, chapter_num)
-        if style_text:
-            replacements["文笔指纹"] = style_text
-            # 提取"信息释放时机"段落（单独注入）
-            info_timing_match = re.search(r'## 信息释放时机.*?(?=\n## |\Z)', style_text, re.DOTALL)
-            if info_timing_match:
-                replacements.setdefault("信息释放时机", info_timing_match.group(0).strip())
+            # 仿写模式：注入源文（用于风格模仿，替换角色名，截断到1000字）
+            source_text = get_source_text(config, chapter_num)
+            if source_text:
+                name_map = _build_name_map(config)
+                if name_map:
+                    for old_name, new_name in name_map.items():
+                        source_text = source_text.replace(old_name, new_name)
+                # 截断到1000字
+                if len(source_text) > 1000:
+                    source_text = source_text[:1000] + "\n\n（源文已截断，只供风格参考）"
+                replacements["源文参考"] = source_text
             else:
-                replacements.setdefault("信息释放时机", "（信息释放时机未提取）")
-        else:
-            replacements["文笔指纹"] = "（写法指令未提取）"
-            replacements.setdefault("信息释放时机", "（写法指令未提取）")
+                replacements["源文参考"] = "（源文读取失败）"
+            # 注入写法指令（从 style-analyze 输出）
+            style_text = _get_style_text_mapped(config, chapter_num)
+            if style_text:
+                replacements["文笔指纹"] = style_text
+            else:
+                replacements["文笔指纹"] = "（写法指令未提取）"
+        
+        # 注入信息释放时机
+        if "信息释放时机" not in replacements:
+            style_text = _get_style_text_mapped(config, chapter_num)
+            if style_text:
+                info_timing_match = re.search(r'## 信息释放时机.*?(?=\n## |\Z)', style_text, re.DOTALL)
+                if info_timing_match:
+                    replacements["信息释放时机"] = info_timing_match.group(0).strip()
+                else:
+                    replacements["信息释放时机"] = "（信息释放时机未提取）"
+            else:
+                replacements["信息释放时机"] = "（文笔指纹未提取）"
 
     # 注入风格类型（使用缓存）
     replacements.setdefault("风格类型", _get_genre_text(config))
@@ -696,30 +808,44 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     if chapter_num:
         from file_io import get_chapter_event, get_skeleton_context, get_adaptation_principles
 
-        # 使用缓存的映射版本（避免每次重复替换）
-        events_mapped = _load_events_mapped(config)
+        # 判断是否是续写模式
+        is_continue = _is_continue_mode(config)
         
-        # 从映射后的 events 中提取本章事件
-        ch_event = "（事件未提取）"
-        for e in events_mapped:
-            if e.get("id") == chapter_num or e.get("chapter_index") == chapter_num:
-                if e.get("event"):
-                    ch_event = f"第{chapter_num}章：{e['event']}"
-                break
-        
-        # 使用缓存的骨架和改编策略
-        skeleton_mapped = _load_skeleton_mapped(config)
-        adaptation_mapped = _load_adaptation_mapped(config)
-        
-        skel_ctx = get_skeleton_context(config, chapter_num) or "（骨架未生成）"
-        adapt_pr = get_adaptation_principles(config) or "（改编策略未生成）"
-        
-        # 对骨架和改编策略的上下文也做替换
-        name_map = _build_name_map(config)
-        if name_map:
-            for old_name, new_name in name_map.items():
-                skel_ctx = skel_ctx.replace(old_name, new_name)
-                adapt_pr = adapt_pr.replace(old_name, new_name)
+        if is_continue:
+            # 续写模式：从plan.md提取事件
+            ch_event = _get_continue_plan_event(config, chapter_num)
+            if ch_event:
+                ch_event = f"第{chapter_num}章：{ch_event}"
+            else:
+                ch_event = "（续写方案中未找到本章事件）"
+            
+            # 续写模式：骨架和改编策略从concept.md提取
+            skel_ctx = "（续写模式：请参考续写方案中的情节线）"
+            adapt_pr = "（续写模式：延续原作核心要素）"
+        else:
+            # 仿写模式：从源文events.json提取
+            events_mapped = _load_events_mapped(config)
+            
+            ch_event = "（事件未提取）"
+            for e in events_mapped:
+                if e.get("id") == chapter_num or e.get("chapter_index") == chapter_num:
+                    if e.get("event"):
+                        ch_event = f"第{chapter_num}章：{e['event']}"
+                    break
+            
+            # 使用缓存的骨架和改编策略
+            skeleton_mapped = _load_skeleton_mapped(config)
+            adaptation_mapped = _load_adaptation_mapped(config)
+            
+            skel_ctx = get_skeleton_context(config, chapter_num) or "（骨架未生成）"
+            adapt_pr = get_adaptation_principles(config) or "（改编策略未生成）"
+            
+            # 对骨架和改编策略的上下文也做替换
+            name_map = _build_name_map(config)
+            if name_map:
+                for old_name, new_name in name_map.items():
+                    skel_ctx = skel_ctx.replace(old_name, new_name)
+                    adapt_pr = adapt_pr.replace(old_name, new_name)
 
         replacements.setdefault("本章事件", ch_event)
         replacements.setdefault("全局结构", skel_ctx)

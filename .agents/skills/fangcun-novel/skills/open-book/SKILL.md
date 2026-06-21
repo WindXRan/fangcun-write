@@ -170,6 +170,27 @@ projects/{author}/{source_book}/rewrites/{new_book}/
     └── {角色2}.md
 ```
 
+**续写模式的config配置：**
+
+续写模式下，需要在config.json中添加`mode`字段：
+
+```json
+{
+  "book_name": "续写书名",
+  "author": "原作作者",
+  "source_book": "原作书名",
+  "mode": "continue",
+  "rewrites_dir": "projects/{author}/{source_book}/rewrites/{续写书名}",
+  "api_key": null,
+  "model": "deepseek-v4-pro"
+}
+```
+
+**关键字段：**
+- `"mode": "continue"` — 标记为续写模式
+- 续写模式下，pipeline会从plan.md提取情节线，而不是从源文events.json映射
+- 续写模式下，风格参考来自原作前3章，而不是源文全文
+
 ---
 
 ## 参考资料

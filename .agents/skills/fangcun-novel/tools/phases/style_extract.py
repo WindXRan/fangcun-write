@@ -63,15 +63,30 @@ def phase_style_extract(config, start, end, workers=None):
     print(f"Phase 1.5: 文笔指纹 (ch{start}-{end}, {w}w)")
     print("=" * 50)
 
-    # 扫描待处理章节（哈希校验：源文变了重算）
-    todo = []
-    for ch in range(start, end + 1):
-        src_text = get_source_text(config, ch)
-        if not src_text:
-            continue
-        if _cache_valid(styles_dir, ch, src_text):
-            continue
-        todo.append(ch)
+    # 判断是否是续写模式
+    is_continue = config.get("mode") == "continue"
+    
+    if is_continue:
+        # 续写模式：只提取原作前3章的风格
+        print("  续写模式：提取原作前3章风格作为参考")
+        todo = []
+        for ch in range(1, 4):
+            src_text = get_source_text(config, ch)
+            if not src_text:
+                continue
+            if _cache_valid(styles_dir, ch, src_text):
+                continue
+            todo.append(ch)
+    else:
+        # 仿写模式：提取指定范围的章节
+        todo = []
+        for ch in range(start, end + 1):
+            src_text = get_source_text(config, ch)
+            if not src_text:
+                continue
+            if _cache_valid(styles_dir, ch, src_text):
+                continue
+            todo.append(ch)
 
     if not todo:
         print(f"  所有章节已完成，跳过")
