@@ -632,9 +632,6 @@ def phase_open_book(config, state_mgr=None):
         atomic_write_text(rewrites_dir / "world.md", world_content)
         print(f"  [OK] world.md")
         
-        atomic_write_text(rewrites_dir / "plot.md", plot_content)
-        print(f"  [OK] plot.md")
-        
         atomic_write_text(rewrites_dir / "book_info.md", bookinfo_content)
         print(f"  [OK] book_info.md")
         

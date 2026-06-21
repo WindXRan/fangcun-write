@@ -356,6 +356,44 @@ def _get_chapter_characters(config, ch_num):
     return "、".join(sorted(chars))
 
 
+def _get_chapter_name_map(config, ch_num):
+    """获取本章出场角色的映射表（精简版）。"""
+    # 获取出场角色
+    events = _load_events_mapped(config)
+    chars = set()
+    for e in events:
+        if e.get("id") == ch_num or e.get("chapter_index") == ch_num:
+            event_text = e.get("event", "")
+            parts = event_text.split("|")
+            if len(parts) >= 3:
+                for c in re.split(r"[、，,]", parts[2].strip()):
+                    c = c.strip()
+                    if c:
+                        chars.add(c)
+            break
+    
+    if not chars:
+        return "（无出场角色信息）"
+    
+    # 获取完整映射表
+    name_map = _build_name_map(config)
+    if not name_map:
+        return "（角色名映射表不存在）"
+    
+    # 只保留出场角色的映射
+    result_lines = ["| 源文名 | 新名 |", "|--------|------|"]
+    for old_name, new_name in sorted(name_map.items()):
+        # 检查是否是出场角色（新名或旧名在出场列表中）
+        if new_name in chars or old_name in chars:
+            result_lines.append(f"| {old_name} | {new_name} |")
+    
+    if len(result_lines) == 2:
+        # 没有匹配到，返回完整映射表
+        return _build_name_map_text(config)
+    
+    return "\n".join(result_lines)
+
+
 def _load_character_cards(config, ch_num):
     """加载本章出场角色的卡内容（从 characters/ 目录读取独立文件）。"""
     # 使用缓存的映射版本
@@ -610,7 +648,7 @@ def _get_continue_style(config, ch_num):
 # ============================================================
 
 def phase_guides(config, start, end, workers=5, state_mgr=None):
-    """生成 plot_guide（含文笔指纹提取）。"""
+    """生成 plot_guide（含文笔指纹提取 + 全书风格聚合）。"""
     from lib.api_client import get_api_url
     
     guides_dir = f"{config['rewrites_dir']}/guides"
@@ -741,7 +779,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     n_plus1 = str(chapter_num + 1) if chapter_num else "2"
     total_ch = get_total_chapters(config)
     replacements = {
-        "新书名": config["book_name"],
+        "新书名": Path(config.get("rewrites_dir", "")).name,
         "N": n,
         "N_plus1": n_plus1,
         "N03d": f"{chapter_num:03d}" if chapter_num else "001",
@@ -785,73 +823,34 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
                 for old_name, new_name in name_map.items():
                     source_text = source_text.replace(old_name, new_name)
             replacements["源文全文"] = source_text
-            # 注入源文高光段落（情绪密度最高的段落）
             highlights = _extract_highlights(source_text, max_chars=500)
-            if highlights:
-                replacements["源文高光"] = highlights
-            else:
-                replacements["源文高光"] = ""
+            replacements["highlights"] = highlights or ""
         else:
             replacements["源文全文"] = "（源文读取失败）"
-            replacements["源文高光"] = ""
+            replacements["highlights"] = ""
+        # 注入源文结构缓存（per-chapter）
+        if "structure" not in replacements:
+            from phases.style_extract import load_chapter_structure
+            ch_struct = load_chapter_structure(config, chapter_num)
+            replacements["structure"] = ch_struct or "（结构未提取）"
         # 注入本章出场角色卡内容
-        if "角色约束" not in replacements and chapter_num:
-            replacements["角色约束"] = _load_character_cards(config, chapter_num)
-        # 注入世界观（使用缓存）
-        if "世界观" not in replacements:
-            replacements["世界观"] = _get_world_text(config)
-        # 注入信息释放时机
-        style_text = _get_style_text_mapped(config, chapter_num)
-        if style_text:
-            info_timing_match = re.search(r'## 信息释放时机.*?(?=\n## |\Z)', style_text, re.DOTALL)
-            if info_timing_match:
-                replacements.setdefault("信息释放时机", info_timing_match.group(0).strip())
-            else:
-                replacements.setdefault("信息释放时机", "（信息释放时机未提取）")
-        else:
-            replacements.setdefault("信息释放时机", "（文笔指纹未提取）")
+        if "characters" not in replacements and chapter_num:
+            replacements["characters"] = _load_character_cards(config, chapter_num)
+        # 注入世界观
+        if "world" not in replacements:
+            replacements["world"] = _get_world_text(config)
 
     # 写章时注入本章出场角色的卡内容
     if prompt_type == "write-chapter" and chapter_num:
-        if "角色约束" not in replacements or replacements.get("角色约束") == "{角色行为卡片}":
-            replacements["角色约束"] = _load_character_cards(config, chapter_num)
-        # 注入角色名映射表（直接读取完整characters.md）
-        if "角色名映射表" not in replacements:
-            rewrites_dir = Path(config["rewrites_dir"])
-            chars_path = rewrites_dir / "characters.md"
-            if not chars_path.exists():
-                chars_path = rewrites_dir / "settings" / "characters.md"
-            if chars_path.exists():
-                replacements["角色名映射表"] = chars_path.read_text(encoding="utf-8")
-            else:
-                replacements["角色名映射表"] = "（角色名映射表不存在）"
-        # 注入世界观（使用缓存）
-        if "世界观" not in replacements:
-            replacements["世界观"] = _get_world_text(config)
-        
-        # 判断是否是续写模式
-        is_continue = _is_continue_mode(config)
-        
-        # 注入文笔指纹（仿写和续写都用同一套）
-        style_text = _get_style_text_mapped(config, chapter_num)
-        if style_text:
-            replacements["文笔指纹"] = style_text
-        else:
-            replacements["文笔指纹"] = "（写法指令未提取）"
-        
-        # 注入信息释放时机
-        if "信息释放时机" not in replacements:
-            if style_text:
-                info_timing_match = re.search(r'## 信息释放时机.*?(?=\n## |\Z)', style_text, re.DOTALL)
-                if info_timing_match:
-                    replacements["信息释放时机"] = info_timing_match.group(0).strip()
-                else:
-                    replacements["信息释放时机"] = "（信息释放时机未提取）"
-            else:
-                replacements["信息释放时机"] = "（文笔指纹未提取）"
-
-    # 注入风格类型（使用缓存）
-    replacements.setdefault("风格类型", _get_genre_text(config))
+        if "characters" not in replacements:
+            replacements["characters"] = _load_character_cards(config, chapter_num)
+        if "name_map" not in replacements:
+            replacements["name_map"] = _get_chapter_name_map(config, chapter_num)
+        if "world" not in replacements:
+            replacements["world"] = _get_world_text(config)
+        if "style" not in replacements:
+            style_text = _get_style_text_mapped(config, chapter_num)
+            replacements["style"] = style_text or "（风格未提取）"
 
     # 注入源书级产物（从 _cache/ 读取，使用缓存的映射版本）
     if chapter_num:
@@ -873,13 +872,13 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             if concept_path.exists():
                 concept_text = concept_path.read_text(encoding="utf-8")
                 # 提取全局结构
-                skel_match = re.search(r'##\s*(?:全局结构|剧情结构|三幕结构)\s*\n([\s\S]*?)(?=\n##|\Z)', concept_text, re.DOTALL)
+                skel_match = re.search(r'<structure>(.*?)</structure>', concept_text, re.DOTALL)
                 if skel_match:
                     skel_ctx = skel_match.group(1).strip()[:1000]
                 else:
                     skel_ctx = "（续写模式：请参考concept.md中的剧情结构）"
                 # 提取改写原则
-                adapt_match = re.search(r'##\s*(?:改写原则|改编原则|核心要素)\s*\n([\s\S]*?)(?=\n##|\Z)', concept_text, re.DOTALL)
+                adapt_match = re.search(r'<principles>(.*?)</principles>', concept_text, re.DOTALL)
                 if adapt_match:
                     adapt_pr = adapt_match.group(1).strip()[:1000]
                 else:
@@ -912,9 +911,9 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
                     skel_ctx = skel_ctx.replace(old_name, new_name)
                     adapt_pr = adapt_pr.replace(old_name, new_name)
 
-        replacements.setdefault("本章事件", ch_event)
-        replacements.setdefault("全局结构", skel_ctx)
-        replacements.setdefault("改写原则", adapt_pr)
+        replacements.setdefault("event", ch_event)
+        replacements.setdefault("structure", skel_ctx)
+        replacements.setdefault("principles", adapt_pr)
 
     # 注入角色行为卡片（写章时需要）
     if prompt_type == "write-chapter" and "角色行为卡片" not in replacements:
@@ -949,8 +948,8 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     # 不限制 max_tokens
     max_tokens = None
 
-    # === Debug: 保存最终发给 API 的完整 prompt ===
-    if config.get("debug") and chapter_num and chapter_num <= 3:
+    # === 保存 prompt 到 _debug/（每次调用都保存，不占token） ===
+    if chapter_num:
         debug_dump_prompt(config, prompt_type, chapter_num, prompt_path, system_prompt, user_prompt, sp_name, pc)
 
     # prompts_only: 只输出 prompt，不调 API
@@ -991,7 +990,7 @@ def process_plot_guide_output(config, chapter_num, ai_output):
         "目标字数_min": str(int(src_chars * 0.9)),
         "目标字数_max": str(int(src_chars * 1.1)),
         "作者名": config.get("author", ""),
-        "新书名": config.get("book_name", ""),
+        "新书名": Path(config.get("rewrites_dir", "")).name,
         "源书名": config.get("source_book", ""),
     }
     book_data = _get_book_data(config.get("rewrites_dir", ""))

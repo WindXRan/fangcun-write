@@ -27,6 +27,7 @@ from phases import (
     phase_postfix,
     phase_unified_review_fix,
 )
+from phases.compare import phase_compare
 
 
 # ─── 模型解析 ──────────────────────────────────────────────────────
@@ -78,6 +79,19 @@ def _post_process(config, goal):
         return
 
 
+def _auto_compare(config, start, end):
+    """写章后自动 compare 黄金章节（1-3, 1-10, 1-20）。"""
+    # 只 compare 在写章范围内的区间
+    checkpoints = [r for r in [(1, 3), (1, 10), (1, 20)] if r[0] >= start and r[1] <= end]
+    if not checkpoints:
+        return
+    for cs, ce in checkpoints:
+        try:
+            phase_compare(config, cs, ce)
+        except Exception as ex:
+            print(f"  [WARN] auto-compare ch{cs}-{ce} 失败: {ex}")
+
+
 def _print_report(t0, config):
     total = time.time() - t0
     p = Path(config.get("rewrites_dir", ""))
@@ -103,9 +117,10 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
     h = {}
 
     def _write_handler(cfg, s, e):
-        """写章 + 自动 postfix。"""
-        phase_write(cfg, s, e, cfg.get("workers", 30))
+        """写章 + 自动 postfix + 自动 compare（黄金章节）。"""
+        phase_write(cfg, s, e)
         phase_postfix(cfg, s, e)
+        _auto_compare(cfg, s, e)
 
     def _write_handler_agent(cfg, s, e):
         ok, fail = phase_write_agent(cfg, s, e, workers=cfg.get("workers", 10), state_mgr=state_mgr)
@@ -336,26 +351,28 @@ def main():
     config["_chapter_start"] = args.start
     config["_chapter_end"] = args.end
 
-    handlers = _build_handlers(config, state_mgr, config_path=args.config)
-    results, phase_errors = _run_phases(handlers, config, goal, args.start, args.end)
-
+    # book_name=auto 时，从 book_info.md 提取真实书名（在 phases 执行前）
     if config.get("book_name") == "auto":
         rewrites_dir = config.get("rewrites_dir", "")
         book_info_path = Path(rewrites_dir) / "settings" / "book_info.md"
+        if not book_info_path.exists():
+            book_info_path = Path(rewrites_dir) / "book_info.md"
         if book_info_path.exists():
-            import re
+            import re as _re
             content = book_info_path.read_text(encoding="utf-8")
-            m = re.search(r'^\s*(?:\d+\.|[-*])\s*[《](.+?)[》]', content, re.MULTILINE)
+            m = _re.search(r'^\s*(?:\d+\.|[-*])\s*[《](.+?)[》]', content, _re.MULTILINE)
             if m:
-                actual_name = m.group(1).strip()
-                config["book_name"] = actual_name
-                print(f"[AUTO] 从 book_info.md 提取书名: {actual_name}")
-                old_path = Path(rewrites_dir)
-                new_path = old_path.parent / actual_name
-                if old_path.exists() and not new_path.exists():
-                    old_path.rename(new_path)
-                    config["rewrites_dir"] = str(new_path)
-                    print(f"[OK] 目录重命名: {old_path} → {new_path}")
+                config["book_name"] = m.group(1).strip()
+                print(f"[AUTO] book_name: auto → {config['book_name']}")
+            else:
+                config["book_name"] = Path(rewrites_dir).name
+                print(f"[AUTO] book_name: auto → {config['book_name']} (from dir)")
+        else:
+            config["book_name"] = Path(rewrites_dir).name
+            print(f"[AUTO] book_name: auto → {config['book_name']} (from dir)")
+
+    handlers = _build_handlers(config, state_mgr, config_path=args.config)
+    results, phase_errors = _run_phases(handlers, config, goal, args.start, args.end)
 
     _post_process(config, goal)
     _print_report(t0, config)

@@ -1,6 +1,6 @@
 ﻿---
-version: 5
-changelog: Fix: 编辑反馈核心问题前置+角色能力/时间线/身份强制检查
+version: 6
+changelog: 迁移到XML标签格式
 type: user
 phase: unified
 description: 批量审稿
@@ -10,15 +10,20 @@ optional_vars: ["source_context"]
 defaults: {"reasoning_effort": "low", "temperature": 0.3}
 ---
 
+<role>
 你是资深网文编辑。请审稿以下 {count} 个章节，输出审稿意见。
+</role>
 
+<principles>
 ## 审核原则（从 fangcun-drama 迁移）
 
 1. **文件读取优先**：所有审核依据必须通过实际读取文件，不得凭记忆或上下文摘要审核
 2. **可执行优先**：标准是"能不能用"，不是"完不完美"
 3. **问题具体化**：每个问题指向具体位置和内容，不说"整体不够好"
 4. **建议多元化**：严重问题提供多个可选方案
+</principles>
 
+<scoring>
 ## 评分标准
 
 | 评分 | 严重问题 | 中等问题 |
@@ -27,13 +32,17 @@ defaults: {"reasoning_effort": "low", "temperature": 0.3}
 | B — 小修后可用 | 0 | ≤5 |
 | C — 需较大修改 | 1-2 | 不限 |
 | D — 建议重做 | ≥3 | 不限 |
+</scoring>
 
+<rules>
 ## 精简规则
 
 - 审核通过的项目不出现在报告中
 - 同类轻微问题合并为一行
 - B 级及以上省略「需要您决定」区块
+</rules>
 
+<critical_checks>
 ## 🔴 必须首先检查的3个致命问题（跳过其他也要查这个）
 
 ### 1. 角色身份一致性
@@ -55,7 +64,9 @@ defaults: {"reasoning_effort": "low", "temperature": 0.3}
 - 角色在A章展现了某种能力（如查账、危机处理），在B章却完全不具备该能力（如连基本时辰都不知道）
 - 角色的"会什么/不会什么"是否与设定一致？
 - **如果有波动 → 标记 character（严重度=high），要求统一能力边界**
+</critical_checks>
 
+<other_checks>
 ## 其他审稿维度
 
 4. AI痕迹：句首路标词、直抒情过滥、比喻堆砌
@@ -68,7 +79,9 @@ defaults: {"reasoning_effort": "low", "temperature": 0.3}
    - 思考过渡词：检查"顿了顿"、"停了停"、"愣了一下"出现次数。全章超过2次 → 标记为 ai_pattern（严重度=medium）
    - 情绪同质化：检查同一角色在不同场景的情绪反应是否雷同。如果同一情绪在3个以上场景用相同身体反应 → 标记为 ai_pattern（严重度=medium）
 10. **地点一致性**：检查正文中出现的地点是否在世界观设定内。如果出现设定外的地点 → 标记为 location（严重度=high）
+</other_checks>
 
+<density_checks>
 ## 三大密度审查（从 fangcun-drama 迁移）
 
 ### 情绪密度
@@ -85,7 +98,9 @@ defaults: {"reasoning_effort": "low", "temperature": 0.3}
 - 是否有因果锚定（上一情节的果是本事件的因）？
 - 是否有冲突驱动（核心冲突的动态变化）？
 - 是否有价值转变（主角核心处境/方向发生不可逆改变）？
+</density_checks>
 
+<output_format>
 ## 输出格式
 
 对每一章输出：
@@ -106,11 +121,16 @@ defaults: {"reasoning_effort": "low", "temperature": 0.3}
 ### 跨章问题
 
 - 涉及章节: 1,2,3 | 类型: continuity | 严重度: medium | 描述: 主角位置跳跃 | 修复: 在第2章开头加过渡
+</output_format>
 
+<chapters>
 ## 章节内容
 
 {chapters_text}
+</chapters>
 
+<source>
 ## 源文参考
 
 {source_context}
+</source>

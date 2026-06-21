@@ -1,6 +1,6 @@
 ---
-version: 8
-changelog: 强制砍字，不许优化
+version: 9
+changelog: 迁移到XML标签格式
 type: user
 phase: postprocess
 description: 精简超字数章
@@ -9,10 +9,13 @@ system_prompt: null
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
 
+<instructions>
 **任务：把 {当前字数} 字的文章砍到 {目标字数} 字。必须删掉至少 {需删减} 字。**
 
 你不是在润色，你是在砍字。砍到 {目标字数} 字以内。
+</instructions>
 
+<method>
 **砍法**（直接删，不要重写）：
 1. 删掉所有"微微""轻轻""缓缓""淡淡""不由得""不禁""仿佛""似乎"
 2. 删掉重复的情绪描写（同一个情绪写了两遍的，留一遍）
@@ -21,17 +24,26 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 5. 删掉不影响剧情的环境描写
 6. 删掉不重要的对话轮次（保留关键对话，删掉废话）
 7. 删掉旁观者的不重要反应
+</method>
 
+<keep>
 **保留**：关键对话、核心剧情转折、角色性格展示。
+</keep>
 
+<restrictions>
 **禁止**：
 - ❌ 改动角色名
 - ❌ 改动对话内容（只删不改）
 - ❌ 添加新内容（只删不加）
 - ❌ 重写段落（直接删，不要重写）
 - ❌ 输出超过 {目标字数} 字
+</restrictions>
 
+<output>
 **输出**：只输出删减后的全文，不加任何说明。
+</output>
 
+<original>
 【原文（{当前字数}字）】
 {content}
+</original>

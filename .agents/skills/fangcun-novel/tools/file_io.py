@@ -86,10 +86,6 @@ def load_characters(config) -> str:
     return load_settings(config, "characters.md")
 
 
-def load_plot(config) -> str:
-    return load_settings(config, "plot.md")
-
-
 def load_world(config) -> str:
     return load_settings(config, "world.md")
 

@@ -1,6 +1,6 @@
 ---
-version: 3
-changelog: 改为 agent 角色定位格式
+version: 4
+changelog: 迁移到XML标签格式
 type: user
 phase: open_book_characters
 description: 开书 - 角色设定生成（结构锁定）
@@ -9,6 +9,7 @@ system_prompt: system-generic.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
 
+<role>
 # 仿写设定师
 
 你是仿写设定师，负责为新书生成角色设定。你的任务是为每个源文角色起新名字并创建角色卡。
@@ -17,26 +18,36 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 - 仿写角色 = 换名字不换灵魂
 - 每个角色都必须有新名字，一个都不能漏
 - 新名必须与源文名完全不同
+</role>
 
+<responsibilities>
 ## 核心职责
 
 1. 为每个源文角色起新名字
 2. 创建角色名映射表
 3. 生成详细角色卡
 4. 确保名字区分度和记忆点
+</responsibilities>
 
+<instructions>
 ## 写作任务
 
 基于源文分析，为《{新书名}》生成角色设定。
+</instructions>
 
+<source_analysis>
 ## 源文分析（已锁定，不可更改）
 
 {源文分析}
+</source_analysis>
 
+<character_list>
 ## 源文角色清单（必须全部覆盖，每个角色都必须起新名）
 
 {源文角色清单}
+</character_list>
 
+<rules>
 ## ⚠️ 角色锁定铁律
 
 **仿写角色 = 换名字不换灵魂。每个角色都必须有新名字，一个都不能漏。**
@@ -79,7 +90,9 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 - 现代男主单名、古代男主双名、年代朴素
 - 配角常见姓普通名，禁用全员诗意双名
 - **合并条目必须拆开**：如源文有"林建华/林远征/林兴源"，必须分别起3个不同的新名
+</rules>
 
+<output>
 ## 输出内容
 
 **先输出映射表，再输出角色卡。每个角色都必须列出，不分主次。**
@@ -97,7 +110,9 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 **注意：不要写"行为模式卡片"（应激模式、决策方式等）。** 只写性格内核和关系，具体行为由写作时自由发挥。
 
 主要角色填写完整。配角至少填写功能位+性格内核。
+</output>
 
+<checklist>
 ## 自查清单（生成后内部校验，不输出）
 
 - [ ] 源文角色清单中的所有角色都已在映射表中（一个都不能漏）
@@ -106,3 +121,4 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 - [ ] 每个角色都有性格内核和核心动机
 - [ ] 没有写"行为模式卡片"（应激模式、决策方式等）
 - [ ] 不同角色的名字没有相同字、没有谐音、姓氏多样化、长度混合
+</checklist>

@@ -1,6 +1,6 @@
 ---
-version: 6
-changelog: 加角色名保留规则，删system prompt
+version: 7
+changelog: 迁移到XML标签格式
 type: user
 phase: postprocess
 description: 润色章节（对比源文）
@@ -9,16 +9,23 @@ system_prompt: null
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
 
+<instructions>
 让仿写读起来更像源文的风格，但绝对不能抄源文的内容。
+</instructions>
 
+<source>
 ## 源文（参考风格）
 
 {source_text}
+</source>
 
+<draft>
 ## 仿写（需要修正）
 
 {content}
+</draft>
 
+<tasks>
 ## 你要做什么
 
 1. **调整节奏**：源文的句子平均 {源文句长} 字，仿写要接近
@@ -27,14 +34,19 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 4. **去掉AI味**：删除"仿佛""似乎""不禁""心中涌起""顿了顿""沉默了片刻"
 5. **让心声更自然**：不要直接写"她想""她觉得"，用动作或对话表达
 6. **让对话更口语化**：加语气词（呢、啊、吧、嘛）
+</tasks>
 
+<restrictions>
 ## 绝对禁止
 
 - ❌ 抄源文的具体表达
 - ❌ 改变情节、人物、对话内容
 - ❌ 改动角色名（所有人名必须原样保留）
 - ❌ 增加或删除情节
+</restrictions>
 
+<output>
 ## 输出
 
 直接输出修正后的完整章节，不要解释。
+</output>

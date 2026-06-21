@@ -14,7 +14,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import _path_setup  # noqa: F401
 from utils import get_source_text
 from lib.text_metrics import count_style_fingerprint, format_style_anchors
-from prompt_meta import load_system_prompt, load_prompt_str, get_system_prompt_name, safe_format
+from prompt_meta import load_system_prompt, load_prompt_str, get_system_prompt_name, get_prompt_config_with_overrides, safe_format
 
 
 def _text_hash(text):
@@ -23,23 +23,22 @@ def _text_hash(text):
 
 
 def _cache_valid(styles_dir, ch, src_text):
-    """检查缓存是否有效：文件存在 + 哈希匹配 + LLM 分析存在。"""
+    """检查缓存是否有效：文件存在 + 哈希匹配 + LLM 风格 + 结构。"""
     f = styles_dir / f"style_{ch:03d}.md"
     if not f.exists():
         return False
     content = f.read_text(encoding="utf-8")
-    # 检查哈希标记 <!-- hash: xxx -->
     if "<!-- hash:" in content:
         cached_hash = content.split("<!-- hash:")[1].split("-->")[0].strip()
         if cached_hash != _text_hash(src_text):
             return False
     else:
-        return False  # 旧格式无哈希，视为无效
+        return False
     
-    # 检查 LLM 分析是否存在
-    llm_f = styles_dir / f"style_{ch:03d}_llm.md"
-    if not llm_f.exists():
-        return False  # LLM 分析不存在，需要重新运行
+    if not (styles_dir / f"style_{ch:03d}_llm.md").exists():
+        return False
+    if not (styles_dir / f"structure_{ch:03d}.md").exists():
+        return False
     
     return True
 
@@ -169,13 +168,6 @@ def _llm_one(config, ch, styles_dir):
 
     fp = count_style_fingerprint(text)
     anchors = format_style_anchors(fp)
-
-    # Debug: check which prompt_meta is being used
-    import prompt_meta as _pm
-    if not hasattr(_pm, '_DEBUG_printed'):
-        print(f"  [DEBUG] prompt_meta file: {_pm.__file__}")
-        print(f"  [DEBUG] PROMPTS_DIR: {_pm.PROMPTS_DIR}")
-        _pm._DEBUG_printed = True
     
     prompt_template = load_prompt_str("style-analyze.md")
     if not prompt_template:
@@ -208,7 +200,7 @@ def _llm_one(config, ch, styles_dir):
 
 
 def _write_md(styles_dir, ch, anchor=None, analysis=None, src_text=None):
-    """分开写入：算法锚点 → style_{N}.md，LLM 分析 → style_{N}_llm.md。"""
+    """提取 XML 标签，直接写文件。不解析内容。"""
     # 算法锚点
     if anchor:
         f = styles_dir / f"style_{ch:03d}.md"
@@ -218,11 +210,57 @@ def _write_md(styles_dir, ch, anchor=None, analysis=None, src_text=None):
         content += "\n" + anchor.strip() + "\n"
         f.write_text(content, encoding="utf-8")
     
-    # LLM 分析（单独文件）
-    if analysis:
-        f_llm = styles_dir / f"style_{ch:03d}_llm.md"
-        content = f"# 第{ch}章 LLM 风格分析\n\n" + analysis.strip() + "\n"
-        f_llm.write_text(content, encoding="utf-8")
+    if not analysis:
+        return
+    
+    # 提取 XML 标签内容
+    def _extract(tag):
+        m = re.search(rf'<{tag}>(.*?)</{tag}>', analysis, re.DOTALL)
+        return m.group(1).strip() if m else ""
+    
+    style = _extract("style")
+    structure = _extract("structure")
+    blacklist = _extract("blacklist")
+    
+    # 写风格文件
+    if style:
+        f = styles_dir / f"style_{ch:03d}_llm.md"
+        f.write_text(f"# 第{ch}章 风格分析\n\n{style}\n", encoding="utf-8")
+    
+    # 写结构文件
+    if structure:
+        f = styles_dir / f"structure_{ch:03d}.md"
+        f.write_text(f"# 第{ch}章 结构约束\n\n{structure}\n", encoding="utf-8")
+    
+    # 写黑名单（增量）
+    if blacklist:
+        _append_blacklist(styles_dir / "blacklist.md", ch, blacklist)
+
+
+def _append_blacklist(bl_path, ch, raw_text):
+    """增量追加黑名单（直接写原始文本，不解析）。"""
+    import platform
+    
+    # 去重检查：如果本章已写入，跳过
+    if bl_path.exists():
+        existing = bl_path.read_text(encoding="utf-8")
+        if f"来源: 第{ch}章" in existing:
+            return
+    
+    with open(bl_path, 'a', encoding='utf-8') as f:
+        if platform.system() != 'Windows':
+            import fcntl
+            fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+        try:
+            if not bl_path.stat().st_size:
+                f.write("# 全书级黑名单\n\n")
+                f.write("> 以下元素在仿写中不可复用（包括同义替换）。\n\n")
+            f.write(f"<!-- 来源: 第{ch}章 -->\n")
+            f.write(raw_text.strip() + "\n\n")
+        finally:
+            if platform.system() != 'Windows':
+                import fcntl
+                fcntl.flock(f.fileno(), fcntl.LOCK_UN)
 
 
 def load_style_text(config, ch):
@@ -251,4 +289,26 @@ def load_style_text(config, ch):
     if local.exists():
         return local.read_text(encoding="utf-8")
     return None
+
+
+def load_chapter_structure(config, ch):
+    """加载 per-chapter structure_{N}.md + 全书 blacklist.md（给 plot-guide 用）。"""
+    source_book = config.get("source_book", "")
+    author = config.get("author", "")
+    base_dir = config.get("base_dir", os.getcwd())
+    styles_dir = Path(base_dir) / "projects" / author / source_book / "_cache" / "styles"
+    
+    parts = []
+    
+    # 全书黑名单
+    bl_path = styles_dir / "blacklist.md"
+    if bl_path.exists():
+        parts.append(bl_path.read_text(encoding="utf-8"))
+    
+    # 本章场景功能
+    f = styles_dir / f"structure_{ch:03d}.md"
+    if f.exists():
+        parts.append(f.read_text(encoding="utf-8"))
+    
+    return "\n\n".join(parts) if parts else None
 
