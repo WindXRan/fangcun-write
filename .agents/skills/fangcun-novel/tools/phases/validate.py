@@ -279,6 +279,31 @@ def validate_one(config, ch):
         elif ratio > 1.3 or ratio < 0.7:
             warnings.append(f"句长标准差偏离 {metrics['sent_len_stddev']} (源文{src['sent_len_stddev']})")
 
+    # 6.5 风格指纹对比（对话比/段长/情绪密度）
+    if src_text:
+        from lib.text_metrics import count_style_fingerprint
+        src_fp = count_style_fingerprint(src_text)
+        our_fp = count_style_fingerprint(text)
+        
+        # 对话比检查（源文±30%以内）
+        if src_fp.get("dialogue_ratio") and src_fp["dialogue_ratio"] > 0:
+            ratio = our_fp.get("dialogue_ratio", 0) / src_fp["dialogue_ratio"]
+            if ratio > 1.3 or ratio < 0.7:
+                warnings.append(f"对话比偏离 {our_fp.get('dialogue_ratio',0):.0%} (源文{src_fp['dialogue_ratio']:.0%}, ±30%界限)")
+        
+        # 段长检查（源文±40%以内）
+        if src_fp.get("paragraph_avg_len") and src_fp["paragraph_avg_len"] > 0:
+            ratio = our_fp.get("paragraph_avg_len", 0) / src_fp["paragraph_avg_len"]
+            if ratio > 1.4 or ratio < 0.6:
+                warnings.append(f"段长偏离 {our_fp.get('paragraph_avg_len',0):.0f}字 (源文{src_fp['paragraph_avg_len']:.0f}字, ±40%界限)")
+        
+        # 情绪词密度检查（源文±50%以内）
+        if src_fp.get("emotion_density") and src_fp["emotion_density"] > 0:
+            our_density = our_fp.get("emotion_density", 0)
+            ratio = our_density / src_fp["emotion_density"]
+            if ratio > 1.5 or ratio < 0.5:
+                warnings.append(f"情绪词密度偏离 {our_density:.1f}/千字 (源文{src_fp['emotion_density']:.1f}/千字)")
+
     # 7. 台词抄袭检测（连续8字以上与源文重合 + 结构性抄袭）
     if src_text:
         from lib.plagiarism import find_plagiarism, check_structural_plagiarism

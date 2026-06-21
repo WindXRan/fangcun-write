@@ -1,6 +1,6 @@
 ---
-version: 3
-changelog: 用具体锚点教 LLM 控制字数
+version: 4
+changelog: 改为 agent 角色定位格式
 type: user
 phase: postprocess
 description: 精简超字数章
@@ -8,6 +8,24 @@ required_vars: ["目标字数", "内容", "N", "N03d"]
 system_prompt: system-generic.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
+
+# 仿写精简师
+
+你是仿写精简师，负责精简超字数的章节。你的任务是在保持核心剧情的前提下，删除冗余内容。
+
+**核心原则：**
+- 保留所有关键对话、核心剧情转折、角色性格展示
+- 删除重复描写、过度修饰、内心独白已用动作表达的部分
+- 压缩过渡描写
+
+## 核心职责
+
+1. 分析原文结构
+2. 识别可删减内容
+3. 精简到目标字数
+4. 保留核心剧情
+
+## 写作任务
 
 把下面的章节精简到 **{目标字数}个汉字** 以内。
 

@@ -8,13 +8,27 @@ LLM 分析: style-analyze prompt — 正反面写法规则
 
 import re
 import math
+import hashlib
 from .constants import AI_MARKER_PATTERN, METAPHOR_PATTERN, DIRECT_EMOTION_PATTERN
 
 PRONOUN_PATTERN = r'[她他它]'
 
+# 模块级缓存：metrics 计算结果 {text_hash: result}
+_metrics_cache = {}
+_fingerprint_cache = {}
+
+
+def _text_hash(text):
+    """文本内容哈希（用于缓存键）。"""
+    return hashlib.md5(text[:5000].encode("utf-8")).hexdigest()[:16]
+
 
 def count_metrics(text):
-    """统计文本的量化指标（用于算法审查）。"""
+    """统计文本的量化指标（用于算法审查）。带缓存。"""
+    text_key = _text_hash(text)
+    if text_key in _metrics_cache:
+        return _metrics_cache[text_key]
+    
     body = _strip_title(text)
     clean = re.sub(r'\s', '', body)
     total = max(len(clean), 1)
@@ -69,7 +83,7 @@ def count_metrics(text):
             seen.add(t)
     repeat_density = round(repeat_count / max(total, 1) * 1000, 2)
 
-    return {
+    result = {
         "chars": total,
         "dash": body.count('——'),
         "metaphor": len(re.findall(METAPHOR_PATTERN, body)),
@@ -85,14 +99,21 @@ def count_metrics(text):
         "para_stddev": para_stddev,
         "repeat_density": repeat_density,
     }
+    
+    _metrics_cache[text_key] = result
+    return result
 
 
 def count_style_fingerprint(text):
-    """段落为核心的风格指纹。
+    """段落为核心的风格指纹。带缓存。
 
     返回: {chars, dialogue_ratio, paragraph_avg_len, single_sent_ratio,
-           avg_sent_per_para, pronoun_density, ttr, punct_style, opening_type, closing_type}
+           avg_sent_per_para, pronoun_density, ttr, punct_style, opening_ratios, emotion_density, tag_diversity}
     """
+    text_key = _text_hash(text)
+    if text_key in _fingerprint_cache:
+        return _fingerprint_cache[text_key]
+    
     body = _strip_title(text)
     clean = re.sub(r'\s', '', body)
     total = max(len(clean), 1)
@@ -131,7 +152,39 @@ def count_style_fingerprint(text):
     # 标点指纹
     punct = _classify_punct(body, total)
 
-    return {
+    # 句首词分布（防 AI：AI 倾向于用代词/人名开头，句式单调）
+    sents = re.split(r'[。！？!?\n]', body)
+    opening_types = {"人名": 0, "代词": 0, "环境": 0, "动作": 0, "对话": 0, "其他": 0}
+    for s in sents:
+        s = s.strip()
+        if not s or len(s) < 2:
+            continue
+        if re.match(r'^[「""\u201c\u201d\'\u2018\u2019]', s):
+            opening_types["对话"] += 1
+        elif re.match(r'^[她他它她们他们它们]', s):
+            opening_types["代词"] += 1
+        elif re.match(r'^[A-Za-z\u4e00-\u9fa5]{1,4}(?:说|道|问|喊|答|叫|骂|吼|嚷|喝|笑|怒|叹|冷)', s):
+            opening_types["人名"] += 1
+        elif re.match(r'^[在从到当随着趁着沿着]', s):
+            opening_types["环境"] += 1
+        elif re.match(r'^[一赶忙急紧慌忙]', s):
+            opening_types["动作"] += 1
+        else:
+            opening_types["其他"] += 1
+    total_openings = sum(opening_types.values()) or 1
+    opening_ratios = {k: round(v / total_openings, 2) for k, v in opening_types.items()}
+
+    # 情绪词密度（每千字）
+    emotion_words = re.findall(r'哭|泪|笑|怒|恨|怕|慌|急|痛|甜|暖|冷|空|惊|惧|羞|恼|怨|悲|喜|乐|忧|愁|焦虑|恐惧|愤怒|悲伤|欢喜|开心|难过|心疼|心酸|心痛', body)
+    emotion_density = round(len(emotion_words) / total * 1000, 1)
+
+    # 对话标签种类数（多样性指标）
+    tag_types = set()
+    for m in re.finditer(r'[」""\u201c\u201d]\s*[\u4e00-\u9fff]{0,4}(说|道|问|答|喊|叫|骂|吼|嚷|喝|笑|怒|叹|冷声|嘟囔|嘀咕|嘀咕|冷笑|苦笑|微笑|大笑|轻笑|哼道|嚷道|喝道|吼道|骂道|喊道|答道|问道|说道)', body):
+        tag_types.add(m.group(1))
+    tag_diversity = len(tag_types)
+
+    result = {
         "chars": total,
         "dialogue_ratio": dia_ratio,
         "paragraph_avg_len": para_avg,
@@ -141,7 +194,13 @@ def count_style_fingerprint(text):
         "pronoun_density": pronoun_density,
         "ttr": ttr,
         "punct_style": punct,
+        "opening_ratios": opening_ratios,
+        "emotion_density": emotion_density,
+        "tag_diversity": tag_diversity,
     }
+    
+    _fingerprint_cache[text_key] = result
+    return result
 
 
 def format_style_anchors(fp):
@@ -161,6 +220,14 @@ def format_style_anchors(fp):
         parts.append(f"词汇丰富度{fp['ttr']:.2f}")
     if fp.get("punct_style"):
         parts.append(fp["punct_style"])
+    # 新增维度
+    if fp.get("opening_ratios"):
+        ors = fp["opening_ratios"]
+        parts.append(f"句首:代词{ors.get('代词',0):.0%}/人名{ors.get('人名',0):.0%}/环境{ors.get('环境',0):.0%}")
+    if fp.get("emotion_density") is not None:
+        parts.append(f"情绪词{fp['emotion_density']}/千字")
+    if fp.get("tag_diversity"):
+        parts.append(f"对话标签{fp['tag_diversity']}种")
     return '，'.join(parts)
 
 
@@ -196,3 +263,10 @@ def get_body_chars(text):
     if not text:
         return 0
     return len(re.sub(r'\s', '', _strip_title(text)))
+
+
+def clear_metrics_cache():
+    """清除 metrics 缓存（用于测试或内存清理）。"""
+    global _metrics_cache, _fingerprint_cache
+    _metrics_cache.clear()
+    _fingerprint_cache.clear()

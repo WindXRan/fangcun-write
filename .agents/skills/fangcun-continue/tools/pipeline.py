@@ -37,10 +37,8 @@ def load_config(config_path):
     with open(config_path, 'r', encoding='utf-8') as f:
         config = json.load(f)
     
-    # 自动检测 base_dir（如果未指定）
-    if "base_dir" not in config:
-        # 从 config_path 推断：.agents/skills/fangcun-continue/config/xxx.json -> 项目根目录
-        config["base_dir"] = str(Path(config_path).parent.parent.parent.parent.parent)
+    # 默认 base_dir 为当前工作目录（与 fangcun-novel 一致）
+    config.setdefault("base_dir", os.getcwd())
     
     return config
 
@@ -168,7 +166,7 @@ def _extract_relationships(events):
 
 
 def _extract_ending_state(events, ending_text):
-    """提取结局状态"""
+    """提取结局状态（只提取原始数据，角色状态由LLM智能分析）"""
     last_events = events[-3:] if len(events) >= 3 else events
     
     lines = ["# 结局状态\n"]
@@ -178,6 +176,18 @@ def _extract_ending_state(events, ending_text):
         parts = event_text.split("|")
         if len(parts) >= 4:
             lines.append(f"- **{parts[1].strip()}**: {parts[3].strip()}")
+    
+    # 提取包含关键词的事件（供LLM分析角色状态）
+    lines.append("\n## 关键事件（供LLM分析角色状态）\n")
+    keywords = ["高考", "出分", "升学宴", "开学报到", "大学毕业", "工作", "结婚"]
+    for event in events:
+        event_text = event.get("event", "")
+        for keyword in keywords:
+            if keyword in event_text:
+                parts = event_text.split("|")
+                if len(parts) >= 4:
+                    lines.append(f"- **{parts[1].strip()}**: {parts[3].strip()}")
+                break
     
     lines.append("\n## 结局原文摘要\n")
     lines.append(ending_text[:800] if ending_text else "（无）")
@@ -250,11 +260,35 @@ def phase_plan(config):
 def _generate_plans(config, characters, relationships, ending_state, plot_lines):
     """生成续写方案"""
     source_book = config.get("source_book", "")
+    base_dir = config.get("base_dir", ".")
+    author = config.get("author", "")
     
-    prompt = f"""你是一个专业的小说策划。基于以下小说分析，设计3个续写方案（第二部）。
+    # 读取plan.md模板
+    prompts_dir = Path(__file__).parent.parent / "prompts"
+    plan_template_path = prompts_dir / "plan.md"
+    if plan_template_path.exists():
+        plan_template = plan_template_path.read_text(encoding='utf-8')
+        # 去掉frontmatter
+        import re
+        plan_template = re.sub(r'^---.*?---\s*', '', plan_template, flags=re.DOTALL)
+    else:
+        plan_template = "设计3个续写方案。"
+    
+    # 读取story_skeleton.md（故事核、人物小传、三幕结构）
+    story_skeleton = ""
+    skeleton_path = Path(base_dir) / "projects" / author / source_book / "_cache" / "story_skeleton.md"
+    if skeleton_path.exists():
+        story_skeleton = skeleton_path.read_text(encoding='utf-8')
+        print(f"  [OK] 读取 story_skeleton.md")
+    
+    # 构建prompt
+    prompt = f"""{plan_template}
 
 ## 原著信息
 - 书名：《{source_book}》
+
+## 原著故事核、人物小传、三幕结构（必须参考）
+{story_skeleton[:3000]}
 
 ## 原著角色库
 {characters[:1500]}
@@ -263,73 +297,16 @@ def _generate_plans(config, characters, relationships, ending_state, plot_lines)
 {relationships[:800]}
 
 ## 原著结局状态
-{ending_state[:800]}
+{ending_state[:1500]}
 
 ## 原著情节线（部分）
-{plot_lines[:1000]}
-
-## 续写设计原则
-
-**第一步：分析原作**
-从以上信息中提取：
-- 原作的核心卖点是什么？
-- 原作的情感基调是什么？（治愈/热血/虐心/搞笑...）
-- 原作的主要冲突类型是什么？（家庭/职场/校园/奇幻...）
-- 原作的读者群体是谁？
-
-**第二步：设计方案**
-基于分析结果，设计3个续写方案：
-- 延续原作的核心卖点和情感基调
-- 冲突类型与原作一致（不要擅自改变）
-- 新角色符合原作的世界观
-- 情感线发展方向与原作一致
-
-**第三步：输出格式**
-
-每个方案包含：
-1. **书名**（5-10字，符合原作风格）
-2. **核心卖点分析**（一句话，原作为什么好看）
-3. **续写冲突**（一句话，延续原作的冲突类型）
-4. **时间跳跃**（多久后？为什么？）
-5. **新角色**（2-3个，符合原作世界观）
-6. **情感线发展**（与原作基调一致）
-7. **高潮设计**（至少3个高潮点）
-8. **预期章数**（150-200章，总字数30-60万字）
-
-请用以下格式输出：
-
----
-## 方案一：《书名》
-
-**核心卖点：** ...
-
-**续写冲突：** ...
-
-**时间跳跃：** ...
-
-**新角色：**
-- 角色A：...
-- 角色B：...
-
-**情感线：** ...
-
-**高潮设计：**
-1. ...
-2. ...
-3. ...
-
-**预期章数：** ...
-
----
-## 方案二：《书名》
-...
----
+{plot_lines[:1500]}
 """
     
     try:
         result = call_llm(config, "plan", prompt, 
-                         system_prompt="你是一个专业的小说策划。你必须基于原作的风格和卖点来设计续写，不要擅自改变原作的基调。输出简洁有力，不要废话。",
-                         max_tokens=4096)
+                         system_prompt="你是一个专业的小说策划。你必须基于原作的故事核、人物小传、三幕结构来设计续写，保持原作的核心爽点（归属）、金手指（高情商+强执行力）、情绪基调（轻松搞笑）。不要擅自改变原作的风格。输出简洁有力，不要废话。",
+                         max_tokens=8192)
         
         # 解析方案
         plans = []

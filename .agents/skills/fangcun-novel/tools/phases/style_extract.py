@@ -167,7 +167,7 @@ def _llm_one(config, ch, styles_dir):
         print(f"  [STYLE] ch{ch:03d} err: style-analyze.md 不存在")
         return False
 
-    prompt = safe_format(prompt_template, {"chapter_text": text[:3000], "style_anchors": anchors})
+    prompt = safe_format(prompt_template, {"chapter_text": text[:8000], "style_anchors": anchors})
 
     sp_name = get_system_prompt_name("style-analyze.md") or "system-generic.md"
     if config.get("debug") and ch <= 3:

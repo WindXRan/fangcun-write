@@ -595,48 +595,57 @@ def phase_open_book(config, state_mgr=None):
     replacements_stage2_with_chars["角色名映射"] = char_names_text
     replacements_stage2_with_chars["characters.md内容"] = characters_content[:3000]
 
-    agents = [
-        ("open-book-bookinfo.md",    "bookInfo",    "book_info.md"),
-        ("open-book-world.md",       "world",       "world.md"),
-        ("open-book-plot.md",        "plot",        "plot.md"),
-        ("open-book-concept.md",     "concept",     "concept.md"),
-    ]
+    # 使用合并后的 open-book-settings.md 一次生成所有设定
+    try:
+        user_prompt = load_prompt(
+            f"{prompts_dir}/open-book-settings.md",
+            base_dir, replacements_stage2_with_chars, mode="api",
+            rewrites_dir=config.get("rewrites_dir"),
+        )
+        sp_name = get_system_prompt_name("open-book-settings.md") or "system-generic.md"
+        system_prompt = load_system_prompt(sp_name) or ""
 
-    def run_setting_agent(prompt_file, xml_tag, output_file):
-        try:
-            user_prompt = load_prompt(
-                f"{prompts_dir}/{prompt_file}",
-                base_dir, replacements_stage2_with_chars, mode="api",
-                rewrites_dir=config.get("rewrites_dir"),
-            )
-            sp_name = get_system_prompt_name(prompt_file) or "system-generic.md"
-            system_prompt = load_system_prompt(sp_name) or ""
-            system_prompt += f"\n\n你必须使用如下XML格式输出全部内容：\n<{xml_tag}>内容</{xml_tag}>"
+        result = call_llm(config, "open-book-settings", user_prompt, system_prompt)
 
-            result = call_llm(config, prompt_file.replace(".md", ""), user_prompt, system_prompt)
+        # 从结果中提取各部分内容
+        import re
+        
+        # 提取世界观设定
+        world_match = re.search(r'(?:## 世界观设定|### 世界观设定)(.*?)(?=## 剧情设定|### 剧情设定|\Z)', result, re.DOTALL)
+        world_content = world_match.group(1).strip() if world_match else ""
+        
+        # 提取剧情设定
+        plot_match = re.search(r'(?:## 剧情设定|### 剧情设定)(.*?)(?=## 书籍信息|### 书籍信息|\Z)', result, re.DOTALL)
+        plot_content = plot_match.group(1).strip() if plot_match else ""
+        
+        # 提取书籍信息
+        bookinfo_match = re.search(r'(?:## 书籍信息|### 书籍信息)(.*?)$', result, re.DOTALL)
+        bookinfo_content = bookinfo_match.group(1).strip() if bookinfo_match else ""
+        
+        # 提取概念（从书籍信息中提取定位+策略+卖点）
+        concept_match = re.search(r'(?:### 定位|定位)(.*?)(?=### 赛道表|\Z)', result, re.DOTALL)
+        concept_content = concept_match.group(1).strip() if concept_match else ""
+        if not concept_content:
+            # 如果没有单独的定位部分，从整个结果中提取
+            concept_content = f"# 概念\n\n{result[:1000]}"
 
-            m = re.search(rf"<{xml_tag}[^>]*>([\s\S]*?)</{xml_tag}>", result)
-            content = m.group(1).strip() if m else result.strip()
-
-            full_path = rewrites_dir / output_file
-            atomic_write_text(full_path, content)
-            print(f"  [OK] {output_file}")
-            return output_file, content
-        except Exception as e:
-            print(f"  [FAIL] {output_file}: {e}")
-            return output_file, None
-
-    from concurrent.futures import ThreadPoolExecutor, as_completed
-    book_info_content = None
-    with ThreadPoolExecutor(max_workers=4) as executor:
-        futures = {
-            executor.submit(run_setting_agent, pf, tag, out): out
-            for pf, tag, out in agents
-        }
-        for future in as_completed(futures):
-            output_file, content = future.result()
-            if output_file == "book_info.md" and content:
-                book_info_content = content
+        # 保存到文件
+        atomic_write_text(rewrites_dir / "world.md", world_content)
+        print(f"  [OK] world.md")
+        
+        atomic_write_text(rewrites_dir / "plot.md", plot_content)
+        print(f"  [OK] plot.md")
+        
+        atomic_write_text(rewrites_dir / "book_info.md", bookinfo_content)
+        print(f"  [OK] book_info.md")
+        
+        atomic_write_text(rewrites_dir / "concept.md", concept_content)
+        print(f"  [OK] concept.md")
+        
+        book_info_content = bookinfo_content
+    except Exception as e:
+        print(f"  [FAIL] open-book-settings: {e}")
+        book_info_content = None
 
     # === Stage 2.5: 拆分角色卡 + 补全未改名角色 ===
     _split_character_cards(rewrites_dir)

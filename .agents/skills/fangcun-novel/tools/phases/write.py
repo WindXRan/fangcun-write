@@ -10,6 +10,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from utils import count_source_chars, batch_run, get_source_text
 
 # 添加 fangcun-write 到 path
+# phases/ → tools/ → fangcun-novel/ → skills/ → fangcun-write/tools
 _WRITER_ENGINE = Path(__file__).parent.parent.parent.parent / "fangcun-write" / "tools"
 sys.path.insert(0, str(_WRITER_ENGINE))
 
