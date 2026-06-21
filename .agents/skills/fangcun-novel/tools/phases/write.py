@@ -207,14 +207,15 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
             write_config = {**write_cfg, "rewrites_dir": str(Path(chapters_dir).parent)}
             result = writer.write_chapter(write_config, ch, auto_fix=True)
             if result:
-                # 写完立刻 trim（如果超 3000 字）
+                # 先保存写章结果
+                ch_file.parent.mkdir(parents=True, exist_ok=True)
+                ch_file.write_text(result, encoding='utf-8')
+                # 再 trim（如果超 3000 字）
                 chars = len(re.sub(r'\s', '', result))
                 if chars > 3000:
                     trim_result = writer.trim_chapter(write_config, ch)
                     if trim_result:
-                        result = trim_result
-                ch_file.parent.mkdir(parents=True, exist_ok=True)
-                ch_file.write_text(result, encoding='utf-8')
+                        ch_file.write_text(trim_result, encoding='utf-8')
                 if state_mgr:
                     state_mgr.chapter_completed(ch)
             return ch, True, None
