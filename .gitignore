@@ -44,6 +44,9 @@ temp_*
 [0-9]*/status.json
 [0-9]*/downloaded_chapters.jsonl
 
+# === 插件目录 ===
+.agents/plugins/
+
 # === novel-download 临时目录 ===
 .claude/skills/novel-download/downloads/
 .claude/skills/novel-download/logs/

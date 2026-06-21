@@ -1,2 +1,0 @@
-C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\.agents\skills\story-web\tools\scrape_fanqie_ranks.py:176: SyntaxWarning: invalid escape sequence '\d'
-  extract_js = """
