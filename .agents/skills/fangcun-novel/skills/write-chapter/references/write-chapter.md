@@ -1,6 +1,6 @@
 ---
-version: 30
-changelog: 输出格式改为XML，postfix解析XML
+version: 29
+changelog: 删指标约束，改为写法指令
 type: user
 phase: write
 description: 写章
@@ -53,7 +53,7 @@ defaults: {"reasoning_effort": "low", "temperature": 1.0}
 **角色名必须与角色约束一致** — 不能改名、不能用源文名
 
 ## 字数
-{目标字数}字（{目标字数_min}~{目标字数_max}）。
+{目标字数}字（{目标字数_min}~{目标字数_max}）。末尾加 `【字数：XXX字】`。
 
 ## 角色约束
 {角色约束}
@@ -72,19 +72,3 @@ defaults: {"reasoning_effort": "low", "temperature": 1.0}
 
 ## 输出路径
 projects/{作者名}/{源书名}/rewrites/{新书名}/chapters/ch_{N}.txt
-
-## 输出格式（必须严格遵守）
-
-用XML标签包裹输出，不要输出任何标签外的内容：
-
-```
-<chapter>
-<title>第{N}章 [章名]</title>
-<content>
-正文第一段...
-
-正文第二段...
-</content>
-<wordcount>实际字数</wordcount>
-</chapter>
-```

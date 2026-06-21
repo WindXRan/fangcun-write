@@ -662,45 +662,32 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         # 注入世界观（使用缓存）
         if "世界观" not in replacements:
             replacements["世界观"] = _get_world_text(config)
-        # 注入源文（用于风格模仿，替换角色名）
+        # 注入源文（用于风格模仿，替换角色名，截断到1000字避免写太长）
         source_text = get_source_text(config, chapter_num)
         if source_text:
             name_map = _build_name_map(config)
             if name_map:
                 for old_name, new_name in name_map.items():
                     source_text = source_text.replace(old_name, new_name)
+            # 截断到1000字
+            if len(source_text) > 1000:
+                source_text = source_text[:1000] + "\n\n（源文已截断，只供风格参考）"
             replacements["源文参考"] = source_text
         else:
             replacements["源文参考"] = "（源文读取失败）"
-        # 源文风格指标（使用缓存的风格指纹）
-        fp = _get_style_fingerprint(config, chapter_num)
-        if fp:
-            replacements["源文段长"] = str(int(fp.get("paragraph_avg_len", 40)))
-            replacements["源文单句段比例"] = str(int(fp.get("single_sent_ratio", 0.5) * 100))
-            replacements["源文对话比"] = str(int(fp.get("dialogue_ratio", 0.1) * 100))
-            replacements["源文代词密度"] = str(fp.get("pronoun_density", 15))
-            replacements["源文标点"] = fp.get("punct_style", "标点克制")
-            
-            # 注入文笔指纹（使用缓存的映射版本）
-            style_text = _get_style_text_mapped(config, chapter_num)
-            if style_text:
-                replacements["文笔指纹"] = style_text
-                
-                # 提取"信息释放时机"段落（单独注入）
-                info_timing_match = re.search(r'## 信息释放时机.*?(?=\n## |\Z)', style_text, re.DOTALL)
-                if info_timing_match:
-                    replacements.setdefault("信息释放时机", info_timing_match.group(0).strip())
-                else:
-                    replacements.setdefault("信息释放时机", "（信息释放时机未提取）")
+        # 注入写法指令（从 style-analyze 输出）
+        style_text = _get_style_text_mapped(config, chapter_num)
+        if style_text:
+            replacements["文笔指纹"] = style_text
+            # 提取"信息释放时机"段落（单独注入）
+            info_timing_match = re.search(r'## 信息释放时机.*?(?=\n## |\Z)', style_text, re.DOTALL)
+            if info_timing_match:
+                replacements.setdefault("信息释放时机", info_timing_match.group(0).strip())
             else:
-                replacements["文笔指纹"] = "（文笔指纹未提取）"
+                replacements.setdefault("信息释放时机", "（信息释放时机未提取）")
         else:
-            replacements["源文段长"] = "40"; replacements["源文单句段比例"] = "50"
-            replacements["源文对话比"] = "10"; replacements["源文代词密度"] = "15"
-            replacements["源文标点"] = "标点克制"
-            replacements["源文高光"] = ""
-            replacements["文笔指纹"] = "（源文读取失败）"
-            replacements.setdefault("信息释放时机", "（源文读取失败）")
+            replacements["文笔指纹"] = "（写法指令未提取）"
+            replacements.setdefault("信息释放时机", "（写法指令未提取）")
 
     # 注入风格类型（使用缓存）
     replacements.setdefault("风格类型", _get_genre_text(config))
