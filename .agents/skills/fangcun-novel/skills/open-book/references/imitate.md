@@ -87,62 +87,73 @@
 
 ### concept.md
 
-```
-# {新书名} 设定
+```xml
+<concept>
+<title>{新书名} 设定</title>
 
-## 风格类型
+<style_type>
 {与源文一致}
+</style_type>
 
-## 定位
+<positioning>
 {与源文同赛道}
+</positioning>
 
-## 核心卖点
+<selling_point>
 {与源文同构}
+</selling_point>
 
-## 策略
+<strategy>
 换壳保骨
+</strategy>
 
-## 改写原则
+<writing_principles>
 {改写原则}
+</writing_principles>
+</concept>
 ```
 
 ### characters.md
 
-```
-# 角色设定
-
-## 角色名映射表
-
+```xml
+<characters>
+<name_mapping>
 | 源文名 | 新名 | 性别 | 功能位 | 出场次数 |
 |--------|------|------|--------|----------|
 | {源文角色} | {新名} | {性别} | {功能位} | {次数} |
+</name_mapping>
 
-## 角色卡
-
+<character_cards>
 【{新角色名}】（源文对应：{源文角色名}）
 - 基本信息：年龄{X}岁，身份{学生/职场人/家长等}，职业/学校{具体信息}
 - 功能位：{与源文一致}
 - 性格内核：{2-3句话描述性格本质}
 - 核心动机：{他/她最想要什么}
 - 关系：{与主角/其他角色的关系}
+</character_cards>
+</characters>
 ```
 
 ### world.md
 
-```
-# 世界观设定
-
-## 时代背景
+```xml
+<world>
+<time_period>
 {可换}
+</time_period>
 
-## 地理设定
+<geography>
 {可换}
+</geography>
 
-## 社会结构
+<social_structure>
 {与源文同构}
+</social_structure>
 
-## 核心规则
+<core_rules>
 {与源文对应}
+</core_rules>
+</world>
 ```
 
 ### plot.md

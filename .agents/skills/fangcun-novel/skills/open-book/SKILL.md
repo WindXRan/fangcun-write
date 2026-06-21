@@ -157,15 +157,17 @@ metadata:
 
 **任务：** 将确认的设定文件输出到指定目录。
 
+**输出格式：** 使用XML标签格式（详见references/imitate.md）
+
 **输出目录：**
 ```
 projects/{author}/{source_book}/rewrites/{new_book}/
-├── concept.md
-├── characters.md
-├── world.md
-├── plot.md          (仿写模式)
-├── book_info.md     (仿写模式)
-└── characters/      (续写模式)
+├── concept.md        (XML格式)
+├── characters.md     (XML格式)
+├── world.md          (XML格式)
+├── plot.md           (XML格式，仿写模式)
+├── book_info.md      (XML格式，仿写模式)
+└── characters/       (续写模式)
     ├── {角色1}.md
     └── {角色2}.md
 ```

@@ -255,6 +255,71 @@ def _get_world_text(config):
     return _world_cache
 
 
+# 模块级缓存：世界观约束
+_world_constraint_cache = None
+
+
+def _get_world_constraint(config):
+    """从 concept.md 提取世界观约束（时间线/年龄/地点）。"""
+    global _world_constraint_cache
+    if _world_constraint_cache is not None:
+        return _world_constraint_cache
+
+    concept_path = Path(config.get("rewrites_dir", "")) / "concept.md"
+    if not concept_path.exists():
+        _world_constraint_cache = "（concept.md 不存在）"
+        return _world_constraint_cache
+
+    concept = concept_path.read_text(encoding="utf-8")
+
+    # 提取定位、故事核、卖点等关键信息作为约束
+    parts = []
+    for section in ["定位", "故事核", "卖点", "策略"]:
+        m = re.search(rf'(?:##?\s*\d*\.?\s*{section}.*?\n)(.*?)(?=\n##|\Z)', concept, re.DOTALL)
+        if m:
+            text = m.group(1).strip()[:200]
+            if text:
+                parts.append(f"- {section}：{text}")
+
+    # 提取角色年龄/身份信息
+    chars_path = Path(config["rewrites_dir"]) / "characters.md"
+    if not chars_path.exists():
+        chars_path = Path(config["rewrites_dir"]) / "settings" / "characters.md"
+    if chars_path.exists():
+        chars_text = chars_path.read_text(encoding="utf-8")
+        # 提取主角年龄/身份
+        for name in ["周小麦", "陆川", "女主", "男主"]:
+            m = re.search(rf'【{re.escape(name)}】.*?(?:功能位|身份)[：:]\s*(.+)', chars_text)
+            if m:
+                parts.append(f"- {name}身份：{m.group(1).strip()[:50]}")
+
+    _world_constraint_cache = "\n".join(parts) if parts else "（未提取到世界观约束）"
+    return _world_constraint_cache
+
+
+# 模块级缓存：全量角色名映射表文本
+_name_map_text_cache = None
+
+
+def _build_name_map_text(config):
+    """构建全量角色名映射表（不按章裁剪）。"""
+    global _name_map_text_cache
+    if _name_map_text_cache is not None:
+        return _name_map_text_cache
+
+    name_map = _build_name_map(config)
+    if not name_map:
+        _name_map_text_cache = "（角色名映射表不存在）"
+        return _name_map_text_cache
+
+    lines = ["| 源文名 | 新名 |", "|--------|------|"]
+    for old_name, new_name in sorted(name_map.items(), key=lambda x: -len(x[0])):
+        lines.append(f"| {old_name} | {new_name} |")
+
+    _name_map_text_cache = "\n".join(lines)
+    return _name_map_text_cache
+
+
 # 模块级缓存：风格类型文本
 _genre_cache = None
 
@@ -817,16 +882,12 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     if prompt_type == "plot-guide" and chapter_num:
         source_text = get_source_text(config, chapter_num)
         if source_text:
-            # 用全量角色映射替换源文角色名（不只本章出场角色）
-            name_map = _build_name_map(config)
-            if name_map:
-                for old_name, new_name in name_map.items():
-                    source_text = source_text.replace(old_name, new_name)
-            replacements["源文全文"] = source_text
+            # 源文保留原名，不强制换名。LLM 通过角色卡自行映射。
+            replacements["event"] = source_text
             highlights = _extract_highlights(source_text, max_chars=500)
             replacements["highlights"] = highlights or ""
         else:
-            replacements["源文全文"] = "（源文读取失败）"
+            replacements["event"] = "（源文读取失败）"
             replacements["highlights"] = ""
         # 注入源文结构缓存（per-chapter）
         if "structure" not in replacements:
@@ -839,13 +900,16 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         # 注入世界观
         if "world" not in replacements:
             replacements["world"] = _get_world_text(config)
+        # 注入世界观约束（统一时间线/年龄/地点）
+        if "world_constraint" not in replacements:
+            replacements["world_constraint"] = _get_world_constraint(config)
 
     # 写章时注入本章出场角色的卡内容
     if prompt_type == "write-chapter" and chapter_num:
         if "characters" not in replacements:
             replacements["characters"] = _load_character_cards(config, chapter_num)
         if "name_map" not in replacements:
-            replacements["name_map"] = _get_chapter_name_map(config, chapter_num)
+            replacements["name_map"] = _build_name_map_text(config)
         if "world" not in replacements:
             replacements["world"] = _get_world_text(config)
         if "style" not in replacements:

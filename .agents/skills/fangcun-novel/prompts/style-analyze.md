@@ -1,7 +1,7 @@
 ---
 name: style-analyze
-version: 20
-changelog: XML标签输出，不解析内容
+version: 21
+changelog: 新增风格锚点（必须保留的源文特征）
 description: 提取源文特征，输出3个文件
 system_prompt: null
 defaults: {"reasoning_effort": "low", "temperature": 0.3}
@@ -16,9 +16,14 @@ defaults: {"reasoning_effort": "low", "temperature": 0.3}
 - 幽默风格：
 - 情绪基调：
 
+## 风格锚点（必须保留的源文独有特征，每章仿写必须包含至少3个）
+- [锚点] 特征描述+示例
+- [锚点] 特征描述+示例
+（5-8个。提取源文区别于其他小说的独特写法，如"作者旁白吐槽""邻里八卦推动情节""市井烟火气细节"等。这些是仿写必须保留的灵魂，不是通用写法建议）
+
 ## 写法指令
 - [指令] 具体怎么写
-（15条左右）
+（10条左右，提取句式、对话标签、段落节奏等通用写法特征）
 </style>
 
 <structure>
