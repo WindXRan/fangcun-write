@@ -53,12 +53,12 @@ def call_api(api_key, model, user_prompt, max_tokens=2048):
 
 def llm_analyze_chapter(api_key, src_text, new_text, ch):
     """用LLM分析单章（只分析异常章）"""
-    prompt = f"""请对比以下两份文本：
+    prompt = f"""请对比以下两份文本（版本A是源文，版本B是仿写作品）：
 
-# 源文第{ch}章
+# 版本A（源文）第{ch}章
 {src_text[:3000]}
 
-# 新书第{ch}章
+# 版本B（仿写）第{ch}章
 {new_text[:3000]}
 
 ---
@@ -80,7 +80,8 @@ def llm_analyze_chapter(api_key, src_text, new_text, ch):
 1. 核心差异（2句话）
 2. 质量判断（哪个更好，各自的硬伤）
 3. 抄袭风险等级（低/中/高），若有雷同指出具体哪里像
-4. 改进建议（针对高风险点的具体修改方案）"""
+4. 改进建议（针对高风险点的具体修改方案）
+5. **Prompt优化建议**：根据仿写成品暴露的问题，反推写作prompt应该如何调整（2-3条具体可执行的修改建议）"""
 
     try:
         result = call_api(api_key, "deepseek-v4-flash", prompt)

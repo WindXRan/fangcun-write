@@ -506,17 +506,18 @@ def generate_ai_analysis(start, end, all_stats, all_profiles, src_chapters, new_
     output.append('')
     output.append('**以下内容可直接喂给 AI，无需额外说明。**')
     output.append('')
-    output.append('请你以资深网文编辑的身份，对下面两份文本进行对比分析。')
+    output.append('请你以资深网文编辑的身份，对下面两份文本进行对比分析。版本A是源文（原作），版本B是仿写作品。')
     output.append('')
     output.append('## 分析要求')
     output.append('')
     output.append('1. **差异分析**：版本A和版本B在叙事风格、节奏控制、人设塑造、信息密度上有什么核心差异？')
     output.append('2. **优劣评估**：分别指出两版各自的优势和不足。哪个版本的阅读体验更好？好在哪里？')
     output.append('3. **市场判断**：从网文市场的角度，哪一版更容易留住读者？为什么？')
-    output.append('4. **改进建议**：给较弱的那一版提出具体修改方向。')
+    output.append('4. **改进建议**：给仿写版提出具体修改方向。')
     output.append('5. **抄袭风险评估**：逐章对比两版的具体情节、对话、场景设计，判断是否存在抄袭嫌疑。重点关注：(1) 情节走向是否高度雷同 (2) 关键场景/对话是否有大段相似 (3) 人设/关系框架是否照搬 (4) 两版的差异化程度是否足够。给出具体的风险等级（低/中/高）和需要重点修改的段落。')
+    output.append('6. **Prompt优化建议**：根据仿写成品暴露的问题，反推写作prompt应该如何调整（2-3条具体可执行的修改建议）。')
     output.append('')
-    output.append('请逐章分析，最后给出总体评价。**不要猜测哪版是仿写**，仅基于文本本身做判断。')
+    output.append('请逐章分析，最后给出总体评价。')
     output.append('')
     output.append('---')
     output.append('')
@@ -534,7 +535,7 @@ def generate_ai_analysis(start, end, all_stats, all_profiles, src_chapters, new_
     output.append('')
     
     # 版本B全文
-    output.append('# 版本B（新书）')
+    output.append('# 版本B（仿写）')
     output.append('')
     for ch in sorted(new_chapters.keys()):
         content, title = new_chapters[ch]
