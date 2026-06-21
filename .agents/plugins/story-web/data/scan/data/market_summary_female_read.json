@@ -1,0 +1,402 @@
+{
+  "date": "2026-06-01",
+  "prev_date": "2026-05-29",
+  "periods": {
+    "7": {
+      "period": "近 7 日",
+      "source": "rule",
+      "summary": "近 7 日里，古风世情 是更热的分类，具体分类以 古风世情 的榜单动能更强；题材上 穿越、重生、先婚后爱、双洁、女配、和离 反复出现，说明读者仍偏好强设定、强情绪钩子和明确爽点。",
+      "fallback_summary": "近 7 日里，古风世情 是更热的分类，具体分类以 古风世情 的榜单动能更强；题材上 穿越、重生、先婚后爱、双洁、女配、和离 反复出现，说明读者仍偏好强设定、强情绪钩子和明确爽点。",
+      "hot_genres": [
+        {
+          "name": "古风世情",
+          "score": 107,
+          "new_count": 20,
+          "dropped_count": 0,
+          "read_count": 6,
+          "active_days": 2,
+          "lead_category": "古风世情"
+        }
+      ],
+      "hot_types": [
+        {
+          "name": "古风世情",
+          "score": 107,
+          "new_count": 20,
+          "dropped_count": 0,
+          "read_count": 6,
+          "active_days": 2
+        }
+      ],
+      "hot_themes": [
+        {
+          "name": "穿越",
+          "count": 14,
+          "category_count": 1
+        },
+        {
+          "name": "重生",
+          "count": 9,
+          "category_count": 1
+        },
+        {
+          "name": "先婚后爱",
+          "count": 5,
+          "category_count": 1
+        },
+        {
+          "name": "双洁",
+          "count": 5,
+          "category_count": 1
+        },
+        {
+          "name": "女配",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "和离",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "三国",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "争霸",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "空间",
+          "count": 3,
+          "category_count": 1
+        },
+        {
+          "name": "替嫁",
+          "count": 3,
+          "category_count": 1
+        },
+        {
+          "name": "逃荒",
+          "count": 3,
+          "category_count": 1
+        },
+        {
+          "name": "甜宠",
+          "count": 3,
+          "category_count": 1
+        },
+        {
+          "name": "历史",
+          "count": 3,
+          "category_count": 1
+        },
+        {
+          "name": "架空",
+          "count": 3,
+          "category_count": 1
+        }
+      ]
+    },
+    "14": {
+      "period": "近 14 日",
+      "source": "rule",
+      "summary": "近 14 日里，古风世情 是更热的分类，具体分类以 古风世情 的榜单动能更强；题材上 穿越、重生、先婚后爱、双洁、三国、女配 反复出现，说明读者仍偏好强设定、强情绪钩子和明确爽点。",
+      "fallback_summary": "近 14 日里，古风世情 是更热的分类，具体分类以 古风世情 的榜单动能更强；题材上 穿越、重生、先婚后爱、双洁、三国、女配 反复出现，说明读者仍偏好强设定、强情绪钩子和明确爽点。",
+      "hot_genres": [
+        {
+          "name": "古风世情",
+          "score": 208,
+          "new_count": 23,
+          "dropped_count": 23,
+          "read_count": 15,
+          "active_days": 6,
+          "lead_category": "古风世情"
+        }
+      ],
+      "hot_types": [
+        {
+          "name": "古风世情",
+          "score": 208,
+          "new_count": 23,
+          "dropped_count": 23,
+          "read_count": 15,
+          "active_days": 6
+        }
+      ],
+      "hot_themes": [
+        {
+          "name": "穿越",
+          "count": 16,
+          "category_count": 1
+        },
+        {
+          "name": "重生",
+          "count": 10,
+          "category_count": 1
+        },
+        {
+          "name": "先婚后爱",
+          "count": 6,
+          "category_count": 1
+        },
+        {
+          "name": "双洁",
+          "count": 5,
+          "category_count": 1
+        },
+        {
+          "name": "三国",
+          "count": 5,
+          "category_count": 1
+        },
+        {
+          "name": "女配",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "和离",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "甜宠",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "历史",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "争霸",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "空间",
+          "count": 3,
+          "category_count": 1
+        },
+        {
+          "name": "宅斗",
+          "count": 3,
+          "category_count": 1
+        },
+        {
+          "name": "替嫁",
+          "count": 3,
+          "category_count": 1
+        },
+        {
+          "name": "逃荒",
+          "count": 3,
+          "category_count": 1
+        }
+      ]
+    },
+    "30": {
+      "period": "近 30 日",
+      "source": "rule",
+      "summary": "近 30 日里，古风世情 是更热的分类，具体分类以 古风世情 的榜单动能更强；题材上 穿越、重生、先婚后爱、甜宠、双洁、逆袭 反复出现，说明读者仍偏好强设定、强情绪钩子和明确爽点。",
+      "fallback_summary": "近 30 日里，古风世情 是更热的分类，具体分类以 古风世情 的榜单动能更强；题材上 穿越、重生、先婚后爱、甜宠、双洁、逆袭 反复出现，说明读者仍偏好强设定、强情绪钩子和明确爽点。",
+      "hot_genres": [
+        {
+          "name": "古风世情",
+          "score": 268,
+          "new_count": 34,
+          "dropped_count": 24,
+          "read_count": 18,
+          "active_days": 7,
+          "lead_category": "古风世情"
+        }
+      ],
+      "hot_types": [
+        {
+          "name": "古风世情",
+          "score": 268,
+          "new_count": 34,
+          "dropped_count": 24,
+          "read_count": 18,
+          "active_days": 7
+        }
+      ],
+      "hot_themes": [
+        {
+          "name": "穿越",
+          "count": 20,
+          "category_count": 1
+        },
+        {
+          "name": "重生",
+          "count": 12,
+          "category_count": 1
+        },
+        {
+          "name": "先婚后爱",
+          "count": 7,
+          "category_count": 1
+        },
+        {
+          "name": "甜宠",
+          "count": 6,
+          "category_count": 1
+        },
+        {
+          "name": "双洁",
+          "count": 6,
+          "category_count": 1
+        },
+        {
+          "name": "逆袭",
+          "count": 5,
+          "category_count": 1
+        },
+        {
+          "name": "三国",
+          "count": 5,
+          "category_count": 1
+        },
+        {
+          "name": "争霸",
+          "count": 5,
+          "category_count": 1
+        },
+        {
+          "name": "穿书",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "女配",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "宅斗",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "和离",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "替嫁",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "历史",
+          "count": 4,
+          "category_count": 1
+        }
+      ]
+    },
+    "all": {
+      "period": "全部样本",
+      "source": "rule",
+      "summary": "全部样本里，古风世情 是更热的分类，具体分类以 古风世情 的榜单动能更强；题材上 穿越、重生、先婚后爱、甜宠、双洁、逆袭 反复出现，说明读者仍偏好强设定、强情绪钩子和明确爽点。",
+      "fallback_summary": "全部样本里，古风世情 是更热的分类，具体分类以 古风世情 的榜单动能更强；题材上 穿越、重生、先婚后爱、甜宠、双洁、逆袭 反复出现，说明读者仍偏好强设定、强情绪钩子和明确爽点。",
+      "hot_genres": [
+        {
+          "name": "古风世情",
+          "score": 268,
+          "new_count": 34,
+          "dropped_count": 24,
+          "read_count": 18,
+          "active_days": 7,
+          "lead_category": "古风世情"
+        }
+      ],
+      "hot_types": [
+        {
+          "name": "古风世情",
+          "score": 268,
+          "new_count": 34,
+          "dropped_count": 24,
+          "read_count": 18,
+          "active_days": 7
+        }
+      ],
+      "hot_themes": [
+        {
+          "name": "穿越",
+          "count": 20,
+          "category_count": 1
+        },
+        {
+          "name": "重生",
+          "count": 12,
+          "category_count": 1
+        },
+        {
+          "name": "先婚后爱",
+          "count": 7,
+          "category_count": 1
+        },
+        {
+          "name": "甜宠",
+          "count": 6,
+          "category_count": 1
+        },
+        {
+          "name": "双洁",
+          "count": 6,
+          "category_count": 1
+        },
+        {
+          "name": "逆袭",
+          "count": 5,
+          "category_count": 1
+        },
+        {
+          "name": "三国",
+          "count": 5,
+          "category_count": 1
+        },
+        {
+          "name": "争霸",
+          "count": 5,
+          "category_count": 1
+        },
+        {
+          "name": "穿书",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "女配",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "宅斗",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "和离",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "替嫁",
+          "count": 4,
+          "category_count": 1
+        },
+        {
+          "name": "历史",
+          "count": 4,
+          "category_count": 1
+        }
+      ]
+    }
+  }
+}

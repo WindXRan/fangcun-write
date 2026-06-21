@@ -1,0 +1,17 @@
+{
+  "_comment": "fangcun-novel 配置文件示例",
+  "_comment_book_name": "新书名，'auto' = 让 LLM 自动起名",
+  "_comment_author": "源文作者名（目录名）",
+  "_comment_source_book": "源文书名（目录名）",
+  "_comment_rewrites_dir": "仿写输出目录",
+  "_comment_model": "模型名，推荐 deepseek-v4-pro",
+  "_comment_workers": "并行数，建议 3-10",
+
+  "book_name": "auto",
+  "author": "源文作者",
+  "source_book": "源文书名",
+  "rewrites_dir": "projects/源文作者/源文书名/rewrites/auto",
+  "model": "deepseek-v4-pro",
+  "workers": 5,
+  "skip_confirm": true
+}

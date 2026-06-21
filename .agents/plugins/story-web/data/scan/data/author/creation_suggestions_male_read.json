@@ -1,0 +1,21 @@
+{
+  "date": "2026-06-09",
+  "periods": {
+    "7": {
+      "genre_suggestions": {},
+      "cross_genre_opportunities": []
+    },
+    "14": {
+      "genre_suggestions": {},
+      "cross_genre_opportunities": []
+    },
+    "30": {
+      "genre_suggestions": {},
+      "cross_genre_opportunities": []
+    },
+    "all": {
+      "genre_suggestions": {},
+      "cross_genre_opportunities": []
+    }
+  }
+}

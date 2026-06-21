@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创作灵感分析 · 番茄指数</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/author.css">
+    <meta name="description" content="基于番茄小说排行榜数据的创作灵感分析工具，帮助作者把握题材趋势、分析竞品、获取创作建议。">
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+</head>
+<body class="author-page">
+    <nav class="top-nav" id="top-nav"></nav>
+    <div class="author-shell">
+        <header class="author-topbar">
+            <div>
+                <h1>创作灵感分析</h1>
+                <p id="author-subtitle">基于数据的网文创作方向指南</p>
+            </div>
+            <div class="author-controls">
+                <div class="period-range" id="author-period">
+                    <button class="range-btn active" data-days="7">7日</button>
+                    <button class="range-btn" data-days="14">14日</button>
+                    <button class="range-btn" data-days="30">30日</button>
+                    <button class="range-btn" data-days="all">全部</button>
+                </div>
+                <button class="export-all-btn" id="export-all-btn" title="导出全部数据为Excel">
+                    📥 导出全部
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <!-- Section 1: 题材热度分析 -->
+            <section class="author-section" id="section-themes">
+                <div class="section-header">
+                    <div>
+                        <span class="panel-kicker">题材风向</span>
+                        <h2>题材热度分析</h2>
+                        <p class="section-desc">哪些题材正在升温？哪些组合最受欢迎？</p>
+                    </div>
+                    <div class="export-btn-group">
+                        <button class="export-btn" data-format="csv" data-type="theme_trends">CSV</button>
+                        <button class="export-btn" data-format="excel" data-type="theme_trends">Excel</button>
+                        <button class="export-btn" data-format="json" data-type="theme_trends">JSON</button>
+                    </div>
+                </div>
+
+                <div class="theme-grid">
+                    <article class="theme-card theme-cloud-card">
+                        <span class="panel-kicker">高频题材</span>
+                        <div id="theme-cloud" class="theme-cloud"></div>
+                    </article>
+
+                    <article class="theme-card theme-trend-card">
+                        <span class="panel-kicker">趋势走向</span>
+                        <h3>Top 6 题材趋势</h3>
+                        <div id="theme-trend-chart" class="theme-trend-chart"></div>
+                    </article>
+                </div>
+
+                <article class="theme-combo-section">
+                    <span class="panel-kicker">热门组合</span>
+                    <h3>高频共现题材对</h3>
+                    <p class="section-hint">以下题材经常在同一本书中同时出现，可作为选题参考</p>
+                    <div id="combo-cards" class="combo-cards"></div>
+                </article>
+            </section>
+
+            <!-- Section 2: 竞品对标分析 -->
+            <section class="author-section" id="section-compete">
+                <div class="section-header">
+                    <div>
+                        <span class="panel-kicker">竞品洞察</span>
+                        <h2>竞品对标分析</h2>
+                        <p class="section-desc">头部作品有哪些共性特征？如何找到差异化切入点？</p>
+                    </div>
+                    <div class="export-btn-group">
+                        <button class="export-btn" data-format="csv" data-type="competitive_analysis">CSV</button>
+                        <button class="export-btn" data-format="excel" data-type="competitive_analysis">Excel</button>
+                        <button class="export-btn" data-format="json" data-type="competitive_analysis">JSON</button>
+                    </div>
+                </div>
+
+                <div class="compete-controls">
+                    <label class="trend-select-label" for="compete-category">选择分类</label>
+                    <select id="compete-category" class="trend-select"></select>
+                </div>
+
+                <div class="compete-grid">
+                    <article class="compete-card">
+                        <span class="panel-kicker">共性关键词</span>
+                        <h3>Top 10 作品中的高频元素</h3>
+                        <div id="compete-keywords" class="presence-bars"></div>
+                    </article>
+
+                    <article class="compete-card">
+                        <span class="panel-kicker">标题模式</span>
+                        <h3>爆款书名特征</h3>
+                        <div id="compete-titles" class="title-patterns"></div>
+                    </article>
+
+                    <article class="compete-card">
+                        <span class="panel-kicker">阅读分布</span>
+                        <h3>Top 10 阅读量分布</h3>
+                        <div id="compete-reads" class="reads-chart"></div>
+                    </article>
+
+                    <article class="compete-card">
+                        <span class="panel-kicker">简介钩子</span>
+                        <h3>开头常见吸引力元素</h3>
+                        <div id="compete-hooks" class="hook-analysis"></div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Section 3: 创作方向建议 -->
+            <section class="author-section" id="section-suggest">
+                <div class="section-header">
+                    <div>
+                        <span class="panel-kicker">AI 参谋</span>
+                        <h2>创作方向建议</h2>
+                        <p class="section-desc">基于市场数据的智能选题推荐</p>
+                    </div>
+                    <div class="export-btn-group">
+                        <button class="export-btn" data-format="csv" data-type="creation_suggestions">CSV</button>
+                        <button class="export-btn" data-format="excel" data-type="creation_suggestions">Excel</button>
+                        <button class="export-btn" data-format="json" data-type="creation_suggestions">JSON</button>
+                    </div>
+                </div>
+
+                <div class="suggest-controls">
+                    <label class="trend-select-label" for="suggest-genre">选择分类</label>
+                    <select id="suggest-genre" class="trend-select"></select>
+                </div>
+
+                <div id="suggest-panel" class="suggest-panel">
+                    <p class="loading-hint">正在加载创作建议...</p>
+                </div>
+
+                <article class="cross-genre-section">
+                    <span class="panel-kicker">跨分类机会</span>
+                    <h3>题材混搭推荐</h3>
+                    <div id="suggest-cross" class="cross-cards"></div>
+                </article>
+            </section>
+
+            <!-- Section 4: 读者偏好画像 -->
+            <section class="author-section" id="section-profile">
+                <div class="section-header">
+                    <div>
+                        <span class="panel-kicker">读者洞察</span>
+                        <h2>读者偏好画像</h2>
+                        <p class="section-desc">了解目标读者的口味和偏好</p>
+                    </div>
+                    <div class="export-btn-group">
+                        <button class="export-btn" data-format="csv" data-type="reader_profile">CSV</button>
+                        <button class="export-btn" data-format="excel" data-type="reader_profile">Excel</button>
+                        <button class="export-btn" data-format="json" data-type="reader_profile">JSON</button>
+                    </div>
+                </div>
+
+                <div class="profile-controls">
+                    <label class="trend-select-label" for="profile-genre">选择分类</label>
+                    <select id="profile-genre" class="trend-select"></select>
+                </div>
+
+                <div class="profile-grid">
+                    <article class="profile-card">
+                        <span class="panel-kicker">热门元素</span>
+                        <h3>读者最爱的题材元素</h3>
+                        <div id="profile-elements" class="presence-bars"></div>
+                    </article>
+
+                    <article class="profile-card">
+                        <span class="panel-kicker">情感偏好</span>
+                        <h3>甜宠 / 虐恋 / 爽文 / 日常</h3>
+                        <div id="profile-emotion" class="donut-section"></div>
+                    </article>
+
+                    <article class="profile-card">
+                        <span class="panel-kicker">金手指偏好</span>
+                        <h3>读者最喜欢的金手指类型</h3>
+                        <div id="profile-golden" class="golden-ranking"></div>
+                    </article>
+
+                    <article class="profile-card">
+                        <span class="panel-kicker">背景设定</span>
+                        <h3>热门故事背景</h3>
+                        <div id="profile-setting" class="setting-bars"></div>
+                    </article>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/nav.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/author.js"></script>
+</body>
+</html>
