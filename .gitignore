@@ -24,6 +24,9 @@ configs/*.json
 # story-engine configs（可能含 API key）
 .agents/skills/story-engine/configs/*.json
 !.agents/skills/story-engine/configs/example.json
+# fangcun-novel configs（可能含 API key）
+.agents/skills/fangcun-novel/configs/*.json
+!.agents/skills/fangcun-novel/configs/example.json
 
 # === 日志 ===
 logs/

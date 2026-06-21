@@ -7,6 +7,7 @@ import time
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+import _path_setup  # noqa: F401
 from utils import count_source_chars, batch_run, get_source_text
 
 # 添加 fangcun-write 到 path

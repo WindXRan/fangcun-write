@@ -4,7 +4,7 @@
   "source_book": "认亲后，画风跑偏",
   "provider": "deepseek",
   "model": "deepseek-v4-pro",
-  "api_key": "sk-566efd1f2c7f4aa7a3634ceab7a1f182",
+  "api_key": null,
   "reasoning_effort": "low",
   "system_prompt": "你是一个专业的网文写手，擅长仿写风格迁移。",
   "prompts_dir": ".agents/skills/story-engine/prompts",
