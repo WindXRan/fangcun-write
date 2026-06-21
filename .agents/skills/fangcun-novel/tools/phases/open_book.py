@@ -608,7 +608,6 @@ def phase_open_book(config, state_mgr=None):
         result = call_llm(config, "open-book-settings", user_prompt, system_prompt)
 
         # 从结果中提取各部分内容
-        import re
         
         # 提取世界观设定
         world_match = re.search(r'(?:## 世界观设定|### 世界观设定)(.*?)(?=## 剧情设定|### 剧情设定|\Z)', result, re.DOTALL)
