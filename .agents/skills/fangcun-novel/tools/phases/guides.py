@@ -48,39 +48,58 @@ def _build_name_map(config):
     _name_map_cache = {}
     base_dir = Path(config.get("base_dir", "."))
     rewrites_dir = base_dir / config.get("rewrites_dir", "")
-    chars_path = rewrites_dir / "settings" / "characters.md"
-    if not chars_path.exists():
-        chars_path = rewrites_dir / "characters.md"
-    if not chars_path.exists():
+    
+    # 读取所有可能的 characters.md 文件
+    chars_files = []
+    chars_path1 = rewrites_dir / "settings" / "characters.md"
+    chars_path2 = rewrites_dir / "characters.md"
+    if chars_path1.exists():
+        chars_files.append(chars_path1)
+    if chars_path2.exists():
+        chars_files.append(chars_path2)
+    
+    if not chars_files:
         return _name_map_cache
-
-    chars_text = chars_path.read_text(encoding="utf-8")
     
-    # 格式1: 【新名】（源文对应：源文名）
-    for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars_text):
-        new_name = m.group(1).strip()
-        old_names_raw = m.group(2).strip()
-        old_names = re.split(r'[/、]', old_names_raw)
-        for old_name in old_names:
-            old_name = old_name.strip()
-            if old_name and old_name != new_name:
+    # 解析所有文件
+    for chars_path in chars_files:
+        chars_text = chars_path.read_text(encoding="utf-8")
+        
+        # 格式1: 【新名】（源文对应：源文名）
+        for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars_text):
+            new_name = m.group(1).strip()
+            old_names_raw = m.group(2).strip()
+            old_names = re.split(r'[/、]', old_names_raw)
+            for old_name in old_names:
+                old_name = old_name.strip()
+                if old_name and old_name != new_name and old_name not in _name_map_cache:
+                    _name_map_cache[old_name] = new_name
+        
+        # 格式2: ## 【角色位】新名（原料名）
+        for m in re.finditer(r'##\s*【[^】]+】(.+?)（原(.+?)）', chars_text):
+            new_name = m.group(1).strip()
+            old_name = m.group(2).strip()
+            if old_name and new_name and old_name != new_name and old_name not in _name_map_cache:
                 _name_map_cache[old_name] = new_name
-    
-    # 格式2: 表格行（逐行解析，只取前两列）
-    for line in chars_text.split('\n'):
-        line = line.strip()
-        if not line.startswith('|'):
-            continue
-        cells = [c.strip() for c in line.split('|') if c.strip()]
-        if len(cells) < 2:
-            continue
-        old_name = cells[0]
-        new_name = cells[1]
-        # 跳过表头和分隔行
-        if old_name in ('源文名', '----', '---', '===') or new_name in ('新名', '----', '---', '==='):
-            continue
-        if old_name and new_name and old_name != new_name and old_name not in _name_map_cache:
-            _name_map_cache[old_name] = new_name
+        
+        # 格式3: 表格行（逐行解析，只取前两列）
+        for line in chars_text.split('\n'):
+            line = line.strip()
+            if not line.startswith('|'):
+                continue
+            cells = [c.strip() for c in line.split('|') if c.strip()]
+            if len(cells) < 2:
+                continue
+            old_name = cells[0]
+            new_name = cells[1]
+            # 跳过表头和分隔行
+            if old_name in ('源文名', '----', '---', '===') or new_name in ('新名', '----', '---', '==='):
+                continue
+            # 跳过分隔线
+            if '-' in old_name or '-' in new_name:
+                continue
+            if old_name and new_name and old_name != new_name and old_name not in _name_map_cache:
+                _name_map_cache[old_name] = new_name
 
     return _name_map_cache
 
@@ -527,21 +546,62 @@ def _get_continue_plan_event(config, ch_num):
 
 
 def _get_continue_style(config, ch_num):
-    """续写模式的风格参考：从原作前3章提取。"""
-    from lib.text_metrics import count_style_fingerprint
+    """续写模式的风格参考：从原作前3章提取详细写法指令。"""
+    from pathlib import Path
+    import re
+    
+    # 直接读取源文
+    base_dir = Path(config.get("base_dir", "."))
+    source_book = config.get("source_book", "")
+    author = config.get("author", "")
+    src_dir = base_dir / "projects" / author / source_book / "_cache" / "chapters"
+    
+    if not src_dir.exists():
+        return None
     
     # 使用原作前3章作为风格参考
     style_parts = []
-    for i in range(1, 4):
-        src_text = get_source_text(config, i)
-        if src_text:
-            fp = count_style_fingerprint(src_text)
-            if fp:
-                style_parts.append(f"第{i}章风格：句长{fp.get('avg_sent_len', '?')}字，"
-                                  f"对话占比{fp.get('dialogue_ratio', '?')}%")
+    write_instructions = []
     
-    if style_parts:
-        return "续写风格参考（原作前3章）：\n" + "\n".join(style_parts)
+    for i in range(1, 4):
+        src_file = src_dir / f"第{i}章.txt"
+        if not src_file.exists():
+            src_file = src_dir / f"第{i:03d}章.txt"
+        if not src_file.exists():
+            continue
+            
+        src_text = src_file.read_text(encoding="utf-8")
+        if not src_text:
+            continue
+        
+        # 统计句长
+        sentences = re.split(r'[。！？]', src_text)
+        sentences = [s.strip() for s in sentences if s.strip()]
+        if sentences:
+            avg_sent_len = sum(len(s) for s in sentences) // len(sentences)
+            style_parts.append(f"第{i}章风格：句长{avg_sent_len}字")
+        
+        # 统计对话占比
+        dialogue_lines = [line for line in src_text.split('\n') if '"' in line or '"' in line]
+        if dialogue_lines:
+            dialogue_chars = sum(len(line) for line in dialogue_lines)
+            total_chars = len(src_text.replace('\n', '').replace(' ', ''))
+            dialogue_ratio = dialogue_chars / total_chars if total_chars > 0 else 0
+            write_instructions.append(f"第{i}章对话特点：{len(dialogue_lines)}句对话，占比{dialogue_ratio:.0%}")
+        
+        # 统计段落结构
+        paragraphs = [p.strip() for p in src_text.split('\n') if p.strip() and len(p.strip()) > 20]
+        if paragraphs:
+            avg_para_len = sum(len(p) for p in paragraphs) // len(paragraphs)
+            write_instructions.append(f"第{i}章段落：平均{avg_para_len}字/段")
+    
+    if style_parts or write_instructions:
+        result = "续写风格参考（原作前3章）：\n"
+        if style_parts:
+            result += "\n".join(style_parts) + "\n"
+        if write_instructions:
+            result += "\n写法指令：\n" + "\n".join(write_instructions[:6])
+        return result
     return None
 
 
@@ -755,6 +815,16 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     if prompt_type == "write-chapter" and chapter_num:
         if "角色约束" not in replacements or replacements.get("角色约束") == "{角色行为卡片}":
             replacements["角色约束"] = _load_character_cards(config, chapter_num)
+        # 注入角色名映射表（直接读取完整characters.md）
+        if "角色名映射表" not in replacements:
+            rewrites_dir = Path(config["rewrites_dir"])
+            chars_path = rewrites_dir / "characters.md"
+            if not chars_path.exists():
+                chars_path = rewrites_dir / "settings" / "characters.md"
+            if chars_path.exists():
+                replacements["角色名映射表"] = chars_path.read_text(encoding="utf-8")
+            else:
+                replacements["角色名映射表"] = "（角色名映射表不存在）"
         # 注入世界观（使用缓存）
         if "世界观" not in replacements:
             replacements["世界观"] = _get_world_text(config)
@@ -762,22 +832,15 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         # 判断是否是续写模式
         is_continue = _is_continue_mode(config)
         
-        if is_continue:
-            # 续写模式：使用原作风格参考，不注入源文全文
-            continue_style = _get_continue_style(config, chapter_num)
-            replacements["文笔指纹"] = continue_style or "（续写模式：延续原作风格）"
+        # 注入文笔指纹（仿写和续写都用同一套）
+        style_text = _get_style_text_mapped(config, chapter_num)
+        if style_text:
+            replacements["文笔指纹"] = style_text
         else:
-            # 仿写模式：不注入源文，避免纯换皮
-            # 注入写法指令（从 style-analyze 输出）
-            style_text = _get_style_text_mapped(config, chapter_num)
-            if style_text:
-                replacements["文笔指纹"] = style_text
-            else:
-                replacements["文笔指纹"] = "（写法指令未提取）"
+            replacements["文笔指纹"] = "（写法指令未提取）"
         
         # 注入信息释放时机
         if "信息释放时机" not in replacements:
-            style_text = _get_style_text_mapped(config, chapter_num)
             if style_text:
                 info_timing_match = re.search(r'## 信息释放时机.*?(?=\n## |\Z)', style_text, re.DOTALL)
                 if info_timing_match:
@@ -805,9 +868,25 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             else:
                 ch_event = "（续写方案中未找到本章事件）"
             
-            # 续写模式：骨架和改编策略从concept.md提取
-            skel_ctx = "（续写模式：请参考续写方案中的情节线）"
-            adapt_pr = "（续写模式：延续原作核心要素）"
+            # 续写模式：从concept.md提取骨架和改编原则
+            concept_path = Path(config.get("rewrites_dir", "")) / "concept.md"
+            if concept_path.exists():
+                concept_text = concept_path.read_text(encoding="utf-8")
+                # 提取全局结构
+                skel_match = re.search(r'##\s*(?:全局结构|剧情结构|三幕结构)\s*\n([\s\S]*?)(?=\n##|\Z)', concept_text, re.DOTALL)
+                if skel_match:
+                    skel_ctx = skel_match.group(1).strip()[:1000]
+                else:
+                    skel_ctx = "（续写模式：请参考concept.md中的剧情结构）"
+                # 提取改写原则
+                adapt_match = re.search(r'##\s*(?:改写原则|改编原则|核心要素)\s*\n([\s\S]*?)(?=\n##|\Z)', concept_text, re.DOTALL)
+                if adapt_match:
+                    adapt_pr = adapt_match.group(1).strip()[:1000]
+                else:
+                    adapt_pr = "（续写模式：延续原作核心要素）"
+            else:
+                skel_ctx = "（续写模式：请参考续写方案中的情节线）"
+                adapt_pr = "（续写模式：延续原作核心要素）"
         else:
             # 仿写模式：从源文events.json提取
             events_mapped = _load_events_mapped(config)
