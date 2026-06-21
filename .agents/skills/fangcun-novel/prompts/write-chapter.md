@@ -1,11 +1,11 @@
 ---
-version: 31
-changelog: 恢复合并前的防抄袭机制 + 保留XML输出格式
+version: 32
+changelog: 移除源文参考，避免纯换皮
 type: user
 phase: write
 description: 写章
 required_vars: ["N", "新书名", "作者名", "源书名", "目标字数", "目标字数_min", "目标字数_max"]
-optional_vars: ["genre", "文笔指纹", "风格类型", "场景运作机制", "本章事件", "全局结构", "改写原则", "源文参考", "角色约束"]
+optional_vars: ["genre", "文笔指纹", "风格类型", "场景运作机制", "本章事件", "全局结构", "改写原则", "角色约束"]
 system_prompt: system-generic.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
@@ -13,20 +13,6 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 写《{新书名}》第{N}章。正文第一行写"第{N}章 [章名]"（不加#）。
 
 【plot_guide】projects/{作者名}/{源书名}/rewrites/{新书名}/guides/plot_{N}.md
-
-## 源文参考（只学风格，不准抄）
-
-读下面的源文，感受它的节奏、句式、对话风格。你的输出要**读起来像同一个人写的**。
-
-**绝对禁止：**
-- ❌ 照搬源文的句子（换了名字也是抄）
-- ❌ 照搬源文的段落结构
-- ❌ 照搬源文的对话模式
-- ❌ 照搬源文的开场方式
-
-**正确做法：** 读完源文后，合上它，自己从头写。用同样的节奏感，但内容是全新的。
-
-{源文参考}
 
 ## 写法指令
 
@@ -98,7 +84,7 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 **自检：写完后问自己——"这个场景的运作方式和源文一样吗？"如果一样但内容不同，✓。如果运作方式也不同，推翻重写。**
 
 ## 字数
-{目标字数}字（{目标字数_min}~{目标字数_max}）。末尾加 `【字数：XXX字】`。
+{目标字数}字（{目标字数_min}~{目标字数_max}）。
 
 ## 全局上下文
 

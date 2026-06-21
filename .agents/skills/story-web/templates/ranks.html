@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>番茄扫榜 - AI网文</title>
+    <style>
+        :root {
+            --bg: #f3f6fb;
+            --surface: #ffffff;
+            --surface-soft: #f8fafc;
+            --border: #dbe4ef;
+            --text-primary: #172033;
+            --text-secondary: #475569;
+            --text-muted: #7b8798;
+            --accent: #f04f38;
+            --accent-soft: rgba(240, 79, 56, 0.1);
+            --green: #10b981;
+            --green-soft: rgba(16, 185, 129, 0.12);
+            --blue: #0ea5e9;
+            --shadow-card: 0 18px 46px rgba(25, 39, 64, 0.1);
+            --radius-lg: 14px;
+            --radius-md: 10px;
+            --sidebar-w: 280px;
+            --font-body: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, rgba(240, 79, 56, 0.08), transparent 360px),
+                        radial-gradient(circle at 85% 0, rgba(14, 165, 233, 0.08), transparent 320px),
+                        linear-gradient(180deg, var(--bg) 0%, #eef3f9 100%);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 15px;
+            line-height: 1.55;
+        }
+
+        .app-container { display: flex; min-height: 100vh; }
+
+        /* 侧边栏 */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .sidebar-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .rank-type-nav {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .rank-type-nav ul {
+            list-style: none;
+        }
+
+        .rank-type-nav li {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .rank-type-nav li:hover {
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .rank-type-nav li.active {
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .category-nav {
+            flex: 1;
+            padding: 12px 0;
+            overflow-y: auto;
+        }
+
+        .category-nav ul {
+            list-style: none;
+        }
+
+        .category-nav li {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-nav li:hover {
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .category-nav li.active {
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .category-count {
+            font-size: 12px;
+            background: var(--surface-soft);
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: var(--text-muted);
+        }
+
+        .nav-links {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 10px 16px;
+            margin-bottom: 8px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-w);
+            padding: 24px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .header-left h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header-left .date {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            width: 260px;
+            background: var(--surface);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .refresh-btn {
+            padding: 10px 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* 书籍列表 */
+        .books-table {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+        }
+
+        .books-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .books-table th {
+            background: var(--surface-soft);
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .books-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .books-table tr:hover {
+            background: var(--surface-soft);
+        }
+
+        .books-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .rank-num {
+            width: 50px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .rank-num.top3 {
+            color: var(--accent);
+            font-size: 16px;
+        }
+
+        .book-title-cell {
+            max-width: 300px;
+        }
+
+        .book-title-cell .title {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .book-title-cell .author {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .reads-cell {
+            font-weight: 500;
+            color: var(--green);
+        }
+
+        .trend-cell {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trend-up { color: var(--green); }
+        .trend-down { color: #ef4444; }
+        .trend-new { 
+            background: var(--accent-soft);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-muted);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>📊 番茄扫榜</h1>
+                <p class="sidebar-subtitle">实时排行榜数据</p>
+            </div>
+
+            <div class="rank-type-nav">
+                <ul>
+                    <li class="active" onclick="switchRankType('female_new')">女频新书榜</li>
+                    <li onclick="switchRankType('female_read')">女频阅读榜</li>
+                    <li onclick="switchRankType('male_new')">男频新书榜</li>
+                    <li onclick="switchRankType('male_read')">男频阅读榜</li>
+                </ul>
+            </div>
+
+            <nav class="category-nav">
+                <ul id="categoryList">
+                    <li class="loading">加载中...</li>
+                </ul>
+            </nav>
+
+            <div class="nav-links">
+                <a href="/">📚 本地书库</a>
+                <a href="/compare">⚖️ 对比阅读</a>
+                <a href="/scan">🔄 扫描书库</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-left">
+                    <h2 id="currentCategory">全部分类</h2>
+                    <div class="date" id="currentDate">加载中...</div>
+                </div>
+                <div class="header-right">
+                    <input type="text" class="search-input" id="searchInput" placeholder="搜索书名或作者...">
+                    <button class="refresh-btn" onclick="refreshData()">🔄 刷新数据</button>
+                </div>
+            </header>
+
+            <div class="books-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="rank-num">排名</th>
+                            <th>书名/作者</th>
+                            <th>阅读量</th>
+                            <th>趋势</th>
+                        </tr>
+                    </thead>
+                    <tbody id="booksTableBody">
+                        <tr>
+                            <td colspan="4" class="loading">加载中...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let rankData = null;
+        let currentRankType = 'female_new';
+        let currentCategory = '';
+
+        // 加载数据
+        async function loadData() {
+            try {
+                const response = await fetch(`/api/ranks?type=${currentRankType}`);
+                rankData = await response.json();
+                
+                // 更新日期
+                document.getElementById('currentDate').textContent = `数据日期: ${rankData.date || '未知'}`;
+                
+                // 更新分类导航
+                updateCategoryList();
+                
+                // 显示书籍
+                showBooks();
+            } catch (error) {
+                console.error('加载数据失败:', error);
+            }
+        }
+
+        // 更新分类列表
+        function updateCategoryList() {
+            const categoryList = document.getElementById('categoryList');
+            const categories = rankData.categories || [];
+            
+            categoryList.innerHTML = `
+                <li class="${!currentCategory ? 'active' : ''}" onclick="filterCategory('')">
+                    全部分类 <span class="category-count">${getTotalBooks()}</span>
+                </li>
+            `;
+            
+            categories.forEach(cat => {
+                const li = document.createElement('li');
+                li.className = currentCategory === cat.name ? 'active' : '';
+                li.innerHTML = `${cat.name} <span class="category-count">${cat.books.length}</span>`;
+                li.onclick = () => filterCategory(cat.name);
+                categoryList.appendChild(li);
+            });
+        }
+
+        // 获取总书籍数
+        function getTotalBooks() {
+            const categories = rankData.categories || [];
+            return categories.reduce((sum, cat) => sum + cat.books.length, 0);
+        }
+
+        // 筛选分类
+        function filterCategory(category) {
+            currentCategory = category;
+            document.getElementById('currentCategory').textContent = category || '全部分类';
+            
+            // 更新导航高亮
+            document.querySelectorAll('.category-nav li').forEach(li => {
+                li.classList.remove('active');
+            });
+            event.target.closest('li').classList.add('active');
+            
+            showBooks();
+        }
+
+        // 显示书籍
+        function showBooks() {
+            const tbody = document.getElementById('booksTableBody');
+            const categories = rankData.categories || [];
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            
+            let allBooks = [];
+            categories.forEach(cat => {
+                if (!currentCategory || cat.name === currentCategory) {
+                    cat.books.forEach(book => {
+                        book.category = cat.name;
+                        allBooks.push(book);
+                    });
+                }
+            });
+            
+            // 搜索过滤
+            if (searchQuery) {
+                allBooks = allBooks.filter(book => 
+                    book.title.toLowerCase().includes(searchQuery) ||
+                    book.author.toLowerCase().includes(searchQuery)
+                );
+            }
+            
+            // 按阅读量排序
+            allBooks.sort((a, b) => {
+                const readsA = parseReads(a.reads);
+                const readsB = parseReads(b.reads);
+                return readsB - readsA;
+            });
+            
+            // 渲染表格
+            tbody.innerHTML = allBooks.map((book, index) => `
+                <tr>
+                    <td class="rank-num ${index < 3 ? 'top3' : ''}">${index + 1}</td>
+                    <td class="book-title-cell">
+                        <div class="title">${book.title}</div>
+                        <div class="author">${book.author} · ${book.category}</div>
+                    </td>
+                    <td class="reads-cell">${book.reads || '-'}</td>
+                    <td class="trend-cell">
+                        ${book.is_new ? '<span class="trend-new">新上榜</span>' : ''}
+                        ${book.rank_change > 0 ? `<span class="trend-up">↑${book.rank_change}</span>` : ''}
+                        ${book.rank_change < 0 ? `<span class="trend-down">↓${Math.abs(book.rank_change)}</span>` : ''}
+                    </td>
+                </tr>
+            `).join('');
+            
+            if (allBooks.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="empty-state">暂无数据</td></tr>';
+            }
+        }
+
+        // 解析阅读量字符串
+        function parseReads(readsStr) {
+            if (!readsStr) return 0;
+            const num = parseFloat(readsStr);
+            if (readsStr.includes('万')) return num * 10000;
+            if (readsStr.includes('亿')) return num * 100000000;
+            return num;
+        }
+
+        // 切换榜单类型
+        function switchRankType(type) {
+            currentRankType = type;
+            currentCategory = '';
+            
+            document.querySelectorAll('.rank-type-nav li').forEach(li => {
+                li.classList.remove('active');
+            });
+            event.target.closest('li').classList.add('active');
+            
+            loadData();
+        }
+
+        // 搜索
+        document.getElementById('searchInput').addEventListener('input', () => {
+            showBooks();
+        });
+
+        // 刷新数据
+        async function refreshData() {
+            try {
+                await fetch('/api/refresh', { method: 'POST' });
+                await loadData();
+            } catch (error) {
+                alert('刷新失败: ' + error.message);
+            }
+        }
+
+        // 初始加载
+        loadData();
+    </script>
+</body>
+</html>

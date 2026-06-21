@@ -765,23 +765,9 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         if is_continue:
             # 续写模式：使用原作风格参考，不注入源文全文
             continue_style = _get_continue_style(config, chapter_num)
-            replacements["源文参考"] = continue_style or "（续写模式：延续原作风格）"
-            # 续写模式的文笔指纹从原作前几章提取
             replacements["文笔指纹"] = continue_style or "（续写模式：延续原作风格）"
         else:
-            # 仿写模式：注入源文（用于风格模仿，替换角色名，截断到1000字）
-            source_text = get_source_text(config, chapter_num)
-            if source_text:
-                name_map = _build_name_map(config)
-                if name_map:
-                    for old_name, new_name in name_map.items():
-                        source_text = source_text.replace(old_name, new_name)
-                # 截断到1000字
-                if len(source_text) > 1000:
-                    source_text = source_text[:1000] + "\n\n（源文已截断，只供风格参考）"
-                replacements["源文参考"] = source_text
-            else:
-                replacements["源文参考"] = "（源文读取失败）"
+            # 仿写模式：不注入源文，避免纯换皮
             # 注入写法指令（从 style-analyze 输出）
             style_text = _get_style_text_mapped(config, chapter_num)
             if style_text:
