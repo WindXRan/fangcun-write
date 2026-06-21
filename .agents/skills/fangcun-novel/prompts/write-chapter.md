@@ -7,7 +7,7 @@ description: 写章
 required_vars: ["N", "新书名", "作者名", "源书名", "目标字数", "目标字数_min", "目标字数_max"]
 optional_vars: ["genre", "文笔指纹", "风格类型", "信息释放时机", "本章事件", "全局结构", "改写原则", "源文参考"]
 system_prompt: null
-defaults: {"reasoning_effort": "low", "temperature": 0.8}
+defaults: {"reasoning_effort": "low", "temperature": 0.95}
 ---
 
 写《{新书名}》第{N}章。正文第一行写"第{N}章 [章名]"。
