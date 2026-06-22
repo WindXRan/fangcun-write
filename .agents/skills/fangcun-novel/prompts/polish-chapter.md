@@ -1,52 +1,21 @@
 ---
-version: 7
-changelog: 迁移到XML标签格式
-type: user
+version: 8
+changelog: 纯task，不注入变量
+type: task
 phase: postprocess
-description: 润色章节（对比源文）
-required_vars: ["content", "source_text", "源文句长", "源文对话比", "源文段长", "min_chars", "max_chars"]
-system_prompt: null
+description: 润色章节
+system_prompt: base_agent.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
-
-<instructions>
+<task>
 让仿写读起来更像源文的风格，但绝对不能抄源文的内容。
-</instructions>
 
-<source>
-## 源文（参考风格）
+1. 调整节奏：句子平均长度接近源文
+2. 调整对话比例：接近源文的对话占比
+3. 调整段落长度：接近源文的段落平均长度
+4. 去掉AI味：删除"仿佛""似乎""不禁""心中涌起""顿了顿""沉默了片刻"
+5. 让心声更自然：不要直接写"她想""她觉得"，用动作或对话表达
+6. 让对话更口语化：加语气词
 
-{source_text}
-</source>
-
-<draft>
-## 仿写（需要修正）
-
-{content}
-</draft>
-
-<tasks>
-## 你要做什么
-
-1. **调整节奏**：源文的句子平均 {源文句长} 字，仿写要接近
-2. **调整对话比例**：源文的对话占比 {源文对话比}%，仿写要接近
-3. **调整段落长度**：源文的段落平均 {源文段长} 字，仿写要接近
-4. **去掉AI味**：删除"仿佛""似乎""不禁""心中涌起""顿了顿""沉默了片刻"
-5. **让心声更自然**：不要直接写"她想""她觉得"，用动作或对话表达
-6. **让对话更口语化**：加语气词（呢、啊、吧、嘛）
-</tasks>
-
-<restrictions>
-## 绝对禁止
-
-- ❌ 抄源文的具体表达
-- ❌ 改变情节、人物、对话内容
-- ❌ 改动角色名（所有人名必须原样保留）
-- ❌ 增加或删除情节
-</restrictions>
-
-<output>
-## 输出
-
-直接输出修正后的完整章节，不要解释。
-</output>
+**禁止**：抄源文表达、改变情节/人物/对话内容、改动角色名、增删情节。
+</task>
