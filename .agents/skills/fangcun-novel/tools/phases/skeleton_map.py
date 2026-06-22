@@ -68,8 +68,9 @@ def phase_skeleton_map(config, state_mgr=None):
     # 调用 LLM
     print("  调用 LLM 分析骨架...")
     try:
+        prompts_dir = config.get("prompts_dir", str(Path(__file__).parent.parent.parent / "prompts"))
         user_prompt = load_prompt(
-            str(Path(config.get("prompts_dir", "")) / "skeleton-map.md"),
+            str(Path(prompts_dir) / "skeleton-map.md"),
             str(base_dir),
             replacements,
             mode="api",
