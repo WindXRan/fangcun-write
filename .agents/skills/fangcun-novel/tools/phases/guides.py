@@ -1110,6 +1110,11 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         else:
             replacements["highlights"] = ""
         
+        # 注入市场数据
+        if "market" not in replacements:
+            from market_data import load_market_summary
+            replacements["market"] = load_market_summary(config)
+        
         # 注入源文结构缓存（per-chapter）
         if "structure" not in replacements:
             from phases.style_extract import load_chapter_structure
@@ -1215,7 +1220,8 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         replacements.update(extra_replacements)
 
     # 优先从 tasks/ 目录加载 task prompt，fallback 到 prompts/
-    task_path = Path(__file__).parent.parent / "tasks" / f"{prompt_type}.md"
+    tasks_dir = Path(__file__).parent.parent.parent.parent / "tasks"
+    task_path = tasks_dir / f"{prompt_type}.md"
     if task_path.exists():
         prompt_path = str(task_path)
     else:
