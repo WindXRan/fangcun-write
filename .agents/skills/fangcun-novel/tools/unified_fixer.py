@@ -116,6 +116,12 @@ def fix_agent(config, task: FixTask, dry_run=False) -> FixResult:
                          new_chars=len(re.sub(r'\s', '', text)))
 
     if not dry_run:
+        # 备份原稿
+        backup_dir = Path(f"{config['rewrites_dir']}/chapters_backup")
+        backup_dir.mkdir(parents=True, exist_ok=True)
+        backup_file = backup_dir / f"ch_{task.ch:03d}.txt"
+        if not backup_file.exists():
+            backup_file.write_text(original, encoding='utf-8')
         ch_file.write_text(text, encoding='utf-8')
 
     return FixResult(ch=task.ch, status="fixed",
@@ -226,7 +232,7 @@ def _fix_llm(config, task, text):
 
         fixed_chars = len(re.sub(r'\s', '', fixed))
         target = max(task.target_chars, 1)
-        if abs(fixed_chars - target) / target < 0.3:
+        if abs(fixed_chars - target) / target < 0.15:
             return fixed
         return None
     except Exception as e:
@@ -466,7 +472,7 @@ def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False):
 # ============================================================
 
 def main():
-    parser = argparse.ArgumentParser(description="多 Agent 审改系统 v4")
+    parser = argparse.ArgumentParser(description="多 Agent 审改系统 v5")
     parser.add_argument("--config", required=True)
     parser.add_argument("--start", type=int, default=None)
     parser.add_argument("--end", type=int, default=None)
