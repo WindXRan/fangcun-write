@@ -292,7 +292,10 @@ def load_style_text(config, ch):
 
 
 def load_chapter_structure(config, ch):
-    """加载 per-chapter structure_{N}.md + 全书 blacklist.md（给 plot-guide 用）。"""
+    """加载 per-chapter structure_{N}.md + 本章 blacklist 条目（给 plot-guide 用）。
+
+    章对章仿写，每章只看自己的禁用清单，不需要全局黑名单。
+    """
     source_book = config.get("source_book", "")
     author = config.get("author", "")
     base_dir = config.get("base_dir", os.getcwd())
@@ -300,10 +303,21 @@ def load_chapter_structure(config, ch):
     
     parts = []
     
-    # 全书黑名单
+    # 从 blacklist.md 提取本章的条目（按 <!-- 来源: 第N章 --> 分割）
     bl_path = styles_dir / "blacklist.md"
     if bl_path.exists():
-        parts.append(bl_path.read_text(encoding="utf-8"))
+        bl_text = bl_path.read_text(encoding="utf-8")
+        marker = f"<!-- 来源: 第{ch}章 -->"
+        if marker in bl_text:
+            # 提取本章条目：从 marker 到下一个 marker 或文件末尾
+            start = bl_text.index(marker) + len(marker)
+            next_marker = bl_text.find("\n<!-- 来源: 第", start)
+            if next_marker == -1:
+                entry = bl_text[start:].strip()
+            else:
+                entry = bl_text[start:next_marker].strip()
+            if entry:
+                parts.append(f"## 本章禁用清单\n\n{entry}")
     
     # 本章场景功能
     f = styles_dir / f"structure_{ch:03d}.md"
