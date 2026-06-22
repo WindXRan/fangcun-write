@@ -68,7 +68,28 @@ def _check_character_names(config, text):
         # 例如：设定称谓是"漫漫"，但文本中写成"小漫"或"漫姐"
         # 这里可以添加更复杂的检查逻辑
     
-    # 3. 检查同一角色在不同章节是否使用不同名字
+    # 3. 检查是否有源文角色名混入（从源文提取角色名）
+    source_book = config.get("source_book", "")
+    author = config.get("author", "")
+    if source_book and author:
+        base_dir = Path(config.get("base_dir", "."))
+        source_chars_path = base_dir / "projects" / author / source_book / "characters.md"
+        if not source_chars_path.exists():
+            source_chars_path = base_dir / "projects" / author / source_book / "settings" / "characters.md"
+        
+        if source_chars_path.exists():
+            try:
+                source_chars_text = source_chars_path.read_text(encoding="utf-8")
+                source_names = re.findall(r'^##\s*(.+)$', source_chars_text, re.MULTILINE)
+                source_names = [n.strip() for n in source_names if n.strip()]
+                
+                for src_name in source_names:
+                    if src_name in text and src_name not in char_names.values():
+                        issues.append(f"源文角色名混入：'{src_name}' 出现在仿写文本中")
+            except Exception:
+                pass
+    
+    # 4. 检查同一角色在不同章节是否使用不同名字
     # 这需要跨章节检查，暂时在单章检查中不实现
     
     return issues

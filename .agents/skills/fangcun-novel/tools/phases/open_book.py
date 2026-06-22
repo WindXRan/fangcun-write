@@ -380,17 +380,34 @@ def phase_open_book(config, state_mgr=None):
         print(f"  [FAIL] characters.md: {e}")
         content = None
 
-    # === Stage 2b: 生成其他设定文件 ===
+    # === Stage 2b: 生成其他设定文件，注入角色名映射 ===
     print(f"  [STAGE 2b] 生成其他设定文件（4 并行 agent）...")
 
-    # 读取 characters.md 内容
+    # 从 characters.md 提取角色名映射，注入到其他 prompt
     characters_content = ""
     chars_path = rewrites_dir / "characters.md"
     if chars_path.exists():
         characters_content = chars_path.read_text(encoding="utf-8")
     
-    # 更新 replacements，注入 characters 内容
+    # 提取角色名映射表
+    char_mapping = {}
+    for m in re.finditer(r'\|\s*(\S+)\s*\|\s*(\S+)\s*\|\s*[男女]\s*\|', characters_content):
+        old_name = m.group(1).strip()
+        new_name = m.group(2).strip()
+        if old_name != "源文名" and new_name != "新名":
+            char_mapping[old_name] = new_name
+    
+    # 构建角色名注入文本
+    char_names_text = ""
+    if char_mapping:
+        char_names_lines = ["## 角色名映射（必须使用这些名字，不可自编）"]
+        for old, new in char_mapping.items():
+            char_names_lines.append(f"- {old} → {new}")
+        char_names_text = "\n".join(char_names_lines)
+    
+    # 更新 replacements，注入角色名
     replacements_stage2_with_chars = replacements_stage2.copy()
+    replacements_stage2_with_chars["角色名映射"] = char_names_text
     replacements_stage2_with_chars["characters.md内容"] = characters_content[:3000]
 
     # 使用合并后的 open-book-settings.md 一次生成所有设定
@@ -466,6 +483,9 @@ def phase_open_book(config, state_mgr=None):
         else:
             print("\n  [WARN] 未找到书名候选，请手动设置 book_name")
 
+    # === Stage 4: 汇总 book_info.md ===
+    _assemble_book_info(config)
+
     # === 用户确认方向 ===
     if not config.get("prompts_only") and not config.get("skip_confirm"):
         confirmed = _confirm_direction(config)
@@ -478,6 +498,141 @@ def phase_open_book(config, state_mgr=None):
     if state_mgr:
         state_mgr.phase_done("open-book")
     return True
+
+
+def _assemble_book_info(config):
+    """汇总各产物，生成完整的 book_info.md。"""
+    rewrites_dir = Path(config.get("rewrites_dir", ""))
+    if not rewrites_dir.exists():
+        return
+
+    base_dir = config.get("base_dir", os.getcwd())
+    author = config.get("author", "")
+    source_book = config.get("source_book", "")
+
+    # 读取源文元数据
+    source_meta = ""
+    header_path = Path(base_dir) / "projects" / author / source_book / "_cache" / "_header.txt"
+    if header_path.exists():
+        source_meta = header_path.read_text(encoding="utf-8")
+
+    # 提取源文简介
+    source_intro = ""
+    if source_meta:
+        intro_match = re.search(r'简介[：:]\s*\n(.*?)(?=\n={3,}|\Z)', source_meta, re.DOTALL)
+        if intro_match:
+            source_intro = intro_match.group(1).strip()
+
+    # 读取 concept.md
+    concept = ""
+    concept_path = rewrites_dir / "concept.md"
+    if concept_path.exists():
+        concept = concept_path.read_text(encoding="utf-8")
+
+    # 读取 characters.md
+    characters = ""
+    chars_path = rewrites_dir / "characters.md"
+    if chars_path.exists():
+        characters = chars_path.read_text(encoding="utf-8")
+
+    # 提取角色名列表
+    char_names = []
+    if characters:
+        char_names = re.findall(r'【([^】]+)】', characters)
+        # 去掉合并条目的斜杠
+        cleaned = []
+        for n in char_names:
+            for part in re.split(r'\s*/\s*', n):
+                part = part.strip()
+                if part:
+                    cleaned.append(part)
+        char_names = cleaned
+
+    # 读取已有 book_info.md（LLM 生成的赛道表+书名+简介）
+    existing = ""
+    info_path = rewrites_dir / "book_info.md"
+    if info_path.exists():
+        existing = info_path.read_text(encoding="utf-8")
+
+    # 从 concept.md 提取各段
+    def _extract_section(text, header):
+        pattern = rf'##\s*{re.escape(header)}\s*\n(.*?)(?=\n##\s|\Z)'
+        m = re.search(pattern, text, re.DOTALL)
+        return m.group(1).strip() if m else ""
+
+    strategy = _extract_section(concept, "策略")
+    selling = _extract_section(concept, "卖点")
+    story_core = _extract_section(concept, "故事核")
+    pleasure = _extract_section(concept, "核心心理级爽点")
+    golden_finger = _extract_section(concept, "金手指及其约束")
+    hidden_line = _extract_section(concept, "隐线（人物弧）")
+    rhythm = _extract_section(concept, "全局节奏图")
+    style = _extract_section(concept, "风格类型")
+
+    # 组装完整 book_info.md
+    parts = []
+
+    # 源文信息
+    if source_meta:
+        # 提取源文基础信息（书名、作者、评分、字数、章数等）
+        meta_lines = []
+        for line in source_meta.split("\n"):
+            line = line.strip()
+            if line and not line.startswith("=") and "简介" not in line:
+                meta_lines.append(line)
+                if len(meta_lines) >= 9:  # 取前9行元数据
+                    break
+        if meta_lines:
+            parts.append("**源文信息**\n")
+            parts.append("\n".join(meta_lines))
+
+    if source_intro:
+        parts.append(f"\n**源文简介**\n\n{source_intro}")
+
+    parts.append("\n---\n")
+
+    # LLM 生成的赛道表+书名+简介
+    if existing:
+        parts.append(existing.strip())
+
+    # 核心策略
+    if strategy or selling or story_core:
+        parts.append("\n---\n")
+        parts.append("**核心策略**\n")
+        if strategy:
+            parts.append(f"- **改编策略**：{strategy}")
+        if story_core:
+            parts.append(f"- **故事核**：{story_core}")
+        if selling:
+            parts.append(f"- **卖点**：{selling}")
+
+    # 爽点与金手指
+    if pleasure or golden_finger:
+        parts.append("\n**爽点与金手指**\n")
+        if pleasure:
+            parts.append(f"- **核心爽点**：{pleasure}")
+        if golden_finger:
+            parts.append(f"- **金手指**：{golden_finger}")
+
+    # 人物弧
+    if hidden_line:
+        parts.append(f"\n**人物弧**：{hidden_line}")
+
+    # 风格
+    if style:
+        parts.append(f"\n**风格类型**：{style}")
+
+    # 角色清单
+    if char_names:
+        parts.append(f"\n**角色清单**（{len(char_names)}人）：{'、'.join(char_names)}")
+
+    # 全局节奏图
+    if rhythm:
+        parts.append(f"\n---\n\n**全局节奏图**\n\n{rhythm}")
+
+    result = "\n".join(parts)
+    atomic_write_text(rewrites_dir / "book_info.md", result)
+    print(f"  [OK] book_info.md 已汇总（{len(result)}字）")
 
 
 def _confirm_direction(config):
