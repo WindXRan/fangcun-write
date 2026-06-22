@@ -301,12 +301,28 @@ def _get_style_text_mapped(config, ch):
         for old_name, new_name in extended_map.items():
             style_text = style_text.replace(old_name, new_name)
 
-    # 去掉例句行（防止 LLM 照抄源文原句）
+    # 保留<style_deep>部分，去掉例句行
     filtered_lines = []
+    in_style_deep = False
     for line in style_text.split("\n"):
+        # 跟踪<style_deep>部分
+        if '<style_deep>' in line:
+            in_style_deep = True
+        if '</style_deep>' in line:
+            in_style_deep = False
+            filtered_lines.append(line)
+            continue
+        
+        # 在<style_deep>内，保留所有内容（包括例子）
+        if in_style_deep:
+            filtered_lines.append(line)
+            continue
+        
+        # 在<style_deep>外，去掉例句行
         if re.match(r'^\s*(例句|例|示例)[：:]', line.strip()):
             continue
         filtered_lines.append(line)
+    
     style_text = "\n".join(filtered_lines)
 
     _style_text_cache[ch] = style_text
@@ -516,7 +532,15 @@ def _extract_info_release(config, chapter_num):
             if entry.get("ch") == chapter_num:
                 func = entry.get("function", "")
                 title = entry.get("title", "")
-                return f"## 本章任务\n- 章名：{title}\n- 功能：{func}\n- 类型：全新设计（源文无对应）"
+                conflict = entry.get("conflict_desc", "")
+                page_turn = entry.get("page_turn", "")
+                page_turn_desc = entry.get("page_turn_desc", "")
+                lines = [f"## 本章任务", f"- 章名：{title}", f"- 功能：{func}", f"- 类型：全新设计（源文无对应）"]
+                if conflict:
+                    lines.append(f"- 冲突：{conflict}")
+                if page_turn:
+                    lines.append(f"- 翻页理由：{page_turn}（{page_turn_desc}）")
+                return "\n".join(lines)
         return f"（第{chapter_num}章：全新设计）"
     
     # 收集所有源文章节的事件
@@ -538,6 +562,13 @@ def _extract_info_release(config, chapter_num):
             info_lines.append(f"- 功能：{entry.get('function', '')}")
             if len(source_chs) > 1:
                 info_lines.append(f"- 源文对应：第{', '.join(str(c) for c in source_chs)}章（已合并）")
+            conflict = entry.get("conflict_desc", "")
+            page_turn = entry.get("page_turn", "")
+            page_turn_desc = entry.get("page_turn_desc", "")
+            if conflict:
+                info_lines.append(f"- 冲突：{conflict}")
+            if page_turn:
+                info_lines.append(f"- 翻页理由：{page_turn}（{page_turn_desc}）")
             break
     
     for e in all_events:
