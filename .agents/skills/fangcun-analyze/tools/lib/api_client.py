@@ -49,8 +49,15 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None, max_
         max_tokens = pc.get("max_tokens", None)
 
     if not system_prompt:
-        sp_name = get_system_prompt_name(f"{prompt_type}.md") or "system-generic.md"
-        system_prompt = load_system_prompt(sp_name) or ""
+        from prompt_meta import get_prompt_meta
+        meta = get_prompt_meta(f"{prompt_type}.md")
+        # system_prompt: null 表示明确不要 system prompt
+        # 没有 system_prompt 字段才 fallback 到 system-generic.md
+        if "system_prompt" in meta:
+            sp_name = meta["system_prompt"]
+            system_prompt = load_system_prompt(sp_name) if sp_name else ""
+        else:
+            system_prompt = load_system_prompt("system-generic.md") or ""
 
     rewrites_dir = config.get("rewrites_dir", "")
     usage_log_path = str(Path(rewrites_dir) / "_log/api_usage.jsonl") if rewrites_dir else ""
