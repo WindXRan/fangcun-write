@@ -5,7 +5,7 @@ type: user
 phase: unified
 description: 全局修复（分析→方案→重写）
 system_prompt: system-generic.md
-required_vars: ["issues_text", "adjacent_context", "orig_chars", "target_chars", "min_chars", "max_chars", "chapter_content", "源文全文"]
+required_vars: ["N", "issues_text", "adjacent_context", "orig_chars", "target_chars", "min_chars", "max_chars", "chapter_content"]
 defaults: {"reasoning_effort": "low", "temperature": 0.6}
 ---
 
@@ -50,9 +50,12 @@ defaults: {"reasoning_effort": "low", "temperature": 0.6}
 </current_chapter>
 
 <source_reference>
-## 参考：源文同一章（仅作情绪/结构对标，禁止照搬情节）
+## 参考：源文结构（仅作情绪/节奏对标，禁止照搬情节/台词/道具）
 
-{源文全文}
+源文第{N}章的**情绪曲线**和**节奏结构**作为参考。修复时：
+- 保留源文的情绪起伏节奏（压抑→爆发→缓和）
+- 禁止照搬源文的具体事件、台词、道具
+- 禁止模仿源文的情节骨架
 </source_reference>
 
 <process>
