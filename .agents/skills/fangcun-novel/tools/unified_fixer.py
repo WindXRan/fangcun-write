@@ -275,12 +275,34 @@ def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False):
 
     print(f"  {len(review_results)}/{len(batches)} 个审查 agent 完成")
 
+    # ========== Step 1b: 全局维度审查（3 个 agent 并行）==========
+    print(f"\n{'='*40}", flush=True)
+    print(f"Step 1b: 全局维度审查", flush=True)
+    print("="*40, flush=True)
+
+    global_issues = []
+    try:
+        from unified_review import global_dimension_review
+        global_issues = global_dimension_review(cfg, chapters)
+        if global_issues:
+            print(f"  全局维度发现 {len(global_issues)} 个问题", flush=True)
+        else:
+            print(f"  全局维度未发现问题", flush=True)
+    except Exception as e:
+        print(f"  [WARN] 全局维度审查失败: {e}", flush=True)
+
     # ========== Step 2: Gather — Summary Agent ==========
     print(f"\n{'='*40}", flush=True)
     print(f"Step 2: 总结 Agent", flush=True)
     print("="*40, flush=True)
 
     summary = summary_agent(review_results, config=cfg)
+    # 合并全局维度问题到跨章问题
+    if global_issues:
+        summary.cross_issues.extend([
+            Issue(**{k: v for k, v in iss.items() if k in ("type", "severity", "priority", "desc", "fix", "auto_fixable", "ch")})
+            for iss in global_issues
+        ])
     s = summary.stats
     print(f"  {s['total_ch']} 章有问题 | P0:{s['p0']} P1:{s['p1']} P2:{s['p2']} | 均分:{s['avg_score']}", flush=True)
 

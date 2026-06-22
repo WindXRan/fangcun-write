@@ -3,7 +3,7 @@
 
 Agent 架构:
   1a. Batch Review Agents (scatter)   — N个并行，每人审 X 章 (algo+LLM, 7维全检)
-  1b. Global Review Agents (scatter)  — 2个并行，通读全书关键章：人设一致性 + 全局节奏/伏笔
+  1b. Global Review Agents (scatter)  — 3个并行，通读全书关键章：人设一致性 + 感情逻辑 + 节奏伏笔
   2.  Summary Agent (gather)          — 合并两层结果，去重分级 P0/P1/P2
 """
 
@@ -123,78 +123,225 @@ def _algo_check(config, ch):
     return {"score": score, "issues": issues}
 
 
-def _check_character_names_in_review(config, text, ch):
-    """在审查中检查角色名一致性。"""
-    issues = []
-    
-    # 加载 book_data.json 获取角色名
-    rewrites_dir = config.get("rewrites_dir", "")
-    if not rewrites_dir:
-        return issues
-    
-    book_data_path = Path(rewrites_dir) / "book_data.json"
-    if not book_data_path.exists():
-        return issues
-    
-    try:
-        book_data = json.loads(book_data_path.read_text(encoding="utf-8"))
-    except Exception:
-        return issues
-    
-    # 获取所有角色名
-    characters = book_data.get("characters", [])
-    if not characters:
-        return issues
-    
-    # 构建角色名列表
-    all_char_names = []
-    for ch_data in characters:
-        name = ch_data.get("name", "")
-        if name:
-            all_char_names.append(name)
-    
-    # 检查文本中是否出现角色名的变体
-    for name in all_char_names:
-        if not name:
-            continue
-        suffixes = ["哥", "爷", "姐", "嫂", "叔", "婶", "伯", "姨", "弟", "妹"]
-        for suffix in suffixes:
-            variant = name + suffix
-            if variant in text and variant != name:
-                issues.append({"type": "char_name_drift", "severity": "high",
-                               "desc": f"角色名漂移：'{name}' 被写成 '{variant}'",
-                               "fix": f"将'{variant}'替换为'{name}'",
-                               "auto_fixable": True})
-    
-    return issues
+# ============================================================
+# Layer 1b: 全局维度审查（3 个 agent 并行）
+# ============================================================
+
+def _select_key_chapters(chapter_nums, n=10):
+    """选择代表性章节：头3 + 每20%分位 + 尾3，最多 n 章。"""
+    if len(chapter_nums) <= n:
+        return list(chapter_nums)
+    picks = set(chapter_nums[:3])  # 头3
+    picks.add(chapter_nums[-1])    # 尾1
+    picks.add(chapter_nums[-2])    # 尾2
+    picks.add(chapter_nums[-3])    # 尾3
+    # 每20%分位
+    for pct in (0.2, 0.4, 0.6, 0.8):
+        idx = int(len(chapter_nums) * pct)
+        idx = min(idx, len(chapter_nums) - 1)
+        picks.add(chapter_nums[idx])
+    return sorted(picks)[:n]
 
 
-def _check_trope_repetition_in_review(config, text, ch):
-    """在审查中检查梗重复（从源文动态提取模式）。"""
-    from lib.trope_extractor import get_trope_patterns_for_validation
-    import re
-    
+def _load_concept(config):
+    """加载 concept.md 内容。"""
+    rewrites_dir = Path(config.get("rewrites_dir", ""))
+    for name in ("concept.md", "settings/concept.md"):
+        p = rewrites_dir / name
+        if p.exists():
+            return p.read_text(encoding="utf-8")
+    return ""
+
+
+def _load_key_chapters_text(config, key_chapters, max_chars_per_ch=1500):
+    """加载关键章节文本。"""
+    rewrites_dir = Path(config.get("rewrites_dir", ""))
+    chapters_dir = rewrites_dir / "chapters"
+    parts = []
+    for ch in key_chapters:
+        f = chapters_dir / f"ch_{ch:03d}.txt"
+        if f.exists():
+            text = f.read_text(encoding="utf-8")
+            parts.append(f"--- 第{ch}章 ---\n{text[:max_chars_per_ch]}")
+    return "\n\n".join(parts)
+
+
+def _parse_global_issues(llm_output, dimension):
+    """解析全局维度 agent 的输出为 issue 列表。"""
     issues = []
-    try:
-        trope_patterns = get_trope_patterns_for_validation(config)
-    except Exception:
-        return issues  # 提取失败时降级为空
-    
-    for trope_name, patterns in trope_patterns.items():
-        count = 0
-        for pattern in patterns:
-            matches = re.findall(pattern, text)
-            count += len(matches)
-        if count >= 5:  # 审查阶段阈值更宽松（5次）
+    # 匹配 P0/P1/P2 标记的问题
+    for m in re.finditer(
+        r'[-•]\s*\[?(P[012])\]?\s*[:：]\s*(.+?)(?:\n|$)', llm_output
+    ):
+        prio = m.group(1)
+        desc = m.group(2).strip()
+        if desc:
             issues.append({
-                "type": "trope_repetition",
-                "severity": "medium",
-                "desc": f"梗重复：'{trope_name}' 在本章出现 {count} 次",
-                "fix": f"减少'{trope_name}'相关描写，增加其他类型的桥段",
-                "auto_fixable": False
+                "type": dimension,
+                "severity": "high" if prio == "P0" else ("medium" if prio == "P1" else "low"),
+                "priority": prio,
+                "desc": f"【全局{dimension}】{desc}",
+                "fix": "",
+                "auto_fixable": False,
             })
-    
+    # 也匹配 markdown 表格行
+    for m in re.finditer(
+        r'\|\s*(P[012])\s*\|(.+?)\|(.+?)\|', llm_output
+    ):
+        prio = m.group(1)
+        desc = m.group(2).strip()
+        fix = m.group(3).strip()
+        if desc:
+            issues.append({
+                "type": dimension,
+                "severity": "high" if prio == "P0" else ("medium" if prio == "P1" else "low"),
+                "priority": prio,
+                "desc": f"【全局{dimension}】{desc}",
+                "fix": fix,
+                "auto_fixable": False,
+            })
     return issues
+
+
+_GLOBAL_PROMPT_TEMPLATE = """你是资深网文编辑，负责全局维度审查：{dimension_name}。
+
+## 审查对象
+
+{concept_section}
+
+## 关键章节内容
+
+{chapters_text}
+
+## 审查任务
+
+{task_desc}
+
+## 输出格式
+
+逐条列出问题，每条格式：
+- [P0/P1/P2] 问题描述
+
+没有问题则输出"未发现全局{dimension_name}问题"。
+"""
+
+
+def _global_agent_character(config, key_chapters, concept):
+    """全局 Agent A：人设一致性（对照行为卡片逐章检查）。"""
+    from lib.api_client import call_llm
+
+    chapters_text = _load_key_chapters_text(config, key_chapters)
+    # 加载角色卡
+    rewrites_dir = Path(config.get("rewrites_dir", ""))
+    chars_path = rewrites_dir / "characters.md"
+    characters = chars_path.read_text(encoding="utf-8") if chars_path.exists() else ""
+
+    concept_section = f"## 角色设定\n\n{characters}\n\n## 核心策略\n\n{concept[:3000]}"
+    task_desc = """检查以下问题：
+1. 角色核心性格在各章是否一致（对照角色设定）
+2. 角色行为模式是否随剧情合理渐进（不能突然转变）
+3. 角色称谓/身份是否前后一致
+4. 配角是否在需要时出场（不能消失或凭空出现）
+5. 角色的能力边界是否一致（不能跨章波动）"""
+
+    prompt = _GLOBAL_PROMPT_TEMPLATE.format(
+        dimension_name="人设一致性",
+        concept_section=concept_section,
+        chapters_text=chapters_text,
+        task_desc=task_desc,
+    )
+
+    try:
+        content = call_llm(config, "unified-review", prompt, "")
+        return _parse_global_issues(content, "character")
+    except Exception as e:
+        print(f"    [全局-人设] 失败: {e}", flush=True)
+        return []
+
+
+def _global_agent_emotion(config, key_chapters, concept):
+    """全局 Agent B：感情逻辑（阶段渐进+情绪真实性）。"""
+    from lib.api_client import call_llm
+
+    chapters_text = _load_key_chapters_text(config, key_chapters)
+    concept_section = f"## 核心策略\n\n{concept[:3000]}"
+    task_desc = """检查以下问题：
+1. 主角的感情线是否按阶段合理渐进（不能跳跃）
+2. 亲情/友情/爱情的转变是否有铺垫（不能突变）
+3. 情绪反应是否符合角色性格（不能所有人都一样的反应）
+4. 高潮情绪是否有足够的压抑铺垫（不能平地起高楼）
+5. 情绪节奏是否张弛有度（不能一直高强度或一直低沉）"""
+
+    prompt = _GLOBAL_PROMPT_TEMPLATE.format(
+        dimension_name="感情逻辑",
+        concept_section=concept_section,
+        chapters_text=chapters_text,
+        task_desc=task_desc,
+    )
+
+    try:
+        content = call_llm(config, "unified-review", prompt, "")
+        return _parse_global_issues(content, "emotion")
+    except Exception as e:
+        print(f"    [全局-感情] 失败: {e}", flush=True)
+        return []
+
+
+def _global_agent_rhythm(config, key_chapters, concept):
+    """全局 Agent C：节奏/伏笔。"""
+    from lib.api_client import call_llm
+
+    chapters_text = _load_key_chapters_text(config, key_chapters)
+    concept_section = f"## 核心策略\n\n{concept[:3000]}"
+    task_desc = """检查以下问题：
+1. 伏笔是否在后续章节有回收（不能只埋不收）
+2. 主线推进是否每章都有（不能跑偏写支线）
+3. 章节间的节奏是否合理（不能连续多章同一节奏）
+4. 信息释放是否均匀（不能前松后紧或前紧后松）
+5. 高潮位置是否在全局节奏图的预期位置"""
+
+    prompt = _GLOBAL_PROMPT_TEMPLATE.format(
+        dimension_name="节奏伏笔",
+        concept_section=concept_section,
+        chapters_text=chapters_text,
+        task_desc=task_desc,
+    )
+
+    try:
+        content = call_llm(config, "unified-review", prompt, "")
+        return _parse_global_issues(content, "rhythm")
+    except Exception as e:
+        print(f"    [全局-节奏] 失败: {e}", flush=True)
+        return []
+
+
+def global_dimension_review(config, chapter_nums):
+    """Layer 1b: 3 个全局维度 agent 并行审查。"""
+    key_chapters = _select_key_chapters(chapter_nums)
+    concept = _load_concept(config)
+    if not concept:
+        print("    [全局] concept.md 不存在，跳过全局维度审查", flush=True)
+        return []
+
+    print(f"  [全局] 3 个维度 agent 并行启动（关键章: {key_chapters}）", flush=True)
+    all_issues = []
+
+    with ThreadPoolExecutor(max_workers=3) as ex:
+        futures = {
+            ex.submit(_global_agent_character, config, key_chapters, concept): "人设",
+            ex.submit(_global_agent_emotion, config, key_chapters, concept): "感情",
+            ex.submit(_global_agent_rhythm, config, key_chapters, concept): "节奏",
+        }
+        for f in as_completed(futures):
+            name = futures[f]
+            try:
+                issues = f.result()
+                all_issues.extend(issues)
+                print(f"    [全局-{name}] 发现 {len(issues)} 个问题", flush=True)
+            except Exception as e:
+                print(f"    [全局-{name}] 失败: {e}", flush=True)
+
+    return all_issues
 
 
 def _parse_review_output(text):
