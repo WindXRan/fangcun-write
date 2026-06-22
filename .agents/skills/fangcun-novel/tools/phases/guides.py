@@ -412,6 +412,60 @@ def _build_name_list(chars_text):
     return "、".join(items) if items else ""
 
 
+def _extract_info_release(config, chapter_num):
+    """从 events.json 提取本章信息释放清单，不传源文全文。"""
+    from file_io import load_events
+    
+    events = load_events(config)
+    if not events:
+        return f"（第{chapter_num}章事件未找到）"
+    
+    # 找到本章事件
+    chapter_event = None
+    for e in events:
+        if e.get("chapter_index") == chapter_num or e.get("id") == chapter_num:
+            chapter_event = e
+            break
+    
+    if not chapter_event:
+        return f"（第{chapter_num}章事件未找到）"
+    
+    # 提取事件描述
+    event_text = chapter_event.get("event", "")
+    
+    # 解析事件表格格式：| 章节 | 角色 | 事件 | 功能 | 强度 | 时长 | 情绪 |
+    parts = event_text.split("|")
+    if len(parts) >= 4:
+        characters = parts[2].strip() if len(parts) > 2 else ""
+        event_desc = parts[3].strip() if len(parts) > 3 else ""
+        function = parts[4].strip() if len(parts) > 4 else ""
+        
+        # 构建信息释放清单
+        info_lines = []
+        info_lines.append(f"## 本章信息释放清单")
+        info_lines.append(f"")
+        info_lines.append(f"**本章出场角色**：{characters}")
+        info_lines.append(f"**本章事件概述**：{event_desc}")
+        info_lines.append(f"**本章功能**：{function}")
+        info_lines.append(f"")
+        info_lines.append(f"## 要求")
+        info_lines.append(f"")
+        info_lines.append(f"基于以上信息，设计**完全原创的场景**来实现相同的功能。")
+        info_lines.append(f"**禁止**：")
+        info_lines.append(f"- 不要参考源文的具体事件、情节步骤、冲突方式")
+        info_lines.append(f"- 不要使用源文的标志性道具、台词、设定")
+        info_lines.append(f"- 不要复制源文的情节骨架（A→B→C→D）")
+        info_lines.append(f"")
+        info_lines.append(f"**必须**：")
+        info_lines.append(f"- 自主设计全新的事件、冲突、收尾方式")
+        info_lines.append(f"- 使用新角色名（参考 name_map）")
+        info_lines.append(f"- 确保信息释放与源文一致（相同的信息，不同的方式）")
+        
+        return "\n".join(info_lines)
+    
+    return f"（第{chapter_num}章事件解析失败）"
+
+
 def _get_chapter_characters(config, ch_num):
     """从 events.json 提取本章出场角色，映射为新名。"""
     # 使用缓存的映射版本
@@ -506,9 +560,20 @@ def _load_character_cards(config, ch_num):
                 chars_path = rewrites_dir / "characters.md"
             if chars_path.exists():
                 chars_text = chars_path.read_text(encoding="utf-8")
+                # 匹配格式1: 【角色名】
                 m = re.search(rf'【{re.escape(name)}】[\s\S]*?(?=【[^】]|$)', chars_text)
                 if m:
                     cards.append(m.group(0).strip())
+                else:
+                    # 匹配格式2: ### 【角色位】name（...）— 角色位不是名字
+                    m = re.search(rf'###\s*【[^】]+】{re.escape(name)}[（(][\s\S]*?(?=###|$)', chars_text)
+                    if m:
+                        cards.append(m.group(0).strip())
+                    else:
+                        # 匹配格式3: 角色名出现在表格行中，提取该行+后续角色卡
+                        m = re.search(rf'【[^】]*{re.escape(name)}[^】]*】[\s\S]*?(?=###\s*【|$)', chars_text)
+                        if m:
+                            cards.append(m.group(0).strip())
 
     return "\n\n".join(cards) if cards else "（无角色信息）"
 
@@ -865,17 +930,20 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         replacements.setdefault("目标字数_min", "2000")
         replacements.setdefault("目标字数_max", "3000")
     
-    # plot-guide 注入源文全文（章纲需要完整分析结构和节拍）
+    # plot-guide 注入信息释放清单（不传源文全文，防止换皮）
     if prompt_type == "plot-guide" and chapter_num:
+        # 从 events.json 提取本章事件信息
+        info_release = _extract_info_release(config, chapter_num)
+        replacements["event"] = info_release
+        
+        # 源文高光（保留，用于风格参考）
         source_text = get_source_text(config, chapter_num)
         if source_text:
-            # 源文保留原名，不强制换名。LLM 通过角色卡自行映射。
-            replacements["event"] = source_text
             highlights = _extract_highlights(source_text, max_chars=500)
             replacements["highlights"] = highlights or ""
         else:
-            replacements["event"] = "（源文读取失败）"
             replacements["highlights"] = ""
+        
         # 注入源文结构缓存（per-chapter）
         if "structure" not in replacements:
             from phases.style_extract import load_chapter_structure
