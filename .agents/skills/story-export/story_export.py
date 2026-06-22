@@ -43,6 +43,13 @@ def export_novel(project_dir, output_file=None):
         key=lambda f: int(re.search(r'第(\d+)章', f.stem).group(1)) if re.search(r'第(\d+)章', f.stem) else 0
     )
     
+    # 如果没有找到"第*章*.txt"格式，尝试"ch_*.txt"格式
+    if not chapter_files:
+        chapter_files = sorted(
+            [f for f in chapters_dir.glob("ch_*.txt")],
+            key=lambda f: int(re.search(r'ch_(\d+)', f.stem).group(1)) if re.search(r'ch_(\d+)', f.stem) else 0
+        )
+    
     if not chapter_files:
         print(f"错误：没有找到章节文件")
         return False

@@ -523,8 +523,26 @@ def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False, auto
             if ch in summary.chapters:
                 original_issues[ch] = summary.chapters[ch].get("issues", [])
 
-        # 只审改过的章
-        re_review = review_agent(cfg, fixed_chs, agent_id="re-check")
+        # 只审改过的章（分批并行，复用 Step 1 的 batch_size）
+        re_batches = [fixed_chs[i:i+batch_size] for i in range(0, len(fixed_chs), batch_size)]
+        re_review_results = []
+        print(f"  {len(re_batches)} 个二次审查 agent 并行启动", flush=True)
+        with ThreadPoolExecutor(max_workers=min(workers, len(re_batches))) as ex:
+            re_futures = {
+                ex.submit(review_agent, cfg, batch, agent_id=f"re-check-{i}"): i
+                for i, batch in enumerate(re_batches)
+            }
+            for f in as_completed(re_futures):
+                try:
+                    re_review_results.append(f.result())
+                except Exception as e:
+                    print(f"    [FAIL] Re-check Agent {re_futures[f]}: {e}")
+
+        # 合并二次审查结果
+        re_review = ReviewResult()
+        for rr in re_review_results:
+            re_review.chapters.update(rr.chapters)
+            re_review.cross_issues.extend(rr.cross_issues)
         
         # 回归检查：验证原始问题是否解决
         unresolved_count = 0
