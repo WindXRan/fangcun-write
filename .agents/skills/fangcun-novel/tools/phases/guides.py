@@ -311,11 +311,33 @@ def _build_name_map_text(config):
 
     chars_text = chars_path.read_text(encoding="utf-8")
     items = []
+    seen = set()
+
+    # 格式1: 表格行 | 源文名 | 新名 | ... |
+    for line in chars_text.split('\n'):
+        line = line.strip()
+        if not line.startswith('|'):
+            continue
+        cells = [c.strip() for c in line.split('|') if c.strip()]
+        if len(cells) < 2:
+            continue
+        old_name = cells[0]
+        new_name = cells[1]
+        if old_name in ('源文名', '----', '---', '===') or new_name in ('新名', '----', '---', '==='):
+            continue
+        if '-' in old_name or '-' in new_name:
+            continue
+        if old_name and new_name and old_name != new_name and old_name not in seen:
+            items.append(f"{old_name}→{new_name}")
+            seen.add(old_name)
+
+    # 格式2: 【新名】（源文对应：源文名）
     for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars_text):
         new_name = m.group(1).strip()
         old_name = m.group(2).strip()
-        if new_name != old_name:
+        if new_name != old_name and old_name not in seen:
             items.append(f"{old_name}→{new_name}")
+            seen.add(old_name)
 
     _name_map_text_cache = "、".join(items) if items else ""
     return _name_map_text_cache
