@@ -49,11 +49,11 @@ def aggregate(records):
 
     Returns:
         (phase_stats, total_stats)
-        phase_stats: {prompt_type: {calls, prompt, completion, total, cost}}
-        total_stats: {calls, prompt, completion, total, cost}
+        phase_stats: {prompt_type: {calls, prompt, cached, completion, total, cost}}
+        total_stats: {calls, prompt, cached, completion, total, cost}
     """
     phases = {}
-    total = {"calls": 0, "prompt": 0, "completion": 0, "total": 0, "cost": 0.0}
+    total = {"calls": 0, "prompt": 0, "cached": 0, "completion": 0, "total": 0, "cost": 0.0}
 
     for r in records:
         pt = r.get("prompt_type", "unknown")
@@ -62,17 +62,22 @@ def aggregate(records):
 
         p = r.get("prompt_tokens", 0)
         c = r.get("completion_tokens", 0)
-        cost = (p / 1000 * prices["input"]) + (c / 1000 * prices["output"])
+        cached = r.get("cached_tokens", 0)
+        # 缓存命中的 token 按 1/10 计费（DeepSeek/MiMo 缓存定价）
+        uncached = max(0, p - cached)
+        cost = (uncached / 1000 * prices["input"]) + (cached / 1000 * prices["input"] * 0.1) + (c / 1000 * prices["output"])
 
-        phases.setdefault(pt, {"calls": 0, "prompt": 0, "completion": 0, "total": 0, "cost": 0.0})
+        phases.setdefault(pt, {"calls": 0, "prompt": 0, "cached": 0, "completion": 0, "total": 0, "cost": 0.0})
         phases[pt]["calls"] += 1
         phases[pt]["prompt"] += p
+        phases[pt]["cached"] += cached
         phases[pt]["completion"] += c
         phases[pt]["total"] += p + c
         phases[pt]["cost"] += cost
 
         total["calls"] += 1
         total["prompt"] += p
+        total["cached"] += cached
         total["completion"] += c
         total["total"] += p + c
         total["cost"] += cost
@@ -86,24 +91,27 @@ def format_report(records, total_cost=None):
         return "# Token 消耗报告\n\n暂无数据（API 调用未记录）\n"
 
     phases, total = aggregate(records)
+    cache_hit_rate = total["cached"] / total["prompt"] * 100 if total["prompt"] else 0
     lines = []
     lines.append("# Token 消耗报告\n")
     lines.append(f"总 API 调用次数：{total['calls']} 次\n")
     lines.append(f"总消耗：{total['total']:,} tokens（输入 {total['prompt']:,} + 输出 {total['completion']:,}）\n")
+    lines.append(f"缓存命中：{total['cached']:,} tokens（命中率 {cache_hit_rate:.1f}%）\n")
 
     cost = total_cost or total["cost"]
     lines.append(f"总费用：¥{cost:.4f}\n")
 
     lines.append("\n## 各阶段消耗\n\n")
-    lines.append("| 阶段 | 调用次数 | 输入 tokens | 输出 tokens | 合计 tokens | 费用(元) |\n")
-    lines.append("|------|---------|------------|-------------|------------|----------|\n")
+    lines.append("| 阶段 | 调用次数 | 输入 tokens | 缓存命中 | 命中率 | 输出 tokens | 合计 tokens | 费用(元) |\n")
+    lines.append("|------|---------|------------|---------|--------|------------|------------|----------|\n")
     row_cost = 0
     for pt in sorted(phases.keys()):
         s = phases[pt]
         pct = s["total"] / total["total"] * 100 if total["total"] else 0
-        lines.append(f"| {pt} | {s['calls']} | {s['prompt']:,} | {s['completion']:,} | {s['total']:,} ({pct:.1f}%) | ¥{s['cost']:.4f} |\n")
+        hit_rate = s["cached"] / s["prompt"] * 100 if s["prompt"] else 0
+        lines.append(f"| {pt} | {s['calls']} | {s['prompt']:,} | {s['cached']:,} | {hit_rate:.1f}% | {s['completion']:,} | {s['total']:,} ({pct:.1f}%) | ¥{s['cost']:.4f} |\n")
         row_cost += s["cost"]
-    lines.append(f"| **合计** | **{total['calls']}** | **{total['prompt']:,}** | **{total['completion']:,}** | **{total['total']:,}** | **¥{cost:.4f}** |\n")
+    lines.append(f"| **合计** | **{total['calls']}** | **{total['prompt']:,}** | **{total['cached']:,}** | **{cache_hit_rate:.1f}%** | **{total['completion']:,}** | **{total['total']:,}** | **¥{cost:.4f}** |\n")
 
     if records:
         lines.append("\n## 时间分布\n\n")

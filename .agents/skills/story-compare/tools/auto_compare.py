@@ -6,6 +6,7 @@ import requests
 from pathlib import Path
 
 API_URL = "https://api.deepseek.com/chat/completions"
+_session = requests.Session()
 SYSTEM_PROMPT = """你是资深网文编辑，负责评估仿写作品的质量。
 
 版本A是源文（原作），版本B是仿写作品。请基于这个前提进行分析。
@@ -36,7 +37,7 @@ def call_api(api_key, model, user_prompt, reasoning_effort="low", max_tokens=409
     data = {
         "model": model,
         "messages": [
-            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": SYSTEM_PROMPT, "cache_control": {"type": "ephemeral"}},
             {"role": "user", "content": user_prompt}
         ],
         "temperature": 0.3,
@@ -44,7 +45,7 @@ def call_api(api_key, model, user_prompt, reasoning_effort="low", max_tokens=409
         "stream": False,
         "reasoning_effort": reasoning_effort
     }
-    resp = requests.post(API_URL, headers=headers, json=data, timeout=300)
+    resp = _session.post(API_URL, headers=headers, json=data, timeout=300)
     resp.raise_for_status()
     return resp.json()["choices"][0]["message"]["content"]
 

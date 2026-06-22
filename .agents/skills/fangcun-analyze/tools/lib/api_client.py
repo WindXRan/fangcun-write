@@ -8,6 +8,9 @@ from datetime import datetime
 
 DEFAULT_API_URL = os.environ.get("DEFAULT_API_URL", "https://token-plan-cn.xiaomimimo.com/v1/chat/completions")
 
+# 复用 TCP 连接，减少 TLS 握手开销
+_session = requests.Session()
+
 
 def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None, max_tokens=None):
     """统一 LLM 调用入口。
@@ -60,11 +63,19 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None, max_
     if usage and rewrites_dir:
         try:
             from lib.token_tracker import log_usage
+            # 提取缓存命中的 token 数（DeepSeek/MiMo 返回 prompt_tokens_details.cached_tokens）
+            cached = 0
+            ptd = usage.get("prompt_tokens_details") or usage.get("prompt_cache_hit_tokens")
+            if isinstance(ptd, dict):
+                cached = ptd.get("cached_tokens", 0)
+            elif isinstance(ptd, (int, float)):
+                cached = int(ptd)
             log_usage(rewrites_dir, {
                 "prompt_type": prompt_type,
                 "ch": ch,
                 "model": model,
                 "prompt_tokens": usage.get("prompt_tokens", 0),
+                "cached_tokens": cached,
                 "completion_tokens": usage.get("completion_tokens", 0),
                 "total_tokens": usage.get("total_tokens", 0),
                 "timestamp": datetime.now().isoformat(timespec="seconds"),
@@ -128,12 +139,13 @@ def call_api(api_key, model, user_prompt,
         headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     
     sys_prompt = system_prompt or load_system_prompt("system-generic.md") or ""
+    messages = [
+        {"role": "system", "content": sys_prompt, "cache_control": {"type": "ephemeral"}},
+        {"role": "user", "content": user_prompt}
+    ]
     data = {
         "model": model,
-        "messages": [
-            {"role": "system", "content": sys_prompt},
-            {"role": "user", "content": user_prompt}
-        ],
+        "messages": messages,
         "temperature": temperature,
     }
     if max_tokens:
@@ -143,7 +155,7 @@ def call_api(api_key, model, user_prompt,
 
     for attempt in range(max_retries + 1):
         try:
-            resp = requests.post(url, headers=headers, json=data, timeout=timeout)
+            resp = _session.post(url, headers=headers, json=data, timeout=timeout)
 
             if resp.status_code == 200:
                 body = resp.json()
@@ -233,7 +245,7 @@ def test_api_connection(config=None, timeout=10):
     
     try:
         start_time = time.time()
-        resp = requests.post(api_url, headers=headers, json=data, timeout=timeout)
+        resp = _session.post(api_url, headers=headers, json=data, timeout=timeout)
         latency_ms = (time.time() - start_time) * 1000
         
         if resp.status_code == 200:
