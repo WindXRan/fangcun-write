@@ -1,9 +1,10 @@
 ﻿---
-version: 6
-changelog: 迁移到XML标签格式
-type: user
+version: 7
+changelog: 添加trigger字段
+type: task
 phase: unified
 description: 批量审稿
+trigger: "/unified-review", "/审查", "/审改", "审查一下", "看看质量"
 system_prompt: system-generic.md
 required_vars: ["count", "chapters_text"]
 optional_vars: ["source_context"]

@@ -1,9 +1,10 @@
 ﻿---
-version: 1
-changelog: 骨架映射：分析源文结构，设计新骨架
-type: user
+version: 2
+changelog: 添加trigger字段
+type: task
 phase: skeleton_map
 description: 骨架映射（源文章节→新书章节）
+trigger: "/skeleton-map", "/骨架映射", "映射骨架", "生成映射"
 required_vars: ["新书名", "源书名", "events_text", "skeleton", "concept"]
 system_prompt: null
 defaults: {"reasoning_effort": "low", "temperature": 0.8}

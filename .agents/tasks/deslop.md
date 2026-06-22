@@ -1,10 +1,11 @@
 ---
 name: deslop
-version: 2.0.0
-changelog: 改为task格式
+version: 2.1.0
+changelog: 添加trigger字段
 type: task
 phase: deslop
 description: 去AI味
+trigger: "/deslop", "/去AI味", "这段太AI了", "帮我润色一下"
 system_prompt: agent.md
 defaults: {"reasoning_effort": "low", "temperature": 0.3}
 ---

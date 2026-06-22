@@ -1,6 +1,6 @@
 ﻿---
-version: 8
-changelog: 纯task，不注入变量
+version: 9
+changelog: 文件引用模式
 type: task
 phase: postprocess
 description: 润色章节
@@ -20,3 +20,8 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 **禁止**：抄源文表达、改变情节/人物/对话内容、改动角色名、增删情节。
 </task>
 
+仿写稿：
+【原文】{rewrites_dir}/chapters/ch_{N03d}.txt
+
+源文（参考风格）：
+【源文】{rewrites_dir}/../_cache/chapters/第{N}章*.txt

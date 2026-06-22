@@ -409,6 +409,15 @@ def phase_open_book(config, state_mgr=None):
     replacements_stage2_with_chars = replacements_stage2.copy()
     replacements_stage2_with_chars["角色名映射"] = char_names_text
     replacements_stage2_with_chars["characters.md内容"] = characters_content[:3000]
+    
+    # 注入市场数据
+    try:
+        from market_data import load_market_summary
+        market_data = load_market_summary(config)
+        if market_data:
+            replacements_stage2_with_chars["市场数据"] = market_data
+    except:
+        pass
 
     # 使用合并后的 open-book-settings.md 一次生成所有设定
     try:

@@ -1,6 +1,6 @@
 ﻿---
-version: 10
-changelog: 纯task，不注入变量
+version: 11
+changelog: 文件引用模式
 type: task
 phase: postprocess
 description: 精简超字数章
@@ -24,3 +24,5 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 **禁止**：改动角色名、改动对话内容、添加新内容、重写段落。
 </task>
 
+原文：
+【原文】{rewrites_dir}/chapters/ch_{N03d}.txt

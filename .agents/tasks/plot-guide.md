@@ -1,6 +1,6 @@
 ﻿---
-version: 49
-changelog: 纯task，不注入变量
+version: 50
+changelog: 文件引用模式，不依赖代码注入
 type: task
 phase: guides
 description: 章纲生成
@@ -23,6 +23,26 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 **第三步：输出章纲**
 按输出格式输出，完成自检表。
 </task>
+
+<event>
+【event】{rewrites_dir}/../_cache/events.json
+</event>
+
+<characters>
+【characters】{rewrites_dir}/characters.md
+</characters>
+
+<highlights>
+【highlights】{rewrites_dir}/../_cache/styles/style_{N03d}_llm.md
+</highlights>
+
+<blacklist>
+【blacklist】{rewrites_dir}/../_cache/styles/blacklist.md
+</blacklist>
+
+<world>
+【world】{rewrites_dir}/world.md
+</world>
 
 <output_format>
 ## 输出格式
@@ -56,4 +76,3 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 | 人设落地≥2处？ | ✅/❌ |
 | 有原创名场面？ | ✅/❌ |
 </output_format>
-

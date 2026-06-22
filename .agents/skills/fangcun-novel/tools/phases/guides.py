@@ -1110,11 +1110,6 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         else:
             replacements["highlights"] = ""
         
-        # 注入市场数据
-        if "market" not in replacements:
-            from market_data import load_market_summary
-            replacements["market"] = load_market_summary(config)
-        
         # 注入源文结构缓存（per-chapter）
         if "structure" not in replacements:
             from phases.style_extract import load_chapter_structure
@@ -1227,38 +1222,6 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     else:
         prompt_path = f"{prompts_dir}/{prompt_type}.md"
     user_prompt = load_prompt(prompt_path, base_dir, replacements, mode="api", rewrites_dir=config.get("rewrites_dir"))
-
-    # 新架构：task prompt 不含 {变量}，用 XML 标签拼接 context
-    if prompt_type == "write-chapter" and chapter_num:
-        ctx_parts = []
-        if replacements.get("style"):
-            ctx_parts.append(f"<style>\n{replacements['style']}\n</style>")
-        if replacements.get("characters"):
-            ctx_parts.append(f"<characters>\n{replacements['characters']}\n</characters>")
-        if replacements.get("name_map"):
-            ctx_parts.append(f"<name_map>\n{replacements['name_map']}\n</name_map>")
-        if replacements.get("structure"):
-            ctx_parts.append(f"<structure>\n{replacements['structure']}\n</structure>")
-        if replacements.get("principles"):
-            ctx_parts.append(f"<principles>\n{replacements['principles']}\n</principles>")
-        ctx_parts.append(f"<word_count>目标字数：{replacements.get('目标字数', '?')}字（{replacements.get('目标字数_min', '?')}~{replacements.get('目标字数_max', '?')}）</word_count>")
-        if ctx_parts:
-            user_prompt = user_prompt + "\n\n" + "\n\n".join(ctx_parts)
-
-    elif prompt_type == "plot-guide" and chapter_num:
-        ctx_parts = []
-        if replacements.get("event"):
-            ctx_parts.append(f"<event>\n{replacements['event']}\n</event>")
-        if replacements.get("characters"):
-            ctx_parts.append(f"<characters>\n{replacements['characters']}\n</characters>")
-        if replacements.get("highlights"):
-            ctx_parts.append(f"<highlights>\n{replacements['highlights']}\n</highlights>")
-        if replacements.get("structure"):
-            ctx_parts.append(f"<blacklist>\n{replacements['structure']}\n</blacklist>")
-        if replacements.get("world"):
-            ctx_parts.append(f"<world>\n{replacements['world']}\n</world>")
-        if ctx_parts:
-            user_prompt = user_prompt + "\n\n" + "\n\n".join(ctx_parts)
 
     if not system_prompt:
         sp_name = get_system_prompt_name(f"{prompt_type}.md") or "agent.md"
