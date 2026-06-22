@@ -367,7 +367,7 @@ def phase_open_book(config, state_mgr=None):
             base_dir, replacements_stage2, mode="api",
             rewrites_dir=config.get("rewrites_dir"),
         )
-        sp_name = get_system_prompt_name("open-book-characters.md") or "system-generic.md"
+        sp_name = get_system_prompt_name("open-book-characters.md") or "agent.md"
         system_prompt = load_system_prompt(sp_name) or ""
         system_prompt += "\n\n你必须使用如下XML格式输出全部内容：\n<characters>内容</characters>"
         
@@ -417,7 +417,7 @@ def phase_open_book(config, state_mgr=None):
             base_dir, replacements_stage2_with_chars, mode="api",
             rewrites_dir=config.get("rewrites_dir"),
         )
-        sp_name = get_system_prompt_name("open-book-settings.md") or "system-generic.md"
+        sp_name = get_system_prompt_name("open-book-settings.md") or "agent.md"
         system_prompt = load_system_prompt(sp_name) or ""
 
         result = call_llm(config, "open-book-settings", user_prompt, system_prompt)

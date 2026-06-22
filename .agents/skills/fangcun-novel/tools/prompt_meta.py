@@ -7,6 +7,7 @@ from pathlib import Path
 
 
 PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
+TASKS_DIR = Path(__file__).resolve().parent.parent / "tasks"
 FRONTMATTER_RE = re.compile(r'^---\s*\n(.*?)\n---\s*\n', re.DOTALL)
 
 
@@ -76,8 +77,11 @@ def load_system_prompt(name, visited=None):
 
 
 def load_prompt_str(name, with_tag=False):
-    """从 prompts/ 按名加载 prompt，去掉 frontmatter。"""
-    p = PROMPTS_DIR / name
+    """从 tasks/ 或 prompts/ 按名加载 prompt，去掉 frontmatter。"""
+    # 优先 tasks/
+    p = TASKS_DIR / name
+    if not p.exists():
+        p = PROMPTS_DIR / name
     if not p.exists():
         return ("", 0) if with_tag else ""
     meta, body = parse_frontmatter(p.read_text(encoding="utf-8"))
@@ -87,8 +91,10 @@ def load_prompt_str(name, with_tag=False):
 
 
 def get_prompt_meta(name):
-    """读取 prompts/{name} 文件的 frontmatter，返回 meta 字典。"""
-    p = PROMPTS_DIR / name
+    """读取 prompt 文件的 frontmatter，返回 meta 字典。"""
+    p = TASKS_DIR / name
+    if not p.exists():
+        p = PROMPTS_DIR / name
     if not p.exists():
         return {}
     meta, _ = parse_frontmatter(p.read_text(encoding="utf-8"))

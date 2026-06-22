@@ -1,0 +1,128 @@
+{
+  "title": "认亲后，画风跑偏",
+  "author": "午夜凶球",
+  "total_chars": 600000,
+  "total_chapters": 154,
+  "total_scenes": 455,
+  "scenes_per_chapter": "2-7",
+  "split_status": "complete",
+  "split_progress": "154/154 chapters",
+  "created_at": "2026-06-22",
+  "updated_at": "2026-06-22",
+  "characters": [
+    {
+      "name": "李观澜",
+      "role": "主角",
+      "description": "装温柔实际很能打，东北女大王",
+      "key_traits": ["装乖巧", "嘴毒", "护短", "聪明"]
+    },
+    {
+      "name": "江流",
+      "role": "男主",
+      "description": "嘴笨但很宠李观澜，校草",
+      "key_traits": ["嘴笨", "护犊子", "阳光", "帅气"]
+    },
+    {
+      "name": "李建国",
+      "role": "父亲",
+      "description": "李观澜养父，宠女狂魔",
+      "key_traits": ["怕老婆", "宠女儿", "幽默", "负责任"]
+    },
+    {
+      "name": "林秋敏",
+      "role": "母亲",
+      "description": "李观澜养母，家庭话事人",
+      "key_traits": ["强势", "护犊子", "能干", "嘴硬心软"]
+    },
+    {
+      "name": "高慧云",
+      "role": "婆婆",
+      "description": "江流妈妈，护犊子",
+      "key_traits": ["护儿子", "八卦", "热心"]
+    },
+    {
+      "name": "江青山",
+      "role": "公公",
+      "description": "江流爸爸，怕老婆",
+      "key_traits": ["怕老婆", "幽默", "宠儿子"]
+    },
+    {
+      "name": "赵萌萌",
+      "role": "配角",
+      "description": "CP粉头子，磕李观澜和江流",
+      "key_traits": ["八卦", "可爱", "学习不好"]
+    },
+    {
+      "name": "李萱",
+      "role": "妹妹",
+      "description": "李观澜亲妹妹，性格软弱",
+      "key_traits": ["软弱", "善良", "依赖姐姐"]
+    },
+    {
+      "name": "林霆",
+      "role": "配角",
+      "description": "谢玉露CP，老好人",
+      "key_traits": ["老好人", "温柔", "护短"]
+    },
+    {
+      "name": "谢玉露",
+      "role": "闺蜜",
+      "description": "李观澜闺蜜，东北口音",
+      "key_traits": ["东北口音", "直爽", "可爱"]
+    },
+    {
+      "name": "张自珍",
+      "role": "亲生母亲",
+      "description": "李观澜亲生母亲，女强人",
+      "key_traits": ["冷淡", "理性", "事业型"]
+    },
+    {
+      "name": "李卫东",
+      "role": "养父",
+      "description": "李萱养父，搞科研",
+      "key_traits": ["老实", "没主见", "被欺负"]
+    },
+    {
+      "name": "孙老太",
+      "role": "配角",
+      "description": "李卫东母亲，重男轻女",
+      "key_traits": ["重男轻女", "抠门", "迷信"]
+    },
+    {
+      "name": "刘淑芬",
+      "role": "姥姥",
+      "description": "李观澜姥姥，会看事儿",
+      "key_traits": ["重男轻女", "会看事儿", "抠门"]
+    },
+    {
+      "name": "谢飞星",
+      "role": "配角",
+      "description": "谢玉露哥哥，喜欢李观澜",
+      "key_traits": ["高冷", "护妹妹", "闷骚"]
+    }
+  ],
+  "scene_types": [
+    "互怼日常",
+    "家庭温馨",
+    "校园生活",
+    "身世线",
+    "感情线",
+    "喜剧",
+    "冲突"
+  ],
+  "locations": [
+    "李家",
+    "江家",
+    "学校",
+    "姥姥家",
+    "京市",
+    "餐厅",
+    "医院"
+  ],
+  "file_structure": {
+    "raw_chapters": "原始章节文件（ch001.txt - ch153.txt）",
+    "chapters": "场景片段文件（ch001_scene01.md - ch153_scene04.md）",
+    "index.md": "索引文件",
+    "metadata.json": "元数据文件"
+  }
+}

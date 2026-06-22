@@ -472,7 +472,7 @@ def _llm_batch_review(config, chapter_nums):
         if rubric_text:
             prompt = prompt + "\n\n---\n\n## 平台专项审查（{target_platform}）\n\n".format(target_platform=target_platform) + rubric_text[:1500]
 
-    sp_name = get_system_prompt_name("unified-review.md") or "system-generic.md"
+    sp_name = get_system_prompt_name("unified-review.md") or "agent.md"
     sys_prompt = load_system_prompt(sp_name) or ""
 
     if config.get("debug"):

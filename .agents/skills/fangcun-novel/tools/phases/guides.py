@@ -329,6 +329,53 @@ def _get_style_text_mapped(config, ch):
     return style_text
 
 
+# 模块级缓存：分身知识库
+_avatar_cache = {}
+
+
+def _load_avatar_knowledge(config):
+    """加载分身知识库（style + emotions + rhythm + voices）。"""
+    author = config.get("author", "")
+    if not author:
+        return ""
+    
+    if author in _avatar_cache:
+        return _avatar_cache[author]
+    
+    base_dir = Path(config.get("base_dir", "."))
+    avatar_dir = base_dir / "avatars" / author
+    
+    if not avatar_dir.exists():
+        _avatar_cache[author] = ""
+        return ""
+    
+    parts = []
+    
+    # 加载风格理解
+    style_path = avatar_dir / "style.md"
+    if style_path.exists():
+        parts.append("## 分身风格理解\n\n" + style_path.read_text(encoding="utf-8"))
+    
+    # 加载情绪模块
+    emotions_path = avatar_dir / "emotions.md"
+    if emotions_path.exists():
+        parts.append("## 分身情绪模块\n\n" + emotions_path.read_text(encoding="utf-8"))
+    
+    # 加载节奏模式
+    rhythm_path = avatar_dir / "rhythm.md"
+    if rhythm_path.exists():
+        parts.append("## 分身节奏模式\n\n" + rhythm_path.read_text(encoding="utf-8"))
+    
+    # 加载角色声音
+    voices_path = avatar_dir / "voices.md"
+    if voices_path.exists():
+        parts.append("## 分身角色声音\n\n" + voices_path.read_text(encoding="utf-8"))
+    
+    result = "\n\n".join(parts) if parts else ""
+    _avatar_cache[author] = result
+    return result
+
+
 # 模块级缓存：世界观文本
 _world_cache = None
 
@@ -1086,6 +1133,10 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             replacements["world"] = _get_world_text(config)
         if "style" not in replacements:
             style_text = _get_style_text_mapped(config, chapter_num)
+            # 加载分身知识库
+            avatar_text = _load_avatar_knowledge(config)
+            if avatar_text:
+                style_text = (style_text or "") + "\n\n" + avatar_text
             replacements["style"] = style_text or "（风格未提取）"
         # 注入 name_map
         if "name_map" not in replacements:
@@ -1204,7 +1255,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             user_prompt = user_prompt + "\n\n" + "\n\n".join(ctx_parts)
 
     if not system_prompt:
-        sp_name = get_system_prompt_name(f"{prompt_type}.md") or "system-generic.md"
+        sp_name = get_system_prompt_name(f"{prompt_type}.md") or "agent.md"
         system_prompt = load_system_prompt(sp_name) or ""
 
     # XML 标签注入（fangcun-drama 同款，write-chapter 用 markdown+△ 格式不注入）

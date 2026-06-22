@@ -1,9 +1,11 @@
 ---
-version: 49
-changelog: 纯task，不注入变量
+name: plot-guide
+version: 50
+changelog: 添加触发方式
 type: task
 phase: guides
 description: 章纲生成
+trigger: "/plot-guide", "/章纲", "生成章纲", "写章纲"
 system_prompt: base_agent.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---

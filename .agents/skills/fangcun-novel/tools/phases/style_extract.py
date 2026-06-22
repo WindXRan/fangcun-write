@@ -102,10 +102,7 @@ def phase_style_extract(config, start, end, workers=None):
                 algo_count += 1
     print(f"  Layer1 算法锚点: {algo_count}/{len(todo)} ({time.time() - t0:.1f}s)")
 
-    # if api_key:
-    #     ...
-    else:
-        print(f"  # Layer 2 已弃用（使用 cyber_author_prompt.md 替代）
+    # Layer 2 已弃用（使用 cyber_author_prompt.md 替代）
 
     total = list(styles_dir.glob("style_*.md"))
     print(f"  完成: {len(total)} styles 文件")

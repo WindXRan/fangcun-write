@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "avatars": {
+    "午夜凶球": {
+      "style": "东北家庭轻喜剧，对话驱动，全员碎嘴子",
+      "books": ["认亲后画风跑偏"],
+      "knows_about": [],
+      "path": "avatars/午夜凶球"
+    }
+  },
+  "shared": {
+    "genre_patterns": "avatars/shared/genre_patterns.md",
+    "anti_ai": "avatars/shared/anti_ai.md"
+  }
+}

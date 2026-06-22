@@ -1,9 +1,11 @@
 ---
-version: 52
-changelog: 纯task，不注入变量
+name: write-chapter
+version: 53
+changelog: 添加触发方式
 type: task
 phase: write
 description: 写章
+trigger: "/write-chapter", "/写章", "写第N章", "继续写"
 system_prompt: base_agent.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
