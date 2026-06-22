@@ -28,6 +28,7 @@ from phases import (
     phase_unified_review_fix,
 )
 from phases.compare import phase_compare
+from phases.skeleton_map import phase_skeleton_map
 
 
 # ─── 模型解析 ──────────────────────────────────────────────────────
@@ -52,10 +53,11 @@ def get_phase_api(config: dict, phase: str) -> tuple:
 # ─── Phase 映射 ──────────────────────────────────────────────────────
 
 GOAL_MAP = {
-    "guides": {"guides"},
-    "write": {"guides", "write", "postfix"},
+    "guides": {"skeleton-map", "guides"},
+    "write": {"skeleton-map", "guides", "write", "postfix"},
     "review": {"unified_review_fix"},
     "postfix": {"postfix"},
+    "skeleton-map": {"skeleton-map"},
 }
 
 # 章级 phase 按此顺序执行
@@ -142,6 +144,7 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
         phase_guides(cfg, s, e, workers=g_workers, state_mgr=state_mgr)
 
     h["guides"] = _guide_handler
+    h["skeleton-map"] = lambda cfg, s, e: phase_skeleton_map(cfg, state_mgr=state_mgr)
     if _get_execution_mode(config, "write") == "agent":
         h["write"] = _write_handler_agent
         print(f"  [MODE] write → agent")

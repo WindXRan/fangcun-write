@@ -2,6 +2,7 @@
 
 import os
 import re
+import json
 import time
 from pathlib import Path
 
@@ -12,6 +13,69 @@ from utils import (
 )
 from prompt_meta import load_system_prompt, get_prompt_config_with_overrides, get_system_prompt_name, safe_format
 from prompt_loader import load_prompt
+
+
+# 骨架映射缓存
+_skeleton_map_cache = None
+
+
+def _load_skeleton_map(config):
+    """加载 skeleton_map.json（模块级缓存）。"""
+    global _skeleton_map_cache
+    if _skeleton_map_cache is not None:
+        return _skeleton_map_cache
+    rewrites_dir = Path(config.get("rewrites_dir", ""))
+    map_path = rewrites_dir / "skeleton_map.json"
+    if map_path.exists():
+        _skeleton_map_cache = json.loads(map_path.read_text(encoding="utf-8"))
+    else:
+        _skeleton_map_cache = {}
+    return _skeleton_map_cache
+
+
+def _get_source_text_for_chapter(config, ch):
+    """获取源文文本。如果有 skeleton_map，按映射加载多个源文章节。"""
+    skel_map = _load_skeleton_map(config)
+    chapters = skel_map.get("chapters", [])
+    if not chapters:
+        # 没有骨架映射，按传统 1:1 加载
+        return get_source_text(config, ch)
+
+    # 找到新章节 ch 对应的源文章节
+    for entry in chapters:
+        if entry.get("ch") == ch:
+            source_chs = entry.get("source", [])
+            action = entry.get("action", "keep")
+            if action == "new" or not source_chs:
+                return None  # 全新章节，没有源文参考
+            # 合并多个源文章节的文本
+            parts = []
+            for src_ch in source_chs:
+                text = get_source_text(config, src_ch)
+                if text:
+                    parts.append(f"--- 源文第{src_ch}章 ---\n{text}")
+            return "\n\n".join(parts) if parts else None
+    return None
+
+
+def _get_source_chars_for_chapter(config, ch):
+    """获取源文字数。如果有 skeleton_map，按映射计算。"""
+    skel_map = _load_skeleton_map(config)
+    chapters = skel_map.get("chapters", [])
+    if not chapters:
+        return count_source_chars(config, ch)
+
+    for entry in chapters:
+        if entry.get("ch") == ch:
+            source_chs = entry.get("source", [])
+            action = entry.get("action", "keep")
+            if action == "new" or not source_chs:
+                return 2000  # 全新章节用默认字数
+            total = 0
+            for src_ch in source_chs:
+                total += count_source_chars(config, src_ch)
+            return total
+    return count_source_chars(config, ch)
 
 # 模块级缓存：book_data.json 每章都读，缓存一次
 _book_data_cache = None
@@ -429,56 +493,65 @@ def _build_name_list(chars_text):
 
 
 def _extract_info_release(config, chapter_num):
-    """从 events.json 提取本章功能描述，不传源文事件。"""
+    """从 events.json 提取本章功能描述，支持骨架映射。"""
     from file_io import load_events
     
     events = load_events(config)
     if not events:
         return f"（第{chapter_num}章事件未找到）"
     
-    # 找到本章事件
-    chapter_event = None
-    for e in events:
-        if e.get("chapter_index") == chapter_num or e.get("id") == chapter_num:
-            chapter_event = e
+    # 检查骨架映射
+    skel_map = _load_skeleton_map(config)
+    source_chs = []
+    action = "keep"
+    for entry in skel_map.get("chapters", []):
+        if entry.get("ch") == chapter_num:
+            source_chs = entry.get("source", [])
+            action = entry.get("action", "keep")
             break
     
-    if not chapter_event:
+    if action == "new" or not source_chs:
+        # 全新章节，返回骨架映射中的 function 描述
+        for entry in skel_map.get("chapters", []):
+            if entry.get("ch") == chapter_num:
+                func = entry.get("function", "")
+                title = entry.get("title", "")
+                return f"## 本章任务\n- 章名：{title}\n- 功能：{func}\n- 类型：全新设计（源文无对应）"
+        return f"（第{chapter_num}章：全新设计）"
+    
+    # 收集所有源文章节的事件
+    all_events = []
+    for src_ch in source_chs:
+        for e in events:
+            if e.get("chapter_index") == src_ch or e.get("id") == src_ch:
+                all_events.append(e)
+    
+    if not all_events:
         return f"（第{chapter_num}章事件未找到）"
     
-    # 提取事件描述
-    event_text = chapter_event.get("event", "")
+    # 合并事件描述
+    info_lines = []
+    for entry in skel_map.get("chapters", []):
+        if entry.get("ch") == chapter_num:
+            info_lines.append(f"## 本章任务")
+            info_lines.append(f"- 章名：{entry.get('title', '')}")
+            info_lines.append(f"- 功能：{entry.get('function', '')}")
+            if len(source_chs) > 1:
+                info_lines.append(f"- 源文对应：第{', '.join(str(c) for c in source_chs)}章（已合并）")
+            break
     
-    # 解析事件表格格式：| 章节 | 角色 | 事件 | 功能 | 强度 | 时长 | 情绪 |
-    parts = event_text.split("|")
-    if len(parts) >= 4:
-        characters = parts[2].strip() if len(parts) > 2 else ""
-        function = parts[4].strip() if len(parts) > 4 else ""
-        
-        # 构建功能描述（不包含具体事件）
-        info_lines = []
-        info_lines.append(f"## 本章任务")
-        info_lines.append(f"")
-        info_lines.append(f"**出场角色**：{characters}")
-        info_lines.append(f"**本章功能**：{function}")
-        info_lines.append(f"")
-        info_lines.append(f"## 要求")
-        info_lines.append(f"")
-        info_lines.append(f"基于以上功能，**自主设计完全原创的事件**。")
-        info_lines.append(f"")
-        info_lines.append(f"**你必须：**")
-        info_lines.append(f"- 自己想一个全新的事件来实现这个功能")
-        info_lines.append(f"- 事件的起因、经过、结果都要原创")
-        info_lines.append(f"- 使用新角色名（参考 name_map）")
-        info_lines.append(f"")
-        info_lines.append(f"**你禁止：**")
-        info_lines.append(f"- 不要参考任何源文的具体事件")
-        info_lines.append(f"- 不要使用源文的标志性道具、台词、设定")
-        info_lines.append(f"- 不要复制源文的情节骨架")
-        
-        return "\n".join(info_lines)
+    for e in all_events:
+        event_text = e.get("event", "")
+        parts = event_text.split("|")
+        if len(parts) >= 4:
+            characters = parts[2].strip() if len(parts) > 2 else ""
+            function = parts[4].strip() if len(parts) > 4 else ""
+            if characters:
+                info_lines.append(f"- 出场角色：{characters}")
+            if function:
+                info_lines.append(f"- 源文功能：{function}")
     
-    return f"（第{chapter_num}章事件解析失败）"
+    return "\n".join(info_lines) if info_lines else f"（第{chapter_num}章事件未找到）"
 
 
 def _get_chapter_characters(config, ch_num):
@@ -923,7 +996,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
 
     # 需要源文字数时，脚本计算
     if prompt_type in ("plot-guide", "write-chapter") and chapter_num:
-        src_chars = count_source_chars(config, chapter_num)
+        src_chars = _get_source_chars_for_chapter(config, chapter_num)
         target_chars = src_chars if src_chars > 0 else 1500
         replacements["源文字数"] = str(src_chars)
         replacements["目标字数"] = str(target_chars)
@@ -931,7 +1004,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         replacements["目标字数_max"] = str(int(target_chars * 1.1))
         # 源文句长（从文笔指纹提取，供仿写对标）
         if "源文句长" not in replacements:
-            src_text = get_source_text(config, chapter_num)
+            src_text = _get_source_text_for_chapter(config, chapter_num)
             if src_text:
                 from lib.text_metrics import count_metrics
                 src_metrics = count_metrics(src_text)
@@ -952,7 +1025,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         replacements["event"] = info_release
         
         # 源文高光（保留，用于风格参考）
-        source_text = get_source_text(config, chapter_num)
+        source_text = _get_source_text_for_chapter(config, chapter_num)
         if source_text:
             highlights = _extract_highlights(source_text, max_chars=500)
             replacements["highlights"] = highlights or ""
