@@ -1,11 +1,11 @@
 ---
-version: 2
-changelog: 从"换皮不换骨"改为"同爽点不同骨"，设计有独立吸引力的设定
+version: 3
+changelog: 注入市场数据，参考热门题材
 type: user
 phase: open_book_settings
 description: 开书 - 设定生成（世界观+剧情+书名+简介）
 required_vars: ["作者名", "源书名", "新书名", "源文分析"]
-optional_vars: ["角色名映射", "characters.md内容"]
+optional_vars: ["角色名映射", "characters.md内容", "市场数据"]
 system_prompt: null
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
@@ -18,6 +18,11 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 - 保留源文的爽点内核，但用全新的骨架承载
 - 设定要有独立吸引力，读者不知道源文也会想看
 - 书名要有记忆点，简介要有钩子
+- **参考市场趋势，选择当前热门题材**
+
+## 市场数据（参考当前热门题材）
+
+{市场数据}
 
 ## 源文分析（已锁定，不可更改）
 

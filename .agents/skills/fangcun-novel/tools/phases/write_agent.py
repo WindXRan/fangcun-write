@@ -80,10 +80,16 @@ def phase_write_agent(config, start, end, workers=5, state_mgr=None):
             except Exception:
                 pass
 
-        # 加载 prompt（agent mode：不嵌入文件内容）
+        # 加载 prompt（agent mode：优先 tasks/，fallback prompts/）
         try:
+            tasks_dir = Path(__file__).parent.parent.parent.parent / "tasks"
+            task_file = tasks_dir / "write-chapter.md"
+            if task_file.exists():
+                prompt_path = str(task_file)
+            else:
+                prompt_path = f"{prompts_dir}/write-chapter.md"
             prompt_text = load_prompt(
-                f"{prompts_dir}/write-chapter.md",
+                prompt_path,
                 base_dir, replacements, mode="agent",
                 rewrites_dir=rewrites_dir,
             )
