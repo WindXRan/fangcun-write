@@ -240,75 +240,42 @@ def _fix_mechanical(text, issues):
 
 
 def _fix_llm(config, task, text):
-    """LLM 修复。"""
-    from lib.api_client import call_llm
-    print(f"      [修复] 第{task.ch}章 LLM 修复中...", flush=True)
+    """LLM 修复：按问题类型分发到现有体系 polish/trim/expand/rewrite。
 
-    prompt_template = load_prompt_str("unified-fix.md")
-    if not prompt_template:
-        return None
+    - plagiarism/character/timeline/continuity → rewrite（整章重写）
+    - word_count 高 → trim，低 → expand
+    - ai_trace/ai_marker/emotion/dialogue/hook/rhythm/metaphor → polish
+    - 其他 → polish
+    """
+    import importlib
+    writer = importlib.import_module("writer")
 
-    issues_text = '\n'.join(
-        f"{i+1}. [{iss.severity}] {iss.desc}" + (f"\n   → {iss.fix}" if iss.fix else "")
-        for i, iss in enumerate(task.llm)
-    )
+    ch = task.ch
+    issue_types = {iss.type for iss in task.llm}
+    issue_descs = [f"[{iss.severity}] {iss.desc}" for iss in task.llm]
+    print(f"      [修复] 第{ch}章 LLM 修复 ({', '.join(sorted(issue_types))})...", flush=True)
 
-    ch_dir = Path(f"{config['rewrites_dir']}/chapters")
-    adj_parts = []
-    for offset, label in [(-1, "上一章结尾"), (1, "下一章开头")]:
-        adj_ch = task.ch + offset
-        if adj_ch < 1:
-            continue
-        adj_file = ch_dir / f"ch_{adj_ch:03d}.txt"
-        if adj_file.exists():
-            adj_t = adj_file.read_text(encoding='utf-8')
-            adj_parts.append(f"【{label}】\n{adj_t[-500:]}" if offset == -1 else f"【{label}】\n{adj_t[:500]}")
-    adj = '\n\n'.join(adj_parts)
+    # 整章重写：抄袭/人设/时间线/连续性
+    _REWRITE_TYPES = {"plagiarism", "character", "timeline", "continuity"}
+    if issue_types & _REWRITE_TYPES:
+        reason = "; ".join(issue_descs[:3])
+        print(f"      [修复] 第{ch}章 → rewrite", flush=True)
+        return writer.rewrite_chapter(config, ch, mode="imitation", reason=reason)
 
-    prompt = safe_format(prompt_template, {
-        "N": str(task.ch),
-        "issues_text": issues_text,
-        "adjacent_context": adj,
-        "orig_chars": str(len(re.sub(r'\s', '', text))),
-        "target_chars": str(task.target_chars or len(re.sub(r'\s', '', text))),
-        "min_chars": str(int((task.target_chars or len(re.sub(r'\s', '', text))) * 0.85)),
-        "max_chars": str(int((task.target_chars or len(re.sub(r'\s', '', text))) * 1.15)),
-        "chapter_content": text,
-    })
+    # 字数修复
+    if "word_count" in issue_types:
+        current_chars = len(re.sub(r'\s', '', text))
+        target = task.target_chars or current_chars
+        if current_chars > target * 1.15:
+            print(f"      [修复] 第{ch}章 → trim ({current_chars}→{target})", flush=True)
+            return writer.trim_chapter(config, ch, mode="imitation")
+        elif current_chars < target * 0.85:
+            print(f"      [修复] 第{ch}章 → expand ({current_chars}→{target})", flush=True)
+            return writer.expand_chapter(config, ch, mode="imitation")
 
-    sp_name = get_system_prompt_name("unified-fix.md") or "system-generic.md"
-    sys_prompt = load_system_prompt(sp_name) or ""
-
-    if config.get("debug"):
-        from utils import debug_dump_prompt
-        pc = get_prompt_config_with_overrides("unified-fix.md", config)
-        debug_dump_prompt(config, "unified-fix", task.ch,
-                          "prompts/unified-fix.md", sys_prompt,
-                          prompt, sp_name, pc)
-
-    try:
-        fixed = call_llm(config, "unified-fix", prompt, sys_prompt)
-        # 提取修复后章节
-        if "## 修复后章节" in fixed:
-            fixed = fixed.split("## 修复后章节")[-1].strip()
-        elif "## 修复策略" in fixed:
-            parts = fixed.split("## 修复策略")
-            if len(parts) > 1:
-                fixed = parts[-1].strip()
-        if fixed.startswith("```"):
-            fixed = fixed.split("\n", 1)[-1]
-        if fixed.endswith("```"):
-            fixed = fixed.rsplit("```", 1)[0]
-        fixed = fixed.strip()
-
-        fixed_chars = len(re.sub(r'\s', '', fixed))
-        target = max(task.target_chars, 1)
-        if abs(fixed_chars - target) / target < 0.15:
-            return fixed
-        return None
-    except Exception as e:
-        print(f"      [修复] 第{task.ch}章 LLM 修复失败: {e}", flush=True)
-        return None
+    # 其他问题 → polish（AI痕迹/情绪/对话/钩子/节奏/比喻等）
+    print(f"      [修复] 第{ch}章 → polish", flush=True)
+    return writer.polish_chapter(config, ch, mode="imitation")
 
 
 def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False, auto=False):
