@@ -212,6 +212,29 @@ trim 会自动执行。如果还是超，重跑该章即可。
 
 ---
 
+## 路由表（agent 调用指南）
+
+用户反馈 → 应调用的脚本：
+
+| 用户说 | 调用 | 命令 |
+|--------|------|------|
+| "继续写" / "写下一章" | pipeline write | `python pipeline.py --config {cfg} --phase write --start {N} --end {M}` |
+| "写第N章" | pipeline write | `python pipeline.py --config {cfg} --phase write --start {N} --end {N}` |
+| "看看对比" / "质量怎么样" | compare | `python .agents/skills/story-compare/compare.py "{rewrites_dir}" {start} {end} --source "{author}/{source_book}"` |
+| "第X章字数不对" | trim | `python pipeline.py --config {cfg} --phase postfix --start {X} --end {X}` |
+| "第X章重写" | 删章 + write | 删 `ch_{X}.txt`，再跑 write |
+| "审一下" / "检查问题" | unified review | `python unified_fixer.py --config {cfg} --dry-run` |
+| "修一下" / "修复问题" | unified fix | `python unified_fixer.py --config {cfg}` |
+| "开书" / "仿写这本书" | open-book skill | 见 open-book SKILL.md |
+| "导出" / "合并成txt" | story-export | 见 story-export SKILL.md |
+| "封面" / "做个封面" | story-cover | 见 story-cover SKILL.md |
+
+**写章后自动 compare**：每写完 10 章，pipeline 自动跑 compare，无需手动触发。
+
+**compare 报告位置**：`{rewrites_dir}/compare/对比_{start}-{end}_报告.md` 和 `对比_{start}-{end}_AI分析.md`
+
+---
+
 ## 文件结构
 
 ```

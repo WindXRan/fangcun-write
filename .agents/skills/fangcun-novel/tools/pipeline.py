@@ -80,9 +80,14 @@ def _post_process(config, goal):
 
 
 def _auto_compare(config, start, end):
-    """写章后自动 compare 黄金章节（1-3, 1-10, 1-20）。"""
-    # 只 compare 在写章范围内的区间
-    checkpoints = [r for r in [(1, 3), (1, 10), (1, 20)] if r[0] >= start and r[1] <= end]
+    """写章后每 10 章自动 compare。"""
+    # 按 10 章一组生成对比报告
+    bucket_start = ((start - 1) // 10) * 10 + 1
+    checkpoints = []
+    for s in range(bucket_start, end + 1, 10):
+        e = min(s + 9, end)
+        if e >= start:
+            checkpoints.append((s, e))
     if not checkpoints:
         return
     for cs, ce in checkpoints:
