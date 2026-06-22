@@ -429,7 +429,7 @@ def _build_name_list(chars_text):
 
 
 def _extract_info_release(config, chapter_num):
-    """从 events.json 提取本章信息释放清单，不传源文全文。"""
+    """从 events.json 提取本章功能描述，不传源文事件。"""
     from file_io import load_events
     
     events = load_events(config)
@@ -453,29 +453,28 @@ def _extract_info_release(config, chapter_num):
     parts = event_text.split("|")
     if len(parts) >= 4:
         characters = parts[2].strip() if len(parts) > 2 else ""
-        event_desc = parts[3].strip() if len(parts) > 3 else ""
         function = parts[4].strip() if len(parts) > 4 else ""
         
-        # 构建信息释放清单
+        # 构建功能描述（不包含具体事件）
         info_lines = []
-        info_lines.append(f"## 本章信息释放清单")
+        info_lines.append(f"## 本章任务")
         info_lines.append(f"")
-        info_lines.append(f"**本章出场角色**：{characters}")
-        info_lines.append(f"**本章事件概述**：{event_desc}")
+        info_lines.append(f"**出场角色**：{characters}")
         info_lines.append(f"**本章功能**：{function}")
         info_lines.append(f"")
         info_lines.append(f"## 要求")
         info_lines.append(f"")
-        info_lines.append(f"基于以上信息，设计**完全原创的场景**来实现相同的功能。")
-        info_lines.append(f"**禁止**：")
-        info_lines.append(f"- 不要参考源文的具体事件、情节步骤、冲突方式")
-        info_lines.append(f"- 不要使用源文的标志性道具、台词、设定")
-        info_lines.append(f"- 不要复制源文的情节骨架（A→B→C→D）")
+        info_lines.append(f"基于以上功能，**自主设计完全原创的事件**。")
         info_lines.append(f"")
-        info_lines.append(f"**必须**：")
-        info_lines.append(f"- 自主设计全新的事件、冲突、收尾方式")
+        info_lines.append(f"**你必须：**")
+        info_lines.append(f"- 自己想一个全新的事件来实现这个功能")
+        info_lines.append(f"- 事件的起因、经过、结果都要原创")
         info_lines.append(f"- 使用新角色名（参考 name_map）")
-        info_lines.append(f"- 确保信息释放与源文一致（相同的信息，不同的方式）")
+        info_lines.append(f"")
+        info_lines.append(f"**你禁止：**")
+        info_lines.append(f"- 不要参考任何源文的具体事件")
+        info_lines.append(f"- 不要使用源文的标志性道具、台词、设定")
+        info_lines.append(f"- 不要复制源文的情节骨架")
         
         return "\n".join(info_lines)
     

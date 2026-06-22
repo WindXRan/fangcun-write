@@ -197,7 +197,7 @@ def _run_review_report(config, rewrites_dir, compare_dir, local_compare_script, 
 
 
 def _run_change_report(config, rewrites_dir, compare_dir, start, end, batch_size):
-    """生成改动报告 — 汇总每章的核心改动。"""
+    """生成改动报告 — 汇总每章的基础统计。"""
     from lib.source_locator import get_source_text as get_src
     from lib.text_metrics import count_metrics, count_style_fingerprint
 
@@ -209,7 +209,7 @@ def _run_change_report(config, rewrites_dir, compare_dir, start, end, batch_size
 
         lines = [f"# 改动报告（第{batch_start}-{batch_end}章）\n",
                  f"生成时间：{time.strftime('%Y-%m-%d %H:%M')}\n",
-                 f"> 对比仿写成品与源文的逐章改动，量化换皮程度。\n\n"]
+                 f"> 对比仿写成品与源文的逐章统计。\n\n"]
 
         changes = []
         total_src_chars = 0
@@ -248,73 +248,42 @@ def _run_change_report(config, rewrites_dir, compare_dir, start, end, batch_size
             # 代词密度变化
             pronoun_change = new_fp.get("pronoun_density", 0) - src_fp.get("pronoun_density", 0)
 
-            # 检测文本相似度（粗略：共用字符比例）
-            src_clean = re.sub(r'\s', '', src_text)
-            new_clean = re.sub(r'\s', '', new_text)
-            common = len(set(src_clean) & set(new_clean))
-            total_unique = len(set(src_clean) | set(new_clean))
-            char_overlap = common / total_unique * 100 if total_unique else 0
-
-            # 换皮程度：字数变化大 + 对话结构调整 + 用字重合度低 = 换皮彻底
-            rewrite_score = min(100, int(
-                abs(char_pct) * 0.3 +
-                abs(dia_change) * 0.5 +
-                (100 - char_overlap) * 0.4
-            ))
-
             changes.append((ch, src_m, new_m, {
                 "char_change": char_change,
                 "char_pct": char_pct,
                 "dia_change": dia_change,
                 "para_change": para_change,
                 "pronoun_change": pronoun_change,
-                "char_overlap": char_overlap,
-                "rewrite_score": rewrite_score,
             }))
 
         # 概览
-        avg_score = sum(c[3]["rewrite_score"] for c in changes if c[3]) / max(len([c for c in changes if c[3]]), 1)
         lines.append(f"## 概览\n")
         lines.append(f"| 指标 | 数值 |\n|------|------|\n")
         lines.append(f"| 对比章数 | {len(changes)} |\n")
         lines.append(f"| 源文总字数 | {total_src_chars:,} |\n")
         lines.append(f"| 新书总字数 | {total_new_chars:,} |\n")
         lines.append(f"| 总字数变化 | {total_new_chars - total_src_chars:+,} ({((total_new_chars-total_src_chars)/max(total_src_chars,1)*100):+.0f}%) |\n")
-        lines.append(f"| 平均换皮评分 | {avg_score:.0f}/100 |\n")
-        lines.append(f"| 换皮程度 | {'🟢 深度换皮' if avg_score > 60 else '🟡 中度调整' if avg_score > 30 else '🔴 轻度修改'} |\n")
         lines.append("")
 
         # 逐章改动
         lines.append("## 逐章改动\n")
-        lines.append("| 章 | 源文字数 | 新书字数 | 字数变化 | 对话比变化 | 段长变化 | 代词密度变化 | 用字重合% | 换皮评分 |\n")
-        lines.append("|---|---------|---------|---------|-----------|---------|-------------|----------|---------|\n")
+        lines.append("| 章 | 源文字数 | 新书字数 | 字数变化 | 对话比变化 | 段长变化 | 代词密度变化 |\n")
+        lines.append("|---|---------|---------|---------|-----------|---------|-------------|\n")
         for ch, src_m, new_m, info in changes:
             if not info:
-                lines.append(f"| {ch} | — | — | — | — | — | — | — | 无源文 |\n")
+                lines.append(f"| {ch} | — | — | — | — | — | — |\n")
                 continue
             dia_str = f"{info['dia_change']:+.0f}%" if info['dia_change'] != 0 else "—"
             para_str = f"{info['para_change']:+.0f}" if info['para_change'] != 0 else "—"
             pronoun_str = f"{info['pronoun_change']:+.1f}" if info['pronoun_change'] != 0 else "—"
-            overlap_str = f"{info['char_overlap']:.0f}%"
-            score_str = f"{info['rewrite_score']} {'🟢' if info['rewrite_score'] > 60 else '🟡' if info['rewrite_score'] > 30 else '🔴'}"
-            lines.append(f"| {ch} | {src_m['chars']:,} | {new_m['chars']:,} | {info['char_pct']:+.0f}% | {dia_str} | {para_str} | {pronoun_str} | {overlap_str} | {score_str} |\n")
-
-        lines.append("")
-        lines.append("**换皮评分说明**：>60=深度换皮（血肉全换），30-60=中度调整（框架保留），<30=轻度修改\n")
-
-        # 章节改动事件（找变化最大的几章）
-        scored = [(c[0], c[3]["rewrite_score"]) for c in changes if c[3]]
-        scored.sort(key=lambda x: x[1], reverse=True)
-        lines.append("## 改动最大的章节\n")
-        for ch, score in scored[:5]:
-            lines.append(f"- **第{ch}章**：换皮评分 {score}/100\n")
+            lines.append(f"| {ch} | {src_m['chars']:,} | {new_m['chars']:,} | {info['char_pct']:+.0f}% | {dia_str} | {para_str} | {pronoun_str} |\n")
 
         lines.append("")
 
         Path(compare_dir).mkdir(parents=True, exist_ok=True)
         report_path = Path(compare_dir) / f"改动报告_{batch_start}-{batch_end}.md"
         report_path.write_text("".join(lines), encoding="utf-8")
-        print(f"  [OK] 改动报告_{batch_start}-{batch_end}.md (换皮评分 {avg_score:.0f}/100)")
+        print(f"  [OK] 改动报告_{batch_start}-{batch_end}.md")
 
 
 # ============================================================
