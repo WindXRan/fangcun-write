@@ -1,6 +1,6 @@
 ---
-version: 47
-changelog: 去掉system prompt，全部指令合并到user prompt
+version: 49
+changelog: 移除硬编码的锚点类型，让LLM自己提取
 type: user
 phase: write
 description: 写章
@@ -27,6 +27,14 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 
 <style>
 {style}
+
+**⚠️ 风格锚点（必须保留）：**
+上面的风格分析中有"风格锚点"——这是源文区别于其他小说的独特写法。仿写时必须保留至少3个锚点特征，否则就是流水账。
+
+**深度风格参考：**
+如果风格分析中有"文字质感""对话风格""描写手法""情绪表达"等深度分析，参考这些维度来模仿源文的"味道"，但不要照抄原文例子。
+
+**自检：** 写完后问自己——"这段文字有源文的味道吗？"如果没有，检查是否遗漏了风格锚点。
 </style>
 
 <requirements>
