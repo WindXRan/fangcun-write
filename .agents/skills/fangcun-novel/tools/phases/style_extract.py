@@ -1,4 +1,4 @@
-"""Phase 1.5: 文笔指纹 — 算法锚点 + LLM 分析，与 plot-guide 同级并行。
+﻿"""Phase 1.5: 文笔指纹 — 算法锚点，与 plot-guide 同级并行。
 
 输出: rewrites_dir/styles/style_{N}.md  (人可读 + prompt 可嵌入)
 """
@@ -23,7 +23,7 @@ def _text_hash(text):
 
 
 def _cache_valid(styles_dir, ch, src_text):
-    """检查缓存是否有效：文件存在 + 哈希匹配 + LLM 风格 + 结构。"""
+    """检查缓存是否有效：文件存在 + 哈希匹配 + 结构。"""
     f = styles_dir / f"style_{ch:03d}.md"
     if not f.exists():
         return False
@@ -35,7 +35,6 @@ def _cache_valid(styles_dir, ch, src_text):
     else:
         return False
     
-    if not (styles_dir / f"style_{ch:03d}_llm.md").exists():
         return False
     if not (styles_dir / f"structure_{ch:03d}.md").exists():
         return False
@@ -103,11 +102,10 @@ def phase_style_extract(config, start, end, workers=None):
                 algo_count += 1
     print(f"  Layer1 算法锚点: {algo_count}/{len(todo)} ({time.time() - t0:.1f}s)")
 
-    # Layer 2: LLM 分析（已弃用，使用 cyber_author_prompt.md 替代）
     # if api_key:
     #     ...
     else:
-        print(f"  Layer2 LLM分析: 跳过 (无 API_KEY)")
+        print(f"  # Layer 2 已弃用（使用 cyber_author_prompt.md 替代）
 
     total = list(styles_dir.glob("style_*.md"))
     print(f"  完成: {len(total)} styles 文件")
@@ -140,48 +138,6 @@ def _algo_one(config, ch, styles_dir):
     return True
 
 
-def _llm_one(config, ch, styles_dir):
-    """LLM 分析 → 追加到 style_{N}.md 后半部分。"""
-    from lib.api_client import call_llm
-
-    text = get_source_text(config, ch)
-    if not text:
-        print(f"  [STYLE] ch{ch:03d} err: 源文不存在")
-        return False
-
-    fp = count_style_fingerprint(text)
-    anchors = format_style_anchors(fp)
-    
-    prompt_template = load_prompt_str("style-analyze.md")
-    if not prompt_template:
-        print(f"  [STYLE] ch{ch:03d} err: style-analyze.md 不存在")
-        return False
-
-    prompt = safe_format(prompt_template, {"chapter_text": text[:8000], "style_anchors": anchors})
-
-    sp_name = get_system_prompt_name("style-analyze.md") or "system-generic.md"
-    if config.get("debug") and ch <= 3:
-        from utils import debug_dump_prompt
-        pc = get_prompt_config_with_overrides("style-analyze.md", config)
-        sys_prompt = load_system_prompt(sp_name) or ""
-        debug_dump_prompt(config, "style-analyze", ch,
-                          "prompts/style-analyze.md", sys_prompt,
-                          prompt, sp_name, pc)
-
-    if config.get("prompts_only"):
-        return False
-
-    sys_prompt = load_system_prompt(sp_name) or "你是资深文学编辑，分析文笔风格。"
-    try:
-        analysis = call_llm(config, "style-analyze", prompt, sys_prompt).strip()
-        _write_md(styles_dir, ch, analysis=f"## LLM 风格分析\n{analysis}", src_text=text)
-        print(f"  [STYLE] ch{ch:03d} OK")
-        return True
-    except Exception as e:
-        print(f"  [STYLE] ch{ch:03d} err: {e}")
-    return False
-
-
 def _write_md(styles_dir, ch, anchor=None, analysis=None, src_text=None):
     """提取 XML 标签，直接写文件。不解析内容。"""
     # 算法锚点
@@ -207,7 +163,6 @@ def _write_md(styles_dir, ch, anchor=None, analysis=None, src_text=None):
     
     # 写风格文件
     if style:
-        f = styles_dir / f"style_{ch:03d}_llm.md"
         f.write_text(f"# 第{ch}章 风格分析\n\n{style}\n", encoding="utf-8")
     
     # 写结构文件
