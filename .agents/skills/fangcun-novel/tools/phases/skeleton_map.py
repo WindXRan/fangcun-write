@@ -57,81 +57,151 @@ def phase_skeleton_map(config, state_mgr=None):
 
     # 构建替换变量
     book_name = config.get("book_name", "auto")
-    replacements = {
+    base_replacements = {
         "新书名": book_name if book_name != "auto" else "（待生成）",
         "源书名": source_book,
-        "events_text": events_text[:15000],  # 限制长度
-        "skeleton": (skeleton or "（未生成）")[:5000],
-        "concept": concept[:5000],
+        "skeleton": (skeleton or "（未生成）")[:3000],
+        "concept": concept[:3000],
     }
 
-    # 调用 LLM
-    print("  调用 LLM 分析骨架...")
-    try:
-        prompts_dir = config.get("prompts_dir", str(Path(__file__).parent.parent.parent / "prompts"))
-        user_prompt = load_prompt(
-            str(Path(prompts_dir) / "skeleton-map.md"),
-            str(base_dir),
-            replacements,
-            mode="api",
-            rewrites_dir=str(rewrites_dir),
-        )
-        content = call_llm(config, "skeleton-map", user_prompt, "")
+    # 分批处理 events（避免单次 prompt 过长导致超时）
+    events_lines = events_text.split("\n")
+    total_lines = len(events_lines)
+    batch_size = max(20, total_lines // 2)  # 每批至少20行
+    batches = []
+    for i in range(0, total_lines, batch_size):
+        batch_text = "\n".join(events_lines[i:i + batch_size])
+        batches.append(batch_text)
 
-        # 提取 JSON
-        json_match = re.search(r'```json\s*([\s\S]*?)```', content)
-        if json_match:
-            json_str = json_match.group(1).strip()
-        else:
-            # 尝试直接解析
-            json_match = re.search(r'\{[\s\S]*"chapters"[\s\S]*\}', content)
+    all_chapters = []
+    all_trim = []
+    analysis = {}
+
+    for batch_idx, batch_events in enumerate(batches):
+        print(f"  批次 {batch_idx + 1}/{len(batches)}...")
+        replacements = {**base_replacements, "events_text": batch_events[:8000]}
+
+        try:
+            user_prompt = load_prompt(
+                str(Path(prompts_dir) / "skeleton-map.md"),
+                str(base_dir),
+                replacements,
+                mode="api",
+                rewrites_dir=str(rewrites_dir),
+            )
+            content = call_llm(config, "skeleton-map", user_prompt, "")
+
+            # 提取 JSON
+            json_match = re.search(r'```json\s*([\s\S]*?)```', content)
             if json_match:
-                json_str = json_match.group(0)
+                json_str = json_match.group(1).strip()
             else:
-                print("  [FAIL] 无法从 LLM 输出中提取 JSON")
-                if state_mgr:
-                    state_mgr.phase_failed("skeleton-map", error="JSON 提取失败")
-                return False
+                json_match = re.search(r'\{[\s\S]*"chapters"[\s\S]*\}', content)
+                if json_match:
+                    json_str = json_match.group(0)
+                else:
+                    print(f"  [WARN] 批次 {batch_idx + 1} JSON 提取失败，跳过")
+                    continue
 
-        skeleton_map = json.loads(json_str)
+            batch_result = json.loads(json_str)
+            batch_chapters = batch_result.get("chapters", [])
+            batch_trim = batch_result.get("trim_reasons", [])
 
-        # 验证结构
-        if "chapters" not in skeleton_map:
-            print("  [FAIL] JSON 缺少 chapters 字段")
-            if state_mgr:
-                state_mgr.phase_failed("skeleton-map", error="JSON 结构错误")
-            return False
+            # 合并结果
+            ch_offset = len(all_chapters)
+            for ch in batch_chapters:
+                ch["ch"] = ch_offset + 1 + len([c for c in all_chapters])
+                all_chapters.append(ch)
+            all_trim.extend(batch_trim)
 
-        # 保存
-        output_path = rewrites_dir / "skeleton_map.json"
-        atomic_write_text(output_path, json.dumps(skeleton_map, ensure_ascii=False, indent=2))
-        print(f"  [OK] skeleton_map.json")
+            # 合并分析
+            if not analysis:
+                analysis = batch_result.get("analysis", {})
+            else:
+                # 合并核心章、过渡章、水章列表
+                for key in ("core_chapters", "transition_chapters", "filler_chapters"):
+                    existing = set(analysis.get(key, []))
+                    new_items = batch_result.get("analysis", {}).get(key, [])
+                    existing.update(new_items)
+                    analysis[key] = sorted(existing)
 
-        # 打印摘要
-        new_chapters = len(skeleton_map.get("chapters", []))
-        source_chapters = skeleton_map.get("analysis", {}).get("source_chapters", "?")
-        actions = {}
-        for ch in skeleton_map.get("chapters", []):
-            a = ch.get("action", "unknown")
-            actions[a] = actions.get(a, 0) + 1
-        print(f"  源文 {source_chapters} 章 → 新书 {new_chapters} 章")
-        for a, count in sorted(actions.items()):
-            print(f"    {a}: {count} 章")
+        except json.JSONDecodeError as e:
+            print(f"  [WARN] 批次 {batch_idx + 1} JSON 解析失败: {e}")
+            continue
+        except Exception as e:
+            print(f"  [WARN] 批次 {batch_idx + 1} 失败: {e}")
+            continue
 
+    if not all_chapters:
+        print("  [FAIL] 所有批次均失败")
         if state_mgr:
-            state_mgr.phase_done("skeleton-map")
-        return True
-
-    except json.JSONDecodeError as e:
-        print(f"  [FAIL] JSON 解析失败: {e}")
-        if state_mgr:
-            state_mgr.phase_failed("skeleton-map", error=f"JSON 解析失败: {e}")
+            state_mgr.phase_failed("skeleton-map", error="所有批次均失败")
         return False
-    except Exception as e:
-        print(f"  [FAIL] skeleton-map 失败: {e}")
-        if state_mgr:
-            state_mgr.phase_failed("skeleton-map", error=str(e))
-        return False
+
+    # 重新编号
+    for i, ch in enumerate(all_chapters):
+        ch["ch"] = i + 1
+
+    # 构建最终结果
+    skeleton_map = {
+        "analysis": analysis,
+        "new_structure": _build_acts(all_chapters),
+        "chapters": all_chapters,
+        "trim_reasons": all_trim,
+    }
+
+    # 验证源文章节覆盖率
+    covered = set()
+    for entry in skeleton_map.get("chapters", []):
+        for s in entry.get("source", []):
+            covered.add(s)
+    for trim in skeleton_map.get("trim_reasons", []):
+        for s in trim.get("source", []):
+            covered.add(s)
+    total_source = len(events)
+    all_source = set(range(1, total_source + 1))
+    missing = all_source - covered
+    if missing and len(missing) > 10:
+        print(f"  [WARN] {len(missing)} 个源文章节未覆盖: {sorted(missing)[:20]}...")
+
+    # 保存
+    output_path = rewrites_dir / "skeleton_map.json"
+    atomic_write_text(output_path, json.dumps(skeleton_map, ensure_ascii=False, indent=2))
+    print(f"  [OK] skeleton_map.json")
+
+    # 打印摘要
+    new_chapters = len(skeleton_map.get("chapters", []))
+    source_chapters = skeleton_map.get("analysis", {}).get("source_chapters", "?")
+    actions = {}
+    for ch in skeleton_map.get("chapters", []):
+        a = ch.get("action", "unknown")
+        actions[a] = actions.get(a, 0) + 1
+    print(f"  源文 {total_source} 章 → 新书 {new_chapters} 章")
+    for a, count in sorted(actions.items()):
+        print(f"    {a}: {count} 章")
+
+    if state_mgr:
+        state_mgr.phase_done("skeleton-map")
+    return True
+
+
+def _build_acts(chapters):
+    """根据章节列表自动划分幕次。"""
+    total = len(chapters)
+    if total <= 10:
+        return {"total_chapters": total, "acts": [
+            {"act": 1, "name": "全书", "chapters": list(range(1, total + 1)), "function": "完整故事"}
+        ]}
+
+    # 按三分之一划分
+    act1_end = total // 3
+    act2_end = act1_end * 2
+
+    return {"total_chapters": total, "acts": [
+        {"act": 1, "name": "开篇", "chapters": list(range(1, act1_end + 1)), "function": "建立人物与核心矛盾"},
+        {"act": 2, "name": "发展", "chapters": list(range(act1_end + 1, act2_end + 1)), "function": "矛盾升级与解决"},
+        {"act": 3, "name": "收尾", "chapters": list(range(act2_end + 1, total + 1)), "function": "高潮与结局"},
+    ]}
 
 
 if __name__ == "__main__":
