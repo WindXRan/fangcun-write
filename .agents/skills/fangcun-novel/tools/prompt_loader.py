@@ -177,14 +177,17 @@ def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites
     if replacements:
         merged.update(replacements)
 
-    # 三层架构：加载 author_agent.md 注入到 user prompt 头部
+    # 三层架构：加载 style-distill 输出的 cyber_author_prompt.md 注入到 user prompt 头部
     author_agent_text = ""
     if rewrites_dir:
-        author_agent_path = Path(rewrites_dir) / "author_agent.md"
-        if author_agent_path.exists():
-            aa_raw = author_agent_path.read_text(encoding="utf-8")
-            _, aa_body = parse_frontmatter(aa_raw)
-            author_agent_text = aa_body.strip()
+        # 优先读 style-distill 输出，fallback 到 author_agent.md
+        for name in ("cyber_author_prompt.md", "author_agent.md"):
+            aa_path = Path(rewrites_dir) / name
+            if aa_path.exists():
+                aa_raw = aa_path.read_text(encoding="utf-8")
+                _, aa_body = parse_frontmatter(aa_raw)
+                author_agent_text = aa_body.strip()
+                break
 
     if mode == "api":
         user_prompt = embed_files(raw_text, base_dir, merged)
