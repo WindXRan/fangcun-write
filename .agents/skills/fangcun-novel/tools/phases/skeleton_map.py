@@ -16,6 +16,51 @@ from prompt_loader import load_prompt
 from lib.api_client import call_llm
 
 
+def _try_parse_json(text):
+    """尝试解析 JSON，失败时自动修复常见问题。"""
+    # 直接尝试
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        pass
+
+    # 修复尾部逗号
+    fixed = re.sub(r',\s*([}\]])', r'\1', text)
+    try:
+        return json.loads(fixed)
+    except json.JSONDecodeError:
+        pass
+
+    # 修复截断的 JSON（补缺失的括号）
+    open_braces = text.count('{') - text.count('}')
+    open_brackets = text.count('[') - text.count(']')
+    if open_braces > 0 or open_brackets > 0:
+        fixed = text.rstrip().rstrip(',')
+        if fixed.endswith('"'):
+            fixed += '"'
+        fixed += ']' * open_brackets + '}' * open_braces
+        try:
+            return json.loads(fixed)
+        except json.JSONDecodeError:
+            pass
+
+    # 提取最后一个完整的 chapters 数组
+    m = re.search(r'"chapters"\s*:\s*\[([\s\S]*?)\](?=\s*[,}])', text)
+    if m:
+        chapters_str = m.group(1)
+        # 逐个提取 chapter 对象
+        chapters = []
+        for cm in re.finditer(r'\{[^{}]*"ch"\s*:\s*\d+[^{}]*\}', chapters_str):
+            try:
+                chapters.append(json.loads(cm.group(0)))
+            except json.JSONDecodeError:
+                continue
+        if chapters:
+            return {"chapters": chapters}
+
+    return None
+
+
 def phase_skeleton_map(config, state_mgr=None):
     """骨架映射：分析源文骨架，设计新书章节结构。"""
     print("\n" + "=" * 50)
@@ -98,7 +143,7 @@ def phase_skeleton_map(config, state_mgr=None):
             )
             content = call_llm(config, "skeleton-map", user_prompt, "")
 
-            # 提取 JSON
+            # 提取并修复 JSON
             json_match = re.search(r'```json\s*([\s\S]*?)```', content)
             if json_match:
                 json_str = json_match.group(1).strip()
@@ -110,7 +155,10 @@ def phase_skeleton_map(config, state_mgr=None):
                     print(f"  [WARN] 批次 {batch_idx + 1} JSON 提取失败，跳过")
                     continue
 
-            batch_result = json.loads(json_str)
+            batch_result = _try_parse_json(json_str)
+            if not batch_result:
+                print(f"  [WARN] 批次 {batch_idx + 1} JSON 解析失败，跳过")
+                continue
             batch_chapters = batch_result.get("chapters", [])
             batch_trim = batch_result.get("trim_reasons", [])
 

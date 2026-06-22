@@ -1,10 +1,11 @@
 ---
 name: compare
-version: 1.0.0
-changelog: 新建task
+version: 1.1.0
+changelog: 添加trigger字段
 type: task
 phase: compare
 description: 对比分析
+trigger: "/compare", "/对比", "对比分析", "看看仿写质量"
 system_prompt: agent.md
 defaults: {"reasoning_effort": "low", "temperature": 0.3}
 ---

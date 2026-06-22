@@ -1,10 +1,11 @@
 ---
 name: postfix
-version: 1.0.0
-changelog: 新建task
+version: 1.1.0
+changelog: 添加trigger字段
 type: task
 phase: postfix
 description: 后处理（机械修正）
+trigger: "/postfix", "/后处理", "修正格式", "清理章节"
 system_prompt: agent.md
 defaults: {"reasoning_effort": "low", "temperature": 0.3}
 ---
