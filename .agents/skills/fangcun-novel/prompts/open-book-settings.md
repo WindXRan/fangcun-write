@@ -5,7 +5,7 @@ type: user
 phase: open_book_settings
 description: 开书 - 设定生成（世界观+剧情+书名+简介）
 required_vars: ["作者名", "源书名", "新书名", "源文分析"]
-optional_vars: ["角色名映射", "characters.md内容"]
+optional_vars: ["characters.md内容"]
 system_prompt: system-generic.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
@@ -34,10 +34,6 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ## 源文分析（已锁定，不可更改）
 
 {源文分析}
-
-## 角色名映射（必须使用这些名字，不可自编）
-
-{角色名映射}
 
 ---
 
@@ -91,8 +87,7 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 用表格对比，**关系本质和情感功能必须一致**，只换表面设定。
 
 #### 人物关系图
-**角色数量、关系结构必须与源文一致。** 只换名字和设定，不换功能位。
-**必须使用上面的角色名映射表中的名字，不可自编。**
+**角色数量、关系结构必须与源文一致。** 只换设定，不换功能位。
 
 #### 前10章锚点
 **每章的核心事件必须与源文对应章同功能。** 格式：

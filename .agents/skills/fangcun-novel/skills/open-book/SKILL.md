@@ -80,7 +80,7 @@ metadata:
 
 **产出：**
 - `concept.md`（设定+弧线+角色名+行为模式+全局节奏图）
-- `characters.md`（角色设定，新名字+性格+关系）
+- `characters.md`（角色设定，角色名+性格+关系）
 - `world.md`（世界观设定）
 - `plot.md`（剧情设定）
 - `book_info.md`（书籍信息）
@@ -91,7 +91,7 @@ metadata:
 - 冲突类型保持一致
 - 情绪基调保持一致
 
-**⚠️ 必须读取：** `references/imitate.md`（包含角色名映射格式、起名铁律、设定文件模板）
+**⚠️ 必须读取：** `references/imitate.md`（包含角色卡格式、设定文件模板）
 
 ---
 

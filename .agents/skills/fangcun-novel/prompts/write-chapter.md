@@ -38,15 +38,6 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 - 结尾不需要"钩子"，读者自然会翻下一章
 </requirements>
 
-<name_map>
-**必须使用新名字，绝对不能使用源文名字！**
-
-**角色名映射表（必须严格遵守）：**
-{name_map}
-
-**检查每一个名字，确保没有使用源文名字！**
-</name_map>
-
 <characters>
 {characters}
 </characters>

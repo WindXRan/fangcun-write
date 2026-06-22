@@ -240,191 +240,6 @@ def _split_character_cards(rewrites_dir):
         print(f"  [OK] 拆分 {count} 个角色卡 → {cards_dir}")
 
 
-def _fix_unrenamed_characters(rewrites_dir):
-    """检查角色卡，自动给未改名的角色生成完整新名。"""
-    cards_dir = Path(rewrites_dir) / "characters"
-    if not cards_dir.exists():
-        return
-
-    # 完整名字池（避免AI审美，用接地气的名字）
-    NAME_POOL = [
-        "陈大勇", "周小梅", "吴铁柱", "孙翠花", "赵有才", "钱秀英", "郑国强", "冯玉兰",
-        "卫东来", "沈月娥", "韩志远", "杨桂花", "朱富贵", "秦淑芬", "许金凤", "何建设",
-        "吕国庆", "张春花", "孔令辉", "曹德旺", "严守一", "华明珠", "金刚强", "魏红霞",
-        "陶大伟", "姜小燕", "戚志强", "谢美玲", "邹明亮", "苏小红", "潘巧云", "范进财",
-        "彭大海", "鲁智深", "韦小宝", "昌平生", "马兰花", "苗翠翠", "方志明", "任盈盈",
-        "袁秀秀", "柳如烟", "唐国栋", "罗玉凤", "薛宝钗", "顾惜朝", "宋青书", "林平之",
-        "胡一刀", "丁春秋", "白展堂", "郭芙蓉", "吕轻侯", "佟湘玉", "莫小贝", "燕小六",
-        "邢捕头", "李大嘴", "钱掌柜", "姬无命", "公孙策", "展昭飞", "包拯天", "王朝云",
-        "马汉文", "张龙飞", "赵虎啸", "苏乞儿", "黄飞鸿", "霍元甲", "陈真勇", "叶问天",
-        "方世玉", "洪熙官", "黄麒英", "梁赞伟", "严咏春", "李小龙", "成龙杰", "甄子丹",
-    ]
-
-    # 收集已使用的名字
-    used_names = set()
-    for f in cards_dir.glob("*.md"):
-        text = f.read_text(encoding="utf-8")
-        m = re.search(r'【(.+?)】[（(]源文对应', text)
-        if m:
-            used_names.add(m.group(1).strip())
-
-    # 收集源文名（避免新名与源文重名）
-    source_names = set()
-    for f in cards_dir.glob("*.md"):
-        text = f.read_text(encoding="utf-8")
-        m = re.search(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', text)
-        if m:
-            for n in re.split(r'[/、]', m.group(2)):
-                source_names.add(n.strip())
-
-    # 扫描未改名的角色
-    replacements = {}
-    pool_idx = 0
-    for f in sorted(cards_dir.glob("*.md")):
-        text = f.read_text(encoding="utf-8")
-        m = re.search(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', text)
-        if not m:
-            continue
-        new_name = m.group(1).strip()
-        old_name = m.group(2).strip()
-        if new_name != old_name:
-            continue
-        if len(old_name) < 2:
-            continue
-
-        # 从名字池中找一个未使用的名字
-        generated = None
-        for _ in range(len(NAME_POOL)):
-            candidate = NAME_POOL[pool_idx % len(NAME_POOL)]
-            pool_idx += 1
-            if candidate not in used_names and candidate not in source_names:
-                generated = candidate
-                break
-
-        if not generated:
-            # fallback: 用"顾"+序号
-            generated = f"顾{len(replacements)+1}"
-            while generated in used_names:
-                generated = f"顾{len(replacements)+1}号"
-
-        used_names.add(generated)
-        replacements[old_name] = generated
-
-    if not replacements:
-        return
-
-    print(f"  [FIX] {len(replacements)} 个角色自动改名:")
-    for old, new in replacements.items():
-        print(f"    {old} → {new}")
-
-    # 替换 characters.md
-    chars_path = Path(rewrites_dir) / "settings" / "characters.md"
-    if not chars_path.exists():
-        chars_path = Path(rewrites_dir) / "characters.md"
-    if chars_path.exists():
-        chars_text = chars_path.read_text(encoding="utf-8")
-        for old, new in replacements.items():
-            chars_text = chars_text.replace(f"【{old}】", f"【{new}】")
-        chars_path.write_text(chars_text, encoding="utf-8")
-        print(f"  [OK] characters.md 已更新")
-
-    # 替换角色卡文件
-    for f in cards_dir.glob("*.md"):
-        text = f.read_text(encoding="utf-8")
-        modified = False
-        for old, new in replacements.items():
-            if f"【{old}】" in text:
-                text = text.replace(f"【{old}】", f"【{new}】")
-                modified = True
-        if modified:
-            f.write_text(text, encoding="utf-8")
-            m = re.search(r'【(.+?)】', text)
-            if m:
-                new_name = m.group(1).strip()
-                new_path = f.parent / f"{new_name}.md"
-                if new_path != f:
-                    f.rename(new_path)
-
-    # 替换其他设定文件
-    settings_dir = Path(rewrites_dir) / "settings"
-    for f in settings_dir.glob("*.md"):
-        if f.name == "characters.md":
-            continue
-        text = f.read_text(encoding="utf-8")
-        modified = False
-        for old, new in replacements.items():
-            if old in text:
-                text = text.replace(old, new)
-                modified = True
-        if modified:
-            f.write_text(text, encoding="utf-8")
-            print(f"  [OK] {f.name} 已同步更新")
-
-
-def _enforce_unique_names(rewrites_dir):
-    """强制去重：characters.md 中与源文同名的角色自动改名。"""
-    chars_path = Path(rewrites_dir) / "settings" / "characters.md"
-    if not chars_path.exists():
-        chars_path = Path(rewrites_dir) / "characters.md"
-    if not chars_path.exists():
-        return
-
-    chars_text = chars_path.read_text(encoding="utf-8")
-    changed = False
-    replacements = {}
-
-    # 找出所有未改名的角色
-    for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars_text):
-        new_name = m.group(1).strip()
-        old_name = m.group(2).strip()
-        if new_name == old_name:
-            # 生成新名：加姓氏前缀（从角色上下文推断）
-            role_section = chars_text[m.end():m.end()+500]
-            if re.search(r'女性|女孩|女儿|女主|小姐|姐姐|妹妹', role_section):
-                # 女性角色：加"苏"姓（与女主同族）
-                generated = f"苏{old_name}" if not old_name.startswith("苏") else f"林{old_name}"
-            elif re.search(r'男性|男孩|男主|先生|哥哥|弟弟', role_section):
-                # 男性角色：加"秦"姓（与养父同族）
-                generated = f"秦{old_name}" if not old_name.startswith("秦") else f"凌{old_name}"
-            else:
-                # 默认：加"顾"姓
-                generated = f"顾{old_name}" if not old_name.startswith("顾") else f"沈{old_name}"
-
-            # 确保新名不与已有角色冲突
-            existing = [m2.group(1) for m2 in re.finditer(r'【(.+?)】', chars_text)]
-            if generated in existing:
-                generated = f"{generated}儿"
-
-            replacements[old_name] = generated
-            changed = True
-            print(f"  [RENAME] {old_name} → {generated}")
-
-    if not changed:
-        return
-
-    # 替换 characters.md（只改角色名，不改源文对应名）
-    for old, new in replacements.items():
-        chars_text = chars_text.replace(f"【{old}】", f"【{new}】")
-
-    chars_path.write_text(chars_text, encoding="utf-8")
-    print(f"  [OK] characters.md 已更新 {len(replacements)} 个角色名")
-
-    # 替换其他设定文件中的角色名
-    settings_dir = Path(rewrites_dir) / "settings"
-    for f in settings_dir.glob("*.md"):
-        if f.name == "characters.md":
-            continue
-        text = f.read_text(encoding="utf-8")
-        modified = False
-        for old, new in replacements.items():
-            if old in text:
-                text = text.replace(old, new)
-                modified = True
-        if modified:
-            f.write_text(text, encoding="utf-8")
-            print(f"  [OK] {f.name} 已同步更新")
-
-
 def _format_events_table(events):
     """格式化事件表为可读的markdown表格。"""
     if not events:
@@ -544,7 +359,7 @@ def phase_open_book(config, state_mgr=None):
 
     print(f"\n  [STAGE 2] 生成设定文件...")
 
-    # === Stage 2a: 先生成 characters.md（角色名映射表）===
+    # === Stage 2a: 先生成 characters.md ===
     print(f"  [STAGE 2a] 生成角色设定...")
     try:
         user_prompt = load_prompt(
@@ -565,34 +380,17 @@ def phase_open_book(config, state_mgr=None):
         print(f"  [FAIL] characters.md: {e}")
         content = None
 
-    # === Stage 2b: 生成其他文件，注入角色名映射 ===
+    # === Stage 2b: 生成其他设定文件 ===
     print(f"  [STAGE 2b] 生成其他设定文件（4 并行 agent）...")
 
-    # 从 characters.md 提取角色名映射，注入到其他 prompt
+    # 读取 characters.md 内容
     characters_content = ""
     chars_path = rewrites_dir / "characters.md"
     if chars_path.exists():
         characters_content = chars_path.read_text(encoding="utf-8")
     
-    # 提取角色名映射表
-    char_mapping = {}
-    for m in re.finditer(r'\|\s*(\S+)\s*\|\s*(\S+)\s*\|\s*[男女]\s*\|', characters_content):
-        old_name = m.group(1).strip()
-        new_name = m.group(2).strip()
-        if old_name != "源文名" and new_name != "新名":  # 跳过表头
-            char_mapping[old_name] = new_name
-    
-    # 构建角色名注入文本
-    char_names_text = ""
-    if char_mapping:
-        char_names_lines = ["## 角色名映射（必须使用这些名字，不可自编）"]
-        for old, new in char_mapping.items():
-            char_names_lines.append(f"- {old} → {new}")
-        char_names_text = "\n".join(char_names_lines)
-    
-    # 更新 replacements，注入角色名
+    # 更新 replacements，注入 characters 内容
     replacements_stage2_with_chars = replacements_stage2.copy()
-    replacements_stage2_with_chars["角色名映射"] = char_names_text
     replacements_stage2_with_chars["characters.md内容"] = characters_content[:3000]
 
     # 使用合并后的 open-book-settings.md 一次生成所有设定
@@ -643,9 +441,8 @@ def phase_open_book(config, state_mgr=None):
         print(f"  [FAIL] open-book-settings: {e}")
         book_info_content = None
 
-    # === Stage 2.5: 拆分角色卡 + 补全未改名角色 ===
+    # === Stage 2.5: 拆分角色卡 ===
     _split_character_cards(rewrites_dir)
-    _fix_unrenamed_characters(rewrites_dir)
 
     # === Stage 3: book_name=auto 时从书名候选中选择 ===
     if book_name == "auto" and book_info_content:

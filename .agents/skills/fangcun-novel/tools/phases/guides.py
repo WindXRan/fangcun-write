@@ -35,73 +35,13 @@ def _get_book_data(rewrites_dir):
     return _book_data_cache
 
 
-# 模块级缓存：角色名映射
+# 模块级缓存：角色名映射（不再使用，保留兼容）
 _name_map_cache = None
 
 
 def _build_name_map(config):
-    """从 characters.md 构建源文名→新名映射（模块级缓存）。支持合并条目如 高慧云/林秋敏。"""
-    global _name_map_cache
-    if _name_map_cache is not None:
-        return _name_map_cache
-
-    _name_map_cache = {}
-    base_dir = Path(config.get("base_dir", "."))
-    rewrites_dir = base_dir / config.get("rewrites_dir", "")
-    
-    # 读取所有可能的 characters.md 文件
-    chars_files = []
-    chars_path1 = rewrites_dir / "settings" / "characters.md"
-    chars_path2 = rewrites_dir / "characters.md"
-    if chars_path1.exists():
-        chars_files.append(chars_path1)
-    if chars_path2.exists():
-        chars_files.append(chars_path2)
-    
-    if not chars_files:
-        return _name_map_cache
-    
-    # 解析所有文件
-    for chars_path in chars_files:
-        chars_text = chars_path.read_text(encoding="utf-8")
-        
-        # 格式1: 【新名】（源文对应：源文名）
-        for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars_text):
-            new_name = m.group(1).strip()
-            old_names_raw = m.group(2).strip()
-            old_names = re.split(r'[/、]', old_names_raw)
-            for old_name in old_names:
-                old_name = old_name.strip()
-                if old_name and old_name != new_name and old_name not in _name_map_cache:
-                    _name_map_cache[old_name] = new_name
-        
-        # 格式2: ## 【角色位】新名（原料名）
-        for m in re.finditer(r'##\s*【[^】]+】(.+?)（原(.+?)）', chars_text):
-            new_name = m.group(1).strip()
-            old_name = m.group(2).strip()
-            if old_name and new_name and old_name != new_name and old_name not in _name_map_cache:
-                _name_map_cache[old_name] = new_name
-        
-        # 格式3: 表格行（逐行解析，只取前两列）
-        for line in chars_text.split('\n'):
-            line = line.strip()
-            if not line.startswith('|'):
-                continue
-            cells = [c.strip() for c in line.split('|') if c.strip()]
-            if len(cells) < 2:
-                continue
-            old_name = cells[0]
-            new_name = cells[1]
-            # 跳过表头和分隔行
-            if old_name in ('源文名', '----', '---', '===') or new_name in ('新名', '----', '---', '==='):
-                continue
-            # 跳过分隔线
-            if '-' in old_name or '-' in new_name:
-                continue
-            if old_name and new_name and old_name != new_name and old_name not in _name_map_cache:
-                _name_map_cache[old_name] = new_name
-
-    return _name_map_cache
+    """不再强制换名，返回空映射。保留函数签名避免调用方报错。"""
+    return {}
 
 
 # 模块级缓存：events.json 映射后版本
@@ -109,30 +49,15 @@ _events_mapped_cache = None
 
 
 def _load_events_mapped(config):
-    """加载 events.json 并替换为新名（模块级缓存）。"""
+    """加载 events.json（不再替换角色名，直接返回原数据）。"""
     global _events_mapped_cache
     if _events_mapped_cache is not None:
         return _events_mapped_cache
 
     from file_io import load_events
     events = load_events(config)
-    name_map = _build_name_map(config)
-
-    if not name_map:
-        _events_mapped_cache = events
-        return events
-
-    mapped = []
-    for e in events:
-        e_copy = dict(e)
-        event_text = e_copy.get("event", "")
-        for old, new in name_map.items():
-            event_text = event_text.replace(old, new)
-        e_copy["event"] = event_text
-        mapped.append(e_copy)
-
-    _events_mapped_cache = mapped
-    return mapped
+    _events_mapped_cache = events
+    return events
 
 
 # 模块级缓存：story_skeleton.md 映射后版本
@@ -140,22 +65,13 @@ _skeleton_mapped_cache = None
 
 
 def _load_skeleton_mapped(config):
-    """加载 story_skeleton.md 并替换为新名（模块级缓存）。"""
+    """加载 story_skeleton.md（不再替换角色名）。"""
     global _skeleton_mapped_cache
     if _skeleton_mapped_cache is not None:
         return _skeleton_mapped_cache
 
     from file_io import load_skeleton
     skeleton = load_skeleton(config)
-    name_map = _build_name_map(config)
-
-    if not name_map or not skeleton:
-        _skeleton_mapped_cache = skeleton
-        return skeleton
-
-    for old, new in name_map.items():
-        skeleton = skeleton.replace(old, new)
-
     _skeleton_mapped_cache = skeleton
     return skeleton
 
@@ -165,22 +81,13 @@ _adaptation_mapped_cache = None
 
 
 def _load_adaptation_mapped(config):
-    """加载 adaptation_strategy.md 并替换为新名（模块级缓存）。"""
+    """加载 adaptation_strategy.md（不再替换角色名）。"""
     global _adaptation_mapped_cache
     if _adaptation_mapped_cache is not None:
         return _adaptation_mapped_cache
 
     from file_io import load_adaptation
     adaptation = load_adaptation(config)
-    name_map = _build_name_map(config)
-
-    if not name_map or not adaptation:
-        _adaptation_mapped_cache = adaptation
-        return adaptation
-
-    for old, new in name_map.items():
-        adaptation = adaptation.replace(old, new)
-
     _adaptation_mapped_cache = adaptation
     return adaptation
 
@@ -209,7 +116,7 @@ _style_text_cache = {}
 
 
 def _get_style_text_mapped(config, ch):
-    """获取文笔指纹文本并替换为新名（模块级缓存）。"""
+    """获取文笔指纹文本（不再替换角色名）。"""
     if ch in _style_text_cache:
         return _style_text_cache[ch]
 
@@ -218,12 +125,6 @@ def _get_style_text_mapped(config, ch):
     if not style_text:
         _style_text_cache[ch] = None
         return None
-
-    # 替换源文角色名
-    name_map = _build_name_map(config)
-    if name_map:
-        for old_name, new_name in name_map.items():
-            style_text = style_text.replace(old_name, new_name)
 
     # 去掉例句行（防止 LLM 照抄源文原句）
     filtered_lines = []
@@ -287,8 +188,9 @@ def _get_world_constraint(config):
         chars_path = Path(config["rewrites_dir"]) / "settings" / "characters.md"
     if chars_path.exists():
         chars_text = chars_path.read_text(encoding="utf-8")
-        # 提取主角年龄/身份
-        for name in ["周小麦", "陆川", "女主", "男主"]:
+        # 动态提取所有角色名（从 characters.md 解析）
+        char_names = [m.group(1).strip() for m in re.finditer(r'【(.+?)】[（(]源文对应', chars_text)]
+        for name in char_names[:5]:  # 最多取5个主角
             m = re.search(rf'【{re.escape(name)}】.*?(?:功能位|身份)[：:]\s*(.+)', chars_text)
             if m:
                 parts.append(f"- {name}身份：{m.group(1).strip()[:50]}")
@@ -297,27 +199,13 @@ def _get_world_constraint(config):
     return _world_constraint_cache
 
 
-# 模块级缓存：全量角色名映射表文本
+# 模块级缓存：全量角色名映射表文本（不再使用，保留兼容）
 _name_map_text_cache = None
 
 
 def _build_name_map_text(config):
-    """构建全量角色名映射表（不按章裁剪）。"""
-    global _name_map_text_cache
-    if _name_map_text_cache is not None:
-        return _name_map_text_cache
-
-    name_map = _build_name_map(config)
-    if not name_map:
-        _name_map_text_cache = "（角色名映射表不存在）"
-        return _name_map_text_cache
-
-    lines = ["| 源文名 | 新名 |", "|--------|------|"]
-    for old_name, new_name in sorted(name_map.items(), key=lambda x: -len(x[0])):
-        lines.append(f"| {old_name} | {new_name} |")
-
-    _name_map_text_cache = "\n".join(lines)
-    return _name_map_text_cache
+    """不再强制换名，返回空字符串。保留函数签名避免调用方报错。"""
+    return ""
 
 
 # 模块级缓存：风格类型文本
@@ -421,42 +309,6 @@ def _get_chapter_characters(config, ch_num):
     return "、".join(sorted(chars))
 
 
-def _get_chapter_name_map(config, ch_num):
-    """获取本章出场角色的映射表（精简版）。"""
-    # 获取出场角色
-    events = _load_events_mapped(config)
-    chars = set()
-    for e in events:
-        if e.get("id") == ch_num or e.get("chapter_index") == ch_num:
-            event_text = e.get("event", "")
-            parts = event_text.split("|")
-            if len(parts) >= 3:
-                for c in re.split(r"[、，,]", parts[2].strip()):
-                    c = c.strip()
-                    if c:
-                        chars.add(c)
-            break
-    
-    if not chars:
-        return "（无出场角色信息）"
-    
-    # 获取完整映射表
-    name_map = _build_name_map(config)
-    if not name_map:
-        return "（角色名映射表不存在）"
-    
-    # 只保留出场角色的映射
-    result_lines = ["| 源文名 | 新名 |", "|--------|------|"]
-    for old_name, new_name in sorted(name_map.items()):
-        # 检查是否是出场角色（新名或旧名在出场列表中）
-        if new_name in chars or old_name in chars:
-            result_lines.append(f"| {old_name} | {new_name} |")
-    
-    if len(result_lines) == 2:
-        # 没有匹配到，返回完整映射表
-        return _build_name_map_text(config)
-    
-    return "\n".join(result_lines)
 
 
 def _load_character_cards(config, ch_num):
@@ -908,8 +760,6 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     if prompt_type == "write-chapter" and chapter_num:
         if "characters" not in replacements:
             replacements["characters"] = _load_character_cards(config, chapter_num)
-        if "name_map" not in replacements:
-            replacements["name_map"] = _build_name_map_text(config)
         if "world" not in replacements:
             replacements["world"] = _get_world_text(config)
         if "style" not in replacements:
@@ -967,13 +817,6 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             
             skel_ctx = get_skeleton_context(config, chapter_num) or "（骨架未生成）"
             adapt_pr = get_adaptation_principles(config) or "（改编策略未生成）"
-            
-            # 对骨架和改编策略的上下文也做替换
-            name_map = _build_name_map(config)
-            if name_map:
-                for old_name, new_name in name_map.items():
-                    skel_ctx = skel_ctx.replace(old_name, new_name)
-                    adapt_pr = adapt_pr.replace(old_name, new_name)
 
         replacements.setdefault("event", ch_event)
         replacements.setdefault("structure", skel_ctx)
@@ -1138,11 +981,6 @@ def run_one_with_template(config, prompt_type, chapter_num=None, **kwargs):
         result = process_plot_guide_output(config, chapter_num, result)
         # 去掉源文全文（防止 write-chapter 照抄）
         result = _strip_source_text(result)
-        # 替换源文角色名（LLM 产出中可能残留源文角色名）
-        name_map = _build_name_map(config)
-        if name_map:
-            for old_name, new_name in sorted(name_map.items(), key=lambda x: -len(x[0])):
-                result = result.replace(old_name, new_name)
 
     return result
 
