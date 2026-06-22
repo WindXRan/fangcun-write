@@ -1163,7 +1163,12 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     if extra_replacements:
         replacements.update(extra_replacements)
 
-    prompt_path = f"{prompts_dir}/{prompt_type}.md"
+    # 优先从 tasks/ 目录加载 task prompt，fallback 到 prompts/
+    task_path = Path(__file__).parent.parent / "tasks" / f"{prompt_type}.md"
+    if task_path.exists():
+        prompt_path = str(task_path)
+    else:
+        prompt_path = f"{prompts_dir}/{prompt_type}.md"
     user_prompt = load_prompt(prompt_path, base_dir, replacements, mode="api", rewrites_dir=config.get("rewrites_dir"))
 
     # 新架构：task prompt 不含 {变量}，用 XML 标签拼接 context

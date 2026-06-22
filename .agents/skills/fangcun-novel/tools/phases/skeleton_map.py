@@ -65,6 +65,7 @@ def phase_skeleton_map(config, state_mgr=None):
     }
 
     prompts_dir = config.get("prompts_dir", str(Path(__file__).parent.parent.parent / "prompts"))
+    tasks_dir = str(Path(__file__).parent.parent / "tasks")
 
     # 分批处理 events（避免单次 prompt 过长导致超时）
     events_lines = events_text.split("\n")
@@ -84,8 +85,12 @@ def phase_skeleton_map(config, state_mgr=None):
         replacements = {**base_replacements, "events_text": batch_events[:8000]}
 
         try:
+            # 优先从 tasks/ 加载
+            task_file = Path(tasks_dir) / "skeleton-map.md"
+            if not task_file.exists():
+                task_file = Path(prompts_dir) / "skeleton-map.md"
             user_prompt = load_prompt(
-                str(Path(prompts_dir) / "skeleton-map.md"),
+                str(task_file),
                 str(base_dir),
                 replacements,
                 mode="api",
