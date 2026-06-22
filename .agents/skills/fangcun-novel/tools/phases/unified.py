@@ -27,10 +27,10 @@ def phase_unified_check(config, start, end, workers=10, batch_size=25, state_mgr
     return merged
 
 
-def phase_unified_fix(config, start, end, workers=10, batch_size=25, dry_run=False):
+def phase_unified_fix(config, start, end, workers=10, batch_size=25, dry_run=False, auto=False):
     """统一审改：分批审核→合并→制定任务→执行修复。"""
     print(f"\n{'=' * 50}")
-    print(f"统一审改 (ch{start}-{end}, dry_run={dry_run})")
+    print(f"统一审改 (ch{start}-{end}, dry_run={dry_run}, auto={auto})")
     print("=" * 50)
 
     from unified_fixer import run_pipeline
@@ -40,7 +40,7 @@ def phase_unified_fix(config, start, end, workers=10, batch_size=25, dry_run=Fal
 
     results, merged = run_pipeline(
         config, start, end,
-        batch_size=batch_size, workers=workers, dry_run=dry_run,
+        batch_size=batch_size, workers=workers, dry_run=dry_run, auto=auto,
     )
 
     # 保存
@@ -58,7 +58,8 @@ def phase_unified_fix(config, start, end, workers=10, batch_size=25, dry_run=Fal
 
 def phase_unified_review_fix(config, start, end, workers=10, batch_size=25, state_mgr=None):
     """统一审改（推荐）：分批审核→合并→制定任务→执行修复。"""
-    results = phase_unified_fix(config, start, end, workers=workers, batch_size=batch_size, dry_run=False)
+    auto = config.get("auto_review", False)
+    results = phase_unified_fix(config, start, end, workers=workers, batch_size=batch_size, dry_run=False, auto=auto)
 
     if state_mgr and results:
         for ch, r in (results or {}).items():

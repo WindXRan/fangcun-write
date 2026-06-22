@@ -27,6 +27,15 @@ try:
 except ImportError:
     setup_pipeline_log = lambda cfg: None
 
+# 对话开头字符（机械修复时跳过这些行）
+_DIALOGUE_QUOTES = set('"\"\u300c\u300e\u2018\u2019')
+
+
+def _is_dialogue_line(line):
+    """判断一行是否是对话开头（引号开头的行）。"""
+    stripped = line.strip()
+    return bool(stripped) and stripped[0] in _DIALOGUE_QUOTES
+
 @dataclass
 class FixTask:
     """dispatch_agent 输出的单个修复任务"""
@@ -72,6 +81,21 @@ def dispatch_agent(config, report: SummaryReport) -> dict[int, FixTask]:
 
         tasks[ch] = FixTask(ch=ch, mechanical=mech, llm=llm_list, target_chars=target)
 
+    # 跨章问题：将跨章问题分配到涉及的第一章
+    for ci in report.cross_issues:
+        if not ci.desc:
+            continue
+        # 从描述中提取涉及章节
+        ch_match = re.findall(r'第(\d+)章', ci.desc)
+        if not ch_match:
+            continue
+        first_ch = int(ch_match[0])
+        if first_ch not in tasks:
+            src = get_source_text(config, first_ch)
+            tasks[first_ch] = FixTask(ch=first_ch, target_chars=get_body_chars(src))
+        # 跨章问题作为 LLM 任务添加
+        tasks[first_ch].llm.append(ci)
+
     return tasks
 
 
@@ -102,12 +126,39 @@ def fix_agent(config, task: FixTask, dry_run=False) -> FixResult:
     if task.mechanical:
         text, mech_count = _fix_mechanical(text, task.mechanical)
 
-    # LLM 修复
+    # LLM 修复（#6: target_chars 扣除机械修复删掉的字数）
     if task.llm and not dry_run:
-        llm_text = _fix_llm(config, task, text)
+        # 调整目标字数：机械修复可能删掉了字
+        adjusted_task = FixTask(
+            ch=task.ch, mechanical=task.mechanical, llm=task.llm,
+            target_chars=task.target_chars or len(re.sub(r'\s', '', text))
+        )
+        llm_text = _fix_llm(config, adjusted_task, text)
         if llm_text:
-            text = llm_text
-            llm_used = True
+            # #3: LLM 修复后跑 algo 验证，拒绝引入新问题的修复
+            from phases.validate import validate_one
+            try:
+                # 临时写入验证
+                ch_file.write_text(llm_text, encoding='utf-8')
+                passed, report_text, metrics = validate_one(config, task.ch)
+                if not passed and "*ISSUE*" in report_text:
+                    # 检查是否引入了新的 AI 模式问题
+                    new_ai_issues = [l for l in report_text.split('\n') if '*ISSUE*' in l and ('AI' in l or '路标' in l or '痕迹' in l)]
+                    if new_ai_issues:
+                        print(f"      [修复] 第{task.ch}章 LLM 修复引入新问题，回退", flush=True)
+                        ch_file.write_text(text, encoding='utf-8')  # 回退
+                    else:
+                        text = llm_text
+                        llm_used = True
+                else:
+                    text = llm_text
+                    llm_used = True
+                # 恢复原文件（如果上面临时写入了但最终不用）
+                if not llm_used:
+                    ch_file.write_text(text, encoding='utf-8')
+            except Exception:
+                text = llm_text
+                llm_used = True
 
     if text == original:
         return FixResult(ch=task.ch, status="unchanged",
@@ -131,24 +182,38 @@ def fix_agent(config, task: FixTask, dry_run=False) -> FixResult:
 
 
 def _fix_mechanical(text, issues):
-    """机械修复 AI 痕迹词 + 角色名漂移 + 梗重复。"""
+    """机械修复 AI 痕迹词 + 角色名漂移。对话内文字受保护不被修改。"""
     count = 0
     for iss in issues:
         if iss.type == "ai_trace":
-            for marker in AI_MARKERS:
-                pat = r'(?:^|[\n。！？])\s*' + re.escape(marker)
-                found = re.findall(pat, text)
+            lines = text.split('\n')
+            new_lines = []
+            for line in lines:
+                if _is_dialogue_line(line):
+                    new_lines.append(line)
+                    continue
+                for marker in AI_MARKERS:
+                    pat = r'(?:^|[\n。！？])\s*' + re.escape(marker)
+                    found = re.findall(pat, line)
+                    if found:
+                        count += len(found)
+                        line = re.sub(pat, lambda m: m.group()[:1] if m.group() else '', line)
+                new_lines.append(line)
+            text = '\n'.join(new_lines)
+        elif iss.type == "ai_marker":
+            lines = text.split('\n')
+            new_lines = []
+            for line in lines:
+                if _is_dialogue_line(line):
+                    new_lines.append(line)
+                    continue
+                found = re.findall(AI_MARKER_PATTERN, line)
                 if found:
                     count += len(found)
-                    text = re.sub(pat, lambda m: m.group()[:1] if m.group() else '', text)
-        elif iss.type == "ai_marker":
-            found = re.findall(AI_MARKER_PATTERN, text)
-            if found:
-                count += len(found)
-                text = re.sub(AI_MARKER_PATTERN, '', text)
+                    line = re.sub(AI_MARKER_PATTERN, '', line)
+                new_lines.append(line)
+            text = '\n'.join(new_lines)
         elif iss.type == "char_name_drift":
-            # 角色名漂移修复：将变体替换为标准名
-            # 例如：将"张三哥"替换为"张三"
             desc = iss.desc
             if "被写成" in desc:
                 parts = desc.split("被写成")
@@ -156,10 +221,19 @@ def _fix_mechanical(text, issues):
                     standard = parts[0].strip().strip("'")
                     variant = parts[1].strip().strip("'")
                     if variant in text:
-                        count += text.count(variant)
-                        text = text.replace(variant, standard)
+                        lines = text.split('\n')
+                        new_lines = []
+                        for line in lines:
+                            if _is_dialogue_line(line):
+                                new_lines.append(line)
+                                continue
+                            c = line.count(variant)
+                            if c:
+                                count += c
+                                line = line.replace(variant, standard)
+                            new_lines.append(line)
+                        text = '\n'.join(new_lines)
         elif iss.type == "trope_repetition":
-            # 梗重复：这里不做自动修复，需要LLM处理
             pass
     text = re.sub(r'\n{3,}', '\n\n', text)
     return text, count
@@ -191,10 +265,8 @@ def _fix_llm(config, task, text):
             adj_parts.append(f"【{label}】\n{adj_t[-500:]}" if offset == -1 else f"【{label}】\n{adj_t[:500]}")
     adj = '\n\n'.join(adj_parts)
 
-    # 读源文
-    source_text = get_source_text(config, task.ch) or "（无源文）"
-
     prompt = safe_format(prompt_template, {
+        "N": str(task.ch),
         "issues_text": issues_text,
         "adjacent_context": adj,
         "orig_chars": str(len(re.sub(r'\s', '', text))),
@@ -202,7 +274,6 @@ def _fix_llm(config, task, text):
         "min_chars": str(int((task.target_chars or len(re.sub(r'\s', '', text))) * 0.85)),
         "max_chars": str(int((task.target_chars or len(re.sub(r'\s', '', text))) * 1.15)),
         "chapter_content": text,
-        "源文全文": source_text,
     })
 
     sp_name = get_system_prompt_name("unified-fix.md") or "system-generic.md"
@@ -240,7 +311,7 @@ def _fix_llm(config, task, text):
         return None
 
 
-def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False):
+def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False, auto=False):
     """多 Agent 审改流程。
 
     Flow:
@@ -334,9 +405,9 @@ def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False):
         print(f"\n  [DRY-RUN] 不执行修复", flush=True)
         return tasks, {str(k): v for k, v in summary.chapters.items()}
 
-    # ========== 确认环节 ==========
+    # ========== 汇报环节 ==========
     print(f"\n{'='*50}", flush=True)
-    print(f"  修复计划预览", flush=True)
+    print(f"  审查报告", flush=True)
     print("="*50, flush=True)
     print(f"  需修复: {len(tasks)} / {len(chapters)} 章", flush=True)
     print(f"  机械修复: {mech_total} 处 (AI痕迹词/路标词 — 自动删)", flush=True)
@@ -366,7 +437,53 @@ def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False):
             more = f"...共{len(info['chapters'])}章" if len(info['chapters']) > 5 else ""
             print(f"    {label}: {info['count']} 处 (第{','.join(map(str,ch_list))}章{more})", flush=True)
 
-    print(f"  [AUTO] 开始修复", flush=True)
+    # 逐章问题明细
+    print(f"\n  逐章明细:")
+    for ch, task in sorted(tasks.items()):
+        issues = task.mechanical + task.llm
+        if not issues:
+            continue
+        print(f"    第{ch}章:", flush=True)
+        for iss in issues:
+            sev = iss.priority or iss.severity or "?"
+            print(f"      [{sev}] {iss.type}: {iss.desc}", flush=True)
+
+    # 写审查报告文件
+    report_dir = os.path.join(cfg.get('rewrites_dir', ''), 'compare')
+    os.makedirs(report_dir, exist_ok=True)
+    review_report_path = os.path.join(report_dir, 'review_report.md')
+    with open(review_report_path, 'w', encoding='utf-8') as f:
+        f.write(f"# 审查报告\n\n")
+        f.write(f"**范围**: 第{start}-{end}章 ({len(chapters)}章)\n")
+        f.write(f"**需修复**: {len(tasks)}章 | 机械修复{mech_total}处 | LLM修复{llm_total}章\n\n")
+        f.write(f"## 问题分布\n\n")
+        for t, info in sorted(type_count.items(), key=lambda x: -x[1]["count"]):
+            label = order.get(t, t)
+            f.write(f"- **{label}**: {info['count']}处 (第{','.join(map(str,info['chapters']))}章)\n")
+        f.write(f"\n## 逐章明细\n\n")
+        for ch, task in sorted(tasks.items()):
+            issues = task.mechanical + task.llm
+            if not issues:
+                continue
+            f.write(f"### 第{ch}章\n\n")
+            for iss in issues:
+                sev = iss.priority or iss.severity or "?"
+                f.write(f"- [{sev}] **{iss.type}**: {iss.desc}\n")
+            f.write("\n")
+    print(f"\n  报告已保存: {review_report_path}", flush=True)
+
+    # 确认环节
+    if not auto:
+        print(f"\n  输入 y 继续修复，n 中止: ", flush=True, end="")
+        try:
+            answer = input().strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            answer = "n"
+        if answer != "y":
+            print("  已中止。报告已保存，可稍后手动执行修复。", flush=True)
+            return {}, {str(k): v for k, v in summary.chapters.items()}
+    else:
+        print(f"  [AUTO] 自动继续修复", flush=True)
 
     # ========== Step 4: Scatter — Fix Agents ==========
     print(f"\n{'='*40}", flush=True)
@@ -440,34 +557,75 @@ def run_pipeline(cfg, start, end, batch_size=10, workers=10, dry_run=False):
                     new_issues.append({"ch": ch, **iss})
 
         if new_issues:
-            print(f"  发现 {len(new_issues)} 个新问题，修复中...", flush=True)
-            # 生成修复任务
-            re_tasks = {}
+            # 二次审查汇报
+            print(f"\n  二次审查发现 {len(new_issues)} 个新问题:", flush=True)
+            re_type_count = {}
             for iss in new_issues:
+                t = iss.get("type", "?")
+                re_type_count.setdefault(t, {"count": 0, "chapters": []})
+                re_type_count[t]["count"] += 1
                 ch = iss["ch"]
-                if ch not in re_tasks:
-                    re_tasks[ch] = FixTask(ch=ch)
-                if iss.get("auto_fixable"):
-                    re_tasks[ch].mechanical.append(Issue(**{k: v for k, v in iss.items() if k != "ch"}))
-                else:
-                    re_tasks[ch].llm.append(Issue(**{k: v for k, v in iss.items() if k != "ch"}))
+                if ch not in re_type_count[t]["chapters"]:
+                    re_type_count[t]["chapters"].append(ch)
+            for t, info in sorted(re_type_count.items(), key=lambda x: -x[1]["count"]):
+                label = order.get(t, t) if 'order' in dir() else t
+                print(f"    {label}: {info['count']}处 (第{','.join(map(str,info['chapters']))}章)", flush=True)
 
-            # 修复
-            re_results = {}
-            with ThreadPoolExecutor(max_workers=min(workers, len(re_tasks))) as ex:
-                futures = {
-                    ex.submit(fix_agent, cfg, task, False): ch
-                    for ch, task in re_tasks.items()
-                }
-                for f in as_completed(futures):
-                    ch = futures[f]
-                    try:
-                        re_results[ch] = f.result()
-                    except Exception as e:
-                        re_results[ch] = FixResult(ch=ch, status="error", error=str(e))
+            # 写二次审查报告
+            re_report_path = os.path.join(report_dir, 'review_report_round2.md')
+            with open(re_report_path, 'w', encoding='utf-8') as f:
+                f.write(f"# 二次审查报告\n\n")
+                f.write(f"**已修复**: {len(fixed_chs)}章\n")
+                f.write(f"**新问题**: {len(new_issues)}个\n\n")
+                f.write(f"## 新问题明细\n\n")
+                for iss in new_issues:
+                    sev = iss.get("priority") or iss.get("severity") or "?"
+                    f.write(f"- 第{iss['ch']}章 [{sev}] **{iss.get('type','?')}**: {iss.get('desc','')}\n")
+            print(f"  二次审查报告已保存: {re_report_path}", flush=True)
 
-            re_fixed = sum(1 for r in re_results.values() if r.status == "fixed")
-            print(f"  二次修复: {re_fixed} 章", flush=True)
+            # 确认环节
+            do_second_fix = True
+            if not auto:
+                print(f"\n  输入 y 继续修复，n 中止: ", flush=True, end="")
+                try:
+                    answer = input().strip().lower()
+                except (EOFError, KeyboardInterrupt):
+                    answer = "n"
+                if answer != "y":
+                    print("  已中止。二次修复未执行。", flush=True)
+                    do_second_fix = False
+            else:
+                print(f"  [AUTO] 自动继续二次修复", flush=True)
+
+            if do_second_fix:
+                print(f"  开始二次修复...", flush=True)
+                # 生成修复任务
+                re_tasks = {}
+                for iss in new_issues:
+                    ch = iss["ch"]
+                    if ch not in re_tasks:
+                        re_tasks[ch] = FixTask(ch=ch)
+                    if iss.get("auto_fixable"):
+                        re_tasks[ch].mechanical.append(Issue(**{k: v for k, v in iss.items() if k != "ch"}))
+                    else:
+                        re_tasks[ch].llm.append(Issue(**{k: v for k, v in iss.items() if k != "ch"}))
+
+                # 修复
+                re_results = {}
+                with ThreadPoolExecutor(max_workers=min(workers, len(re_tasks))) as ex:
+                    futures = {
+                        ex.submit(fix_agent, cfg, task, False): ch
+                        for ch, task in re_tasks.items()
+                    }
+                    for f in as_completed(futures):
+                        ch = futures[f]
+                        try:
+                            re_results[ch] = f.result()
+                        except Exception as e:
+                            re_results[ch] = FixResult(ch=ch, status="error", error=str(e))
+
+                re_fixed = sum(1 for r in re_results.values() if r.status == "fixed")
+                print(f"  二次修复: {re_fixed} 章", flush=True)
         else:
             print(f"  无新问题", flush=True)
 
@@ -501,6 +659,7 @@ def main():
     parser.add_argument("--batch-size", type=int, default=10, help="每 agent 审多少章")
     parser.add_argument("--workers", type=int, default=10, help="并行 agent 数")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--auto", action="store_true", help="跳过确认环节，自动执行修复")
     parser.add_argument("--output", default=None)
     args = parser.parse_args()
 
@@ -527,6 +686,7 @@ def main():
         batch_size=args.batch_size,
         workers=args.workers,
         dry_run=args.dry_run,
+        auto=args.auto,
     )
 
     output = args.output or os.path.join(cfg['rewrites_dir'], 'compare', 'unified_review_fix.json')
