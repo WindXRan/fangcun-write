@@ -227,22 +227,52 @@ _GLOBAL_PROMPT_TEMPLATE = """你是资深网文编辑，负责全局维度审查
 
 
 def _global_agent_character(config, key_chapters, concept):
-    """全局 Agent A：人设一致性（对照行为卡片逐章检查）。"""
+    """全局 Agent A：人设一致性 + 人名检查（对照行为卡片逐章检查）。"""
     from lib.api_client import call_llm
 
     chapters_text = _load_key_chapters_text(config, key_chapters)
-    # 加载角色卡
     rewrites_dir = Path(config.get("rewrites_dir", ""))
+    base_dir = Path(config.get("base_dir", "."))
+    author = config.get("author", "")
+    source_book = config.get("source_book", "")
+
+    # 加载角色卡（新书）
     chars_path = rewrites_dir / "characters.md"
     characters = chars_path.read_text(encoding="utf-8") if chars_path.exists() else ""
 
-    concept_section = f"## 角色设定\n\n{characters}\n\n## 核心策略\n\n{concept[:3000]}"
+    # 加载源文角色名（用于检测混入）
+    source_chars_section = ""
+    source_chars_path = base_dir / "projects" / author / source_book / "characters.md"
+    if not source_chars_path.exists():
+        source_chars_path = base_dir / "projects" / author / source_book / "settings" / "characters.md"
+    if source_chars_path.exists():
+        source_text = source_chars_path.read_text(encoding="utf-8")
+        source_names = re.findall(r'【([^】]+)】', source_text)
+        if source_names:
+            source_chars_section = f"\n\n## 源文角色名（禁止在仿写中出现）\n\n{'、'.join(source_names)}"
+
+    # 加载角色名映射表（如有）
+    name_map_section = ""
+    for map_name in ("name_map.md", "settings/name_map.md"):
+        map_path = rewrites_dir / map_name
+        if map_path.exists():
+            name_map_section = f"\n\n## 角色名映射表\n\n{map_path.read_text(encoding='utf-8')[:2000]}"
+            break
+
+    concept_section = f"## 角色设定\n\n{characters}{source_chars_section}{name_map_section}\n\n## 核心策略\n\n{concept[:3000]}"
     task_desc = """检查以下问题：
-1. 角色核心性格在各章是否一致（对照角色设定）
-2. 角色行为模式是否随剧情合理渐进（不能突然转变）
-3. 角色称谓/身份是否前后一致
-4. 配角是否在需要时出场（不能消失或凭空出现）
-5. 角色的能力边界是否一致（不能跨章波动）"""
+
+### 人名一致性
+1. 是否有源文角色名混入仿写文本（对照"源文角色名"列表，发现一个就是P0）
+2. 同一角色在不同章节是否使用了不同名字（跨章人名不一致）
+3. 角色称谓/身份是否前后一致（如某章叫"张三哥"另一章叫"张三"）
+4. 角色名是否符合映射表（对照"角色名映射表"）
+
+### 人设一致性
+5. 角色核心性格在各章是否一致（对照角色设定）
+6. 角色行为模式是否随剧情合理渐进（不能突然转变）
+7. 配角是否在需要时出场（不能消失或凭空出现）
+8. 角色的能力边界是否一致（不能跨章波动）"""
 
     prompt = _GLOBAL_PROMPT_TEMPLATE.format(
         dimension_name="人设一致性",
