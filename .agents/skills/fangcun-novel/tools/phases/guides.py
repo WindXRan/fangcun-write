@@ -205,7 +205,7 @@ _style_text_cache = {}
 
 
 def _get_style_text_mapped(config, ch):
-    """获取文笔指纹文本并替换为新名（模块级缓存）。"""
+    """获取文笔指纹文本，替换源文名字，保留风格信息。"""
     if ch in _style_text_cache:
         return _style_text_cache[ch]
 
@@ -215,10 +215,26 @@ def _get_style_text_mapped(config, ch):
         _style_text_cache[ch] = None
         return None
 
-    # 替换源文角色名
+    # 替换源文角色名（包括昵称）
     name_map = _build_name_map(config)
     if name_map:
-        for old_name, new_name in name_map.items():
+        # 添加昵称映射
+        extended_map = dict(name_map)
+        # 从 characters.md 提取昵称映射
+        chars_path = Path(config["rewrites_dir"]) / "characters.md"
+        if chars_path.exists():
+            chars_text = chars_path.read_text(encoding="utf-8")
+            for line in chars_text.split('\n'):
+                if '→' in line and '|' in line:
+                    parts = [p.strip() for p in line.split('|') if p.strip()]
+                    if len(parts) >= 2:
+                        old_nick = parts[0]
+                        new_nick = parts[1]
+                        if old_nick and new_nick and old_nick != new_nick:
+                            extended_map[old_nick] = new_nick
+        
+        # 替换所有名字
+        for old_name, new_name in extended_map.items():
             style_text = style_text.replace(old_name, new_name)
 
     # 去掉例句行（防止 LLM 照抄源文原句）
@@ -966,6 +982,8 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     if prompt_type == "write-chapter" and chapter_num:
         if "characters" not in replacements:
             replacements["characters"] = _load_character_cards(config, chapter_num)
+        if "name_map" not in replacements:
+            replacements["name_map"] = _build_name_map_text(config)
         if "world" not in replacements:
             replacements["world"] = _get_world_text(config)
         if "style" not in replacements:
