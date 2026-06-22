@@ -146,7 +146,12 @@ def embed_files(prompt_text, base_dir, extra_replacements=None):
 
 
 def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites_dir=None):
-    """统一入口：加载 prompt，支持 agent/api 双模式 + 品类级联。
+    """统一入口：加载 prompt，支持 agent/api 双模式 + 品类级联 + 三层 agent 架构。
+
+    三层组装：
+    1. base_agent.md → system prompt（通用规则）
+    2. author_agent.md → 注入 user prompt 头部（作者人格，项目级）
+    3. task prompt → user prompt 主体（任务指令）
 
     Args:
         prompt_path: prompt 文件路径
@@ -163,7 +168,7 @@ def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites
         raise FileNotFoundError(f"Prompt 文件不存在: {prompt_file}")
 
     raw_text = prompt_file.read_text(encoding='utf-8')
-    _, raw_text = parse_frontmatter(raw_text)
+    meta, raw_text = parse_frontmatter(raw_text)
 
     merged = {}
     if rewrites_dir:
@@ -172,11 +177,24 @@ def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites
     if replacements:
         merged.update(replacements)
 
+    # 三层架构：加载 author_agent.md 注入到 user prompt 头部
+    author_agent_text = ""
+    if rewrites_dir:
+        author_agent_path = Path(rewrites_dir) / "author_agent.md"
+        if author_agent_path.exists():
+            aa_raw = author_agent_path.read_text(encoding="utf-8")
+            _, aa_body = parse_frontmatter(aa_raw)
+            author_agent_text = aa_body.strip()
+
     if mode == "api":
         user_prompt = embed_files(raw_text, base_dir, merged)
     else:
         user_prompt = raw_text
         if merged:
             user_prompt = safe_format(user_prompt, merged)
+
+    # 注入 author_agent（如果有）
+    if author_agent_text:
+        user_prompt = f"<author_persona>\n{author_agent_text}\n</author_persona>\n\n{user_prompt}"
 
     return user_prompt

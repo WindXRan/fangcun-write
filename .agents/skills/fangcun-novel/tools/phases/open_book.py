@@ -280,6 +280,76 @@ def _format_events_table(events):
     return "\n".join(lines)
 
 
+def _generate_author_agent(config, source_analysis):
+    """从源文分析生成 author_agent.md（作者人格）。"""
+    rewrites_dir = Path(config.get("rewrites_dir", ""))
+    author_agent_path = rewrites_dir / "author_agent.md"
+
+    # 已存在则跳过
+    if author_agent_path.exists():
+        print("  [OK] author_agent.md 已存在，跳过")
+        return
+
+    # 加载 author_agent 模板
+    prompts_dir = config.get("prompts_dir", str(Path(__file__).parent.parent.parent / "prompts"))
+    template_path = Path(prompts_dir) / "author_agent_template.md"
+    if not template_path.exists():
+        print("  [WARN] author_agent_template.md 不存在，跳过")
+        return
+
+    template = template_path.read_text(encoding="utf-8")
+    _, template_body = parse_frontmatter(template)
+
+    # 从源文取样（取前3章+中间3章+后3章，共约5000字）
+    from utils import get_source_text
+    source_book = config.get("source_book", "")
+    author = config.get("author", "")
+    base_dir = Path(config.get("base_dir", os.getcwd()))
+
+    # 获取源文总章数
+    from utils import get_total_chapters
+    total = get_total_chapters(config)
+    sample_chs = [1, 2, 3, total // 2, total // 2 + 1, total // 2 + 2, total - 2, total - 1, total]
+    sample_chs = sorted(set(c for c in sample_chs if 1 <= c <= total))
+
+    samples = []
+    for ch in sample_chs:
+        text = get_source_text(config, ch)
+        if text:
+            samples.append(f"--- 第{ch}章 ---\n{text[:800]}")
+    source_sample = "\n\n".join(samples)[:5000]
+
+    # 构建 prompt
+    author_name = config.get("author", "")
+    source_book_name = config.get("source_book", "")
+    replacements = {
+        "作者名": author_name,
+        "源书名": source_book_name,
+        "源文分析": source_analysis[:3000],
+        "源文样本": source_sample,
+    }
+
+    prompt = safe_format(template_body, replacements)
+    prompt += "\n\n## 源文样本（用于分析作者风格）\n\n" + source_sample
+
+    # 调用 LLM
+    print("  生成 author_agent.md（作者人格分析）...")
+    try:
+        content = call_llm(config, "open-book-characters", prompt, "")
+
+        # 提取内容（去掉可能的 XML 标签）
+        for tag in ("author_agent", "authorPersona", "result"):
+            m = re.search(rf'<{tag}[^>]*>([\s\S]*?)</{tag}>', content)
+            if m:
+                content = m.group(1).strip()
+                break
+
+        atomic_write_text(author_agent_path, content)
+        print(f"  [OK] author_agent.md ({len(content)}字)")
+    except Exception as e:
+        print(f"  [FAIL] author_agent.md: {e}")
+
+
 def phase_open_book(config, state_mgr=None):
     """开书：从 fangcun-analyze 产物生成设定文件。不重新读源文。"""
     print("\n" + "=" * 50)
@@ -457,6 +527,9 @@ def phase_open_book(config, state_mgr=None):
     except Exception as e:
         print(f"  [FAIL] open-book-settings: {e}")
         book_info_content = None
+
+    # === Stage 2.1: 生成 author_agent.md（作者人格）===
+    _generate_author_agent(config, source_analysis)
 
     # === Stage 2.5: 拆分角色卡 ===
     _split_character_cards(rewrites_dir)
