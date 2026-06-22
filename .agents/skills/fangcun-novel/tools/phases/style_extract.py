@@ -103,26 +103,9 @@ def phase_style_extract(config, start, end, workers=None):
                 algo_count += 1
     print(f"  Layer1 算法锚点: {algo_count}/{len(todo)} ({time.time() - t0:.1f}s)")
 
-    # Layer 2: LLM 分析（并行，需 API key）
-    if api_key:
-        t0 = time.time()
-        llm_count = 0
-        llm_errors = []
-        with ThreadPoolExecutor(max_workers=min(w, len(todo))) as ex:
-            futures = {ex.submit(_llm_one, config, ch, styles_dir): ch for ch in todo}
-            for f in as_completed(futures):
-                ch = futures[f]
-                try:
-                    if f.result():
-                        llm_count += 1
-                    else:
-                        llm_errors.append(ch)
-                except Exception as e:
-                    llm_errors.append(ch)
-                    print(f"  [STYLE] ch{ch:03d} exception: {e}")
-        print(f"  Layer2 LLM分析: {llm_count}/{len(todo)} ({time.time() - t0:.1f}s)")
-        if llm_errors:
-            print(f"  [WARN] LLM分析失败: {llm_errors}")
+    # Layer 2: LLM 分析（已弃用，使用 cyber_author_prompt.md 替代）
+    # if api_key:
+    #     ...
     else:
         print(f"  Layer2 LLM分析: 跳过 (无 API_KEY)")
 
@@ -264,30 +247,39 @@ def _append_blacklist(bl_path, ch, raw_text):
 
 
 def load_style_text(config, ch):
-    """加载 style_{N}.md + style_{N}_llm.md（供写章 prompt 注入）。"""
+    """加载风格文本（供写章 prompt 注入）。
+    
+    优先级：
+    1. cyber_author_prompt.md（赛博作者风格理解）
+    2. style_understanding.md（风格理解文档）
+    3. style_{N}.md（算法锚点）
+    """
     source_book = config.get("source_book", "")
     author = config.get("author", "")
-    base_dir = config.get("base_dir", os.getcwd())
+    base_dir = Path(config.get("base_dir", os.getcwd()))
+    source_dir = base_dir / "projects" / author / source_book
     
-    parts = []
+    # 优先加载赛博作者风格理解
+    cyber_author = source_dir / "cyber_author" / "cyber_author_prompt.md"
+    if cyber_author.exists():
+        return cyber_author.read_text(encoding="utf-8")
     
-    # 算法锚点
-    shared = Path(base_dir) / "projects" / author / source_book / "_cache" / "styles" / f"style_{ch:03d}.md"
-    if shared.exists():
-        parts.append(shared.read_text(encoding="utf-8"))
+    # 备选：风格理解文档
+    style_understanding = source_dir / "cyber_author" / "style_understanding.md"
+    if style_understanding.exists():
+        return style_understanding.read_text(encoding="utf-8")
     
-    # LLM 分析
-    shared_llm = Path(base_dir) / "projects" / author / source_book / "_cache" / "styles" / f"style_{ch:03d}_llm.md"
-    if shared_llm.exists():
-        parts.append(shared_llm.read_text(encoding="utf-8"))
+    # 兜底：算法锚点
+    styles_dir = source_dir / "_cache" / "styles"
+    algorithmic = styles_dir / f"style_{ch:03d}.md"
+    if algorithmic.exists():
+        return algorithmic.read_text(encoding="utf-8")
     
-    if parts:
-        return "\n\n".join(parts)
-    
-    # fallback: 仿写版本内（兼容旧结构）
+    # 兼容旧结构
     local = Path(config["rewrites_dir"]) / "styles" / f"style_{ch:03d}.md"
     if local.exists():
         return local.read_text(encoding="utf-8")
+    
     return None
 
 
