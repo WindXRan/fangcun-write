@@ -22,7 +22,7 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 </plot_guide>
 
 <style>
-【style】{rewrites_dir}/../_cache/styles/style_{N03d}_llm.md
+【style】{rewrites_dir}/../../_cache/styles/style_{N03d}_llm.md
 </style>
 
 <characters>
@@ -30,7 +30,7 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 </characters>
 
 <structure>
-【structure】{rewrites_dir}/../_cache/styles/structure_{N03d}.md
+【structure】{rewrites_dir}/../../_cache/styles/structure_{N03d}.md
 </structure>
 
 <principles>

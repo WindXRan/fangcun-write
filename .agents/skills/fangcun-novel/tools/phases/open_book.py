@@ -118,18 +118,18 @@ def _generate_source_analysis(config):
         print("  [SKIP] 未设置 API_KEY，跳过源书级分析")
         return
 
-    prompts_dir = Path(__file__).parent.parent.parent / "prompts"
+    prompts_dir = Path(__file__).resolve().parent.parent.parent.parent.parent / ".prompts" / "user"
 
     # Events
     events = load_events(config)
     if not events:
         print("\n  [源书分析] 事件提取...")
-        prompt_file = prompts_dir / "event_extraction.md"
+        prompt_file = prompts_dir / "事件提取.md"
         if prompt_file.exists():
             prompt_text = prompt_file.read_text(encoding="utf-8")
             events = extract_events(config, api_key, api_url, model, prompt_text, workers=5)
         else:
-            print("  [SKIP] event_extraction.md 不存在")
+            print("  [SKIP] 事件提取.md 不存在")
     else:
         print(f"\n  [源书分析] 事件表已有 {len(events)} 章，跳过")
 
@@ -137,13 +137,13 @@ def _generate_source_analysis(config):
     skeleton = load_skeleton(config)
     if not skeleton:
         print("\n  [源书分析] 故事骨架...")
-        prompt_file = prompts_dir / "skeleton.md"
+        prompt_file = prompts_dir / "故事骨架.md"
         if prompt_file.exists():
             system_prompt = prompt_file.read_text(encoding="utf-8")
             system_prompt += "\n\n你必须使用如下XML格式写入工作区：\n<storySkeleton>故事骨架内容</storySkeleton>"
             build_skeleton(config, api_key, api_url, model, system_prompt, config.get("source_book", ""))
         else:
-            print("  [SKIP] skeleton.md 不存在")
+            print("  [SKIP] 故事骨架.md 不存在")
     else:
         print(f"\n  [源书分析] 故事骨架已有，跳过")
 
@@ -151,13 +151,13 @@ def _generate_source_analysis(config):
     adaptation = load_adaptation(config)
     if not adaptation:
         print("\n  [源书分析] 改编策略...")
-        prompt_file = prompts_dir / "adaptation.md"
+        prompt_file = prompts_dir / "改编策略.md"
         if prompt_file.exists():
             system_prompt = prompt_file.read_text(encoding="utf-8")
             system_prompt += "\n\n你必须使用如下XML格式写入工作区：\n<adaptationStrategy>改编策略内容</adaptationStrategy>"
             build_adaptation(config, api_key, api_url, model, system_prompt, config.get("source_book", ""))
         else:
-            print("  [SKIP] adaptation.md 不存在")
+            print("  [SKIP] 改编策略.md 不存在")
     else:
         print(f"\n  [源书分析] 改编策略已有，跳过")
 
@@ -347,7 +347,7 @@ def phase_open_book(config, state_mgr=None):
 
     # === Stage 2: 5 个并行 agent 生成设定文件 ===
     book_name = config.get("book_name", "auto")
-    prompts_dir = config.get("prompts_dir", str(Path(__file__).parent.parent.parent / "prompts"))
+    prompts_dir = config.get("prompts_dir", str(Path(__file__).resolve().parent.parent.parent.parent.parent / ".prompts" / "user"))
 
     replacements_stage2 = {
         "新书名": book_name if book_name != "auto" else "（待生成）",

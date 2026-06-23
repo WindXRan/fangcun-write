@@ -25,7 +25,7 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 </task>
 
 <event>
-【event】{rewrites_dir}/../_cache/events.json
+{event}
 </event>
 
 <characters>
@@ -33,11 +33,11 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 </characters>
 
 <highlights>
-【highlights】{rewrites_dir}/../_cache/styles/style_{N03d}_llm.md
+【highlights】{rewrites_dir}/../../_cache/styles/style_{N03d}_llm.md
 </highlights>
 
 <blacklist>
-【blacklist】{rewrites_dir}/../_cache/styles/blacklist.md
+【blacklist】{rewrites_dir}/../../_cache/styles/blacklist.md
 </blacklist>
 
 <world>

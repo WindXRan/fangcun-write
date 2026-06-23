@@ -116,7 +116,7 @@ def main():
 
     config = json.loads(config_path.read_text(encoding="utf-8"))
     config.setdefault("base_dir", str(config_path.resolve().parent))
-    config.setdefault("prompts_dir", str(Path(__file__).parent.parent / "prompts"))
+    config.setdefault("prompts_dir", str(Path(__file__).resolve().parent.parent / "prompts"))
 
     rewrites_dir = config.get("rewrites_dir", "")
     if rewrites_dir and not Path(rewrites_dir).is_absolute():

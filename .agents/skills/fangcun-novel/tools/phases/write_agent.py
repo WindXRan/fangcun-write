@@ -24,7 +24,7 @@ from utils import get_total_chapters, count_source_chars
 def phase_write_agent(config, start, end, workers=5, state_mgr=None):
     """生成 agent 写章任务清单，不调用任何 API。"""
     base_dir = config.get("base_dir", os.getcwd())
-    prompts_dir = config.get("prompts_dir", str(Path(__file__).parent.parent.parent / "prompts"))
+    prompts_dir = config.get("prompts_dir", str(Path(__file__).resolve().parent.parent.parent / "prompts"))
     rewrites_dir = config.get("rewrites_dir", "")
 
     print(f"\n{'=' * 50}")

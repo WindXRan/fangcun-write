@@ -109,8 +109,8 @@ def phase_skeleton_map(config, state_mgr=None):
         "concept": concept[:3000],
     }
 
-    prompts_dir = config.get("prompts_dir", str(Path(__file__).parent.parent.parent / "prompts"))
-    tasks_dir = str(Path(__file__).parent.parent.parent.parent / "tasks")
+    prompts_dir = config.get("prompts_dir", str(Path(__file__).resolve().parent.parent.parent / "prompts"))
+    tasks_dir = str(Path(__file__).resolve().parent.parent.parent / "tasks")
 
     # 分批处理 events（避免单次 prompt 过长导致超时）
     events_lines = events_text.split("\n")

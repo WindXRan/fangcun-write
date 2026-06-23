@@ -567,14 +567,16 @@ def _extract_info_release(config, chapter_num):
     skel_map = _load_skeleton_map(config)
     source_chs = []
     action = "keep"
+    has_skeleton = bool(skel_map.get("chapters"))
+    
     for entry in skel_map.get("chapters", []):
         if entry.get("ch") == chapter_num:
             source_chs = entry.get("source", [])
             action = entry.get("action", "keep")
             break
     
-    if action == "new" or not source_chs:
-        # 全新章节，返回骨架映射中的 function 描述
+    # 如果有骨架映射且是全新章节，返回骨架映射中的 function 描述
+    if has_skeleton and (action == "new" or not source_chs):
         for entry in skel_map.get("chapters", []):
             if entry.get("ch") == chapter_num:
                 func = entry.get("function", "")
@@ -590,6 +592,10 @@ def _extract_info_release(config, chapter_num):
                 return "\n".join(lines)
         return f"（第{chapter_num}章：全新设计）"
     
+    # 没有骨架映射时，直接使用 events.json（1:1 映射）
+    if not has_skeleton:
+        source_chs = [chapter_num]
+    
     # 收集所有源文章节的事件
     all_events = []
     for src_ch in source_chs:
@@ -602,30 +608,37 @@ def _extract_info_release(config, chapter_num):
     
     # 合并事件描述
     info_lines = []
-    for entry in skel_map.get("chapters", []):
-        if entry.get("ch") == chapter_num:
-            info_lines.append(f"## 本章任务")
-            info_lines.append(f"- 章名：{entry.get('title', '')}")
-            info_lines.append(f"- 功能：{entry.get('function', '')}")
-            if len(source_chs) > 1:
-                info_lines.append(f"- 源文对应：第{', '.join(str(c) for c in source_chs)}章（已合并）")
-            conflict = entry.get("conflict_desc", "")
-            page_turn = entry.get("page_turn", "")
-            page_turn_desc = entry.get("page_turn_desc", "")
-            if conflict:
-                info_lines.append(f"- 冲突：{conflict}")
-            if page_turn:
-                info_lines.append(f"- 翻页理由：{page_turn}（{page_turn_desc}）")
-            break
+    if has_skeleton:
+        for entry in skel_map.get("chapters", []):
+            if entry.get("ch") == chapter_num:
+                info_lines.append(f"## 本章任务")
+                info_lines.append(f"- 章名：{entry.get('title', '')}")
+                info_lines.append(f"- 功能：{entry.get('function', '')}")
+                if len(source_chs) > 1:
+                    info_lines.append(f"- 源文对应：第{', '.join(str(c) for c in source_chs)}章（已合并）")
+                conflict = entry.get("conflict_desc", "")
+                page_turn = entry.get("page_turn", "")
+                page_turn_desc = entry.get("page_turn_desc", "")
+                if conflict:
+                    info_lines.append(f"- 冲突：{conflict}")
+                if page_turn:
+                    info_lines.append(f"- 翻页理由：{page_turn}（{page_turn_desc}）")
+                break
     
     for e in all_events:
         event_text = e.get("event", "")
         parts = event_text.split("|")
         if len(parts) >= 4:
+            title = parts[1].strip() if len(parts) > 1 else ""
             characters = parts[2].strip() if len(parts) > 2 else ""
+            summary = parts[3].strip() if len(parts) > 3 else ""
             function = parts[4].strip() if len(parts) > 4 else ""
+            if title:
+                info_lines.append(f"- 源文章节：{title}")
             if characters:
                 info_lines.append(f"- 出场角色：{characters}")
+            if summary:
+                info_lines.append(f"- 事件摘要：{summary}")
             if function:
                 info_lines.append(f"- 源文功能：{function}")
     
@@ -1023,7 +1036,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     """
     from lib.api_client import call_llm, get_api_url
 
-    prompts_dir = config.get("prompts_dir", str(Path(__file__).parent.parent.parent.parent / ".prompts" / "user"))
+    prompts_dir = config.get("prompts_dir", str(Path(__file__).resolve().parent.parent.parent / "prompts"))
     base_dir = config.get("base_dir", os.getcwd())
 
     n = str(chapter_num) if chapter_num else "1"
@@ -1092,6 +1105,9 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         # 注入世界观约束（统一时间线/年龄/地点）
         if "world_constraint" not in replacements:
             replacements["world_constraint"] = _get_world_constraint(config)
+        # 注入 name_map（角色名映射）
+        if "name_map" not in replacements:
+            replacements["name_map"] = _build_name_map_text(config)
 
     # 写章时注入本章出场角色的卡内容
     if prompt_type == "write-chapter" and chapter_num:
