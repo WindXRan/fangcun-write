@@ -174,6 +174,8 @@ def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites
     if rewrites_dir:
         book_data = load_book_data(rewrites_dir)
         merged = make_book_data_replacements(book_data)
+        # 添加 rewrites_dir 到替换字典
+        merged["rewrites_dir"] = rewrites_dir
     if replacements:
         merged.update(replacements)
 
