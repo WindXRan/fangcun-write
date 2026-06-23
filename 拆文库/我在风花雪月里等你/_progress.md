@@ -3,11 +3,17 @@
 schema_version: 2
 
 ## 最终状态
-状态: paused_after_stage1
-当前阶段: Stage 1 完成（黄金三章已拆解）
+状态: completed
+当前阶段: Stage 6 完成（全部完成）
 
-## 断点
-下一操作: Stage 2 逐章摘要
+## 完成时间
+- Stage 0: 概要提取
+- Stage 1: 黄金三章深度拆解
+- Stage 2: 逐章摘要（471章）
+- Stage 3: 聚合分析（剧情/节奏/情绪模块）
+- Stage 4: 设定+关系
+- Stage 5: 汇总报告
+- Stage 6: 文风
 
 ## 章节边界
 | 章号 | 标题 | 起始行 | 字数 |

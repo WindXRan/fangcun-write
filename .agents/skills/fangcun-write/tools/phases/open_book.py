@@ -118,7 +118,7 @@ def _generate_source_analysis(config):
         print("  [SKIP] 未设置 API_KEY，跳过源书级分析")
         return
 
-    prompts_dir = Path(__file__).resolve().parent.parent.parent.parent.parent / ".prompts" / "user"
+    prompts_dir = Path(__file__).resolve().parent.parent.parent / "prompts"
 
     # Events
     events = load_events(config)
