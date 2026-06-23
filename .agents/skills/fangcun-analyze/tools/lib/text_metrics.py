@@ -242,21 +242,11 @@ def _strip_title(text):
 
 
 def _classify_punct(body, total):
-    """标点风格指纹。"""
-    dash_d = body.count('——') / total * 1000
-    ellip_d = (body.count('…') + body.count('...')) / total * 1000
-    excl_d = (body.count('！') + body.count('!')) / total * 1000
-
-    tags = []
-    if dash_d > 1.5:
-        tags.append("多用破折号")
-    if ellip_d > 1:
-        tags.append("多用省略号")
-    if excl_d > 0.8:
-        tags.append("多用感叹号")
-    if not tags:
-        tags.append("标点克制")
-    return '，'.join(tags)
+    """标点密度（每千字）。"""
+    dash_d = round(body.count('——') / total * 1000, 2)
+    ellip_d = round((body.count('…') + body.count('...')) / total * 1000, 2)
+    excl_d = round((body.count('！') + body.count('!')) / total * 1000, 2)
+    return {"exclamation": excl_d, "ellipsis": ellip_d, "dash": dash_d}
 
 
 def get_body_chars(text):
