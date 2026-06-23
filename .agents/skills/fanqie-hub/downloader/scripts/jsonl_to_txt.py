@@ -105,7 +105,17 @@ def convert_jsonl_to_txt(jsonl_path, output_path, book_name, author, status_path
             title = chapter.get('title', f'第{i+1}章')
             ch_content = chapter.get('content', '')
             ch_content = clean_html(ch_content)
-            txt_content += f"\n\n{title}\n\n{ch_content}"
+            
+            # 去重：如果内容已包含标题，不再添加
+            content_lines = ch_content.strip().split('\n')
+            first_line = content_lines[0].strip() if content_lines else ""
+            
+            if first_line == title or first_line.startswith(title):
+                # 内容已包含标题，直接使用
+                txt_content += f"\n\n{ch_content}"
+            else:
+                # 内容不包含标题，添加标题
+                txt_content += f"\n\n{title}\n\n{ch_content}"
         except json.JSONDecodeError as e:
             print(f"  警告: 第{i+1}行解析失败: {e}")
             continue
