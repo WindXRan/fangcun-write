@@ -16,7 +16,7 @@ docs/plans/
 # === 下载/导入文件 ===
 *.epub
 *.exe
-!.agents/skills/novel-download/TomatoNovelDownloader-Win64-v2.4.11.exe
+!.agents/skills/fanqie-hub/downloader/TomatoNovelDownloader-Win64-v2.4.11.exe
 
 # === configs 目录 ===
 configs/*.json
@@ -72,6 +72,7 @@ plan_*.md
 
 # === 项目数据（按作者归档）===
 projects/
+knowledge/
 # 兼容旧目录
 novel-download-authors/
 # Cover images
@@ -83,6 +84,7 @@ source_cover.png
 # Reference repo (not tracked)
 .agents/skills/oh-story-claudecode/
 Toonflow-app/
+superpowers/
 !projects/��ҹ����/
 
 docs/
