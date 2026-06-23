@@ -1,7 +1,8 @@
 {
   "午夜凶球": {
     "knowledge_path": ".agents/knowledge/午夜凶球",
-    "skill_path": ".agents/knowledge/午夜凶球/SKILL.md",
+    "skill_path": ".agents/skills/style-午夜凶球/SKILL.md",
+    "system_prompt_path": ".prompts/system/style-午夜凶球.md",
     "metrics_path": ".agents/knowledge/午夜凶球/style_metrics.json",
     "index_path": ".agents/knowledge/午夜凶球/index.json",
     "books": ["认亲后，画风跑偏"],

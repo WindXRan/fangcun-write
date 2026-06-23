@@ -78,20 +78,31 @@ description: |
 ```
 .agents/
 ├── registry.json           # 作者注册表
-├── router/SKILL.md         # 本文件
-├── tasks/                  # 通用任务指令
-├── styles/                 # 作者风格数据
+├── knowledge/              # 作者知识库
 │   └── {作者名}/
-│       ├── cyber_author_prompt.md
 │       ├── style_metrics.md
 │       ├── index.json
 │       └── knowledge_base/
-└── skills/                 # 其他 skill
+└── skills/                 # skill
+    └── style-{作者名}/
+        └── SKILL.md
+
+.prompts/
+├── system/                 # 作者风格
+│   └── style-{作者名}.md
+└── user/                   # 通用任务指令
+    ├── 写章.md
+    ├── 写章纲.md
+    ├── 扩写.md
+    ├── 润色.md
+    ├── 精简.md
+    └── ...
 ```
 
 ## 注册新作者
 
 当用户说"蒸馏XX的风格"或"分析XX的写法"时：
 1. 跑 style-distill 流程
-2. 产出放到 `.agents/styles/{作者名}/`
-3. 更新 `registry.json` 添加新条目
+2. 产出放到 `.agents/knowledge/{作者名}/`
+3. 创建 `.prompts/system/style-{作者名}.md`
+4. 更新 `registry.json` 添加新条目

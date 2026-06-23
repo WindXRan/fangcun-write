@@ -667,7 +667,7 @@ def _get_chapter_characters(config, ch_num):
 
 
 def _load_character_cards(config, ch_num):
-    """加载本章出场角色的卡内容（只提取关键信息）。"""
+    """加载本章出场角色的卡内容（直接读取，不做处理）。"""
     # 使用缓存的映射版本
     events = _load_events_mapped(config)
 
@@ -702,57 +702,12 @@ def _load_character_cards(config, ch_num):
         # 匹配 XML 格式: <角色名>...</角色名>
         m = re.search(rf'<{re.escape(name)}>([\s\S]*?)</{re.escape(name)}>', chars_text)
         if m:
-            block = m.group(1).strip()
-            # 提取关键字段
-            key_fields = {}
-            for line in block.split('\n'):
-                line = line.strip()
-                if line.startswith('年龄：'):
-                    key_fields['年龄'] = line[len('年龄：'):]
-                elif line.startswith('身份：'):
-                    key_fields['身份'] = line[len('身份：'):]
-                elif line.startswith('职业：'):
-                    key_fields['职业'] = line[len('职业：'):]
-                elif line.startswith('性格：'):
-                    key_fields['性格'] = line[len('性格：'):][:50]  # 截断
-                elif line.startswith('关系：'):
-                    key_fields['关系'] = line[len('关系：'):][:50]  # 截断
-            
-            if key_fields:
-                card_lines = [f"**{name}**"]
-                for k, v in key_fields.items():
-                    card_lines.append(f"- {k}：{v}")
-                cards.append("\n".join(card_lines))
-            else:
-                cards.append(f"**{name}**（详细信息见 characters.md）")
+            cards.append(f"<{name}>{m.group(1)}</{name}>")
         else:
             # fallback: 匹配旧格式 【角色名】（源文对应：XXX）
             m = re.search(rf'【{re.escape(name)}】[（(]源文对应[：:](.+?)[）)][\s\S]*?(?=【|$)', chars_text)
             if m:
-                block = m.group(0).strip()
-                key_fields = {}
-                for line in block.split('\n'):
-                    line = line.strip()
-                    if line.startswith('- 年龄：'):
-                        key_fields['年龄'] = line[5:]
-                    elif line.startswith('- 身份：'):
-                        key_fields['身份'] = line[5:]
-                    elif line.startswith('- 职业/学校：'):
-                        key_fields['职业'] = line[7:]
-                    elif line.startswith('- 性格内核：'):
-                        key_fields['性格'] = line[7:][:50]
-                    elif line.startswith('- 关系：'):
-                        key_fields['关系'] = line[5:][:50]
-                
-                if key_fields:
-                    card_lines = [f"**{name}**"]
-                    for k, v in key_fields.items():
-                        card_lines.append(f"- {k}：{v}")
-                    cards.append("\n".join(card_lines))
-                else:
-                    cards.append(f"**{name}**（详细信息见 characters.md）")
-            else:
-                cards.append(f"**{name}**（未找到角色卡）")
+                cards.append(m.group(0).strip())
     
     return "\n\n".join(cards) if cards else "（无角色信息）"
 

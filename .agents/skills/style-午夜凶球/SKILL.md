@@ -22,10 +22,11 @@ description: |
 
 ## 知识库
 
-位于 `knowledge_base/`，包含：
-- 455个场景片段
-- 15个主要角色
-- 7种场景类型
+位于 `.agents/knowledge/午夜凶球/`，包含：
+- knowledge_base/ - 场景片段
+- index.json - 场景索引
+- style_metrics.json - 定量指标
+- style_metrics.md - 定量指标文档
 
 ## 使用方式
 
