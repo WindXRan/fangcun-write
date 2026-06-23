@@ -32,10 +32,6 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 {characters}
 </characters>
 
-<highlights>
-{highlights}
-</highlights>
-
 <blacklist>
 {blacklist}
 </blacklist>

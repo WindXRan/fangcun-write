@@ -140,6 +140,13 @@ def _build_name_map(config):
     for chars_path in chars_files:
         chars_text = chars_path.read_text(encoding="utf-8")
 
+        # 格式0: XML格式 <item old="源文名" new="新名" />
+        for m in re.finditer(r'<item\s+old="([^"]+)"\s+new="([^"]+)"', chars_text):
+            old_name = m.group(1).strip()
+            new_name = m.group(2).strip()
+            if old_name and new_name and old_name != new_name and old_name not in _name_map_cache:
+                _name_map_cache[old_name] = new_name
+
         # 格式1: 【新名】（源文对应：源文名）
         for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars_text):
             new_name = m.group(1).strip()
@@ -469,6 +476,14 @@ def _build_name_map_text(config):
     items = []
     seen = set()
 
+    # 格式0: XML格式 <item old="源文名" new="新名" />
+    for m in re.finditer(r'<item\s+old="([^"]+)"\s+new="([^"]+)"', chars_text):
+        old_name = m.group(1).strip()
+        new_name = m.group(2).strip()
+        if old_name and new_name and old_name != new_name and old_name not in seen:
+            items.append(f"{old_name}→{new_name}")
+            seen.add(old_name)
+
     # 格式1: 表格行 | 源文名 | 新名 | ... |
     for line in chars_text.split('\n'):
         line = line.strip()
@@ -531,32 +546,48 @@ def _get_genre_text(config):
 def _extract_gender_info(chars_text):
     """从 characters.md 提取角色性别信息。返回格式："{角色名}（{性别}）、..."。"""
     genders = []
-    for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars_text):
+    
+    # XML格式: <character name="新名" source="源文名"><role>...</role></character>
+    for m in re.finditer(r'<character\s+name="([^"]+)"[^>]*>.*?</character>', chars_text, re.DOTALL):
         name = m.group(1).strip()
-        start = m.end()
-        next_section = chars_text[start:start+500]
+        body = m.group(0)
         gender = "未知"
-        if re.search(r'女主|女性|女孩|姑娘|小姐|姐姐|妹妹|女儿|她\b', next_section):
+        if re.search(r'女主|女性|女孩|姑娘|小姐|姐姐|妹妹|女儿', body):
             gender = "女"
-        elif re.search(r'男主|男性|男孩|小子|先生|哥哥|弟弟|儿子|他\b', next_section):
+        elif re.search(r'男主|男性|男孩|小子|先生|哥哥|弟弟|儿子', body):
             gender = "男"
         if gender != "未知":
             genders.append(f"{name}（{gender}）")
+    
+    # 旧格式: 【新名】（源文对应：源文名）
+    if not genders:
+        for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars_text):
+            name = m.group(1).strip()
+            start = m.end()
+            next_section = chars_text[start:start+500]
+            gender = "未知"
+            if re.search(r'女主|女性|女孩|姑娘|小姐|姐姐|妹妹|女儿|她\b', next_section):
+                gender = "女"
+            elif re.search(r'男主|男性|男孩|小子|先生|哥哥|弟弟|儿子|他\b', next_section):
+                gender = "男"
+            if gender != "未知":
+                genders.append(f"{name}（{gender}）")
     return "、".join(genders) if genders else ""
 
 
 def _build_name_list(chars_text):
     """从 characters.md 构建完整角色名列表。格式：苏念（女，源文：李观澜）、凌霄（男，源文：江流）..."""
     items = []
-    for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars_text):
+    
+    # XML格式: <character name="新名" source="源文名"><role>...</role></character>
+    for m in re.finditer(r'<character\s+name="([^"]+)"\s+source="([^"]*)"[^>]*>.*?</character>', chars_text, re.DOTALL):
         new_name = m.group(1).strip()
         old_name = m.group(2).strip()
-        start = m.end()
-        section = chars_text[start:start+300]
+        body = m.group(0)
         gender = ""
-        if re.search(r'女性|女孩|女儿|她\b|女主|小姐|姐姐|妹妹', section):
+        if re.search(r'女性|女孩|女儿|女主|小姐|姐姐|妹妹', body):
             gender = "女"
-        elif re.search(r'男性|男孩|儿子|他\b|男主|先生|哥哥|弟弟', section):
+        elif re.search(r'男性|男孩|儿子|男主|先生|哥哥|弟弟', body):
             gender = "男"
         if new_name == old_name:
             entry = new_name
@@ -565,6 +596,26 @@ def _build_name_list(chars_text):
         else:
             entry = f"{new_name}（源文：{old_name}）"
         items.append(entry)
+    
+    # 旧格式: 【新名】（源文对应：源文名）
+    if not items:
+        for m in re.finditer(r'【(.+?)】[（(]源文对应[：:](.+?)[）)]', chars_text):
+            new_name = m.group(1).strip()
+            old_name = m.group(2).strip()
+            start = m.end()
+            section = chars_text[start:start+300]
+            gender = ""
+            if re.search(r'女性|女孩|女儿|她\b|女主|小姐|姐姐|妹妹', section):
+                gender = "女"
+            elif re.search(r'男性|男孩|儿子|他\b|男主|先生|哥哥|弟弟', section):
+                gender = "男"
+            if new_name == old_name:
+                entry = new_name
+            elif gender:
+                entry = f"{new_name}（{gender}，源文：{old_name}）"
+            else:
+                entry = f"{new_name}（源文：{old_name}）"
+            items.append(entry)
     return "、".join(items) if items else ""
 
 
@@ -725,15 +776,20 @@ def _load_character_cards(config, ch_num):
     cards = []
     
     for name in sorted(chars):
-        # 匹配 XML 格式: <角色名>...</角色名>
-        m = re.search(rf'<{re.escape(name)}>([\s\S]*?)</{re.escape(name)}>', chars_text)
+        # 匹配新XML格式: <character name="角色名">...</character>
+        m = re.search(rf'<character\s+name="{re.escape(name)}"[^>]*>[\s\S]*?</character>', chars_text)
         if m:
-            cards.append(f"<{name}>{m.group(1)}</{name}>")
+            cards.append(m.group(0))
         else:
-            # fallback: 匹配旧格式 【角色名】（源文对应：XXX）
-            m = re.search(rf'【{re.escape(name)}】[（(]源文对应[：:](.+?)[）)][\s\S]*?(?=【|$)', chars_text)
+            # 匹配旧XML格式: <角色名>...</角色名>
+            m = re.search(rf'<{re.escape(name)}>([\s\S]*?)</{re.escape(name)}>', chars_text)
             if m:
-                cards.append(m.group(0).strip())
+                cards.append(f"<{name}>{m.group(1)}</{name}>")
+            else:
+                # fallback: 匹配旧格式 【角色名】（源文对应：XXX）
+                m = re.search(rf'【{re.escape(name)}】[（(]源文对应[：:](.+?)[）)][\s\S]*?(?=【|$)', chars_text)
+                if m:
+                    cards.append(m.group(0).strip())
     
     return "\n\n".join(cards) if cards else "（无角色信息）"
 
@@ -1119,14 +1175,6 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         # 从 events.json 提取本章事件信息
         info_release = _extract_info_release(config, chapter_num)
         replacements["event"] = info_release
-        
-        # 源文高光（保留，用于风格参考）
-        source_text = _get_source_text_for_chapter(config, chapter_num)
-        if source_text:
-            highlights = _extract_highlights(source_text, max_chars=500)
-            replacements["highlights"] = highlights or ""
-        else:
-            replacements["highlights"] = ""
         
         # 注入黑名单（只加载本章相关的黑名单项）
         if "blacklist" not in replacements:
