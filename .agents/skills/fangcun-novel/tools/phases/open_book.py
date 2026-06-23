@@ -431,22 +431,22 @@ def phase_open_book(config, state_mgr=None):
 
         result = call_llm(config, "open-book-settings", user_prompt, system_prompt)
 
-        # 从结果中提取各部分内容
+        # 从结果中提取各部分内容（XML格式）
         
         # 提取世界观设定
-        world_match = re.search(r'(?:## 世界观设定|### 世界观设定)(.*?)(?=## 剧情设定|### 剧情设定|\Z)', result, re.DOTALL)
+        world_match = re.search(r'<world>(.*?)</world>', result, re.DOTALL)
         world_content = world_match.group(1).strip() if world_match else ""
         
         # 提取剧情设定
-        plot_match = re.search(r'(?:## 剧情设定|### 剧情设定)(.*?)(?=## 书籍信息|### 书籍信息|\Z)', result, re.DOTALL)
+        plot_match = re.search(r'<plot>(.*?)</plot>', result, re.DOTALL)
         plot_content = plot_match.group(1).strip() if plot_match else ""
         
         # 提取书籍信息
-        bookinfo_match = re.search(r'(?:## 书籍信息|### 书籍信息)(.*?)$', result, re.DOTALL)
+        bookinfo_match = re.search(r'<book_info>(.*?)</book_info>', result, re.DOTALL)
         bookinfo_content = bookinfo_match.group(1).strip() if bookinfo_match else ""
         
         # 提取概念（从书籍信息中提取定位+策略+卖点）
-        concept_match = re.search(r'(?:### 定位|定位)(.*?)(?=### 赛道表|\Z)', result, re.DOTALL)
+        concept_match = re.search(r'<concept>(.*?)</concept>', result, re.DOTALL)
         concept_content = concept_match.group(1).strip() if concept_match else ""
         if not concept_content:
             # 如果没有单独的定位部分，从整个结果中提取
