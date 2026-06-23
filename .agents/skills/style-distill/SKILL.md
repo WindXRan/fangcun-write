@@ -29,20 +29,41 @@ metadata:
 ```
 输入：作者名 + 原文
     ↓
-Phase 1: 分块阅读（LLM读取大量原文）
+Phase 1: 定量分析（脚本跑 style_metrics.py）
     ↓
-Phase 2: 提取风格特征（多维度）
+Phase 2: 分块阅读（LLM读取大量原文，带着定量数据）
     ↓
-Phase 3: 构建知识库（场景片段）
+Phase 3: 提取风格特征（多维度，定量+定性）
     ↓
-Phase 4: 生成系统提示词
+Phase 4: 构建知识库（场景片段）
     ↓
-产出：SKILL.md + knowledge_base/
+Phase 5: 生成系统提示词
+    ↓
+产出：SKILL.md + knowledge_base/ + style_metrics.md
 ```
 
 ---
 
-## Phase 1-4: 同 v3（省略）
+## Phase 1: 定量分析
+
+**先跑脚本，拿到真实数据，不要猜。**
+
+```bash
+python .agents/skills/style-distill/tools/style_metrics.py \
+  "projects/{作者}/{书名}/_cache/chapters" \
+  -o ".agents/skills/style-{作者}/style_metrics.md"
+```
+
+产出 3 个核心指标：
+- **章均字数** → 写章目标字数锚点
+- **对话比例** → 对话占比控制
+- **段落均长** → 段落长度控制
+
+**这些数据必须写入最终的 SKILL.md，不能用猜测值。**
+
+---
+
+## Phase 2: 分块阅读
 
 ---
 
@@ -62,10 +83,10 @@ Phase 4: 生成系统提示词
 ### 一句话定义
 {一句话概括，如"东北家庭轻喜剧，对话驱动，全员碎嘴子"}
 
-### 量化锚点
-- 对话：{60-70}%
-- 段落：{30-50}字
-- 单句段：{40-50}%
+### 量化锚点（从 style_metrics.md 读取，不要猜）
+- 章均字数：{从style_metrics.md读取}
+- 对话比例：{从style_metrics.md读取}
+- 段落均长：{从style_metrics.md读取}
 
 ### 核心规则（5-8条，每条配完整例子）
 
