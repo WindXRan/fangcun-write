@@ -190,6 +190,12 @@ def phase_script(config: dict, start: int = 1, end: int = 3, dry_run: bool = Fal
         system_prompt += f"\n\n## 写作方法论参考（仅供创意参考，不写进剧本）\n\n{writing_methods}"
     except FileNotFoundError:
         pass
+    # 加载格式规范作为硬性约束
+    try:
+        format_rules = load_prompt("format-rules.md")
+        system_prompt += f"\n\n## 格式红线（必须遵守，违反=不合格）\n\n{format_rules}"
+    except FileNotFoundError:
+        pass
     format_prompt = '\n你必须使用如下XML格式写入工作区：\n<scriptItem name="剧本名称">剧本内容</scriptItem>'
 
     existing_scripts = get_all_scripts(output_dir)
@@ -403,6 +409,43 @@ def phase_review(config: dict, target: str = "all"):
     return True
 
 
+# ─── 格式校验 ───────────────────────────────────────────────────────────────
+
+def phase_format_check(config: dict):
+    """运行格式校验器，检测剧本格式违规。"""
+    output_dir = Path(config["output_dir"])
+    scripts_dir = output_dir / "scripts"
+
+    if not scripts_dir.exists():
+        print(f"[FAIL] 剧本目录不存在: {scripts_dir}")
+        return False
+
+    # 导入格式校验器
+    tools_dir = Path(__file__).resolve().parent
+    sys.path.insert(0, str(tools_dir))
+    from format_validator import validate_directory, print_report
+
+    print(f"\n{'='*50}")
+    print(f"格式校验 | {config.get('novel_name', '')}")
+    print(f"{'='*50}")
+
+    reports = validate_directory(scripts_dir)
+    total_errors = sum(r.error_count for r in reports)
+    total_warnings = sum(r.warning_count for r in reports)
+
+    for r in reports:
+        print_report(r)
+
+    print(f"\n{'='*50}")
+    if total_errors == 0 and total_warnings == 0:
+        print(f"✅ 全部 {len(reports)} 个文件通过格式校验")
+    else:
+        print(f"❌ {len(reports)} 个文件: {total_errors} 个错误, {total_warnings} 个警告")
+    print(f"{'='*50}")
+
+    return total_errors == 0
+
+
 # ─── 合并导出 ───────────────────────────────────────────────────────────────
 
 def phase_export(config: dict):
@@ -426,8 +469,8 @@ def main():
     parser = argparse.ArgumentParser(description="剧本引擎 — 小说转短剧剧本")
     parser.add_argument("--config", required=True, help="配置文件路径")
     parser.add_argument("--phase", default="all",
-                        choices=["all", "resume", "event", "skeleton", "adaptation", "script", "review", "export", "status"],
-                        help="执行阶段（resume=断点续传，status=查看进度）")
+                        choices=["all", "resume", "event", "skeleton", "adaptation", "script", "review", "export", "status", "format-check"],
+                        help="执行阶段（resume=断点续传，status=查看进度，format-check=格式校验）")
     parser.add_argument("--start", type=int, default=1, help="剧本起始集")
     parser.add_argument("--end", type=int, default=3, help="剧本结束集")
     parser.add_argument("--workers", type=int, default=5, help="事件提取并行数")
@@ -483,6 +526,8 @@ def main():
         _run_phase(state, "review", lambda: phase_review(config, args.review_target))
     elif args.phase == "export":
         phase_export(config)
+    elif args.phase == "format-check":
+        phase_format_check(config)
 
 
 def _run_phase(state, phase_name, fn):
@@ -512,6 +557,7 @@ def _run_all(config, state, args):
         ("adaptation",      lambda: phase_adaptation(config, args.dry_run)),
         ("adaptation_review", lambda: phase_review(config, "adaptation")),
         ("script",          lambda: phase_script(config, args.start, args.end, args.dry_run, state)),
+        ("format_check",    lambda: phase_format_check(config)),
     ]
     for name, fn in phases:
         if not _run_phase(state, name, fn):
