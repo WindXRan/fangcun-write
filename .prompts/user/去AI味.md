@@ -6,7 +6,7 @@ phase: postprocess
 description: 重写失败章节
 required_vars: ["N", "新书名", "作者名", "源书名", "目标字数", "目标字数_min", "目标字数_max", "世界观"]
 optional_vars: ["genre", "女主名", "男主名", "文笔指纹", "角色行为卡片", "源文句长", "源文短句比", "源文段长", "源文对话比", "源文代词密度", "源文标点", "失败原因"]
-system_prompt: system.md
+system_prompt: 
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
 
