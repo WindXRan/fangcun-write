@@ -1,123 +1,45 @@
 ﻿---
-name: fangcun-novel
-version: 3.0.0
+name: fangcun-write
+version: 4.0.0
 description: |
-  小说仿写引擎。从源文生成新书：源文分析 → 章纲 → 写章 → 对比审核。
-  触发方式：「仿写这本书」「帮我仿写XX」「写第N章」「继续写」
+  方寸长篇写作引擎。支持章对章仿写和续写两种模式。
+  触发方式：/fangcun-write、/仿写、/写章、「仿写这本书」「帮我仿写XX」「写第N章」「继续写」
 metadata:
   author: fangcun-team
   pipeline: source → guides → write → compare
-allowed-tools: Bash(python *) Bash(cat *) Bash(ls *) Bash(mkdir *) Bash(rm *)
 ---
 
-# fangcun-novel：小说仿写引擎
+# fangcun-write：方寸长篇写作引擎
 
 ## 核心方法
 
+### 仿写模式（章对章）
+
 **换壳保骨**：保留源文的情绪弧线和叙事骨架，换掉人名、地名、具体情节。
 
-### 三层架构
-
 ```
-style-analyze（文笔层）    → 提取源文写法特征
-plot-guide（结构层）       → 生成功能需求清单
-write-chapter（执行层）    → 按功能需求写全新内容
+源文分析 → 事件提取 → 章纲生成 → 逐章写作 → 对比审核
 ```
 
-### 职责分离
+### 续写模式
 
-| 层 | 负责什么 | 不负责什么 |
-|----|----------|------------|
-| style-analyze | 句长、对话比、写法指令 | 具体场景设计 |
-| plot-guide | 情绪功能、冲突升级、信息流 | 具体怎么实现 |
-| write-chapter | 按功能需求写全新内容 | 改变骨架结构 |
+**延续原作**：保留原作核心要素，自由创作新内容。
+
+```
+状态提取 → 大纲生成 → 逐章写作 → 质量审核
+```
 
 ---
 
 ## 快速开始
 
-### 1. 安装
-
-```powershell
-.\setup.ps1
-```
-
-### 2. 设置 API Key
+### 1. 设置 API Key
 
 ```powershell
 $env:API_KEY = "sk-xxx"
 ```
 
-### 3. 创建配置
-
-```powershell
-# 复制示例配置
-copy configs\example.json configs\mybook.json
-
-# 编辑配置（填入作者名、源书名、新书名）
-notepad configs\mybook.json
-```
-
-### 4. 开始仿写
-
-```powershell
-# 写前 10 章
-.\novel.ps1 write --config configs\mybook.json --start 1 --end 10
-
-# 查看状态
-.\novel.ps1 status --config configs\mybook.json
-
-# 对比审核
-.\novel.ps1 compare --config configs\mybook.json --start 1 --end 10
-```
-
----
-
-## 流程详解
-
-### Phase 1: 源文分析
-
-```bash
-python .agents/skills/fangcun-novel/tools/pipeline.py --config {config} --phase source
-```
-
-产物：
-- `_cache/events.json` — 事件表
-- `_cache/story_skeleton.md` — 故事骨架
-- `_cache/styles/style_{N}.md` — 文笔指纹
-
-### Phase 2: 章纲生成
-
-```bash
-python .agents/skills/fangcun-novel/tools/pipeline.py --config {config} --phase guides --start 1 --end {N}
-```
-
-产物：
-- `guides/plot_{N}.md` — 功能需求清单
-
-### Phase 3: 写章（含自动 trim）
-
-```bash
-python .agents/skills/fangcun-novel/tools/pipeline.py --config {config} --phase write --start 1 --end {N}
-```
-
-产物：
-- `chapters/ch_{N}.txt` — 正文
-
-### Phase 4: 对比审核
-
-```bash
-python .agents/skills/fangcun-novel/tools/pipeline.py --config {config} --phase compare --start 1 --end {N}
-```
-
-产物：
-- `compare/对比_{start}-{end}_报告.md` — 基础统计
-- `compare/审核报告_{start}-{end}.md` — 审核结果
-- `compare/改动报告_{start}-{end}.md` — 换皮评分
-
----
-
-## 配置文件
+### 2. 创建配置
 
 ```json
 {
@@ -125,32 +47,73 @@ python .agents/skills/fangcun-novel/tools/pipeline.py --config {config} --phase 
   "author": "作者名",
   "source_book": "源书名",
   "rewrites_dir": "projects/作者/源书名/rewrites/新书名",
-  "model": "deepseek-v4-pro",
-  "workers": 10,
-  "skip_confirm": true
+  "model": "deepseek-chat",
+  "execution_mode": "api"
 }
 ```
 
-| 字段 | 必填 | 说明 |
-|------|------|------|
-| book_name | 否 | 新书名，"auto" = 自动起名 |
-| author | 是 | 源文作者名 |
-| source_book | 是 | 源文书名 |
-| rewrites_dir | 是 | 输出目录 |
-| model | 否 | 模型名 |
-| workers | 否 | 并行数 |
-| skip_confirm | 否 | 跳过确认 |
+### 3. 开始写作
+
+```powershell
+# 完整流程
+python .agents/skills/fangcun-write/tools/pipeline.py --config configs/mybook.json --phase all
+
+# 分步执行
+python .agents/skills/fangcun-write/tools/pipeline.py --config configs/mybook.json --phase open-book
+python .agents/skills/fangcun-write/tools/pipeline.py --config configs/mybook.json --phase guides --start 1 --end 10
+python .agents/skills/fangcun-write/tools/pipeline.py --config configs/mybook.json --phase write --start 1 --end 10
+```
+
+---
+
+## 流程详解
+
+### Phase 1: 开书（open-book）
+
+生成设定文件：
+- `concept.md` — 设定+角色+弧线
+- `characters.md` — 角色名映射表（XML格式）
+- `world.md` — 世界观设定
+- `book_info.md` — 书名+简介
+
+### Phase 2: 章纲生成（guides）
+
+为每章生成功能需求清单：
+- 本章释放的信息
+- 场景设计
+- 人设落地
+- 原创名场面
+- 结尾方式
+
+### Phase 3: 写章（write）
+
+按章纲逐章写作：
+- 目标字数：源文字数 ±10%
+- 角色名自动映射
+- 超字数自动 trim
+
+### Phase 4: 对比审核（compare）
+
+生成对比报告：
+- 基础统计（字数、段落、对话比例）
+- 风格指纹（句长、标点、词汇）
+- AI痕迹检测
+- 换皮评分
 
 ---
 
 ## 角色名映射
 
-仿写会自动替换角色名。映射表在 `characters.md`：
+仿写会自动替换角色名。映射表在 `characters.md`（XML格式）：
 
-```markdown
-| 源文名 | 新名 | 性别 | 功能位 |
-|--------|------|------|--------|
-| {源文角色} | {新名} | {性别} | {功能位} |
+```xml
+<角色名>
+- 功能位：主角
+- 性格内核：...
+- 核心动机：...
+- 口头禅/标志性台词：...
+- 关系：...
+</角色名>
 ```
 
 ---
@@ -159,96 +122,22 @@ python .agents/skills/fangcun-novel/tools/pipeline.py --config {config} --phase 
 
 - 目标：源文字数 ±10%
 - 超 3000 字自动 trim
-- trim 在写章时自动执行，无需手动调用
+- trim 在写章时自动执行
 
 ---
 
-## 质量检查
-
-### 自动检查
-
-- 字数偏差 ±15%
-- 角色名无泄漏
-- 台词重复 0%
-- AI 痕迹在合理范围
-
-### 手动检查
-
-```powershell
-# 对比报告
-.\novel.ps1 compare --config configs\mybook.json --start 1 --end 10
-
-# 审核报告
-.\novel.ps1 review --config configs\mybook.json --start 1 --end 10
-```
-
----
-
-## 常见问题
-
-### Q: API Key 错误
-
-```
-$env:API_KEY = "sk-xxx"
-```
-
-### Q: 某章写得不好，重写
-
-```powershell
-# 删除该章
-Remove-Item chapters\ch_003.txt
-
-# 重写
-.\novel.ps1 write --config configs\mybook.json --start 3 --end 3
-```
-
-### Q: 角色名不对
-
-编辑 `characters.md`，然后重跑受影响的章节。
-
-### Q: 字数超标
-
-trim 会自动执行。如果还是超，重跑该章即可。
-
----
-
-## 路由表（agent 调用指南）
-
-用户反馈 → 应调用的脚本：
+## 路由表
 
 | 用户说 | 调用 | 命令 |
 |--------|------|------|
-| "继续写" / "写下一章" | pipeline write | `python pipeline.py --config {cfg} --phase write --start {N} --end {M}` |
-| "写第N章" | pipeline write | `python pipeline.py --config {cfg} --phase write --start {N} --end {N}` |
-| "看看对比" / "质量怎么样" | compare | `python .agents/skills/story-compare/compare.py "{rewrites_dir}" {start} {end} --source "{author}/{source_book}"` |
-| "第X章字数不对" | trim | `python pipeline.py --config {cfg} --phase postfix --start {X} --end {X}` |
+| "继续写" / "写下一章" | write | `--phase write --start {N} --end {M}` |
+| "写第N章" | write | `--phase write --start {N} --end {N}` |
+| "看看对比" / "质量怎么样" | compare | `--phase compare --start {N} --end {M}` |
+| "第X章字数不对" | postfix | `--phase postfix --start {X} --end {X}` |
 | "第X章重写" | 删章 + write | 删 `ch_{X}.txt`，再跑 write |
-| "审一下" / "检查问题" | unified review | `python unified_fixer.py --config {cfg} --dry-run` |
-| "修一下" / "修复问题" | unified fix | `python unified_fixer.py --config {cfg}` |
-| "开书" / "仿写这本书" | open-book skill | 见 open-book SKILL.md |
-| "导出" / "合并成txt" | story-export | 见 story-export SKILL.md |
-| "封面" / "做个封面" | story-cover | 见 story-cover SKILL.md |
-
-**写章后自动 compare**：每写完 10 章，pipeline 自动跑 compare，无需手动触发。
-
-**compare 报告位置**：`{rewrites_dir}/compare/对比_{start}-{end}_报告.md` 和 `对比_{start}-{end}_AI分析.md`
-
----
-
-## 去AI味
-
-**独立skill：** `skills/deslop/`
-
-**触发方式：**
-- `/deslop` 或 `/去AI味` — 检测+修复
-- "这段太AI了" — rewrite模式
-- "检测一下有没有AI痕迹" — detect模式
-
-**功能：**
-- 三级AI痕迹检测（路标词/高频副词/空洞修饰词）
-- 三种模式（detect/rewrite/edit）
-- 与源文对比（修复后AI痕迹 ≤ 源文）
-- 白名单支持（避免误报）
+| "审一下" / "检查问题" | review | `--phase unified --dry-run` |
+| "修一下" / "修复问题" | fix | `--phase unified` |
+| "开书" / "仿写这本书" | open-book | `--phase open-book` |
 
 ---
 
@@ -263,7 +152,7 @@ projects/{作者}/{源书名}/
 │   └── styles/                ← 文笔指纹
 └── rewrites/{新书名}/         ← 仿写产物
     ├── concept.md             ← 设定
-    ├── characters.md          ← 角色映射表
+    ├── characters.md          ← 角色映射表（XML格式）
     ├── guides/plot_{N}.md     ← 章纲
     ├── chapters/ch_{N}.txt    ← 正文
     └── compare/               ← 对比报告
@@ -275,9 +164,6 @@ projects/{作者}/{源书名}/
 
 | 文件 | 用途 |
 |------|------|
-| `style-analyze.md` | 提取源文写法特征 |
 | `plot-guide.md` | 生成功能需求清单 |
 | `write-chapter.md` | 按功能需求写章 |
-| `trim-chapter.md` | 精简超字数章 |
-| `expand-chapter.md` | 扩写不足字数章 |
-| `polish-chapter.md` | 润色章节 |
+| `agent.md` | 系统提示词（全局缓存） |
