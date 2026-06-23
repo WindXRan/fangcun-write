@@ -1,0 +1,1701 @@
+{
+  "date": "2026-06-19",
+  "categories": {
+    "西方奇幻": {
+      "top10_books": [
+        {
+          "rank": 1,
+          "title": "龙骑士：开局被自己的银龙反骑",
+          "reads": "19.8万",
+          "author": "迷途的小蜘蛛"
+        },
+        {
+          "rank": 2,
+          "title": "青眼白龙也是龙",
+          "reads": "16.4万",
+          "author": "闪电猫猫侠"
+        },
+        {
+          "rank": 3,
+          "title": "血量为1的圣女在异界要好好生活",
+          "reads": "13.3万",
+          "author": "那天人多以为有我"
+        },
+        {
+          "rank": 4,
+          "title": "金龙领主：在贵族世界的放纵生活",
+          "reads": "10.2万",
+          "author": "喝西北风的草"
+        },
+        {
+          "rank": 5,
+          "title": "北境大公：我以永霜镇压一切",
+          "reads": "6万",
+          "author": "莫之道"
+        },
+        {
+          "rank": 6,
+          "title": "我的元素周期表绝不是禁忌魔典",
+          "reads": "5.8万",
+          "author": "墨水梨"
+        },
+        {
+          "rank": 7,
+          "title": "变身：想要逃脱坏女人和破败结局",
+          "reads": "5.3万",
+          "author": "拾一只小洛"
+        },
+        {
+          "rank": 8,
+          "title": "母亲是恶龙，我怎么是祥瑞",
+          "reads": "4.2万",
+          "author": "白菜煲"
+        },
+        {
+          "rank": 9,
+          "title": "西幻反派教皇：主角病娇母亲赎罪",
+          "reads": "5.6万",
+          "author": "一叶知秋zy"
+        },
+        {
+          "rank": 10,
+          "title": "戈德港的猫公爵",
+          "reads": "4.6万",
+          "author": "石墙上的猫"
+        }
+      ],
+      "shared_keywords": [
+        {
+          "keyword": "穿越",
+          "count": 6,
+          "presence": 0.6
+        },
+        {
+          "keyword": "种田",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "系统",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "空间",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "幼崽",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "反派",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "强制爱",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "游戏",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "衍生",
+          "count": 1,
+          "presence": 0.1
+        }
+      ],
+      "title_patterns": {
+        "avg_length": 12.7,
+        "has_punctuation": 0.6,
+        "common_structures": []
+      },
+      "intro_patterns": {
+        "avg_length": 256,
+        "common_hooks": [
+          "日常"
+        ],
+        "common_settings": []
+      },
+      "reads_distribution": {
+        "min": "4.2万",
+        "max": "19.8万",
+        "median": "5.8万",
+        "top1_avg": "19.8万",
+        "top10_avg": "9.1万"
+      }
+    },
+    "东方仙侠": {
+      "top10_books": [
+        {
+          "rank": 1,
+          "title": "同学们选武侠仙侠，我选洪荒世界",
+          "reads": "68.6万",
+          "author": "皮蛋瘦肉周"
+        },
+        {
+          "rank": 2,
+          "title": "家族：从契约白蛇开始伪装天才",
+          "reads": "16.6万",
+          "author": "憾无穷人生长恨水长东"
+        },
+        {
+          "rank": 3,
+          "title": "西游：苟在猴哥体内满天神佛慌了",
+          "reads": "13万",
+          "author": "五指山下小牧童"
+        },
+        {
+          "rank": 4,
+          "title": "零帧起手，圣人来了也照打！",
+          "reads": "13.5万",
+          "author": "女帝在上"
+        },
+        {
+          "rank": 5,
+          "title": "洪荒：我不为天帝，苍生何所辜",
+          "reads": "10.5万",
+          "author": "三大大"
+        },
+        {
+          "rank": 6,
+          "title": "二品退休，我在天牢当送饭人",
+          "reads": "8.7万",
+          "author": "闭关三千年"
+        },
+        {
+          "rank": 7,
+          "title": "西游：耿直牛妖的种地创业指南",
+          "reads": "7.9万",
+          "author": "青城一剑客"
+        },
+        {
+          "rank": 8,
+          "title": "不是哥们，采药咋采到清冷剑仙了",
+          "reads": "7.5万",
+          "author": "坐北朝向南"
+        },
+        {
+          "rank": 9,
+          "title": "病娇仙子成了剑鞘后，彻底疯狂！",
+          "reads": "7.3万",
+          "author": "三个甜瓜"
+        },
+        {
+          "rank": 10,
+          "title": "读心穿越者弟子，我通天开局分家",
+          "reads": "6.8万",
+          "author": "花朝戌时"
+        }
+      ],
+      "shared_keywords": [
+        {
+          "keyword": "穿越",
+          "count": 7,
+          "presence": 0.7
+        },
+        {
+          "keyword": "阵法",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "游戏",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "重生",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "系统",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "修仙",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "仙侠",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "丹药",
+          "count": 1,
+          "presence": 0.1
+        }
+      ],
+      "title_patterns": {
+        "avg_length": 14.3,
+        "has_punctuation": 1.0,
+        "common_structures": [
+          "穿越/重生"
+        ]
+      },
+      "intro_patterns": {
+        "avg_length": 321,
+        "common_hooks": [
+          "虐",
+          "日常"
+        ],
+        "common_settings": [
+          "修仙玄幻"
+        ]
+      },
+      "reads_distribution": {
+        "min": "6.8万",
+        "max": "68.6万",
+        "median": "8.7万",
+        "top1_avg": "68.6万",
+        "top10_avg": "16.0万"
+      }
+    },
+    "科幻末世": {
+      "top10_books": [
+        {
+          "rank": 1,
+          "title": "末日氦闪：我用飞船装走整个华夏",
+          "reads": "13.1万",
+          "author": "北沐萧涵"
+        },
+        {
+          "rank": 2,
+          "title": "小区求生：开局住进邻家阿姨家！",
+          "reads": "7.3万",
+          "author": "猫尾的笔呀"
+        },
+        {
+          "rank": 3,
+          "title": "天序007：化龙",
+          "reads": "6.9万",
+          "author": "难道说我是"
+        },
+        {
+          "rank": 4,
+          "title": "序列求生：我可以无限附加词条",
+          "reads": "6.8万",
+          "author": "离群的独狼"
+        },
+        {
+          "rank": 5,
+          "title": "上交火星，国家把我宠上天",
+          "reads": "6万",
+          "author": "屋顶烧烤"
+        },
+        {
+          "rank": 6,
+          "title": "让你公路求生，你带校花蹬三轮？",
+          "reads": "5.7万",
+          "author": "晖"
+        },
+        {
+          "rank": 7,
+          "title": "序列求生：从猛蹬自行车开始自律",
+          "reads": "5.7万",
+          "author": "喵大云"
+        },
+        {
+          "rank": 8,
+          "title": "全民海岛：开局SSS级命运抽卡",
+          "reads": "5.5万",
+          "author": "苍梧墨渊"
+        },
+        {
+          "rank": 9,
+          "title": "谁玩求生游戏，家里一堆美女啊！",
+          "reads": "5.4万",
+          "author": "被坑八百块"
+        },
+        {
+          "rank": 10,
+          "title": "开局世界入侵，一界一词条！",
+          "reads": "5.3万",
+          "author": "平平无奇初阳君8"
+        }
+      ],
+      "shared_keywords": [
+        {
+          "keyword": "穿越",
+          "count": 7,
+          "presence": 0.7
+        },
+        {
+          "keyword": "系统",
+          "count": 3,
+          "presence": 0.3
+        },
+        {
+          "keyword": "游戏",
+          "count": 3,
+          "presence": 0.3
+        },
+        {
+          "keyword": "重生",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "末世",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "废土",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "直播",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "基建",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "升级",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "争霸",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "星际",
+          "count": 1,
+          "presence": 0.1
+        }
+      ],
+      "title_patterns": {
+        "avg_length": 13.7,
+        "has_punctuation": 1.0,
+        "common_structures": []
+      },
+      "intro_patterns": {
+        "avg_length": 201,
+        "common_hooks": [
+          "爽",
+          "打脸",
+          "经营"
+        ],
+        "common_settings": [
+          "末世科幻"
+        ]
+      },
+      "reads_distribution": {
+        "min": "5.3万",
+        "max": "13.1万",
+        "median": "5.7万",
+        "top1_avg": "13.1万",
+        "top10_avg": "6.8万"
+      }
+    },
+    "都市日常": {
+      "top10_books": [
+        {
+          "rank": 1,
+          "title": "拜托！当天才没你想的那么轻松！",
+          "reads": "19万",
+          "author": "街溜子二虎"
+        },
+        {
+          "rank": 2,
+          "title": "穿到女频，整顿满城霸总",
+          "reads": "18.2万",
+          "author": "嘎嘣蹦"
+        },
+        {
+          "rank": 3,
+          "title": "七岁熊猫烧香，我被老妈上交国家",
+          "reads": "17.1万",
+          "author": "天川八戒"
+        },
+        {
+          "rank": 4,
+          "title": "权力巅峰：开局空降老家当领导！",
+          "reads": "15万",
+          "author": "小萌新的进击"
+        },
+        {
+          "rank": 5,
+          "title": "哥！这是领养证明，我不要嫂子！",
+          "reads": "14.7万",
+          "author": "传奇小陈"
+        },
+        {
+          "rank": 6,
+          "title": "和病娇老婆离婚路上我失忆了",
+          "reads": "12.2万",
+          "author": "在逃飞行家"
+        },
+        {
+          "rank": 7,
+          "title": "不是妹妹吗？怎么就童养媳了！",
+          "reads": "11.5万",
+          "author": "白衣长剑酒"
+        },
+        {
+          "rank": 8,
+          "title": "刚上大学，就和校花老婆同居了",
+          "reads": "10.9万",
+          "author": "向春软"
+        },
+        {
+          "rank": 9,
+          "title": "妹网恋圈百万，拿项圈套我干嘛",
+          "reads": "10.9万",
+          "author": "那年18被叫叔"
+        },
+        {
+          "rank": 10,
+          "title": "被女总裁捡到后，我成了团宠？",
+          "reads": "9.9万",
+          "author": "清风大上人"
+        }
+      ],
+      "shared_keywords": [
+        {
+          "keyword": "重生",
+          "count": 4,
+          "presence": 0.4
+        },
+        {
+          "keyword": "系统",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "总裁",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "都市",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "团宠",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "强制爱",
+          "count": 1,
+          "presence": 0.1
+        }
+      ],
+      "title_patterns": {
+        "avg_length": 14.0,
+        "has_punctuation": 0.9,
+        "common_structures": [
+          "身份"
+        ]
+      },
+      "intro_patterns": {
+        "avg_length": 324,
+        "common_hooks": [
+          "甜",
+          "日常",
+          "爽",
+          "养成"
+        ],
+        "common_settings": [
+          "现代都市"
+        ]
+      },
+      "reads_distribution": {
+        "min": "9.9万",
+        "max": "19.0万",
+        "median": "12.2万",
+        "top1_avg": "19.0万",
+        "top10_avg": "13.9万"
+      }
+    },
+    "都市修真": {
+      "top10_books": [
+        {
+          "rank": 1,
+          "title": "我的群里怎么都是道家老祖",
+          "reads": "14万",
+          "author": "五月一十六"
+        },
+        {
+          "rank": 2,
+          "title": "僵约：开局顶级天师！无敌了！",
+          "reads": "14.8万",
+          "author": "扶不起的小周3"
+        },
+        {
+          "rank": 3,
+          "title": "风流村",
+          "reads": "11.5万",
+          "author": "抱着牛跳舞"
+        },
+        {
+          "rank": 4,
+          "title": "乡村入夜，征服",
+          "reads": "10.4万",
+          "author": "室内高人"
+        },
+        {
+          "rank": 5,
+          "title": "入夜，征服",
+          "reads": "10万",
+          "author": "云想羽衣"
+        },
+        {
+          "rank": 6,
+          "title": "都市：开局算命馆，一卦八万八！",
+          "reads": "8.8万",
+          "author": "郑铮铮日上"
+        },
+        {
+          "rank": 7,
+          "title": "分手后，我获得阴阳仙诀爽炸了",
+          "reads": "8.7万",
+          "author": "冰若白雪"
+        },
+        {
+          "rank": 8,
+          "title": "乱风流",
+          "reads": "8万",
+          "author": "五精"
+        },
+        {
+          "rank": 9,
+          "title": "低山臭水觅知音，末法时代双子星",
+          "reads": "7.8万",
+          "author": "果冻很狗"
+        },
+        {
+          "rank": 10,
+          "title": "僵尸世界：开局拜师雷电法王",
+          "reads": "8.8万",
+          "author": "鹤梦辞"
+        }
+      ],
+      "shared_keywords": [
+        {
+          "keyword": "修仙",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "战神",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "重生",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "穿越",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "系统",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "玄学",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "悬疑",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "种田",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "民国",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "神医",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "都市",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "历史",
+          "count": 1,
+          "presence": 0.1
+        }
+      ],
+      "title_patterns": {
+        "avg_length": 10.1,
+        "has_punctuation": 0.7,
+        "common_structures": []
+      },
+      "intro_patterns": {
+        "avg_length": 235,
+        "common_hooks": [
+          "爽",
+          "悬疑"
+        ],
+        "common_settings": [
+          "修仙玄幻",
+          "现代都市",
+          "民国"
+        ]
+      },
+      "reads_distribution": {
+        "min": "7.8万",
+        "max": "14.8万",
+        "median": "8.8万",
+        "top1_avg": "14.8万",
+        "top10_avg": "10.3万"
+      }
+    },
+    "都市高武": {
+      "top10_books": [
+        {
+          "rank": 1,
+          "title": "开局抡出音速钢卷，校花被吓哭了",
+          "reads": "35.4万",
+          "author": "揪揪你的小揪揪"
+        },
+        {
+          "rank": 2,
+          "title": "SSSSSSS级天赋：不死不灭",
+          "reads": "26.6万",
+          "author": "猫猫虫ce"
+        },
+        {
+          "rank": 3,
+          "title": "什么叫包养的五个校花都成最强了",
+          "reads": "21.4万",
+          "author": "黑白百褶裙"
+        },
+        {
+          "rank": 4,
+          "title": "帝国：谁把这个老六招进来的！",
+          "reads": "20.8万",
+          "author": "胖圆西瓜"
+        },
+        {
+          "rank": 5,
+          "title": "穿进be漫画后，我带头手撕剧本",
+          "reads": "20.5万",
+          "author": "喜欢十间鱼的顾清影"
+        },
+        {
+          "rank": 6,
+          "title": "国运认亲：我魔帝，被乖女儿曝光",
+          "reads": "19.4万",
+          "author": "爷霸气威武"
+        },
+        {
+          "rank": 7,
+          "title": "刚上高中，系统非说我是晚年大帝",
+          "reads": "18.1万",
+          "author": "梦魇巨"
+        },
+        {
+          "rank": 8,
+          "title": "重生成莲，开局拒绝上交国家",
+          "reads": "16.9万",
+          "author": "郭无敌"
+        },
+        {
+          "rank": 9,
+          "title": "刚成神的我，被重生者妹妹曝光了",
+          "reads": "16.5万",
+          "author": "一斤鱼子酱"
+        },
+        {
+          "rank": 10,
+          "title": "全球奇物降临，只有我有探宝雷达",
+          "reads": "16万",
+          "author": "一颗独苹果"
+        }
+      ],
+      "shared_keywords": [
+        {
+          "keyword": "穿越",
+          "count": 5,
+          "presence": 0.5
+        },
+        {
+          "keyword": "系统",
+          "count": 5,
+          "presence": 0.5
+        },
+        {
+          "keyword": "重生",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "异能",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "高武",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "天灾",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "无CP",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "国运",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "暗恋",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "都市",
+          "count": 1,
+          "presence": 0.1
+        }
+      ],
+      "title_patterns": {
+        "avg_length": 14.7,
+        "has_punctuation": 0.9,
+        "common_structures": [
+          "穿越/重生"
+        ]
+      },
+      "intro_patterns": {
+        "avg_length": 285,
+        "common_hooks": [
+          "爽",
+          "日常"
+        ],
+        "common_settings": [
+          "现代都市",
+          "末世科幻"
+        ]
+      },
+      "reads_distribution": {
+        "min": "16.0万",
+        "max": "35.4万",
+        "median": "19.4万",
+        "top1_avg": "35.4万",
+        "top10_avg": "21.2万"
+      }
+    },
+    "历史古代": {
+      "top10_books": [
+        {
+          "rank": 1,
+          "title": "大唐：拉着母后逛青楼，父皇好巧",
+          "reads": "33.2万",
+          "author": "夜色凝夕"
+        },
+        {
+          "rank": 2,
+          "title": "大唐长生者，但开局在玄武门？",
+          "reads": "30.1万",
+          "author": "抱星明月居"
+        },
+        {
+          "rank": 3,
+          "title": "让你辅佐曹操，你天天骂他送死",
+          "reads": "26.7万",
+          "author": "天煞门的小花娘"
+        },
+        {
+          "rank": 4,
+          "title": "父皇，你要的至尊版太子到了！",
+          "reads": "15.4万",
+          "author": "映山时光"
+        },
+        {
+          "rank": 5,
+          "title": "三国：开局冒充天子何来不臣之人",
+          "reads": "15万",
+          "author": "LOgtopVE"
+        },
+        {
+          "rank": 6,
+          "title": "三国：关于错认吕布当岳父这件事",
+          "reads": "13万",
+          "author": "漫步夜风"
+        },
+        {
+          "rank": 7,
+          "title": "穿女频科举：我写反诗坑死原男主",
+          "reads": "10.4万",
+          "author": "心安之"
+        },
+        {
+          "rank": 8,
+          "title": "让你记账管粮，你成了曹操心腹",
+          "reads": "8.5万",
+          "author": "暗影岛风"
+        },
+        {
+          "rank": 9,
+          "title": "银行牛马穿越当皇帝",
+          "reads": "7.2万",
+          "author": "你就是小鱼啊"
+        },
+        {
+          "rank": 10,
+          "title": "三国：从颍川三浪到开国功勋",
+          "reads": "6万",
+          "author": "九阳lxy"
+        }
+      ],
+      "shared_keywords": [
+        {
+          "keyword": "穿越",
+          "count": 5,
+          "presence": 0.5
+        },
+        {
+          "keyword": "三国",
+          "count": 5,
+          "presence": 0.5
+        },
+        {
+          "keyword": "系统",
+          "count": 4,
+          "presence": 0.4
+        },
+        {
+          "keyword": "重生",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "异能",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "历史",
+          "count": 1,
+          "presence": 0.1
+        }
+      ],
+      "title_patterns": {
+        "avg_length": 13.8,
+        "has_punctuation": 0.9,
+        "common_structures": [
+          "穿越/重生"
+        ]
+      },
+      "intro_patterns": {
+        "avg_length": 283,
+        "common_hooks": [
+          "爽"
+        ],
+        "common_settings": [
+          "真实朝代"
+        ]
+      },
+      "reads_distribution": {
+        "min": "6.0万",
+        "max": "33.2万",
+        "median": "13.0万",
+        "top1_avg": "33.2万",
+        "top10_avg": "16.6万"
+      }
+    },
+    "战神赘婿": {
+      "top10_books": [
+        {
+          "rank": 1,
+          "title": "嫌我是穷兵？国家解密了我的档案",
+          "reads": "2.6万",
+          "author": "鼠鼠我呀又鼠了"
+        },
+        {
+          "rank": 2,
+          "title": "穿越女频世界：虐我？一拳打爆！",
+          "reads": "2.4万",
+          "author": "无敌的帅气青年"
+        },
+        {
+          "rank": 3,
+          "title": "青囊赘婿",
+          "reads": "2万",
+          "author": "如余烬燃"
+        },
+        {
+          "rank": 4,
+          "title": "反手考公入编，短剧女主全炸了！",
+          "reads": "2万",
+          "author": "赤龙城的惊奇队长"
+        },
+        {
+          "rank": 5,
+          "title": "真当我是癞蛤蟆，离婚你又哭什么",
+          "reads": "2万",
+          "author": "圆宝吃不饱"
+        },
+        {
+          "rank": 6,
+          "title": "上门女婿也风流",
+          "reads": "1.7万",
+          "author": "8888091"
+        },
+        {
+          "rank": 7,
+          "title": "铁血佣兵：非洲生死薄",
+          "reads": "1.7万",
+          "author": "孤帆看尽"
+        },
+        {
+          "rank": 8,
+          "title": "你们选假儿子，断亲后悔干什么",
+          "reads": "1.5万",
+          "author": "写封情书给自己"
+        },
+        {
+          "rank": 9,
+          "title": "顶罪八年：归来已权倾全球",
+          "reads": "1.3万",
+          "author": "白淇淋"
+        },
+        {
+          "rank": 10,
+          "title": "入赘三年，神医身份瞒不住了",
+          "reads": "1.3万",
+          "author": "我才不会深情"
+        }
+      ],
+      "shared_keywords": [
+        {
+          "keyword": "赘婿",
+          "count": 5,
+          "presence": 0.5
+        },
+        {
+          "keyword": "穿越",
+          "count": 3,
+          "presence": 0.3
+        },
+        {
+          "keyword": "系统",
+          "count": 3,
+          "presence": 0.3
+        },
+        {
+          "keyword": "豪门",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "逆袭",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "战神",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "神医",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "重生",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "反派",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "总裁",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "先婚后爱",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "兵王",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "都市",
+          "count": 1,
+          "presence": 0.1
+        }
+      ],
+      "title_patterns": {
+        "avg_length": 12.0,
+        "has_punctuation": 0.8,
+        "common_structures": [
+          "穿越/重生",
+          "动作"
+        ]
+      },
+      "intro_patterns": {
+        "avg_length": 184,
+        "common_hooks": [
+          "爽",
+          "虐",
+          "逆袭",
+          "打脸"
+        ],
+        "common_settings": [
+          "现代都市",
+          "架空古代"
+        ]
+      },
+      "reads_distribution": {
+        "min": "1.3万",
+        "max": "2.6万",
+        "median": "1.7万",
+        "top1_avg": "2.6万",
+        "top10_avg": "1.9万"
+      }
+    },
+    "都市种田": {
+      "top10_books": [
+        {
+          "rank": 1,
+          "title": "宗族：全族供我读书我带全村暴富",
+          "reads": "14.9万",
+          "author": "番茄薯条"
+        },
+        {
+          "rank": 2,
+          "title": "我真没混黑，他们纯是企业文化",
+          "reads": "14.2万",
+          "author": "用户25919633"
+        },
+        {
+          "rank": 3,
+          "title": "年代：地狱开局，我是资本家少爷",
+          "reads": "13.1万",
+          "author": "法舟"
+        },
+        {
+          "rank": 4,
+          "title": "八七赶海，老婆真是港岛大小姐",
+          "reads": "11.8万",
+          "author": "劲劲的"
+        },
+        {
+          "rank": 5,
+          "title": "重返高三，满仓抄底狂赚百亿",
+          "reads": "9.1万",
+          "author": "施安拌面"
+        },
+        {
+          "rank": 6,
+          "title": "被拔管前夜，我把全族卖了",
+          "reads": "8.1万",
+          "author": "鸽鸽又鸽"
+        },
+        {
+          "rank": 7,
+          "title": "重生2010，世界杯后财富自由",
+          "reads": "8.1万",
+          "author": "爱吃虾的蟹老板233"
+        },
+        {
+          "rank": 8,
+          "title": "70年代带着哑巴未婚妻去下乡",
+          "reads": "7.9万",
+          "author": "一口肥肉都不吃"
+        },
+        {
+          "rank": 9,
+          "title": "山货探索增幅系统，天选跑山人",
+          "reads": "7万",
+          "author": "红豆生相思"
+        },
+        {
+          "rank": 10,
+          "title": "六零打猎丛林法则：半斤肉换媳妇",
+          "reads": "7.1万",
+          "author": "乩骨"
+        }
+      ],
+      "shared_keywords": [
+        {
+          "keyword": "系统",
+          "count": 6,
+          "presence": 0.6
+        },
+        {
+          "keyword": "重生",
+          "count": 4,
+          "presence": 0.4
+        },
+        {
+          "keyword": "年代",
+          "count": 3,
+          "presence": 0.3
+        },
+        {
+          "keyword": "穿越",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "电竞",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "空间",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "直播",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "基建",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "种田",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "经商",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "强制爱",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "青梅竹马",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "都市",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "游戏",
+          "count": 1,
+          "presence": 0.1
+        }
+      ],
+      "title_patterns": {
+        "avg_length": 14.1,
+        "has_punctuation": 0.9,
+        "common_structures": [
+          "身份",
+          "穿越/重生"
+        ]
+      },
+      "intro_patterns": {
+        "avg_length": 197,
+        "common_hooks": [
+          "虐"
+        ],
+        "common_settings": [
+          "现代都市"
+        ]
+      },
+      "reads_distribution": {
+        "min": "7.0万",
+        "max": "14.9万",
+        "median": "8.1万",
+        "top1_avg": "14.9万",
+        "top10_avg": "10.1万"
+      }
+    },
+    "传统玄幻": {
+      "top10_books": [
+        {
+          "rank": 1,
+          "title": "穿书百合文，我只想安稳苟到结局",
+          "reads": "15.7万",
+          "author": "瑰夏真好喝"
+        },
+        {
+          "rank": 2,
+          "title": "菇真人",
+          "reads": "11.5万",
+          "author": "孤寒"
+        },
+        {
+          "rank": 3,
+          "title": "你死了，我就能继承你的修为了",
+          "reads": "7.6万",
+          "author": "不吃炸鸡柳"
+        },
+        {
+          "rank": 4,
+          "title": "女尊：惹到未婚妻我被对方囚禁了",
+          "reads": "7.3万",
+          "author": "哥布林王中王"
+        },
+        {
+          "rank": 5,
+          "title": "实力比老祖恐怖，你竟敢诬陷我？",
+          "reads": "7.3万",
+          "author": "青锋白马"
+        },
+        {
+          "rank": 6,
+          "title": "我对着红旗唱歌，它飘起来了",
+          "reads": "6.4万",
+          "author": "长了白头发的鱼"
+        },
+        {
+          "rank": 7,
+          "title": "玄幻：老祖的机缘",
+          "reads": "5万",
+          "author": "街道的重力球"
+        },
+        {
+          "rank": 8,
+          "title": "自爆起手退宗，冤种狗都不当",
+          "reads": "4.7万",
+          "author": "鱼雨雨鱼雨"
+        },
+        {
+          "rank": 9,
+          "title": "这个导师明明超强却非要装菜",
+          "reads": "4.2万",
+          "author": "真不知道叫什么"
+        },
+        {
+          "rank": 10,
+          "title": "苟在战国，从泡狐龙无限进化",
+          "reads": "4.1万",
+          "author": "不死人的膝盖"
+        }
+      ],
+      "shared_keywords": [
+        {
+          "keyword": "穿越",
+          "count": 3,
+          "presence": 0.3
+        },
+        {
+          "keyword": "修仙",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "重生",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "系统",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "穿书",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "反派",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "强制爱",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "玄幻",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "炼器",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "阵法",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "升级",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "副本",
+          "count": 1,
+          "presence": 0.1
+        }
+      ],
+      "title_patterns": {
+        "avg_length": 12.2,
+        "has_punctuation": 0.8,
+        "common_structures": [
+          "穿越/重生"
+        ]
+      },
+      "intro_patterns": {
+        "avg_length": 310,
+        "common_hooks": [
+          "复仇",
+          "打脸"
+        ],
+        "common_settings": [
+          "修仙玄幻"
+        ]
+      },
+      "reads_distribution": {
+        "min": "4.1万",
+        "max": "15.7万",
+        "median": "6.4万",
+        "top1_avg": "15.7万",
+        "top10_avg": "7.4万"
+      }
+    },
+    "历史脑洞": {
+      "top10_books": [
+        {
+          "rank": 1,
+          "title": "亲爹战死五年归来后，我随母改嫁",
+          "reads": "22.8万",
+          "author": "浮玉呀"
+        },
+        {
+          "rank": 2,
+          "title": "错把刘宏当爹，他送貂蝉做我老婆",
+          "reads": "21.7万",
+          "author": "吾名张飞"
+        },
+        {
+          "rank": 3,
+          "title": "修仙皇帝：开局曝光我儿圣君",
+          "reads": "16.7万",
+          "author": "萝卜煮鸡蛋"
+        },
+        {
+          "rank": 4,
+          "title": "大唐：武才人？请陛下称太子侧妃",
+          "reads": "15.2万",
+          "author": "喝咖啡胃疼"
+        },
+        {
+          "rank": 5,
+          "title": "别人夺嫡偷偷来，我家皇帝下圣旨",
+          "reads": "13.7万",
+          "author": "荒漠之缘"
+        },
+        {
+          "rank": 6,
+          "title": "穿成扶苏，开局被始皇宠上天",
+          "reads": "12.3万",
+          "author": "九个核桃0v0"
+        },
+        {
+          "rank": 7,
+          "title": "大明：朱棣假死，开局我兵变登基",
+          "reads": "10.7万",
+          "author": "烟某人"
+        },
+        {
+          "rank": 8,
+          "title": "大明魔丸：请陛下称太孙！",
+          "reads": "10.5万",
+          "author": "满橙风絮"
+        },
+        {
+          "rank": 9,
+          "title": "穿越古代，每年十连抽",
+          "reads": "10.4万",
+          "author": "枕书煮茶"
+        },
+        {
+          "rank": 10,
+          "title": "大明：每天一个仙术，嘉靖乐疯了",
+          "reads": "10.4万",
+          "author": "桃萄Tao"
+        }
+      ],
+      "shared_keywords": [
+        {
+          "keyword": "系统",
+          "count": 9,
+          "presence": 0.9
+        },
+        {
+          "keyword": "穿越",
+          "count": 8,
+          "presence": 0.8
+        },
+        {
+          "keyword": "修仙",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "历史",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "重生",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "空间",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "和离",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "种田",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "架空",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "衍生",
+          "count": 1,
+          "presence": 0.1
+        }
+      ],
+      "title_patterns": {
+        "avg_length": 13.8,
+        "has_punctuation": 1.0,
+        "common_structures": [
+          "动作",
+          "穿越/重生"
+        ]
+      },
+      "intro_patterns": {
+        "avg_length": 342,
+        "common_hooks": [
+          "虐",
+          "爽",
+          "养成"
+        ],
+        "common_settings": [
+          "架空古代",
+          "修仙玄幻"
+        ]
+      },
+      "reads_distribution": {
+        "min": "10.4万",
+        "max": "22.8万",
+        "median": "12.3万",
+        "top1_avg": "22.8万",
+        "top10_avg": "14.4万"
+      }
+    },
+    "悬疑脑洞": {
+      "top10_books": [
+        {
+          "rank": 1,
+          "title": "全民学校求生：所有学校沦为地狱",
+          "reads": "14.3万",
+          "author": "倒霉蛋阿古朵"
+        },
+        {
+          "rank": 2,
+          "title": "警告！邪神眷属正在杀入诡异副本",
+          "reads": "14.3万",
+          "author": "世事无常真菌"
+        },
+        {
+          "rank": 3,
+          "title": "影踪：我们神打就是强",
+          "reads": "13.6万",
+          "author": "蛋炒香蕉"
+        },
+        {
+          "rank": 4,
+          "title": "科普六翅蜈蚣，奖励全盗墓技能？",
+          "reads": "11.2万",
+          "author": "肖二狗"
+        },
+        {
+          "rank": 5,
+          "title": "我黑无常，你让我直播科普鬼怪？",
+          "reads": "9.3万",
+          "author": "清纯萌妹"
+        },
+        {
+          "rank": 6,
+          "title": "规则怪谈：开局牢大整顿校园",
+          "reads": "7.9万",
+          "author": "Ceiling912"
+        },
+        {
+          "rank": 7,
+          "title": "刚确诊绝症，大脑却说道爷我成了",
+          "reads": "7.8万",
+          "author": "小小盒马"
+        },
+        {
+          "rank": 8,
+          "title": "盗墓：开局惊醒千年沉睡女王",
+          "reads": "7.4万",
+          "author": "盘峙岛的胡语"
+        },
+        {
+          "rank": 9,
+          "title": "青山精神病院：病友皆是不可名状",
+          "reads": "7.1万",
+          "author": "晚安巧乐兹"
+        },
+        {
+          "rank": 10,
+          "title": "全民义庄：养僵尸？这业务我熟！",
+          "reads": "6.6万",
+          "author": "红尘丶一壶酒"
+        }
+      ],
+      "shared_keywords": [
+        {
+          "keyword": "穿越",
+          "count": 4,
+          "presence": 0.4
+        },
+        {
+          "keyword": "系统",
+          "count": 3,
+          "presence": 0.3
+        },
+        {
+          "keyword": "直播",
+          "count": 3,
+          "presence": 0.3
+        },
+        {
+          "keyword": "副本",
+          "count": 2,
+          "presence": 0.2
+        },
+        {
+          "keyword": "空间",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "末世",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "无限流",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "悬疑",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "校园",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "升级",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "历史",
+          "count": 1,
+          "presence": 0.1
+        },
+        {
+          "keyword": "游戏",
+          "count": 1,
+          "presence": 0.1
+        }
+      ],
+      "title_patterns": {
+        "avg_length": 14.1,
+        "has_punctuation": 1.0,
+        "common_structures": []
+      },
+      "intro_patterns": {
+        "avg_length": 261,
+        "common_hooks": [
+          "悬疑"
+        ],
+        "common_settings": [
+          "末世科幻",
+          "现代都市"
+        ]
+      },
+      "reads_distribution": {
+        "min": "6.6万",
+        "max": "14.3万",
+        "median": "7.9万",
+        "top1_avg": "14.3万",
+        "top10_avg": "9.9万"
+      }
+    }
+  }
+}

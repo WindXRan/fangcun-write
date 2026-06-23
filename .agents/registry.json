@@ -1,6 +1,6 @@
 {
   "午夜凶球": {
-    "skill_path": ".agents/skills/style-午夜凶球/SKILL.md",
+    "system_prompt": ".prompts/system/style-午夜凶球.md",
     "metrics_path": ".agents/skills/style-午夜凶球/style_metrics.json",
     "index_path": ".agents/skills/style-午夜凶球/index.json",
     "knowledge_path": ".agents/skills/style-午夜凶球/knowledge_base",

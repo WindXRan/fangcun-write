@@ -1,0 +1,20 @@
+{
+  "date": "2026-06-01",
+  "prev_date": "2026-05-29",
+  "rank_type": "女频阅读榜",
+  "types": [
+    {
+      "type": "all",
+      "rank_type": "女频阅读榜",
+      "url": "api/latest/female_read_all.json",
+      "category_count": 1,
+      "book_count": 30
+    },
+    {
+      "type": "古风世情",
+      "rank_type": "女频阅读榜",
+      "url": "api/latest/female_read_%E5%8F%A4%E9%A3%8E%E4%B8%96%E6%83%85.json",
+      "book_count": 30
+    }
+  ]
+}

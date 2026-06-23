@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ book.title }} - 阅读器</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; display: flex; height: 100vh; }
+        
+        .sidebar { width: 300px; background: #fff; border-right: 1px solid #ddd; overflow-y: auto; flex-shrink: 0; display: flex; flex-direction: column; }
+        .sidebar-header { padding: 16px 20px; border-bottom: 1px solid #ddd; }
+        .sidebar-header a { color: #4CAF50; text-decoration: none; font-size: 14px; }
+        .sidebar-header h2 { font-size: 16px; margin: 8px 0 4px; }
+        .sidebar-header .book-author { font-size: 13px; color: #888; }
+        
+        .version-tabs { display: flex; gap: 0; border-bottom: 1px solid #ddd; background: #fafafa; }
+        .version-tab { flex: 1; padding: 10px 8px; text-align: center; font-size: 13px; cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; color: #666; }
+        .version-tab:hover { background: #f0f0f0; }
+        .version-tab.active { color: #4CAF50; border-bottom-color: #4CAF50; font-weight: 600; }
+        
+        .chapter-list { flex: 1; overflow-y: auto; padding: 8px 0; }
+        .chapter-item { padding: 10px 20px; cursor: pointer; border-bottom: 1px solid #f0f0f0; font-size: 14px; color: #333; }
+        .chapter-item:hover { background: #f9f9f9; }
+        .chapter-item.active { background: #e8f5e9; border-left: 3px solid #4CAF50; }
+        
+        .reader { flex: 1; overflow-y: auto; }
+        .reader-header { background: #fff; padding: 16px 24px; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
+        .reader-header h1 { font-size: 20px; flex: 1; }
+        .reader-controls { display: flex; gap: 8px; }
+        .reader-controls button { padding: 6px 14px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; background: #fff; font-size: 13px; }
+        .reader-controls button:hover { background: #f5f5f5; }
+        .reader-controls button.active { background: #4CAF50; color: #fff; border-color: #4CAF50; }
+        
+        .content { padding: 40px; max-width: 800px; margin: 0 auto; line-height: 1.8; font-size: 18px; color: #333; }
+        .content p { margin-bottom: 1em; text-indent: 2em; }
+        .content .no-content { text-indent: 0; color: #999; text-align: center; padding: 60px 0; }
+        
+        .font-controls { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .font-controls button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ddd; background: #fff; cursor: pointer; font-size: 18px; }
+        .font-controls button:hover { background: #f5f5f5; }
+        
+        .scroll-top { position: fixed; bottom: 80px; right: 20px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ddd; background: #fff; cursor: pointer; font-size: 18px; display: none; }
+
+        .night-mode { background: #1a1a2e; }
+        .night-mode .sidebar { background: #16213e; border-color: #2a2a4a; }
+        .night-mode .sidebar-header, .night-mode .reader-header { background: #16213e; border-color: #2a2a4a; }
+        .night-mode .version-tabs { background: #0f3460; border-color: #2a2a4a; }
+        .night-mode .version-tab { color: #888; }
+        .night-mode .version-tab.active { color: #4CAF50; }
+        .night-mode .chapter-item { color: #ccc; border-color: #2a2a4a; }
+        .night-mode .chapter-item:hover { background: #1a1a3e; }
+        .night-mode .chapter-item.active { background: #0f3460; }
+        .night-mode .content { color: #ccc; }
+        .night-mode .reader-controls button { background: #16213e; color: #ccc; border-color: #2a2a4a; }
+        .night-mode .font-controls button, .night-mode .scroll-top { background: #16213e; color: #ccc; border-color: #2a2a4a; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="/">← 返回书库</a>
+            <h2>{{ book.title }}</h2>
+            <div class="book-author">{{ book.author }}</div>
+        </div>
+
+        {% if versions|length > 1 %}
+        <div class="version-tabs" id="versionTabs">
+            {% for v in versions %}
+            <button class="version-tab {{ 'active' if loop.index0 == 0 else '' }}"
+                    data-idx="{{ v.idx }}" onclick="switchVersion({{ v.idx }})">{{ v.name }}</button>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="chapter-list" id="chapterList">
+            {% for chapter in chapters %}
+            <div class="chapter-item" onclick="loadChapter({{ loop.index0 }})" data-index="{{ loop.index0 }}">
+                {{ chapter.title }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="reader">
+        <div class="reader-header">
+            <h1 id="currentTitle">{{ chapters[0].title if chapters else '暂无内容' }}</h1>
+            <div class="reader-controls">
+                <button onclick="prevChapter()">上一章</button>
+                <button onclick="nextChapter()">下一章</button>
+                <button onclick="toggleNightMode()" id="nightModeBtn">夜间</button>
+            </div>
+        </div>
+        <div class="content" id="content">
+            {% if chapters %}
+                <p class="no-content">点击左侧章节开始阅读</p>
+            {% else %}
+                <p class="no-content">暂无内容</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="font-controls">
+        <button onclick="changeFontSize(2)">+</button>
+        <button onclick="changeFontSize(-2)">-</button>
+    </div>
+    <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
+    
+    <script>
+        const bookIdx = {{ book_idx }};
+        let chapters = {{ chapters|tojson }};
+        let currentChapter = -1;
+        let fontSize = 18;
+        
+        function loadChapter(index) {
+            if (index < 0 || index >= chapters.length) return;
+            currentChapter = index;
+            const ch = chapters[index];
+            document.getElementById('currentTitle').textContent = ch.title;
+            document.querySelectorAll('.chapter-item').forEach((el, i) => {
+                el.classList.toggle('active', i === index);
+            });
+            const paragraphs = ch.content.split('\n').filter(p => p.trim());
+            document.getElementById('content').innerHTML =
+                paragraphs.map(p => '<p>' + escapeHtml(p.trim()) + '</p>').join('');
+            document.querySelector('.reader').scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function switchVersion(verIdx) {
+            document.querySelectorAll('.version-tab').forEach(el => {
+                el.classList.toggle('active', parseInt(el.dataset.idx) === verIdx);
+            });
+            document.getElementById('chapterList').innerHTML = '<div style="padding:20px;color:#999;text-align:center;">加载中...</div>';
+            fetch('/api/version_chapters?book_idx=' + bookIdx + '&ver_idx=' + verIdx)
+                .then(r => r.json())
+                .then(data => {
+                    chapters = data;
+                    renderChapterList();
+                    if (chapters.length > 0) loadChapter(0);
+                });
+        }
+
+        function renderChapterList() {
+            const list = document.getElementById('chapterList');
+            list.innerHTML = chapters.map((ch, i) =>
+                '<div class="chapter-item" onclick="loadChapter(' + i + ')" data-index="' + i + '">' + escapeHtml(ch.title) + '</div>'
+            ).join('');
+        }
+        
+        function prevChapter() { if (currentChapter > 0) loadChapter(currentChapter - 1); }
+        function nextChapter() { if (currentChapter < chapters.length - 1) loadChapter(currentChapter + 1); }
+        
+        function changeFontSize(delta) {
+            fontSize = Math.max(12, Math.min(24, fontSize + delta));
+            document.getElementById('content').style.fontSize = fontSize + 'px';
+        }
+        
+        function toggleNightMode() {
+            document.body.classList.toggle('night-mode');
+            document.getElementById('nightModeBtn').classList.toggle('active');
+        }
+        
+        function scrollToTop() {
+            document.querySelector('.reader').scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function escapeHtml(s) {
+            return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+        
+        window.addEventListener('scroll', () => {
+            document.getElementById('scrollTop').style.display = window.scrollY > 300 ? 'block' : 'none';
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevChapter();
+            if (e.key === 'ArrowRight') nextChapter();
+        });
+        
+        if (chapters.length > 0) loadChapter(0);
+    </script>
+</body>
+</html>

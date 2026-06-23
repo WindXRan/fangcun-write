@@ -1,0 +1,7742 @@
+{
+  "date": "2026-06-19",
+  "generated_at": "2026-06-19T19:46:56.280051",
+  "periods": {
+    "7": {
+      "period": "近 7 日",
+      "themes": [
+        {
+          "name": "穿越",
+          "total_count": 383,
+          "category_count": 19,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "西方奇幻",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "男频衍生",
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 243
+            },
+            {
+              "date": "2026-06-19",
+              "count": 140
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -42.4
+        },
+        {
+          "name": "系统",
+          "total_count": 312,
+          "category_count": 19,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "西方奇幻",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "男频衍生",
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 202
+            },
+            {
+              "date": "2026-06-19",
+              "count": 110
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -45.5
+        },
+        {
+          "name": "重生",
+          "total_count": 103,
+          "category_count": 15,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "都市修真",
+            "都市种田",
+            "战神赘婿",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 59
+            },
+            {
+              "date": "2026-06-19",
+              "count": 44
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -25.4
+        },
+        {
+          "name": "游戏",
+          "total_count": 75,
+          "category_count": 15,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "西方奇幻",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "都市日常",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 50
+            },
+            {
+              "date": "2026-06-19",
+              "count": 25
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "都市",
+          "total_count": 60,
+          "category_count": 10,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "都市高武",
+            "悬疑灵异",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 33
+            },
+            {
+              "date": "2026-06-19",
+              "count": 27
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -18.2
+        },
+        {
+          "name": "修仙",
+          "total_count": 52,
+          "category_count": 9,
+          "categories": [
+            "科幻末世",
+            "西方奇幻",
+            "玄幻脑洞",
+            "都市修真",
+            "传统玄幻",
+            "东方仙侠",
+            "游戏体育",
+            "男频衍生",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 29
+            },
+            {
+              "date": "2026-06-19",
+              "count": 23
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.7
+        },
+        {
+          "name": "空间",
+          "total_count": 45,
+          "category_count": 13,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "西方奇幻",
+            "游戏体育",
+            "东方仙侠",
+            "男频衍生",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 26
+            },
+            {
+              "date": "2026-06-19",
+              "count": 19
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -26.9
+        },
+        {
+          "name": "升级",
+          "total_count": 45,
+          "category_count": 9,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "都市高武",
+            "悬疑脑洞",
+            "传统玄幻",
+            "东方仙侠",
+            "游戏体育",
+            "男频衍生",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 25
+            },
+            {
+              "date": "2026-06-19",
+              "count": 20
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "年代",
+          "total_count": 41,
+          "category_count": 8,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "都市日常",
+            "都市高武",
+            "悬疑灵异",
+            "都市修真",
+            "都市种田",
+            "男频衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 25
+            },
+            {
+              "date": "2026-06-19",
+              "count": 16
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -36.0
+        },
+        {
+          "name": "历史",
+          "total_count": 40,
+          "category_count": 10,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "动漫衍生",
+            "传统玄幻",
+            "东方仙侠",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 19
+            },
+            {
+              "date": "2026-06-19",
+              "count": 21
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 10.5
+        },
+        {
+          "name": "直播",
+          "total_count": 38,
+          "category_count": 11,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "悬疑脑洞",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 27
+            },
+            {
+              "date": "2026-06-19",
+              "count": 11
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -59.3
+        },
+        {
+          "name": "种田",
+          "total_count": 31,
+          "category_count": 6,
+          "categories": [
+            "历史古代",
+            "西方奇幻",
+            "都市修真",
+            "都市种田",
+            "东方仙侠",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 14
+            },
+            {
+              "date": "2026-06-19",
+              "count": 17
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 21.4
+        },
+        {
+          "name": "神医",
+          "total_count": 31,
+          "category_count": 5,
+          "categories": [
+            "都市脑洞",
+            "都市高武",
+            "都市修真",
+            "都市种田",
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 16
+            },
+            {
+              "date": "2026-06-19",
+              "count": 15
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": -6.2
+        },
+        {
+          "name": "总裁",
+          "total_count": 30,
+          "category_count": 5,
+          "categories": [
+            "抗战谍战",
+            "都市日常",
+            "科幻末世",
+            "都市修真",
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 15
+            },
+            {
+              "date": "2026-06-19",
+              "count": 15
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "高武",
+          "total_count": 29,
+          "category_count": 4,
+          "categories": [
+            "传统玄幻",
+            "游戏体育",
+            "都市高武",
+            "玄幻脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 16
+            },
+            {
+              "date": "2026-06-19",
+              "count": 13
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -18.8
+        },
+        {
+          "name": "豪门",
+          "total_count": 27,
+          "category_count": 5,
+          "categories": [
+            "动漫衍生",
+            "抗战谍战",
+            "战神赘婿",
+            "游戏体育",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 15
+            },
+            {
+              "date": "2026-06-19",
+              "count": 12
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "副本",
+          "total_count": 27,
+          "category_count": 7,
+          "categories": [
+            "都市高武",
+            "悬疑灵异",
+            "悬疑脑洞",
+            "动漫衍生",
+            "传统玄幻",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 15
+            },
+            {
+              "date": "2026-06-19",
+              "count": 12
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "战神",
+          "total_count": 26,
+          "category_count": 4,
+          "categories": [
+            "抗战谍战",
+            "战神赘婿",
+            "悬疑脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 14
+            },
+            {
+              "date": "2026-06-19",
+              "count": 12
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -14.3
+        },
+        {
+          "name": "玄幻",
+          "total_count": 26,
+          "category_count": 5,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "玄幻脑洞",
+            "战神赘婿",
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 16
+            },
+            {
+              "date": "2026-06-19",
+              "count": 10
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -37.5
+        },
+        {
+          "name": "末世",
+          "total_count": 24,
+          "category_count": 4,
+          "categories": [
+            "科幻末世",
+            "游戏体育",
+            "悬疑灵异",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 13
+            },
+            {
+              "date": "2026-06-19",
+              "count": 11
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -15.4
+        },
+        {
+          "name": "赘婿",
+          "total_count": 22,
+          "category_count": 4,
+          "categories": [
+            "战神赘婿",
+            "男频衍生",
+            "都市高武",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 11
+            },
+            {
+              "date": "2026-06-19",
+              "count": 11
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "异能",
+          "total_count": 18,
+          "category_count": 6,
+          "categories": [
+            "科幻末世",
+            "历史古代",
+            "都市高武",
+            "都市修真",
+            "动漫衍生",
+            "男频衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 10
+            },
+            {
+              "date": "2026-06-19",
+              "count": 8
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "反派",
+          "total_count": 18,
+          "category_count": 9,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市高武",
+            "西方奇幻",
+            "悬疑脑洞",
+            "玄幻脑洞",
+            "战神赘婿",
+            "传统玄幻",
+            "男频衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 10
+            },
+            {
+              "date": "2026-06-19",
+              "count": 8
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "逆袭",
+          "total_count": 16,
+          "category_count": 8,
+          "categories": [
+            "历史古代",
+            "玄幻脑洞",
+            "都市修真",
+            "都市种田",
+            "战神赘婿",
+            "传统玄幻",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 8
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "争霸",
+          "total_count": 16,
+          "category_count": 7,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "历史古代",
+            "玄幻脑洞",
+            "传统玄幻",
+            "东方仙侠",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 9
+            },
+            {
+              "date": "2026-06-19",
+              "count": 7
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -22.2
+        },
+        {
+          "name": "三国",
+          "total_count": 14,
+          "category_count": 1,
+          "categories": [
+            "历史古代"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 7
+            },
+            {
+              "date": "2026-06-19",
+              "count": 7
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "国运",
+          "total_count": 13,
+          "category_count": 4,
+          "categories": [
+            "动漫衍生",
+            "都市高武",
+            "悬疑脑洞",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 5
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -37.5
+        },
+        {
+          "name": "兵王",
+          "total_count": 13,
+          "category_count": 1,
+          "categories": [
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 7
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 16.7
+        },
+        {
+          "name": "架空",
+          "total_count": 13,
+          "category_count": 6,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "悬疑脑洞",
+            "传统玄幻",
+            "男频衍生",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 5
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -37.5
+        },
+        {
+          "name": "抗战",
+          "total_count": 13,
+          "category_count": 1,
+          "categories": [
+            "抗战谍战"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 13
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "无限流",
+          "total_count": 12,
+          "category_count": 1,
+          "categories": [
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 6
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "强制爱",
+          "total_count": 12,
+          "category_count": 5,
+          "categories": [
+            "都市日常",
+            "西方奇幻",
+            "都市高武",
+            "都市种田",
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 6
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "民国",
+          "total_count": 12,
+          "category_count": 3,
+          "categories": [
+            "抗战谍战",
+            "都市修真",
+            "悬疑灵异"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 11
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -90.9
+        },
+        {
+          "name": "天灾",
+          "total_count": 11,
+          "category_count": 6,
+          "categories": [
+            "科幻末世",
+            "都市高武",
+            "玄幻脑洞",
+            "动漫衍生",
+            "传统玄幻",
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 7
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -42.9
+        },
+        {
+          "name": "娱乐圈",
+          "total_count": 11,
+          "category_count": 5,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 7
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -42.9
+        },
+        {
+          "name": "同人",
+          "total_count": 11,
+          "category_count": 5,
+          "categories": [
+            "动漫衍生",
+            "传统玄幻",
+            "男频衍生",
+            "悬疑脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -62.5
+        },
+        {
+          "name": "悬疑",
+          "total_count": 9,
+          "category_count": 3,
+          "categories": [
+            "悬疑灵异",
+            "悬疑脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 5
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "基建",
+          "total_count": 9,
+          "category_count": 5,
+          "categories": [
+            "科幻末世",
+            "游戏体育",
+            "男频衍生",
+            "都市种田",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "龙王",
+          "total_count": 9,
+          "category_count": 5,
+          "categories": [
+            "战神赘婿",
+            "游戏体育",
+            "男频衍生",
+            "都市高武",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "动漫",
+          "total_count": 8,
+          "category_count": 4,
+          "categories": [
+            "动漫衍生",
+            "传统玄幻",
+            "都市高武",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 5
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -40.0
+        },
+        {
+          "name": "团宠",
+          "total_count": 7,
+          "category_count": 4,
+          "categories": [
+            "都市日常",
+            "传统玄幻",
+            "游戏体育",
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -25.0
+        },
+        {
+          "name": "校园",
+          "total_count": 7,
+          "category_count": 3,
+          "categories": [
+            "都市日常",
+            "游戏体育",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 33.3
+        },
+        {
+          "name": "阵法",
+          "total_count": 7,
+          "category_count": 3,
+          "categories": [
+            "传统玄幻",
+            "东方仙侠",
+            "玄幻脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -25.0
+        },
+        {
+          "name": "废土",
+          "total_count": 6,
+          "category_count": 1,
+          "categories": [
+            "科幻末世"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "炮灰",
+          "total_count": 6,
+          "category_count": 3,
+          "categories": [
+            "动漫衍生",
+            "历史古代",
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 5
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -80.0
+        },
+        {
+          "name": "无CP",
+          "total_count": 6,
+          "category_count": 3,
+          "categories": [
+            "都市脑洞",
+            "都市高武",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "修真",
+          "total_count": 6,
+          "category_count": 2,
+          "categories": [
+            "玄幻脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "电竞",
+          "total_count": 6,
+          "category_count": 2,
+          "categories": [
+            "都市种田",
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "综艺",
+          "total_count": 5,
+          "category_count": 2,
+          "categories": [
+            "悬疑脑洞",
+            "都市脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -75.0
+        },
+        {
+          "name": "幼崽",
+          "total_count": 5,
+          "category_count": 3,
+          "categories": [
+            "动漫衍生",
+            "科幻末世",
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -33.3
+        },
+        {
+          "name": "权臣",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "游戏体育",
+            "历史古代"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "先婚后爱",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "战神赘婿",
+            "都市脑洞",
+            "都市日常"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "暗恋",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "都市日常",
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "青梅竹马",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "都市种田",
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "仙侠",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "抗战谍战",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "剑道",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "动漫衍生",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "丹药",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "男频衍生",
+            "传统玄幻",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "炼器",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "传统玄幻",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "明朝",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "悬疑脑洞",
+            "历史古代"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "机甲",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "衍生",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "历史脑洞",
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "远古",
+          "total_count": 3,
+          "category_count": 1,
+          "categories": [
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "星际",
+          "total_count": 3,
+          "category_count": 2,
+          "categories": [
+            "都市脑洞",
+            "科幻末世"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "囤货",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "玄学",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "穿书",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "和离",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "经商",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "都市种田"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "追妻",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "甜宠",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "谍战",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "抗战谍战"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "体育",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "快穿",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "动漫衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "美食",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "都市脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "谋略",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 0
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 0
+        },
+        {
+          "name": "科幻",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "抗战谍战"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        }
+      ],
+      "top_combinations": [
+        {
+          "themes": [
+            "穿越",
+            "系统"
+          ],
+          "co_count": 57,
+          "categories": [
+            "都市脑洞",
+            "西方奇幻",
+            "游戏体育",
+            "都市日常",
+            "都市修真"
+          ]
+        },
+        {
+          "themes": [
+            "系统",
+            "重生"
+          ],
+          "co_count": 19,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "历史古代"
+          ]
+        },
+        {
+          "themes": [
+            "历史",
+            "穿越"
+          ],
+          "co_count": 12,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真"
+          ]
+        },
+        {
+          "themes": [
+            "历史",
+            "系统"
+          ],
+          "co_count": 12,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真"
+          ]
+        },
+        {
+          "themes": [
+            "游戏",
+            "穿越"
+          ],
+          "co_count": 11,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "西方奇幻"
+          ]
+        },
+        {
+          "themes": [
+            "升级",
+            "穿越"
+          ],
+          "co_count": 11,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "都市高武",
+            "悬疑脑洞",
+            "传统玄幻"
+          ]
+        },
+        {
+          "themes": [
+            "升级",
+            "系统"
+          ],
+          "co_count": 10,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "都市高武",
+            "悬疑脑洞",
+            "传统玄幻"
+          ]
+        },
+        {
+          "themes": [
+            "修仙",
+            "穿越"
+          ],
+          "co_count": 9,
+          "categories": [
+            "科幻末世",
+            "西方奇幻",
+            "玄幻脑洞",
+            "都市修真",
+            "传统玄幻"
+          ]
+        },
+        {
+          "themes": [
+            "种田",
+            "穿越"
+          ],
+          "co_count": 8,
+          "categories": [
+            "历史古代",
+            "西方奇幻",
+            "都市修真",
+            "都市种田",
+            "东方仙侠"
+          ]
+        },
+        {
+          "themes": [
+            "系统",
+            "都市"
+          ],
+          "co_count": 8,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "悬疑灵异",
+            "都市高武"
+          ]
+        }
+      ]
+    },
+    "14": {
+      "period": "近 14 日",
+      "themes": [
+        {
+          "name": "穿越",
+          "total_count": 383,
+          "category_count": 19,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "西方奇幻",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "男频衍生",
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 243
+            },
+            {
+              "date": "2026-06-19",
+              "count": 140
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -42.4
+        },
+        {
+          "name": "系统",
+          "total_count": 312,
+          "category_count": 19,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "西方奇幻",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "男频衍生",
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 202
+            },
+            {
+              "date": "2026-06-19",
+              "count": 110
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -45.5
+        },
+        {
+          "name": "重生",
+          "total_count": 103,
+          "category_count": 15,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "都市修真",
+            "都市种田",
+            "战神赘婿",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 59
+            },
+            {
+              "date": "2026-06-19",
+              "count": 44
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -25.4
+        },
+        {
+          "name": "游戏",
+          "total_count": 75,
+          "category_count": 15,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "西方奇幻",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "都市日常",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 50
+            },
+            {
+              "date": "2026-06-19",
+              "count": 25
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "都市",
+          "total_count": 60,
+          "category_count": 10,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "都市高武",
+            "悬疑灵异",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 33
+            },
+            {
+              "date": "2026-06-19",
+              "count": 27
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -18.2
+        },
+        {
+          "name": "修仙",
+          "total_count": 52,
+          "category_count": 9,
+          "categories": [
+            "科幻末世",
+            "西方奇幻",
+            "玄幻脑洞",
+            "都市修真",
+            "传统玄幻",
+            "东方仙侠",
+            "游戏体育",
+            "男频衍生",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 29
+            },
+            {
+              "date": "2026-06-19",
+              "count": 23
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.7
+        },
+        {
+          "name": "空间",
+          "total_count": 45,
+          "category_count": 13,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "西方奇幻",
+            "游戏体育",
+            "东方仙侠",
+            "男频衍生",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 26
+            },
+            {
+              "date": "2026-06-19",
+              "count": 19
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -26.9
+        },
+        {
+          "name": "升级",
+          "total_count": 45,
+          "category_count": 9,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "都市高武",
+            "悬疑脑洞",
+            "传统玄幻",
+            "东方仙侠",
+            "游戏体育",
+            "男频衍生",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 25
+            },
+            {
+              "date": "2026-06-19",
+              "count": 20
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "年代",
+          "total_count": 41,
+          "category_count": 8,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "都市日常",
+            "都市高武",
+            "悬疑灵异",
+            "都市修真",
+            "都市种田",
+            "男频衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 25
+            },
+            {
+              "date": "2026-06-19",
+              "count": 16
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -36.0
+        },
+        {
+          "name": "历史",
+          "total_count": 40,
+          "category_count": 10,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "动漫衍生",
+            "传统玄幻",
+            "东方仙侠",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 19
+            },
+            {
+              "date": "2026-06-19",
+              "count": 21
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 10.5
+        },
+        {
+          "name": "直播",
+          "total_count": 38,
+          "category_count": 11,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "悬疑脑洞",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 27
+            },
+            {
+              "date": "2026-06-19",
+              "count": 11
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -59.3
+        },
+        {
+          "name": "种田",
+          "total_count": 31,
+          "category_count": 6,
+          "categories": [
+            "历史古代",
+            "西方奇幻",
+            "都市修真",
+            "都市种田",
+            "东方仙侠",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 14
+            },
+            {
+              "date": "2026-06-19",
+              "count": 17
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 21.4
+        },
+        {
+          "name": "神医",
+          "total_count": 31,
+          "category_count": 5,
+          "categories": [
+            "都市脑洞",
+            "都市高武",
+            "都市修真",
+            "都市种田",
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 16
+            },
+            {
+              "date": "2026-06-19",
+              "count": 15
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": -6.2
+        },
+        {
+          "name": "总裁",
+          "total_count": 30,
+          "category_count": 5,
+          "categories": [
+            "抗战谍战",
+            "都市日常",
+            "科幻末世",
+            "都市修真",
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 15
+            },
+            {
+              "date": "2026-06-19",
+              "count": 15
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "高武",
+          "total_count": 29,
+          "category_count": 4,
+          "categories": [
+            "传统玄幻",
+            "游戏体育",
+            "都市高武",
+            "玄幻脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 16
+            },
+            {
+              "date": "2026-06-19",
+              "count": 13
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -18.8
+        },
+        {
+          "name": "豪门",
+          "total_count": 27,
+          "category_count": 5,
+          "categories": [
+            "动漫衍生",
+            "抗战谍战",
+            "战神赘婿",
+            "游戏体育",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 15
+            },
+            {
+              "date": "2026-06-19",
+              "count": 12
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "副本",
+          "total_count": 27,
+          "category_count": 7,
+          "categories": [
+            "都市高武",
+            "悬疑灵异",
+            "悬疑脑洞",
+            "动漫衍生",
+            "传统玄幻",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 15
+            },
+            {
+              "date": "2026-06-19",
+              "count": 12
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "战神",
+          "total_count": 26,
+          "category_count": 4,
+          "categories": [
+            "抗战谍战",
+            "战神赘婿",
+            "悬疑脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 14
+            },
+            {
+              "date": "2026-06-19",
+              "count": 12
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -14.3
+        },
+        {
+          "name": "玄幻",
+          "total_count": 26,
+          "category_count": 5,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "玄幻脑洞",
+            "战神赘婿",
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 16
+            },
+            {
+              "date": "2026-06-19",
+              "count": 10
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -37.5
+        },
+        {
+          "name": "末世",
+          "total_count": 24,
+          "category_count": 4,
+          "categories": [
+            "科幻末世",
+            "游戏体育",
+            "悬疑灵异",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 13
+            },
+            {
+              "date": "2026-06-19",
+              "count": 11
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -15.4
+        },
+        {
+          "name": "赘婿",
+          "total_count": 22,
+          "category_count": 4,
+          "categories": [
+            "战神赘婿",
+            "男频衍生",
+            "都市高武",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 11
+            },
+            {
+              "date": "2026-06-19",
+              "count": 11
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "异能",
+          "total_count": 18,
+          "category_count": 6,
+          "categories": [
+            "科幻末世",
+            "历史古代",
+            "都市高武",
+            "都市修真",
+            "动漫衍生",
+            "男频衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 10
+            },
+            {
+              "date": "2026-06-19",
+              "count": 8
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "反派",
+          "total_count": 18,
+          "category_count": 9,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市高武",
+            "西方奇幻",
+            "悬疑脑洞",
+            "玄幻脑洞",
+            "战神赘婿",
+            "传统玄幻",
+            "男频衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 10
+            },
+            {
+              "date": "2026-06-19",
+              "count": 8
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "逆袭",
+          "total_count": 16,
+          "category_count": 8,
+          "categories": [
+            "历史古代",
+            "玄幻脑洞",
+            "都市修真",
+            "都市种田",
+            "战神赘婿",
+            "传统玄幻",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 8
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "争霸",
+          "total_count": 16,
+          "category_count": 7,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "历史古代",
+            "玄幻脑洞",
+            "传统玄幻",
+            "东方仙侠",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 9
+            },
+            {
+              "date": "2026-06-19",
+              "count": 7
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -22.2
+        },
+        {
+          "name": "三国",
+          "total_count": 14,
+          "category_count": 1,
+          "categories": [
+            "历史古代"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 7
+            },
+            {
+              "date": "2026-06-19",
+              "count": 7
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "国运",
+          "total_count": 13,
+          "category_count": 4,
+          "categories": [
+            "动漫衍生",
+            "都市高武",
+            "悬疑脑洞",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 5
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -37.5
+        },
+        {
+          "name": "兵王",
+          "total_count": 13,
+          "category_count": 1,
+          "categories": [
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 7
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 16.7
+        },
+        {
+          "name": "架空",
+          "total_count": 13,
+          "category_count": 6,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "悬疑脑洞",
+            "传统玄幻",
+            "男频衍生",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 5
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -37.5
+        },
+        {
+          "name": "抗战",
+          "total_count": 13,
+          "category_count": 1,
+          "categories": [
+            "抗战谍战"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 13
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "无限流",
+          "total_count": 12,
+          "category_count": 1,
+          "categories": [
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 6
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "强制爱",
+          "total_count": 12,
+          "category_count": 5,
+          "categories": [
+            "都市日常",
+            "西方奇幻",
+            "都市高武",
+            "都市种田",
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 6
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "民国",
+          "total_count": 12,
+          "category_count": 3,
+          "categories": [
+            "抗战谍战",
+            "都市修真",
+            "悬疑灵异"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 11
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -90.9
+        },
+        {
+          "name": "天灾",
+          "total_count": 11,
+          "category_count": 6,
+          "categories": [
+            "科幻末世",
+            "都市高武",
+            "玄幻脑洞",
+            "动漫衍生",
+            "传统玄幻",
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 7
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -42.9
+        },
+        {
+          "name": "娱乐圈",
+          "total_count": 11,
+          "category_count": 5,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 7
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -42.9
+        },
+        {
+          "name": "同人",
+          "total_count": 11,
+          "category_count": 5,
+          "categories": [
+            "动漫衍生",
+            "传统玄幻",
+            "男频衍生",
+            "悬疑脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -62.5
+        },
+        {
+          "name": "悬疑",
+          "total_count": 9,
+          "category_count": 3,
+          "categories": [
+            "悬疑灵异",
+            "悬疑脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 5
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "基建",
+          "total_count": 9,
+          "category_count": 5,
+          "categories": [
+            "科幻末世",
+            "游戏体育",
+            "男频衍生",
+            "都市种田",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "龙王",
+          "total_count": 9,
+          "category_count": 5,
+          "categories": [
+            "战神赘婿",
+            "游戏体育",
+            "男频衍生",
+            "都市高武",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "动漫",
+          "total_count": 8,
+          "category_count": 4,
+          "categories": [
+            "动漫衍生",
+            "传统玄幻",
+            "都市高武",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 5
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -40.0
+        },
+        {
+          "name": "团宠",
+          "total_count": 7,
+          "category_count": 4,
+          "categories": [
+            "都市日常",
+            "传统玄幻",
+            "游戏体育",
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -25.0
+        },
+        {
+          "name": "校园",
+          "total_count": 7,
+          "category_count": 3,
+          "categories": [
+            "都市日常",
+            "游戏体育",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 33.3
+        },
+        {
+          "name": "阵法",
+          "total_count": 7,
+          "category_count": 3,
+          "categories": [
+            "传统玄幻",
+            "东方仙侠",
+            "玄幻脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -25.0
+        },
+        {
+          "name": "废土",
+          "total_count": 6,
+          "category_count": 1,
+          "categories": [
+            "科幻末世"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "炮灰",
+          "total_count": 6,
+          "category_count": 3,
+          "categories": [
+            "动漫衍生",
+            "历史古代",
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 5
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -80.0
+        },
+        {
+          "name": "无CP",
+          "total_count": 6,
+          "category_count": 3,
+          "categories": [
+            "都市脑洞",
+            "都市高武",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "修真",
+          "total_count": 6,
+          "category_count": 2,
+          "categories": [
+            "玄幻脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "电竞",
+          "total_count": 6,
+          "category_count": 2,
+          "categories": [
+            "都市种田",
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "综艺",
+          "total_count": 5,
+          "category_count": 2,
+          "categories": [
+            "悬疑脑洞",
+            "都市脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -75.0
+        },
+        {
+          "name": "幼崽",
+          "total_count": 5,
+          "category_count": 3,
+          "categories": [
+            "动漫衍生",
+            "科幻末世",
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -33.3
+        },
+        {
+          "name": "权臣",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "游戏体育",
+            "历史古代"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "先婚后爱",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "战神赘婿",
+            "都市脑洞",
+            "都市日常"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "暗恋",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "都市日常",
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "青梅竹马",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "都市种田",
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "仙侠",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "抗战谍战",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "剑道",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "动漫衍生",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "丹药",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "男频衍生",
+            "传统玄幻",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "炼器",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "传统玄幻",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "明朝",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "悬疑脑洞",
+            "历史古代"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "机甲",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "衍生",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "历史脑洞",
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "远古",
+          "total_count": 3,
+          "category_count": 1,
+          "categories": [
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "星际",
+          "total_count": 3,
+          "category_count": 2,
+          "categories": [
+            "都市脑洞",
+            "科幻末世"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "囤货",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "玄学",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "穿书",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "和离",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "经商",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "都市种田"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "追妻",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "甜宠",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "谍战",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "抗战谍战"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "体育",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "快穿",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "动漫衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "美食",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "都市脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "谋略",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 0
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 0
+        },
+        {
+          "name": "科幻",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "抗战谍战"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        }
+      ],
+      "top_combinations": [
+        {
+          "themes": [
+            "穿越",
+            "系统"
+          ],
+          "co_count": 57,
+          "categories": [
+            "都市脑洞",
+            "西方奇幻",
+            "游戏体育",
+            "都市日常",
+            "都市修真"
+          ]
+        },
+        {
+          "themes": [
+            "系统",
+            "重生"
+          ],
+          "co_count": 19,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "历史古代"
+          ]
+        },
+        {
+          "themes": [
+            "历史",
+            "穿越"
+          ],
+          "co_count": 12,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真"
+          ]
+        },
+        {
+          "themes": [
+            "历史",
+            "系统"
+          ],
+          "co_count": 12,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真"
+          ]
+        },
+        {
+          "themes": [
+            "游戏",
+            "穿越"
+          ],
+          "co_count": 11,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "西方奇幻"
+          ]
+        },
+        {
+          "themes": [
+            "升级",
+            "穿越"
+          ],
+          "co_count": 11,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "都市高武",
+            "悬疑脑洞",
+            "传统玄幻"
+          ]
+        },
+        {
+          "themes": [
+            "升级",
+            "系统"
+          ],
+          "co_count": 10,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "都市高武",
+            "悬疑脑洞",
+            "传统玄幻"
+          ]
+        },
+        {
+          "themes": [
+            "修仙",
+            "穿越"
+          ],
+          "co_count": 9,
+          "categories": [
+            "科幻末世",
+            "西方奇幻",
+            "玄幻脑洞",
+            "都市修真",
+            "传统玄幻"
+          ]
+        },
+        {
+          "themes": [
+            "种田",
+            "穿越"
+          ],
+          "co_count": 8,
+          "categories": [
+            "历史古代",
+            "西方奇幻",
+            "都市修真",
+            "都市种田",
+            "东方仙侠"
+          ]
+        },
+        {
+          "themes": [
+            "系统",
+            "都市"
+          ],
+          "co_count": 8,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "悬疑灵异",
+            "都市高武"
+          ]
+        }
+      ]
+    },
+    "30": {
+      "period": "近 30 日",
+      "themes": [
+        {
+          "name": "穿越",
+          "total_count": 383,
+          "category_count": 19,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "西方奇幻",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "男频衍生",
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 243
+            },
+            {
+              "date": "2026-06-19",
+              "count": 140
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -42.4
+        },
+        {
+          "name": "系统",
+          "total_count": 312,
+          "category_count": 19,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "西方奇幻",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "男频衍生",
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 202
+            },
+            {
+              "date": "2026-06-19",
+              "count": 110
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -45.5
+        },
+        {
+          "name": "重生",
+          "total_count": 103,
+          "category_count": 15,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "都市修真",
+            "都市种田",
+            "战神赘婿",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 59
+            },
+            {
+              "date": "2026-06-19",
+              "count": 44
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -25.4
+        },
+        {
+          "name": "游戏",
+          "total_count": 75,
+          "category_count": 15,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "西方奇幻",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "都市日常",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 50
+            },
+            {
+              "date": "2026-06-19",
+              "count": 25
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "都市",
+          "total_count": 60,
+          "category_count": 10,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "都市高武",
+            "悬疑灵异",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 33
+            },
+            {
+              "date": "2026-06-19",
+              "count": 27
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -18.2
+        },
+        {
+          "name": "修仙",
+          "total_count": 52,
+          "category_count": 9,
+          "categories": [
+            "科幻末世",
+            "西方奇幻",
+            "玄幻脑洞",
+            "都市修真",
+            "传统玄幻",
+            "东方仙侠",
+            "游戏体育",
+            "男频衍生",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 29
+            },
+            {
+              "date": "2026-06-19",
+              "count": 23
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.7
+        },
+        {
+          "name": "空间",
+          "total_count": 45,
+          "category_count": 13,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "西方奇幻",
+            "游戏体育",
+            "东方仙侠",
+            "男频衍生",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 26
+            },
+            {
+              "date": "2026-06-19",
+              "count": 19
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -26.9
+        },
+        {
+          "name": "升级",
+          "total_count": 45,
+          "category_count": 9,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "都市高武",
+            "悬疑脑洞",
+            "传统玄幻",
+            "东方仙侠",
+            "游戏体育",
+            "男频衍生",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 25
+            },
+            {
+              "date": "2026-06-19",
+              "count": 20
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "年代",
+          "total_count": 41,
+          "category_count": 8,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "都市日常",
+            "都市高武",
+            "悬疑灵异",
+            "都市修真",
+            "都市种田",
+            "男频衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 25
+            },
+            {
+              "date": "2026-06-19",
+              "count": 16
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -36.0
+        },
+        {
+          "name": "历史",
+          "total_count": 40,
+          "category_count": 10,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "动漫衍生",
+            "传统玄幻",
+            "东方仙侠",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 19
+            },
+            {
+              "date": "2026-06-19",
+              "count": 21
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 10.5
+        },
+        {
+          "name": "直播",
+          "total_count": 38,
+          "category_count": 11,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "悬疑脑洞",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 27
+            },
+            {
+              "date": "2026-06-19",
+              "count": 11
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -59.3
+        },
+        {
+          "name": "种田",
+          "total_count": 31,
+          "category_count": 6,
+          "categories": [
+            "历史古代",
+            "西方奇幻",
+            "都市修真",
+            "都市种田",
+            "东方仙侠",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 14
+            },
+            {
+              "date": "2026-06-19",
+              "count": 17
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 21.4
+        },
+        {
+          "name": "神医",
+          "total_count": 31,
+          "category_count": 5,
+          "categories": [
+            "都市脑洞",
+            "都市高武",
+            "都市修真",
+            "都市种田",
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 16
+            },
+            {
+              "date": "2026-06-19",
+              "count": 15
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": -6.2
+        },
+        {
+          "name": "总裁",
+          "total_count": 30,
+          "category_count": 5,
+          "categories": [
+            "抗战谍战",
+            "都市日常",
+            "科幻末世",
+            "都市修真",
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 15
+            },
+            {
+              "date": "2026-06-19",
+              "count": 15
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "高武",
+          "total_count": 29,
+          "category_count": 4,
+          "categories": [
+            "传统玄幻",
+            "游戏体育",
+            "都市高武",
+            "玄幻脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 16
+            },
+            {
+              "date": "2026-06-19",
+              "count": 13
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -18.8
+        },
+        {
+          "name": "豪门",
+          "total_count": 27,
+          "category_count": 5,
+          "categories": [
+            "动漫衍生",
+            "抗战谍战",
+            "战神赘婿",
+            "游戏体育",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 15
+            },
+            {
+              "date": "2026-06-19",
+              "count": 12
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "副本",
+          "total_count": 27,
+          "category_count": 7,
+          "categories": [
+            "都市高武",
+            "悬疑灵异",
+            "悬疑脑洞",
+            "动漫衍生",
+            "传统玄幻",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 15
+            },
+            {
+              "date": "2026-06-19",
+              "count": 12
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "战神",
+          "total_count": 26,
+          "category_count": 4,
+          "categories": [
+            "抗战谍战",
+            "战神赘婿",
+            "悬疑脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 14
+            },
+            {
+              "date": "2026-06-19",
+              "count": 12
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -14.3
+        },
+        {
+          "name": "玄幻",
+          "total_count": 26,
+          "category_count": 5,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "玄幻脑洞",
+            "战神赘婿",
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 16
+            },
+            {
+              "date": "2026-06-19",
+              "count": 10
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -37.5
+        },
+        {
+          "name": "末世",
+          "total_count": 24,
+          "category_count": 4,
+          "categories": [
+            "科幻末世",
+            "游戏体育",
+            "悬疑灵异",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 13
+            },
+            {
+              "date": "2026-06-19",
+              "count": 11
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -15.4
+        },
+        {
+          "name": "赘婿",
+          "total_count": 22,
+          "category_count": 4,
+          "categories": [
+            "战神赘婿",
+            "男频衍生",
+            "都市高武",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 11
+            },
+            {
+              "date": "2026-06-19",
+              "count": 11
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "异能",
+          "total_count": 18,
+          "category_count": 6,
+          "categories": [
+            "科幻末世",
+            "历史古代",
+            "都市高武",
+            "都市修真",
+            "动漫衍生",
+            "男频衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 10
+            },
+            {
+              "date": "2026-06-19",
+              "count": 8
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "反派",
+          "total_count": 18,
+          "category_count": 9,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市高武",
+            "西方奇幻",
+            "悬疑脑洞",
+            "玄幻脑洞",
+            "战神赘婿",
+            "传统玄幻",
+            "男频衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 10
+            },
+            {
+              "date": "2026-06-19",
+              "count": 8
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "逆袭",
+          "total_count": 16,
+          "category_count": 8,
+          "categories": [
+            "历史古代",
+            "玄幻脑洞",
+            "都市修真",
+            "都市种田",
+            "战神赘婿",
+            "传统玄幻",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 8
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "争霸",
+          "total_count": 16,
+          "category_count": 7,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "历史古代",
+            "玄幻脑洞",
+            "传统玄幻",
+            "东方仙侠",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 9
+            },
+            {
+              "date": "2026-06-19",
+              "count": 7
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -22.2
+        },
+        {
+          "name": "三国",
+          "total_count": 14,
+          "category_count": 1,
+          "categories": [
+            "历史古代"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 7
+            },
+            {
+              "date": "2026-06-19",
+              "count": 7
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "国运",
+          "total_count": 13,
+          "category_count": 4,
+          "categories": [
+            "动漫衍生",
+            "都市高武",
+            "悬疑脑洞",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 5
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -37.5
+        },
+        {
+          "name": "兵王",
+          "total_count": 13,
+          "category_count": 1,
+          "categories": [
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 7
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 16.7
+        },
+        {
+          "name": "架空",
+          "total_count": 13,
+          "category_count": 6,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "悬疑脑洞",
+            "传统玄幻",
+            "男频衍生",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 5
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -37.5
+        },
+        {
+          "name": "抗战",
+          "total_count": 13,
+          "category_count": 1,
+          "categories": [
+            "抗战谍战"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 13
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "无限流",
+          "total_count": 12,
+          "category_count": 1,
+          "categories": [
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 6
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "强制爱",
+          "total_count": 12,
+          "category_count": 5,
+          "categories": [
+            "都市日常",
+            "西方奇幻",
+            "都市高武",
+            "都市种田",
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 6
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "民国",
+          "total_count": 12,
+          "category_count": 3,
+          "categories": [
+            "抗战谍战",
+            "都市修真",
+            "悬疑灵异"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 11
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -90.9
+        },
+        {
+          "name": "天灾",
+          "total_count": 11,
+          "category_count": 6,
+          "categories": [
+            "科幻末世",
+            "都市高武",
+            "玄幻脑洞",
+            "动漫衍生",
+            "传统玄幻",
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 7
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -42.9
+        },
+        {
+          "name": "娱乐圈",
+          "total_count": 11,
+          "category_count": 5,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 7
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -42.9
+        },
+        {
+          "name": "同人",
+          "total_count": 11,
+          "category_count": 5,
+          "categories": [
+            "动漫衍生",
+            "传统玄幻",
+            "男频衍生",
+            "悬疑脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -62.5
+        },
+        {
+          "name": "悬疑",
+          "total_count": 9,
+          "category_count": 3,
+          "categories": [
+            "悬疑灵异",
+            "悬疑脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 5
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "基建",
+          "total_count": 9,
+          "category_count": 5,
+          "categories": [
+            "科幻末世",
+            "游戏体育",
+            "男频衍生",
+            "都市种田",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "龙王",
+          "total_count": 9,
+          "category_count": 5,
+          "categories": [
+            "战神赘婿",
+            "游戏体育",
+            "男频衍生",
+            "都市高武",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "动漫",
+          "total_count": 8,
+          "category_count": 4,
+          "categories": [
+            "动漫衍生",
+            "传统玄幻",
+            "都市高武",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 5
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -40.0
+        },
+        {
+          "name": "团宠",
+          "total_count": 7,
+          "category_count": 4,
+          "categories": [
+            "都市日常",
+            "传统玄幻",
+            "游戏体育",
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -25.0
+        },
+        {
+          "name": "校园",
+          "total_count": 7,
+          "category_count": 3,
+          "categories": [
+            "都市日常",
+            "游戏体育",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 33.3
+        },
+        {
+          "name": "阵法",
+          "total_count": 7,
+          "category_count": 3,
+          "categories": [
+            "传统玄幻",
+            "东方仙侠",
+            "玄幻脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -25.0
+        },
+        {
+          "name": "废土",
+          "total_count": 6,
+          "category_count": 1,
+          "categories": [
+            "科幻末世"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "炮灰",
+          "total_count": 6,
+          "category_count": 3,
+          "categories": [
+            "动漫衍生",
+            "历史古代",
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 5
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -80.0
+        },
+        {
+          "name": "无CP",
+          "total_count": 6,
+          "category_count": 3,
+          "categories": [
+            "都市脑洞",
+            "都市高武",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "修真",
+          "total_count": 6,
+          "category_count": 2,
+          "categories": [
+            "玄幻脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "电竞",
+          "total_count": 6,
+          "category_count": 2,
+          "categories": [
+            "都市种田",
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "综艺",
+          "total_count": 5,
+          "category_count": 2,
+          "categories": [
+            "悬疑脑洞",
+            "都市脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -75.0
+        },
+        {
+          "name": "幼崽",
+          "total_count": 5,
+          "category_count": 3,
+          "categories": [
+            "动漫衍生",
+            "科幻末世",
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -33.3
+        },
+        {
+          "name": "权臣",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "游戏体育",
+            "历史古代"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "先婚后爱",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "战神赘婿",
+            "都市脑洞",
+            "都市日常"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "暗恋",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "都市日常",
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "青梅竹马",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "都市种田",
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "仙侠",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "抗战谍战",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "剑道",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "动漫衍生",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "丹药",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "男频衍生",
+            "传统玄幻",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "炼器",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "传统玄幻",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "明朝",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "悬疑脑洞",
+            "历史古代"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "机甲",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "衍生",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "历史脑洞",
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "远古",
+          "total_count": 3,
+          "category_count": 1,
+          "categories": [
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "星际",
+          "total_count": 3,
+          "category_count": 2,
+          "categories": [
+            "都市脑洞",
+            "科幻末世"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "囤货",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "玄学",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "穿书",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "和离",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "经商",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "都市种田"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "追妻",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "甜宠",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "谍战",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "抗战谍战"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "体育",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "快穿",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "动漫衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "美食",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "都市脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "谋略",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 0
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 0
+        },
+        {
+          "name": "科幻",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "抗战谍战"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        }
+      ],
+      "top_combinations": [
+        {
+          "themes": [
+            "穿越",
+            "系统"
+          ],
+          "co_count": 57,
+          "categories": [
+            "都市脑洞",
+            "西方奇幻",
+            "游戏体育",
+            "都市日常",
+            "都市修真"
+          ]
+        },
+        {
+          "themes": [
+            "系统",
+            "重生"
+          ],
+          "co_count": 19,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "历史古代"
+          ]
+        },
+        {
+          "themes": [
+            "历史",
+            "穿越"
+          ],
+          "co_count": 12,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真"
+          ]
+        },
+        {
+          "themes": [
+            "历史",
+            "系统"
+          ],
+          "co_count": 12,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真"
+          ]
+        },
+        {
+          "themes": [
+            "游戏",
+            "穿越"
+          ],
+          "co_count": 11,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "西方奇幻"
+          ]
+        },
+        {
+          "themes": [
+            "升级",
+            "穿越"
+          ],
+          "co_count": 11,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "都市高武",
+            "悬疑脑洞",
+            "传统玄幻"
+          ]
+        },
+        {
+          "themes": [
+            "升级",
+            "系统"
+          ],
+          "co_count": 10,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "都市高武",
+            "悬疑脑洞",
+            "传统玄幻"
+          ]
+        },
+        {
+          "themes": [
+            "修仙",
+            "穿越"
+          ],
+          "co_count": 9,
+          "categories": [
+            "科幻末世",
+            "西方奇幻",
+            "玄幻脑洞",
+            "都市修真",
+            "传统玄幻"
+          ]
+        },
+        {
+          "themes": [
+            "种田",
+            "穿越"
+          ],
+          "co_count": 8,
+          "categories": [
+            "历史古代",
+            "西方奇幻",
+            "都市修真",
+            "都市种田",
+            "东方仙侠"
+          ]
+        },
+        {
+          "themes": [
+            "系统",
+            "都市"
+          ],
+          "co_count": 8,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "悬疑灵异",
+            "都市高武"
+          ]
+        }
+      ]
+    },
+    "all": {
+      "period": "全部样本",
+      "themes": [
+        {
+          "name": "穿越",
+          "total_count": 383,
+          "category_count": 19,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "西方奇幻",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "男频衍生",
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 243
+            },
+            {
+              "date": "2026-06-19",
+              "count": 140
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -42.4
+        },
+        {
+          "name": "系统",
+          "total_count": 312,
+          "category_count": 19,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "西方奇幻",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "男频衍生",
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 202
+            },
+            {
+              "date": "2026-06-19",
+              "count": 110
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -45.5
+        },
+        {
+          "name": "重生",
+          "total_count": 103,
+          "category_count": 15,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "都市修真",
+            "都市种田",
+            "战神赘婿",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 59
+            },
+            {
+              "date": "2026-06-19",
+              "count": 44
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -25.4
+        },
+        {
+          "name": "游戏",
+          "total_count": 75,
+          "category_count": 15,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "西方奇幻",
+            "玄幻脑洞",
+            "游戏体育",
+            "东方仙侠",
+            "都市日常",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 50
+            },
+            {
+              "date": "2026-06-19",
+              "count": 25
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "都市",
+          "total_count": 60,
+          "category_count": 10,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "都市高武",
+            "悬疑灵异",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 33
+            },
+            {
+              "date": "2026-06-19",
+              "count": 27
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -18.2
+        },
+        {
+          "name": "修仙",
+          "total_count": 52,
+          "category_count": 9,
+          "categories": [
+            "科幻末世",
+            "西方奇幻",
+            "玄幻脑洞",
+            "都市修真",
+            "传统玄幻",
+            "东方仙侠",
+            "游戏体育",
+            "男频衍生",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 29
+            },
+            {
+              "date": "2026-06-19",
+              "count": 23
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.7
+        },
+        {
+          "name": "空间",
+          "total_count": 45,
+          "category_count": 13,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "西方奇幻",
+            "游戏体育",
+            "东方仙侠",
+            "男频衍生",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田",
+            "动漫衍生",
+            "传统玄幻",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 26
+            },
+            {
+              "date": "2026-06-19",
+              "count": 19
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -26.9
+        },
+        {
+          "name": "升级",
+          "total_count": 45,
+          "category_count": 9,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "都市高武",
+            "悬疑脑洞",
+            "传统玄幻",
+            "东方仙侠",
+            "游戏体育",
+            "男频衍生",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 25
+            },
+            {
+              "date": "2026-06-19",
+              "count": 20
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "年代",
+          "total_count": 41,
+          "category_count": 8,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "都市日常",
+            "都市高武",
+            "悬疑灵异",
+            "都市修真",
+            "都市种田",
+            "男频衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 25
+            },
+            {
+              "date": "2026-06-19",
+              "count": 16
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -36.0
+        },
+        {
+          "name": "历史",
+          "total_count": 40,
+          "category_count": 10,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真",
+            "动漫衍生",
+            "传统玄幻",
+            "东方仙侠",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 19
+            },
+            {
+              "date": "2026-06-19",
+              "count": 21
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 10.5
+        },
+        {
+          "name": "直播",
+          "total_count": 38,
+          "category_count": 11,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "悬疑灵异",
+            "玄幻脑洞",
+            "悬疑脑洞",
+            "都市种田",
+            "动漫衍生",
+            "战神赘婿",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 27
+            },
+            {
+              "date": "2026-06-19",
+              "count": 11
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -59.3
+        },
+        {
+          "name": "种田",
+          "total_count": 31,
+          "category_count": 6,
+          "categories": [
+            "历史古代",
+            "西方奇幻",
+            "都市修真",
+            "都市种田",
+            "东方仙侠",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 14
+            },
+            {
+              "date": "2026-06-19",
+              "count": 17
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 21.4
+        },
+        {
+          "name": "神医",
+          "total_count": 31,
+          "category_count": 5,
+          "categories": [
+            "都市脑洞",
+            "都市高武",
+            "都市修真",
+            "都市种田",
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 16
+            },
+            {
+              "date": "2026-06-19",
+              "count": 15
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": -6.2
+        },
+        {
+          "name": "总裁",
+          "total_count": 30,
+          "category_count": 5,
+          "categories": [
+            "抗战谍战",
+            "都市日常",
+            "科幻末世",
+            "都市修真",
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 15
+            },
+            {
+              "date": "2026-06-19",
+              "count": 15
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "高武",
+          "total_count": 29,
+          "category_count": 4,
+          "categories": [
+            "传统玄幻",
+            "游戏体育",
+            "都市高武",
+            "玄幻脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 16
+            },
+            {
+              "date": "2026-06-19",
+              "count": 13
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -18.8
+        },
+        {
+          "name": "豪门",
+          "total_count": 27,
+          "category_count": 5,
+          "categories": [
+            "动漫衍生",
+            "抗战谍战",
+            "战神赘婿",
+            "游戏体育",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 15
+            },
+            {
+              "date": "2026-06-19",
+              "count": 12
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "副本",
+          "total_count": 27,
+          "category_count": 7,
+          "categories": [
+            "都市高武",
+            "悬疑灵异",
+            "悬疑脑洞",
+            "动漫衍生",
+            "传统玄幻",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 15
+            },
+            {
+              "date": "2026-06-19",
+              "count": 12
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "战神",
+          "total_count": 26,
+          "category_count": 4,
+          "categories": [
+            "抗战谍战",
+            "战神赘婿",
+            "悬疑脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 14
+            },
+            {
+              "date": "2026-06-19",
+              "count": 12
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -14.3
+        },
+        {
+          "name": "玄幻",
+          "total_count": 26,
+          "category_count": 5,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "玄幻脑洞",
+            "战神赘婿",
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 16
+            },
+            {
+              "date": "2026-06-19",
+              "count": 10
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -37.5
+        },
+        {
+          "name": "末世",
+          "total_count": 24,
+          "category_count": 4,
+          "categories": [
+            "科幻末世",
+            "游戏体育",
+            "悬疑灵异",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 13
+            },
+            {
+              "date": "2026-06-19",
+              "count": 11
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -15.4
+        },
+        {
+          "name": "赘婿",
+          "total_count": 22,
+          "category_count": 4,
+          "categories": [
+            "战神赘婿",
+            "男频衍生",
+            "都市高武",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 11
+            },
+            {
+              "date": "2026-06-19",
+              "count": 11
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "异能",
+          "total_count": 18,
+          "category_count": 6,
+          "categories": [
+            "科幻末世",
+            "历史古代",
+            "都市高武",
+            "都市修真",
+            "动漫衍生",
+            "男频衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 10
+            },
+            {
+              "date": "2026-06-19",
+              "count": 8
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "反派",
+          "total_count": 18,
+          "category_count": 9,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市高武",
+            "西方奇幻",
+            "悬疑脑洞",
+            "玄幻脑洞",
+            "战神赘婿",
+            "传统玄幻",
+            "男频衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 10
+            },
+            {
+              "date": "2026-06-19",
+              "count": 8
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "逆袭",
+          "total_count": 16,
+          "category_count": 8,
+          "categories": [
+            "历史古代",
+            "玄幻脑洞",
+            "都市修真",
+            "都市种田",
+            "战神赘婿",
+            "传统玄幻",
+            "游戏体育",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 8
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "争霸",
+          "total_count": 16,
+          "category_count": 7,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "历史古代",
+            "玄幻脑洞",
+            "传统玄幻",
+            "东方仙侠",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 9
+            },
+            {
+              "date": "2026-06-19",
+              "count": 7
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -22.2
+        },
+        {
+          "name": "三国",
+          "total_count": 14,
+          "category_count": 1,
+          "categories": [
+            "历史古代"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 7
+            },
+            {
+              "date": "2026-06-19",
+              "count": 7
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "国运",
+          "total_count": 13,
+          "category_count": 4,
+          "categories": [
+            "动漫衍生",
+            "都市高武",
+            "悬疑脑洞",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 5
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -37.5
+        },
+        {
+          "name": "兵王",
+          "total_count": 13,
+          "category_count": 1,
+          "categories": [
+            "战神赘婿"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 7
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 16.7
+        },
+        {
+          "name": "架空",
+          "total_count": 13,
+          "category_count": 6,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "悬疑脑洞",
+            "传统玄幻",
+            "男频衍生",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 5
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -37.5
+        },
+        {
+          "name": "抗战",
+          "total_count": 13,
+          "category_count": 1,
+          "categories": [
+            "抗战谍战"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 13
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "无限流",
+          "total_count": 12,
+          "category_count": 1,
+          "categories": [
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 6
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "强制爱",
+          "total_count": 12,
+          "category_count": 5,
+          "categories": [
+            "都市日常",
+            "西方奇幻",
+            "都市高武",
+            "都市种田",
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 6
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "民国",
+          "total_count": 12,
+          "category_count": 3,
+          "categories": [
+            "抗战谍战",
+            "都市修真",
+            "悬疑灵异"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 11
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -90.9
+        },
+        {
+          "name": "天灾",
+          "total_count": 11,
+          "category_count": 6,
+          "categories": [
+            "科幻末世",
+            "都市高武",
+            "玄幻脑洞",
+            "动漫衍生",
+            "传统玄幻",
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 7
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -42.9
+        },
+        {
+          "name": "娱乐圈",
+          "total_count": 11,
+          "category_count": 5,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "悬疑脑洞",
+            "都市修真",
+            "都市种田"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 7
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -42.9
+        },
+        {
+          "name": "同人",
+          "total_count": 11,
+          "category_count": 5,
+          "categories": [
+            "动漫衍生",
+            "传统玄幻",
+            "男频衍生",
+            "悬疑脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 8
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -62.5
+        },
+        {
+          "name": "悬疑",
+          "total_count": 9,
+          "category_count": 3,
+          "categories": [
+            "悬疑灵异",
+            "悬疑脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 5
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -20.0
+        },
+        {
+          "name": "基建",
+          "total_count": 9,
+          "category_count": 5,
+          "categories": [
+            "科幻末世",
+            "游戏体育",
+            "男频衍生",
+            "都市种田",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "龙王",
+          "total_count": 9,
+          "category_count": 5,
+          "categories": [
+            "战神赘婿",
+            "游戏体育",
+            "男频衍生",
+            "都市高武",
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 6
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "动漫",
+          "total_count": 8,
+          "category_count": 4,
+          "categories": [
+            "动漫衍生",
+            "传统玄幻",
+            "都市高武",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 5
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -40.0
+        },
+        {
+          "name": "团宠",
+          "total_count": 7,
+          "category_count": 4,
+          "categories": [
+            "都市日常",
+            "传统玄幻",
+            "游戏体育",
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -25.0
+        },
+        {
+          "name": "校园",
+          "total_count": 7,
+          "category_count": 3,
+          "categories": [
+            "都市日常",
+            "游戏体育",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 4
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 33.3
+        },
+        {
+          "name": "阵法",
+          "total_count": 7,
+          "category_count": 3,
+          "categories": [
+            "传统玄幻",
+            "东方仙侠",
+            "玄幻脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -25.0
+        },
+        {
+          "name": "废土",
+          "total_count": 6,
+          "category_count": 1,
+          "categories": [
+            "科幻末世"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 3
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "炮灰",
+          "total_count": 6,
+          "category_count": 3,
+          "categories": [
+            "动漫衍生",
+            "历史古代",
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 5
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -80.0
+        },
+        {
+          "name": "无CP",
+          "total_count": 6,
+          "category_count": 3,
+          "categories": [
+            "都市脑洞",
+            "都市高武",
+            "悬疑脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "修真",
+          "total_count": 6,
+          "category_count": 2,
+          "categories": [
+            "玄幻脑洞",
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "电竞",
+          "total_count": 6,
+          "category_count": 2,
+          "categories": [
+            "都市种田",
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "综艺",
+          "total_count": 5,
+          "category_count": 2,
+          "categories": [
+            "悬疑脑洞",
+            "都市脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 4
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -75.0
+        },
+        {
+          "name": "幼崽",
+          "total_count": 5,
+          "category_count": 3,
+          "categories": [
+            "动漫衍生",
+            "科幻末世",
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -33.3
+        },
+        {
+          "name": "权臣",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "游戏体育",
+            "历史古代"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "先婚后爱",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "战神赘婿",
+            "都市脑洞",
+            "都市日常"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "暗恋",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "都市日常",
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "青梅竹马",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "都市种田",
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "仙侠",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "抗战谍战",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "剑道",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "动漫衍生",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "丹药",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "男频衍生",
+            "传统玄幻",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "炼器",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "玄幻脑洞",
+            "传统玄幻",
+            "东方仙侠"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "明朝",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "悬疑脑洞",
+            "历史古代"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "机甲",
+          "total_count": 4,
+          "category_count": 3,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 3
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -66.7
+        },
+        {
+          "name": "衍生",
+          "total_count": 4,
+          "category_count": 2,
+          "categories": [
+            "历史脑洞",
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 2
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "远古",
+          "total_count": 3,
+          "category_count": 1,
+          "categories": [
+            "西方奇幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "星际",
+          "total_count": 3,
+          "category_count": 2,
+          "categories": [
+            "都市脑洞",
+            "科幻末世"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -50.0
+        },
+        {
+          "name": "囤货",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "都市高武"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "玄学",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "都市修真"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "穿书",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "和离",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "经商",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "都市种田"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "追妻",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "甜宠",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "传统玄幻"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "stable",
+          "trend_pct": 0.0
+        },
+        {
+          "name": "谍战",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "抗战谍战"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "体育",
+          "total_count": 2,
+          "category_count": 1,
+          "categories": [
+            "游戏体育"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 2
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "快穿",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "动漫衍生"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "美食",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "都市脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        },
+        {
+          "name": "谋略",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "历史脑洞"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 0
+            },
+            {
+              "date": "2026-06-19",
+              "count": 1
+            }
+          ],
+          "trend_direction": "rising",
+          "trend_pct": 0
+        },
+        {
+          "name": "科幻",
+          "total_count": 1,
+          "category_count": 1,
+          "categories": [
+            "抗战谍战"
+          ],
+          "daily_counts": [
+            {
+              "date": "2026-06-18",
+              "count": 1
+            },
+            {
+              "date": "2026-06-19",
+              "count": 0
+            }
+          ],
+          "trend_direction": "falling",
+          "trend_pct": -100.0
+        }
+      ],
+      "top_combinations": [
+        {
+          "themes": [
+            "穿越",
+            "系统"
+          ],
+          "co_count": 57,
+          "categories": [
+            "都市脑洞",
+            "西方奇幻",
+            "游戏体育",
+            "都市日常",
+            "都市修真"
+          ]
+        },
+        {
+          "themes": [
+            "系统",
+            "重生"
+          ],
+          "co_count": 19,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "历史古代"
+          ]
+        },
+        {
+          "themes": [
+            "历史",
+            "穿越"
+          ],
+          "co_count": 12,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真"
+          ]
+        },
+        {
+          "themes": [
+            "历史",
+            "系统"
+          ],
+          "co_count": 12,
+          "categories": [
+            "都市日常",
+            "历史古代",
+            "都市高武",
+            "悬疑脑洞",
+            "都市修真"
+          ]
+        },
+        {
+          "themes": [
+            "游戏",
+            "穿越"
+          ],
+          "co_count": 11,
+          "categories": [
+            "抗战谍战",
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "西方奇幻"
+          ]
+        },
+        {
+          "themes": [
+            "升级",
+            "穿越"
+          ],
+          "co_count": 11,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "都市高武",
+            "悬疑脑洞",
+            "传统玄幻"
+          ]
+        },
+        {
+          "themes": [
+            "升级",
+            "系统"
+          ],
+          "co_count": 10,
+          "categories": [
+            "抗战谍战",
+            "科幻末世",
+            "都市高武",
+            "悬疑脑洞",
+            "传统玄幻"
+          ]
+        },
+        {
+          "themes": [
+            "修仙",
+            "穿越"
+          ],
+          "co_count": 9,
+          "categories": [
+            "科幻末世",
+            "西方奇幻",
+            "玄幻脑洞",
+            "都市修真",
+            "传统玄幻"
+          ]
+        },
+        {
+          "themes": [
+            "种田",
+            "穿越"
+          ],
+          "co_count": 8,
+          "categories": [
+            "历史古代",
+            "西方奇幻",
+            "都市修真",
+            "都市种田",
+            "东方仙侠"
+          ]
+        },
+        {
+          "themes": [
+            "系统",
+            "都市"
+          ],
+          "co_count": 8,
+          "categories": [
+            "都市脑洞",
+            "科幻末世",
+            "都市日常",
+            "悬疑灵异",
+            "都市高武"
+          ]
+        }
+      ]
+    }
+  }
+}

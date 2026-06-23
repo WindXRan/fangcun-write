@@ -1,0 +1,706 @@
+{
+  "date": "2026-06-19",
+  "prev_date": "2026-06-18",
+  "periods": {
+    "7": {
+      "period": "近 7 日",
+      "source": "ai",
+      "summary": "近7日，西方奇幻、科幻末世、都市日常领跑榜单，穿越、系统、重生题材高频出现。读者偏好强设定与明确爽点，建议新书聚焦这三类，用穿越+系统或重生+都市组合快速吸量。",
+      "fallback_summary": "近 7 日里，西方奇幻、科幻末世 是更热的分类，具体分类以 西方奇幻、科幻末世、都市日常 的榜单动能更强；题材上 穿越、系统、重生、都市、修仙、游戏 反复出现，说明读者仍偏好强设定、强情绪钩子和明确爽点。",
+      "hot_genres": [
+        {
+          "name": "西方奇幻",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "西方奇幻"
+        },
+        {
+          "name": "科幻末世",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "科幻末世"
+        },
+        {
+          "name": "都市日常",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "都市日常"
+        },
+        {
+          "name": "历史古代",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "历史古代"
+        },
+        {
+          "name": "都市种田",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "都市种田"
+        }
+      ],
+      "hot_types": [
+        {
+          "name": "西方奇幻",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "科幻末世",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "都市日常",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "历史古代",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "都市种田",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "东方仙侠",
+          "score": 26,
+          "new_count": 2,
+          "dropped_count": 2,
+          "read_count": 3,
+          "active_days": 1
+        }
+      ],
+      "hot_themes": [
+        {
+          "name": "穿越",
+          "count": 200,
+          "category_count": 12
+        },
+        {
+          "name": "系统",
+          "count": 166,
+          "category_count": 12
+        },
+        {
+          "name": "重生",
+          "count": 74,
+          "category_count": 10
+        },
+        {
+          "name": "都市",
+          "count": 38,
+          "category_count": 7
+        },
+        {
+          "name": "修仙",
+          "count": 37,
+          "category_count": 5
+        },
+        {
+          "name": "游戏",
+          "count": 36,
+          "category_count": 10
+        },
+        {
+          "name": "历史",
+          "count": 32,
+          "category_count": 8
+        },
+        {
+          "name": "种田",
+          "count": 29,
+          "category_count": 7
+        },
+        {
+          "name": "空间",
+          "count": 28,
+          "category_count": 9
+        },
+        {
+          "name": "升级",
+          "count": 25,
+          "category_count": 6
+        },
+        {
+          "name": "逆袭",
+          "count": 23,
+          "category_count": 8
+        },
+        {
+          "name": "总裁",
+          "count": 22,
+          "category_count": 4
+        },
+        {
+          "name": "直播",
+          "count": 21,
+          "category_count": 5
+        },
+        {
+          "name": "年代",
+          "count": 21,
+          "category_count": 4
+        }
+      ]
+    },
+    "14": {
+      "period": "近 14 日",
+      "source": "ai",
+      "summary": "近14日，西方奇幻、科幻末世、都市日常持续主导，穿越、系统、重生、都市、修仙、游戏题材反复上榜。市场对强情绪钩子依赖度高，编辑判断：稳守穿越系统基本盘，可尝试修仙+游戏融合创新。",
+      "fallback_summary": "近 14 日里，西方奇幻、科幻末世 是更热的分类，具体分类以 西方奇幻、科幻末世、都市日常 的榜单动能更强；题材上 穿越、系统、重生、都市、修仙、游戏 反复出现，说明读者仍偏好强设定、强情绪钩子和明确爽点。",
+      "hot_genres": [
+        {
+          "name": "西方奇幻",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "西方奇幻"
+        },
+        {
+          "name": "科幻末世",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "科幻末世"
+        },
+        {
+          "name": "都市日常",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "都市日常"
+        },
+        {
+          "name": "历史古代",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "历史古代"
+        },
+        {
+          "name": "都市种田",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "都市种田"
+        }
+      ],
+      "hot_types": [
+        {
+          "name": "西方奇幻",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "科幻末世",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "都市日常",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "历史古代",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "都市种田",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "东方仙侠",
+          "score": 26,
+          "new_count": 2,
+          "dropped_count": 2,
+          "read_count": 3,
+          "active_days": 1
+        }
+      ],
+      "hot_themes": [
+        {
+          "name": "穿越",
+          "count": 200,
+          "category_count": 12
+        },
+        {
+          "name": "系统",
+          "count": 166,
+          "category_count": 12
+        },
+        {
+          "name": "重生",
+          "count": 74,
+          "category_count": 10
+        },
+        {
+          "name": "都市",
+          "count": 38,
+          "category_count": 7
+        },
+        {
+          "name": "修仙",
+          "count": 37,
+          "category_count": 5
+        },
+        {
+          "name": "游戏",
+          "count": 36,
+          "category_count": 10
+        },
+        {
+          "name": "历史",
+          "count": 32,
+          "category_count": 8
+        },
+        {
+          "name": "种田",
+          "count": 29,
+          "category_count": 7
+        },
+        {
+          "name": "空间",
+          "count": 28,
+          "category_count": 9
+        },
+        {
+          "name": "升级",
+          "count": 25,
+          "category_count": 6
+        },
+        {
+          "name": "逆袭",
+          "count": 23,
+          "category_count": 8
+        },
+        {
+          "name": "总裁",
+          "count": 22,
+          "category_count": 4
+        },
+        {
+          "name": "直播",
+          "count": 21,
+          "category_count": 5
+        },
+        {
+          "name": "年代",
+          "count": 21,
+          "category_count": 4
+        }
+      ]
+    },
+    "30": {
+      "period": "近 30 日",
+      "source": "ai",
+      "summary": "近30日，西方奇幻、科幻末世、都市日常仍是动能最强分类，穿越、系统、重生、都市、修仙、游戏题材稳定输出。读者对‘强设定+快爽点’模式接受度极高，建议新书优先选择穿越系统或重生都市赛道。",
+      "fallback_summary": "近 30 日里，西方奇幻、科幻末世 是更热的分类，具体分类以 西方奇幻、科幻末世、都市日常 的榜单动能更强；题材上 穿越、系统、重生、都市、修仙、游戏 反复出现，说明读者仍偏好强设定、强情绪钩子和明确爽点。",
+      "hot_genres": [
+        {
+          "name": "西方奇幻",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "西方奇幻"
+        },
+        {
+          "name": "科幻末世",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "科幻末世"
+        },
+        {
+          "name": "都市日常",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "都市日常"
+        },
+        {
+          "name": "历史古代",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "历史古代"
+        },
+        {
+          "name": "都市种田",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "都市种田"
+        }
+      ],
+      "hot_types": [
+        {
+          "name": "西方奇幻",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "科幻末世",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "都市日常",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "历史古代",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "都市种田",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "东方仙侠",
+          "score": 26,
+          "new_count": 2,
+          "dropped_count": 2,
+          "read_count": 3,
+          "active_days": 1
+        }
+      ],
+      "hot_themes": [
+        {
+          "name": "穿越",
+          "count": 200,
+          "category_count": 12
+        },
+        {
+          "name": "系统",
+          "count": 166,
+          "category_count": 12
+        },
+        {
+          "name": "重生",
+          "count": 74,
+          "category_count": 10
+        },
+        {
+          "name": "都市",
+          "count": 38,
+          "category_count": 7
+        },
+        {
+          "name": "修仙",
+          "count": 37,
+          "category_count": 5
+        },
+        {
+          "name": "游戏",
+          "count": 36,
+          "category_count": 10
+        },
+        {
+          "name": "历史",
+          "count": 32,
+          "category_count": 8
+        },
+        {
+          "name": "种田",
+          "count": 29,
+          "category_count": 7
+        },
+        {
+          "name": "空间",
+          "count": 28,
+          "category_count": 9
+        },
+        {
+          "name": "升级",
+          "count": 25,
+          "category_count": 6
+        },
+        {
+          "name": "逆袭",
+          "count": 23,
+          "category_count": 8
+        },
+        {
+          "name": "总裁",
+          "count": 22,
+          "category_count": 4
+        },
+        {
+          "name": "直播",
+          "count": 21,
+          "category_count": 5
+        },
+        {
+          "name": "年代",
+          "count": 21,
+          "category_count": 4
+        }
+      ]
+    },
+    "all": {
+      "period": "全部样本",
+      "source": "ai",
+      "summary": "全部样本中，西方奇幻、科幻末世、都市日常为绝对热门分类，穿越、系统、重生、都市、修仙、游戏题材反复出现。市场整体偏好强设定、强情绪钩子与明确爽点，编辑判断：穿越系统仍是流量密码，都市日常与科幻末世具备长尾潜力。",
+      "fallback_summary": "全部样本里，西方奇幻、科幻末世 是更热的分类，具体分类以 西方奇幻、科幻末世、都市日常 的榜单动能更强；题材上 穿越、系统、重生、都市、修仙、游戏 反复出现，说明读者仍偏好强设定、强情绪钩子和明确爽点。",
+      "hot_genres": [
+        {
+          "name": "西方奇幻",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "西方奇幻"
+        },
+        {
+          "name": "科幻末世",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "科幻末世"
+        },
+        {
+          "name": "都市日常",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "都市日常"
+        },
+        {
+          "name": "历史古代",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "历史古代"
+        },
+        {
+          "name": "都市种田",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1,
+          "lead_category": "都市种田"
+        }
+      ],
+      "hot_types": [
+        {
+          "name": "西方奇幻",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "科幻末世",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "都市日常",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "历史古代",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "都市种田",
+          "score": 32,
+          "new_count": 3,
+          "dropped_count": 3,
+          "read_count": 3,
+          "active_days": 1
+        },
+        {
+          "name": "东方仙侠",
+          "score": 26,
+          "new_count": 2,
+          "dropped_count": 2,
+          "read_count": 3,
+          "active_days": 1
+        }
+      ],
+      "hot_themes": [
+        {
+          "name": "穿越",
+          "count": 200,
+          "category_count": 12
+        },
+        {
+          "name": "系统",
+          "count": 166,
+          "category_count": 12
+        },
+        {
+          "name": "重生",
+          "count": 74,
+          "category_count": 10
+        },
+        {
+          "name": "都市",
+          "count": 38,
+          "category_count": 7
+        },
+        {
+          "name": "修仙",
+          "count": 37,
+          "category_count": 5
+        },
+        {
+          "name": "游戏",
+          "count": 36,
+          "category_count": 10
+        },
+        {
+          "name": "历史",
+          "count": 32,
+          "category_count": 8
+        },
+        {
+          "name": "种田",
+          "count": 29,
+          "category_count": 7
+        },
+        {
+          "name": "空间",
+          "count": 28,
+          "category_count": 9
+        },
+        {
+          "name": "升级",
+          "count": 25,
+          "category_count": 6
+        },
+        {
+          "name": "逆袭",
+          "count": 23,
+          "category_count": 8
+        },
+        {
+          "name": "总裁",
+          "count": 22,
+          "category_count": 4
+        },
+        {
+          "name": "直播",
+          "count": 21,
+          "category_count": 5
+        },
+        {
+          "name": "年代",
+          "count": 21,
+          "category_count": 4
+        }
+      ]
+    }
+  }
+}
