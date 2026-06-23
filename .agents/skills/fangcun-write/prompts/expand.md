@@ -5,7 +5,7 @@ type: user
 phase: postprocess
 description: 扩写章节
 required_vars: ["content", "orig_chars", "target_chars", "min_chars", "max_chars"]
-system_prompt: 
+system_prompt: system.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
 

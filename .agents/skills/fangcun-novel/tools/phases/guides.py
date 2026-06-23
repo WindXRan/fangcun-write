@@ -667,22 +667,9 @@ def _get_chapter_characters(config, ch_num):
 
 
 def _load_character_cards(config, ch_num):
-    """加载本章出场角色的卡内容（从 characters/ 目录读取独立文件）。"""
+    """加载本章出场角色的卡内容（只提取关键信息）。"""
     # 使用缓存的映射版本
     events = _load_events_mapped(config)
-
-    # 构建角色最早出场章节映射
-    char_first_ch = {}
-    for e in events:
-        ch = e.get("id") or e.get("chapter_index")
-        event_text = e.get("event", "")
-        parts = event_text.split("|")
-        if len(parts) >= 3:
-            for c in re.split(r"[、，,]", parts[2].strip()):
-                c = c.strip()
-                if c:
-                    if c not in char_first_ch:
-                        char_first_ch[c] = ch
 
     # 从 events.json 提取本章出场角色
     chars = set()
@@ -703,44 +690,32 @@ def _load_character_cards(config, ch_num):
     # 读取角色卡文件
     base_dir = Path(config.get("base_dir", "."))
     rewrites_dir = base_dir / config.get("rewrites_dir", "")
-    cards_dir = rewrites_dir / "characters"
+    chars_path = rewrites_dir / "characters.md"
+    
+    if not chars_path.exists():
+        return "（角色卡文件不存在）"
+    
+    chars_text = chars_path.read_text(encoding="utf-8")
     cards = []
     
-    # 添加出场角色列表（含最早出场章节）
-    char_list = []
     for name in sorted(chars):
-        first_ch = char_first_ch.get(name, "?")
-        char_list.append(f"- {name}（第{first_ch}章首次出场）")
+        # 匹配角色卡块
+        m = re.search(rf'###\s*【[^】]+】{re.escape(name)}[（(][\s\S]*?(?=###|$)', chars_text)
+        if m:
+            block = m.group(0).strip()
+            # 只提取关键信息：年龄、身份、职业、性格内核
+            key_info = []
+            for line in block.split('\n'):
+                line = line.strip()
+                if any(kw in line for kw in ['年龄', '身份', '职业', '性格内核', '关系：']):
+                    key_info.append(line)
+            if key_info:
+                cards.append(f"**{name}**\n" + "\n".join(key_info))
+            else:
+                # 如果没有关键信息，取前5行
+                lines = block.split('\n')[:5]
+                cards.append("\n".join(lines))
     
-    cards.append(f"## 本章出场角色（第{ch_num}章）\n" + "\n".join(char_list))
-    cards.append("")
-    
-    for name in sorted(chars):
-        card_path = cards_dir / f"{name}.md"
-        if card_path.exists():
-            cards.append(card_path.read_text(encoding="utf-8"))
-        else:
-            # fallback: 从 characters.md 中提取该角色
-            chars_path = rewrites_dir / "settings" / "characters.md"
-            if not chars_path.exists():
-                chars_path = rewrites_dir / "characters.md"
-            if chars_path.exists():
-                chars_text = chars_path.read_text(encoding="utf-8")
-                # 匹配格式1: 【角色名】
-                m = re.search(rf'【{re.escape(name)}】[\s\S]*?(?=【[^】]|$)', chars_text)
-                if m:
-                    cards.append(m.group(0).strip())
-                else:
-                    # 匹配格式2: ### 【角色位】name（...）— 角色位不是名字
-                    m = re.search(rf'###\s*【[^】]+】{re.escape(name)}[（(][\s\S]*?(?=###|$)', chars_text)
-                    if m:
-                        cards.append(m.group(0).strip())
-                    else:
-                        # 匹配格式3: 角色名出现在表格行中，提取该行+后续角色卡
-                        m = re.search(rf'【[^】]*{re.escape(name)}[^】]*】[\s\S]*?(?=###\s*【|$)', chars_text)
-                        if m:
-                            cards.append(m.group(0).strip())
-
     return "\n\n".join(cards) if cards else "（无角色信息）"
 
 

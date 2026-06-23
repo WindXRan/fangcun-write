@@ -4,7 +4,7 @@ changelog: 合并fangcun-novel write-chapter.md的优点，统一通用
 type: user
 phase: write
 description: 写章（通用版，仿写/续写都可用）
-system_prompt: 
+system_prompt: system.md
 defaults: {"reasoning_effort": "low", "temperature": 0.8}
 ---
 
