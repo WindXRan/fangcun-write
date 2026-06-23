@@ -11,9 +11,9 @@ type: router
 ## 选择作者
 
 当用户提到作者名或书名时：
-1. 找到 `projects/{作者}/{书名}/` 目录
-2. 读取 `rewrites/{新书名}/` 下的项目文件
-3. 如果有 `cyber_author_prompt.md`，读取并作为你的写作人格
+1. 读取 `.agents/registry.json` 找到作者信息
+2. 读取 `.agents/knowledge/{作者名}/SKILL.md` 作为写作人格
+3. 读取 `projects/{作者}/{书名}/` 下的项目文件
 
 ## 意图路由
 
