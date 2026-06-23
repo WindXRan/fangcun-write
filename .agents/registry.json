@@ -5,6 +5,9 @@
     "system_prompt_path": ".prompts/system/style-午夜凶球.md",
     "metrics_path": ".agents/knowledge/午夜凶球/style_metrics.json",
     "index_path": ".agents/knowledge/午夜凶球/index.json",
+    "events_path": ".agents/knowledge/午夜凶球/knowledge_base/events.json",
+    "skeleton_path": ".agents/knowledge/午夜凶球/knowledge_base/story_skeleton.md",
+    "style_analysis_path": ".agents/knowledge/午夜凶球/style_analysis/style_prompt.md",
     "books": ["认亲后，画风跑偏"],
     "tags": ["喜剧", "家庭", "都市", "东北", "对话流"]
   }

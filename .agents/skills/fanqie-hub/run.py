@@ -93,13 +93,24 @@ def cmd_status():
     print("\n番茄小说 Hub 状态")
     print('='*60)
     
-    # projects 目录
-    if PROJECTS_DIR.exists():
-        authors = [d for d in PROJECTS_DIR.iterdir() if d.is_dir()]
-        print(f"\n书库: {len(authors)} 个作者")
+    # knowledge 目录
+    knowledge_dir = HUB_DIR.parent.parent / "knowledge"
+    if knowledge_dir.exists():
+        authors = [d for d in knowledge_dir.iterdir() if d.is_dir()]
+        print(f"\n知识库: {len(authors)} 个作者")
         for author_dir in authors[:5]:
             books = [d for d in author_dir.iterdir() if d.is_dir()]
             print(f"  - {author_dir.name}: {len(books)} 本书")
+        if len(authors) > 5:
+            print(f"  ... 还有 {len(authors)-5} 个作者")
+    
+    # projects 目录
+    if PROJECTS_DIR.exists():
+        authors = [d for d in PROJECTS_DIR.iterdir() if d.is_dir()]
+        print(f"\n项目库: {len(authors)} 个作者")
+        for author_dir in authors[:5]:
+            books = [d for d in author_dir.iterdir() if d.is_dir()]
+            print(f"  - {author_dir.name}: {len(books)} 个项目")
         if len(authors) > 5:
             print(f"  ... 还有 {len(authors)-5} 个作者")
     

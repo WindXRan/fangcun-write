@@ -26,7 +26,7 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 </style>
 
 <characters>
-【characters】{rewrites_dir}/characters.md
+{characters}
 </characters>
 
 <structure>

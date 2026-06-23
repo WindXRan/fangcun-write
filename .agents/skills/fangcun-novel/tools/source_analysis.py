@@ -12,15 +12,17 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 def get_cache_dir(config):
-    """获取源书 _cache 目录。"""
-    base_dir = config.get("base_dir", ".")
+    """获取源书 _cache 目录。优先从 config.source_dir 读取。"""
+    # 优先从 config 读取 source_dir
+    if config.get("source_dir"):
+        source_dir = Path(config["source_dir"])
+        if source_dir.exists():
+            return source_dir
+    
+    # 兼容旧路径
+    base_dir = Path(config.get("base_dir", "."))
     author = config.get("author", "")
     source_book = config.get("source_book", "")
-    # fangcun-drama 兼容：从 source_dir 推断
-    if not author and config.get("source_dir"):
-        source_dir = Path(config["source_dir"])
-        if source_dir.name == "chapters" and source_dir.parent.name == "_cache":
-            return source_dir.parent
     return Path(base_dir) / "projects" / author / source_book / "_cache"
 
 

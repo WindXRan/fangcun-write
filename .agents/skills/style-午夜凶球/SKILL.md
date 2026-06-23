@@ -23,10 +23,11 @@ description: |
 ## 知识库
 
 位于 `.agents/knowledge/午夜凶球/`，包含：
-- knowledge_base/ - 场景片段
-- index.json - 场景索引
-- style_metrics.json - 定量指标
-- style_metrics.md - 定量指标文档
+- raw_chapters/ - 原文（154章）
+- knowledge_base/events.json - 事件流
+- knowledge_base/story_skeleton.md - 故事骨架
+- style_analysis/ - 风格分析
+- index.json - 索引
 
 ## 使用方式
 
@@ -41,3 +42,9 @@ description: |
 
 ### 续写故事
 用户给一段前文，续写后续情节。
+
+### 检索事件
+用户给出关键词，检索events.json找类似事件。
+
+### 读取骨架
+用户想了解故事结构，读取story_skeleton.md。

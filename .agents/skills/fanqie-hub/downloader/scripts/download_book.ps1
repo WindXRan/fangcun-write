@@ -213,55 +213,68 @@ $completed = Wait-Downloads $port $MaxWaitSeconds
 # 归档
 if (-not $NoArchive -and $completed -gt 0) {
     Write-Step "归档"
-    if (-not $Author) { $Author = "未知作者" }
-    if (-not $bookName) { $bookName = $bookId }
+    
+    # 查找下载器输出的jsonl文件
+    $jsonlFiles = @()
+    $jsonlFiles += Get-ChildItem "$SkillDir\$bookId\downloaded_chapters.jsonl" -ErrorAction SilentlyContinue
+    $jsonlFiles += Get-ChildItem "$SkillDir\downloads\$bookId\downloaded_chapters.jsonl" -ErrorAction SilentlyContinue
+    $jsonlFiles += Get-ChildItem "$SkillDir\*\downloaded_chapters.jsonl" -ErrorAction SilentlyContinue | Where-Object { $_.LastWriteTime -gt (Get-Date).AddMinutes(-5) }
+    $jsonlFiles = $jsonlFiles | Sort-Object LastWriteTime -Descending | Select-Object -Unique
 
-    # 标准化路径: projects/{作者}/{书名}/_cache/
-    # 清理文件名中的特殊字符
-    $safeAuthor = $Author -replace '[\\/:*?"<>|]', '_'
-    $safeBookName = $bookName -replace '[\\/:*?"<>|]', '_'
-    $bookDir = "$SkillDir\projects\$safeAuthor\$safeBookName"
-    $cacheDir = "$bookDir\_cache"
-    New-Item -ItemType Directory -Path $cacheDir -Force | Out-Null
-
-    # 移动 txt 文件（下载器可能保存在 skill 根目录或 downloads 目录）
-    $downloadedFiles = @()
-    $downloadedFiles += Get-ChildItem "$SkillDir\downloads\*.txt" -ErrorAction SilentlyContinue
-    $downloadedFiles += Get-ChildItem "$SkillDir\*.txt" -ErrorAction SilentlyContinue | Where-Object { $_.LastWriteTime -gt (Get-Date).AddMinutes(-5) }
-    $downloadedFiles = $downloadedFiles | Sort-Object LastWriteTime -Descending | Select-Object -Unique
-    if ($downloadedFiles) {
-        foreach ($f in $downloadedFiles) {
-            $targetName = if ($f.Name -match $bookName) { $f.Name } else { "$bookName.txt" }
-            $targetPath = "$cacheDir\$targetName"
-            Move-Item $f.FullName $targetPath -Force
-            Write-Ok "$targetName -> $Author/$bookName/_cache/"
-            
-            # 修复下载器 bug：去掉重复的章节标题
-            # 格式：第X章 标题 第X章 标题 → 第X章 标题
-            Write-Step "修复重复标题"
-            $content = Get-Content $targetPath -Raw -Encoding UTF8
-            $content = [regex]::Replace($content, '(第\d+章\s+.+?)\s+\1', '$1')
-            # 去掉重复的卷名
-            $content = [regex]::Replace($content, '(第.+?卷.+?)\s+\1\s+\1', '$1')
-            Set-Content $targetPath -Value $content -Encoding UTF8 -NoNewline
-            Write-Ok "重复标题已修复"
+    if ($jsonlFiles) {
+        $jsonlFile = $jsonlFiles[0]
+        $bookDir = $jsonlFile.Directory
+        
+        # 从status.json读取正确信息
+        $statusFile = Join-Path $bookDir "status.json"
+        if (Test-Path $statusFile) {
+            $statusData = Get-Content $statusFile -Raw -Encoding UTF8 | ConvertFrom-Json
+            if ($statusData.book_name) { $bookName = $statusData.book_name }
+            if ($statusData.author) { $Author = $statusData.author }
+            Write-Ok "从status.json读取: $bookName (作者: $Author)"
         }
-    } else {
-        Write-Warn "downloads 目录没有找到 txt 文件"
-    }
-
-    # 下载封面
-    if ($coverUrl) {
-        Write-Step "下载封面"
-        try {
-            $coverPath = "$cacheDir\cover.jpg"
-            Invoke-WebRequest $coverUrl -OutFile $coverPath -UseBasicParsing -TimeoutSec 15
-            Write-Ok "cover.jpg -> $Author/$bookName/_cache/"
-        } catch {
-            Write-Warn "封面下载失败: $_"
+        
+        if (-not $Author) { $Author = "未知作者" }
+        if (-not $bookName) { $bookName = $bookId }
+        
+        # 标准化路径: knowledge/{作者}/{书名}/
+        $safeAuthor = $Author -replace '[\\/:*?"<>|]', '_'
+        $safeBookName = $bookName -replace '[\\/:*?"<>|]', '_'
+        # SkillDir = .agents/skills/fanqie-hub/downloader，项目根目录 = 上四级
+        $projectRoot = (Get-Item "$SkillDir").Parent.Parent.Parent.Parent.FullName
+        $knowledgeDir = "$projectRoot\knowledge\$safeAuthor\$safeBookName"
+        Write-Host "    目录: $knowledgeDir" -ForegroundColor Gray
+        New-Item -ItemType Directory -Path $knowledgeDir -Force | Out-Null
+        
+        # 调用Python脚本转换jsonl为txt
+        Write-Step "转换 jsonl → txt"
+        $convertScript = "$SkillDir\scripts\jsonl_to_txt.py"
+        $txtPath = "$knowledgeDir\$safeBookName.txt"
+        $convertCmd = "python `"$convertScript`" `"$($jsonlFile.FullName)`" `"$txtPath`" `"$bookName`" `"$Author`" `"$statusFile`""
+        $convertResult = Invoke-Expression $convertCmd 2>&1
+        if ($LASTEXITCODE -eq 0) {
+            Write-Ok "$safeBookName.txt -> knowledge/$safeAuthor/$safeBookName/"
+        } else {
+            Write-Err "转换失败: $convertResult"
         }
+        
+        # 复制status.json
+        Copy-Item $statusFile "$knowledgeDir\status.json" -Force
+        Write-Ok "status.json -> knowledge/$safeAuthor/$safeBookName/"
+        
+        # 复制封面
+        $coverFile = Join-Path $bookDir "cover.png"
+        if (Test-Path $coverFile) {
+            Copy-Item $coverFile "$knowledgeDir\cover.png" -Force
+            Write-Ok "cover.png -> knowledge/$safeAuthor/$safeBookName/"
+        }
+        
+        # 清理下载器缓存
+        Write-Step "清理下载器缓存"
+        Remove-Item $bookDir -Recurse -Force -ErrorAction SilentlyContinue
+        Write-Ok "已清理: $bookDir"
     } else {
-        Write-Warn "无封面 URL，跳过"
+        Write-Warn "未找到下载的jsonl文件"
     }
 }
 
@@ -274,8 +287,8 @@ if (-not $KeepServer) {
 Write-Host "`n========================================" -ForegroundColor Green
 if ($completed -gt 0) {
     Write-Host "下载完成！" -ForegroundColor Green
-    if (-not $NoArchive -and $Author) {
-        Write-Host "  归档: $SkillDir\projects\$Author"
+    if (-not $NoArchive) {
+        Write-Host "  归档: knowledge/$safeAuthor/$safeBookName"
     }
 } else {
     Write-Host "下载未成功完成" -ForegroundColor Yellow

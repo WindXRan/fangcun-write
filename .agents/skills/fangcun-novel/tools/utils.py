@@ -79,22 +79,31 @@ def print_progress(done, total, t_start, prefix="  "):
 
 def get_chapters_list(config, include_fanwai=False):
     """获取章节目录中的章节列表"""
-    author = config.get("author", "")
-    source_book = config.get("source_book", "")
     base_dir = config.get("base_dir", os.getcwd())
     
-    # 查找章节目录
-    patterns = [
-        f"projects/{author}/{source_book}/_cache/chapters/",
-        f"projects/{author}/{source_book}/源文/",
-    ]
-    
-    chapters_dir = None
-    for pat in patterns:
-        full_path = os.path.join(base_dir, pat)
-        if os.path.isdir(full_path):
-            chapters_dir = full_path
-            break
+    # 优先从 config 读取 source_dir
+    source_dir = config.get("source_dir", "")
+    if source_dir:
+        chapters_dir = Path(base_dir) / source_dir / "chapters"
+        if chapters_dir.exists():
+            chapters_dir = str(chapters_dir)
+        else:
+            chapters_dir = None
+    else:
+        # 兼容旧路径
+        author = config.get("author", "")
+        source_book = config.get("source_book", "")
+        patterns = [
+            f"projects/{author}/{source_book}/_cache/chapters/",
+            f"projects/{author}/{source_book}/源文/",
+        ]
+        
+        chapters_dir = None
+        for pat in patterns:
+            full_path = os.path.join(base_dir, pat)
+            if os.path.isdir(full_path):
+                chapters_dir = full_path
+                break
     
     if not chapters_dir:
         return []

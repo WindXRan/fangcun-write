@@ -29,7 +29,7 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 </event>
 
 <characters>
-【characters】{rewrites_dir}/characters.md
+{characters}
 </characters>
 
 <highlights>
