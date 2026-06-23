@@ -1023,7 +1023,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     """
     from lib.api_client import call_llm, get_api_url
 
-    prompts_dir = config.get("prompts_dir", str(Path(__file__).parent.parent.parent / "prompts"))
+    prompts_dir = config.get("prompts_dir", str(Path(__file__).parent.parent.parent.parent / ".prompts" / "user"))
     base_dir = config.get("base_dir", os.getcwd())
 
     n = str(chapter_num) if chapter_num else "1"

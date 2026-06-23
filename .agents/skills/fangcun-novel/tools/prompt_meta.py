@@ -6,8 +6,9 @@ import json
 from pathlib import Path
 
 
-PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
-TASKS_DIR = Path(__file__).resolve().parent.parent.parent.parent / "tasks"
+PROMPTS_DIR = Path(__file__).resolve().parent.parent.parent.parent / ".prompts" / "user"
+SYSTEM_PROMPTS_DIR = Path(__file__).resolve().parent.parent.parent.parent / ".prompts" / "system"
+TASKS_DIR = Path(__file__).resolve().parent.parent.parent.parent / ".prompts" / "user"
 FRONTMATTER_RE = re.compile(r'^---\s*\n(.*?)\n---\s*\n', re.DOTALL)
 
 

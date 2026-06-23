@@ -28,11 +28,9 @@ import argparse
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# 添加 fangcun-analyze 和 fangcun-analyze tools 到 path 以复用共享模块
-_shared_engine_tools = str(Path(__file__).parent.parent.parent / "fangcun-analyze" / "tools")
-_source_engine_tools = str(Path(__file__).parent.parent.parent / "fangcun-analyze" / "tools")
-sys.path.insert(0, _shared_engine_tools)  # fangcun-analyze 优先
-sys.path.insert(0, _source_engine_tools)  # fangcun-analyze 兼容
+# 添加共享工具到 path
+_shared_tools = str(Path(__file__).parent.parent.parent.parent / "tools")
+sys.path.insert(0, _shared_tools)
 from lib.api_client import call_api, get_api_key, get_api_url
 from source_analysis import (
     load_events, save_events, get_events_text, get_source_chapters, get_source_text,
