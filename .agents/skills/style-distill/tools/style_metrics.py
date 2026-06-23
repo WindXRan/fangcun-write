@@ -109,8 +109,6 @@ def format_metrics_report(summary):
     lines.append(f"- **章均字数**: {s['chars']['avg']}（中位数 {s['chars']['median']}，标准差 {s['chars']['stddev']}）")
     lines.append(f"- **对话比例**: {s['dialogue']['ratio']*100:.0f}%")
     lines.append(f"- **段落均长**: {s['para']['avg_len']} 字")
-    lines.append(f"- **单句段比例**: {s['single_sent_ratio']*100:.0f}%")
-    lines.append(f"- **情绪密度**: {s['emotion']['density']}")
     
     return "\n".join(lines)
 
