@@ -1,0 +1,4652 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ncx version="2005-1" xmlns="http://www.daisy.org/z3986/2005/ncx/">
+  <head>
+    <meta name="dtb:uid" content="7496815839388109848" />
+    <meta name="dtb:depth" content="1" />
+    <meta name="dtb:totalPageCount" content="0" />
+    <meta name="dtb:maxPageNumber" content="0" />
+  </head>
+  <docTitle>
+    <text>我在风花雪月里等你</text>
+  </docTitle>
+  <navMap>
+    <navPoint id="navPoint-1">
+      <navLabel>
+       <text>简介</text>
+      </navLabel>
+      <content src="aux_00000.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-2">
+      <navLabel>
+       <text>目录</text>
+      </navLabel>
+      <content src="table-of-contents.html"/>
+    </navPoint>
+    <navPoint id="navPoint-3">
+      <navLabel>
+       <text>第1章 我说孤独，她说梦想</text>
+      </navLabel>
+      <content src="chapter_00001.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-4">
+      <navLabel>
+       <text>第2章 与我同行的姑娘</text>
+      </navLabel>
+      <content src="chapter_00002.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-5">
+      <navLabel>
+       <text>第3章 3000公里之外</text>
+      </navLabel>
+      <content src="chapter_00003.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-6">
+      <navLabel>
+       <text>第4章 抛弃队友的混蛋</text>
+      </navLabel>
+      <content src="chapter_00004.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-7">
+      <navLabel>
+       <text>第5章 观景台偶遇</text>
+      </navLabel>
+      <content src="chapter_00005.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-8">
+      <navLabel>
+       <text>第6章 拔刀相助</text>
+      </navLabel>
+      <content src="chapter_00006.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-9">
+      <navLabel>
+       <text>第7章 大理欢迎你</text>
+      </navLabel>
+      <content src="chapter_00007.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-10">
+      <navLabel>
+       <text>第8章 风人院青年旅社</text>
+      </navLabel>
+      <content src="chapter_00008.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-11">
+      <navLabel>
+       <text>第9章 玩个游戏</text>
+      </navLabel>
+      <content src="chapter_00009.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-12">
+      <navLabel>
+       <text>第10章 摆地摊</text>
+      </navLabel>
+      <content src="chapter_00010.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-13">
+      <navLabel>
+       <text>第11章 风花雪月</text>
+      </navLabel>
+      <content src="chapter_00011.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-14">
+      <navLabel>
+       <text>第12章 搞欺骗</text>
+      </navLabel>
+      <content src="chapter_00012.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-15">
+      <navLabel>
+       <text>第13章 兔死狐悲</text>
+      </navLabel>
+      <content src="chapter_00013.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-16">
+      <navLabel>
+       <text>第14章 我们不是情侣</text>
+      </navLabel>
+      <content src="chapter_00014.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-17">
+      <navLabel>
+       <text>第15章 置身险地</text>
+      </navLabel>
+      <content src="chapter_00015.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-18">
+      <navLabel>
+       <text>第16章 你又骗我</text>
+      </navLabel>
+      <content src="chapter_00016.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-19">
+      <navLabel>
+       <text>第17章 找个随便的人，随便生活</text>
+      </navLabel>
+      <content src="chapter_00017.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-20">
+      <navLabel>
+       <text>第18章 这不是缘分，是因为寂寞</text>
+      </navLabel>
+      <content src="chapter_00018.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-21">
+      <navLabel>
+       <text>第19章 女邻居</text>
+      </navLabel>
+      <content src="chapter_00019.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-22">
+      <navLabel>
+       <text>第20章 女人花</text>
+      </navLabel>
+      <content src="chapter_00020.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-23">
+      <navLabel>
+       <text>第21章 高性价比客栈</text>
+      </navLabel>
+      <content src="chapter_00021.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-24">
+      <navLabel>
+       <text>第22章 最被动的人</text>
+      </navLabel>
+      <content src="chapter_00022.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-25">
+      <navLabel>
+       <text>第23章 夜闯海途客栈</text>
+      </navLabel>
+      <content src="chapter_00023.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-26">
+      <navLabel>
+       <text>第24章 给他点教训</text>
+      </navLabel>
+      <content src="chapter_00024.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-27">
+      <navLabel>
+       <text>第25章 权衡利弊</text>
+      </navLabel>
+      <content src="chapter_00025.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-28">
+      <navLabel>
+       <text>第26章 习惯了有她</text>
+      </navLabel>
+      <content src="chapter_00026.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-29">
+      <navLabel>
+       <text>第27章 我要得到更多</text>
+      </navLabel>
+      <content src="chapter_00027.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-30">
+      <navLabel>
+       <text>第28章 情愿在大理站着死，也别在上海跪着活</text>
+      </navLabel>
+      <content src="chapter_00028.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-31">
+      <navLabel>
+       <text>第29章 一年之约</text>
+      </navLabel>
+      <content src="chapter_00029.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-32">
+      <navLabel>
+       <text>第30章 老黄的忧虑</text>
+      </navLabel>
+      <content src="chapter_00030.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-33">
+      <navLabel>
+       <text>第31章 来大理后的第一个好消息</text>
+      </navLabel>
+      <content src="chapter_00031.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-34">
+      <navLabel>
+       <text>第32章 一片从树上飘落的叶子</text>
+      </navLabel>
+      <content src="chapter_00032.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-35">
+      <navLabel>
+       <text>第33章 落魄小姐和倒霉先生</text>
+      </navLabel>
+      <content src="chapter_00033.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-36">
+      <navLabel>
+       <text>第34章 半好半坏的消息</text>
+      </navLabel>
+      <content src="chapter_00034.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-37">
+      <navLabel>
+       <text>第35章 一生的朋友</text>
+      </navLabel>
+      <content src="chapter_00035.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-38">
+      <navLabel>
+       <text>第36章 叶芷的建议</text>
+      </navLabel>
+      <content src="chapter_00036.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-39">
+      <navLabel>
+       <text>第37章 绝望的杨思思</text>
+      </navLabel>
+      <content src="chapter_00037.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-40">
+      <navLabel>
+       <text>第38章 出来约架吧</text>
+      </navLabel>
+      <content src="chapter_00038.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-41">
+      <navLabel>
+       <text>第39章 新来的前台小妹</text>
+      </navLabel>
+      <content src="chapter_00039.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-42">
+      <navLabel>
+       <text>第40章 我在风花雪月里等你</text>
+      </navLabel>
+      <content src="chapter_00040.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-43">
+      <navLabel>
+       <text>第41章 等不到的爱</text>
+      </navLabel>
+      <content src="chapter_00041.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-44">
+      <navLabel>
+       <text>第42章 给我介绍个男朋友</text>
+      </navLabel>
+      <content src="chapter_00042.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-45">
+      <navLabel>
+       <text>第43章 桃子</text>
+      </navLabel>
+      <content src="chapter_00043.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-46">
+      <navLabel>
+       <text>第44章 行程有变</text>
+      </navLabel>
+      <content src="chapter_00044.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-47">
+      <navLabel>
+       <text>第45章 一场不愿意醒来的梦</text>
+      </navLabel>
+      <content src="chapter_00045.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-48">
+      <navLabel>
+       <text>第46章 会调酒的桃子</text>
+      </navLabel>
+      <content src="chapter_00046.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-49">
+      <navLabel>
+       <text>第47章 搞事情</text>
+      </navLabel>
+      <content src="chapter_00047.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-50">
+      <navLabel>
+       <text>第48章 我没有退路了</text>
+      </navLabel>
+      <content src="chapter_00048.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-51">
+      <navLabel>
+       <text>第49章 我也是个现实的人</text>
+      </navLabel>
+      <content src="chapter_00049.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-52">
+      <navLabel>
+       <text>第50章 吐露心迹</text>
+      </navLabel>
+      <content src="chapter_00050.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-53">
+      <navLabel>
+       <text>第51章 他很尊重我</text>
+      </navLabel>
+      <content src="chapter_00051.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-54">
+      <navLabel>
+       <text>第52章 最大的幸福，只源于幻想</text>
+      </navLabel>
+      <content src="chapter_00052.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-55">
+      <navLabel>
+       <text>第53章 救人</text>
+      </navLabel>
+      <content src="chapter_00053.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-56">
+      <navLabel>
+       <text>第54章 救人2</text>
+      </navLabel>
+      <content src="chapter_00054.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-57">
+      <navLabel>
+       <text>第55章 悲伤的铁男</text>
+      </navLabel>
+      <content src="chapter_00055.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-58">
+      <navLabel>
+       <text>第56章 我们是同类</text>
+      </navLabel>
+      <content src="chapter_00056.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-59">
+      <navLabel>
+       <text>第57章 叶芷的关心</text>
+      </navLabel>
+      <content src="chapter_00057.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-60">
+      <navLabel>
+       <text>第58章 江湖规矩</text>
+      </navLabel>
+      <content src="chapter_00058.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-61">
+      <navLabel>
+       <text>第59章 送给你的</text>
+      </navLabel>
+      <content src="chapter_00059.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-62">
+      <navLabel>
+       <text>第60章 被拆穿的谎言</text>
+      </navLabel>
+      <content src="chapter_00060.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-63">
+      <navLabel>
+       <text>第61章 黄金戒指与钻石戒指</text>
+      </navLabel>
+      <content src="chapter_00061.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-64">
+      <navLabel>
+       <text>第62章 没有人理解</text>
+      </navLabel>
+      <content src="chapter_00062.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-65">
+      <navLabel>
+       <text>第63章 最美的谎言</text>
+      </navLabel>
+      <content src="chapter_00063.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-66">
+      <navLabel>
+       <text>第64章 帅和漂亮</text>
+      </navLabel>
+      <content src="chapter_00064.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-67">
+      <navLabel>
+       <text>第65章 有话好好说</text>
+      </navLabel>
+      <content src="chapter_00065.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-68">
+      <navLabel>
+       <text>第66章 互不理解</text>
+      </navLabel>
+      <content src="chapter_00066.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-69">
+      <navLabel>
+       <text>第67章 这个夜</text>
+      </navLabel>
+      <content src="chapter_00067.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-70">
+      <navLabel>
+       <text>第68章 英雄与英雄</text>
+      </navLabel>
+      <content src="chapter_00068.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-71">
+      <navLabel>
+       <text>第69章 特别的缘分</text>
+      </navLabel>
+      <content src="chapter_00069.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-72">
+      <navLabel>
+       <text>第70章 要多做善事</text>
+      </navLabel>
+      <content src="chapter_00070.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-73">
+      <navLabel>
+       <text>第71章 挂牌</text>
+      </navLabel>
+      <content src="chapter_00071.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-74">
+      <navLabel>
+       <text>第72章 蛮横的杨思思</text>
+      </navLabel>
+      <content src="chapter_00072.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-75">
+      <navLabel>
+       <text>第73章 高情商的杨思思</text>
+      </navLabel>
+      <content src="chapter_00073.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-76">
+      <navLabel>
+       <text>第74章 分歧</text>
+      </navLabel>
+      <content src="chapter_00074.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-77">
+      <navLabel>
+       <text>第75章 送别老米</text>
+      </navLabel>
+      <content src="chapter_00075.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-78">
+      <navLabel>
+       <text>第76章 恢复营业前</text>
+      </navLabel>
+      <content src="chapter_00076.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-79">
+      <navLabel>
+       <text>第77章 恢复营业前2</text>
+      </navLabel>
+      <content src="chapter_00077.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-80">
+      <navLabel>
+       <text>第78章 名单公布</text>
+      </navLabel>
+      <content src="chapter_00078.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-81">
+      <navLabel>
+       <text>第79章 头痛发热</text>
+      </navLabel>
+      <content src="chapter_00079.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-82">
+      <navLabel>
+       <text>第80章 对付她的冷漠</text>
+      </navLabel>
+      <content src="chapter_00080.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-83">
+      <navLabel>
+       <text>第81章 好运来</text>
+      </navLabel>
+      <content src="chapter_00081.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-84">
+      <navLabel>
+       <text>第82章 想起了她</text>
+      </navLabel>
+      <content src="chapter_00082.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-85">
+      <navLabel>
+       <text>第83章 恶作剧</text>
+      </navLabel>
+      <content src="chapter_00083.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-86">
+      <navLabel>
+       <text>第84章 冲突</text>
+      </navLabel>
+      <content src="chapter_00084.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-87">
+      <navLabel>
+       <text>第85章 冲突2</text>
+      </navLabel>
+      <content src="chapter_00085.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-88">
+      <navLabel>
+       <text>第86章 一些感悟</text>
+      </navLabel>
+      <content src="chapter_00086.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-89">
+      <navLabel>
+       <text>第87章 分析</text>
+      </navLabel>
+      <content src="chapter_00087.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-90">
+      <navLabel>
+       <text>第88章 珍惜眼前</text>
+      </navLabel>
+      <content src="chapter_00088.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-91">
+      <navLabel>
+       <text>第89章 我不是肤浅的人</text>
+      </navLabel>
+      <content src="chapter_00089.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-92">
+      <navLabel>
+       <text>第90章 初次见面</text>
+      </navLabel>
+      <content src="chapter_00090.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-93">
+      <navLabel>
+       <text>第91章 树大招风</text>
+      </navLabel>
+      <content src="chapter_00091.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-94">
+      <navLabel>
+       <text>第92章 中计</text>
+      </navLabel>
+      <content src="chapter_00092.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-95">
+      <navLabel>
+       <text>第93章 我是个罪人</text>
+      </navLabel>
+      <content src="chapter_00093.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-96">
+      <navLabel>
+       <text>第94章 孙继伟的为人哲学</text>
+      </navLabel>
+      <content src="chapter_00094.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-97">
+      <navLabel>
+       <text>第95章 她在丽江</text>
+      </navLabel>
+      <content src="chapter_00095.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-98">
+      <navLabel>
+       <text>第96章 去意已决</text>
+      </navLabel>
+      <content src="chapter_00096.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-99">
+      <navLabel>
+       <text>第97章 不欢而散</text>
+      </navLabel>
+      <content src="chapter_00097.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-100">
+      <navLabel>
+       <text>第98章 做决定</text>
+      </navLabel>
+      <content src="chapter_00098.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-101">
+      <navLabel>
+       <text>第99章 送别</text>
+      </navLabel>
+      <content src="chapter_00099.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-102">
+      <navLabel>
+       <text>第100章 怕一辈子再也见不到你</text>
+      </navLabel>
+      <content src="chapter_00100.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-103">
+      <navLabel>
+       <text>第101章 信</text>
+      </navLabel>
+      <content src="chapter_00101.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-104">
+      <navLabel>
+       <text>第102章 该走的终究都要走</text>
+      </navLabel>
+      <content src="chapter_00102.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-105">
+      <navLabel>
+       <text>第103章 海阔天空</text>
+      </navLabel>
+      <content src="chapter_00103.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-106">
+      <navLabel>
+       <text>第104章 马指导的过往</text>
+      </navLabel>
+      <content src="chapter_00104.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-107">
+      <navLabel>
+       <text>第105章 生日礼物</text>
+      </navLabel>
+      <content src="chapter_00105.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-108">
+      <navLabel>
+       <text>第106章 劝说</text>
+      </navLabel>
+      <content src="chapter_00106.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-109">
+      <navLabel>
+       <text>第107章 生离的感觉</text>
+      </navLabel>
+      <content src="chapter_00107.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-110">
+      <navLabel>
+       <text>第108章 只能成，不能败</text>
+      </navLabel>
+      <content src="chapter_00108.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-111">
+      <navLabel>
+       <text>第109章 等和变</text>
+      </navLabel>
+      <content src="chapter_00109.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-112">
+      <navLabel>
+       <text>第110章 城市灯火通明，孤寂的是人心</text>
+      </navLabel>
+      <content src="chapter_00110.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-113">
+      <navLabel>
+       <text>第111章 去找她</text>
+      </navLabel>
+      <content src="chapter_00111.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-114">
+      <navLabel>
+       <text>第112章 你要不幸早死，我会伤心一辈子</text>
+      </navLabel>
+      <content src="chapter_00112.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-115">
+      <navLabel>
+       <text>第113章 我不会感谢你的</text>
+      </navLabel>
+      <content src="chapter_00113.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-116">
+      <navLabel>
+       <text>第114章 以德报怨</text>
+      </navLabel>
+      <content src="chapter_00114.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-117">
+      <navLabel>
+       <text>第115章 等</text>
+      </navLabel>
+      <content src="chapter_00115.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-118">
+      <navLabel>
+       <text>第116章 给你讲个笑话</text>
+      </navLabel>
+      <content src="chapter_00116.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-119">
+      <navLabel>
+       <text>第117章 求你一个事情</text>
+      </navLabel>
+      <content src="chapter_00117.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-120">
+      <navLabel>
+       <text>第118章 大大的惊喜</text>
+      </navLabel>
+      <content src="chapter_00118.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-121">
+      <navLabel>
+       <text>第119章 夜会</text>
+      </navLabel>
+      <content src="chapter_00119.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-122">
+      <navLabel>
+       <text>第120章 夜会2</text>
+      </navLabel>
+      <content src="chapter_00120.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-123">
+      <navLabel>
+       <text>第121章 上海思维</text>
+      </navLabel>
+      <content src="chapter_00121.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-124">
+      <navLabel>
+       <text>第122章 传承</text>
+      </navLabel>
+      <content src="chapter_00122.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-125">
+      <navLabel>
+       <text>第123章 生死与共</text>
+      </navLabel>
+      <content src="chapter_00123.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-126">
+      <navLabel>
+       <text>第124章 我有这样的危机感</text>
+      </navLabel>
+      <content src="chapter_00124.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-127">
+      <navLabel>
+       <text>第125章 绝处逢生</text>
+      </navLabel>
+      <content src="chapter_00125.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-128">
+      <navLabel>
+       <text>第126章 没有冬天的城市</text>
+      </navLabel>
+      <content src="chapter_00126.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-129">
+      <navLabel>
+       <text>第127章 监视</text>
+      </navLabel>
+      <content src="chapter_00127.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-130">
+      <navLabel>
+       <text>第128章 自甘堕落</text>
+      </navLabel>
+      <content src="chapter_00128.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-131">
+      <navLabel>
+       <text>第129章 我是她爸爸</text>
+      </navLabel>
+      <content src="chapter_00129.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-132">
+      <navLabel>
+       <text>第130章 想送你一个礼物</text>
+      </navLabel>
+      <content src="chapter_00130.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-133">
+      <navLabel>
+       <text>第131章 发朋友圈</text>
+      </navLabel>
+      <content src="chapter_00131.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-134">
+      <navLabel>
+       <text>第132章 催婚</text>
+      </navLabel>
+      <content src="chapter_00132.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-135">
+      <navLabel>
+       <text>第133章 放弃了全世界的阳光</text>
+      </navLabel>
+      <content src="chapter_00133.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-136">
+      <navLabel>
+       <text>第134章 辜负</text>
+      </navLabel>
+      <content src="chapter_00134.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-137">
+      <navLabel>
+       <text>第135章 挚爱</text>
+      </navLabel>
+      <content src="chapter_00135.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-138">
+      <navLabel>
+       <text>第136章 悲伤和不悲伤</text>
+      </navLabel>
+      <content src="chapter_00136.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-139">
+      <navLabel>
+       <text>第137章 巨大的谜</text>
+      </navLabel>
+      <content src="chapter_00137.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-140">
+      <navLabel>
+       <text>第138章 可以住在你们客栈吗？</text>
+      </navLabel>
+      <content src="chapter_00138.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-141">
+      <navLabel>
+       <text>第139章 你凭什么替大家原谅她</text>
+      </navLabel>
+      <content src="chapter_00139.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-142">
+      <navLabel>
+       <text>第140章 只要你来，我就等你</text>
+      </navLabel>
+      <content src="chapter_00140.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-143">
+      <navLabel>
+       <text>第141章 魔性的想法</text>
+      </navLabel>
+      <content src="chapter_00141.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-144">
+      <navLabel>
+       <text>第142章 私奔</text>
+      </navLabel>
+      <content src="chapter_00142.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-145">
+      <navLabel>
+       <text>第143章 客栈是棵树</text>
+      </navLabel>
+      <content src="chapter_00143.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-146">
+      <navLabel>
+       <text>第144章 这不是施舍</text>
+      </navLabel>
+      <content src="chapter_00144.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-147">
+      <navLabel>
+       <text>第145章 人需要转身</text>
+      </navLabel>
+      <content src="chapter_00145.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-148">
+      <navLabel>
+       <text>第146章 想要奋斗的欲望</text>
+      </navLabel>
+      <content src="chapter_00146.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-149">
+      <navLabel>
+       <text>第147章 叶芷的指教</text>
+      </navLabel>
+      <content src="chapter_00147.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-150">
+      <navLabel>
+       <text>第148章 九隆居商业街</text>
+      </navLabel>
+      <content src="chapter_00148.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-151">
+      <navLabel>
+       <text>第149章 夜探九隆居</text>
+      </navLabel>
+      <content src="chapter_00149.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-152">
+      <navLabel>
+       <text>第150章 送别1</text>
+      </navLabel>
+      <content src="chapter_00150.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-153">
+      <navLabel>
+       <text>第151章 再见大理，再见冬天</text>
+      </navLabel>
+      <content src="chapter_00151.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-154">
+      <navLabel>
+       <text>第152章 我很矛盾</text>
+      </navLabel>
+      <content src="chapter_00152.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-155">
+      <navLabel>
+       <text>第153章 约见孙继伟</text>
+      </navLabel>
+      <content src="chapter_00153.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-156">
+      <navLabel>
+       <text>第154章 不死心</text>
+      </navLabel>
+      <content src="chapter_00154.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-157">
+      <navLabel>
+       <text>第155章 她给的赚钱灵感</text>
+      </navLabel>
+      <content src="chapter_00155.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-158">
+      <navLabel>
+       <text>第156章 不许你搬到她那边住</text>
+      </navLabel>
+      <content src="chapter_00156.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-159">
+      <navLabel>
+       <text>第157章 错爱</text>
+      </navLabel>
+      <content src="chapter_00157.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-160">
+      <navLabel>
+       <text>第158章 人分阶段</text>
+      </navLabel>
+      <content src="chapter_00158.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-161">
+      <navLabel>
+       <text>第159章 可行性分析</text>
+      </navLabel>
+      <content src="chapter_00159.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-162">
+      <navLabel>
+       <text>第160章 不是冤家不聚头</text>
+      </navLabel>
+      <content src="chapter_00160.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-163">
+      <navLabel>
+       <text>第161章 陪我解闷的人们</text>
+      </navLabel>
+      <content src="chapter_00161.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-164">
+      <navLabel>
+       <text>第162章 感悟</text>
+      </navLabel>
+      <content src="chapter_00162.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-165">
+      <navLabel>
+       <text>第163章 他会是我的兄弟吗</text>
+      </navLabel>
+      <content src="chapter_00163.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-166">
+      <navLabel>
+       <text>第164章 别和狼打交道</text>
+      </navLabel>
+      <content src="chapter_00164.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-167">
+      <navLabel>
+       <text>第165章 铁匠机车俱乐部</text>
+      </navLabel>
+      <content src="chapter_00165.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-168">
+      <navLabel>
+       <text>第166章 蛇鼠一窝</text>
+      </navLabel>
+      <content src="chapter_00166.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-169">
+      <navLabel>
+       <text>第167章 好人或坏人</text>
+      </navLabel>
+      <content src="chapter_00167.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-170">
+      <navLabel>
+       <text>第168章 客栈被拆</text>
+      </navLabel>
+      <content src="chapter_00168.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-171">
+      <navLabel>
+       <text>第169章 我放弃了</text>
+      </navLabel>
+      <content src="chapter_00169.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-172">
+      <navLabel>
+       <text>第170章 潮起潮汐</text>
+      </navLabel>
+      <content src="chapter_00170.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-173">
+      <navLabel>
+       <text>第171章 我等你</text>
+      </navLabel>
+      <content src="chapter_00171.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-174">
+      <navLabel>
+       <text>第172章 一个嗜睡的人</text>
+      </navLabel>
+      <content src="chapter_00172.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-175">
+      <navLabel>
+       <text>第173章 道不同不相为谋</text>
+      </navLabel>
+      <content src="chapter_00173.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-176">
+      <navLabel>
+       <text>第174章 政策上的风险</text>
+      </navLabel>
+      <content src="chapter_00174.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-177">
+      <navLabel>
+       <text>第175章 她住院了</text>
+      </navLabel>
+      <content src="chapter_00175.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-178">
+      <navLabel>
+       <text>第176章 面见曹金波</text>
+      </navLabel>
+      <content src="chapter_00176.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-179">
+      <navLabel>
+       <text>第177章 回上海？</text>
+      </navLabel>
+      <content src="chapter_00177.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-180">
+      <navLabel>
+       <text>第178章 结果更重要</text>
+      </navLabel>
+      <content src="chapter_00178.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-181">
+      <navLabel>
+       <text>第179章 妮可</text>
+      </navLabel>
+      <content src="chapter_00179.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-182">
+      <navLabel>
+       <text>第180章 回上海</text>
+      </navLabel>
+      <content src="chapter_00180.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-183">
+      <navLabel>
+       <text>第181章 歪打正着</text>
+      </navLabel>
+      <content src="chapter_00181.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-184">
+      <navLabel>
+       <text>第182章 伤感，焦虑</text>
+      </navLabel>
+      <content src="chapter_00182.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-185">
+      <navLabel>
+       <text>第183章 望江阁</text>
+      </navLabel>
+      <content src="chapter_00183.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-186">
+      <navLabel>
+       <text>第184章 也是一种等</text>
+      </navLabel>
+      <content src="chapter_00184.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-187">
+      <navLabel>
+       <text>第185章 你想见面吗？</text>
+      </navLabel>
+      <content src="chapter_00185.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-188">
+      <navLabel>
+       <text>第186章 总有机会再见面</text>
+      </navLabel>
+      <content src="chapter_00186.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-189">
+      <navLabel>
+       <text>第187章 美好的愿望</text>
+      </navLabel>
+      <content src="chapter_00187.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-190">
+      <navLabel>
+       <text>第188章 香榭丽舍大道的树叶</text>
+      </navLabel>
+      <content src="chapter_00188.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-191">
+      <navLabel>
+       <text>第189章 所以世界才这么俗</text>
+      </navLabel>
+      <content src="chapter_00189.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-192">
+      <navLabel>
+       <text>第190章 梦</text>
+      </navLabel>
+      <content src="chapter_00190.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-193">
+      <navLabel>
+       <text>第191章 这个下雨的夜晚</text>
+      </navLabel>
+      <content src="chapter_00191.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-194">
+      <navLabel>
+       <text>第192章 时间走的太快</text>
+      </navLabel>
+      <content src="chapter_00192.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-195">
+      <navLabel>
+       <text>第193章 说实话</text>
+      </navLabel>
+      <content src="chapter_00193.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-196">
+      <navLabel>
+       <text>第194章 突生的意外</text>
+      </navLabel>
+      <content src="chapter_00194.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-197">
+      <navLabel>
+       <text>第195章 真相背后是复杂的人性</text>
+      </navLabel>
+      <content src="chapter_00195.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-198">
+      <navLabel>
+       <text>第196章 内伤</text>
+      </navLabel>
+      <content src="chapter_00196.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-199">
+      <navLabel>
+       <text>第197章 专程</text>
+      </navLabel>
+      <content src="chapter_00197.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-200">
+      <navLabel>
+       <text>第198章 海阔天空1</text>
+      </navLabel>
+      <content src="chapter_00198.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-201">
+      <navLabel>
+       <text>第199章 破局1</text>
+      </navLabel>
+      <content src="chapter_00199.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-202">
+      <navLabel>
+       <text>第200章 破局2</text>
+      </navLabel>
+      <content src="chapter_00200.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-203">
+      <navLabel>
+       <text>第201章 破局3</text>
+      </navLabel>
+      <content src="chapter_00201.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-204">
+      <navLabel>
+       <text>第202章 破局4</text>
+      </navLabel>
+      <content src="chapter_00202.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-205">
+      <navLabel>
+       <text>第203章 破局5</text>
+      </navLabel>
+      <content src="chapter_00203.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-206">
+      <navLabel>
+       <text>第204章 破局6</text>
+      </navLabel>
+      <content src="chapter_00204.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-207">
+      <navLabel>
+       <text>第205章 破局7</text>
+      </navLabel>
+      <content src="chapter_00205.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-208">
+      <navLabel>
+       <text>第206章 咱俩的事儿还没完</text>
+      </navLabel>
+      <content src="chapter_00206.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-209">
+      <navLabel>
+       <text>第207章 反转</text>
+      </navLabel>
+      <content src="chapter_00207.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-210">
+      <navLabel>
+       <text>第208章 你寂寞吗</text>
+      </navLabel>
+      <content src="chapter_00208.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-211">
+      <navLabel>
+       <text>第209章 想去小城做客吗</text>
+      </navLabel>
+      <content src="chapter_00209.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-212">
+      <navLabel>
+       <text>第210章 必须告诉他</text>
+      </navLabel>
+      <content src="chapter_00210.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-213">
+      <navLabel>
+       <text>第211章 劝</text>
+      </navLabel>
+      <content src="chapter_00211.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-214">
+      <navLabel>
+       <text>第212章 来大理过年吧</text>
+      </navLabel>
+      <content src="chapter_00212.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-215">
+      <navLabel>
+       <text>第213章 来替我做事情</text>
+      </navLabel>
+      <content src="chapter_00213.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-216">
+      <navLabel>
+       <text>第214章 你是个人才</text>
+      </navLabel>
+      <content src="chapter_00214.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-217">
+      <navLabel>
+       <text>第215章 车在你在，车亡你亡</text>
+      </navLabel>
+      <content src="chapter_00215.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-218">
+      <navLabel>
+       <text>第216章 欠着</text>
+      </navLabel>
+      <content src="chapter_00216.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-219">
+      <navLabel>
+       <text>第217章 等待</text>
+      </navLabel>
+      <content src="chapter_00217.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-220">
+      <navLabel>
+       <text>第218章 像是在冷的时候喝了一杯热茶</text>
+      </navLabel>
+      <content src="chapter_00218.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-221">
+      <navLabel>
+       <text>第219章 就像男女朋友一样</text>
+      </navLabel>
+      <content src="chapter_00219.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-222">
+      <navLabel>
+       <text>第220章 因为你是我喜欢的人</text>
+      </navLabel>
+      <content src="chapter_00220.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-223">
+      <navLabel>
+       <text>第221章 酒吧风波</text>
+      </navLabel>
+      <content src="chapter_00221.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-224">
+      <navLabel>
+       <text>第222章 别惹我的女人</text>
+      </navLabel>
+      <content src="chapter_00222.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-225">
+      <navLabel>
+       <text>第223章 皆大欢喜</text>
+      </navLabel>
+      <content src="chapter_00223.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-226">
+      <navLabel>
+       <text>第224章 叶芷也是上海女人</text>
+      </navLabel>
+      <content src="chapter_00224.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-227">
+      <navLabel>
+       <text>第225章 我可以去小城</text>
+      </navLabel>
+      <content src="chapter_00225.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-228">
+      <navLabel>
+       <text>第226章 两难</text>
+      </navLabel>
+      <content src="chapter_00226.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-229">
+      <navLabel>
+       <text>第227章 会面</text>
+      </navLabel>
+      <content src="chapter_00227.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-230">
+      <navLabel>
+       <text>第228章 我的野心</text>
+      </navLabel>
+      <content src="chapter_00228.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-231">
+      <navLabel>
+       <text>第229章 终于要见面</text>
+      </navLabel>
+      <content src="chapter_00229.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-232">
+      <navLabel>
+       <text>第230章 终于要见面2</text>
+      </navLabel>
+      <content src="chapter_00230.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-233">
+      <navLabel>
+       <text>第231章 好久不见</text>
+      </navLabel>
+      <content src="chapter_00231.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-234">
+      <navLabel>
+       <text>第232章 让我被动的女人</text>
+      </navLabel>
+      <content src="chapter_00232.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-235">
+      <navLabel>
+       <text>第233章 我不介意</text>
+      </navLabel>
+      <content src="chapter_00233.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-236">
+      <navLabel>
+       <text>第234章 看不见硝烟的战场</text>
+      </navLabel>
+      <content src="chapter_00234.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-237">
+      <navLabel>
+       <text>第235章 上海、大理</text>
+      </navLabel>
+      <content src="chapter_00235.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-238">
+      <navLabel>
+       <text>第236章 没有对错，只有选择</text>
+      </navLabel>
+      <content src="chapter_00236.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-239">
+      <navLabel>
+       <text>第237章 看不见的背后</text>
+      </navLabel>
+      <content src="chapter_00237.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-240">
+      <navLabel>
+       <text>第238章 会是一辈子吗</text>
+      </navLabel>
+      <content src="chapter_00238.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-241">
+      <navLabel>
+       <text>第239章 没有遇到你之前</text>
+      </navLabel>
+      <content src="chapter_00239.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-242">
+      <navLabel>
+       <text>第240章 牵着手走一会儿</text>
+      </navLabel>
+      <content src="chapter_00240.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-243">
+      <navLabel>
+       <text>第241章 解开一把锁</text>
+      </navLabel>
+      <content src="chapter_00241.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-244">
+      <navLabel>
+       <text>第242章 善待她</text>
+      </navLabel>
+      <content src="chapter_00242.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-245">
+      <navLabel>
+       <text>第243章 永远都不开始</text>
+      </navLabel>
+      <content src="chapter_00243.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-246">
+      <navLabel>
+       <text>第244章 祝你，一切都好</text>
+      </navLabel>
+      <content src="chapter_00244.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-247">
+      <navLabel>
+       <text>第245章 顺其自然</text>
+      </navLabel>
+      <content src="chapter_00245.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-248">
+      <navLabel>
+       <text>第246章 人与人</text>
+      </navLabel>
+      <content src="chapter_00246.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-249">
+      <navLabel>
+       <text>第247章 除夕夜的速效救心丸</text>
+      </navLabel>
+      <content src="chapter_00247.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-250">
+      <navLabel>
+       <text>第248章 猫和老鼠</text>
+      </navLabel>
+      <content src="chapter_00248.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-251">
+      <navLabel>
+       <text>第249章 联系上叶芷</text>
+      </navLabel>
+      <content src="chapter_00249.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-252">
+      <navLabel>
+       <text>第250章 有没有考虑回上海发展</text>
+      </navLabel>
+      <content src="chapter_00250.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-253">
+      <navLabel>
+       <text>第251章 你走你的路</text>
+      </navLabel>
+      <content src="chapter_00251.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-254">
+      <navLabel>
+       <text>第252章 跨年</text>
+      </navLabel>
+      <content src="chapter_00252.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-255">
+      <navLabel>
+       <text>第253章 我决定了</text>
+      </navLabel>
+      <content src="chapter_00253.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-256">
+      <navLabel>
+       <text>第254章 突击检查</text>
+      </navLabel>
+      <content src="chapter_00254.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-257">
+      <navLabel>
+       <text>第255章 保护洱海不是空口号</text>
+      </navLabel>
+      <content src="chapter_00255.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-258">
+      <navLabel>
+       <text>第256章 是谁让你想清醒</text>
+      </navLabel>
+      <content src="chapter_00256.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-259">
+      <navLabel>
+       <text>第257章 人不在，心在</text>
+      </navLabel>
+      <content src="chapter_00257.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-260">
+      <navLabel>
+       <text>第258章 我和你不一样</text>
+      </navLabel>
+      <content src="chapter_00258.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-261">
+      <navLabel>
+       <text>第259章 最不想见到的女人</text>
+      </navLabel>
+      <content src="chapter_00259.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-262">
+      <navLabel>
+       <text>第260章 人心叵测</text>
+      </navLabel>
+      <content src="chapter_00260.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-263">
+      <navLabel>
+       <text>第261章 不想面对答案</text>
+      </navLabel>
+      <content src="chapter_00261.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-264">
+      <navLabel>
+       <text>第262章 你只是累了</text>
+      </navLabel>
+      <content src="chapter_00262.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-265">
+      <navLabel>
+       <text>第263章 跟狗学狗</text>
+      </navLabel>
+      <content src="chapter_00263.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-266">
+      <navLabel>
+       <text>第264章 人情和人性</text>
+      </navLabel>
+      <content src="chapter_00264.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-267">
+      <navLabel>
+       <text>第265章 那是因为在乎</text>
+      </navLabel>
+      <content src="chapter_00265.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-268">
+      <navLabel>
+       <text>第266章 你快乐所以我快乐</text>
+      </navLabel>
+      <content src="chapter_00266.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-269">
+      <navLabel>
+       <text>第267章 比未知还未知</text>
+      </navLabel>
+      <content src="chapter_00267.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-270">
+      <navLabel>
+       <text>第268章 她回上海了</text>
+      </navLabel>
+      <content src="chapter_00268.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-271">
+      <navLabel>
+       <text>第269章 不能一直活在阴影里</text>
+      </navLabel>
+      <content src="chapter_00269.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-272">
+      <navLabel>
+       <text>第270章 大理，好吗？</text>
+      </navLabel>
+      <content src="chapter_00270.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-273">
+      <navLabel>
+       <text>第271章 等待1</text>
+      </navLabel>
+      <content src="chapter_00271.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-274">
+      <navLabel>
+       <text>第272章 我要做个坏男人</text>
+      </navLabel>
+      <content src="chapter_00272.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-275">
+      <navLabel>
+       <text>第273章 渣而不烂</text>
+      </navLabel>
+      <content src="chapter_00273.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-276">
+      <navLabel>
+       <text>第274章 这里面会不会有误会？</text>
+      </navLabel>
+      <content src="chapter_00274.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-277">
+      <navLabel>
+       <text>第275章 多情自古伤离别</text>
+      </navLabel>
+      <content src="chapter_00275.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-278">
+      <navLabel>
+       <text>第276章 是你的心魔打败了你</text>
+      </navLabel>
+      <content src="chapter_00276.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-279">
+      <navLabel>
+       <text>第277章 我好像是疯了</text>
+      </navLabel>
+      <content src="chapter_00277.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-280">
+      <navLabel>
+       <text>第278章 太酸了</text>
+      </navLabel>
+      <content src="chapter_00278.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-281">
+      <navLabel>
+       <text>第279章 打破规则</text>
+      </navLabel>
+      <content src="chapter_00279.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-282">
+      <navLabel>
+       <text>第280章 感谢经历</text>
+      </navLabel>
+      <content src="chapter_00280.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-283">
+      <navLabel>
+       <text>第281章 她到底怎么了</text>
+      </navLabel>
+      <content src="chapter_00281.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-284">
+      <navLabel>
+       <text>第282章 意外突生</text>
+      </navLabel>
+      <content src="chapter_00282.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-285">
+      <navLabel>
+       <text>第283章 土地纠纷</text>
+      </navLabel>
+      <content src="chapter_00283.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-286">
+      <navLabel>
+       <text>第284章 涉险</text>
+      </navLabel>
+      <content src="chapter_00284.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-287">
+      <navLabel>
+       <text>第285章 局中局</text>
+      </navLabel>
+      <content src="chapter_00285.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-288">
+      <navLabel>
+       <text>第286章 亡命天涯</text>
+      </navLabel>
+      <content src="chapter_00286.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-289">
+      <navLabel>
+       <text>第287章 要不要做我女朋友</text>
+      </navLabel>
+      <content src="chapter_00287.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-290">
+      <navLabel>
+       <text>第288章 你真的进步了</text>
+      </navLabel>
+      <content src="chapter_00288.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-291">
+      <navLabel>
+       <text>第289章 好，60年</text>
+      </navLabel>
+      <content src="chapter_00289.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-292">
+      <navLabel>
+       <text>第290章 我要霸占你</text>
+      </navLabel>
+      <content src="chapter_00290.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-293">
+      <navLabel>
+       <text>第291章 我想尝尝你口红的味道</text>
+      </navLabel>
+      <content src="chapter_00291.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-294">
+      <navLabel>
+       <text>第292章 断绝联系</text>
+      </navLabel>
+      <content src="chapter_00292.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-295">
+      <navLabel>
+       <text>第293章 收拢人心</text>
+      </navLabel>
+      <content src="chapter_00293.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-296">
+      <navLabel>
+       <text>第294章 带她走吧</text>
+      </navLabel>
+      <content src="chapter_00294.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-297">
+      <navLabel>
+       <text>第295章 你会遭报应的</text>
+      </navLabel>
+      <content src="chapter_00295.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-298">
+      <navLabel>
+       <text>第296章 我也爱你</text>
+      </navLabel>
+      <content src="chapter_00296.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-299">
+      <navLabel>
+       <text>第297章 思考与迷茫并存</text>
+      </navLabel>
+      <content src="chapter_00297.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-300">
+      <navLabel>
+       <text>第298章 好好活着</text>
+      </navLabel>
+      <content src="chapter_00298.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-301">
+      <navLabel>
+       <text>第299章 命运是一把锁</text>
+      </navLabel>
+      <content src="chapter_00299.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-302">
+      <navLabel>
+       <text>第300章 看破红尘</text>
+      </navLabel>
+      <content src="chapter_00300.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-303">
+      <navLabel>
+       <text>第301章 她没有和我联系</text>
+      </navLabel>
+      <content src="chapter_00301.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-304">
+      <navLabel>
+       <text>第302章 情理之中，意料之外</text>
+      </navLabel>
+      <content src="chapter_00302.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-305">
+      <navLabel>
+       <text>第303章 牡丹花下死做鬼也风流</text>
+      </navLabel>
+      <content src="chapter_00303.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-306">
+      <navLabel>
+       <text>第304章 男欢女爱</text>
+      </navLabel>
+      <content src="chapter_00304.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-307">
+      <navLabel>
+       <text>第305章 意外的惊喜</text>
+      </navLabel>
+      <content src="chapter_00305.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-308">
+      <navLabel>
+       <text>第306章 疯子</text>
+      </navLabel>
+      <content src="chapter_00306.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-309">
+      <navLabel>
+       <text>第307章 两个都要了</text>
+      </navLabel>
+      <content src="chapter_00307.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-310">
+      <navLabel>
+       <text>第308章 希望她平安</text>
+      </navLabel>
+      <content src="chapter_00308.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-311">
+      <navLabel>
+       <text>第309章 一家人之后，又一家人</text>
+      </navLabel>
+      <content src="chapter_00309.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-312">
+      <navLabel>
+       <text>第310章 这是我的底线</text>
+      </navLabel>
+      <content src="chapter_00310.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-313">
+      <navLabel>
+       <text>第311章 寒冬来了</text>
+      </navLabel>
+      <content src="chapter_00311.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-314">
+      <navLabel>
+       <text>第312章 我还是忍不住会想你</text>
+      </navLabel>
+      <content src="chapter_00312.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-315">
+      <navLabel>
+       <text>第313章 谈人情，讲条件</text>
+      </navLabel>
+      <content src="chapter_00313.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-316">
+      <navLabel>
+       <text>第314章 心里的一些奢望</text>
+      </navLabel>
+      <content src="chapter_00314.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-317">
+      <navLabel>
+       <text>第315章 不进则退</text>
+      </navLabel>
+      <content src="chapter_00315.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-318">
+      <navLabel>
+       <text>第316章 回家</text>
+      </navLabel>
+      <content src="chapter_00316.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-319">
+      <navLabel>
+       <text>第317章 让人讨厌的欲望</text>
+      </navLabel>
+      <content src="chapter_00317.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-320">
+      <navLabel>
+       <text>第318章 保护</text>
+      </navLabel>
+      <content src="chapter_00318.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-321">
+      <navLabel>
+       <text>第319章 爱的很辛苦</text>
+      </navLabel>
+      <content src="chapter_00319.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-322">
+      <navLabel>
+       <text>第320章 绽放</text>
+      </navLabel>
+      <content src="chapter_00320.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-323">
+      <navLabel>
+       <text>第321章 来的话，我等你</text>
+      </navLabel>
+      <content src="chapter_00321.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-324">
+      <navLabel>
+       <text>第322章 人间败类</text>
+      </navLabel>
+      <content src="chapter_00322.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-325">
+      <navLabel>
+       <text>第323章 对赌合同</text>
+      </navLabel>
+      <content src="chapter_00323.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-326">
+      <navLabel>
+       <text>第324章 无法无天的杨如画</text>
+      </navLabel>
+      <content src="chapter_00324.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-327">
+      <navLabel>
+       <text>第325章 人逢喜事精神爽</text>
+      </navLabel>
+      <content src="chapter_00325.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-328">
+      <navLabel>
+       <text>第326章 好坏各一半的消息</text>
+      </navLabel>
+      <content src="chapter_00326.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-329">
+      <navLabel>
+       <text>第327章 该好好向他学习</text>
+      </navLabel>
+      <content src="chapter_00327.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-330">
+      <navLabel>
+       <text>第328章 这算是威胁吗</text>
+      </navLabel>
+      <content src="chapter_00328.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-331">
+      <navLabel>
+       <text>第329章 你能比我好到哪儿去</text>
+      </navLabel>
+      <content src="chapter_00329.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-332">
+      <navLabel>
+       <text>第330章 拼命想抓住你</text>
+      </navLabel>
+      <content src="chapter_00330.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-333">
+      <navLabel>
+       <text>第331章 我一直在等她</text>
+      </navLabel>
+      <content src="chapter_00331.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-334">
+      <navLabel>
+       <text>第332章 等了又等</text>
+      </navLabel>
+      <content src="chapter_00332.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-335">
+      <navLabel>
+       <text>第333章 来而不见</text>
+      </navLabel>
+      <content src="chapter_00333.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-336">
+      <navLabel>
+       <text>第334章 碎裂的心</text>
+      </navLabel>
+      <content src="chapter_00334.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-337">
+      <navLabel>
+       <text>第335章 必须</text>
+      </navLabel>
+      <content src="chapter_00335.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-338">
+      <navLabel>
+       <text>第336章 且不用再等</text>
+      </navLabel>
+      <content src="chapter_00336.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-339">
+      <navLabel>
+       <text>第337章 醉生梦死</text>
+      </navLabel>
+      <content src="chapter_00337.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-340">
+      <navLabel>
+       <text>第338章 斩断烦恼丝</text>
+      </navLabel>
+      <content src="chapter_00338.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-341">
+      <navLabel>
+       <text>第339章 被孤立的我</text>
+      </navLabel>
+      <content src="chapter_00339.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-342">
+      <navLabel>
+       <text>第340章 你等等她</text>
+      </navLabel>
+      <content src="chapter_00340.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-343">
+      <navLabel>
+       <text>第341章 我会陪他一起的</text>
+      </navLabel>
+      <content src="chapter_00341.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-344">
+      <navLabel>
+       <text>第342章 叶子喜欢的男人</text>
+      </navLabel>
+      <content src="chapter_00342.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-345">
+      <navLabel>
+       <text>第343章 凡事都经不起等</text>
+      </navLabel>
+      <content src="chapter_00343.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-346">
+      <navLabel>
+       <text>第344章 尽力了</text>
+      </navLabel>
+      <content src="chapter_00344.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-347">
+      <navLabel>
+       <text>第345章 最最有担当的男人</text>
+      </navLabel>
+      <content src="chapter_00345.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-348">
+      <navLabel>
+       <text>第346章 你凭什么不努力</text>
+      </navLabel>
+      <content src="chapter_00346.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-349">
+      <navLabel>
+       <text>第347章 人与人之间的关系真奇妙</text>
+      </navLabel>
+      <content src="chapter_00347.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-350">
+      <navLabel>
+       <text>第348章 好机会</text>
+      </navLabel>
+      <content src="chapter_00348.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-351">
+      <navLabel>
+       <text>第349章 极为相似的背影</text>
+      </navLabel>
+      <content src="chapter_00349.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-352">
+      <navLabel>
+       <text>第350章 赚钱带来的快感</text>
+      </navLabel>
+      <content src="chapter_00350.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-353">
+      <navLabel>
+       <text>第351章 你在等别人的同时，也有人在等你</text>
+      </navLabel>
+      <content src="chapter_00351.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-354">
+      <navLabel>
+       <text>第352章 我想听到的话</text>
+      </navLabel>
+      <content src="chapter_00352.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-355">
+      <navLabel>
+       <text>第353章 麻烦非常大</text>
+      </navLabel>
+      <content src="chapter_00353.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-356">
+      <navLabel>
+       <text>第354章 情义无价</text>
+      </navLabel>
+      <content src="chapter_00354.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-357">
+      <navLabel>
+       <text>第355章 有点心疼她</text>
+      </navLabel>
+      <content src="chapter_00355.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-358">
+      <navLabel>
+       <text>第356章 我在大理等你</text>
+      </navLabel>
+      <content src="chapter_00356.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-359">
+      <navLabel>
+       <text>第357章 我的阳光走了</text>
+      </navLabel>
+      <content src="chapter_00357.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-360">
+      <navLabel>
+       <text>第358章 高深莫测的老聂</text>
+      </navLabel>
+      <content src="chapter_00358.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-361">
+      <navLabel>
+       <text>第359章 是远还是近</text>
+      </navLabel>
+      <content src="chapter_00359.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-362">
+      <navLabel>
+       <text>第360章 不太干净</text>
+      </navLabel>
+      <content src="chapter_00360.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-363">
+      <navLabel>
+       <text>第361章 风花雪月1</text>
+      </navLabel>
+      <content src="chapter_00361.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-364">
+      <navLabel>
+       <text>第362章 让人震惊的消息</text>
+      </navLabel>
+      <content src="chapter_00362.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-365">
+      <navLabel>
+       <text>第363章 阳光小美女</text>
+      </navLabel>
+      <content src="chapter_00363.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-366">
+      <navLabel>
+       <text>第364章 你可真是个坏坯子</text>
+      </navLabel>
+      <content src="chapter_00364.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-367">
+      <navLabel>
+       <text>第365章 弄巧成拙</text>
+      </navLabel>
+      <content src="chapter_00365.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-368">
+      <navLabel>
+       <text>第366章 卖关子</text>
+      </navLabel>
+      <content src="chapter_00366.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-369">
+      <navLabel>
+       <text>第367章 这一个月</text>
+      </navLabel>
+      <content src="chapter_00367.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-370">
+      <navLabel>
+       <text>第368章 你想我吗</text>
+      </navLabel>
+      <content src="chapter_00368.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-371">
+      <navLabel>
+       <text>第369章 没什么可逃避的</text>
+      </navLabel>
+      <content src="chapter_00369.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-372">
+      <navLabel>
+       <text>第370章 谁还能对我这么好？</text>
+      </navLabel>
+      <content src="chapter_00370.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-373">
+      <navLabel>
+       <text>第371章 回上海1</text>
+      </navLabel>
+      <content src="chapter_00371.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-374">
+      <navLabel>
+       <text>第372章 最初的美好</text>
+      </navLabel>
+      <content src="chapter_00372.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-375">
+      <navLabel>
+       <text>第373章 错过了，你就后悔吧</text>
+      </navLabel>
+      <content src="chapter_00373.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-376">
+      <navLabel>
+       <text>第374章 是谁摆不正位置</text>
+      </navLabel>
+      <content src="chapter_00374.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-377">
+      <navLabel>
+       <text>第375章 学会了付出</text>
+      </navLabel>
+      <content src="chapter_00375.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-378">
+      <navLabel>
+       <text>第376章 分手不是罪</text>
+      </navLabel>
+      <content src="chapter_00376.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-379">
+      <navLabel>
+       <text>第377章 野心</text>
+      </navLabel>
+      <content src="chapter_00377.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-380">
+      <navLabel>
+       <text>第378章 巧合？</text>
+      </navLabel>
+      <content src="chapter_00378.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-381">
+      <navLabel>
+       <text>第379章 那些回忆</text>
+      </navLabel>
+      <content src="chapter_00379.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-382">
+      <navLabel>
+       <text>第380章 害太岁</text>
+      </navLabel>
+      <content src="chapter_00380.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-383">
+      <navLabel>
+       <text>第381章 我不会再丢下你</text>
+      </navLabel>
+      <content src="chapter_00381.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-384">
+      <navLabel>
+       <text>第382章 具有象征意义的一步</text>
+      </navLabel>
+      <content src="chapter_00382.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-385">
+      <navLabel>
+       <text>第383章 这种感觉前所未有</text>
+      </navLabel>
+      <content src="chapter_00383.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-386">
+      <navLabel>
+       <text>第384章 上个房客留下来的照片</text>
+      </navLabel>
+      <content src="chapter_00384.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-387">
+      <navLabel>
+       <text>第385章 兄弟，勇敢点儿</text>
+      </navLabel>
+      <content src="chapter_00385.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-388">
+      <navLabel>
+       <text>第386章 我都看见了</text>
+      </navLabel>
+      <content src="chapter_00386.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-389">
+      <navLabel>
+       <text>第387章 我相信你</text>
+      </navLabel>
+      <content src="chapter_00387.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-390">
+      <navLabel>
+       <text>第388章 比你光明磊落</text>
+      </navLabel>
+      <content src="chapter_00388.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-391">
+      <navLabel>
+       <text>第389章 请你原谅我</text>
+      </navLabel>
+      <content src="chapter_00389.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-392">
+      <navLabel>
+       <text>第390章 关于她的过往</text>
+      </navLabel>
+      <content src="chapter_00390.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-393">
+      <navLabel>
+       <text>第391章 你就当是救赎吧</text>
+      </navLabel>
+      <content src="chapter_00391.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-394">
+      <navLabel>
+       <text>第392章 我死也不想放开你</text>
+      </navLabel>
+      <content src="chapter_00392.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-395">
+      <navLabel>
+       <text>第393章 可悲的是我</text>
+      </navLabel>
+      <content src="chapter_00393.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-396">
+      <navLabel>
+       <text>第394章 情况可能不好</text>
+      </navLabel>
+      <content src="chapter_00394.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-397">
+      <navLabel>
+       <text>第395章 患难见真情</text>
+      </navLabel>
+      <content src="chapter_00395.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-398">
+      <navLabel>
+       <text>第396章 一夜狂风</text>
+      </navLabel>
+      <content src="chapter_00396.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-399">
+      <navLabel>
+       <text>第397章 一定要把我当成亲人</text>
+      </navLabel>
+      <content src="chapter_00397.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-400">
+      <navLabel>
+       <text>第398章 应该能帮你抵一阵子</text>
+      </navLabel>
+      <content src="chapter_00398.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-401">
+      <navLabel>
+       <text>第399章 如果她在你身边</text>
+      </navLabel>
+      <content src="chapter_00399.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-402">
+      <navLabel>
+       <text>第400章 我想放弃学业</text>
+      </navLabel>
+      <content src="chapter_00400.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-403">
+      <navLabel>
+       <text>第401章 倾向于去上海</text>
+      </navLabel>
+      <content src="chapter_00401.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-404">
+      <navLabel>
+       <text>第402章 是不想让我失望吗</text>
+      </navLabel>
+      <content src="chapter_00402.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-405">
+      <navLabel>
+       <text>第403章 是你一百辈子修来的福气</text>
+      </navLabel>
+      <content src="chapter_00403.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-406">
+      <navLabel>
+       <text>第404章 既疑惑也迷茫</text>
+      </navLabel>
+      <content src="chapter_00404.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-407">
+      <navLabel>
+       <text>第405章 “好色”小镇</text>
+      </navLabel>
+      <content src="chapter_00405.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-408">
+      <navLabel>
+       <text>第406章 抹杀掉还活着的希望</text>
+      </navLabel>
+      <content src="chapter_00406.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-409">
+      <navLabel>
+       <text>第407章 等你爱我</text>
+      </navLabel>
+      <content src="chapter_00407.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-410">
+      <navLabel>
+       <text>第408章 冒险</text>
+      </navLabel>
+      <content src="chapter_00408.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-411">
+      <navLabel>
+       <text>第409章 与时间赛跑</text>
+      </navLabel>
+      <content src="chapter_00409.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-412">
+      <navLabel>
+       <text>第410章 孤立无援</text>
+      </navLabel>
+      <content src="chapter_00410.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-413">
+      <navLabel>
+       <text>第411章 不是真的骂你</text>
+      </navLabel>
+      <content src="chapter_00411.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-414">
+      <navLabel>
+       <text>第412章 你不会坑我的</text>
+      </navLabel>
+      <content src="chapter_00412.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-415">
+      <navLabel>
+       <text>第413章 我要保证她万无一失</text>
+      </navLabel>
+      <content src="chapter_00413.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-416">
+      <navLabel>
+       <text>第414章 绝经少女</text>
+      </navLabel>
+      <content src="chapter_00414.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-417">
+      <navLabel>
+       <text>第415章 这就是你经常说的人情</text>
+      </navLabel>
+      <content src="chapter_00415.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-418">
+      <navLabel>
+       <text>第416章 一个男人的柔软</text>
+      </navLabel>
+      <content src="chapter_00416.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-419">
+      <navLabel>
+       <text>第417章 人性经不住考验</text>
+      </navLabel>
+      <content src="chapter_00417.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-420">
+      <navLabel>
+       <text>第418章 一年的约定</text>
+      </navLabel>
+      <content src="chapter_00418.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-421">
+      <navLabel>
+       <text>第419章 贫穷是原罪</text>
+      </navLabel>
+      <content src="chapter_00419.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-422">
+      <navLabel>
+       <text>第420章 我在风花雪月里等你1</text>
+      </navLabel>
+      <content src="chapter_00420.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-423">
+      <navLabel>
+       <text>第421章 我怕停下来</text>
+      </navLabel>
+      <content src="chapter_00421.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-424">
+      <navLabel>
+       <text>第422章 她回来了</text>
+      </navLabel>
+      <content src="chapter_00422.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-425">
+      <navLabel>
+       <text>第423章 心如刀割</text>
+      </navLabel>
+      <content src="chapter_00423.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-426">
+      <navLabel>
+       <text>第424章 这不是贱嘛</text>
+      </navLabel>
+      <content src="chapter_00424.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-427">
+      <navLabel>
+       <text>第425章 心里有个忘不掉，也放不下的王八蛋</text>
+      </navLabel>
+      <content src="chapter_00425.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-428">
+      <navLabel>
+       <text>第426章 算什么男人</text>
+      </navLabel>
+      <content src="chapter_00426.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-429">
+      <navLabel>
+       <text>第427章 她已经有男朋友了</text>
+      </navLabel>
+      <content src="chapter_00427.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-430">
+      <navLabel>
+       <text>第428章 只是一个过客</text>
+      </navLabel>
+      <content src="chapter_00428.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-431">
+      <navLabel>
+       <text>第429章 我不想见她</text>
+      </navLabel>
+      <content src="chapter_00429.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-432">
+      <navLabel>
+       <text>第430章 这是偶遇吗</text>
+      </navLabel>
+      <content src="chapter_00430.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-433">
+      <navLabel>
+       <text>第431章 井水不犯河水</text>
+      </navLabel>
+      <content src="chapter_00431.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-434">
+      <navLabel>
+       <text>第432章 你告诉她</text>
+      </navLabel>
+      <content src="chapter_00432.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-435">
+      <navLabel>
+       <text>第433章 静观其变</text>
+      </navLabel>
+      <content src="chapter_00433.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-436">
+      <navLabel>
+       <text>第434章 我也是一个有追求，有抱负的人</text>
+      </navLabel>
+      <content src="chapter_00434.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-437">
+      <navLabel>
+       <text>第435章 人真是善变</text>
+      </navLabel>
+      <content src="chapter_00435.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-438">
+      <navLabel>
+       <text>第436章 她到底是不是梦</text>
+      </navLabel>
+      <content src="chapter_00436.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-439">
+      <navLabel>
+       <text>第437章 莫大的讽刺</text>
+      </navLabel>
+      <content src="chapter_00437.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-440">
+      <navLabel>
+       <text>第438章 以后的事情，谁知道</text>
+      </navLabel>
+      <content src="chapter_00438.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-441">
+      <navLabel>
+       <text>第439章 折磨你一辈子</text>
+      </navLabel>
+      <content src="chapter_00439.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-442">
+      <navLabel>
+       <text>第440章 就怕她心里比你还苦</text>
+      </navLabel>
+      <content src="chapter_00440.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-443">
+      <navLabel>
+       <text>第441章 资本家的真面目</text>
+      </navLabel>
+      <content src="chapter_00441.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-444">
+      <navLabel>
+       <text>第442章 罚酒</text>
+      </navLabel>
+      <content src="chapter_00442.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-445">
+      <navLabel>
+       <text>第443章 饭局</text>
+      </navLabel>
+      <content src="chapter_00443.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-446">
+      <navLabel>
+       <text>第444章 我要做个有钱人</text>
+      </navLabel>
+      <content src="chapter_00444.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-447">
+      <navLabel>
+       <text>第445章 我没劲儿了</text>
+      </navLabel>
+      <content src="chapter_00445.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-448">
+      <navLabel>
+       <text>第446章 爱不对时间</text>
+      </navLabel>
+      <content src="chapter_00446.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-449">
+      <navLabel>
+       <text>第447章 风水轮流转</text>
+      </navLabel>
+      <content src="chapter_00447.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-450">
+      <navLabel>
+       <text>第448章 你不能因为看不见，就否定一切</text>
+      </navLabel>
+      <content src="chapter_00448.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-451">
+      <navLabel>
+       <text>第449章 撞了</text>
+      </navLabel>
+      <content src="chapter_00449.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-452">
+      <navLabel>
+       <text>第450章 推三阻四</text>
+      </navLabel>
+      <content src="chapter_00450.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-453">
+      <navLabel>
+       <text>第451章 招架不住</text>
+      </navLabel>
+      <content src="chapter_00451.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-454">
+      <navLabel>
+       <text>第452章 我想见你，我也不知道为什么</text>
+      </navLabel>
+      <content src="chapter_00452.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-455">
+      <navLabel>
+       <text>第453章 她不退，我就退</text>
+      </navLabel>
+      <content src="chapter_00453.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-456">
+      <navLabel>
+       <text>第454章 陪你吃个早饭</text>
+      </navLabel>
+      <content src="chapter_00454.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-457">
+      <navLabel>
+       <text>第455章 我们都是恶人</text>
+      </navLabel>
+      <content src="chapter_00455.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-458">
+      <navLabel>
+       <text>第456章 可我不想恨你</text>
+      </navLabel>
+      <content src="chapter_00456.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-459">
+      <navLabel>
+       <text>第457章 心血来潮</text>
+      </navLabel>
+      <content src="chapter_00457.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-460">
+      <navLabel>
+       <text>第458章 你还有选择的余地</text>
+      </navLabel>
+      <content src="chapter_00458.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-461">
+      <navLabel>
+       <text>第459章 被收割的麦田</text>
+      </navLabel>
+      <content src="chapter_00459.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-462">
+      <navLabel>
+       <text>第460章 不是天灾，是人祸</text>
+      </navLabel>
+      <content src="chapter_00460.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-463">
+      <navLabel>
+       <text>第461章 自己给的孤独</text>
+      </navLabel>
+      <content src="chapter_00461.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-464">
+      <navLabel>
+       <text>第462章 习惯了一个人在这里，站会儿</text>
+      </navLabel>
+      <content src="chapter_00462.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-465">
+      <navLabel>
+       <text>第463章 该认命了</text>
+      </navLabel>
+      <content src="chapter_00463.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-466">
+      <navLabel>
+       <text>第464章 彻底解脱</text>
+      </navLabel>
+      <content src="chapter_00464.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-467">
+      <navLabel>
+       <text>第465章 跟我回家</text>
+      </navLabel>
+      <content src="chapter_00465.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-468">
+      <navLabel>
+       <text>第466章 你喜欢过我吗</text>
+      </navLabel>
+      <content src="chapter_00466.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-469">
+      <navLabel>
+       <text>第467章 带我走吧</text>
+      </navLabel>
+      <content src="chapter_00467.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-470">
+      <navLabel>
+       <text>第468章 冲着赚钱来的</text>
+      </navLabel>
+      <content src="chapter_00468.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-471">
+      <navLabel>
+       <text>第469章 我们之间能扯平吗</text>
+      </navLabel>
+      <content src="chapter_00469.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-472">
+      <navLabel>
+       <text>第470章 为了谁</text>
+      </navLabel>
+      <content src="chapter_00470.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-473">
+      <navLabel>
+       <text>第471章 如此接近</text>
+      </navLabel>
+      <content src="chapter_00471.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-474">
+      <navLabel>
+       <text>第472章 涉嫌酒驾</text>
+      </navLabel>
+      <content src="chapter_00472.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-475">
+      <navLabel>
+       <text>第473章 低下了头</text>
+      </navLabel>
+      <content src="chapter_00473.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-476">
+      <navLabel>
+       <text>第474章 她终于来了</text>
+      </navLabel>
+      <content src="chapter_00474.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-477">
+      <navLabel>
+       <text>第475章 爱着</text>
+      </navLabel>
+      <content src="chapter_00475.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-478">
+      <navLabel>
+       <text>第476章 这个世界不会完美的</text>
+      </navLabel>
+      <content src="chapter_00476.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-479">
+      <navLabel>
+       <text>第477章 心有抱负，何惧小节</text>
+      </navLabel>
+      <content src="chapter_00477.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-480">
+      <navLabel>
+       <text>第478章 我是不是很聪明</text>
+      </navLabel>
+      <content src="chapter_00478.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-481">
+      <navLabel>
+       <text>第479章 对不起，我有错</text>
+      </navLabel>
+      <content src="chapter_00479.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-482">
+      <navLabel>
+       <text>第480章 一切回到原点才好</text>
+      </navLabel>
+      <content src="chapter_00480.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-483">
+      <navLabel>
+       <text>第481章 他爸是个混蛋</text>
+      </navLabel>
+      <content src="chapter_00481.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-484">
+      <navLabel>
+       <text>第482章 外号矿长</text>
+      </navLabel>
+      <content src="chapter_00482.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-485">
+      <navLabel>
+       <text>第483章 我还年轻</text>
+      </navLabel>
+      <content src="chapter_00483.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-486">
+      <navLabel>
+       <text>第484章 平凡的一天</text>
+      </navLabel>
+      <content src="chapter_00484.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-487">
+      <navLabel>
+       <text>第485章 可惜，没有这样的交集</text>
+      </navLabel>
+      <content src="chapter_00485.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-488">
+      <navLabel>
+       <text>第486章 起死回生的构思</text>
+      </navLabel>
+      <content src="chapter_00486.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-489">
+      <navLabel>
+       <text>第487章 分道扬镳</text>
+      </navLabel>
+      <content src="chapter_00487.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-490">
+      <navLabel>
+       <text>第488章 谢谢你</text>
+      </navLabel>
+      <content src="chapter_00488.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-491">
+      <navLabel>
+       <text>第489章 生日</text>
+      </navLabel>
+      <content src="chapter_00489.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-492">
+      <navLabel>
+       <text>第490章 是不是有什么暗示</text>
+      </navLabel>
+      <content src="chapter_00490.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-493">
+      <navLabel>
+       <text>第491章 她是在保护自己</text>
+      </navLabel>
+      <content src="chapter_00491.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-494">
+      <navLabel>
+       <text>第492章 孤独与暖意</text>
+      </navLabel>
+      <content src="chapter_00492.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-495">
+      <navLabel>
+       <text>第493章 可是，你能等吗？</text>
+      </navLabel>
+      <content src="chapter_00493.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-496">
+      <navLabel>
+       <text>第494章 爱不起的女人</text>
+      </navLabel>
+      <content src="chapter_00494.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-497">
+      <navLabel>
+       <text>第495章 高山杜鹃1</text>
+      </navLabel>
+      <content src="chapter_00495.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-498">
+      <navLabel>
+       <text>第496章 高山杜鹃2</text>
+      </navLabel>
+      <content src="chapter_00496.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-499">
+      <navLabel>
+       <text>第497章 高山杜鹃3</text>
+      </navLabel>
+      <content src="chapter_00497.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-500">
+      <navLabel>
+       <text>第498章 我们会不会死在这里</text>
+      </navLabel>
+      <content src="chapter_00498.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-501">
+      <navLabel>
+       <text>第499章 我能叫你一声老公吗</text>
+      </navLabel>
+      <content src="chapter_00499.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-502">
+      <navLabel>
+       <text>第500章 好人好报</text>
+      </navLabel>
+      <content src="chapter_00500.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-503">
+      <navLabel>
+       <text>第501章 一种默认</text>
+      </navLabel>
+      <content src="chapter_00501.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-504">
+      <navLabel>
+       <text>第502章 如果人有下辈子</text>
+      </navLabel>
+      <content src="chapter_00502.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-505">
+      <navLabel>
+       <text>第503章 这是一个我选不起的世界</text>
+      </navLabel>
+      <content src="chapter_00503.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-506">
+      <navLabel>
+       <text>第504章 倾诉</text>
+      </navLabel>
+      <content src="chapter_00504.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-507">
+      <navLabel>
+       <text>第505章 能给的都给了</text>
+      </navLabel>
+      <content src="chapter_00505.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-508">
+      <navLabel>
+       <text>第506章 希望大家都好</text>
+      </navLabel>
+      <content src="chapter_00506.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-509">
+      <navLabel>
+       <text>第507章 就这么糊涂着吧</text>
+      </navLabel>
+      <content src="chapter_00507.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-510">
+      <navLabel>
+       <text>第508章 这太难了</text>
+      </navLabel>
+      <content src="chapter_00508.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-511">
+      <navLabel>
+       <text>第509章 你会看不起我吧</text>
+      </navLabel>
+      <content src="chapter_00509.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-512">
+      <navLabel>
+       <text>第510章 你的梦</text>
+      </navLabel>
+      <content src="chapter_00510.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-513">
+      <navLabel>
+       <text>第511章 人人都曾杀死心爱之人</text>
+      </navLabel>
+      <content src="chapter_00511.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-514">
+      <navLabel>
+       <text>第512章 互为彼岸</text>
+      </navLabel>
+      <content src="chapter_00512.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-515">
+      <navLabel>
+       <text>第513章 迷路</text>
+      </navLabel>
+      <content src="chapter_00513.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-516">
+      <navLabel>
+       <text>第514章 救援1</text>
+      </navLabel>
+      <content src="chapter_00514.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-517">
+      <navLabel>
+       <text>第515章 救援2</text>
+      </navLabel>
+      <content src="chapter_00515.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-518">
+      <navLabel>
+       <text>第516章 诉说一个真实的她</text>
+      </navLabel>
+      <content src="chapter_00516.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-519">
+      <navLabel>
+       <text>第517章 对不对，亲爱的</text>
+      </navLabel>
+      <content src="chapter_00517.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-520">
+      <navLabel>
+       <text>第518章 各守一边</text>
+      </navLabel>
+      <content src="chapter_00518.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-521">
+      <navLabel>
+       <text>第519章 人生百态</text>
+      </navLabel>
+      <content src="chapter_00519.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-522">
+      <navLabel>
+       <text>第520章 剑已出鞘</text>
+      </navLabel>
+      <content src="chapter_00520.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-523">
+      <navLabel>
+       <text>第521章 做你背后的女人</text>
+      </navLabel>
+      <content src="chapter_00521.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-524">
+      <navLabel>
+       <text>第522章 不三不四</text>
+      </navLabel>
+      <content src="chapter_00522.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-525">
+      <navLabel>
+       <text>第523章 至少也得相互扶持</text>
+      </navLabel>
+      <content src="chapter_00523.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-526">
+      <navLabel>
+       <text>第524章 狐狸精</text>
+      </navLabel>
+      <content src="chapter_00524.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-527">
+      <navLabel>
+       <text>第525章 就当我是一个傻子吧</text>
+      </navLabel>
+      <content src="chapter_00525.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-528">
+      <navLabel>
+       <text>第526章 明天我要嫁给你</text>
+      </navLabel>
+      <content src="chapter_00526.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-529">
+      <navLabel>
+       <text>第527章 我太失败了</text>
+      </navLabel>
+      <content src="chapter_00527.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-530">
+      <navLabel>
+       <text>第528章 你这样，真的好吗？</text>
+      </navLabel>
+      <content src="chapter_00528.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-531">
+      <navLabel>
+       <text>第529章 我很恼火</text>
+      </navLabel>
+      <content src="chapter_00529.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-532">
+      <navLabel>
+       <text>第530章 我要你恨我</text>
+      </navLabel>
+      <content src="chapter_00530.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-533">
+      <navLabel>
+       <text>第531章 像个废人</text>
+      </navLabel>
+      <content src="chapter_00531.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-534">
+      <navLabel>
+       <text>第532章 像是一种解脱</text>
+      </navLabel>
+      <content src="chapter_00532.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-535">
+      <navLabel>
+       <text>第533章 里外不是人</text>
+      </navLabel>
+      <content src="chapter_00533.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-536">
+      <navLabel>
+       <text>第534章 未必能当个伟人</text>
+      </navLabel>
+      <content src="chapter_00534.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-537">
+      <navLabel>
+       <text>第535章 是心里的白鸽</text>
+      </navLabel>
+      <content src="chapter_00535.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-538">
+      <navLabel>
+       <text>第536章 你个混账东西</text>
+      </navLabel>
+      <content src="chapter_00536.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-539">
+      <navLabel>
+       <text>第537章 相依为命的感觉</text>
+      </navLabel>
+      <content src="chapter_00537.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-540">
+      <navLabel>
+       <text>第538章 你再说一遍</text>
+      </navLabel>
+      <content src="chapter_00538.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-541">
+      <navLabel>
+       <text>第539章 永远都不要恨自己的父母</text>
+      </navLabel>
+      <content src="chapter_00539.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-542">
+      <navLabel>
+       <text>第540章 我特别、特别幸福</text>
+      </navLabel>
+      <content src="chapter_00540.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-543">
+      <navLabel>
+       <text>第541章 人间很苦</text>
+      </navLabel>
+      <content src="chapter_00541.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-544">
+      <navLabel>
+       <text>第542章 就凭我是你未来的儿媳妇</text>
+      </navLabel>
+      <content src="chapter_00542.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-545">
+      <navLabel>
+       <text>第543章 凶丫头</text>
+      </navLabel>
+      <content src="chapter_00543.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-546">
+      <navLabel>
+       <text>第544章 心里有鬼</text>
+      </navLabel>
+      <content src="chapter_00544.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-547">
+      <navLabel>
+       <text>第545章 梦快醒了</text>
+      </navLabel>
+      <content src="chapter_00545.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-548">
+      <navLabel>
+       <text>第546章 等我</text>
+      </navLabel>
+      <content src="chapter_00546.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-549">
+      <navLabel>
+       <text>第547章 我更想来看看你</text>
+      </navLabel>
+      <content src="chapter_00547.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-550">
+      <navLabel>
+       <text>第548章 摆脱不了的困境</text>
+      </navLabel>
+      <content src="chapter_00548.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-551">
+      <navLabel>
+       <text>第549章 一定会等来黎明</text>
+      </navLabel>
+      <content src="chapter_00549.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-552">
+      <navLabel>
+       <text>第550章 是佛也是魔</text>
+      </navLabel>
+      <content src="chapter_00550.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-553">
+      <navLabel>
+       <text>第551章 我想你了</text>
+      </navLabel>
+      <content src="chapter_00551.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-554">
+      <navLabel>
+       <text>第552章 快意人生</text>
+      </navLabel>
+      <content src="chapter_00552.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-555">
+      <navLabel>
+       <text>第553章 只能有一个</text>
+      </navLabel>
+      <content src="chapter_00553.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-556">
+      <navLabel>
+       <text>第554章 一键游</text>
+      </navLabel>
+      <content src="chapter_00554.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-557">
+      <navLabel>
+       <text>第555章 善的心</text>
+      </navLabel>
+      <content src="chapter_00555.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-558">
+      <navLabel>
+       <text>第556章 你真的开心吗</text>
+      </navLabel>
+      <content src="chapter_00556.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-559">
+      <navLabel>
+       <text>第557章 把她变成你嫂子</text>
+      </navLabel>
+      <content src="chapter_00557.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-560">
+      <navLabel>
+       <text>第558章 交房</text>
+      </navLabel>
+      <content src="chapter_00558.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-561">
+      <navLabel>
+       <text>第559章 我不会再回头了</text>
+      </navLabel>
+      <content src="chapter_00559.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-562">
+      <navLabel>
+       <text>第560章 我会默默关注你的</text>
+      </navLabel>
+      <content src="chapter_00560.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-563">
+      <navLabel>
+       <text>第561章 也想有个人陪</text>
+      </navLabel>
+      <content src="chapter_00561.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-564">
+      <navLabel>
+       <text>第562章 不想再炒房</text>
+      </navLabel>
+      <content src="chapter_00562.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-565">
+      <navLabel>
+       <text>第563章 她从来都不是为了自己</text>
+      </navLabel>
+      <content src="chapter_00563.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-566">
+      <navLabel>
+       <text>第564章 突然想去上海</text>
+      </navLabel>
+      <content src="chapter_00564.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-567">
+      <navLabel>
+       <text>第565章 不想太紧张</text>
+      </navLabel>
+      <content src="chapter_00565.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-568">
+      <navLabel>
+       <text>第566章 飞行途中</text>
+      </navLabel>
+      <content src="chapter_00566.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-569">
+      <navLabel>
+       <text>第567章 我的另外一个嫂子</text>
+      </navLabel>
+      <content src="chapter_00567.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-570">
+      <navLabel>
+       <text>第568章 中年危机</text>
+      </navLabel>
+      <content src="chapter_00568.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-571">
+      <navLabel>
+       <text>第569章 爱情法则</text>
+      </navLabel>
+      <content src="chapter_00569.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-572">
+      <navLabel>
+       <text>第570章 我信你，等你</text>
+      </navLabel>
+      <content src="chapter_00570.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-573">
+      <navLabel>
+       <text>第571章 不能再懈怠</text>
+      </navLabel>
+      <content src="chapter_00571.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-574">
+      <navLabel>
+       <text>第572章 找回自己</text>
+      </navLabel>
+      <content src="chapter_00572.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-575">
+      <navLabel>
+       <text>第573章 开业前</text>
+      </navLabel>
+      <content src="chapter_00573.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-576">
+      <navLabel>
+       <text>第574章 加油</text>
+      </navLabel>
+      <content src="chapter_00574.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-577">
+      <navLabel>
+       <text>第575章 紧张的心情</text>
+      </navLabel>
+      <content src="chapter_00575.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-578">
+      <navLabel>
+       <text>第576章 一直在默默的支持你</text>
+      </navLabel>
+      <content src="chapter_00576.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-579">
+      <navLabel>
+       <text>第577章 不要剥夺我的快乐</text>
+      </navLabel>
+      <content src="chapter_00577.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-580">
+      <navLabel>
+       <text>第578章 平起平坐</text>
+      </navLabel>
+      <content src="chapter_00578.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-581">
+      <navLabel>
+       <text>第579章 你才是核心竞争力</text>
+      </navLabel>
+      <content src="chapter_00579.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-582">
+      <navLabel>
+       <text>第580章 我到底错在哪儿了</text>
+      </navLabel>
+      <content src="chapter_00580.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-583">
+      <navLabel>
+       <text>第581章 这才是难以抉择的</text>
+      </navLabel>
+      <content src="chapter_00581.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-584">
+      <navLabel>
+       <text>第582章 很深的牵挂</text>
+      </navLabel>
+      <content src="chapter_00582.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-585">
+      <navLabel>
+       <text>第583章 我们是兄弟</text>
+      </navLabel>
+      <content src="chapter_00583.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-586">
+      <navLabel>
+       <text>第584章 当你老了</text>
+      </navLabel>
+      <content src="chapter_00584.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-587">
+      <navLabel>
+       <text>第585章 故事的结局</text>
+      </navLabel>
+      <content src="chapter_00585.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-588">
+      <navLabel>
+       <text>第586章 我放不下他</text>
+      </navLabel>
+      <content src="chapter_00586.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-589">
+      <navLabel>
+       <text>第587章 不要以伤害她为代价</text>
+      </navLabel>
+      <content src="chapter_00587.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-590">
+      <navLabel>
+       <text>第588章 忘不了</text>
+      </navLabel>
+      <content src="chapter_00588.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-591">
+      <navLabel>
+       <text>第589章 做人难</text>
+      </navLabel>
+      <content src="chapter_00589.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-592">
+      <navLabel>
+       <text>第590章 给我留一间房</text>
+      </navLabel>
+      <content src="chapter_00590.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-593">
+      <navLabel>
+       <text>第591章 等待天晴</text>
+      </navLabel>
+      <content src="chapter_00591.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-594">
+      <navLabel>
+       <text>第592章 一生所爱</text>
+      </navLabel>
+      <content src="chapter_00592.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-595">
+      <navLabel>
+       <text>第593章 我也是你拥有的人</text>
+      </navLabel>
+      <content src="chapter_00593.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-596">
+      <navLabel>
+       <text>第594章 开窍了</text>
+      </navLabel>
+      <content src="chapter_00594.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-597">
+      <navLabel>
+       <text>第595章 想见她</text>
+      </navLabel>
+      <content src="chapter_00595.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-598">
+      <navLabel>
+       <text>第596章 我是赚到了</text>
+      </navLabel>
+      <content src="chapter_00596.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-599">
+      <navLabel>
+       <text>第597章 我不后悔</text>
+      </navLabel>
+      <content src="chapter_00597.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-600">
+      <navLabel>
+       <text>第598章 见面</text>
+      </navLabel>
+      <content src="chapter_00598.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-601">
+      <navLabel>
+       <text>第599章 我就是这么傻的女人</text>
+      </navLabel>
+      <content src="chapter_00599.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-602">
+      <navLabel>
+       <text>第600章 你的希望在曼谷</text>
+      </navLabel>
+      <content src="chapter_00600.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-603">
+      <navLabel>
+       <text>第601章 心病</text>
+      </navLabel>
+      <content src="chapter_00601.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-604">
+      <navLabel>
+       <text>第602章 你的第六感很准</text>
+      </navLabel>
+      <content src="chapter_00602.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-605">
+      <navLabel>
+       <text>第603章 大不了一无所有</text>
+      </navLabel>
+      <content src="chapter_00603.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-606">
+      <navLabel>
+       <text>第604章 你应该把真相告诉她</text>
+      </navLabel>
+      <content src="chapter_00604.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-607">
+      <navLabel>
+       <text>第605章 我等你1</text>
+      </navLabel>
+      <content src="chapter_00605.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-608">
+      <navLabel>
+       <text>第606章 交给缘分</text>
+      </navLabel>
+      <content src="chapter_00606.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-609">
+      <navLabel>
+       <text>第607章 他正在等你</text>
+      </navLabel>
+      <content src="chapter_00607.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-610">
+      <navLabel>
+       <text>第608章 不要让我们担心</text>
+      </navLabel>
+      <content src="chapter_00608.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-611">
+      <navLabel>
+       <text>第609章 我还在等你</text>
+      </navLabel>
+      <content src="chapter_00609.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-612">
+      <navLabel>
+       <text>第610章 让她再等等</text>
+      </navLabel>
+      <content src="chapter_00610.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-613">
+      <navLabel>
+       <text>第611章 临走之前</text>
+      </navLabel>
+      <content src="chapter_00611.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-614">
+      <navLabel>
+       <text>第612章 临走之前2</text>
+      </navLabel>
+      <content src="chapter_00612.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-615">
+      <navLabel>
+       <text>第613章 临走之前3</text>
+      </navLabel>
+      <content src="chapter_00613.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-616">
+      <navLabel>
+       <text>第614章 回忆杀</text>
+      </navLabel>
+      <content src="chapter_00614.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-617">
+      <navLabel>
+       <text>第615章 我要发朋友圈</text>
+      </navLabel>
+      <content src="chapter_00615.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-618">
+      <navLabel>
+       <text>第616章 心态最重要</text>
+      </navLabel>
+      <content src="chapter_00616.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-619">
+      <navLabel>
+       <text>第617章 你已经无敌了</text>
+      </navLabel>
+      <content src="chapter_00617.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-620">
+      <navLabel>
+       <text>第618章 你记住我这句话</text>
+      </navLabel>
+      <content src="chapter_00618.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-621">
+      <navLabel>
+       <text>第619章 你得好好吃饭</text>
+      </navLabel>
+      <content src="chapter_00619.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-622">
+      <navLabel>
+       <text>第620章 奉献也是一种爱</text>
+      </navLabel>
+      <content src="chapter_00620.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-623">
+      <navLabel>
+       <text>第621章 你能答应我吗</text>
+      </navLabel>
+      <content src="chapter_00621.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-624">
+      <navLabel>
+       <text>第622章 润物细无声</text>
+      </navLabel>
+      <content src="chapter_00622.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-625">
+      <navLabel>
+       <text>第623章 我恐怕中招了</text>
+      </navLabel>
+      <content src="chapter_00623.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-626">
+      <navLabel>
+       <text>第624章 忙着后悔</text>
+      </navLabel>
+      <content src="chapter_00624.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-627">
+      <navLabel>
+       <text>第625章 “我”不想si</text>
+      </navLabel>
+      <content src="chapter_00625.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-628">
+      <navLabel>
+       <text>第626章 他确实需要一颗后悔药</text>
+      </navLabel>
+      <content src="chapter_00626.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-629">
+      <navLabel>
+       <text>第627章 男为阳，阳为刚</text>
+      </navLabel>
+      <content src="chapter_00627.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-630">
+      <navLabel>
+       <text>第628章 我给你一个机会</text>
+      </navLabel>
+      <content src="chapter_00628.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-631">
+      <navLabel>
+       <text>第629章 真心觉得你是高手</text>
+      </navLabel>
+      <content src="chapter_00629.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-632">
+      <navLabel>
+       <text>第630章 我也挺怕的</text>
+      </navLabel>
+      <content src="chapter_00630.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-633">
+      <navLabel>
+       <text>第631章 咱们之间就算两清了</text>
+      </navLabel>
+      <content src="chapter_00631.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-634">
+      <navLabel>
+       <text>第632章 你倒是去做啊</text>
+      </navLabel>
+      <content src="chapter_00632.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-635">
+      <navLabel>
+       <text>第633章 我选择相信</text>
+      </navLabel>
+      <content src="chapter_00633.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-636">
+      <navLabel>
+       <text>第634章 我在风花雪月里等你壹</text>
+      </navLabel>
+      <content src="chapter_00634.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-637">
+      <navLabel>
+       <text>第635章 我在风花雪月里等你2</text>
+      </navLabel>
+      <content src="chapter_00635.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-638">
+      <navLabel>
+       <text>第636章 最美不过夕阳红</text>
+      </navLabel>
+      <content src="chapter_00636.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-639">
+      <navLabel>
+       <text>第637章 大理浪人</text>
+      </navLabel>
+      <content src="chapter_00637.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-640">
+      <navLabel>
+       <text>第638章 我也该走了</text>
+      </navLabel>
+      <content src="chapter_00638.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-641">
+      <navLabel>
+       <text>第639章 我们之间已经有无数个结果了</text>
+      </navLabel>
+      <content src="chapter_00639.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-642">
+      <navLabel>
+       <text>第640章 下车吧</text>
+      </navLabel>
+      <content src="chapter_00640.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-643">
+      <navLabel>
+       <text>第641章 我其实是一个很失败的人</text>
+      </navLabel>
+      <content src="chapter_00641.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-644">
+      <navLabel>
+       <text>第642章 谁能真正了解另一个人的痛苦</text>
+      </navLabel>
+      <content src="chapter_00642.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-645">
+      <navLabel>
+       <text>第643章 儿行千里母担忧</text>
+      </navLabel>
+      <content src="chapter_00643.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-646">
+      <navLabel>
+       <text>第644章 茫然无助</text>
+      </navLabel>
+      <content src="chapter_00644.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-647">
+      <navLabel>
+       <text>第645章 初到泰国</text>
+      </navLabel>
+      <content src="chapter_00645.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-648">
+      <navLabel>
+       <text>第646章 在这座陌生的城市</text>
+      </navLabel>
+      <content src="chapter_00646.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-649">
+      <navLabel>
+       <text>第647章 我更想祝福她</text>
+      </navLabel>
+      <content src="chapter_00647.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-650">
+      <navLabel>
+       <text>第648章 她到底是什么样的女人</text>
+      </navLabel>
+      <content src="chapter_00648.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-651">
+      <navLabel>
+       <text>第649章 来不及了</text>
+      </navLabel>
+      <content src="chapter_00649.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-652">
+      <navLabel>
+       <text>第650章 我不走</text>
+      </navLabel>
+      <content src="chapter_00650.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-653">
+      <navLabel>
+       <text>第651章 你已经够好了</text>
+      </navLabel>
+      <content src="chapter_00651.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-654">
+      <navLabel>
+       <text>第652章 成年人的告别方式</text>
+      </navLabel>
+      <content src="chapter_00652.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-655">
+      <navLabel>
+       <text>第653章 乱七八糟的梦</text>
+      </navLabel>
+      <content src="chapter_00653.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-656">
+      <navLabel>
+       <text>第654章 贵人相助</text>
+      </navLabel>
+      <content src="chapter_00654.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-657">
+      <navLabel>
+       <text>第655章 她还会去泰国陪你吗</text>
+      </navLabel>
+      <content src="chapter_00655.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-658">
+      <navLabel>
+       <text>第656章 无怨无悔</text>
+      </navLabel>
+      <content src="chapter_00656.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-659">
+      <navLabel>
+       <text>第657章 男人的担当</text>
+      </navLabel>
+      <content src="chapter_00657.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-660">
+      <navLabel>
+       <text>第658章 无所畏惧和无恶不作</text>
+      </navLabel>
+      <content src="chapter_00658.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-661">
+      <navLabel>
+       <text>第659章 你还是没有一点危机感吗</text>
+      </navLabel>
+      <content src="chapter_00659.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-662">
+      <navLabel>
+       <text>第660章 我很需要关心</text>
+      </navLabel>
+      <content src="chapter_00660.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-663">
+      <navLabel>
+       <text>第661章 心里有相见的人</text>
+      </navLabel>
+      <content src="chapter_00661.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-664">
+      <navLabel>
+       <text>第662章 赤诚之心</text>
+      </navLabel>
+      <content src="chapter_00662.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-665">
+      <navLabel>
+       <text>第663章 无以为报</text>
+      </navLabel>
+      <content src="chapter_00663.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-666">
+      <navLabel>
+       <text>第664章 有感而发</text>
+      </navLabel>
+      <content src="chapter_00664.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-667">
+      <navLabel>
+       <text>第665章 你性格里最不好的一面</text>
+      </navLabel>
+      <content src="chapter_00665.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-668">
+      <navLabel>
+       <text>第666章 我想去看看你</text>
+      </navLabel>
+      <content src="chapter_00666.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-669">
+      <navLabel>
+       <text>第667章 今天的她，很特别</text>
+      </navLabel>
+      <content src="chapter_00667.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-670">
+      <navLabel>
+       <text>第668章 渴望时间停止</text>
+      </navLabel>
+      <content src="chapter_00668.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-671">
+      <navLabel>
+       <text>第669章 都不是能真正快乐的人</text>
+      </navLabel>
+      <content src="chapter_00669.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-672">
+      <navLabel>
+       <text>第670章 那就下地狱吧</text>
+      </navLabel>
+      <content src="chapter_00670.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-673">
+      <navLabel>
+       <text>第671章 吐露心声</text>
+      </navLabel>
+      <content src="chapter_00671.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-674">
+      <navLabel>
+       <text>第672章 善恶到头终有报</text>
+      </navLabel>
+      <content src="chapter_00672.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-675">
+      <navLabel>
+       <text>第673章 我一直在等你</text>
+      </navLabel>
+      <content src="chapter_00673.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-676">
+      <navLabel>
+       <text>第674章 大理好，还是普吉好？</text>
+      </navLabel>
+      <content src="chapter_00674.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-677">
+      <navLabel>
+       <text>第675章 不能再逃避了</text>
+      </navLabel>
+      <content src="chapter_00675.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-678">
+      <navLabel>
+       <text>第676章 你必须让她回上海</text>
+      </navLabel>
+      <content src="chapter_00676.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-679">
+      <navLabel>
+       <text>第677章 一个得不到，一个给不起</text>
+      </navLabel>
+      <content src="chapter_00677.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-680">
+      <navLabel>
+       <text>第678章 我要做自己的风格</text>
+      </navLabel>
+      <content src="chapter_00678.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-681">
+      <navLabel>
+       <text>第679章 不是梦</text>
+      </navLabel>
+      <content src="chapter_00679.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-682">
+      <navLabel>
+       <text>第680章 我是你的速效救心丸吗？</text>
+      </navLabel>
+      <content src="chapter_00680.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-683">
+      <navLabel>
+       <text>第681章 两不相欠</text>
+      </navLabel>
+      <content src="chapter_00681.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-684">
+      <navLabel>
+       <text>第682章 我配不上</text>
+      </navLabel>
+      <content src="chapter_00682.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-685">
+      <navLabel>
+       <text>第683章 我不想再失去了</text>
+      </navLabel>
+      <content src="chapter_00683.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-686">
+      <navLabel>
+       <text>第684章 先君子后小人</text>
+      </navLabel>
+      <content src="chapter_00684.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-687">
+      <navLabel>
+       <text>第685章 我想睡了</text>
+      </navLabel>
+      <content src="chapter_00685.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-688">
+      <navLabel>
+       <text>第686章 突如其来的意外</text>
+      </navLabel>
+      <content src="chapter_00686.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-689">
+      <navLabel>
+       <text>第687章 因为我爱的是他，不是你</text>
+      </navLabel>
+      <content src="chapter_00687.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-690">
+      <navLabel>
+       <text>第688章 你的机会一直在</text>
+      </navLabel>
+      <content src="chapter_00688.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-691">
+      <navLabel>
+       <text>第689章 他有这个能力</text>
+      </navLabel>
+      <content src="chapter_00689.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-692">
+      <navLabel>
+       <text>第690章 现实很骨感</text>
+      </navLabel>
+      <content src="chapter_00690.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-693">
+      <navLabel>
+       <text>第691章 武副总</text>
+      </navLabel>
+      <content src="chapter_00691.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-694">
+      <navLabel>
+       <text>第692章 这是为什么</text>
+      </navLabel>
+      <content src="chapter_00692.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-695">
+      <navLabel>
+       <text>第693章 特别想和你聊聊</text>
+      </navLabel>
+      <content src="chapter_00693.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-696">
+      <navLabel>
+       <text>第694章 句号之后，就是解脱</text>
+      </navLabel>
+      <content src="chapter_00694.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-697">
+      <navLabel>
+       <text>第695章 你能落下点什么</text>
+      </navLabel>
+      <content src="chapter_00695.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-698">
+      <navLabel>
+       <text>第696章 你骗的了别人，骗不了我</text>
+      </navLabel>
+      <content src="chapter_00696.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-699">
+      <navLabel>
+       <text>第697章 最后一场</text>
+      </navLabel>
+      <content src="chapter_00697.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-700">
+      <navLabel>
+       <text>第698章 她把房子还给了你</text>
+      </navLabel>
+      <content src="chapter_00698.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-701">
+      <navLabel>
+       <text>第699章 你才是最矛盾的女人</text>
+      </navLabel>
+      <content src="chapter_00699.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-702">
+      <navLabel>
+       <text>第700章 最合理的解释</text>
+      </navLabel>
+      <content src="chapter_00700.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-703">
+      <navLabel>
+       <text>第701章 你快乐吗？</text>
+      </navLabel>
+      <content src="chapter_00701.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-704">
+      <navLabel>
+       <text>第702章 不死，又怎能重生？</text>
+      </navLabel>
+      <content src="chapter_00702.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-705">
+      <navLabel>
+       <text>第703章 失而复得？</text>
+      </navLabel>
+      <content src="chapter_00703.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-706">
+      <navLabel>
+       <text>第704章 久而久之</text>
+      </navLabel>
+      <content src="chapter_00704.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-707">
+      <navLabel>
+       <text>第705章 转运</text>
+      </navLabel>
+      <content src="chapter_00705.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-708">
+      <navLabel>
+       <text>第706章 妥协</text>
+      </navLabel>
+      <content src="chapter_00706.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-709">
+      <navLabel>
+       <text>第707章 我想开着你的酷路泽回去</text>
+      </navLabel>
+      <content src="chapter_00707.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-710">
+      <navLabel>
+       <text>第708章 野心1</text>
+      </navLabel>
+      <content src="chapter_00708.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-711">
+      <navLabel>
+       <text>第709章 你务必得和我见一面</text>
+      </navLabel>
+      <content src="chapter_00709.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-712">
+      <navLabel>
+       <text>第710章 我想重新站队</text>
+      </navLabel>
+      <content src="chapter_00710.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-713">
+      <navLabel>
+       <text>第711章 不平静的夜晚</text>
+      </navLabel>
+      <content src="chapter_00711.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-714">
+      <navLabel>
+       <text>第712章 你该找个合适的人过日子</text>
+      </navLabel>
+      <content src="chapter_00712.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-715">
+      <navLabel>
+       <text>第713章 真心话大冒险</text>
+      </navLabel>
+      <content src="chapter_00713.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-716">
+      <navLabel>
+       <text>第714章 真心话大冒险2</text>
+      </navLabel>
+      <content src="chapter_00714.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-717">
+      <navLabel>
+       <text>第715章 这个人真的太危险了</text>
+      </navLabel>
+      <content src="chapter_00715.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-718">
+      <navLabel>
+       <text>第716章 黄金搭档</text>
+      </navLabel>
+      <content src="chapter_00716.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-719">
+      <navLabel>
+       <text>第717章 不得已才和你说了这些</text>
+      </navLabel>
+      <content src="chapter_00717.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-720">
+      <navLabel>
+       <text>第718章 上海见</text>
+      </navLabel>
+      <content src="chapter_00718.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-721">
+      <navLabel>
+       <text>第719章 孟婆汤</text>
+      </navLabel>
+      <content src="chapter_00719.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-722">
+      <navLabel>
+       <text>第720章 她终于活成了你想要的样子</text>
+      </navLabel>
+      <content src="chapter_00720.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-723">
+      <navLabel>
+       <text>第721章 向你爆个猛料</text>
+      </navLabel>
+      <content src="chapter_00721.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-724">
+      <navLabel>
+       <text>第722章 真相1？</text>
+      </navLabel>
+      <content src="chapter_00722.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-725">
+      <navLabel>
+       <text>第723章 真相2？</text>
+      </navLabel>
+      <content src="chapter_00723.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-726">
+      <navLabel>
+       <text>第724章 我们都是不信守承诺的人</text>
+      </navLabel>
+      <content src="chapter_00724.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-727">
+      <navLabel>
+       <text>第725章 我真希望这是一场梦?</text>
+      </navLabel>
+      <content src="chapter_00725.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-728">
+      <navLabel>
+       <text>第726章 恰到好处?</text>
+      </navLabel>
+      <content src="chapter_00726.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-729">
+      <navLabel>
+       <text>第727章 是延续</text>
+      </navLabel>
+      <content src="chapter_00727.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-730">
+      <navLabel>
+       <text>第728章 我知道你最需要什么</text>
+      </navLabel>
+      <content src="chapter_00728.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-731">
+      <navLabel>
+       <text>第729章 恭喜你了</text>
+      </navLabel>
+      <content src="chapter_00729.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-732">
+      <navLabel>
+       <text>第730章 阔太</text>
+      </navLabel>
+      <content src="chapter_00730.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-733">
+      <navLabel>
+       <text>第731章 不想让你等我</text>
+      </navLabel>
+      <content src="chapter_00731.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-734">
+      <navLabel>
+       <text>第732章 人世间最无奈的事情</text>
+      </navLabel>
+      <content src="chapter_00732.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-735">
+      <navLabel>
+       <text>第733章 高歌猛进</text>
+      </navLabel>
+      <content src="chapter_00733.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-736">
+      <navLabel>
+       <text>第734章 人做他的女婿</text>
+      </navLabel>
+      <content src="chapter_00734.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-737">
+      <navLabel>
+       <text>第735章 久仰大名</text>
+      </navLabel>
+      <content src="chapter_00735.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-738">
+      <navLabel>
+       <text>第736章 我该怎么办</text>
+      </navLabel>
+      <content src="chapter_00736.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-739">
+      <navLabel>
+       <text>第737章 途中</text>
+      </navLabel>
+      <content src="chapter_00737.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-740">
+      <navLabel>
+       <text>第738章 你去死吧</text>
+      </navLabel>
+      <content src="chapter_00738.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-741">
+      <navLabel>
+       <text>第739章 会不会是一个美好的象征</text>
+      </navLabel>
+      <content src="chapter_00739.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-742">
+      <navLabel>
+       <text>第740章 人生如梦，梦如人生</text>
+      </navLabel>
+      <content src="chapter_00740.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-743">
+      <navLabel>
+       <text>第741章 不怕一万，就怕万一</text>
+      </navLabel>
+      <content src="chapter_00741.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-744">
+      <navLabel>
+       <text>第742章 帮我，也是帮你自己</text>
+      </navLabel>
+      <content src="chapter_00742.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-745">
+      <navLabel>
+       <text>第743章 请你理解我</text>
+      </navLabel>
+      <content src="chapter_00743.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-746">
+      <navLabel>
+       <text>第744章 人各有志</text>
+      </navLabel>
+      <content src="chapter_00744.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-747">
+      <navLabel>
+       <text>第745章 他知道我在骗他</text>
+      </navLabel>
+      <content src="chapter_00745.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-748">
+      <navLabel>
+       <text>第746章 再等你一天</text>
+      </navLabel>
+      <content src="chapter_00746.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-749">
+      <navLabel>
+       <text>第747章 一瞬间的感觉</text>
+      </navLabel>
+      <content src="chapter_00747.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-750">
+      <navLabel>
+       <text>第748章 不忘初心</text>
+      </navLabel>
+      <content src="chapter_00748.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-751">
+      <navLabel>
+       <text>第749章 唯一一次</text>
+      </navLabel>
+      <content src="chapter_00749.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-752">
+      <navLabel>
+       <text>第750章 最不像朋友的朋友</text>
+      </navLabel>
+      <content src="chapter_00750.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-753">
+      <navLabel>
+       <text>第751章 最后的最后</text>
+      </navLabel>
+      <content src="chapter_00751.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-754">
+      <navLabel>
+       <text>第752章 匿名举报</text>
+      </navLabel>
+      <content src="chapter_00752.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-755">
+      <navLabel>
+       <text>第753章 这个人是谁</text>
+      </navLabel>
+      <content src="chapter_00753.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-756">
+      <navLabel>
+       <text>第754章 一生的夙愿</text>
+      </navLabel>
+      <content src="chapter_00754.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-757">
+      <navLabel>
+       <text>第755章 要变天</text>
+      </navLabel>
+      <content src="chapter_00755.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-758">
+      <navLabel>
+       <text>第756章 我最期待的事情</text>
+      </navLabel>
+      <content src="chapter_00756.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-759">
+      <navLabel>
+       <text>第757章 我不信</text>
+      </navLabel>
+      <content src="chapter_00757.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-760">
+      <navLabel>
+       <text>第758章 对话</text>
+      </navLabel>
+      <content src="chapter_00758.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-761">
+      <navLabel>
+       <text>第759章 我真的承受不来</text>
+      </navLabel>
+      <content src="chapter_00759.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-762">
+      <navLabel>
+       <text>第760章 喝醉了一样</text>
+      </navLabel>
+      <content src="chapter_00760.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-763">
+      <navLabel>
+       <text>第761章 谁先认真，谁就输</text>
+      </navLabel>
+      <content src="chapter_00761.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-764">
+      <navLabel>
+       <text>第762章 这是我为你做的最后一件事情</text>
+      </navLabel>
+      <content src="chapter_00762.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-765">
+      <navLabel>
+       <text>第763章 这一辈子，就只求你一次</text>
+      </navLabel>
+      <content src="chapter_00763.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-766">
+      <navLabel>
+       <text>第764章 我一定会陪着你渡过难关</text>
+      </navLabel>
+      <content src="chapter_00764.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-767">
+      <navLabel>
+       <text>第765章 百密一疏</text>
+      </navLabel>
+      <content src="chapter_00765.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-768">
+      <navLabel>
+       <text>第766章 危险的味道</text>
+      </navLabel>
+      <content src="chapter_00766.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-769">
+      <navLabel>
+       <text>第767章 如果一切能重头</text>
+      </navLabel>
+      <content src="chapter_00767.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-770">
+      <navLabel>
+       <text>第768章 你们怕是不知道我是什么人吧</text>
+      </navLabel>
+      <content src="chapter_00768.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-771">
+      <navLabel>
+       <text>第769章 穷途末路</text>
+      </navLabel>
+      <content src="chapter_00769.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-772">
+      <navLabel>
+       <text>第770章 尚有余温</text>
+      </navLabel>
+      <content src="chapter_00770.xhtml"/>
+    </navPoint>
+    <navPoint id="navPoint-773">
+      <navLabel>
+       <text>第771章 一间客栈，一座城，一生只等一个人(结局)</text>
+      </navLabel>
+      <content src="chapter_00771.xhtml"/>
+    </navPoint>
+  </navMap>
+</ncx>

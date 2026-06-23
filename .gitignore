@@ -73,6 +73,8 @@ plan_*.md
 # === 项目数据（按作者归档）===
 projects/
 knowledge/
+# 拆文库例外（需要提交）
+!拆文库/
 # 兼容旧目录
 novel-download-authors/
 # Cover images

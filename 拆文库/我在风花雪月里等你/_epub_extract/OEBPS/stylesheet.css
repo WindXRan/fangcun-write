@@ -1,0 +1,20 @@
+body { font-family: serif; color:#000 !important; line-height:1.5; }
+             p { color:#000 !important; text-indent:2em; margin:0 0 .8em 0; line-height:1.5; }
+             p.no-indent { text-indent:0; }
+             p.img-desc { color:#999 !important; font-size:0.75em; text-indent:0; text-align:center; margin:-.4em 0 .9em 0; }
+             a.seg-link { color: inherit; text-decoration: none; }
+             a.seg-link:hover { text-decoration: underline; }
+             .seg-count { color:#999; font-size:0.75em; margin-left:.3em; text-decoration: none; }
+             h3 { background:#f5f5f5; padding:.4em .6em; color:#333; font-weight:500; }
+             .para-title .para-index { font-weight:600; margin-right:.25em; color:#333; }
+             .para-title .para-src { color:#333; }
+             .para-title small { color:#666; }
+             .back-to-chapter { margin:.2em 0 .8em 0; }
+             .back-to-chapter a { font-size:.85em; color:#666; text-decoration:none; }
+             .back-to-chapter a:hover { color:#333; text-decoration:underline; }
+             .seg-images { margin:.25em 0 .5em 0; display:block; }
+             .seg-images img { max-width:100%; height:auto; max-height:220px; margin-right:.4em; margin-bottom:.2em; border-radius:2px; object-fit:contain; }
+             .avatar { width:36px; height:36px; border-radius:50%; object-fit:cover; vertical-align:middle; margin-right:.5em; }
+             .seg-meta { color:#666; display:block; text-align:right; }
+             li.seg-item { border-bottom:1px solid #ddd; padding:.5em 0 .6em 0; }
+             li.seg-item:last-child { border-bottom:none; }
