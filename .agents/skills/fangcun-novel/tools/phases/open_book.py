@@ -347,7 +347,7 @@ def phase_open_book(config, state_mgr=None):
 
     # === Stage 2: 5 个并行 agent 生成设定文件 ===
     book_name = config.get("book_name", "auto")
-    prompts_dir = config.get("prompts_dir", str(Path(__file__).resolve().parent.parent.parent.parent.parent / ".prompts" / "user"))
+    prompts_dir = config.get("prompts_dir", str(Path(__file__).resolve().parent.parent.parent / "prompts"))
 
     replacements_stage2 = {
         "新书名": book_name if book_name != "auto" else "（待生成）",
@@ -389,13 +389,21 @@ def phase_open_book(config, state_mgr=None):
     if chars_path.exists():
         characters_content = chars_path.read_text(encoding="utf-8")
     
-    # 提取角色名映射表
+    # 提取角色名映射表（支持XML和markdown两种格式）
     char_mapping = {}
-    for m in re.finditer(r'\|\s*(\S+)\s*\|\s*(\S+)\s*\|\s*[男女]\s*\|', characters_content):
+    # XML格式: <item old="源文名" new="新名" gender="男" role="主角" />
+    for m in re.finditer(r'<item\s+old="([^"]+)"\s+new="([^"]+)"', characters_content):
         old_name = m.group(1).strip()
         new_name = m.group(2).strip()
-        if old_name != "源文名" and new_name != "新名":
+        if old_name and new_name:
             char_mapping[old_name] = new_name
+    # markdown格式兼容: | 源文名 | 新名 | 性别 | 功能位 |
+    if not char_mapping:
+        for m in re.finditer(r'\|\s*(\S+)\s*\|\s*(\S+)\s*\|\s*[男女]\s*\|', characters_content):
+            old_name = m.group(1).strip()
+            new_name = m.group(2).strip()
+            if old_name != "源文名" and new_name != "新名":
+                char_mapping[old_name] = new_name
     
     # 构建角色名注入文本
     char_names_text = ""

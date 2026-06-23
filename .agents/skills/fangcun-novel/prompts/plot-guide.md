@@ -33,15 +33,15 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 </characters>
 
 <highlights>
-【highlights】{rewrites_dir}/../../_cache/styles/style_{N03d}_llm.md
+{highlights}
 </highlights>
 
 <blacklist>
-【blacklist】{rewrites_dir}/../../_cache/styles/blacklist.md
+{blacklist}
 </blacklist>
 
 <world>
-【world】{rewrites_dir}/world.md
+{world}
 </world>
 
 <output_format>
@@ -55,7 +55,6 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 - 信息2：{...}
 
 ### 场景设计
-
 #### 场景1：{场景名}
 - 地点/人物/事件/关键台词/情绪
 

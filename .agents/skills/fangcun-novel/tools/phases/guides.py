@@ -15,6 +15,19 @@ from prompt_meta import load_system_prompt, get_prompt_config_with_overrides, ge
 from prompt_loader import load_prompt
 
 
+# 模块级缓存：system prompt（全局共享，省 token）
+_system_prompt_cache = {}
+
+
+def _get_system_prompt_cached(prompt_type):
+    """获取 system prompt（模块级缓存）。"""
+    global _system_prompt_cache
+    if prompt_type not in _system_prompt_cache:
+        sp_name = get_system_prompt_name(f"{prompt_type}.md") or "agent.md"
+        _system_prompt_cache[prompt_type] = load_system_prompt(sp_name) or ""
+    return _system_prompt_cache[prompt_type]
+
+
 # 骨架映射缓存
 _skeleton_map_cache = None
 
@@ -1027,6 +1040,30 @@ def _extract_style_fingerprints(config, start, end, workers):
     phase_style_extract(config, start, end, workers)
 
 
+# 模块级缓存：blacklist 文本
+_blacklist_cache = None
+
+
+def _get_blacklist_text(config, chapter_num=None):
+    """获取黑名单文本（模块级缓存）。只加载本章相关的黑名单项。"""
+    global _blacklist_cache
+    if _blacklist_cache is not None:
+        return _blacklist_cache
+
+    base_dir = Path(config.get("base_dir", "."))
+    rewrites_dir = base_dir / config.get("rewrites_dir", "")
+    source_dir = rewrites_dir.parent
+    
+    # 尝试从 _cache/styles/blacklist.md 加载
+    blacklist_path = source_dir / "_cache" / "styles" / "blacklist.md"
+    if blacklist_path.exists():
+        content = blacklist_path.read_text(encoding="utf-8")[:1000]  # 限制长度
+        _blacklist_cache = content
+    else:
+        _blacklist_cache = "（黑名单文件不存在）"
+    return _blacklist_cache
+
+
 def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=None, 
             system_prompt=None, extra_replacements=None, retry_context=None):
     """执行单次调用。通过 prompt_loader 加载并嵌入文件内容。
@@ -1090,6 +1127,10 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             replacements["highlights"] = highlights or ""
         else:
             replacements["highlights"] = ""
+        
+        # 注入黑名单（只加载本章相关的黑名单项）
+        if "blacklist" not in replacements:
+            replacements["blacklist"] = _get_blacklist_text(config, chapter_num)
         
         # 注入源文结构缓存（per-chapter）
         if "structure" not in replacements:
@@ -1208,8 +1249,8 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     user_prompt = load_prompt(prompt_path, base_dir, replacements, mode="api", rewrites_dir=config.get("rewrites_dir"))
 
     if not system_prompt:
+        system_prompt = _get_system_prompt_cached(prompt_type)
         sp_name = get_system_prompt_name(f"{prompt_type}.md") or "agent.md"
-        system_prompt = load_system_prompt(sp_name) or ""
 
     # XML 标签注入（fangcun-drama 同款，write-chapter 用 markdown+△ 格式不注入）
     xml_tags = {
