@@ -92,7 +92,6 @@ def calc_book_metrics(source_dir):
         },
         "ai_markers": avg("ai_markers", all_metrics),
         "metaphor": avg("metaphor", all_metrics),
-        "pronoun_density": avg("pronoun_density", all_metrics),
         "psych_ratio": avg("psych_ratio", all_metrics),
         "single_sent_ratio": avg("single_sent_ratio", all_fingerprints),
         "punctuation": _avg_punct(all_fingerprints),
@@ -107,22 +106,11 @@ def format_metrics_report(summary):
     lines = []
     lines.append("## 定量风格锚点\n")
     lines.append(f"**样本**: {s['total_chapters']} 章\n")
-    lines.append("| 指标 | 均值 | 中位数 | 标准差 |")
-    lines.append("|------|------|--------|--------|")
-    lines.append(f"| 章均字数 | {s['chars']['avg']} | {s['chars']['median']} | {s['chars']['stddev']} |")
-    lines.append(f"| 段落均长 | {s['para']['avg_len']} | - | - |")
-    lines.append(f"| 句长标准差 | {s['sent_len']['avg']} | {s['sent_len']['median']} | - |")
-    lines.append(f"| 对话比例 | {s['dialogue']['ratio']*100:.1f}% | - | - |")
-    lines.append(f"| 对话标签密度 | {s['dialogue']['tag_density']} | - | - |")
-    lines.append(f"| 情绪密度 | {s['emotion']['density']} | - | - |")
-    lines.append(f"| 直抒情密度 | {s['emotion']['direct_emotion']} | - | - |")
-    lines.append(f"| 感叹号/千字 | {s['punctuation']['exclamation']} | - | - |")
-    lines.append(f"| 省略号/千字 | {s['punctuation']['ellipsis']} | - | - |")
-    lines.append(f"| 破折号/千字 | {s['punctuation']['dash']} | - | - |")
-    lines.append(f"| AI标记词 | {s['ai_markers']} | - | - |")
-    lines.append(f"| 比喻密度 | {s['metaphor']} | - | - |")
-    lines.append(f"| 代词密度 | {s['pronoun_density']} | - | - |")
-    lines.append(f"| 心理词占比 | {s['psych_ratio']*100:.2f}% | - | - |")
+    lines.append(f"- **章均字数**: {s['chars']['avg']}（中位数 {s['chars']['median']}，标准差 {s['chars']['stddev']}）")
+    lines.append(f"- **对话比例**: {s['dialogue']['ratio']*100:.0f}%")
+    lines.append(f"- **段落均长**: {s['para']['avg_len']} 字")
+    lines.append(f"- **单句段比例**: {s['single_sent_ratio']*100:.0f}%")
+    lines.append(f"- **情绪密度**: {s['emotion']['density']}")
     
     return "\n".join(lines)
 
