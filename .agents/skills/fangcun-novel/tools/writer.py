@@ -7,9 +7,22 @@ import os
 import sys
 from pathlib import Path
 
+# 全局缓存system prompt，避免重复读取文件
+_system_prompt_cache = {}
+
+def _get_system_prompt(system_prompt_path):
+    """获取system prompt（带缓存）"""
+    if system_prompt_path not in _system_prompt_cache:
+        if os.path.exists(system_prompt_path):
+            with open(system_prompt_path, encoding='utf-8') as f:
+                _system_prompt_cache[system_prompt_path] = f.read()
+        else:
+            _system_prompt_cache[system_prompt_path] = None
+    return _system_prompt_cache[system_prompt_path]
+
 
 def _call_llm(config, prompt, system_prompt=None):
-    """调用 LLM API。"""
+    """调用 LLM API（支持prefix caching）"""
     import requests
     
     api_key = config.get("api_key") or os.environ.get("API_KEY")
@@ -19,6 +32,8 @@ def _call_llm(config, prompt, system_prompt=None):
     api_url = config.get("api_base_url", "https://api.deepseek.com/v1") + "/chat/completions"
     model = config.get("model", "deepseek-chat")
     
+    # DeepSeek prefix caching: 相同的system prompt会自动缓存
+    # 确保system prompt在最前面，user prompt结构一致
     messages = []
     if system_prompt:
         messages.append({"role": "system", "content": system_prompt})
@@ -61,12 +76,9 @@ def write_chapter(config, ch, mode="imitation", auto_fix=True):
     except Exception as e:
         raise Exception(f"加载 prompt 失败: {e}")
     
-    # 加载系统提示词
+    # 加载系统提示词（使用缓存）
     system_prompt_path = ".agents/skills/fangcun-novel/prompts/agent.md"
-    system_prompt = None
-    if os.path.exists(system_prompt_path):
-        with open(system_prompt_path, encoding='utf-8') as f:
-            system_prompt = f.read()
+    system_prompt = _get_system_prompt(system_prompt_path)
     
     # 调用 LLM
     result = _call_llm(config, user_prompt, system_prompt)
