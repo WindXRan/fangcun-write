@@ -52,13 +52,14 @@ def get_phase_api(config: dict, phase: str) -> tuple:
 # ─── Phase 映射 ──────────────────────────────────────────────────────
 
 GOAL_MAP = {
-    "open-book": {"prep", "source-analysis", "open-book"},
-    "guides": {"skeleton-map", "guides"},
-    "write": {"skeleton-map", "guides", "write", "postfix"},
+    "open-book": {"prep", "source-analysis", "open-book", "chapter-map"},
+    "chapter-map": {"chapter-map"},
+    "guides": {"chapter-map", "skeleton-map", "guides"},
+    "write": {"chapter-map", "skeleton-map", "guides", "write", "postfix"},
     "review": {},
     "postfix": {"postfix"},
     "skeleton-map": {"skeleton-map"},
-    "all": {"prep", "source-analysis", "open-book", "skeleton-map", "guides", "write", "postfix"},
+    "all": {"prep", "source-analysis", "open-book", "chapter-map", "skeleton-map", "guides", "write", "postfix"},
 }
 
 # 章级 phase 按此顺序执行
@@ -167,6 +168,10 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
         from phases.open_book import phase_open_book
         phase_open_book(cfg, state_mgr=state_mgr)
 
+    def _chapter_map_handler(cfg, s, e):
+        from phases.chapter_map import phase_chapter_map
+        phase_chapter_map(cfg, state_mgr=state_mgr)
+
     def _write_handler(cfg, s, e):
         """写章 + 自动 postfix + 自动 compare（黄金章节）。"""
         phase_write(cfg, s, e)
@@ -191,6 +196,7 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
     h["prep"] = _prep_handler
     h["source-analysis"] = _source_analysis_handler
     h["open-book"] = _open_book_handler
+    h["chapter-map"] = _chapter_map_handler
     
     h["guides"] = _guide_handler
     h["skeleton-map"] = lambda cfg, s, e: phase_skeleton_map(cfg, state_mgr=state_mgr)
@@ -274,7 +280,7 @@ def _run_phases(handlers, config, goal, start, end):
             return False
 
     # ── 书级 phase（不需要 start/end）──
-    book_phases = ["prep", "source-analysis", "open-book"]
+    book_phases = ["prep", "source-analysis", "open-book", "chapter-map"]
     book_phase_names = [n for n in book_phases if n in goal]
     if book_phase_names:
         print(f"\n{'=' * 50}")

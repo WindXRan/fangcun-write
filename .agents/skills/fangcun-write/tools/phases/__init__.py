@@ -4,6 +4,7 @@ from phases.compare import phase_compare
 from phases.extract import phase_extract
 from phases.guides import phase_guides
 from phases.open_book import phase_prep, phase_source_analysis, phase_open_book
+from phases.chapter_map import phase_chapter_map
 from phases.postprocess import phase_postfix, phase_trim, phase_rewrite, phase_polish, phase_expand
 from phases.style_extract import phase_style_extract
 from phases.validate import phase_validate, validate_one
