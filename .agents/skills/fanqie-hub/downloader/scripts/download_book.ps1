@@ -220,6 +220,9 @@ if (-not $NoArchive -and $completed -gt 0) {
     $jsonlFiles += Get-ChildItem "$SkillDir\downloads\$bookId\downloaded_chapters.jsonl" -ErrorAction SilentlyContinue
     $jsonlFiles += Get-ChildItem "$SkillDir\*\downloaded_chapters.jsonl" -ErrorAction SilentlyContinue | Where-Object { $_.LastWriteTime -gt (Get-Date).AddMinutes(-5) }
     $jsonlFiles = $jsonlFiles | Sort-Object LastWriteTime -Descending | Select-Object -Unique
+    
+    # 删除epub文件（下载器bug，配置txt但仍输出epub）
+    Get-ChildItem "$SkillDir\*.epub" -ErrorAction SilentlyContinue | Where-Object { $_.LastWriteTime -gt (Get-Date).AddMinutes(-5) } | Remove-Item -Force
 
     if ($jsonlFiles) {
         $jsonlFile = $jsonlFiles[0]
@@ -237,36 +240,35 @@ if (-not $NoArchive -and $completed -gt 0) {
         if (-not $Author) { $Author = "未知作者" }
         if (-not $bookName) { $bookName = $bookId }
         
-        # 标准化路径: knowledge/{作者}/{书名}/
+        # 标准化路径: projects/{作者}/{书名}/
         $safeAuthor = $Author -replace '[\\/:*?"<>|]', '_'
         $safeBookName = $bookName -replace '[\\/:*?"<>|]', '_'
-        # SkillDir = .agents/skills/fanqie-hub/downloader，项目根目录 = 上四级
-        $projectRoot = (Get-Item "$SkillDir").Parent.Parent.Parent.Parent.FullName
-        $knowledgeDir = "$projectRoot\knowledge\$safeAuthor\$safeBookName"
-        Write-Host "    目录: $knowledgeDir" -ForegroundColor Gray
-        New-Item -ItemType Directory -Path $knowledgeDir -Force | Out-Null
+        $projectsDir = "$SkillDir\projects"
+        $archiveDir = "$projectsDir\$safeAuthor\$safeBookName"
+        Write-Host "    目录: $archiveDir" -ForegroundColor Gray
+        New-Item -ItemType Directory -Path $archiveDir -Force | Out-Null
         
-        # 调用Python脚本转换jsonl为txt
-        Write-Step "转换 jsonl → txt"
+        # 从jsonl转换为txt
+        Write-Step "转换 → txt"
         $convertScript = "$SkillDir\scripts\jsonl_to_txt.py"
-        $txtPath = "$knowledgeDir\$safeBookName.txt"
+        $txtPath = "$archiveDir\$safeBookName.txt"
         $convertCmd = "python `"$convertScript`" `"$($jsonlFile.FullName)`" `"$txtPath`" `"$bookName`" `"$Author`" `"$statusFile`""
         $convertResult = Invoke-Expression $convertCmd 2>&1
         if ($LASTEXITCODE -eq 0) {
-            Write-Ok "$safeBookName.txt -> knowledge/$safeAuthor/$safeBookName/"
+            Write-Ok "$safeBookName.txt -> projects/$safeAuthor/$safeBookName/"
         } else {
             Write-Err "转换失败: $convertResult"
         }
         
         # 复制status.json
-        Copy-Item $statusFile "$knowledgeDir\status.json" -Force
-        Write-Ok "status.json -> knowledge/$safeAuthor/$safeBookName/"
+        Copy-Item $statusFile "$archiveDir\status.json" -Force
+        Write-Ok "status.json -> projects/$safeAuthor/$safeBookName/"
         
         # 复制封面
         $coverFile = Join-Path $bookDir "cover.png"
         if (Test-Path $coverFile) {
-            Copy-Item $coverFile "$knowledgeDir\cover.png" -Force
-            Write-Ok "cover.png -> knowledge/$safeAuthor/$safeBookName/"
+            Copy-Item $coverFile "$archiveDir\cover.png" -Force
+            Write-Ok "cover.png -> projects/$safeAuthor/$safeBookName/"
         }
         
         # 清理下载器缓存
@@ -288,7 +290,7 @@ Write-Host "`n========================================" -ForegroundColor Green
 if ($completed -gt 0) {
     Write-Host "下载完成！" -ForegroundColor Green
     if (-not $NoArchive) {
-        Write-Host "  归档: knowledge/$safeAuthor/$safeBookName"
+        Write-Host "  归档: projects/$safeAuthor/$safeBookName"
     }
 } else {
     Write-Host "下载未成功完成" -ForegroundColor Yellow

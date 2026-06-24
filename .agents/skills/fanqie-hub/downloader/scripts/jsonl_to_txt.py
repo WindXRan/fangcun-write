@@ -1,4 +1,4 @@
-"""将番茄下载器的jsonl输出转换为txt，并导入到knowledge目录"""
+"""将番茄下载器的jsonl输出转换为txt，并导入到projects目录"""
 import json
 import sys
 import os
@@ -23,6 +23,32 @@ def clean_html(text):
     text = re.sub(r'&quot;', '"', text)
     text = re.sub(r'(\r?\n){3,}', '\n\n', text)
     return text.strip()
+
+def remove_duplicate_title(content, title):
+    """去除重复的章节标题"""
+    # 清理标题中的空格和特殊字符
+    clean_title = re.sub(r'\s+', '', title)
+    
+    # 检查内容是否以标题开头
+    content_lines = content.strip().split('\n')
+    if not content_lines:
+        return content
+    
+    first_line = content_lines[0].strip()
+    clean_first_line = re.sub(r'\s+', '', first_line)
+    
+    # 如果第一行就是标题，或者第一行包含标题，去除它
+    if clean_first_line == clean_title or clean_first_line.startswith(clean_title):
+        # 去掉第一行，保留剩余内容
+        remaining = '\n'.join(content_lines[1:]).strip()
+        return remaining
+    
+    # 如果内容中包含重复的标题行，去除重复的
+    # 例如："第1章 标题\n第1章 标题\n内容" -> "第1章 标题\n内容"
+    pattern = re.escape(title) + r'\s*\n\s*' + re.escape(title)
+    content = re.sub(pattern, title, content)
+    
+    return content
 
 def extract_metadata(status_path):
     """从status.json提取元信息"""
@@ -106,16 +132,11 @@ def convert_jsonl_to_txt(jsonl_path, output_path, book_name, author, status_path
             ch_content = chapter.get('content', '')
             ch_content = clean_html(ch_content)
             
-            # 去重：如果内容已包含标题，不再添加
-            content_lines = ch_content.strip().split('\n')
-            first_line = content_lines[0].strip() if content_lines else ""
+            # 去除重复的章节标题
+            ch_content = remove_duplicate_title(ch_content, title)
             
-            if first_line == title or first_line.startswith(title):
-                # 内容已包含标题，直接使用
-                txt_content += f"\n\n{ch_content}"
-            else:
-                # 内容不包含标题，添加标题
-                txt_content += f"\n\n{title}\n\n{ch_content}"
+            # 添加章节内容
+            txt_content += f"\n\n{title}\n\n{ch_content}"
         except json.JSONDecodeError as e:
             print(f"  警告: 第{i+1}行解析失败: {e}")
             continue

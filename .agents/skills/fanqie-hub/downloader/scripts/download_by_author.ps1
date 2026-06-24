@@ -182,30 +182,69 @@ $completed = Wait-Downloads $port $MaxWaitSeconds
 # Step 4: 归档
 if (-not $NoArchive) {
     Write-Step "归档下载文件"
-    $authorDir = "$SkillDir\projects\$Author"
-    New-Item -ItemType Directory -Path $authorDir -Force | Out-Null
-
-    $downloadedFiles = Get-ChildItem "$SkillDir\downloads\*.txt" -ErrorAction SilentlyContinue
-    if ($downloadedFiles) {
-        foreach ($f in $downloadedFiles) {
-            Move-Item $f.FullName "$authorDir\$($f.Name)" -Force
-            Write-Ok "$($f.Name) -> $Author/"
+    $convertScript = "$SkillDir\scripts\jsonl_to_txt.py"
+    
+    # 删除epub文件（下载器bug，配置txt但仍输出epub）
+    Get-ChildItem "$SkillDir\*.epub" -ErrorAction SilentlyContinue | Where-Object { $_.LastWriteTime -gt (Get-Date).AddMinutes(-5) } | Remove-Item -Force
+    
+    # 查找所有下载的 jsonl 文件（最近5分钟内）
+    $jsonlFiles = Get-ChildItem "$SkillDir\*\downloaded_chapters.jsonl" -ErrorAction SilentlyContinue | 
+        Where-Object { $_.LastWriteTime -gt (Get-Date).AddMinutes(-5) } |
+        Sort-Object LastWriteTime -Descending
+    
+    if (-not $jsonlFiles) {
+        $jsonlFiles = Get-ChildItem "$SkillDir\downloads\*\downloaded_chapters.jsonl" -ErrorAction SilentlyContinue | 
+            Where-Object { $_.LastWriteTime -gt (Get-Date).AddMinutes(-5) } |
+            Sort-Object LastWriteTime -Descending
+    }
+    
+    if ($jsonlFiles) {
+        foreach ($jsonlFile in $jsonlFiles) {
+            $bookDir = $jsonlFile.Directory
+            
+            # 从 status.json 读取书籍信息
+            $statusFile = Join-Path $bookDir "status.json"
+            $bookName = $bookDir.Name
+            $authorName = $Author
+            
+            if (Test-Path $statusFile) {
+                $statusData = Get-Content $statusFile -Raw -Encoding UTF8 | ConvertFrom-Json
+                if ($statusData.book_name) { $bookName = $statusData.book_name }
+                if ($statusData.author) { $authorName = $statusData.author }
+            }
+            
+            $safeAuthor = $authorName -replace '[\\/:*?"<>|]', '_'
+            $safeBookName = $bookName -replace '[\\/:*?"<>|]', '_'
+            $archiveDir = "$SkillDir\projects\$safeAuthor\$safeBookName"
+            New-Item -ItemType Directory -Path $archiveDir -Force | Out-Null
+            
+            # 转换 jsonl → txt
+            $txtPath = "$archiveDir\$safeBookName.txt"
+            $convertCmd = "python `"$convertScript`" `"$($jsonlFile.FullName)`" `"$txtPath`" `"$bookName`" `"$authorName`" `"$statusFile`""
+            $convertResult = Invoke-Expression $convertCmd 2>&1
+            if ($LASTEXITCODE -eq 0) {
+                Write-Ok "$safeBookName.txt -> projects/$safeAuthor/$safeBookName/"
+            } else {
+                Write-Err "转换失败: $convertResult"
+                continue
+            }
+            
+            # 复制 status.json
+            if (Test-Path $statusFile) {
+                Copy-Item $statusFile "$archiveDir\status.json" -Force
+            }
+            
+            # 复制封面
+            $coverFile = Join-Path $bookDir "cover.png"
+            if (Test-Path $coverFile) {
+                Copy-Item $coverFile "$archiveDir\cover.png" -Force
+            }
+            
+            # 清理下载器缓存
+            Remove-Item $bookDir -Recurse -Force -ErrorAction SilentlyContinue
         }
     } else {
-        Write-Warn "downloads 目录没有找到 txt 文件"
-    }
-
-    # 编码验证
-    Write-Step "验证编码"
-    $allFiles = Get-ChildItem "$authorDir\*.txt" -ErrorAction SilentlyContinue
-    foreach ($f in $allFiles) {
-        $content = [System.IO.File]::ReadAllText($f.FullName, [System.Text.Encoding]::UTF8)
-        $head = $content.Substring(0, [Math]::Min(100, $content.Length))
-        if ($head -match '[锛€浠涔﹀悕鐩綍]') {
-            Write-Err "$($f.Name): 编码损坏"
-        } else {
-            Write-Ok "$($f.Name): 编码正常"
-        }
+        Write-Warn "未找到下载的 jsonl 文件"
     }
 }
 
@@ -218,6 +257,6 @@ if (-not $KeepServer) {
 Write-Host "`n========================================" -ForegroundColor Green
 Write-Host "完成！共提交 $submitted 本，成功 $completed 本" -ForegroundColor Green
 if (-not $NoArchive) {
-    Write-Host "  归档: $SkillDir\projects\$Author"
+    Write-Host "  归档: $SkillDir\projects\$Author\"
 }
 Write-Host "========================================" -ForegroundColor Green
