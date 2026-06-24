@@ -22,6 +22,7 @@ $ErrorActionPreference = "Stop"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 $SkillDir = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
+$ProjectRoot = (Get-Item $SkillDir).Parent.Parent.Parent.Parent.FullName
 
 function Write-Step($msg) { Write-Host "`n>>> $msg" -ForegroundColor Cyan }
 function Write-Ok($msg) { Write-Host "    OK: $msg" -ForegroundColor Green }
@@ -243,7 +244,7 @@ if (-not $NoArchive -and $completed -gt 0) {
         # 标准化路径: projects/{作者}/{书名}/
         $safeAuthor = $Author -replace '[\\/:*?"<>|]', '_'
         $safeBookName = $bookName -replace '[\\/:*?"<>|]', '_'
-        $projectsDir = "$SkillDir\projects"
+        $projectsDir = "$ProjectRoot\projects"
         $archiveDir = "$projectsDir\$safeAuthor\$safeBookName"
         Write-Host "    目录: $archiveDir" -ForegroundColor Gray
         New-Item -ItemType Directory -Path $archiveDir -Force | Out-Null

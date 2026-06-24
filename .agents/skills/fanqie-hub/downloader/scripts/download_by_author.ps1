@@ -16,6 +16,7 @@ $ErrorActionPreference = "Stop"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 $SkillDir = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
+$ProjectRoot = (Get-Item $SkillDir).Parent.Parent.Parent.Parent.FullName
 
 function Write-Step($msg) { Write-Host "`n>>> $msg" -ForegroundColor Cyan }
 function Write-Ok($msg) { Write-Host "    OK: $msg" -ForegroundColor Green }
@@ -215,7 +216,7 @@ if (-not $NoArchive) {
             
             $safeAuthor = $authorName -replace '[\\/:*?"<>|]', '_'
             $safeBookName = $bookName -replace '[\\/:*?"<>|]', '_'
-            $archiveDir = "$SkillDir\projects\$safeAuthor\$safeBookName"
+            $archiveDir = "$ProjectRoot\projects\$safeAuthor\$safeBookName"
             New-Item -ItemType Directory -Path $archiveDir -Force | Out-Null
             
             # 转换 jsonl → txt

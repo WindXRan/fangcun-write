@@ -20,7 +20,7 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding='utf-8')
 
 SKILL_DIR = Path(__file__).parent.parent
-PROJECTS_DIR = Path.cwd() / "projects"  # 主 projects 目录
+PROJECTS_DIR = SKILL_DIR.parent.parent.parent.parent / "projects"
 DEFAULT_PORT = 18423
 
 

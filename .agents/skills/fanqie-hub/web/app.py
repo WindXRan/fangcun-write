@@ -9,7 +9,7 @@ from flask import Flask, render_template, jsonify, request, send_from_directory,
 SKILL_DIR = Path(__file__).parent  # web/
 HUB_DIR = SKILL_DIR.parent  # fanqie-hub/
 ROOT_DIR = HUB_DIR.parent.parent.parent  # 项目根目录
-PROJECTS_DIR = HUB_DIR / "projects"
+PROJECTS_DIR = ROOT_DIR / "projects"
 BOOK_LIBRARY_FILE = SKILL_DIR / "data" / "book_library.json"
 SCAN_DATA_DIR = HUB_DIR / "scanner"
 NOVEL_DOWNLOAD_DIR = HUB_DIR / "downloader"

@@ -69,7 +69,7 @@ def main():
         time.sleep(0.3)
     
     # 保存
-    output_dir = r"C:\Users\Administrator\Documents\trae_projects\AI网文小说项目\.agents\skills\novel-download\downloads"
+    output_dir = Path(__file__).parent.parent.parent.parent / "projects" / "_downloads"
     os.makedirs(output_dir, exist_ok=True)
     output_file = os.path.join(output_dir, f"{title}.txt")
     with open(output_file, 'w', encoding='utf-8') as f:

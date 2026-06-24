@@ -29,7 +29,7 @@ HUB_DIR = Path(__file__).parent
 DOWNLOADER_DIR = HUB_DIR / "downloader"
 SCANNER_DIR = HUB_DIR / "scanner"
 WEB_DIR = HUB_DIR / "web"
-PROJECTS_DIR = HUB_DIR / "projects"
+PROJECTS_DIR = Path(__file__).parent.parent.parent.parent / "projects"
 
 
 def run_cmd(cmd, cwd=None, timeout=None):
