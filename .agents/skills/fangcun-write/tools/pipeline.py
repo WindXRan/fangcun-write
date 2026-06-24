@@ -27,6 +27,7 @@ from phases import (
     phase_postfix,
 )
 from phases.compare import phase_compare
+from phases.deslop import phase_deslop
 from phases.skeleton_map import phase_skeleton_map
 
 
@@ -54,17 +55,18 @@ def get_phase_api(config: dict, phase: str) -> tuple:
 GOAL_MAP = {
     "open-book": {"prep", "source-analysis", "open-book", "chapter-map"},
     "chapter-map": {"chapter-map"},
-    "guides": {"chapter-map", "skeleton-map", "guides"},
-    "write": {"chapter-map", "skeleton-map", "guides", "write", "postfix"},
+    "guides": {"skeleton-map", "guides"},
+    "write": {"skeleton-map", "guides", "write", "postfix"},
     "review": {},
     "postfix": {"postfix"},
     "skeleton-map": {"skeleton-map"},
-    "all": {"prep", "source-analysis", "open-book", "chapter-map", "skeleton-map", "guides", "write", "postfix"},
+    "deslop": {"deslop"},
+    "all": {"prep", "source-analysis", "open-book", "chapter-map", "skeleton-map", "guides", "write", "postfix", "deslop"},
 }
 
 # 章级 phase 按此顺序执行
 _CHAPTER_PHASE_ORDER = [
-    "guides", "write", "compare",
+    "guides", "write", "deslop", "compare",
     "postfix",
 ]
 
@@ -207,6 +209,7 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
         h["write"] = _write_handler
     h["postfix"] = phase_postfix
     h["compare"] = lambda cfg, s, e: phase_compare(cfg, s, e)
+    h["deslop"] = lambda cfg, s, e: phase_deslop(cfg, s, e)
     return h
 
 

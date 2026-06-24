@@ -496,7 +496,7 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
                 for ev in events:
                     if str(ev.get("id", "")) == str(chapter_num):
                         parts = []
-                        for k in ["情绪弧线", "开头承接", "结尾状态", "衔接"]:
+                        for k in ["章节功能", "情绪弧线", "开头承接", "结尾状态", "衔接"]:
                             v = ev.get(k, "")
                             if v:
                                 v = str(v).replace("→ ", "").replace("→", "")
