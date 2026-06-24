@@ -206,6 +206,7 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
     else:
         h["write"] = _write_handler
     h["postfix"] = phase_postfix
+    h["compare"] = lambda cfg, s, e: phase_compare(cfg, s, e)
     return h
 
 

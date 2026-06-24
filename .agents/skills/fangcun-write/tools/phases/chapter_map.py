@@ -70,7 +70,7 @@ def phase_chapter_map(config, state_mgr=None):
         replacements = {
             "start": str(batch_start), "end": str(batch_end),
             "新书名": Path(rewrites_str).name,
-            "贯穿目标": concept_text[:500],
+            "贯穿目标": concept_text[:2000],
             "source_events": source_summary,
             "name_map": chars_text[:1000],
             "concept": concept_text,
@@ -80,8 +80,18 @@ def phase_chapter_map(config, state_mgr=None):
             f"{prompts_dir}/chapter-map.md", base_dir, replacements,
             mode="api", rewrites_dir=rewrites_str,
         )
-        from prompt_meta import load_system_prompt
-        system_prompt = load_system_prompt("agent.md") or ""
+        # System prompt: 优先拆文库文风，回退 agent.md
+        analyze_dir = config.get("analyze_dir", "")
+        system_prompt = ""
+        if analyze_dir:
+            for fname in ["文风分析.md", "文风.md"]:
+                sp = Path(analyze_dir) / fname
+                if sp.exists():
+                    system_prompt = sp.read_text(encoding="utf-8")[:4000]
+                    break
+        if not system_prompt:
+            from prompt_meta import load_system_prompt
+            system_prompt = load_system_prompt("agent.md") or ""
         system_prompt += "\n\n你必须输出一个 JSON 数组。不要输出其他内容。"
 
         try:
