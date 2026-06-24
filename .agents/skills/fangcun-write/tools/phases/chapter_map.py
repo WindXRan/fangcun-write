@@ -34,12 +34,12 @@ def phase_chapter_map(config, state_mgr=None):
     for fname in ["concept.md", "book_info.md", "world.md"]:
         fp = rewrites_dir / fname
         if fp.exists():
-            concept_text += f"\n--- {fname} ---\n" + fp.read_text(encoding="utf-8")[:3000]
+            concept_text += f"\n--- {fname} ---\n" + fp.read_text(encoding="utf-8")
 
     chars_text = ""
     chars_path = rewrites_dir / "characters.md"
     if chars_path.exists():
-        chars_text = chars_path.read_text(encoding="utf-8")[:2000]
+        chars_text = chars_path.read_text(encoding="utf-8")
 
     if not concept_text:
         print("  [WARN] 新书设定文件不存在，使用 name_map 机械替换")
@@ -70,9 +70,9 @@ def phase_chapter_map(config, state_mgr=None):
         replacements = {
             "start": str(batch_start), "end": str(batch_end),
             "新书名": Path(rewrites_str).name,
-            "贯穿目标": concept_text[:2000],
+            "贯穿目标": concept_text,
             "source_events": source_summary,
-            "name_map": chars_text[:1000],
+            "name_map": chars_text,
             "concept": concept_text,
             "characters_context": chars_text,
         }
