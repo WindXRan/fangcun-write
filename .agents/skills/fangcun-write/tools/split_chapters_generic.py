@@ -10,8 +10,8 @@ def split_chapters(input_file, output_dir, encoding='utf-8'):
     
     os.makedirs(output_dir, exist_ok=True)
     
-    # 按"第X章"拆分
-    chapters = re.split(r'(?=第\d+章\s+)', content)
+    # 按"第X章"拆分（兼容有/无空格两种格式）
+    chapters = re.split(r'(?=第\d+章\s*)', content)
     
     # 记录已保存的章节，避免重复
     saved_chapters = {}
@@ -22,7 +22,7 @@ def split_chapters(input_file, output_dir, encoding='utf-8'):
             continue
         
         # 章节标题模式
-        chapter_pattern = re.compile(r'第(\d+)章\s+(.+)')
+        chapter_pattern = re.compile(r'第(\d+)章\s*(.*)')
         match = chapter_pattern.search(chapter)
         if match:
             chapter_num = match.group(1)
