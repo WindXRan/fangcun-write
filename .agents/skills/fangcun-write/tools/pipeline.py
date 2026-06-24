@@ -38,7 +38,7 @@ def get_phase_model(config: dict, phase: str) -> str:
     overrides = config.get("model_overrides", {})
     if phase in overrides:
         return overrides[phase]
-    return config.get("model", "mimo-v2.5-pro")
+    return config.get("model", "deepseek-chat")
 
 
 def get_phase_api(config: dict, phase: str) -> tuple:

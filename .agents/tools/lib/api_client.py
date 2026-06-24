@@ -6,7 +6,7 @@ from pathlib import Path
 import requests
 from datetime import datetime
 
-DEFAULT_API_URL = os.environ.get("DEFAULT_API_URL", "https://token-plan-cn.xiaomimimo.com/v1/chat/completions")
+DEFAULT_API_URL = os.environ.get("DEFAULT_API_URL", "https://api.deepseek.com/v1/chat/completions")
 
 # 复用 TCP 连接，减少 TLS 握手开销
 _session = requests.Session()
@@ -43,7 +43,7 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None, max_
     provider = config.get("provider", "")
     pc = get_prompt_config_with_overrides(f"{prompt_type}.md", config)
     # 优先级：config.json 的 model > prompt defaults 的 model > 默认值
-    model = config.get("model") or pc.get("model") or "mimo-v2.5-pro"
+    model = config.get("model") or pc.get("model") or "deepseek-chat"
     temperature = pc.get("temperature", 0.8)
     if max_tokens is None:
         max_tokens = pc.get("max_tokens", None)
@@ -175,11 +175,7 @@ def call_api(api_key, model, user_prompt,
 
     url = api_url or DEFAULT_API_URL
 
-    # 认证格式：MiMo 用 api-key，其他用 Authorization: Bearer
-    if "mimo" in url or "xiaomimimo" in url:
-        headers = {"api-key": api_key, "Content-Type": "application/json"}
-    else:
-        headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     
     sys_prompt = system_prompt or load_system_prompt("system-generic.md") or ""
     messages = [
@@ -272,12 +268,7 @@ def test_api_connection(config=None, timeout=10):
             "error": "未配置 API_KEY"
         }
     
-    # 根据 provider 选择不同的 header 格式
-    provider = (config or {}).get("provider", "")
-    if provider == "deepseek" or "deepseek" in api_url:
-        headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-    else:
-        headers = {"api-key": api_key, "Content-Type": "application/json"}
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     data = {
         "model": model,
         "messages": [

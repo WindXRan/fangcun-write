@@ -123,7 +123,7 @@ def _generate_source_analysis(config):
     cache_dir = get_cache_dir(config)
     api_key = get_api_key(config)
     api_url = get_api_url(config)
-    model = config.get("model", "mimo-v2.5-pro")
+    model = config.get("model", "deepseek-chat")
 
     if not api_key:
         print("  [SKIP] 未设置 API_KEY，跳过源书级分析")

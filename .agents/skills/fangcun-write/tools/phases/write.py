@@ -163,7 +163,7 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
     t0 = time.time()
     run_id = None
     if state_mgr:
-        run_id = state_mgr.add_run("write", start, end, model=write_cfg.get("model", "mimo-v2.5-pro"))
+        run_id = state_mgr.add_run("write", start, end, model=write_cfg.get("model", "deepseek-chat"))
 
     # --- Key chapter 升级：开头章用 Pro ---
     pro_model = write_cfg.get("key_chapter_model")
