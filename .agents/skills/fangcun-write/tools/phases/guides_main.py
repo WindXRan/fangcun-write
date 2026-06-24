@@ -10,7 +10,7 @@ from pathlib import Path
 
 import _path_setup  # noqa: F401
 from utils import (
-    get_total_chapters, count_source_chars, batch_run, debug_dump_prompt,
+    get_total_chapters, count_source_chars, batch_run,
 )
 from prompt_meta import load_system_prompt, get_prompt_config_with_overrides, get_system_prompt_name, safe_format
 from prompt_loader import load_prompt
@@ -26,7 +26,7 @@ from guides_name import (
 )
 from guides_world import (
     _get_world_text, _get_world_constraint, _get_genre_text,
-    _load_avatar_knowledge, _get_blacklist_text,
+    _get_blacklist_text,
 )
 from guides_style import (
     _get_style_fingerprint, _get_style_text_mapped, _extract_highlights,
@@ -467,10 +467,6 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
             replacements["world"] = _get_world_text(config)
         if "style" not in replacements:
             style_text = _get_style_text_mapped(config, chapter_num)
-            # 加载分身知识库
-            avatar_text = _load_avatar_knowledge(config)
-            if avatar_text:
-                style_text = (style_text or "") + "\n\n" + avatar_text
             replacements["style"] = style_text or "（风格未提取）"
         # 注入 name_map
         if "name_map" not in replacements:
@@ -577,14 +573,6 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
 
     # 不限制 max_tokens
     max_tokens = None
-
-    # === 保存 prompt 到 _debug/（每次调用都保存，不占token） ===
-    if chapter_num:
-        debug_dump_prompt(config, prompt_type, chapter_num, prompt_path, system_prompt, user_prompt, sp_name, pc)
-
-    # prompts_only: 只输出 prompt，不调 API
-    if config.get("prompts_only"):
-        return f"<!-- PROMPTS_ONLY: {prompt_type} ch{chapter_num} — prompt 已保存至 _debug/ -->"
 
     label = f"ch{chapter_num or '?'} {prompt_type}"
 

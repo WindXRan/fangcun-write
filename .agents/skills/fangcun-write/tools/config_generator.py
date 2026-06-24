@@ -74,18 +74,21 @@ def create_avatar_config(author_name, source_dir=None, model="deepseek-chat"):
     """
     base_dir = os.getcwd()
     
-    # 检查分身是否存在
-    avatar_dir = f"avatars/{author_name}"
-    if not os.path.exists(avatar_dir):
-        if source_dir:
-            # 自动蒸馏
-            print(f"⏳ 正在为 {author_name} 生成分身...")
-            from style_distill import distill_author
-            distill_author(author_name, source_dir, "avatars")
-        else:
-            print(f"❌ 分身不存在: {avatar_dir}")
-            print(f"   请先提供源文目录进行蒸馏")
-            return None
+    # 检查 knowledge 目录中是否存在作者数据
+    knowledge_dir = f"knowledge/{author_name}"
+    if not os.path.exists(knowledge_dir):
+        print(f"❌ 作者知识库不存在: {knowledge_dir}")
+        print(f"   请先使用 /fangcun-analyze 拆解作者作品")
+        return None
+    
+    # 查找作者的 system_prompt
+    system_prompt_path = None
+    for book_dir in Path(knowledge_dir).iterdir():
+        if book_dir.is_dir():
+            sp = book_dir / "system_prompt.md"
+            if sp.exists():
+                system_prompt_path = str(sp)
+                break
     
     # 创建配置
     config = {
@@ -98,23 +101,9 @@ def create_avatar_config(author_name, source_dir=None, model="deepseek-chat"):
         "model": model,
         "execution_mode": "api",
         "mode": "avatar",
-        "avatar": {
-            "name": author_name,
-            "dir": avatar_dir,
-            "style": ""  # 从 avatar.md 自动读取
-        }
+        "knowledge_dir": knowledge_dir,
+        "system_prompt_path": system_prompt_path or ""
     }
-    
-    # 读取 avatar.md 提取风格摘要
-    avatar_md = os.path.join(avatar_dir, "avatar.md")
-    if os.path.exists(avatar_md):
-        with open(avatar_md, encoding='utf-8') as f:
-            content = f.read()
-            # 提取"一句话定义"
-            for line in content.split('\n'):
-                if '一句话' in line or '核心标签' in line:
-                    config["avatar"]["style"] = line.strip().replace('- ', '').replace('*', '')
-                    break
     
     # 保存配置
     config_path = f"configs/avatar_{author_name}.json"
@@ -123,7 +112,7 @@ def create_avatar_config(author_name, source_dir=None, model="deepseek-chat"):
     
     print(f"✅ 分身配置已创建: {config_path}")
     print(f"   作者: {author_name}")
-    print(f"   分身: {avatar_dir}")
+    print(f"   知识库: {knowledge_dir}")
     
     return config_path
 

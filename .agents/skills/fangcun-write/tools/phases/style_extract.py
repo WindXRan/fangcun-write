@@ -1,4 +1,4 @@
-﻿"""Phase 1.5: 文笔指纹 — 算法锚点，与 plot-guide 同级并行。
+﻿"""Phase 1.5: 文笔指纹 — 算法锚点 + LLM 分析，与 plot-guide 同级并行。
 
 输出: rewrites_dir/styles/style_{N}.md  (人可读 + prompt 可嵌入)
 """
@@ -23,7 +23,7 @@ def _text_hash(text):
 
 
 def _cache_valid(styles_dir, ch, src_text):
-    """检查缓存是否有效：文件存在 + 哈希匹配 + 结构。"""
+    """检查缓存是否有效：文件存在 + 哈希匹配 + LLM 风格 + 结构。"""
     f = styles_dir / f"style_{ch:03d}.md"
     if not f.exists():
         return False
@@ -35,6 +35,7 @@ def _cache_valid(styles_dir, ch, src_text):
     else:
         return False
     
+    if not (styles_dir / f"style_{ch:03d}_llm.md").exists():
         return False
     if not (styles_dir / f"structure_{ch:03d}.md").exists():
         return False
@@ -102,7 +103,18 @@ def phase_style_extract(config, start, end, workers=None):
                 algo_count += 1
     print(f"  Layer1 算法锚点: {algo_count}/{len(todo)} ({time.time() - t0:.1f}s)")
 
-    # Layer 2 已弃用（使用 cyber_author_prompt.md 替代）
+    # Layer 2: LLM 分析
+    if api_key:
+        t0 = time.time()
+        llm_count = 0
+        with ThreadPoolExecutor(max_workers=min(w, len(todo))) as ex:
+            futures = {ex.submit(_llm_one, config, ch, styles_dir): ch for ch in todo}
+            for f in as_completed(futures):
+                if f.result():
+                    llm_count += 1
+        print(f"  Layer2 LLM分析: {llm_count}/{len(todo)} ({time.time() - t0:.1f}s)")
+    else:
+        print(f"  Layer2 LLM分析: 跳过 (无 API_KEY)")
 
     total = list(styles_dir.glob("style_*.md"))
     print(f"  完成: {len(total)} styles 文件")
@@ -135,6 +147,44 @@ def _algo_one(config, ch, styles_dir):
     return True
 
 
+def _llm_one(config, ch, styles_dir):
+    """LLM 分析 → 追加到 style_{N}.md 后半部分。"""
+    from lib.api_client import call_llm
+
+    text = get_source_text(config, ch)
+    if not text:
+        print(f"  [STYLE] ch{ch:03d} err: 源文不存在")
+        return False
+
+    fp = count_style_fingerprint(text)
+    anchors = format_style_anchors(fp)
+    
+    # 从 prompts 目录加载 style-analyze.md
+    prompts_dir = Path(__file__).resolve().parent.parent.parent / "prompts"
+    prompt_file = prompts_dir / "style-analyze.md"
+    if not prompt_file.exists():
+        print(f"  [STYLE] ch{ch:03d} err: style-analyze.md 不存在")
+        return False
+    
+    prompt_template = prompt_file.read_text(encoding="utf-8")
+    # 去掉 frontmatter
+    from prompt_meta import parse_frontmatter
+    _, prompt_body = parse_frontmatter(prompt_template)
+    
+    prompt = safe_format(prompt_body, {"chapter_text": text[:8000], "style_anchors": anchors})
+
+    sp_name = get_system_prompt_name("style-analyze.md") or "system-generic.md"
+    sys_prompt = load_system_prompt(sp_name) or "你是资深文学编辑，分析文笔风格。"
+    try:
+        analysis = call_llm(config, "style-analyze", prompt, sys_prompt).strip()
+        _write_md(styles_dir, ch, analysis=f"## LLM 风格分析\n{analysis}", src_text=text)
+        print(f"  [STYLE] ch{ch:03d} OK")
+        return True
+    except Exception as e:
+        print(f"  [STYLE] ch{ch:03d} err: {e}")
+    return False
+
+
 def _write_md(styles_dir, ch, anchor=None, analysis=None, src_text=None):
     """提取 XML 标签，直接写文件。不解析内容。"""
     # 算法锚点
@@ -158,8 +208,9 @@ def _write_md(styles_dir, ch, anchor=None, analysis=None, src_text=None):
     structure = _extract("structure")
     blacklist = _extract("blacklist")
     
-    # 写风格文件
+    # 写风格文件（LLM 分析）
     if style:
+        f = styles_dir / f"style_{ch:03d}_llm.md"
         f.write_text(f"# 第{ch}章 风格分析\n\n{style}\n", encoding="utf-8")
     
     # 写结构文件
@@ -204,7 +255,8 @@ def load_style_text(config, ch):
     优先级：
     1. cyber_author_prompt.md（赛博作者风格理解）
     2. style_understanding.md（风格理解文档）
-    3. style_{N}.md（算法锚点）
+    3. style_{N}_llm.md（LLM 风格分析）
+    4. style_{N}.md（算法锚点）
     """
     source_book = config.get("source_book", "")
     author = config.get("author", "")
@@ -221,8 +273,13 @@ def load_style_text(config, ch):
     if style_understanding.exists():
         return style_understanding.read_text(encoding="utf-8")
     
-    # 兜底：算法锚点
+    # LLM 风格分析
     styles_dir = source_dir / "_cache" / "styles"
+    llm_style = styles_dir / f"style_{ch:03d}_llm.md"
+    if llm_style.exists():
+        return llm_style.read_text(encoding="utf-8")
+    
+    # 兜底：算法锚点
     algorithmic = styles_dir / f"style_{ch:03d}.md"
     if algorithmic.exists():
         return algorithmic.read_text(encoding="utf-8")

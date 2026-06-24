@@ -137,6 +137,8 @@ def fix_agent(config, task: FixTask, dry_run=False) -> FixResult:
         if llm_text:
             # #3: LLM 修复后跑 algo 验证，拒绝引入新问题的修复
             from phases.validate import validate_one
+            # 备份当前文件内容
+            backup_text = ch_file.read_text(encoding='utf-8')
             try:
                 # 临时写入验证
                 ch_file.write_text(llm_text, encoding='utf-8')
@@ -146,19 +148,17 @@ def fix_agent(config, task: FixTask, dry_run=False) -> FixResult:
                     new_ai_issues = [l for l in report_text.split('\n') if '*ISSUE*' in l and ('AI' in l or '路标' in l or '痕迹' in l)]
                     if new_ai_issues:
                         print(f"      [修复] 第{task.ch}章 LLM 修复引入新问题，回退", flush=True)
-                        ch_file.write_text(text, encoding='utf-8')  # 回退
+                        ch_file.write_text(backup_text, encoding='utf-8')  # 回退到备份
                     else:
                         text = llm_text
                         llm_used = True
                 else:
                     text = llm_text
                     llm_used = True
-                # 恢复原文件（如果上面临时写入了但最终不用）
-                if not llm_used:
-                    ch_file.write_text(text, encoding='utf-8')
-            except Exception:
-                text = llm_text
-                llm_used = True
+            except Exception as e:
+                print(f"      [修复] 第{task.ch}章 验证异常: {e}，回退", flush=True)
+                ch_file.write_text(backup_text, encoding='utf-8')  # 回退到备份
+                # 不接受 llm_text，保持原样
 
     if text == original:
         return FixResult(ch=task.ch, status="unchanged",

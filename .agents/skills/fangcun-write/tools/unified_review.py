@@ -462,13 +462,6 @@ def _llm_batch_review(config, chapter_nums):
     sp_name = get_system_prompt_name("unified-review.md") or "agent.md"
     sys_prompt = load_system_prompt(sp_name) or ""
 
-    if config.get("debug"):
-        from utils import debug_dump_prompt
-        pc = get_prompt_config_with_overrides("unified-review.md", config)
-        debug_dump_prompt(config, "unified-review", chapter_nums[0],
-                          "prompts/unified-review.md", sys_prompt,
-                          prompt, sp_name, pc)
-
     content = call_llm(config, "unified-review", prompt, sys_prompt)
     return _parse_review_output(content)
 

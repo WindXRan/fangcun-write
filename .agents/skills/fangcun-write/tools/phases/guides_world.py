@@ -96,53 +96,6 @@ def _get_genre_text(config):
     return _genre_cache
 
 
-# 模块级缓存：分身知识库
-_avatar_cache = {}
-
-
-def _load_avatar_knowledge(config):
-    """加载分身知识库（style + emotions + rhythm + voices）。"""
-    author = config.get("author", "")
-    if not author:
-        return ""
-    
-    if author in _avatar_cache:
-        return _avatar_cache[author]
-    
-    base_dir = Path(config.get("base_dir", "."))
-    avatar_dir = base_dir / "avatars" / author
-    
-    if not avatar_dir.exists():
-        _avatar_cache[author] = ""
-        return ""
-    
-    parts = []
-    
-    # 加载风格理解
-    style_path = avatar_dir / "style.md"
-    if style_path.exists():
-        parts.append("## 分身风格理解\n\n" + style_path.read_text(encoding="utf-8"))
-    
-    # 加载情绪模块
-    emotions_path = avatar_dir / "emotions.md"
-    if emotions_path.exists():
-        parts.append("## 分身情绪模块\n\n" + emotions_path.read_text(encoding="utf-8"))
-    
-    # 加载节奏模式
-    rhythm_path = avatar_dir / "rhythm.md"
-    if rhythm_path.exists():
-        parts.append("## 分身节奏模式\n\n" + rhythm_path.read_text(encoding="utf-8"))
-    
-    # 加载角色声音
-    voices_path = avatar_dir / "voices.md"
-    if voices_path.exists():
-        parts.append("## 分身角色声音\n\n" + voices_path.read_text(encoding="utf-8"))
-    
-    result = "\n\n".join(parts) if parts else ""
-    _avatar_cache[author] = result
-    return result
-
-
 # 模块级缓存：blacklist 文本
 _blacklist_cache = None
 

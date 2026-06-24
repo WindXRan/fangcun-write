@@ -205,6 +205,11 @@ def phase_write(config, start, end, workers=10, state_mgr=None):
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         try:
             write_config = {**write_cfg, "rewrites_dir": str(Path(chapters_dir).parent)}
+            # debug/prompts_only 模式：只保存 prompt 到 _debug/，不写正文
+            if write_config.get("prompts_only"):
+                writer.write_chapter(write_config, ch, auto_fix=True)
+                print(f"  [DEBUG] ch{ch:03d} prompt 已保存至 _debug/")
+                return ch, True, None
             result = writer.write_chapter(write_config, ch, auto_fix=True)
             if result:
                 # 先保存写章结果

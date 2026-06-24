@@ -231,21 +231,23 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=N
     print("=" * 50)
 
     # 扫描需要扩写的章节
+    from utils import get_source_text
+    from lib.text_metrics import get_body_chars
     todo = []
     for ch in range(start, end + 1):
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         if not ch_file.exists():
             continue
-        source_chars = 0
+        # 获取源文字数
+        source_text = get_source_text(config, ch)
+        source_chars = get_body_chars(source_text) if source_text else 0
+        original = ch_file.read_text(encoding='utf-8')
+        orig_chars = len(original.replace('\n', '').replace(' ', ''))
         if source_chars > 0:
-            original = ch_file.read_text(encoding='utf-8')
-            orig_chars = len(original.replace('\n', '').replace(' ', ''))
             if orig_chars < source_chars * 0.9:
                 todo.append(ch)
         else:
             # 没有源文字数信息，检查是否过短
-            original = ch_file.read_text(encoding='utf-8')
-            orig_chars = len(original.replace('\n', '').replace(' ', ''))
             if orig_chars < 1800:
                 todo.append(ch)
 

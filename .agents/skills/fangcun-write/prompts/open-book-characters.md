@@ -87,11 +87,15 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 <name_map>
 <item old="{源文角色}" new="{新名}" gender="{性别}" role="{功能位}" />
 <item old="..." new="..." gender="..." role="..." />
+
+**如果某个角色没有对应的新名（源文名和新名相同），则写章时 LLM 会直接使用源文名，构成抄袭。因此每个旧名都必须对应完全不同的新名，不允许出现 old==new 的条目。**
 </name_map>
 
 ### 第二步：角色卡
 
 <character name="{新角色名}" source="{源文角色名}">
+
+**新角色名必须与源文角色名完全不同。如果新角色名 == 源文角色名，构成抄袭，整个设定作废。**
 <role>{功能位}</role>
 <personality>{2-3句话描述性格本质}</personality>
 <motivation>{他/她最想要什么}</motivation>

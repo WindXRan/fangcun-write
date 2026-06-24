@@ -59,9 +59,9 @@ def validate_config(config):
         errors.append(f"channel 必须是 male 或 female，当前: {channel}")
 
     # reasoning_effort 枚举
-    re = config.get("reasoning_effort")
-    if re and re not in ("low", "medium", "high"):
-        errors.append(f"reasoning_effort 必须是 low/medium/high，当前: {re}")
+    reasoning_effort = config.get("reasoning_effort")
+    if reasoning_effort and reasoning_effort not in ("low", "medium", "high"):
+        errors.append(f"reasoning_effort 必须是 low/medium/high，当前: {reasoning_effort}")
 
     # 路径可访问性（非必填字段的路径仅在有值时检查）
     base_dir = config.get("base_dir")

@@ -9,9 +9,9 @@ from pathlib import Path
 # 模块级缓存：角色名映射
 _name_map_cache = None
 
-
 def _build_name_map(config):
     """从 characters.md 构建源文名→新名映射（模块级缓存）。LLM 生成，不做脚本兜底。"""
+
     global _name_map_cache
     if _name_map_cache is not None:
         return _name_map_cache

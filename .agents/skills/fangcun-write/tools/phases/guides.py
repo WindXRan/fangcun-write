@@ -34,7 +34,6 @@ from guides_world import (
     _get_world_text,
     _get_world_constraint,
     _get_genre_text,
-    _load_avatar_knowledge,
     _get_blacklist_text,
 )
 

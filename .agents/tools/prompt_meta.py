@@ -7,7 +7,6 @@ from pathlib import Path
 
 
 PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
-SYSTEM_PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
 TASKS_DIR = Path(__file__).resolve().parent.parent / "tasks"
 FRONTMATTER_RE = re.compile(r'^---\s*\n(.*?)\n---\s*\n', re.DOTALL)
 

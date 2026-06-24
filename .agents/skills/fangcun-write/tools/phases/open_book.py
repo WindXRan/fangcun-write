@@ -124,12 +124,12 @@ def _generate_source_analysis(config):
     events = load_events(config)
     if not events:
         print("\n  [源书分析] 事件提取...")
-        prompt_file = prompts_dir / "事件提取.md"
+        prompt_file = prompts_dir / "event_extraction.md"
         if prompt_file.exists():
             prompt_text = prompt_file.read_text(encoding="utf-8")
             events = extract_events(config, api_key, api_url, model, prompt_text, workers=5)
         else:
-            print("  [SKIP] 事件提取.md 不存在")
+            print("  [SKIP] event_extraction.md 不存在")
     else:
         print(f"\n  [源书分析] 事件表已有 {len(events)} 章，跳过")
 
@@ -137,13 +137,13 @@ def _generate_source_analysis(config):
     skeleton = load_skeleton(config)
     if not skeleton:
         print("\n  [源书分析] 故事骨架...")
-        prompt_file = prompts_dir / "故事骨架.md"
+        prompt_file = prompts_dir / "skeleton.md"
         if prompt_file.exists():
             system_prompt = prompt_file.read_text(encoding="utf-8")
             system_prompt += "\n\n你必须使用如下XML格式写入工作区：\n<storySkeleton>故事骨架内容</storySkeleton>"
             build_skeleton(config, api_key, api_url, model, system_prompt, config.get("source_book", ""))
         else:
-            print("  [SKIP] 故事骨架.md 不存在")
+            print("  [SKIP] skeleton.md 不存在")
     else:
         print(f"\n  [源书分析] 故事骨架已有，跳过")
 
@@ -151,13 +151,13 @@ def _generate_source_analysis(config):
     adaptation = load_adaptation(config)
     if not adaptation:
         print("\n  [源书分析] 改编策略...")
-        prompt_file = prompts_dir / "改编策略.md"
+        prompt_file = prompts_dir / "adaptation.md"
         if prompt_file.exists():
             system_prompt = prompt_file.read_text(encoding="utf-8")
             system_prompt += "\n\n你必须使用如下XML格式写入工作区：\n<adaptationStrategy>改编策略内容</adaptationStrategy>"
             build_adaptation(config, api_key, api_url, model, system_prompt, config.get("source_book", ""))
         else:
-            print("  [SKIP] 改编策略.md 不存在")
+            print("  [SKIP] adaptation.md 不存在")
     else:
         print(f"\n  [源书分析] 改编策略已有，跳过")
 

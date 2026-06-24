@@ -62,6 +62,30 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None, max_
     rewrites_dir = config.get("rewrites_dir", "")
     usage_log_path = str(Path(rewrites_dir) / "_log/api_usage.jsonl") if rewrites_dir else ""
 
+    # Debug: 保存 prompt 到 _debug/
+    if config.get("debug") and rewrites_dir:
+        try:
+            debug_dir = Path(rewrites_dir) / "_debug" / prompt_type
+            debug_dir.mkdir(parents=True, exist_ok=True)
+            ch_label = f"{ch:03d}" if isinstance(ch, int) else (str(ch) if ch else "00")
+            debug_file = debug_dir / f"ch{ch_label}_{prompt_type}.md"
+            debug_file.write_text(
+                f"# Debug: ch{ch_label} — {prompt_type}\n\n"
+                f"**Model**: {model}\n"
+                f"**Temperature**: {temperature}\n\n"
+                f"---\n\n"
+                f"## System Prompt\n\n{system_prompt or ''}\n\n"
+                f"---\n\n"
+                f"## User Prompt\n\n{user_prompt}\n",
+                encoding="utf-8"
+            )
+        except Exception:
+            pass
+
+    # prompts_only: 只保存 prompt 不调 API
+    if config.get("prompts_only"):
+        return f"<!-- PROMPTS_ONLY: {prompt_type} ch{ch} — prompt 已保存至 _debug/ -->"
+
     content, usage = call_api(api_key, model, user_prompt,
                               system_prompt, api_url, temperature=temperature,
                               max_tokens=max_tokens,

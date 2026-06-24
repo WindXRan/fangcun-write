@@ -53,11 +53,13 @@ def get_phase_api(config: dict, phase: str) -> tuple:
 # ─── Phase 映射 ──────────────────────────────────────────────────────
 
 GOAL_MAP = {
+    "open-book": {"prep", "source-analysis", "open-book"},
     "guides": {"skeleton-map", "guides"},
     "write": {"skeleton-map", "guides", "write", "postfix"},
     "review": {"unified_review_fix"},
     "postfix": {"postfix"},
     "skeleton-map": {"skeleton-map"},
+    "all": {"prep", "source-analysis", "open-book", "skeleton-map", "guides", "write", "postfix"},
 }
 
 # 章级 phase 按此顺序执行
@@ -77,8 +79,39 @@ def _expand(phase_str: str) -> set[str]:
 
 
 def _post_process(config, goal):
+    """写章后处理：统计字数、检查文件完整性。"""
     if "write" not in goal:
         return
+    
+    rewrites_dir = config.get("rewrites_dir", "")
+    if not rewrites_dir:
+        return
+    
+    from pathlib import Path
+    chapters_dir = Path(rewrites_dir) / "chapters"
+    if not chapters_dir.exists():
+        return
+    
+    # 统计写章结果
+    chapter_files = sorted(chapters_dir.glob("ch_*.txt"))
+    if not chapter_files:
+        return
+    
+    total_chars = 0
+    empty_files = []
+    for f in chapter_files:
+        try:
+            text = f.read_text(encoding='utf-8')
+            chars = len(text.replace('\n', '').replace(' ', ''))
+            total_chars += chars
+            if chars < 100:
+                empty_files.append(f.name)
+        except Exception:
+            empty_files.append(f.name)
+    
+    print(f"\n  [POST] 写章统计: {len(chapter_files)}章, 总字数={total_chars:,}")
+    if empty_files:
+        print(f"  [WARN] 空/过短文件: {empty_files}")
 
 
 def _auto_compare(config, start, end):
@@ -123,6 +156,19 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
     """构建 {phase_name: handler_fn} 映射。handler 签名 (config, start, end)。"""
     h = {}
 
+    # open-book 各子阶段 handler（各自独立，不互相调用）
+    def _prep_handler(cfg, s, e):
+        from phases.open_book import phase_prep
+        phase_prep(cfg)
+
+    def _source_analysis_handler(cfg, s, e):
+        from phases.open_book import phase_source_analysis
+        phase_source_analysis(cfg, state_mgr=state_mgr)
+
+    def _open_book_handler(cfg, s, e):
+        from phases.open_book import phase_open_book
+        phase_open_book(cfg, state_mgr=state_mgr)
+
     def _write_handler(cfg, s, e):
         """写章 + 自动 postfix + 自动 compare（黄金章节）。"""
         phase_write(cfg, s, e)
@@ -143,6 +189,11 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
         g_workers = cfg.get("batch_size", {}).get("guides", min(cfg.get("workers", 10), 10))
         phase_guides(cfg, s, e, workers=g_workers, state_mgr=state_mgr)
 
+    # open-book 相关 phase（各自独立）
+    h["prep"] = _prep_handler
+    h["source-analysis"] = _source_analysis_handler
+    h["open-book"] = _open_book_handler
+    
     h["guides"] = _guide_handler
     h["skeleton-map"] = lambda cfg, s, e: phase_skeleton_map(cfg, state_mgr=state_mgr)
     if _get_execution_mode(config, "write") == "agent":
@@ -163,6 +214,11 @@ def _check_required_files(config, goal):
         return True
     
     rw = Path(rewrites_dir)
+    
+    # open-book 阶段不需要检查（它本身是生成这些文件的）
+    open_book_phases = {"prep", "source-analysis", "open-book"}
+    if goal & open_book_phases:
+        return True
     
     # guides 或 write 需要的文件
     if "guides" in goal or "write" in goal:
@@ -220,6 +276,16 @@ def _run_phases(handlers, config, goal, start, end):
             results.append({"phase": name, "start": s, "end": e, "status": "error", "error": str(ex), "duration": elapsed})
             errors.append(name)
             return False
+
+    # ── 书级 phase（不需要 start/end）──
+    book_phases = ["prep", "source-analysis", "open-book"]
+    book_phase_names = [n for n in book_phases if n in goal]
+    if book_phase_names:
+        print(f"\n{'=' * 50}")
+        print(f"书级阶段 ({len(book_phase_names)} phase): {', '.join(book_phase_names)}")
+        print(f"{'=' * 50}")
+        for name in book_phase_names:
+            _exec(name, start, end)
 
     # ── 章级 phase ──
     chapter_names = [n for n in _CHAPTER_PHASE_ORDER if n in goal]

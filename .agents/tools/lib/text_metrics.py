@@ -219,7 +219,11 @@ def format_style_anchors(fp):
     if fp.get("ttr"):
         parts.append(f"词汇丰富度{fp['ttr']:.2f}")
     if fp.get("punct_style"):
-        parts.append(fp["punct_style"])
+        punct = fp["punct_style"]
+        if isinstance(punct, dict):
+            parts.append(f"感叹号{punct.get('exclamation', 0)}/千字，省略号{punct.get('ellipsis', 0)}/千字，破折号{punct.get('dash', 0)}/千字")
+        else:
+            parts.append(str(punct))
     # 新增维度
     if fp.get("opening_ratios"):
         ors = fp["opening_ratios"]
