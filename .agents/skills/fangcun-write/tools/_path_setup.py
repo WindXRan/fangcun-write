@@ -15,9 +15,11 @@ _SHARED_TOOLS = _PARENT.parent.parent / "tools"      # .agents/tools/
 # 按优先级从高到低插入（insert(0) 会让后插入的排在前面）
 _DIRS = [
     str(_SHARED_TOOLS),  # .agents/tools/ (最低优先级)
-    str(_THIS_DIR),      # fangcun-novel/tools/  (最高优先级)
+    str(_THIS_DIR),      # fangcun-novel/tools/
+    str(_THIS_DIR / 'phases'),  # fangcun-novel/tools/phases/  (最高优先级)
 ]
 
 for _d in _DIRS:
     if _d not in sys.path:
         sys.path.insert(0, _d)
+
