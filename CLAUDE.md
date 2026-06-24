@@ -1,189 +1,87 @@
-﻿# AI网文小说项目 — 仿写引擎
+﻿# AI网文小说项目 — 写作引擎
 
 ## 核心原则
 
-**任何优化针对 workflow，不针对产出内容。** 不修单章，只修 pipeline。每次抽卡自动出稿，0 人工。
+**优化 workflow，不修单章。** Pipeline 自检返修，0 人工。
 
-防线在流程里：
-- 冲突类型强制换（身份→利益/信息差/道德，不可相同）
-- 台词 0 重合（6 字以上连续匹配视为违规）
-- 换皮检验：剥掉人名地名，认不出源文→合格
-- 题材不变，血肉全换
-- **主线定位**（concept.md必须明确标注）：每章必须有主线推进，不能跑偏
+防线上移：
+- 章纲 (events.json) 锁死每章骨架——事件数、角色位、开头承接、结尾状态、衔接
+- 冲突类型强制换（身份→利益/信息差/道德）
+- 台词 0 重合（6 字以上连续匹配 = S1 重写）
+- 换皮检验：剥掉人名地名，认不出源文 = 合格
 
-## Skill/Prompt 修改原则
+## 三层骨架
 
-- **通用性**：prompt 和 skill 里不加针对化内容（如具体套路列表），保持通用
-- **职责分离**：write 只管写，检查逻辑放 validate 或 compare 阶段
-- **CLAUDE.md 定位**：放 agent 交互原则，不放内容规则
-- **内容规则归属**：换皮检验、撞梗检查等放到 plot-guide.md 或 writing-techniques-*.md
+```
+大纲.md        → 卷级：分几卷、每卷功能
+events.json    → 章级：每章核心事件 / 开头承接 / 结尾状态 / 衔接 / 情绪弧线 / 涉及角色
+plot_{N}.md    → 段级：长格式细纲（五段式+多线+情节点+钩子）
+```
 
-### Prompt 修改流程（借鉴 brainstorming 方法论）
-
-1. **先提方案再动手**：改 prompt 前先提 2-3 个方案，说明每个方案的优劣，用户确认后再改。不要直接动手改。
-2. **分段确认**：先确认方向（改什么、为什么改），再确认细节（具体怎么改）。方向不对就不改细节。
-3. **改完自查**：改完 prompt 后检查：有没有未替换的 placeholder（`{xxx}`）、逻辑有没有矛盾、范围是否合适、有没有引入新问题。
+events.json 是唯一章纲，拆文库产、pipeline 读、人看表格。不再有独立的章纲.md。
 
 ## Pipeline
 
 ```
-Phase 1:   开书 (pro, 2 calls)       → concept.md（设定+角色名+角色行为模式+全局节奏图+弧线）
-Phase 2:   plot-guide (flash, N 并行) → plot_{N}.md（节拍映射+冲突替换+高光标注）
-Phase 3:   写章 (flash, N 并行)      → ch_{N}.txt（章名自生成，输入: plot_guide + 源文全文 + concept）
-Phase 3.5: Trim (flash)              → 超字数 20% 的章自动精简
-Phase 4:   对比 (本地)                → compare/报告
-Phase 5:   审查                       → `/审查` (story-review) — 多视角对抗式审查，出报告
+prep → source-analysis → open-book → chapter-map → guides → write → postfix → compare
 ```
 
-### 审查（story-review）
-
-使用 `/审查` 命令触发 story-review skill。4 个 reviewer 子 agent 并行展开多视角对抗式审查：
-- **story-architect**: 主题对齐、大纲结构、钩子/反转质量、平台期望
-- **character-designer**: 角色声音一致性、对话质量、角色弧线、关系进展
-- **narrative-writer**: AI味检测（8种模式）、情绪强度、格式合规、节奏
-- **consistency-checker**: 角色属性、世界观规则、伏笔状态、时间线、术语统一
-
-支持 full/lean/solo 三档模式，缺失 agents 时自动降级。输出 S1-S4 严重度分级报告。修复建议通过 `/去AI味` 或其他 skill 执行。
+| 阶段 | 功能 | 产物 |
+|------|------|------|
+| prep | 提取元数据 | _header.txt, _toc.txt（优先拆文库） |
+| source-analysis | 事件/骨架/改编 | events.json, story_skeleton.md, adaptation_strategy.md（写入拆文库） |
+| open-book | 生成新书设定 | concept.md, characters.md, world.md, book_info.md |
+| chapter-map | 源文章纲 → 新书章纲（LLM换皮） | rewrites/events.json（每 10 章一批，全并行） |
+| guides | 章纲 → 细纲 | guides/plot_{N}.md |
+| write | 细纲 → 正文 | chapters/ch_{N}.txt |
+| postfix | trim/expand | 修正字数偏差 |
+| compare | 章对章仿写诊断 | compare/ 报告（S1-S4 × pipeline 根因） |
 
 ## 文件结构
 
 ```
-projects/{作者}/{书名}/
-├── _cache/chapters/第N章.txt        # 拆章缓存
+拆文库/{书名}/                  ← 唯一数据源，替代 _cache
+├── events.json                  ← 章纲（12字段：event管道 + 结构化字段）
+├── 概要.md / 拆文报告.md / 文风分析.md
+├── 原文/ / 章节/ / 角色/ / 剧情/ / 设定/
+
+projects/{作者}/{源书名}/
+├── _cache/                      ← 仅回退路径，拆文库存在时不需
 └── rewrites/{新书名}/
-    ├── concept.md                    # 设定+弧线+角色名+行为模式+全局节奏图
-    ├── guides/plot_{N}.md           # 章纲（节拍映射+冲突替换+高光）
-    ├── chapters/ch_{N}.txt          # 正文（直接对标源文全文）
-    └── compare/                      # 对比报告
+    ├── events.json              ← 新书章纲（chapter-map 产出）
+    ├── concept.md / characters.md / world.md / book_info.md
+    ├── guides/plot_{N}.md       ← 细纲
+    ├── chapters/ch_{N}.txt      ← 正文
+    └── compare/                  ← 对比诊断报告
 ```
 
-## 双执行模式
+## 拆文库检测
 
-engine 支持两种执行模式，由 `config.json` 中的 `execution_mode` 控制：
-
-| 模式 | 执行者 | API 调用 | 适用场景 |
-|------|--------|----------|----------|
-| `api`（默认） | Python 脚本直接调 DeepSeek API | 由脚本发起 | 批量生产、快速出稿 |
-| `agent` | opencode agent 派生子 agent 执行 | **不调 API**，agent 本身是 LLM | 高质量单章、需要迭代优化的场景 |
-
-**核心区别：** agent 模式不经过 Python 调 API。opencode agent 作为编排器，派生子 agent 并行写章。子 agent 自主读文件、写文件、校验迭代，不产生额外 API 成本。
-
-### agent 模式写章流程
-
-```
-1. pipeline.py --execution-mode agent --phase write
-   → 生成 _agent_tasks/write_manifest.json（任务清单）
-2. opencode agent 读取任务清单
-3. 每章派生子 agent（Task tool），并行执行
-   - 子 agent 位：读 concept → 读 plot_guide → 读源文 → 写章 → 校验字数
-4. 全部完成后，执行 postfix 做机械修正
-   python pipeline.py --config xxx.json --phase postfix
-```
-
-### config 配置
-
-```json
-{
-  "execution_mode": "api"                    // 全局默认
-  // 或按 phase 覆盖:
-  "execution_mode": {
-    "default": "api",
-    "write": "agent"                         // 只有写章用 agent 模式
-  }
-}
-```
-
-## 模型策略
-
-| 阶段 | 模型 | 原因 |
-|------|------|------|
-| 开书 | pro (reasoning=low) | 够用，速度快 |
-| Guides | pro (reasoning=low) | 够用，速度快 |
-| 写章 | pro (reasoning=low) | 风格模仿能力强，句长节奏更接近源文 |
-| Trim | pro (reasoning=low) | 简单任务 |
-
-| 指纹 | pro (reasoning=low) | 够用 |
-
-**全用 pro low，统一模型，统一行为。**
-**字数控制：max_tokens = 目标字数 × 1.6，prompt 中用 ±10% 区间。**
-
-## 角色命名反 AI
-
-AI 默认起名三大通病：全员诗意双名（沈砚辞、林知意）、古风生僻字、统一格式。
-破解：混搭单名双名、配角用常见姓（王李张刘陈）、允许外号、同辈字合理（姐弟可同辈字）。
-
-## Prompt 设计原则
-
-- **通用性**：prompt 和 skill 里不加针对化内容（如具体套路列表），保持通用
-- **职责分离**：write 只管写，检查逻辑放 validate 或 compare 阶段
-- **CLAUDE.md 定位**：放 agent 交互原则，不放内容规则
-- **内容规则归属**：换皮检验、撞梗检查等放到 plot-guide.md 或 writing-techniques-*.md
-
-## AI 对话智商规则
-
-**修改 prompt 时必须保持通用性**：
-- prompt 里不要写具体书名、人名、地名等特定内容
-- 具体信息通过变量注入，不要硬编码
-- 参考 ohstory-claudecode、toonflow 的 prompt 设计风格
-
-**读取文件时必须完整理解**：
-- 读取 story_skeleton.md 时，必须提取故事核、核心爽点、金手指、情绪基调、冲突类型
-- 读取 events.json 时，必须提取关键角色的人生阶段（高考、升学宴、开学报到等）
-- 读取 ending_state.md 时，必须理解结局状态和悬而未决的问题
-
-**生成方案时必须延续原作核心要素**：
-- 核心爽点必须与原作一致（从故事核中提取）
-- 金手指必须与原作一致（从故事核中提取）
-- 情绪基调必须与原作一致（从故事核中提取）
-- 冲突类型必须与原作一致（从故事核中提取）
-
-**不要擅自改变原作风格**：
-- 如果原作是家庭轻喜剧，续写不能变成事业文或公益文
-- 如果原作的核心爽点是"归属"，续写不能变成"事业成功"
-- 如果原作的金手指是"高情商+强执行力"，续写不能变成"创业能力"
-
-**对话时要动脑子**：
-- 用户说"妹妹李萱也考上大学了"，说明你没有正确分析原文状态
-- 用户说"plan阶段没生成全书大概情节"，说明你没有理解需求
-- 用户说"你这些又是不通用的prompt"，说明你没有理解通用性原则
-- 要从用户的反馈中学习，不要重复犯同样的错误
-
-## Flash 已知天花板
-
-- 单章字数 ±20% 波动（60-70% 章达标）
-- ~10% 随机失效（角色漂移、偶抄源文、过短）→ 重跑即可
-- 句长偏短、对话偏多是模型特征，非 AI 痕迹
-- 角色行为模式卡片能有效减少角色漂移（从~15%降到~5%），但不能完全消除
+pipeline 启动时自动检测 `拆文库/{源书名}/`。存在则：
+- `load_events` 从拆文库读
+- `get_source_text` 从拆文库 `章节/` 读
+- system prompt 从拆文库 `文风分析.md` 读
+- `_cache/` 全部数据优先回退拆文库
 
 ## 使用
 
 ```bash
-# 完整 188 章
-python tools/rewrite_chapters.py --config configs/xxx.json --start 1 --end 188 --workers 30
-
-# 分步（concept 保护：已存在则自动跳过）
-python tools/rewrite_chapters.py --config configs/xxx.json --phase open-book
-python tools/rewrite_chapters.py --config configs/xxx.json --phase guides,write,trim,compare
-
-# Agent 模式写章（生成任务清单 → opencode 派生子 agent → postfix）
-python tools/rewrite_chapters.py --config configs/xxx.json --phase write --execution-mode agent
-# 然后消费任务（opencode 自动处理）
-# 最后机械修正
-python tools/rewrite_chapters.py --config configs/xxx.json --phase postfix
-
-# 查看项目状态
-python tools/rewrite_chapters.py --config configs/xxx.json --status
-
-# 对比两次 validate 的指标变化（自动存档，0 token）
-python tools/rewrite_chapters.py --config configs/xxx.json --diff
-
-# 改 prompt 后记录版本
-python .agents/skills/fangcun-novel/tools/prompt_loader.py bump write-chapter.md
-python .agents/skills/fangcun-novel/tools/prompt_loader.py bump write-chapter.md "手动说明"
-
-# 按prompt覆盖模型参数（在config.json中添加）
-
-
+python .agents/skills/fangcun-write/tools/pipeline.py --config configs/xxx.json --phase all
+python .agents/skills/fangcun-write/tools/pipeline.py --config configs/xxx.json --phase open-book
+python .agents/skills/fangcun-write/tools/pipeline.py --config configs/xxx.json --phase chapter-map
+python .agents/skills/fangcun-write/tools/pipeline.py --config configs/xxx.json --phase guides --start 1 --end 192
+python .agents/skills/fangcun-write/tools/pipeline.py --config configs/xxx.json --phase write --start 1 --end 192
+python .agents/skills/fangcun-write/tools/pipeline.py --config configs/xxx.json --phase compare --start 1 --end 10
+python .agents/skills/fangcun-write/tools/pipeline.py --config configs/xxx.json --status
 ```
 
-> ⚠️ `api_key` 为 null 时从 `$env:API_KEY` 读取。不要将 key 写入配置文件。
+## 模型策略
+
+全用 `deepseek-chat`（reasoning_effort=low）。
+
+## Prompt 修改原则
+
+- 先提方案再动手，分段确认
+- 通用性：prompt 不加具体书名/人名，变量注入
+- 职责分离：write 写，compare 查
+- 改完自查：placeholder 全替换、逻辑无矛盾
