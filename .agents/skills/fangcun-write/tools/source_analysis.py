@@ -43,7 +43,14 @@ def get_chapters_dir(config):
 # ─── 事件提取 ───────────────────────────────────────────────────────────
 
 def load_events(config):
-    """读取事件表。"""
+    """读取事件表。优先拆文库/events.json，回退 _cache/events.json。"""
+    # 1. 优先拆文库
+    analyze_dir = config.get("analyze_dir", "")
+    if analyze_dir:
+        events_file = Path(analyze_dir) / "events.json"
+        if events_file.exists():
+            return json.loads(events_file.read_text(encoding="utf-8"))
+    # 2. 回退 _cache
     events_file = get_cache_dir(config) / "events.json"
     if not events_file.exists():
         return []
@@ -168,7 +175,12 @@ def extract_events(config, api_key, api_url, model, prompt_text, workers=5):
 # ─── 故事骨架 ───────────────────────────────────────────────────────────
 
 def load_skeleton(config):
-    """读取故事骨架。"""
+    """读取故事骨架。优先拆文库，回退 _cache。"""
+    analyze_dir = config.get("analyze_dir", "")
+    if analyze_dir:
+        f = Path(analyze_dir) / "story_skeleton.md"
+        if f.exists():
+            return f.read_text(encoding="utf-8")
     f = get_cache_dir(config) / "story_skeleton.md"
     if not f.exists():
         return ""
@@ -177,9 +189,9 @@ def load_skeleton(config):
 
 def save_skeleton(config, content):
     """保存故事骨架。"""
-    f = get_cache_dir(config) / "story_skeleton.md"
-    f.parent.mkdir(parents=True, exist_ok=True)
-    f.write_text(content, encoding="utf-8")
+    d = Path(config.get("analyze_dir")) if config.get("analyze_dir") else get_cache_dir(config)
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "story_skeleton.md").write_text(content, encoding="utf-8")
 
 
 def build_skeleton(config, api_key, api_url, model, system_prompt, novel_name=""):
@@ -233,7 +245,12 @@ def build_skeleton(config, api_key, api_url, model, system_prompt, novel_name=""
 # ─── 改编策略 ───────────────────────────────────────────────────────────
 
 def load_adaptation(config):
-    """读取改编策略。"""
+    """读取改编策略。优先拆文库，回退 _cache。"""
+    analyze_dir = config.get("analyze_dir", "")
+    if analyze_dir:
+        f = Path(analyze_dir) / "adaptation_strategy.md"
+        if f.exists():
+            return f.read_text(encoding="utf-8")
     f = get_cache_dir(config) / "adaptation_strategy.md"
     if not f.exists():
         return ""
@@ -242,9 +259,9 @@ def load_adaptation(config):
 
 def save_adaptation(config, content):
     """保存改编策略。"""
-    f = get_cache_dir(config) / "adaptation_strategy.md"
-    f.parent.mkdir(parents=True, exist_ok=True)
-    f.write_text(content, encoding="utf-8")
+    d = Path(config.get("analyze_dir")) if config.get("analyze_dir") else get_cache_dir(config)
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "adaptation_strategy.md").write_text(content, encoding="utf-8")
 
 
 def build_adaptation(config, api_key, api_url, model, system_prompt, novel_name=""):

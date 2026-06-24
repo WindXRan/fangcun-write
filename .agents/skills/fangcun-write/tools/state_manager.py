@@ -10,7 +10,7 @@ from datetime import datetime
 class StateManager:
     """fangcun-write pipeline 的持久化状态管理"""
 
-    PHASE_ORDER = ["open-book", "guides", "write", "postfix", "compare", "unified_review_fix"]
+    PHASE_ORDER = ["open-book", "guides", "write", "postfix", "compare"]
 
     def __init__(self, output_dir):
         self.state_path = Path(output_dir) / "state.json"

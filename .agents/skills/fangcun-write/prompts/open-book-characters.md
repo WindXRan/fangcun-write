@@ -1,6 +1,6 @@
 ---
-version: 7
-changelog: XML输出格式，解析更稳定
+version: 8
+changelog: 集成 long-analyze 角色关系数据
 type: user
 phase: open_book_characters
 description: 开书 - 角色设定生成（结构锁定）
@@ -40,6 +40,10 @@ defaults: {"reasoning_effort": "low", "temperature": 0.8}
 
 {源文分析}
 </source_analysis>
+
+<character_relations>
+【角色关系】{analyze_dir}/角色/角色关系.md
+</character_relations>
 
 <character_list>
 ## 源文角色清单（必须全部覆盖，每个角色都必须起新名）

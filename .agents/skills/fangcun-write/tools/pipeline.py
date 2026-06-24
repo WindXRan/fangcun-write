@@ -25,7 +25,6 @@ from phases import (
     phase_guides,
     phase_write, phase_write_agent,
     phase_postfix,
-    phase_unified_review_fix,
 )
 from phases.compare import phase_compare
 from phases.skeleton_map import phase_skeleton_map
@@ -56,7 +55,7 @@ GOAL_MAP = {
     "open-book": {"prep", "source-analysis", "open-book"},
     "guides": {"skeleton-map", "guides"},
     "write": {"skeleton-map", "guides", "write", "postfix"},
-    "review": {"unified_review_fix"},
+    "review": {},
     "postfix": {"postfix"},
     "skeleton-map": {"skeleton-map"},
     "all": {"prep", "source-analysis", "open-book", "skeleton-map", "guides", "write", "postfix"},
@@ -65,7 +64,6 @@ GOAL_MAP = {
 # 章级 phase 按此顺序执行
 _CHAPTER_PHASE_ORDER = [
     "guides", "write", "compare",
-    "unified_check", "unified_fix",
     "postfix",
 ]
 
@@ -202,8 +200,6 @@ def _build_handlers(config, state_mgr, config_path=None) -> dict:
     else:
         h["write"] = _write_handler
     h["postfix"] = phase_postfix
-    h["unified_review_fix"] = lambda cfg, s, e: phase_unified_review_fix(
-        cfg, cfg.get("_chapter_start", s), cfg.get("_chapter_end", e), state_mgr=state_mgr)
     return h
 
 
@@ -315,6 +311,7 @@ def main():
     parser.add_argument("--diff", action="store_true")
     parser.add_argument("--auto-rollback", action="store_true")
     parser.add_argument("--debug", action="store_true", help="只输出 prompt 不调 API，保存到 _debug/ 目录")
+    parser.add_argument("--skip-outline-review", action="store_true", help="跳过章纲审阅，直接继续细纲和写章")
 
     args = parser.parse_args()
     config_path = Path(args.config)
@@ -327,6 +324,7 @@ def main():
     config["workers"] = args.workers
     config["debug"] = True  # 默认保存 prompt 到 _debug/
     config["prompts_only"] = args.debug or args.mode == "debug"  # --debug 时才不调 API
+    config["skip_outline_review"] = args.skip_outline_review
 
     if args.mode:
         if args.mode == "debug":
@@ -343,6 +341,21 @@ def main():
     if errors:
         for e in errors: print(f"  - {e}")
         sys.exit(1)
+
+    # 自动检测拆文库，注入 analyze_dir
+    source_book = config.get("source_book", "")
+    if source_book:
+        analyze_candidates = [
+            Path(base_dir) / "拆文库" / source_book,
+            Path(base_dir) / "拆文库" / Path(source_book).name,
+        ]
+        for ac in analyze_candidates:
+            if ac.exists():
+                config["analyze_dir"] = str(ac)
+                print(f"  [OK] 检测到拆文库: {ac}")
+                break
+        else:
+            print("  [WARN] 未找到拆文库，跳过深度分析数据注入")
 
     rewrites_dir = config.get("rewrites_dir", "")
     state_mgr = StateManager(rewrites_dir) if rewrites_dir else None
@@ -410,7 +423,7 @@ def main():
         "guides": "章纲",
         "write": "写章",
         "postfix": "后处理",
-        "unified_review_fix": "统一审改",
+
     }
     display_names = [phase_display.get(p, p) for p in sorted(goal)]
 

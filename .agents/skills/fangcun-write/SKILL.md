@@ -135,8 +135,8 @@ python .agents/skills/fangcun-write/tools/pipeline.py --config configs/mybook.js
 | "看看对比" / "质量怎么样" | compare | `--phase compare --start {N} --end {M}` |
 | "第X章字数不对" | postfix | `--phase postfix --start {X} --end {X}` |
 | "第X章重写" | 删章 + write | 删 `ch_{X}.txt`，再跑 write |
-| "审一下" / "检查问题" | review | `--phase unified --dry-run` |
-| "修一下" / "修复问题" | fix | `--phase unified` |
+| "审一下" / "检查问题" | review | `/审查` (story-review) |
+| "修一下" / "修复问题" | fix | 根据审查报告手动修，或 `/去AI味` |
 | "开书" / "仿写这本书" | open-book | `--phase open-book` |
 
 ---

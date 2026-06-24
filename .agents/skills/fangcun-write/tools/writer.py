@@ -4,6 +4,7 @@ writer.py - 通用写作模块
 """
 
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -56,6 +57,7 @@ def _call_llm(config, prompt, system_prompt=None):
 def write_chapter(config, ch, mode="imitation", auto_fix=True):
     """写章。调用 LLM 生成正文。"""
     from prompt_loader import load_prompt
+    from phases.guides_name import _build_name_map_text, _load_character_cards
     
     rewrites_dir = config.get("rewrites_dir", "")
     base_dir = config.get("base_dir", ".")
@@ -69,6 +71,40 @@ def write_chapter(config, ch, mode="imitation", auto_fix=True):
         "源书名": config.get("source_book", ""),
     }
     
+    # 注入 name_map（从 characters.md 提取）
+    try:
+        name_map_text = _build_name_map_text(config)
+        if name_map_text:
+            replacements["name_map"] = name_map_text
+    except Exception as e:
+        print(f"  [WARN] name_map 注入失败: {e}")
+    
+    # 注入角色卡（只注入本章出场角色，对齐 events.json）
+    try:
+        char_cards = _load_character_cards(config, ch)
+        replacements["characters"] = char_cards or "（无角色信息）"
+    except Exception as e:
+        print(f"  [WARN] 角色卡注入失败: {e}")
+    except Exception as e:
+        print(f"  [WARN] 角色卡注入失败: {e}")
+
+    # 注入字数目标（基于源文字数）
+    try:
+        from utils import get_source_text
+        src = get_source_text(config, ch)
+        if src:
+            src_chars = len(src.replace("\n", "").replace(" ", "").replace("\r", ""))
+        else:
+            src_chars = config.get("target_word_count", 2500)
+        target = max(int(src_chars), 1500) if src_chars else 2500
+        replacements.setdefault("目标字数", str(target))
+        replacements.setdefault("目标字数_min", str(int(target * 0.8)))
+        replacements.setdefault("目标字数_max", str(int(target * 1.2)))
+    except Exception:
+        replacements.setdefault("目标字数", "2500")
+        replacements.setdefault("目标字数_min", "2000")
+        replacements.setdefault("目标字数_max", "3000")
+    
     # 加载 prompt
     prompts_dir = config.get("prompts_dir", ".agents/skills/fangcun-write/prompts")
     prompt_path = f"{prompts_dir}/write-chapter.md"
@@ -77,9 +113,30 @@ def write_chapter(config, ch, mode="imitation", auto_fix=True):
     except Exception as e:
         raise Exception(f"加载 prompt 失败: {e}")
     
-    # 加载系统提示词
-    system_prompt_path = f"{prompts_dir}/agent.md"
-    system_prompt = _get_system_prompt(system_prompt_path)
+    # 加载系统提示词：文风分析优先（源文风格对标），带缓存省 token
+    analyze_dir = config.get("analyze_dir", "")
+    style_prompt = None
+
+    # 1. 拆文库文风分析（最佳）
+    if analyze_dir:
+        sp = Path(analyze_dir) / "文风分析.md"
+        if sp.exists():
+            key = str(sp)
+            if key not in _system_prompt_cache:
+                _system_prompt_cache[key] = sp.read_text(encoding="utf-8")
+            style_prompt = _system_prompt_cache[key]
+
+    # 2. 自动生成的文笔指纹（次选）
+    if not style_prompt:
+        sp = Path(rewrites_dir) / "book_style_profile.md"
+        if sp.exists():
+            key = str(sp)
+            if key not in _system_prompt_cache:
+                _system_prompt_cache[key] = sp.read_text(encoding="utf-8")
+            style_prompt = _system_prompt_cache[key]
+
+    # 3. 通用 agent（兜底）
+    system_prompt = style_prompt or _get_system_prompt(f"{prompts_dir}/agent.md")
     
     # 通过统一 API 入口调用（自动处理 debug 和 prompts_only）
     from lib.api_client import call_llm
@@ -144,7 +201,7 @@ def trim_chapter(config, ch, mode="imitation"):
 章节内容：
 {text}"""
     
-    result = _call_llm_with_prompt(config, "write-chapter", prompt, ch=ch)
+    result = _call_llm_with_prompt(config, "trim-chapter", prompt, ch=ch)
     if result:
         _save_chapter_text(config, ch, result)
     return result
@@ -167,7 +224,7 @@ def expand_chapter(config, ch, mode="imitation"):
 章节内容：
 {text}"""
     
-    result = _call_llm_with_prompt(config, "write-chapter", prompt, ch=ch)
+    result = _call_llm_with_prompt(config, "expand-chapter", prompt, ch=ch)
     if result:
         _save_chapter_text(config, ch, result)
     return result
@@ -192,7 +249,7 @@ def polish_chapter(config, ch, text=None, issue=""):
 章节内容：
 {text}"""
     
-    result = _call_llm_with_prompt(config, "write-chapter", prompt, ch=ch)
+    result = _call_llm_with_prompt(config, "polish-chapter", prompt, ch=ch)
     if result:
         _save_chapter_text(config, ch, result)
     return result
@@ -222,7 +279,7 @@ def rewrite_chapter(config, ch, mode="imitation", reason=""):
 章纲：
 {guide_text}"""
     
-    result = _call_llm_with_prompt(config, "write-chapter", prompt, ch=ch)
+    result = _call_llm_with_prompt(config, "rewrite-chapter", prompt, ch=ch)
     if result:
         _save_chapter_text(config, ch, result)
     return result

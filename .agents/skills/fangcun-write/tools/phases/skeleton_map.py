@@ -67,7 +67,8 @@ def phase_skeleton_map(config, state_mgr=None):
     print("Phase 1.5: 骨架映射")
     print("=" * 50)
 
-    if state_mgr:
+    is_prompts_only = config.get("prompts_only")
+    if state_mgr and not is_prompts_only:
         if state_mgr.is_phase_done("skeleton-map"):
             print("skeleton_map.json 已完成，跳过")
             return True
@@ -142,6 +143,8 @@ def phase_skeleton_map(config, state_mgr=None):
                 rewrites_dir=str(rewrites_dir),
             )
             content = call_llm(config, "skeleton-map", user_prompt, "")
+            if config.get("prompts_only"):
+                continue
 
             # 提取并修复 JSON
             json_match = re.search(r'```json\s*([\s\S]*?)```', content)

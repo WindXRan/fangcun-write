@@ -65,6 +65,7 @@ def phase_style_extract(config, start, end, workers=None):
     # 判断是否是续写模式
     is_continue = config.get("mode") == "continue"
     
+    prompts_only = config.get("prompts_only")
     if is_continue:
         # 续写模式：只提取原作前3章的风格
         print("  续写模式：提取原作前3章风格作为参考")
@@ -73,7 +74,7 @@ def phase_style_extract(config, start, end, workers=None):
             src_text = get_source_text(config, ch)
             if not src_text:
                 continue
-            if _cache_valid(styles_dir, ch, src_text):
+            if not prompts_only and _cache_valid(styles_dir, ch, src_text):
                 continue
             todo.append(ch)
     else:
@@ -83,7 +84,7 @@ def phase_style_extract(config, start, end, workers=None):
             src_text = get_source_text(config, ch)
             if not src_text:
                 continue
-            if _cache_valid(styles_dir, ch, src_text):
+            if not prompts_only and _cache_valid(styles_dir, ch, src_text):
                 continue
             todo.append(ch)
 
@@ -177,7 +178,8 @@ def _llm_one(config, ch, styles_dir):
     sys_prompt = load_system_prompt(sp_name) or "你是资深文学编辑，分析文笔风格。"
     try:
         analysis = call_llm(config, "style-analyze", prompt, sys_prompt).strip()
-        _write_md(styles_dir, ch, analysis=f"## LLM 风格分析\n{analysis}", src_text=text)
+        if not config.get("prompts_only"):
+            _write_md(styles_dir, ch, analysis=f"## LLM 风格分析\n{analysis}", src_text=text)
         print(f"  [STYLE] ch{ch:03d} OK")
         return True
     except Exception as e:

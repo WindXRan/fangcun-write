@@ -139,13 +139,15 @@ def _filter_todo(config, prompt_type, start, end, output_dir, filename_fmt, skip
                 if state_mgr:
                     state_mgr.chapter_failed(ch, error=f"plot_{ch}.md 为空")
 
+    prompts_only = config.get("prompts_only")
+
     for ch in range(start, end + 1):
         if ch in empty_plots:
             continue
         # 预检模式：只写指定的章
         if rewrite_set is not None and ch not in rewrite_set:
             continue
-        if skip_existing:
+        if skip_existing and not prompts_only:
             filepath = Path(output_dir) / filename_fmt.format(ch=ch)
             if state_mgr and state_mgr.is_chapter_healthy(ch, filepath):
                 continue
@@ -178,6 +180,14 @@ def _execute_batch(todo, config, prompt_type, output_dir, filename_fmt, workers,
                 # 防御：空内容不保存，抛异常触发重试
                 if not content or len(content.strip()) < 50:
                     raise ValueError(f"内容为空或过短 ({len(content or '')} chars)")
+                # prompts_only：只生成 debug prompt，不覆盖输出文件
+                if config.get("prompts_only"):
+                    results[ch] = "_debug_only"
+                    if state_mgr:
+                        state_mgr.chapter_completed(ch, model=config.get("model", ""))
+                    done += 1
+                    print_progress(done, total, t_start)
+                    continue
                 path = Path(output_dir) / filename_fmt.format(ch=ch)
                 from state_manager import atomic_write_text
                 atomic_write_text(path, content)

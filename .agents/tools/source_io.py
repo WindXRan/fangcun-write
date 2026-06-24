@@ -29,17 +29,40 @@ def get_cache_dir_from_path(source_dir: str) -> Path:
 
 # ─── 源文读取 ──────────────────────────────────────────────────────────────
 
+def _resolve_chapters_dir(config) -> Path | None:
+    """解析源文章节目录。优先拆文库，回退 _cache。"""
+    # 1. 拆文库章节/
+    analyze_dir = config.get("analyze_dir", "")
+    if analyze_dir:
+        d = Path(analyze_dir) / "章节"
+        if d.exists() and list(d.glob("第*章*")):
+            return d
+    # 2. 拆文库原文/（需切分）
+    if analyze_dir:
+        d = Path(analyze_dir) / "原文"
+        if d.exists() and list(d.glob("*")):
+            return d
+    # 3. _cache/chapters/
+    cache = get_cache_dir(config)
+    d = cache / "chapters"
+    if d.exists():
+        return d
+    # 4. 配置路径
+    for key in ("source_chapter_dir", "source_dir"):
+        if config.get(key):
+            d = Path(config[key])
+            if d.exists():
+                return d
+    return None
+
+
 def get_source_text(config, ch_num: int) -> str:
     """读取源文单章全文。"""
-    cache = get_cache_dir(config)
-    chapters_dir = cache / "chapters"
-    if not chapters_dir.exists():
-        # 兼容 source_chapter_dir 配置
-        if config.get("source_chapter_dir"):
-            chapters_dir = Path(config["source_chapter_dir"])
-        elif config.get("source_dir"):
-            chapters_dir = Path(config["source_dir"])
-    for f in sorted(chapters_dir.glob("第*章*.txt")):
+    d = _resolve_chapters_dir(config)
+    if not d:
+        return ""
+    # 查找：第N章*.txt 或 第N章*.md
+    for f in sorted(d.glob("第*章*")):
         m = re.search(r"(\d+)", f.name)
         if m and int(m.group(1)) == ch_num:
             return f.read_text(encoding="utf-8")
@@ -48,18 +71,15 @@ def get_source_text(config, ch_num: int) -> str:
 
 def get_source_chapters(config) -> list[tuple[int, Path]]:
     """获取源文章节列表 [(章号, 路径), ...]。"""
-    cache = get_cache_dir(config)
-    chapters_dir = cache / "chapters"
-    if not chapters_dir.exists():
-        if config.get("source_chapter_dir"):
-            chapters_dir = Path(config["source_chapter_dir"])
-        elif config.get("source_dir"):
-            chapters_dir = Path(config["source_dir"])
+    d = _resolve_chapters_dir(config)
+    if not d:
+        return []
     chapters = []
-    for f in sorted(chapters_dir.glob("第*章*.txt")):
+    for f in sorted(d.glob("第*章*")):
         m = re.search(r"(\d+)", f.name)
         if m:
             chapters.append((int(m.group(1)), f))
+    chapters.sort(key=lambda x: x[0])
     return chapters
 
 
@@ -71,17 +91,33 @@ def get_total_chapters(config) -> int:
 # ─── 事件表 ────────────────────────────────────────────────────────────────
 
 def load_events(config) -> list[dict]:
-    """读取事件表。"""
+    """读取事件表。优先拆文库/events.json，回退 _cache/events.json。"""
+    # 1. 优先拆文库
+    analyze_dir = config.get("analyze_dir", "")
+    if analyze_dir:
+        f = Path(analyze_dir) / "events.json"
+        if f.exists():
+            return json.loads(f.read_text(encoding="utf-8"))
+    # 2. 回退 _cache
     f = get_cache_dir(config) / "events.json"
     if not f.exists():
         return []
     return json.loads(f.read_text(encoding="utf-8"))
 
 
+def _resolve_write_dir(config) -> Path:
+    """解析写入目录：优先拆文库，回退 _cache。"""
+    analyze_dir = config.get("analyze_dir", "")
+    if analyze_dir:
+        d = Path(analyze_dir)
+        d.mkdir(parents=True, exist_ok=True)
+        return d
+    return get_cache_dir(config)
+
+
 def save_events(config, events: list[dict]):
     """保存事件表。"""
-    f = get_cache_dir(config) / "events.json"
-    f.parent.mkdir(parents=True, exist_ok=True)
+    f = _resolve_write_dir(config) / "events.json"
     f.write_text(json.dumps(events, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
@@ -112,15 +148,19 @@ def get_chapter_event(config, ch_num: int) -> str:
 # ─── 故事骨架 ──────────────────────────────────────────────────────────────
 
 def load_skeleton(config) -> str:
-    """读取故事骨架。"""
+    """读取故事骨架。优先拆文库，回退 _cache。"""
+    analyze_dir = config.get("analyze_dir", "")
+    if analyze_dir:
+        f = Path(analyze_dir) / "story_skeleton.md"
+        if f.exists():
+            return f.read_text(encoding="utf-8")
     f = get_cache_dir(config) / "story_skeleton.md"
     return f.read_text(encoding="utf-8") if f.exists() else ""
 
 
 def save_skeleton(config, content: str):
     """保存故事骨架。"""
-    f = get_cache_dir(config) / "story_skeleton.md"
-    f.parent.mkdir(parents=True, exist_ok=True)
+    f = _resolve_write_dir(config) / "story_skeleton.md"
     f.write_text(content, encoding="utf-8")
 
 
@@ -171,13 +211,19 @@ def get_skeleton_context(config, ch_num: int) -> str:
 # ─── 改编策略 ──────────────────────────────────────────────────────────────
 
 def load_adaptation(config) -> str:
-    """读取改编策略。"""
+    """读取改编策略。优先拆文库，回退 _cache。"""
+    analyze_dir = config.get("analyze_dir", "")
+    if analyze_dir:
+        f = Path(analyze_dir) / "adaptation_strategy.md"
+        if f.exists():
+            return f.read_text(encoding="utf-8")
     f = get_cache_dir(config) / "adaptation_strategy.md"
     return f.read_text(encoding="utf-8") if f.exists() else ""
 
 
 def save_adaptation(config, content: str):
     """保存改编策略。"""
+    f = _resolve_write_dir(config) / "adaptation_strategy.md"
     f = get_cache_dir(config) / "adaptation_strategy.md"
     f.parent.mkdir(parents=True, exist_ok=True)
     f.write_text(content, encoding="utf-8")

@@ -119,10 +119,10 @@ def build_report(config, rewrites_abs, output_dir, metrics, html_copied=False):
     parts.append("\n---\n## 五、AI 痕迹风险评估\n\n")
     parts.append(_build_risk_assessment(metrics))
 
-    # === 六、统一审改结果 ===
+    # === 六、审查结果 ===
     last_review = state.get("last_review")
     if last_review:
-        parts.append("\n---\n## 六、统一审改结果\n\n")
+        parts.append("\n---\n## 六、审查结果\n\n")
         parts.append(f"| 指标 | 数值 |\n|------|------|\n")
         parts.append(f"| 平均分 | {last_review.get('avg_score', 'N/A')} |\n")
         parts.append(f"| 通过 | {last_review.get('pass', 0)} 章 |\n")
@@ -210,7 +210,7 @@ def _build_timing_report(state):
         return "（无阶段数据）\n"
 
     order = ["prep", "open_book", "extract", "guides", "write", "validate",
-             "postfix", "compare", "unified_review_fix", "trim", "rewrite", "polish", "expand"]
+             "postfix", "compare", "trim", "rewrite", "polish", "expand"]
     lines.append("| 阶段 | 状态 | 耗时(分钟) |\n|------|------|-----------|\n")
     total_mins = 0
     for pname in order:

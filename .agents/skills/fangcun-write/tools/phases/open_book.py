@@ -21,39 +21,57 @@ from lib.api_client import call_llm
 # ============================================================
 
 def phase_prep(config):
-    """从原始 TXT 提取头部元数据和章节目录，供 open-book 使用。"""
+    """提取元数据和章节目录。优先拆文库，回退 _cache。"""
     base_dir = config.get("base_dir", os.getcwd())
     author = config.get("author", "")
     source_book = config.get("source_book", "")
+    analyze_dir = config.get("analyze_dir", "")
 
     cache_dir = Path(base_dir) / "projects" / author / source_book / "_cache"
     os.makedirs(cache_dir, exist_ok=True)
 
-    # 提取原始 TXT 头部（书名/作者/简介/标签/等级体系）
+    # 1. _header.txt：优先拆文库概要.md，回退源 TXT
     header_file = cache_dir / "_header.txt"
     if not header_file.exists():
-        raw_txt = _find_source_txt(base_dir, author, source_book)
-        if raw_txt:
-            head_lines = []
-            with open(raw_txt, encoding='utf-8') as f:
-                for i, line in enumerate(f):
-                    if i >= 80:
-                        break
-                    stripped = line.strip()
-                    if stripped and (
-                        (stripped.startswith('第') and '章' in stripped[:15]) or
-                        stripped.lower().startswith('chapter')
-                    ):
-                        break
-                    head_lines.append(line)
-            header_file.write_text(''.join(head_lines), encoding='utf-8')
-            print(f"[OK] _header.txt ({len(head_lines)}行) -> {raw_txt}")
-        else:
-            print(f"[WARN] 未找到原始 TXT，_header.txt 跳过")
+        header_lines = []
+        if analyze_dir:
+            gaiyao = Path(analyze_dir) / "概要.md"
+            if gaiyao.exists():
+                header_lines = gaiyao.read_text(encoding='utf-8').split('\n')[:20]
+        if not header_lines:
+            raw_txt = _find_source_txt(base_dir, author, source_book)
+            if raw_txt:
+                with open(raw_txt, encoding='utf-8') as f:
+                    for i, line in enumerate(f):
+                        if i >= 80: break
+                        stripped = line.strip()
+                        if stripped and ((stripped.startswith('第') and '章' in stripped[:15]) or stripped.lower().startswith('chapter')):
+                            break
+                        header_lines.append(line)
+        if header_lines:
+            header_file.write_text(''.join(h for h in header_lines if isinstance(h, str)), encoding='utf-8')
+            print(f"[OK] _header.txt ({len(header_lines)}行)")
 
-    # 生成章节目录（从已拆分的章节）
+    # 2. _toc.txt：优先 events.json，回退章节文件
     toc_file = cache_dir / "_toc.txt"
     if not toc_file.exists():
+        toc_lines = []
+        # 拆文库 events.json → 提取章节目录
+        if analyze_dir:
+            events_path = Path(analyze_dir) / "events.json"
+            if events_path.exists():
+                events = json.loads(events_path.read_text(encoding='utf-8'))
+                toc_lines = [f"总章数: {len(events)}\n\n"]
+                for e in events:
+                    parts = e.get("event", "").split("|")
+                    title = parts[1].strip() if len(parts) > 1 else ""
+                    if not title:
+                        title = e.get("章节", "") or f"第{e.get('id', '?')}章"
+                    toc_lines.append(title[:60])
+                toc_file.write_text('\n'.join(toc_lines), encoding='utf-8')
+                print(f"[OK] _toc.txt ({len(events)}章，来自 events.json)")
+                return
+        # 回退：从章节文件提取
         chapters_dirs = [
             cache_dir / "chapters",
             Path(base_dir) / "projects" / author / source_book / "源文",
@@ -61,25 +79,18 @@ def phase_prep(config):
         chapter_files = []
         for d in chapters_dirs:
             if d.exists():
-                cf = sorted(
-                    d.glob("第*章*.txt"),
-                    key=lambda f: int(re.search(r'第(\d+)章', f.stem).group(1)) if re.search(r'第(\d+)章', f.stem) else 0
-                )
-                if cf:
-                    chapter_files = cf
-                    break
-
+                cf = sorted(d.glob("第*章*.txt"), key=lambda f: int(re.search(r'第(\d+)章', f.stem).group(1)) if re.search(r'第(\d+)章', f.stem) else 0)
+                if cf: chapter_files = cf; break
         if chapter_files:
             toc_lines = [f"总章数: {len(chapter_files)}\n\n"]
             for cf in chapter_files:
                 try:
                     first_line = cf.read_text(encoding='utf-8').strip().split('\n')[0]
-                    title = first_line.strip()[:60]
-                    toc_lines.append(title)
+                    toc_lines.append(first_line.strip()[:60])
                 except:
                     toc_lines.append(cf.stem)
             toc_file.write_text('\n'.join(toc_lines), encoding='utf-8')
-            print(f"[OK] _toc.txt ({len(chapter_files)}章，含完整标题)")
+            print(f"[OK] _toc.txt ({len(chapter_files)}章)")
         else:
             print(f"[WARN] 未找到拆分章节，_toc.txt 跳过")
 
@@ -286,7 +297,8 @@ def phase_open_book(config, state_mgr=None):
     print("Phase 1: 开书 (fangcun-analyze 产物 → 设定生成)")
     print("=" * 50)
 
-    if state_mgr:
+    is_prompts_only = config.get("prompts_only")
+    if state_mgr and not is_prompts_only:
         if state_mgr.is_phase_done("open-book"):
             print("concept.md 已完成，跳过")
             return True
@@ -355,30 +367,40 @@ def phase_open_book(config, state_mgr=None):
         "源书名": config.get("source_book", ""),
         "源文分析": source_analysis[:6000],
         "源文角色清单": "、".join(sorted(all_source_chars)),
+        "analyze_dir": config.get("analyze_dir", ""),
     }
 
     print(f"\n  [STAGE 2] 生成设定文件...")
 
     # === Stage 2a: 先生成 characters.md ===
-    print(f"  [STAGE 2a] 生成角色设定...")
-    try:
-        user_prompt = load_prompt(
-            f"{prompts_dir}/open-book-characters.md",
-            base_dir, replacements_stage2, mode="api",
-            rewrites_dir=config.get("rewrites_dir"),
-        )
-        sp_name = get_system_prompt_name("open-book-characters.md") or "agent.md"
-        system_prompt = load_system_prompt(sp_name) or ""
-        system_prompt += "\n\n你必须使用如下XML格式输出全部内容：\n<characters>内容</characters>"
-        
-        result = call_llm(config, "open-book-characters", user_prompt, system_prompt)
-        m = re.search(r"<characters[^>]*>([\s\S]*?)</characters>", result)
-        content = m.group(1).strip() if m else result.strip()
-        atomic_write_text(rewrites_dir / "characters.md", content)
-        print(f"  [OK] characters.md")
-    except Exception as e:
-        print(f"  [FAIL] characters.md: {e}")
-        content = None
+    chars_path = rewrites_dir / "characters.md"
+    if chars_path.exists() and chars_path.stat().st_size > 100:
+        print(f"  [STAGE 2a] characters.md 已存在且有效（{chars_path.stat().st_size}字节），跳过")
+        characters_content = chars_path.read_text(encoding="utf-8")
+    else:
+        print(f"  [STAGE 2a] 生成角色设定...")
+        try:
+            user_prompt = load_prompt(
+                f"{prompts_dir}/open-book-characters.md",
+                base_dir, replacements_stage2, mode="api",
+                rewrites_dir=config.get("rewrites_dir"),
+            )
+            sp_name = get_system_prompt_name("open-book-characters.md") or "agent.md"
+            system_prompt = load_system_prompt(sp_name) or ""
+            system_prompt += "\n\n你必须使用如下XML格式输出全部内容：\n<characters>内容</characters>"
+            
+            result = call_llm(config, "open-book-characters", user_prompt, system_prompt)
+            if config.get("prompts_only"):
+                print(f"  [DEBUG] open-book-characters prompt 已保存至 _debug/")
+            else:
+                m = re.search(r"<characters[^>]*>([\s\S]*?)</characters>", result)
+                content = m.group(1).strip() if m else result.strip()
+                atomic_write_text(rewrites_dir / "characters.md", content)
+                print(f"  [OK] characters.md")
+                characters_content = content
+        except Exception as e:
+            print(f"  [FAIL] characters.md: {e}")
+            characters_content = ""
 
     # === Stage 2b: 生成其他设定文件，注入角色名映射 ===
     print(f"  [STAGE 2b] 生成其他设定文件（4 并行 agent）...")
@@ -436,41 +458,45 @@ def phase_open_book(config, state_mgr=None):
         )
         sp_name = get_system_prompt_name("open-book-settings.md") or "agent.md"
         system_prompt = load_system_prompt(sp_name) or ""
+        system_prompt += "\n\n⚠️ 输出格式强制要求（忽略下方提示中的所有Markdown格式）：你的全部输出必须用以下4个XML标签包裹，每个标签内写对应内容。标签缺一不可，格式错误将导致程序无法解析：\n\n<world>\n（世界观设定内容：时代/地理/社会结构、核心规则、经济体系/阶层体系）\n</world>\n\n<plot>\n（剧情设定内容：主线概述、情感内核、人物关系图、节奏分段）\n</plot>\n\n<book_info>\n（书籍信息：赛道表、书名候选5个、简介100-150字）\n</book_info>\n\n<concept>\n（概念：爽点内核分析、改编策略、核心卖点）\n</concept>"
 
         result = call_llm(config, "open-book-settings", user_prompt, system_prompt)
+        if config.get("prompts_only"):
+            print(f"  [DEBUG] open-book-settings prompt 已保存至 _debug/")
+            book_info_content = None
+        else:
+            # 从结果中提取各部分内容（XML格式）
+            
+            # 提取世界观设定
+            world_match = re.search(r'<world>(.*?)</world>', result, re.DOTALL)
+            world_content = world_match.group(1).strip() if world_match else ""
+            
+            # 提取剧情设定
+            plot_match = re.search(r'<plot>(.*?)</plot>', result, re.DOTALL)
+            plot_content = plot_match.group(1).strip() if plot_match else ""
+            
+            # 提取书籍信息
+            bookinfo_match = re.search(r'<book_info>(.*?)</book_info>', result, re.DOTALL)
+            bookinfo_content = bookinfo_match.group(1).strip() if bookinfo_match else ""
+            
+            # 提取概念（从书籍信息中提取定位+策略+卖点）
+            concept_match = re.search(r'<concept>(.*?)</concept>', result, re.DOTALL)
+            concept_content = concept_match.group(1).strip() if concept_match else ""
+            if not concept_content:
+                # 如果没有单独的定位部分，从整个结果中提取
+                concept_content = f"# 概念\n\n{result[:1000]}"
 
-        # 从结果中提取各部分内容（XML格式）
-        
-        # 提取世界观设定
-        world_match = re.search(r'<world>(.*?)</world>', result, re.DOTALL)
-        world_content = world_match.group(1).strip() if world_match else ""
-        
-        # 提取剧情设定
-        plot_match = re.search(r'<plot>(.*?)</plot>', result, re.DOTALL)
-        plot_content = plot_match.group(1).strip() if plot_match else ""
-        
-        # 提取书籍信息
-        bookinfo_match = re.search(r'<book_info>(.*?)</book_info>', result, re.DOTALL)
-        bookinfo_content = bookinfo_match.group(1).strip() if bookinfo_match else ""
-        
-        # 提取概念（从书籍信息中提取定位+策略+卖点）
-        concept_match = re.search(r'<concept>(.*?)</concept>', result, re.DOTALL)
-        concept_content = concept_match.group(1).strip() if concept_match else ""
-        if not concept_content:
-            # 如果没有单独的定位部分，从整个结果中提取
-            concept_content = f"# 概念\n\n{result[:1000]}"
-
-        # 保存到文件
-        atomic_write_text(rewrites_dir / "world.md", world_content)
-        print(f"  [OK] world.md")
-        
-        atomic_write_text(rewrites_dir / "book_info.md", bookinfo_content)
-        print(f"  [OK] book_info.md")
-        
-        atomic_write_text(rewrites_dir / "concept.md", concept_content)
-        print(f"  [OK] concept.md")
-        
-        book_info_content = bookinfo_content
+            # 保存到文件
+            atomic_write_text(rewrites_dir / "world.md", world_content)
+            print(f"  [OK] world.md")
+            
+            atomic_write_text(rewrites_dir / "book_info.md", bookinfo_content)
+            print(f"  [OK] book_info.md")
+            
+            atomic_write_text(rewrites_dir / "concept.md", concept_content)
+            print(f"  [OK] concept.md")
+            
+            book_info_content = bookinfo_content
     except Exception as e:
         print(f"  [FAIL] open-book-settings: {e}")
         book_info_content = None

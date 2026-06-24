@@ -29,27 +29,57 @@ def _get_writer_module():
 # Phase 3.2: Post-Fix（全靠大模型一次生成正确内容，不做兜底处理）
 # ============================================================
 
+def _get_source_chars(config, ch):
+    """获取源文章节字数。"""
+    try:
+        from lib.source_locator import get_source_text
+        src = get_source_text(config, ch)
+        if src:
+            return len(re.sub(r'\s', '', src))
+    except Exception:
+        pass
+    return 0
+
+
 def phase_postfix(config, start, end):
-    """后处理：全靠大模型一次生成正确内容，不做兜底处理。"""
-    chapters_dir = f"{config['rewrites_dir']}/chapters"
+    """后处理：字数检查+自动trim/expand。"""
+    chapters_dir = Path(f"{config['rewrites_dir']}/chapters")
 
     print(f"\n{'=' * 50}")
     print(f"Phase 3.2: 后处理 (ch{start}-{end})")
     print("=" * 50)
 
+    trim_list, expand_list = [], []
+
     for ch in range(start, end + 1):
-        ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
+        ch_file = chapters_dir / f"ch_{ch:03d}.txt"
         if not ch_file.exists():
             continue
 
         text = ch_file.read_text(encoding='utf-8')
-        
-        # 检查是否为空或过短
         if len(text.strip()) < 50:
             print(f"  ch{ch:03d}: 内容过短，跳过")
             continue
-        
-        print(f"  ch{ch:03d}: 无需修复（大模型一次生成正确内容）")
+
+        chars = len(re.sub(r'\s', '', text))
+        src_chars = _get_source_chars(config, ch) or 2000
+        deviation = (chars - src_chars) / src_chars * 100
+
+        if deviation > 30:
+            trim_list.append(ch)
+            print(f"  ch{ch:03d}: {chars}字 超{deviation:+.0f}% → 待trim")
+        elif deviation < -30:
+            expand_list.append(ch)
+            print(f"  ch{ch:03d}: {chars}字 低{deviation:+0.f}% → 待expand")
+        else:
+            print(f"  ch{ch:03d}: {chars}字 ({deviation:+.0f}%) ✓")
+
+    if trim_list:
+        print(f"\n  自动trim {len(trim_list)}章...")
+        phase_trim(config, start, end, chapter_list=trim_list)
+    if expand_list:
+        print(f"\n  自动expand {len(expand_list)}章...")
+        phase_expand(config, start, end, chapter_list=expand_list)
 
     return True
 
@@ -58,24 +88,29 @@ def phase_postfix(config, start, end):
 # Phase 3.5: Post-Trim（调用 fangcun-write）
 # ============================================================
 
-def phase_trim(config, start, end, workers=None):
+def phase_trim(config, start, end, workers=None, chapter_list=None):
     """超字数章节自动精简（>3000字触发）。调用 fangcun-write。"""
     writer = _get_writer_module()
     chapters_dir = f"{config['rewrites_dir']}/chapters"
     w = workers or config.get("workers", 30)
 
     print(f"\n{'=' * 50}")
-    print(f"Phase 3.5: 字数精简 (ch{start}-{end}, 上限3000字)")
+    print(f"Phase 3.5: 字数精简 (ch{start}-{end}, 上限源文×1.3)")
     print("=" * 50)
 
     candidates = []
     for ch in range(start, end + 1):
+        if chapter_list is not None and ch not in chapter_list:
+            continue
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         if not ch_file.exists():
             continue
         text = ch_file.read_text(encoding='utf-8')
         chars = len(re.sub(r'\s', '', text))
-        if chars > 3000:
+        # 用源文字数上限（1.3x）替代固定3000
+        src_chars = _get_source_chars(config, ch) or 2000
+        limit = max(src_chars * 1.3, 2600)
+        if chars > limit:
             candidates.append((ch, chars))
 
     if not candidates:
@@ -220,7 +255,7 @@ def phase_polish(config, start, end, workers=None, state_mgr=None):
 # Phase 3.8: 扩写（调用 fangcun-write）
 # ============================================================
 
-def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=None):
+def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=None, chapter_list=None):
     """扩写：增加内容扩充字数。并行执行。调用 fangcun-write。"""
     writer = _get_writer_module()
     chapters_dir = f"{config['rewrites_dir']}/chapters"
@@ -235,6 +270,8 @@ def phase_expand(config, start, end, target_ratio=1.3, workers=None, state_mgr=N
     from lib.text_metrics import get_body_chars
     todo = []
     for ch in range(start, end + 1):
+        if chapter_list is not None and ch not in chapter_list:
+            continue
         ch_file = Path(chapters_dir) / f"ch_{ch:03d}.txt"
         if not ch_file.exists():
             continue

@@ -35,6 +35,68 @@ from guides_style import (
 
 
 # ============================================================
+# 章级大纲自动补全
+# ============================================================
+
+def _ensure_chapter_outline(config, rewrites_dir):
+    """从 events.json 提取章纲，写入 guides/章纲.md。不再调用 LLM。"""
+    outline_path = Path(rewrites_dir) / "guides" / "章纲.md"
+    if outline_path.exists() and outline_path.stat().st_size > 100:
+        return True
+
+    print(f"\n  [章纲] 从 events.json 提取...")
+    try:
+        import json as _json
+        # 优先拆文库 events.json（新版9字段），fallback _cache（旧版pipe格式）
+        events_path = Path(config.get("analyze_dir", "")) / "events.json"
+        if not events_path.exists():
+            events_path = Path(rewrites_dir).parent.parent / "_cache" / "events.json"
+        if not events_path.exists():
+            print(f"  [WARN] events.json 不存在")
+            return False
+
+        events = _json.loads(events_path.read_text(encoding="utf-8"))
+        lines = []
+        for ev in events:
+            n = ev.get("id", "?")
+            # 新版格式：有"核心事件""开头承接"等字段
+            if "核心事件" in ev and "开头承接" in ev:
+                event = ev.get("核心事件", "")[:20]
+                opening = ev.get("开头承接", "")[:25]
+                closing = ev.get("结尾状态", "")[:25]
+                link = ev.get("衔接", "").replace("→ ", "").replace("→", "")[:25]
+            else:
+                # 旧版格式：从 pipe 字段提取
+                parts = [p.strip() for p in ev.get("event", "").split("|") if p.strip()]
+                event = parts[0][:20] if len(parts) > 0 else ""
+                opening = parts[8][:25] if len(parts) > 8 else ""
+                closing = parts[9][:25] if len(parts) > 9 else ""
+                link = parts[10].replace("→ ", "").replace("→", "")[:25] if len(parts) > 10 else ""
+            lines.append(f"第{n}章 | {event} | {opening} | {closing} | {link}")
+
+        outline_path.parent.mkdir(parents=True, exist_ok=True)
+        outline_path.write_text("# 章纲\n\n" + "\n".join(lines) + "\n", encoding="utf-8")
+        print(f"  [OK] 章纲.md → {len(lines)} 章")
+        return True
+    except Exception as e:
+        print(f"  [WARN] 章纲提取失败: {e}")
+        return False
+
+
+def _print_outline_summary(config):
+    """打印章纲前5后3条供审阅。"""
+    path = Path(config.get("rewrites_dir", "")) / "guides" / "章纲.md"
+    if not path.exists(): return
+    lines = [l.strip() for l in path.read_text(encoding="utf-8").split("\n") if l.strip().startswith("第")]
+    n = len(lines)
+    if not lines: return
+    print(f"\n  📋 章纲（共{n}章）：")
+    for l in lines[:5]: print(f"     {l[:100]}")
+    if n > 8: print(f"     ...")
+    for l in lines[-3:]: print(f"     {l[:100]}")
+    print(f"  全量：guides/章纲.md")
+
+# ============================================================
 # 续写模式支持
 # ============================================================
 
@@ -274,12 +336,25 @@ def phase_guides(config, start, end, workers=5, state_mgr=None):
     if state_mgr:
         state_mgr.phase_start("guides")
 
+    # 先确保章纲存在，生成后暂停供审阅
+    if not _ensure_chapter_outline(config, config['rewrites_dir']):
+        return
+
+    # 章纲确认门
+    if not config.get("skip_outline_review"):
+        _print_outline_summary(config)
+        print(f"\n  ⏸ 章纲已生成。确认后加 --skip-outline-review 继续。")
+        if state_mgr:
+            state_mgr.save()
+        return
+
     # 先提取文笔指纹（如果还没有提取）
     print(f"\n{'=' * 50}")
     print(f"Phase 2: 文笔指纹 + plot_guide (ch{start}-{end}, {workers}w)")
     print("=" * 50)
     
     _extract_style_fingerprints(config, start, end, workers)
+    _generate_book_style_profile(config)
 
     # plot-guide（JSON 输出 + 模板合并）
     print(f"\n{'=' * 50}")
@@ -381,6 +456,17 @@ def _extract_style_fingerprints(config, start, end, workers):
     phase_style_extract(config, start, end, workers)
 
 
+def _generate_book_style_profile(config):
+    """生成全书级文风摘要（配置 style_profile: true 时启用）。"""
+    if not config.get("style_profile", True):
+        return
+    try:
+        from phases.book_style_profile import generate_profile
+        generate_profile(config)
+    except Exception as e:
+        print(f"  [WARN] book_style_profile 生成失败: {e}")
+
+
 def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=None, 
             system_prompt=None, extra_replacements=None, retry_context=None):
     """执行单次调用。通过 prompt_loader 加载并嵌入文件内容。
@@ -396,6 +482,32 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
     n = str(chapter_num) if chapter_num else "1"
     n_plus1 = str(chapter_num + 1) if chapter_num else "2"
     total_ch = get_total_chapters(config)
+
+    # 读取本章章纲（从 events.json 新格式，只注入结构字段，不传源文标题）
+    chapter_outline = ""
+    try:
+        import json as _json
+        for src_path in [
+            Path(config.get("analyze_dir", "")) / "events.json",
+            Path(config.get("rewrites_dir", "")).parent.parent / "_cache" / "events.json"
+        ]:
+            if src_path.exists():
+                events = _json.loads(src_path.read_text(encoding="utf-8"))
+                for ev in events:
+                    if str(ev.get("id", "")) == str(chapter_num):
+                        parts = []
+                        for k in ["情绪弧线", "开头承接", "结尾状态", "衔接"]:
+                            v = ev.get(k, "")
+                            if v:
+                                v = str(v).replace("→ ", "").replace("→", "")
+                                parts.append(f"{k}: {v[:80]}")
+                        chapter_outline = " | ".join(parts)
+                        break
+                if chapter_outline:
+                    break
+    except Exception:
+        pass
+
     replacements = {
         "新书名": Path(config.get("rewrites_dir", "")).name,
         "N": n,
@@ -405,6 +517,8 @@ def run_one(config, prompt_type, chapter_num=None, model=None, reasoning_effort=
         "作者名": config.get("author", ""),
         "源书名": config.get("source_book", ""),
         "总章数": str(total_ch),
+        "analyze_dir": config.get("analyze_dir", ""),
+        "outline_entry": chapter_outline,
     }
 
     # 需要源文字数时，脚本计算

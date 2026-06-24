@@ -23,7 +23,7 @@ from prompt_meta import parse_frontmatter, safe_format
 
 
 # 需要嵌入内容的标签（输入类），不包含的标签只保留路径引用
-EMBED_TAGS = {"源文", "弧线", "弧线参考", "设定", "新书设定", "plot_guide", "模板", "旧真相", "本章正文", "下章正文", "原文", "热梗素材", "频道配置", "题材配置", "爽点配置", "style", "characters", "structure", "principles", "world", "highlights", "blacklist", "event", "name_map"}
+EMBED_TAGS = {"源文", "弧线", "弧线参考", "设定", "新书设定", "plot_guide", "模板", "旧真相", "本章正文", "下章正文", "原文", "热梗素材", "频道配置", "题材配置", "爽点配置", "style", "characters", "structure", "principles", "world", "highlights", "blacklist", "event", "name_map", "analyze", "角色关系"}
 
 # 不需要嵌入的标签（输出/指令类）
 PASS_THROUGH_TAGS = {"输出", "回传"}

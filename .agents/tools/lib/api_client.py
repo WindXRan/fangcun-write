@@ -59,6 +59,18 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None, max_
         else:
             system_prompt = load_system_prompt("system-generic.md") or ""
 
+    # 注入全书文风摘要
+    if system_prompt and config.get("style_profile", True):
+        try:
+            sp_profile = Path(config.get("rewrites_dir", "")) / "book_style_profile.md"
+            if sp_profile.exists():
+                style_content = sp_profile.read_text(encoding="utf-8")
+                system_prompt = system_prompt.replace("{book_style_profile}", style_content)
+            else:
+                system_prompt = system_prompt.replace("{book_style_profile}", "")
+        except Exception:
+            pass
+
     rewrites_dir = config.get("rewrites_dir", "")
     usage_log_path = str(Path(rewrites_dir) / "_log/api_usage.jsonl") if rewrites_dir else ""
 
