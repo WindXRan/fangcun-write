@@ -405,7 +405,7 @@ node scripts/check-ai-patterns.js --check <正文文件...>
 
 | 时机 | 跳转到 | 命令 |
 |---|---|---|
-| 继续写作 | fangcun-long-write / fangcun-short-write | `/fangcun-long-write` 或 `/fangcun-short-write` |
+| 继续写作 | fangcun-write / fangcun-short-write | `/fangcun-write` 或 `/fangcun-short-write` |
 | 发现结构问题 | fangcun-long-analyze / fangcun-short-analyze | `/fangcun-long-analyze` 或 `/fangcun-short-analyze` |
 | 准备做封面 | fangcun-cover | `/fangcun-cover` |
 

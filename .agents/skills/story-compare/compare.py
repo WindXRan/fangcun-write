@@ -111,16 +111,12 @@ def read_source_path_from_concept(book_dir):
             match = re.search(r'\*?\*?源文路径\*?\*?[：:]\s*(.+)', content)
             if match:
                 return match.group(1).strip()
-        # 对新结构，也尝试从 concept.md 推断
-        if fname == 'concept.md' and os.path.exists(concept_file):
-            # 源文路径通常在 projects/{作者}/{书名}/ 下
-            parts = book_dir.replace('\\', '/').split('/')
-            if 'rewrites' in parts:
-                idx = parts.index('rewrites')
-                if idx >= 2:
-                    source_path = '/'.join(parts[:idx])
-                    if os.path.isdir(source_path):
-                        return source_path
+        # 源文路径：project_dir 的父目录是 {author}/{source_book}/
+        parts = book_dir.replace('\\', '/').split('/')
+        if len(parts) >= 3:
+            source_path = '/'.join(parts[:-1])
+            if os.path.isdir(source_path):
+                return source_path
     return None
 
 def read_chapter(path):
@@ -157,15 +153,11 @@ def find_source_chapter(chapter_num, source_override=None, base_dir=None):
     results = []
 
     # 0. 优先检查源书目录下的缓存拆章（最可靠）
-    # 新结构: projects/{作者}/{书名}/_cache/chapters/
+    # 结构: projects/{作者}/{书名}/{新书名}/chapters/
+    # 源书父目录: projects/{作者}/{书名}/
     if base_dir:
-        # 从 rewrite 项目路径推导源书路径
-        parts = base_dir.replace('\\', '/').split('/')
-        if 'rewrites' in parts:
-            idx = parts.index('rewrites')
-            source_book = '/'.join(parts[:idx])
-            # 新路径
-            for cache_dir in ['_cache/chapters', '源文章节', '源文']:
+        source_book = str(Path(base_dir).parent)
+        for cache_dir in ['_cache/chapters', '源文章节', '源文']:
                 local_src = os.path.join(source_book, cache_dir)
                 if os.path.isdir(local_src):
                     for fmt in [f'ch_{chapter_num:03d}', f'第{chapter_num:03d}章', f'第{chapter_num}章']:

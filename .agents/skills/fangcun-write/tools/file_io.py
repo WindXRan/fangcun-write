@@ -1,5 +1,5 @@
 """
-fangcun-novel 项目级 I/O — rewrites/ 目录下的文件读写。
+fangcun-write 项目级 I/O — project_dir 下的文件读写。
 
 源书级 I/O（events/skeleton/adaptation/styles）从 fangcun-analyze 导入。
 fangcun-analyze/tools 在 pipeline.py 启动时加入 sys.path。
@@ -32,52 +32,52 @@ from source_io import (
 
 # ─── 路径解析 ──────────────────────────────────────────────────────────────
 
-def get_rewrites_dir(config) -> Path:
-    return Path(config.get("rewrites_dir", ""))
+def get_project_dir(config) -> Path:
+    return Path(config.get("project_dir", ""))
 
 
 def get_guides_dir(config) -> Path:
-    return get_rewrites_dir(config) / "guides"
+    return get_project_dir(config) / "正文" / "章纲"
 
 
 def get_chapters_output_dir(config) -> Path:
-    return get_rewrites_dir(config) / "chapters"
+    return get_project_dir(config) / "正文" / "正文"
 
 
 # ─── 项目级 I/O（本地实现）─────────────────────────────────────────────────
 
 def load_concept(config) -> str:
-    f = get_rewrites_dir(config) / "concept.md"
+    f = get_project_dir(config) / "concept.md"
     return f.read_text(encoding="utf-8") if f.exists() else ""
 
 
 def save_concept(config, content: str):
-    f = get_rewrites_dir(config) / "concept.md"
+    f = get_project_dir(config) / "concept.md"
     f.parent.mkdir(parents=True, exist_ok=True)
     f.write_text(content, encoding="utf-8")
 
 
 def load_source_analysis(config) -> str:
-    f = get_rewrites_dir(config) / "source_analysis.md"
+    f = get_project_dir(config) / "source_analysis.md"
     return f.read_text(encoding="utf-8") if f.exists() else ""
 
 
 def save_source_analysis(config, content: str):
-    f = get_rewrites_dir(config) / "source_analysis.md"
+    f = get_project_dir(config) / "source_analysis.md"
     f.parent.mkdir(parents=True, exist_ok=True)
     f.write_text(content, encoding="utf-8")
 
 
 def load_settings(config, filename: str) -> str:
-    f = get_rewrites_dir(config) / "settings" / filename
+    f = get_project_dir(config) / "settings" / filename
     if f.exists():
         return f.read_text(encoding="utf-8")
-    f2 = get_rewrites_dir(config) / filename
+    f2 = get_project_dir(config) / filename
     return f2.read_text(encoding="utf-8") if f2.exists() else ""
 
 
 def save_settings(config, filename: str, content: str):
-    f = get_rewrites_dir(config) / "settings" / filename
+    f = get_project_dir(config) / "settings" / filename
     f.parent.mkdir(parents=True, exist_ok=True)
     f.write_text(content, encoding="utf-8")
 
@@ -113,12 +113,12 @@ def save_style_guide(config, ch_num: int, content: str):
 
 
 def load_chapter(config, ch_num: int) -> str:
-    f = get_chapters_output_dir(config) / f"ch_{ch_num:03d}.txt"
+    f = get_chapters_output_dir(config) / f"第{ch_num}章.xml"
     return f.read_text(encoding="utf-8") if f.exists() else ""
 
 
 def save_chapter(config, ch_num: int, content: str):
-    f = get_chapters_output_dir(config) / f"ch_{ch_num:03d}.txt"
+    f = get_chapters_output_dir(config) / f"第{ch_num}章.xml"
     f.parent.mkdir(parents=True, exist_ok=True)
     f.write_text(content, encoding="utf-8")
 
@@ -128,12 +128,15 @@ def get_written_chapters(config) -> list[int]:
     if not chapters_dir.exists():
         return []
     result = []
-    for f in sorted(chapters_dir.glob("ch_*.txt")):
-        m = re.search(r"ch_(\d+)\.txt", f.name)
+    for f in sorted(chapters_dir.glob("第*章.xml")):
+        m = re.search(r"第(\d+)章\.xml", f.name)
         if m:
             result.append(int(m.group(1)))
     return result
 
 
 def get_state_path(config) -> Path:
-    return get_rewrites_dir(config) / "state.json"
+    return get_project_dir(config) / "state.json"
+
+
+

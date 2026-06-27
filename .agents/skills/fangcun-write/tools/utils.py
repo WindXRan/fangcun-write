@@ -8,6 +8,8 @@ import time
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+import _path_setup  # noqa: F401
+
 from lib.constants import CORRUPT_MARKERS
 from lib.text_metrics import get_body_chars
 from lib.source_locator import get_source_text as _lib_get_source_text, get_total_chapters as _lib_get_total_chapters
@@ -308,6 +310,30 @@ def batch_run(config, prompt_type, start, end, workers, output_dir, filename_fmt
         state_mgr.save()
 
     return results, errors
+
+
+# ─── 章节文件 I/O（兼容 writer.py 导入）───────────────
+
+def find_chapter_file(project_dir, ch):
+    """找章节文件。路径: 正文/正文/第X章*.xml"""
+    cd = Path(project_dir) / "正文" / "正文"
+    files = sorted(cd.glob(f"第{ch}章*.xml"))
+    return files[0] if files else None
+
+
+def load_chapter_text(project_dir, ch):
+    """读取章节文本。"""
+    f = find_chapter_file(project_dir, ch)
+    return f.read_text(encoding="utf-8") if f else ""
+
+
+def save_chapter_file(project_dir, ch, text):
+    """保存章节。"""
+    cd = Path(project_dir) / "正文" / "正文"
+    cd.mkdir(parents=True, exist_ok=True)
+    fname = f"第{ch}章.xml"
+    (cd / fname).write_text(text, encoding='utf-8')
+    return fname
 
 
 def clear_cache(config=None):

@@ -1,0 +1,526 @@
+#!/usr/bin/env python3
+"""
+方寸写作 CLI — 全自动
+
+用法:
+  fangcun                      自动检测项目，显示状态
+  fangcun "帮我写第1章"         自动检测+自动选预设+执行
+  fangcun -p <项目> "写第5章"   指定项目
+
+环境变量:
+  FANGCUN_PROJECT   默认项目路径
+  API_KEY           DeepSeek API Key
+"""
+
+import sys, os, json, re
+from pathlib import Path
+from urllib.request import Request, urlopen
+
+PROJECT_ROOT = Path(__file__).parent
+SERVER_DIR = PROJECT_ROOT / "server"
+TOOLS_DIR = PROJECT_ROOT / ".agents" / "skills" / "fangcun-write" / "tools"
+sys.path.insert(0, str(SERVER_DIR))
+sys.path.insert(0, str(TOOLS_DIR))
+
+from pathlib import Path as _Path
+CUSTOM_DIR = _Path(__file__).parent / "ai_tools" / "custom"
+
+from variable_resolver import VariableResolver
+
+
+# ── 内联 load_presets（原 tool_runner）───────────────────
+
+_BUILTIN_DIR = TOOLS_DIR / "builtin"
+
+def load_presets() -> list[dict]:
+    """扫描 builtin/ 加载所有 .xml preset 文件。支持目录/preset.xml 和 扁平 .xml。"""
+    import xml.etree.ElementTree as ET
+    presets = []
+
+    def _parse(root, pid):
+        sp = ""
+        prompt_el = root.find("prompt")
+        if prompt_el is not None and prompt_el.text:
+            sp = prompt_el.text.strip()
+        return {
+            "id": pid, "name": root.findtext("name", pid),
+            "icon": root.findtext("icon", "?"), "category": root.findtext("category", "其他"),
+            "phase": root.findtext("phase", ""), "temp": float(root.findtext("temperature", "0.7")),
+            "desc": root.findtext("description", ""), "opening": root.findtext("opening", ""),
+            "output": root.findtext("output", ""), "sp": sp,
+            "variables": [v.strip() for v in root.findtext("variables", "").split(",") if v.strip()],
+            "source": "builtin",
+        }
+
+    # 扁平 .xml 文件（id = 文件名去.xml）
+    if _BUILTIN_DIR.exists():
+        for f in sorted(_BUILTIN_DIR.glob("*.xml")):
+            pid = f.stem
+            if pid == "system-prompt": continue  # 系统级，不作为预设暴露
+            try:
+                tree = ET.parse(f)
+                presets.append(_parse(tree.getroot(), pid))
+            except Exception:
+                pass
+
+    # 目录/preset.xml（自定义工具）
+    if CUSTOM_DIR.exists():
+        for tool_dir in sorted(CUSTOM_DIR.iterdir()):
+            if not tool_dir.is_dir(): continue
+            preset_xml = tool_dir / "preset.xml"
+            if not preset_xml.exists(): continue
+            try:
+                tree = ET.parse(preset_xml)
+                presets.append({**_parse(tree.getroot(), tool_dir.name), "source": "custom"})
+            except Exception:
+                pass
+
+    return presets
+
+
+def save_output_files(text: str, project_dir: str) -> list[str]:
+    """扫描 LLM 输出中的 `==== path ====` 标记，保存到对应文件。"""
+    import re as _re
+    import xml.etree.ElementTree as ET
+    saved = []
+    has_char = False
+    for m in _re.finditer(r'====\s*([^\n=]+)\s*====\s*\n(.*?)(?=\n====|\Z)', text, _re.DOTALL):
+        path = m.group(1).strip()
+        content = m.group(2).strip()
+        if not path or not content:
+            continue
+        fp = Path(project_dir) / path
+        fp.parent.mkdir(parents=True, exist_ok=True)
+        fp.write_text(content, encoding='utf-8')
+        saved.append(path)
+    return saved
+
+
+def execute_tool(name: str, args: dict, project_dir: str) -> str:
+    """按工具名执行。"""
+    from writer import write_chapter, trim_chapter, expand_chapter
+    from utils import save_chapter_file, find_chapter_file
+    from pathlib import Path
+
+    config = {
+        "project_dir": project_dir,
+        "base_dir": str(PROJECT_ROOT),
+        "model": "deepseek-chat", "debug": True,
+    }
+
+    if name == "write_chapter":
+        ch = args.get("chapter_number", 1)
+        config["_chapter_start"] = ch
+        text = write_chapter(config, ch)
+        if text:
+            save_chapter_file(project_dir, ch, text)
+        return f"第{ch}章完成, {len(text)}字"
+    elif name == "trim_chapter":
+        trim_chapter(config, args.get("chapter_number", 1))
+        return "已压缩"
+    elif name == "expand_chapter":
+        expand_chapter(config, args.get("chapter_number", 1))
+        return "已扩展"
+    elif name == "save_files":
+        """保存 LLM 输出的多个文件。"""
+        text = args.get("text", "")
+        saved = save_output_files(text, project_dir)
+        return f"已保存 {len(saved)} 个文件: {', '.join(saved)}"
+    elif name == "generate_volumes":
+        """生成卷纲。"""
+        from variable_resolver import VariableResolver
+        resolver = VariableResolver(project_dir)
+        resolver.set_context(N=1)
+        template = resolver.resolve("template_volumes")
+        prompt = f"""按以下模板生成卷纲，每卷用 `==== 正文/卷纲/第X卷.xml ====` 分隔：
+
+{template}
+
+总章数：{args.get('total_chapters', 192)}"""
+        text, _ = call_llm([{"role": "user", "content": prompt}])
+        if text:
+            saved = save_output_files(text, project_dir)
+            return f"卷纲生成完成: {', '.join(saved)}"
+        return "卷纲生成失败"
+    elif name == "generate_plot_guide":
+        """生成章纲。"""
+        ch = args.get("chapter_number", 1)
+        from variable_resolver import VariableResolver
+        resolver = VariableResolver(project_dir)
+        resolver.set_context(N=ch, preset="plot-guide")
+        sp = resolver.render("")
+        prompt = f"{resolver.resolve('template_guide')}\n\n第{ch}章章纲：{args.get('guide_text', '')}"
+        text, _ = call_llm([{"role": "system", "content": sp}, {"role": "user", "content": prompt}])
+        if text:
+            fp = Path(project_dir) / "正文" / "章纲" / f"plot_{ch}.md"
+            fp.parent.mkdir(parents=True, exist_ok=True)
+            fp.write_text(text, encoding='utf-8')
+            return f"第{ch}章章纲已保存"
+        return "章纲生成失败"
+    elif name == "extract_events":
+        # 添加共享工具路径（source_io 在 .agents/tools/）
+        _shared = PROJECT_ROOT / ".agents" / "tools"
+        if str(_shared) not in sys.path:
+            sys.path.insert(0, str(_shared))
+        from source_analysis import extract_events as _extract
+        from variable_resolver import VariableResolver
+
+        # 从 template_events 加载 prompt + events.schema.xml 格式说明
+        resolver = VariableResolver(project_dir)
+        prompt_text = resolver.resolve("template_events")
+
+        # source_dir 自动检测：如果 project_dir 是 rewrite 子目录，向上找源文目录
+        source_dir = args.get("source_dir", "")
+        if not source_dir:
+            _pd = Path(project_dir)
+            # 如果 project_dir 包含 rewrites/，尝试父目录
+            if "rewrites" in _pd.parts:
+                parent = _pd.parent.parent  # rewrites/xxx 的父级
+                cache_chapters = parent / "_cache" / "chapters"
+                if cache_chapters.exists():
+                    source_dir = str(parent)
+            if not source_dir:
+                source_dir = project_dir
+        config["source_dir"] = source_dir
+        config["author"] = args.get("author", "")
+        config["source_book"] = args.get("source_book", "")
+
+        api_key = os.environ.get("API_KEY", "")
+        base_url = os.environ.get("API_BASE_URL", "https://api.deepseek.com/v1")
+        _url = base_url.rstrip("/")
+        if not _url.endswith("/v1"):
+            _url += "/v1"
+        api_url = _url + "/chat/completions"
+        workers = args.get("workers", 5)
+
+        events = _extract(config, api_key, api_url, config["model"], prompt_text, workers)
+        if not events:
+            return "事件提取失败"
+        return f"事件提取完成: {len(events)} 章"
+    elif name == "generate_book_settings":
+        """开书：生成全部设定文件。"""
+        from variable_resolver import VariableResolver
+        resolver = VariableResolver(project_dir)
+        resolver.set_context(N=1)
+        import xml.etree.ElementTree as ET
+        tree = ET.parse(str(_BUILTIN_DIR / "open-book.xml"))
+        sp_raw = tree.getroot().findtext("prompt", "")
+        sp = resolver.render(sp_raw)
+        msg = args.get("user_input", "生成完整作品设定")
+        text, err = call_llm([{"role": "system", "content": sp}, {"role": "user", "content": msg}])
+        if err:
+            return f"开书失败: {err}"
+        if text:
+            saved = save_output_files(text, project_dir)
+            (Path(project_dir) / "作品信息" / "_开书记录.txt").write_text(text, encoding='utf-8')
+            return f"开书完成: 生成 {len(saved)} 个文件"
+        return "开书失败"
+    elif name == "build_skeleton":
+        """仿写：生成故事骨架。"""
+        from variable_resolver import VariableResolver
+        resolver = VariableResolver(project_dir)
+        resolver.set_context(N=1)
+        import xml.etree.ElementTree as ET
+        tree = ET.parse(str(_BUILTIN_DIR / "skeleton.xml"))
+        sp = resolver.render(tree.getroot().findtext("prompt", ""))
+        text, err = call_llm([{"role": "system", "content": sp}, {"role": "user", "content": "分析故事骨架"}])
+        if err: return f"骨架生成失败: {err}"
+        if text:
+            saved = save_output_files(text, project_dir)
+            return f"故事骨架完成: {len(saved)} 个文件"
+        return "骨架生成失败"
+    elif name == "build_adaptation":
+        """仿写：生成改编策略。"""
+        from variable_resolver import VariableResolver
+        resolver = VariableResolver(project_dir)
+        resolver.set_context(N=1)
+        import xml.etree.ElementTree as ET
+        tree = ET.parse(str(_BUILTIN_DIR / "adaptation.xml"))
+        sp = resolver.render(tree.getroot().findtext("prompt", ""))
+        text, err = call_llm([{"role": "system", "content": sp}, {"role": "user", "content": "制定改编策略"}])
+        if err: return f"改编策略失败: {err}"
+        if text:
+            saved = save_output_files(text, project_dir)
+            return f"改编策略完成: {len(saved)} 个文件"
+        return "改编策略失败"
+    elif name == "generate_original_settings":
+        """原创：从零开书。"""
+        from variable_resolver import VariableResolver
+        resolver = VariableResolver(project_dir)
+        resolver.set_context(N=1)
+        import xml.etree.ElementTree as ET
+        tree = ET.parse(str(_BUILTIN_DIR / "original-settings.xml"))
+        sp = resolver.render(tree.getroot().findtext("prompt", ""))
+        msg = args.get("user_input", "生成完整作品设定")
+        text, err = call_llm([{"role": "system", "content": sp}, {"role": "user", "content": msg}])
+        if err: return f"原创开书失败: {err}"
+        if text:
+            saved = save_output_files(text, project_dir)
+            (Path(project_dir) / "作品信息" / "_开书记录.txt").write_text(text, encoding='utf-8')
+            return f"原创开书完成: 生成 {len(saved)} 个文件"
+        return "原创开书失败"
+    return f"未知工具: {name}"
+
+
+# ═══════════════════════ 自动检测项目 ═══════════════════════
+
+def detect_project():
+    """自动检测项目目录。优先级：环境变量 > configs/ > projects/ > ."""
+    # 1. 环境变量
+    env = os.environ.get("FANGCUN_PROJECT", "")
+    if env and Path(env).exists():
+        return env
+
+    # 2. 从 configs/ 找
+    configs_dir = PROJECT_ROOT / "configs"
+    if configs_dir.exists():
+        cfgs = sorted(configs_dir.glob("*.json"))
+        if cfgs:
+            cfg = json.loads(cfgs[0].read_text(encoding="utf-8"))
+            rw = cfg.get("project_dir", "")
+            if rw:
+                p = Path(rw)
+                if not p.is_absolute():
+                    p = PROJECT_ROOT / p
+                if p.exists():
+                    return str(p)
+
+    # 3. 从 projects/ 找有内容的项目目录
+    projects_dir = PROJECT_ROOT / "projects"
+    if projects_dir.exists():
+        for author in projects_dir.iterdir():
+            if not author.is_dir(): continue
+            for book in author.iterdir():
+                if not book.is_dir(): continue
+                for rw in book.iterdir():
+                    if not rw.is_dir(): continue
+                    has_any = any((rw / f).exists() for f in ("events.xml", "concept.md", "book_info.md"))
+                    if has_any:
+                        return str(rw)
+
+    # 4. 当前目录
+    cwd = Path.cwd()
+    if (cwd / "concept.md").exists():
+        return str(cwd)
+
+    return ""
+
+
+# ═══════════════════════ 自动选预设 ═══════════════════════
+
+PRESET_KEYWORDS = {
+    "write-chapter": ["写第", "写章", "重写第", "帮我写", "续写", "写下一章", "日更"],
+    "extract-events": ["提取事件", "拆事件", "事件表", "事件提取"],
+    "character-extract": ["提取角色", "提取势力", "拆角色", "拆势力", "角色卡", "势力卡"],
+    "cover-prompt": ["封面", "封面提示词", "封面设计", "做个封面"],
+    "skeleton":     ["故事骨架", "骨架分析"],
+    "adaptation":   ["改编策略", "换皮方案"],
+    "plot-guide":   ["章纲", "细纲", "生成章纲"],
+    "volume-outline": ["卷纲", "生成卷纲", "批量生成卷纲"],
+    "book-draw": ["开书", "顶层设计", "出书"],
+    "synopsis-generate": ["简介"],
+    "outline-generate": ["总纲"],
+    "tags-generate": ["标签"],
+    "character-generate": ["角色设计", "人设", "角色生成", "设计角色"],
+    "setting-generate": ["设定生成", "背景", "势力", "物品", "地点设定"],
+    "open-book":    ["开书", "设定", "人设", "世界观", "角色表", "仿写这本书"],
+    "deslop":       ["去AI", "去ai", "AI味", "ai味", "修一下", "润色"],
+    "compare":      ["对比", "诊断", "审查", "质量", "审一下"],
+}
+
+def detect_preset(user_input: str) -> str:
+    for preset_id, keywords in PRESET_KEYWORDS.items():
+        for kw in keywords:
+            if kw in user_input:
+                return preset_id
+    return "chat-assistant"
+
+
+# ═══════════════════════ LLM ═══════════════════════
+
+def call_llm(messages: list, temperature: float = 0.7):
+    api_key = os.environ.get("API_KEY", "")
+    if not api_key or not api_key.startswith("sk-"):
+        api_key = os.environ.get("ANTHROPIC_AUTH_TOKEN", api_key)
+    _base = os.environ.get("API_BASE_URL", "https://api.deepseek.com/v1").rstrip("/")
+    if not _base.endswith("/v1"):
+        _base += "/v1"
+    api_url = _base + "/chat/completions"
+    model = os.environ.get("FANGCUN_MODEL", "deepseek-chat")
+    if not api_key:
+        return None, "未设置 API_KEY"
+
+    body = json.dumps({"model": model, "messages": messages, "temperature": temperature, "max_tokens": 4096}).encode()
+    req = Request(api_url, data=body, headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"})
+    try:
+        with urlopen(req, timeout=180) as r:
+            return json.loads(r.read())["choices"][0]["message"]["content"], None
+    except Exception as e:
+        return None, str(e)
+
+
+# ═══════════════════════ 核心执行 ═══════════════════════
+
+def run(project_dir: str, user_input: str, preset_id: str = None, verbose: bool = True):
+    """执行一次 Agent Turn。返回 (response_text, tool_results)。"""
+    if preset_id is None:
+        preset_id = detect_preset(user_input)
+
+    presets = load_presets()
+    preset = next((p for p in presets if p["id"] == preset_id), presets[0])
+
+    # 变量解析
+    resolver = VariableResolver(project_dir)
+    ch_match = re.search(r'第\s*(\d+)', user_input)
+    N = int(ch_match.group(1)) if ch_match else 1
+    resolver.set_context(N=N, start=max(1, N-5), end=N)
+
+    sp = resolver.render(preset["sp"])
+
+    messages = [
+        {"role": "system", "content": sp},
+        {"role": "user", "content": user_input},
+    ]
+
+    if verbose:
+        book = resolver.resolve("故事名称")
+        print(f"\n{'═' * 50}")
+        print(f"  {preset['icon']} {preset['name']}  |  {book}")
+        print(f"  {user_input}")
+        print(f"{'═' * 50}\n")
+
+    resp, err = call_llm(messages, preset["temp"])
+    if err:
+        print(f"  ❌ {err}")
+        return err, []
+
+    # 自动保存文件
+    saved = save_output_files(resp, project_dir)
+    if not saved:
+        # 单文件工具：无标记时直接保存到预设路径
+        _single_map = {
+            "synopsis-generate": "作品信息/主题/简介.xml",
+            "outline-generate": "作品信息/主题/总纲.xml",
+            "tags-generate": "作品信息/主题/标签.xml",
+        }
+        if preset_id in _single_map:
+            fp = Path(project_dir) / _single_map[preset_id]
+            fp.parent.mkdir(parents=True, exist_ok=True)
+            fp.write_text(resp, encoding='utf-8')
+            saved = [_single_map[preset_id]]
+        elif preset_id in ("write-chapter", "golden-opening"):
+            m = re.search(r'第(\d+)', user_input)
+            ch = int(m.group(1)) if m else 1
+            fp = Path(project_dir) / f"正文/正文/第{ch}章.xml"
+            fp.parent.mkdir(parents=True, exist_ok=True)
+            fp.write_text(f'<chapter number="{ch}"><content>\n{resp}\n  </content></chapter>', encoding='utf-8')
+            saved = [f"正文/正文/第{ch}章.xml"]
+        elif preset_id in ("character-generate", "character-designer") and ("<entry" in resp or "<character" in resp):
+            import re as _re
+            # 清理 markdown 包裹
+            clean = _re.sub(r'```(?:xml)?\n?', '', resp).strip()
+            m = _re.search(r'name="([^"]+)"', clean)
+            name = m.group(1) if m else "未知角色"
+            fp = Path(project_dir) / f"作品信息/设定/角色/{name}.xml"
+            fp.parent.mkdir(parents=True, exist_ok=True)
+            fp.write_text(clean, encoding='utf-8')
+            saved = [f"作品信息/设定/角色/{name}.xml"]
+        elif preset_id == "plot-guide" and "<guide" in resp:
+            m = re.search(r'第(\d+)', user_input)
+            ch = int(m.group(1)) if m else 1
+            fp = Path(project_dir) / f"正文/章纲/第{ch}章.xml"
+            fp.parent.mkdir(parents=True, exist_ok=True)
+            fp.write_text(resp, encoding='utf-8')
+            saved = [f"正文/章纲/第{ch}章.xml"]
+    if saved and verbose:
+        print(f"  📁 保存 {len(saved)} 个文件")
+
+    # 执行工具
+    tool_results = []
+    clean = resp
+
+    if verbose and clean:
+        print(f"\n{clean}\n")
+
+    return clean, tool_results
+
+
+# ═══════════════════════ main ═══════════════════════
+
+def init_project(project_dir: str) -> str:
+    """创建新项目目录结构。返回项目路径。"""
+    p = Path(project_dir)
+    p.mkdir(parents=True, exist_ok=True)
+    # 目录结构
+    for d in ["正文/卷纲", "正文/章纲", "正文/正文",
+              "作品信息/设定/角色", "作品信息/设定/背景",
+              "作品信息/设定/势力", "作品信息/设定/地点",
+              "作品信息/设定/物品", "作品信息/主题"]:
+        (p / d).mkdir(parents=True, exist_ok=True)
+    print(f"\n  📁 新建项目: {project_dir}")
+    return str(p)
+
+
+def main():
+    import argparse
+    p = argparse.ArgumentParser(description="方寸写作 — 全自动 CLI")
+    p.add_argument("message", nargs="*", help="自然语言指令")
+    p.add_argument("-p", "--project", default="", help="项目路径（留空=自动检测）")
+    p.add_argument("--preset", default="", help="工具预设（留空=自动匹配）")
+    p.add_argument("--list", action="store_true", help="列出预设和工具")
+    p.add_argument("--status", action="store_true", help="显示项目状态")
+    opts = p.parse_args()
+
+    user_input = " ".join(opts.message) if opts.message else ""
+
+    # --list
+    if opts.list:
+        print("\nAI 工具:\n")
+        for pr in load_presets():
+            tag = "内置" if pr.get("source") == "builtin" else "自定义"
+            cat = pr.get("category", "其他")
+            out = pr.get("output", "")
+            out_str = f" → {out}" if out else ""
+            print(f"  {pr['icon']} {pr['name']:8s} [{cat}] ({pr['id']:20s})  temp={pr['temp']}{out_str}")
+        if CUSTOM_DIR.exists() and not list(CUSTOM_DIR.iterdir()):
+            print(f"\n  自定义 AI 工具: {CUSTOM_DIR}")
+            print(f"  放一个新目录含 preset.xml 即可")
+        return
+
+    # 检测项目
+    project_dir = opts.project or detect_project()
+
+    # --status
+    if opts.status or not user_input:
+        if not project_dir:
+            print("未找到项目。请设 FANGCUN_PROJECT 环境变量，或放在 configs/ 或 projects/ 下。")
+            return
+        r = VariableResolver(project_dir)
+        r.set_context(N=1)
+        book = r.resolve("故事名称")
+        chapters_dir = Path(project_dir) / "chapters"
+        ch_count = len(list(chapters_dir.glob("第*章*.txt"))) + len(list(chapters_dir.glob("ch_*.txt"))) if chapters_dir.exists() else 0
+        print(f"\n  书名: {book}")
+        print(f"  项目: {project_dir}")
+        print(f"  章节: {ch_count} 章")
+        print(f"  状态: {'就绪' if ch_count > 0 else '待开书'}")
+        if not user_input:
+            return
+
+    if not project_dir:
+        # 开书/设定类指令 → 自动建项目
+        if user_input:
+            _p = detect_preset(user_input)
+            if _p in ("book-draw", "character-generate", "setting-generate", "plot-guide", "character-extract"):
+                project_dir = str(PROJECT_ROOT / "projects" / "新作品")
+                init_project(project_dir)
+        if not project_dir:
+            print("未找到项目。fangcun -p <项目路径> \"指令\"")
+            return
+
+    preset_id = opts.preset or (detect_preset(user_input) if user_input else "chat-assistant")
+    run(project_dir, user_input, preset_id)
+
+
+if __name__ == "__main__":
+    main()

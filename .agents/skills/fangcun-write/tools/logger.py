@@ -11,7 +11,7 @@ from contextlib import contextmanager
 class Logger:
     """统一日志管理器。"""
     
-    def __init__(self, name="fangcun-novel", log_file=None, level=logging.INFO):
+    def __init__(self, name="fangcun-write", log_file=None, level=logging.INFO):
         self.logger = logging.getLogger(name)
         self.logger.setLevel(level)
         
@@ -116,7 +116,7 @@ _pipeline_tee = None
 
 
 def setup_pipeline_log(config):
-    """初始化 pipeline 日志：所有 stdout 同时写入 {rewrites_dir}/_log/pipeline.log。
+    """初始化 pipeline 日志：所有 stdout 同时写入 {project_dir}/_log/pipeline.log。
 
     多次调用只生效一次，自动跳过已启动的 tee。
     """
@@ -124,11 +124,11 @@ def setup_pipeline_log(config):
     if _pipeline_tee is not None:
         return  # 已有 tee，不重复创建
 
-    rewrites_dir = config.get("rewrites_dir", "")
-    if not rewrites_dir:
+    project_dir = config.get("project_dir", "")
+    if not project_dir:
         return
 
-    log_path = Path(rewrites_dir) / "_log" / "pipeline.log"
+    log_path = Path(project_dir) / "_log" / "pipeline.log"
     log_path.parent.mkdir(parents=True, exist_ok=True)
     _pipeline_tee = TeeStdout(str(log_path))
     sys.stdout = _pipeline_tee
@@ -143,7 +143,7 @@ def close_pipeline_log():
         _pipeline_tee = None
 
 
-def get_logger(name="fangcun-novel", log_file=None, level=logging.INFO):
+def get_logger(name="fangcun-write", log_file=None, level=logging.INFO):
     """获取全局日志实例。"""
     global _logger
     if _logger is None:
@@ -166,7 +166,7 @@ def setup_logger(config):
     }
     level = level_map.get(log_level.upper(), logging.INFO)
     
-    _logger = Logger("fangcun-novel", log_file, level)
+    _logger = Logger("fangcun-write", log_file, level)
     return _logger
 
 

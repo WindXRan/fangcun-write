@@ -249,17 +249,7 @@ def scan_page():
 
 @app.route('/api/scan', methods=['POST'])
 def api_scan():
-    from book_library import scan_library, save_library_index
-
-    projects_dir = request.json.get('dir', 'projects')
-    books = scan_library(str(ROOT_DIR / projects_dir))
-    index = save_library_index(books, str(BOOK_LIBRARY_FILE))
-
-    return jsonify({
-        "total_books": index["total_books"],
-        "total_chars": index["total_chars"],
-        "genres": index.get("genres", {})
-    })
+    return jsonify({"error": "扫描功能已移除"}), 410
 
 
 # ── 排行榜（大池子） ──

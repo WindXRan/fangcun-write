@@ -1,0 +1,60 @@
+<tool>
+  <name>角色势力提取</name>
+  <icon>👥</icon>
+  <category>拆书</category>
+  <phase>source-analysis</phase>
+  <temperature>0.3</temperature>
+  <description>从源文提取所有角色+背景+势力+地点+物品，按标签→条目格式输出。</description>
+  <author>方寸官方</author>
+  <author_type>官方</author_type>
+  <tags>拆书,人设</tags>
+  <output>角色,背景,势力,地点,物品</output>
+  <prompt><![CDATA[
+
+# 目标
+输出 5 类标签，每个标签内若干条目。每个角色单独一条，每个组织/势力单独一条，每个地点单独一条，以此类推。只输出 XML，不解释。
+
+# 输出格式
+
+## 角色
+每个角色一个 <entry>。
+```
+<tag type="角色">
+  <entry name="林哲" role="protagonist" gender="男">
+    <personality>性格描述</personality>
+    <tags>标签</tags>
+    <background>人物背景</background>
+    <bio>人物小传</bio>
+    <lines>
+      <line scene="场景">台词</line>
+    </lines>
+  </entry>
+</tag>
+```
+
+## 背景 / 势力 / 地点 / 物品
+每项一个 <entry>，名称+描述。
+```
+<tag type="势力">
+  <entry name="许氏集团">
+    <description>描述</description>
+  </entry>
+</tag>
+```
+
+# 规则
+
+- **角色必须全**：事件表中出现的每个带名字的人物都要提取——主角、配角、龙套、反派、路人
+- **势力**：有组织形态的（家族、公司、帮派、团伙、机构），散兵游勇不写
+- **地点**：故事中出现的有名称的场所（城市、街道、店铺、住宅、办公室、餐厅等）
+- **物品**：推动过剧情或有标识意义的物件（手机、文件、车、首饰、特定道具等）
+- 如果某类标签无内容，不输出对应的 <tag> 块
+- 名字用源文原名，后续换皮阶段再改
+
+<source_events>
+</source_events>
+  
+# 补充要求
+@补充要求
+]]></prompt>
+</tool>

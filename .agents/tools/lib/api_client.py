@@ -59,40 +59,29 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None, max_
         else:
             system_prompt = load_system_prompt("system-generic.md") or ""
 
-    # 注入全书文风摘要
-    if system_prompt and config.get("style_profile", True):
-        try:
-            sp_profile = Path(config.get("rewrites_dir", "")) / "book_style_profile.md"
-            if sp_profile.exists():
-                style_content = sp_profile.read_text(encoding="utf-8")
-                system_prompt = system_prompt.replace("{book_style_profile}", style_content)
-            else:
-                system_prompt = system_prompt.replace("{book_style_profile}", "")
-        except Exception:
-            pass
+    project_dir = config.get("project_dir") or ""
+    usage_log_path = str(Path(project_dir) / "_log/api_usage.jsonl") if project_dir else ""
 
-    rewrites_dir = config.get("rewrites_dir", "")
-    usage_log_path = str(Path(rewrites_dir) / "_log/api_usage.jsonl") if rewrites_dir else ""
-
-    # Debug: 保存 prompt 到 _debug/
-    if config.get("debug") and rewrites_dir:
-        try:
-            debug_dir = Path(rewrites_dir) / "_debug" / prompt_type
-            debug_dir.mkdir(parents=True, exist_ok=True)
-            ch_label = f"{ch:03d}" if isinstance(ch, int) else (str(ch) if ch else "00")
-            debug_file = debug_dir / f"ch{ch_label}_{prompt_type}.md"
-            debug_file.write_text(
-                f"# Debug: ch{ch_label} — {prompt_type}\n\n"
-                f"**Model**: {model}\n"
-                f"**Temperature**: {temperature}\n\n"
-                f"---\n\n"
-                f"## System Prompt\n\n{system_prompt or ''}\n\n"
-                f"---\n\n"
-                f"## User Prompt\n\n{user_prompt}\n",
-                encoding="utf-8"
-            )
-        except Exception:
-            pass
+    # 保存完整请求到 _debug/（始终开启）
+    _debug_base = Path(project_dir) if project_dir else Path.cwd()
+    try:
+        debug_dir = _debug_base / "_debug" / prompt_type
+        debug_dir.mkdir(parents=True, exist_ok=True)
+        ch_label = f"{ch:03d}" if isinstance(ch, int) else (str(ch) if ch else "00")
+        debug_file = debug_dir / f"ch{ch_label}_{prompt_type}.md"
+        debug_file.write_text(
+            f"# ch{ch_label} — {prompt_type}\n\n"
+            f"**Model**: {model}\n"
+            f"**Temperature**: {temperature}\n\n"
+            f"---\n\n"
+            f"## System Prompt\n\n{system_prompt or ''}\n\n"
+            f"---\n\n"
+            f"## User Prompt\n\n{user_prompt}\n",
+            encoding="utf-8"
+        )
+        print(f"  [DEBUG] 完整 prompt → {debug_file.resolve()}")
+    except Exception as e:
+        print(f"  [WARN] 保存 debug prompt 失败: {e}")
 
     # prompts_only: 只保存 prompt 不调 API
     if config.get("prompts_only"):
@@ -103,7 +92,7 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None, max_
                               max_tokens=max_tokens,
                               return_usage=True, provider=provider)
 
-    if usage and rewrites_dir:
+    if usage and project_dir:
         try:
             from lib.token_tracker import log_usage
             # 提取缓存命中的 token 数（DeepSeek/MiMo 返回 prompt_tokens_details.cached_tokens）
@@ -113,7 +102,7 @@ def call_llm(config, prompt_type, user_prompt, system_prompt=None, ch=None, max_
                 cached = ptd.get("cached_tokens", 0)
             elif isinstance(ptd, (int, float)):
                 cached = int(ptd)
-            log_usage(rewrites_dir, {
+            log_usage(project_dir, {
                 "prompt_type": prompt_type,
                 "ch": ch,
                 "model": model,

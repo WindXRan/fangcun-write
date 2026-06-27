@@ -44,7 +44,7 @@ description: |
 /story-publish --config configs/xxx.json
 ```
 
-读取 `config.json` → 定位 `rewrites_dir` → 自动提取所有表单字段。
+读取 `config.json` → 定位 `project_dir` → 自动提取所有表单字段。
 
 ### 2. 提取 + 校验
 

@@ -1,0 +1,37 @@
+<tool>
+  <name>改编策略</name>
+  <icon>🔄</icon>
+  <category>拆书</category>
+  <phase>source-analysis</phase>
+  <temperature>0.3</temperature>
+  <description>从故事骨架制定改编策略：换皮方案+爽点内核+卖点+禁区。</description>
+  <author>方寸官方</author>
+  <author_type>官方</author_type>
+  <tags>拆书</tags>
+  <output>改编策略</output>
+  <prompt><![CDATA[
+# 角色
+你是改编策略师。读源文分析，制定换皮方案。
+
+# 目标
+
+# 输出格式
+==== 改编策略.md ====
+## 爽点内核
+读者追更核心动力一句话
+
+## 换皮方向
+源文每个核心场景→新场景的替换方案。行业/场景/道具具体写。
+
+## 核心卖点
+3条，每条一个读者爽感承诺
+
+## 禁区
+禁止出现的元素
+
+# 分析素材
+  
+# 补充要求
+@补充要求
+]]></prompt>
+</tool>

@@ -1,4 +1,4 @@
-# novel.ps1 - fangcun-novel 快捷命令
+# novel.ps1 - fangcun-write 快捷命令
 # 用法: .\novel.ps1 <command> [options]
 
 param(
@@ -14,13 +14,13 @@ param(
     [switch]$Help
 )
 
-$SKILL_DIR = "$PSScriptRoot\.agents\skills\fangcun-novel"
+$SKILL_DIR = $PSScriptRoot
 $PIPELINE = "$SKILL_DIR\tools\pipeline.py"
 
 # 显示帮助
 function Show-Help {
     Write-Host ""
-    Write-Host "fangcun-novel 仿写引擎" -ForegroundColor Cyan
+    Write-Host "fangcun-write 仿写引擎" -ForegroundColor Cyan
     Write-Host ""
     Write-Host "用法:" -ForegroundColor Yellow
     Write-Host "  .\novel.ps1 <command> [options]" -ForegroundColor White

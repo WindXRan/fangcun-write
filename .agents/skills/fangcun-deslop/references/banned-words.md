@@ -4,7 +4,7 @@
 version: 2.0.0
 sync-source: skills/fangcun-setup/references/agent-references/banned-words.md
 本文件在 6 个 skill 副本间需保持一致：
-  fangcun-deslop / fangcun-long-write / fangcun-short-write /
+  fangcun-deslop / fangcun-write / fangcun-short-write /
   fangcun-short-analyze / fangcun-review / fangcun-setup
 修改后请同步所有副本（CI 守卫见 scripts/check-shared-files.sh）。
 -->

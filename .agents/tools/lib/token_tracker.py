@@ -16,20 +16,20 @@ _MODEL_PRICES = {
 }
 
 
-def log_usage(rewrites_dir, entry):
+def log_usage(project_dir, entry):
     """追加一条 API 调用记录。"""
-    if not rewrites_dir:
+    if not project_dir:
         return
-    path = Path(rewrites_dir) / _LOG_FILE
+    path = Path(project_dir) / _LOG_FILE
     path.parent.mkdir(parents=True, exist_ok=True)
     line = json.dumps(entry, ensure_ascii=False)
     with open(path, "a", encoding="utf-8") as f:
         f.write(line + "\n")
 
 
-def get_usage(rewrites_dir):
+def get_usage(project_dir):
     """读取全部 API 调用记录。"""
-    path = Path(rewrites_dir) / _LOG_FILE
+    path = Path(project_dir) / _LOG_FILE
     if not path.exists():
         return []
     records = []

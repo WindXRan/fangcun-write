@@ -1,4 +1,17 @@
-﻿{
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \".agents/skills/fangcun-write/tools/writing_assistant/prompts\")",
+      "Bash(touch \".agents/skills/fangcun-write/tools/writing_assistant/__init__.py\")",
+      "Bash(head -30 fangcun)",
+      "Bash(file fangcun *)",
+      "Bash(python -m pytest tests/ -v --tb=short)",
+      "Bash(python -m pytest tests/test_state_manager.py::test_phase_lifecycle tests/test_state_manager.py::test_run_history tests/test_state_manager.py::test_resume_phase -v --tb=long)",
+      "Bash(python -c \"import os; os.remove\\('c:/Users/Administrator/Documents/trae_projects/fangcun-write/.agents/skills/fangcun-write/tools/tool_calling.py'\\)\")",
+      "Bash(python -c ' *)",
+      "Bash(python -c \"import sys; sys.path.insert\\(0, '.agents/skills/fangcun-write/tools'\\); from writer import write_chapter, main; print\\('writer.py OK'\\)\")"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {
@@ -34,8 +47,8 @@
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/validate-fangcun-commit.sh",
-            "timeout": 15,
-            "if": "Bash(git commit*)"
+            "if": "Bash(git commit*)",
+            "timeout": 15
           }
         ]
       },
@@ -74,4 +87,3 @@
     ]
   }
 }
-

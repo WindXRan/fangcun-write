@@ -217,7 +217,7 @@ function proseBlockReason(root: string, abs: string): string | null {
     }
   } catch {}
   if (!found) {
-    return `⛔ 写正文被拦截：第 ${num} 章缺少细纲（${path.relative(root, outlineDir)}/细纲_第${num}章.md）。先按 story-long-write 单章流程补建细纲再写正文。`
+    return `⛔ 写正文被拦截：第 ${num} 章缺少细纲（${path.relative(root, outlineDir)}/细纲_第${num}章.md）。先按 fangcun-write 单章流程补建细纲再写正文。`
   }
   return null
 }

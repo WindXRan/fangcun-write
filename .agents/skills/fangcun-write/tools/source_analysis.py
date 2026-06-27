@@ -1,7 +1,7 @@
 ﻿"""
 源书级分析模块：事件提取 + 故事骨架 + 改编策略。
 
-产物存放在 projects/{作者}/{源书名}/_cache/ 下，供 fangcun-novel 和 fangcun-drama 共用。
+产物存放在 projects/{作者}/{源书名}/_cache/ 下，供 fangcun-write 和 fangcun-drama 共用。
 """
 
 import json
@@ -9,6 +9,20 @@ import re
 import time
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
+
+
+# 12 字段 pipe 格式索引
+_FIELD_NAMES = ["章节", "涉及角色", "核心事件", "主线关系", "信息密度",
+                "预估集长", "情绪强度", "核心事件_短", "开头承接", "结尾状态", "衔接", "情绪弧线"]
+
+
+def _parse_event_pipe(event_text: str) -> dict:
+    """解析 LLM 返回的 12 字段 pipe 格式为结构化 dict。"""
+    parts = [p.strip() for p in event_text.split("|") if p.strip()]
+    result = {}
+    for i, name in enumerate(_FIELD_NAMES):
+        result[name] = parts[i] if i < len(parts) else ""
+    return result
 
 
 def get_cache_dir(config):
@@ -42,26 +56,8 @@ def get_chapters_dir(config):
 
 # ─── 事件提取 ───────────────────────────────────────────────────────────
 
-def load_events(config):
-    """读取事件表。优先拆文库/events.json，回退 _cache/events.json。"""
-    # 1. 优先拆文库
-    analyze_dir = config.get("analyze_dir", "")
-    if analyze_dir:
-        events_file = Path(analyze_dir) / "events.json"
-        if events_file.exists():
-            return json.loads(events_file.read_text(encoding="utf-8"))
-    # 2. 回退 _cache
-    events_file = get_cache_dir(config) / "events.json"
-    if not events_file.exists():
-        return []
-    return json.loads(events_file.read_text(encoding="utf-8"))
-
-
-def save_events(config, events):
-    """保存事件表。"""
-    events_file = get_cache_dir(config) / "events.json"
-    events_file.parent.mkdir(parents=True, exist_ok=True)
-    events_file.write_text(json.dumps(events, ensure_ascii=False, indent=2), encoding="utf-8")
+# 统一使用 source_io 的 load/save，确保拆文库和 _cache 用同一份数据
+from source_io import load_events, save_events
 
 
 def get_events_text(config, chapter_ids=None):
@@ -108,7 +104,7 @@ def extract_events(config, api_key, api_url, model, prompt_text, workers=5):
         print("[FAIL] 没有找到章节文件")
         return []
 
-    existing = {e["id"]: e for e in load_events(config) if e.get("event")}
+    existing = {int(e["id"]): e for e in load_events(config) if e.get("event")}
     chapters_to_do = [(n, f) for n, f in chapters if n not in existing]
 
     if len(chapters_to_do) < len(chapters):
@@ -129,9 +125,9 @@ def extract_events(config, api_key, api_url, model, prompt_text, workers=5):
     def extract_one(ch_num, ch_file):
         chapter_text = ch_file.read_text(encoding="utf-8")
         prev_context = ""
-        prev_ids = sorted([k for k in existing.keys() if k < ch_num], reverse=True)[:2]
+        prev_ids = sorted([int(k) for k in existing.keys() if int(k) < ch_num], reverse=True)[:2]
         if prev_ids:
-            prev_events = [existing[pid]["event"] for pid in prev_ids if existing[pid].get("event")]
+            prev_events = [existing[pid]["event"] for pid in prev_ids if pid in existing and existing[pid].get("event")]
             if prev_events:
                 prev_context = "前几章事件摘要（供参考）：\n" + "\n".join(prev_events) + "\n\n"
 
@@ -146,7 +142,21 @@ def extract_events(config, api_key, api_url, model, prompt_text, workers=5):
             result = call_api(api_key, model, user_prompt, system_prompt=prompt_text,
                               api_url=api_url, temperature=0.3, max_tokens=2048)
             result = result.strip()
-            return {"id": ch_num, "chapter_index": ch_num, "chapter": ch_file.stem, "event": result}, "ok"
+            # 解析 pipe 格式为结构化字段
+            parsed = _parse_event_pipe(result)
+            entry = {
+                "id": ch_num, "chapter_index": ch_num, "chapter": ch_file.stem,
+                "event": result,
+                "章节": parsed.get("章节", ""),
+                "涉及角色": parsed.get("涉及角色", ""),
+                "核心事件": parsed.get("核心事件", parsed.get("核心事件_短", "")),
+                "主线关系": parsed.get("主线关系", ""),
+                "开头承接": parsed.get("开头承接", ""),
+                "结尾状态": parsed.get("结尾状态", ""),
+                "衔接": parsed.get("衔接", ""),
+                "情绪弧线": parsed.get("情绪弧线", ""),
+            }
+            return entry, "ok"
         except Exception as e:
             return None, str(e)
 

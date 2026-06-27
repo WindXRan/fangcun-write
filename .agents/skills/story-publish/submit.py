@@ -152,7 +152,7 @@ def main():
             cfg = json.loads(config_path.read_text(encoding="utf-8"))
             data["book_name"] = cfg.get("book_name", data["book_name"])
             data["author"] = cfg.get("author", data["author"])
-            data["file"] = os.path.join(cfg.get("rewrites_dir", ""), "export", f"{data['book_name']}.txt")
+            data["file"] = os.path.join(cfg.get("project_dir", ""), "export", f"{data['book_name']}.txt")
 
     if data["file"]:
         # 统计字数

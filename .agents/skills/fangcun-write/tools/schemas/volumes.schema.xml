@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  volumes.xml 模板 — 卷结构定义的唯一事实源。
+  xml_io.py 序列化/反序列化均按此结构。
+-->
+<volumes>
+  <!--
+    @id    必填，卷号数字
+    @name  必填，卷名
+  -->
+  <volume id="1" name="第一卷名称">
+    <description>本卷剧情概要</description>
+    <chapters>1,2,3,4,5</chapters>
+    <status>planned</status>
+    <!-- status 枚举: planned | writing | done -->
+  </volume>
+</volumes>

@@ -27,9 +27,9 @@ def call_api(api_key, model, user_prompt, reasoning_effort="low", max_tokens=409
     return resp.json()["choices"][0]["message"]["content"]
 
 
-def find_ai_analysis_file(rewrites_dir, start, end):
+def find_ai_analysis_file(project_dir, start, end):
     """查找已存在的 AI 分析文件。"""
-    compare_dir = Path(rewrites_dir) / "compare"
+    compare_dir = Path(project_dir) / "compare"
     if not compare_dir.exists():
         return None
     
@@ -64,10 +64,10 @@ def run_compare(config, start, end):
     if not api_key:
         raise ValueError("未配置 API_KEY")
     
-    rewrites_dir = config["rewrites_dir"]
+    project_dir = config["project_dir"]
     
     # 优先查找已存在的 AI 分析文件
-    ai_file = find_ai_analysis_file(rewrites_dir, start, end)
+    ai_file = find_ai_analysis_file(project_dir, start, end)
     
     if ai_file:
         print(f"  [COMPARE] 使用已有分析文件: {ai_file.name}")
@@ -97,7 +97,7 @@ def run_compare(config, start, end):
         # 读取新书章节
         new_book_text = ""
         for ch in range(start, end + 1):
-            ch_file = Path(rewrites_dir) / "chapters" / f"ch_{ch:03d}.txt"
+            ch_file = Path(project_dir) / "chapters" / f"ch_{ch:03d}.txt"
             if ch_file.exists():
                 new_book_text += f"\n\n## 新书第{ch}章\n\n{ch_file.read_text(encoding='utf-8')}"
         
@@ -143,7 +143,7 @@ def run_compare(config, start, end):
     result = call_api(api_key, "deepseek-v4-flash", user_prompt)
     
     # 保存结果
-    compare_dir = Path(rewrites_dir) / "compare"
+    compare_dir = Path(project_dir) / "compare"
     compare_dir.mkdir(exist_ok=True)
     result_file = compare_dir / f"auto_compare_{start}-{end}.md"
     result_file.write_text(f"# 自动对比分析（第{start}-{end}章）\n\n{result}", encoding='utf-8')

@@ -1,205 +1,207 @@
-﻿"""
-统一 Prompt 加载器：Agent/API 双模式兼容。
-
-设计原则：
-- 同一套 prompt 文件，两种模式通用
-- Agent 模式：prompt 原样返回，Agent 自行 Read 文件
-- API 模式：自动解析 prompt 中的【标签】路径引用，将文件内容嵌入 prompt
-- book_data.json: 如果 rewrites_dir 中存在，自动从中提取 {变量} 用于替换
-
-文件引用规范（prompt 中使用）：
-  【标签】相对/路径/文件.md   →  输入文件（会被嵌入）
-  【输出】路径/文件.md         →  输出文件（保留路径，不嵌入）
-  【模板】路径/模板.md         →  模板文件（会被嵌入）
-"""
-
-import os
+"""Prompt 加载器。优先 builtin/*/preset.xml，fallback 旧 .md。"""
 import re
-import json
+import sys
 from pathlib import Path
+import xml.etree.ElementTree as ET
 
-import _path_setup  # noqa: F401
-from prompt_meta import parse_frontmatter, safe_format
+_FILE = Path(__file__).resolve()
+_TOOLS = _FILE.parent / "builtin"          # tools/builtin/（preset.xml 目录）
 
+# prompt_meta（旧 .md 回退用，可能不存在）
+try:
+    from prompt_meta import parse_frontmatter, safe_format
+except ImportError:
+    parse_frontmatter = safe_format = None
 
-# 需要嵌入内容的标签（输入类），不包含的标签只保留路径引用
-EMBED_TAGS = {"源文", "弧线", "弧线参考", "设定", "新书设定", "plot_guide", "模板", "旧真相", "本章正文", "下章正文", "原文", "热梗素材", "频道配置", "题材配置", "爽点配置", "style", "characters", "structure", "principles", "world", "highlights", "blacklist", "event", "name_map", "analyze", "角色关系"}
-
-# 不需要嵌入的标签（输出/指令类）
-PASS_THROUGH_TAGS = {"输出", "回传"}
-
-# 文件引用正则：【标签】路径（路径不含空格或含空格但合理）
-FILE_REF_PATTERN = re.compile(r'【(.+?)】(.+?\.(?:md|txt|json|ps1))', re.MULTILINE)
-
-# 配置目录（相对于 fangcun-novel）
-CONFIG_DIR = "config"
-
-
-def resolve_path(base_dir, ref_path):
-    """将 prompt 中的相对路径解析为绝对路径。"""
-    p = Path(ref_path)
-    if p.is_absolute():
-        return p
-    return (Path(base_dir) / ref_path).resolve()
+# VariableResolver（同 package 内，无跨 skill import）
+try:
+    from variable_resolver import VariableResolver, AT_VAR_PATTERN
+except ImportError:
+    VariableResolver = None
+    AT_VAR_PATTERN = None
 
 
-def extract_file_refs(prompt_text):
-    """从 prompt 中提取所有【标签】路径引用。
-    返回 [(标签, 路径, 起始位置), ...]
-    """
-    refs = []
-    for match in FILE_REF_PATTERN.finditer(prompt_text):
-        tag = match.group(1).strip()
-        path = match.group(2).strip()
-        refs.append((tag, path, match.start(), match.end()))
-    return refs
+# 变量标注解析：变量名(必选) / 变量名(可选)
+_VAR_ANNOT_PATTERN = re.compile(r'^([^(]+)(?:\(([^)]*)\))?$')
 
-
-def load_file_content(file_path):
-    """安全读取文件内容。"""
-    try:
-        p = Path(file_path)
-        if p.exists():
-            return p.read_text(encoding='utf-8')
-        return f"[文件不存在: {file_path}]"
-    except Exception as e:
-        return f"[读取失败: {file_path} — {e}]"
-
-
-def load_book_data(rewrites_dir):
-    """加载 book_data.json，返回 dict 或 None。"""
-    if not rewrites_dir:
-        return None
-    path = Path(rewrites_dir) / "book_data.json"
-    if not path.exists():
-        return None
-    try:
-        return json.loads(path.read_text(encoding='utf-8'))
-    except (json.JSONDecodeError, OSError) as e:
-        print(f"  [WARN] book_data.json 读取失败: {e}")
-        return None
-
-
-def load_channel_config(channel="female"):
-    """加载频道配置（女频/男频）。"""
-    base_dir = Path(__file__).parent.parent
-    config_path = base_dir / "config" / "channel" / f"{channel}.json"
-    if not config_path.exists():
-        print(f"  [WARN] 频道配置不存在: {config_path}")
-        return {}
-    try:
-        return json.loads(config_path.read_text(encoding='utf-8'))
-    except (json.JSONDecodeError, OSError) as e:
-        print(f"  [WARN] 频道配置读取失败: {e}")
-        return {}
-
-
-def make_channel_replacements(channel="female"):
-    """从频道配置构建 {变量} → 值 的替换映射。"""
-    config = load_channel_config(channel)
-    if not config:
-        return {}
-    replacements = {}
-    replacements["channel"] = config.get("channel", "未知")
-    replacements["highlights"] = "、".join(config.get("highlights", []))
-    replacements["conflict_priorities"] = "、".join(config.get("conflict_priorities", []))
-    rhythm = config.get("rhythm", {})
-    rhythm_parts = [f"{k}{v}%" for k, v in rhythm.items()]
-    replacements["rhythm"] = " / ".join(rhythm_parts)
-    return replacements
-
-
-def make_book_data_replacements(book_data):
-    """从 book_data.json 构建 {变量} → 值 的替换映射。"""
-    replacements = {}
-    if not book_data:
-        return replacements
-    char_vars = book_data.get("meta", {}).get("character_variables", {})
-    replacements.update(char_vars)
-    book_info = book_data.get("book_info", {})
-    if book_info.get("name") and "新书名" not in replacements:
-        replacements["新书名"] = book_info["name"]
-    if book_info.get("author") and "作者名" not in replacements:
-        replacements["作者名"] = book_info["author"]
-    return replacements
-
-
-def embed_files(prompt_text, base_dir, extra_replacements=None):
-    """将 prompt 中引用的文件内容嵌入。"""
-    if extra_replacements:
-        prompt_text = safe_format(prompt_text, extra_replacements)
-
-    refs = extract_file_refs(prompt_text)
-    result = prompt_text
-    for tag, path, start, end in reversed(refs):
-        if tag in EMBED_TAGS or any(tag.startswith(p) for p in EMBED_TAGS):
-            abs_path = resolve_path(base_dir, path)
-            content = load_file_content(abs_path)
-            replacement = (
-                f"【{tag}】{path}\n"
-                f"<!-- {tag}_content START -->\n"
-                f"{content}\n"
-                f"<!-- {tag}_content END -->"
-            )
-            result = result[:start] + replacement + result[end:]
+def _parse_var_annotations(raw: str) -> list[dict]:
+    """解析 <variables> 标签内容，返回 [{name, required, label}]。"""
+    result = []
+    for part in [v.strip() for v in raw.split(",") if v.strip()]:
+        m = _VAR_ANNOT_PATTERN.match(part)
+        if m:
+            name = m.group(1).strip()
+            annot = m.group(2)
+            if annot in ("必选", "required"):
+                result.append({"name": name, "required": True, "label": "必选"})
+            elif annot in ("可选", "optional"):
+                result.append({"name": name, "required": False, "label": "可选"})
+            else:
+                result.append({"name": name, "required": True, "label": ""})
     return result
 
 
-def load_prompt(prompt_path, base_dir, replacements=None, mode="agent", rewrites_dir=None):
-    """统一入口：加载 prompt，支持 agent/api 双模式 + 品类级联 + 三层 agent 架构。
+def _read_preset(name):
+    """读取 builtin/{name}.xml。"""
+    name = name.replace(".md", "")
+    d = _TOOLS / f"{name}.xml"
+    if not d.exists():
+        return None, [], []
+    try:
+        t = ET.parse(d)
+        r = t.getroot()
+        pe = r.find("prompt")
+        prompt_text = pe.text.strip() if pe is not None and pe.text else None
 
-    三层组装：
-    1. base_agent.md → system prompt（通用规则）
-    2. author_agent.md → 注入 user prompt 头部（作者人格，项目级）
-    3. task prompt → user prompt 主体（任务指令）
+        # 提取 <variables> 声明（工具预设声明的 @变量名列表，支持 必选/可选 标注）
+        ve = r.find("variables")
+        declared_vars = []
+        var_metas = []
+        if ve is not None and ve.text:
+            var_metas = _parse_var_annotations(ve.text)
+            declared_vars = [m["name"] for m in var_metas]
 
-    Args:
-        prompt_path: prompt 文件路径
-        base_dir: 项目根目录
-        replacements: {变量名: 值} 字典
-        mode: "agent" | "api"
-        rewrites_dir: 仿写项目目录，用于自动加载 book_data.json 中的变量
+        return prompt_text, declared_vars, var_metas
+    except Exception:
+        return None, [], []
 
-    Returns:
-        str: 处理后的 prompt 文本
-    """
-    prompt_file = resolve_path(base_dir, prompt_path)
-    if not prompt_file.exists():
-        raise FileNotFoundError(f"Prompt 文件不存在: {prompt_file}")
 
-    raw_text = prompt_file.read_text(encoding='utf-8')
-    meta, raw_text = parse_frontmatter(raw_text)
+def _validate_preset_variables(
+    preset_name: str,
+    prompt_text: str,
+    declared_vars: list[str],
+    var_metas: list[dict],
+    resolver,
+    replacements: dict | None,
+) -> list[str]:
+    """校验预设的 @变量 是否有注入值。返回缺失变量列表。"""
+    missing: list[str] = []
 
-    merged = {}
-    if rewrites_dir:
-        book_data = load_book_data(rewrites_dir)
-        merged = make_book_data_replacements(book_data)
-        # 添加 rewrites_dir 到替换字典
-        merged["rewrites_dir"] = rewrites_dir
+    # 1. 编译时校验：基于 preset.xml 声明的 <variables>
+    if declared_vars:
+        available = set()
+        if resolver:
+            available.update(resolver.defs.keys())
+            available.update(resolver._user_overrides.keys())
+            available.update(str(k) for k in resolver._runtime_context.keys())
+        if replacements:
+            available.update(replacements.keys())
+
+        # 按标注分组
+        required_vars = {m["name"] for m in var_metas if m.get("required")}
+        optional_vars = {m["name"] for m in var_metas if not m.get("required")}
+
+        for v in declared_vars:
+            if v not in available:
+                if v in required_vars:
+                    missing.append(v)
+                # optional vars missing is fine — they have defaults
+
+        if missing:
+            print(
+                f"  [WARN] 预设 '{preset_name}' 缺少必传变量: {missing}"
+            )
+
+    # 2. 运行时校验：检查 prompt 中是否有残留的 @[未定义:xxx]
+    if AT_VAR_PATTERN and resolver:
+        # 找出 prompt 中所有 @变量
+        used_vars = set(AT_VAR_PATTERN.findall(prompt_text))
+        unresolved = []
+        for v in used_vars:
+            val = resolver.resolve(v)
+            if val.startswith("@[未定义:") or val.startswith("@[未知"):
+                unresolved.append(v)
+        if unresolved:
+            print(
+                f"  [WARN] 预设 '{preset_name}' 渲染后仍有 "
+                f"{len(unresolved)} 个未定义变量: {unresolved}"
+            )
+            missing.extend(unresolved)
+
+    return missing
+
+
+def load_prompt(prompt_path, base_dir, replacements=None, mode=None,
+                project_dir=None, source_dir=None):
+    prompt_file = Path(prompt_path)
+    if not prompt_file.is_absolute():
+        prompt_file = Path(base_dir) / prompt_path
+
+    raw, declared_vars, var_metas = _read_preset(prompt_file.stem)
+
+    if raw is None:
+        if prompt_file.exists():
+            raw = prompt_file.read_text(encoding="utf-8")
+            meta, raw = parse_frontmatter(raw)
+        else:
+            raise FileNotFoundError(f"Prompt 不存在: {prompt_file}")
+
+    if VariableResolver and project_dir:
+        try:
+            r = VariableResolver(str(project_dir))
+            if source_dir:
+                r.set_source_dir(source_dir)
+            ctx = {}
+            if replacements:
+                for k in ("N", "start", "end", "total_chapters", "source_book", "target_words"):
+                    if k in replacements:
+                        try:
+                            ctx[k] = int(replacements[k])
+                        except (ValueError, TypeError):
+                            ctx[k] = replacements[k]
+                if ctx:
+                    r.set_context(preset=prompt_file.stem, **ctx)
+                else:
+                    r.set_context(preset=prompt_file.stem)
+                overs = {
+                    k: str(v)
+                    for k, v in replacements.items()
+                    if isinstance(v, str) and v and k not in ctx
+                }
+                if overs:
+                    r.set_user_overrides(overs)
+
+            # 变量契约校验：预设声明 vs 实际注入
+            _validate_preset_variables(
+                prompt_file.stem, raw, declared_vars, var_metas, r, replacements
+            )
+
+            result = r.render(raw)
+
+            # 渲染后运行时校验：防止漏网之鱼
+            if AT_VAR_PATTERN:
+                leftovers = AT_VAR_PATTERN.findall(result)
+                # 只报未定义的（resolve() 会保留 unknown 为 @[未定义:xxx]）
+                unresolved = [
+                    v
+                    for v in leftovers
+                    if r.resolve(v).startswith("@[未定义:")
+                ]
+                if unresolved:
+                    print(f"  [WARN] {len(unresolved)} 个 @变量未解析（保留原文）: {unresolved[:5]}")
+
+            return result
+        except Exception as ex:
+            print(f"  [WARN] VariableResolver 失败: {ex}，回退 safe_format")
+            # fallthrough to safe_format
+
     if replacements:
-        merged.update(replacements)
+        return safe_format(raw, replacements)
+    return raw
 
-    # 三层架构：加载 style-distill 输出的 cyber_author_prompt.md 注入到 user prompt 头部
-    author_agent_text = ""
-    if rewrites_dir:
-        # 优先读 style-distill 输出，fallback 到 author_agent.md
-        for name in ("cyber_author_prompt.md", "author_agent.md"):
-            aa_path = Path(rewrites_dir) / name
-            if aa_path.exists():
-                aa_raw = aa_path.read_text(encoding="utf-8")
-                _, aa_body = parse_frontmatter(aa_raw)
-                author_agent_text = aa_body.strip()
-                break
 
-    if mode == "api":
-        user_prompt = embed_files(raw_text, base_dir, merged)
-    else:
-        user_prompt = raw_text
-        if merged:
-            user_prompt = safe_format(user_prompt, merged)
-
-    # 注入 author_agent（如果有）
-    if author_agent_text:
-        user_prompt = f"<author_persona>\n{author_agent_text}\n</author_persona>\n\n{user_prompt}"
-
-    return user_prompt
+def make_book_data_replacements(book_data):
+    if not book_data:
+        return {}
+    result = {}
+    for ch in book_data.get("characters", []) or []:
+        if isinstance(ch, dict):
+            n, r = ch.get("name", ""), (ch.get("role") or "").lower()
+            if "男主" in r or "protagonist" in r:
+                result.setdefault("男主名", n)
+            elif "女主" in r:
+                result.setdefault("女主名", n)
+    t = book_data.get("title") or book_data.get("书名", "")
+    if t:
+        result["故事名称"] = result["新书名"] = t
+    return result

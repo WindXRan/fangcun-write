@@ -1,8 +1,8 @@
-# setup.ps1 - fangcun-novel 安装脚本
+# setup.ps1 - fangcun-write 安装脚本
 # 用法: .\setup.ps1
 
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  fangcun-novel 仿写引擎 安装" -ForegroundColor Cyan
+Write-Host "  fangcun-write 仿写引擎 安装" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 

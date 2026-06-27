@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entry name="角色名" gender="男/女">
+  <personality>性格描述</personality>
+  <tags>标签</tags>
+  <background>人物背景</background>
+  <bio>人物小传</bio>
+  <lines>
+    <line scene="场景">台词</line>
+  </lines>
+</entry>

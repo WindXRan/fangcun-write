@@ -1,169 +1,386 @@
-﻿---
+---
 name: fangcun-write
-version: 4.0.0
+version: 5.0.0
 description: |
-  方寸长篇写作引擎。支持章对章仿写和续写两种模式。
-  触发方式：/fangcun-write、/仿写、/写章、「仿写这本书」「帮我仿写XX」「写第N章」「继续写」
-metadata:
-  author: fangcun-team
-  pipeline: source → guides → write → compare
+  方寸长篇写作引擎。XML preset + @变量 驱动 LLM 生成。
+  触发方式：/fangcun-write、/写章、「帮我写第N章」「继续写」
 ---
 
-# fangcun-write：方寸长篇写作引擎
+# fangcun-write 使用说明
 
-## 核心方法
+## 核心原则：展示→确认→保存
 
-### 仿写模式（章对章）
+**每执行一个工具，必须：**
+1. 调用 `run_tool()` 生成内容
+2. 把结果展示给用户看（预览关键部分）
+3. 问用户"满意吗？[Y/重改/继续]"
+4. 用户点头 → 保存到文件
+5. 用户说重改 → 收集反馈重新生成
+6. 用户说继续 → 跳过当前步骤进下一步
 
-**换壳保骨**：保留源文的情绪弧线和叙事骨架，换掉人名、地名、具体情节。
+**绝对禁止：一溜烟把全部工具跑完，不给用户看中间结果。**
 
-```
-源文分析 → 事件提取 → 章纲生成 → 逐章写作 → 对比审核
-```
+## 预设表
 
-### 续写模式
+preset 定义在 `tools/builtin/*.xml`，共 19 个：
 
-**延续原作**：保留原作核心要素，自由创作新内容。
+| 预设 | 用途 | 用户说 |
+|------|------|--------|
+| `write-chapter` | 按章纲写一章正文 | 写第N章、帮我写、继续写 |
+| `plot-guide` | 生成场景级细纲（通用） | 生成章纲、细纲 |
+| `plot-guide/nvpin` | 生成场景级细纲（女频） | 女频章纲、开端/打脸/钩子 |
+| `plot-guide/nanpin` | 生成场景级细纲（男频） | 男频章纲、密集事件流 |
+| `open-book` | 开书设定 | 开书、仿写这本书 |
+| `deslop` | 去AI味 | 去AI味 |
+| `compare` | 章对章对比 | 对比 |
+| `chat-assistant` | 通用创作对话 | 默认 |
+| `character-designer` | 角色设计 | 设计角色 |
+| `character-extract` | 从源文提取角色势力 | 提取角色 |
+| `character-generate` | 生成角色卡 | 生成角色 |
+| `setting-generate` | 世界观设定 | 生成设定 |
+| `golden-opening` | 黄金开篇 | 开篇设计 |
+| `volume-outline` | 卷纲 | 卷纲 |
+| `skeleton` | 故事骨架 | 骨架 |
+| `adaptation` | 改编策略 | 改编 |
+| `premise-draw` | 脑洞抽卡 | 脑洞 |
+| `book-draw` | 顶层设计 | 顶层设计 |
+| `cover-prompt` | 封面提示词（只输出不调API） | 封面 |
+| `system-prompt` | 写作助手烘焙 | 烘焙 |
+| `postfix` | trim/expand/rewrite | 后处理 |
 
-```
-状态提取 → 大纲生成 → 逐章写作 → 质量审核
-```
+## @变量
 
----
+`@变量名` 由 `VariableResolver`（`tools/variable_resolver.py`）提取填充，定义在 `tools/variable_definitions.xml`。
 
-## 快速开始
+```python
+from variable_resolver import VariableResolver
 
-### 1. 设置 API Key
-
-```powershell
-$env:API_KEY = "sk-xxx"
-```
-
-### 2. 创建配置
-
-```json
-{
-  "book_name": "新书名",
-  "author": "作者名",
-  "source_book": "源书名",
-  "rewrites_dir": "projects/作者/源书名/rewrites/新书名",
-  "model": "deepseek-chat",
-  "execution_mode": "api"
-}
-```
-
-### 3. 开始写作
-
-```powershell
-# 完整流程
-python .agents/skills/fangcun-write/tools/pipeline.py --config configs/mybook.json --phase all
-
-# 分步执行
-python .agents/skills/fangcun-write/tools/pipeline.py --config configs/mybook.json --phase open-book
-python .agents/skills/fangcun-write/tools/pipeline.py --config configs/mybook.json --phase guides --start 1 --end 10
-python .agents/skills/fangcun-write/tools/pipeline.py --config configs/mybook.json --phase write --start 1 --end 10
-```
-
----
-
-## 流程详解
-
-### Phase 1: 开书（open-book）
-
-生成设定文件：
-- `concept.md` — 设定+角色+弧线
-- `characters.md` — 角色名映射表（XML格式）
-- `world.md` — 世界观设定
-- `book_info.md` — 书名+简介
-
-### Phase 2: 章纲生成（guides）
-
-为每章生成功能需求清单：
-- 本章释放的信息
-- 场景设计
-- 人设落地
-- 原创名场面
-- 结尾方式
-
-### Phase 3: 写章（write）
-
-按章纲逐章写作：
-- 目标字数：源文字数 ±10%
-- 角色名自动映射
-- 超字数自动 trim
-
-### Phase 4: 对比审核（compare）
-
-生成对比报告：
-- 基础统计（字数、段落、对话比例）
-- 风格指纹（句长、标点、词汇）
-- AI痕迹检测
-- 换皮评分
-
----
-
-## 角色名映射
-
-仿写会自动替换角色名。映射表在 `characters.md`（XML格式）：
-
-```xml
-<角色名>
-- 功能位：主角
-- 性格内核：...
-- 核心动机：...
-- 口头禅/标志性台词：...
-- 关系：...
-</角色名>
+r = VariableResolver(project_dir)
+r.set_context(N=1, total_chapters=192)
+r.set_user_overrides({"故事名称": "我的小说"})
+rendered = r.render("@故事名称 第@当前章节号章")
 ```
 
----
+## @引用
 
-## 字数控制
+除了预设的 `@变量`，还可以在 prompt 或对话中直接用 `@类别:名称` 引用项目内的任何文件：
 
-- 目标：源文字数 ±10%
-- 超 3000 字自动 trim
-- trim 在写章时自动执行
+| 引用 | 示例 | 查找路径 |
+|------|------|----------|
+| `@角色:田雯` | 注入角色卡 | `作品信息/设定/角色/田雯.xml` |
+| `@设定:力量体系` | 注入设定条目 | `作品信息/设定/力量体系.xml` |
+| `@章节:第7章` | 注入正文 | `正文/正文/第7章.xml` |
+| `@纲要:第7章` | 注入章纲 | `正文/章纲/第7章.xml` |
+| `@卷纲:第1卷` | 注入卷纲 | `正文/卷纲/第1卷.xml` |
+| `@标签` | 注入作品标签 | `作品信息/主题/标签.xml` |
+| `@总纲` | 注入作品总纲 | `作品信息/主题/总纲.xml` |
+| `@简介` | 注入简介 | `作品信息/主题/简介.xml` |
 
----
+`@引用` 适合在写作中灵活引用素材，不受 preset 声明的变量限制。找不到文件时会给出可用文件名提示。
 
-## 路由表
-
-| 用户说 | 调用 | 命令 |
-|--------|------|------|
-| "继续写" / "写下一章" | write | `--phase write --start {N} --end {M}` |
-| "写第N章" | write | `--phase write --start {N} --end {N}` |
-| "看看对比" / "质量怎么样" | compare | `--phase compare --start {N} --end {M}` |
-| "第X章字数不对" | postfix | `--phase postfix --start {X} --end {X}` |
-| "第X章重写" | 删章 + write | 删 `ch_{X}.txt`，再跑 write |
-| "审一下" / "检查问题" | review | `/审查` (story-review) |
-| "修一下" / "修复问题" | fix | 根据审查报告手动修，或 `/去AI味` |
-| "开书" / "仿写这本书" | open-book | `--phase open-book` |
-
----
-
-## 文件结构
+## 项目结构
 
 ```
 projects/{作者}/{源书名}/
-├── _cache/                    ← 源书级产物
-│   ├── chapters/              ← 源文拆章
-│   ├── events.json            ← 事件表
-│   ├── story_skeleton.md      ← 故事骨架
-│   └── styles/                ← 文笔指纹
-└── rewrites/{新书名}/         ← 仿写产物
-    ├── concept.md             ← 设定
-    ├── characters.md          ← 角色映射表（XML格式）
-    ├── guides/plot_{N}.md     ← 章纲
-    ├── chapters/ch_{N}.txt    ← 正文
-    └── compare/               ← 对比报告
+├── 正文/
+│   ├── 卷纲/第{N}卷.xml     ← 卷纲
+│   ├── 章纲/第{N}章.xml     ← 细纲
+│   └── 正文/第{N}章.xml     ← 正文
+├── 作品信息/
+│   ├── 设定/                ← 角色/背景/势力 XML
+│   └── 主题/                ← 简介/总纲/标签 XML
+└── 拆文库/{源书名}/       ← 对标分析产物
+    ├── events.json
+    ├── 文风.md
+    └── 骨架.md
 ```
 
----
+## 主要函数
 
-## Prompt 文件
+| 函数 | 文件 | 功能 |
+|------|------|------|
+| `run_preset(config, name, ch)` | `writer.py` | 渲染 preset + 调 API，返回文本 |
+| `write_chapter(config, ch)` | `writer.py` | 写一章（含细纲+风格数据） |
+| `save_chapter(config, ch, text)` | `writer.py` | 保存到 `正文/正文/` |
+| `save_multifile_output(result, base)` | `writer.py` | 解析 `===FILE:===` 格式写入 |
+| `export_book(project_dir)` | `writer.py` | 合并全部章节 |
+| `project_stats(project_dir)` | `writer.py` | 项目统计 |
+| `batch_run(config, type, start, end)` | `utils.py` | 并行批量写章 |
+| `load_prompt(path, base_dir)` | `prompt_loader.py` | 加载 XML/MD prompt |
 
-| 文件 | 用途 |
+## 文件参考
+
+| 文件 | 内容 |
 |------|------|
-| `plot-guide.md` | 生成功能需求清单 |
-| `write-chapter.md` | 按功能需求写章 |
-| `agent.md` | 系统提示词（全局缓存） |
+| `tools/builtin/*.xml` | 19 个写作预设（prompt + 变量声明） |
+| `tools/variable_definitions.xml` | @变量定义（类别/提取规则/默认值） |
+| `tools/schemas/*.schema.xml` | 事件/卷纲等 XML 结构模板 |
+| `tools/writer.py` | 写章/run_preset/导出核心 |
+| `.agents/tools/lib/api_client.py` | LLM 调用（DeepSeek） |
+| `.agents/tools/source_io.py` | events/skeleton 读写 |
+
+## 流程衔接
+
+| 需要 | 路由 |
+|------|------|
+| 扫榜选题 | `/fangcun-long-scan` |
+| 拆解对标 | `/fangcun-long-analyze` |
+| 审查章节 | `/fangcun-review` |
+| 去AI味 | `/fangcun-deslop` |
+| 做封面 | `/fangcun-cover` |
+| 部署环境 | `/fangcun-setup` |
+
+## 自我优化规则
+
+每次调用 LLM 时，`call_llm()` 自动保存 prompt 副本到 `_debug/{preset_name}/ch{N}_{preset}.md`。AI 必须勤查这些文件来自检：
+
+1. **每轮写作前**：看最近 3 次 `_debug/` 文件，检查实际发给 LLM 的 prompt 质量
+2. **发现问题**：@变量未填充、prompt 指令模糊、上下文遗漏 → 去修对应的 `tools/builtin/*.xml` 里的 prompt 文本
+3. **效果验证**：修完跑一次 `run_preset(..., debug=True)` 只出 prompt 不调 API，确认修好了再正式跑
+4. **定期清理**：`_debug/` 文件超过 20 个时清理最旧的，保持可读
+
+### @变量缺失处理
+
+当渲染结果出现 `@[未找到:X]` 或 `@[未定义:X]` 时，说明项目缺少对应数据。AI 应主动调用 preset 创建，而非忽略：
+
+| 缺失变量 | 缺少什么 | 调用 preset |
+|----------|---------|-------------|
+| `@角色卡` / `@作品信息/设定/角色` | 角色设定文件 | `character-designer` |
+| `@核心设定` / `@作品信息/主题/总纲` | 作品总纲/设定 | `open-book` 或 `book-draw` |
+| `@章纲` / `@上一章章纲` | 本章或上一章章纲 | `plot-guide` |
+| `@本章正文` | 本章正文 | `write-chapter` |
+| `@事件表` / `@源文角色列表` | 拆文产物 | `fangcun-long-analyze` |
+
+## 执行决策树
+
+收到用户指令后，按以下逻辑自动链式调用：
+
+### 写章 / 续写
+
+```
+用户说「继续写」「写下一章」「写第N章」
+├─ 第一步：写前定向
+│  ├─ 问用户本章侧重（3 选 1 或自由描述）：
+│  │  ├─ 推进主线 / 日常过渡 / 关键冲突
+│  │  └─ 或用户自己说方向
+│  ├─ 如果用户说"随便""按大纲来"→ 根据章纲判断本章功能
+│  └─ 确认后标记本章定位
+│                                     ↓
+├─ 第二步：检查前置条件
+│  ├─ 检查 @章纲 → 不存在 → 先生成章纲（run_preset("plot-guide")）
+│  │  → 展示章纲概要给用户确认，说"不满意我改"，用户点头再继续
+│  ├─ 检查 @本章角色 → 缺角色卡 → 问用户哪些角色出场
+│  ├─ 检查 @前文 → N>1 且前文缺失 → 警告用户
+│                                     ↓
+├─ 第三步：产正文
+│  ├─ 用户确认章纲 → run_preset("write-chapter", ch=N)
+│  ├─ 输出后展示前 200 字 + 字数，问用户感觉
+│  │  ├─ "可以" → 保存
+│  │  ├─ "改一下风格/节奏/某个情节" → 调参数重跑
+│  │  └─ "重写" → 说明要改的方向，重跑
+│  └─ 保存后提示下一章 ready
+│                                     ↓
+└─ 重要原则：每章产出前至少有一次用户确认，不直接写
+```
+
+### 开书 / 原创开书
+
+```
+用户说「开书」「帮我开书」
+├─ 第一步：脑洞抽卡
+│  ├─ run_tool("premise-draw",{}, project)
+│  │  → 展示 6 张脑洞卡给用户
+│  │  → 每张卡含：书名/题材/一句话钩子/核心冲突/同类参考
+│  ├─ 问用户：看上哪个方向？或者想融合哪几个元素？
+│  │  ├─ 用户选中一张卡 → 提取该卡的题材/情节/情绪/时空
+│  │  ├─ 用户说"融合" → 帮你重新组合
+│  │  └─ 用户都不满意 → 重新抽或自己描述方向
+│                                     ↓
+├─ 第二步：出总纲
+│  ├─ run_tool("outline-generate", {user_input: 选定方向}, project)
+│  ├─ 展示总纲核心内容（300-500字预览）
+│  ├─ 问：总纲方向对吗？[Y/重改]
+│  │  ├─ Y → 保存，继续
+│  │  └─ 重改 → 收集意见重新生成
+│                                     ↓
+├─ 第三步：并发（简介 + 标签）
+│  ├─ 同时发起两个请求：
+│  │  ├─ run_tool("synopsis-generate", {}, project)  → 简介
+│  │  └─ run_tool("tags-generate", {}, project)       → 标签
+│  ├─ 都完成后一起展示给用户
+│  ├─ 问：简介和标签满意吗？[Y/改简介/改标签]
+│                                     ↓
+├─ 第四步：并发（角色 + 卷纲）
+│  ├─ 同时发起两个请求：
+│  │  ├─ run_tool("character-generate", {user_input}, project)
+│  │  └─ run_tool("volume-outline", {}, project)
+│  ├─ 都完成后一起展示
+│  ├─ 问：角色和卷纲满意吗？[Y/改角色/改卷纲]
+│                                     ↓
+└─ 重要原则：
+   ├─ 每步都展示关键内容给用户看
+   ├─ 用户不说"可以"不保存，不进入下一步
+   ├─ 用户说"改" → 收集意见重跑对应步骤
+   └─ 用户说"随便""你定" → AI根据上下文自己决策
+```
+
+### 仿写（有源文拆解数据）
+
+```
+用户说「仿写这本书」「仿写」
+├─ 有源文拆解数据：
+│  ├─ 先向用户说明源文的核心卖点和可换皮的方向
+│  ├─ 产出 2-3 个换皮方案（不同题材迁移/场景变换）
+│  │  → 每个方案说明：保留了源文什么、换了什么、目标读者变化
+│  ├─ 用户选定换皮方向
+│  ├─ run_preset("book-draw") 生成顶层设计
+│  │  → 用户确认
+│  ├─ run_preset("open-book") 生成完整设定
+│  │  → 用户确认
+│  ├─ run_preset("character-designer") 逐个生成角色
+│  └─ run_preset("volume-outline") 生成卷纲
+│
+└─ 无源文数据 → 先 /fangcun-long-analyze 拆文
+```
+
+### 章纲生成
+
+章纲预设已支持子目录结构，可按风格选择不同版本：
+
+| 调用方式 | 预设文件 | 适用 | 提示词关键词 |
+|---------|---------|------|-------------|
+| `plot-guide`（默认） | `builtin/plot-guide.xml` | 通用，起因/发展/转折/高潮/结尾 | 通用 |
+| `plot-guide/nvpin` | `builtin/plot-guide/nvpin.xml` | **女频**，开端/铺垫/转折/打脸/收获/钩子 | 女频、言情、情绪流、打脸、甜虐 |
+| `plot-guide/nanpin` | `builtin/plot-guide/nanpin.xml` | **男频**，密集事件流+4段式 | 男频、升级、打脸、信息差、冲突密度 |
+
+后续可继续扩展：`plot-guide/xuanyi`（悬疑）、`plot-guide/qinggan`（纯感情流）等。
+
+```
+用户说「生成章纲」「细纲」
+├─ 第一步：明确风格
+│  ├─ 问用户：通用章纲还是女频章纲？
+│  ├─ 用户选女频 → 使用 plot-guide/nvpin
+│  ├─ 用户选通用 → 使用 plot-guide（默认）
+│  └─ 也可直接说"女频章纲"自动路由
+│                                     ↓
+├─ 第二步：明确本章定位
+│  ├─ 问用户：这章想推进什么？（主线/支线/日常/高潮）
+│  ├─ 如果用户不确定，根据总纲和前一章的结尾推断 2-3 种走向让用户选
+│  └─ 用户选后再开始生成
+│                                     ↓
+├─ 第三步：检查前置
+│  ├─ 检查 @上一章结尾 → 空且 N>1 → 先确认剧情位置
+│  ├─ 检查 @作品信息/主题/总纲 → 不存在 → run_preset("book-draw")
+│                                     ↓
+├─ 第三步：产章纲
+│  ├─ run_preset("plot-guide", ch=N)
+│  ├─ 输出后展示给用户看，问"重点、节奏、钩子满意吗？"
+│  ├─ 用户说"改" → 说明方向重新生成
+│  └─ 用户说"可以" → 保存，提示可以开始写正文
+```
+
+### 角色设计
+
+```
+用户说「设计角色」「做个人设」「生成角色」
+├─ 第一步：出方向
+│  ├─ 问用户：什么角色？（主角/反派/配角/CP）
+│  ├─ 如果用户"没想好""你来定"：
+│  │  ├─ 根据已有总纲和设定，推断最急需的 2-3 个角色位
+│  │  ├─ 每个角色位给出 2-3 种人设方向（不同性格/背景/功能）
+│  │  └─ 让用户选
+│  │
+│  └─ 用户选定角色位和人设方向后，确认 2-3 个核心特征
+│                                     ↓
+├─ 第二步：生成角色卡
+│  ├─ run_preset("character-designer") 或 run_preset("character-generate")
+│  ├─ 输出后展示角色卡概要（姓名+功能位+性格+核心动机）
+│  ├─ 用户说"改" → 指出要改的维度，重新生成
+│  └─ 用户说"可以" → 保存
+│                                     ↓
+└─ 批量场景：如果用户在开书流程中，按第三步逐张确认即可
+```
+
+### 设定生成（世界观/背景/势力/地点/物品）
+
+```
+用户说「生成设定」「设计世界观」「做背景」
+├─ 第一步：定位
+│  ├─ 问用户：想做什么设定？（世界观规则/势力阵营/地点地图/物品体系）
+│  ├─ 如果用户没想好：
+│  │  ├─ 看看现有设定缺什么，列举 2-3 个可补充的方向
+│  │  ├─ 每个方向给一句话说明+具体产出什么
+│  │  └─ 让用户选
+│  │
+│  └─ 用户选定后，再确认 2-3 个关键要求（风格/强度/边界）
+│                                     ↓
+├─ 第二步：产出
+│  ├─ run_preset("setting-generate") 生成设定
+│  ├─ 输出后展示概要
+│  ├─ 用户说"改" → 说明方向重新生成
+│  └─ 用户说"可以" → 保存
+│                                     ↓
+└─ 重要：设定要分批出，不要一次全量生成，每批确认后再下一批
+```
+
+### 卷纲生成
+
+```
+用户说「生成卷纲」「卷纲」「分卷」
+├─ 第一步：出节奏方案
+│  ├─ 问用户：想要什么节奏？（信息差爽文/情绪流/慢热长线/快节奏打脸）
+│  ├─ 如果用户不确定：
+│  │  ├─ 根据总纲和已写章节，给出 2-3 种分卷方案
+│  │  │  例：3 卷结构（起→承→转） / 5 卷结构（每卷一个核心冲突）
+│  │  ├─ 每个方案说明：每卷功能、情绪曲线、大致章数
+│  │  └─ 让用户选
+│  │
+│  └─ 用户选定后，确认总章数和各卷篇幅比例
+│                                     ↓
+├─ 第二步：产卷纲
+│  ├─ run_preset("volume-outline") 生成卷纲
+│  ├─ 输出后展示纲要，问"每卷的目标和关键事件感觉对吗？"
+│  ├─ 用户说"改某卷" → 单独修改对应卷
+│  └─ 用户说"可以" → 保存
+```
+
+### 去AI味
+
+```
+用户说「去AI味」
+├─ 指定了章节 → run_preset(config, "deslop", ch=N)
+└─ 未指定 → 列出最近 3 章让用户选
+```
+
+### 导入小说
+
+```
+用户说「导入」「把这本书导进来」「导入仿写」
+├─ 第一步：准备原文
+│  ├─ 下载后原文在 projects/{作者}/{书名}/_cache/chapters/
+│  ├─ 拷贝到 projects/{作者}/{书名}/正文/正文/第{N}章.txt
+│  └─ 确认：章数完整、第1章标题正确
+│                                     ↓
+├─ 第二步：提取事件表
+│  ├─ extract_events() 并行提取全部章节事件
+│  ├─ 输出到 projects/{作者}/{书名}/events.json
+│  └─ 确认 events.json 条目数 == 总章数
+│                                     ↓
+├─ 第三步：生成总纲/简介/标签
+│  ├─ run_preset("book-import") → 作品信息/主题/
+│  └─ 展示给用户确认
+│                                     ↓
+├─ 第四步：提取角色/设定
+│  ├─ run_preset("character-extract") → 作品信息/设定/角色/
+│  └─ 展示角色列表给用户确认
+│                                     ↓
+├─ 第五步：文风分析
+│  ├─ run_preset("style-analysis") → 文风分析.md
+│  └─ 展示分析概要
+│                                     ↓
+└─ 导入完成 → 项目已就绪，可开始仿写或续写
+```
+
+## 语言
+
+跟随用户语言回复。中文遵循《中文文案排版指北》。
