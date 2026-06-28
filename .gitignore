@@ -18,6 +18,13 @@ docs/plans/
 *.exe
 !.agents/skills/fanqie-hub/downloader/TomatoNovelDownloader-Win64-v2.4.11.exe
 
+# === fanqie-hub 已下载的小说 ===
+.agents/skills/fanqie-hub/*.txt
+.agents/skills/fanqie-hub/*/
+!.agents/skills/fanqie-hub/downloader/
+!.agents/skills/fanqie-hub/scanner/
+!.agents/skills/fanqie-hub/web/
+
 # === configs 目录 ===
 configs/*.json
 !configs/example.json

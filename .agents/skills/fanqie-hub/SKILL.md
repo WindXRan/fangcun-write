@@ -14,9 +14,11 @@ description: |
 ```bash
 cd .agents/skills/fanqie-hub
 
-# 下载小说
+# 下载小说（搜索 → 选书 → 进度条 → 自动合并单文件 txt）
 python run.py download "书名"
-python run.py download-author "作者名"
+
+# 搜索
+python run.py search "书名"
 
 # 采集排行榜
 python run.py scan
@@ -27,6 +29,22 @@ python run.py web
 
 # 查看状态
 python run.py status
+```
+
+## 下载流程
+
+```
+python run.py download "国术"
+  ↓
+搜索「国术」找到 19 本，选一个下载：
+  1. [7600765146167790617] 国术：每日结算，从黄包车夫开始 — 闻柳却顾
+  2. [7450053831938804798] 国术 — 何顿
+  ...
+  ↓  输入序号或 book_id
+提交下载《国术：每日结算，从黄包车夫开始》...
+  ████████░░░░░░░░░░░░ 40%  117/293章
+  ↓  下载完自动合并
+✓ 293章 → 国术：每日结算，从黄包车夫开始.txt (96 KB)
 ```
 
 ## 功能模块
@@ -82,7 +100,9 @@ fanqie-hub/
 ├── downloader/               # 下载器
 │   ├── TomatoNovelDownloader-Win64-v2.4.11.exe
 │   ├── config.yml
-│   └── scripts/
+│   ├── fix_format.py          # epub→txt 转换（v2.4.12 一般不需要）
+│   ├── logs/
+│   └── projects/
 ├── scanner/                  # 排行榜爬虫
 │   ├── scrape_fanqie_ranks.py
 │   ├── run.py

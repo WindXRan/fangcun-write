@@ -14,34 +14,36 @@
 """
 import os, sys, re, zipfile, html
 from pathlib import Path
-from ebooklib import epub
+
+try:
+    from ebooklib import epub
+    HAS_EBOOKLIB = True
+except ImportError:
+    HAS_EBOOKLIB = False
+    print("[信息] ebooklib 未安装，将使用 zipfile 模式提取 epub")
 
 DOWNLOADER_DIR = Path(__file__).parent
 
 
 def find_epub_files():
-    """查找下载器目录下所有 epub 文件（排除临时/cache）"""
-    epubs = []
-    for f in DOWNLOADER_DIR.glob("*.epub"):
-        epubs.append(f)
-    for f in DOWNLOADER_DIR.glob("**/*.epub"):
-        if f not in epubs:
-            epubs.append(f)
-    return epubs
+    """查找下载器目录下所有 epub 文件"""
+    return sorted(DOWNLOADER_DIR.glob("**/*.epub"))
 
 
 def extract_text_from_epub(epub_path):
     """
-    从 epub 提取纯文本正文。
-    epub 本质是 zip，内含 xhtml 文件。
-    """
+    从 epub 提取纯文本正文（需要 ebooklib）。
+    回退到 extract_text_from_epub_zip（基于 zipfile）。"""
+    if not HAS_EBOOKLIB:
+        print("  ebooklib 未安装，改用 zipfile 模式...")
+        return extract_text_from_epub_zip(epub_path)
+
     book = epub.read_epub(str(epub_path))
     chapters = []
 
     for item in book.get_items():
         if item.get_type() == 9:  # ITEM_DOCUMENT
             content = item.get_content().decode('utf-8', errors='replace')
-            # 提取 body 中文本
             text = html_text(content)
             text = text.strip()
             if text:
@@ -105,7 +107,7 @@ def fix_cache_chapters(author, book_name):
         filename = fpath.name
         # 修复模式: 第N章 第N章<标题>第N章<标题>.txt
         # → 第N章 <标题>.txt
-        m = re.match(r'(第\d+章)\s+\1(.+)\1(.+)\.txt', filename)
+        m = re.match(r'(第\d+章)\s*\1(.+?)\1(.+?)\.txt', filename)
         if m:
             new_name = f"{m.group(1)} {m.group(2)}.txt"
             new_path = fpath.parent / new_name
@@ -191,7 +193,8 @@ def main():
 
         if chapters:
             print(f"  提取到 {len(chapters)} 章")
-            output_name = epub_path.stem + ".txt"
+            safe_name = re.sub(r'[<>:"/\\|?*]', '_', epub_path.stem)
+            output_name = safe_name + ".txt"
             output_path = epub_path.parent / output_name
             merge_to_txt(chapters, output_path)
 

@@ -3,6 +3,8 @@ import os
 import json
 import re
 import sys
+import urllib.request
+import urllib.error
 from pathlib import Path
 from flask import Flask, render_template, jsonify, request, send_from_directory, redirect
 
@@ -402,9 +404,7 @@ DOWNLOADER_URL = "http://127.0.0.1:18423"
 
 @app.route('/api/download', methods=['POST'])
 def api_download():
-    """调用番茄下载器下载小说，下载完成后自动归档"""
-    import requests as req
-
+    """调用番茄下载器下载小说"""
     data = request.json
     book_id = data.get('book_id', '')
     title = data.get('title', '')
@@ -415,10 +415,14 @@ def api_download():
 
     # 1. 创建下载任务
     try:
-        r = req.post(f"{DOWNLOADER_URL}/api/jobs",
-                     json={"book_id": book_id},
-                     timeout=10)
-        job = r.json()
+        body = json.dumps({"book_id": book_id}).encode()
+        req = urllib.request.Request(
+            f"{DOWNLOADER_URL}/api/jobs",
+            data=body,
+            headers={"Content-Type": "application/json"}
+        )
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            job = json.loads(resp.read().decode())
     except Exception as e:
         return jsonify({"error": f"downloader error: {e}"}), 502
 
@@ -434,11 +438,9 @@ def api_download():
 @app.route('/api/download/status')
 def api_download_status():
     """查询下载器任务状态"""
-    import requests as req
-
     try:
-        r = req.get(f"{DOWNLOADER_URL}/api/jobs", timeout=10)
-        return jsonify(r.json())
+        with urllib.request.urlopen(f"{DOWNLOADER_URL}/api/jobs", timeout=10) as resp:
+            return jsonify(json.loads(resp.read().decode()))
     except Exception as e:
         return jsonify({"error": str(e)}), 502
 
@@ -446,29 +448,26 @@ def api_download_status():
 @app.route('/api/download/archive', methods=['POST'])
 def api_download_archive():
     """将下载完成的小说归档到 projects/（以 book_id 为准）"""
-    import requests as req
-
     data = request.json
     book_id = data.get('book_id', '')
     title = data.get('title', '')
     author = data.get('author', '未知作者')
 
     downloads_dir = NOVEL_DOWNLOAD_DIR / "downloads"
-    # 以 book_id 子目录为准（下载器按 book_id 创建子目录）
     book_id_dir = downloads_dir / book_id
     projects_dir = PROJECTS_DIR / author / title / "_cache"
     projects_dir.mkdir(parents=True, exist_ok=True)
 
     moved = []
     # 优先从 book_id 子目录找 txt
-    if book_id_dir.is_dir():
+    if downloads_dir.exists() and book_id_dir.is_dir():
         for f in book_id_dir.glob("*.txt"):
             target = projects_dir / f.name
             if target.exists():
-                target.unlink()  # 覆盖已存在的文件
+                target.unlink()
             f.rename(target)
             moved.append(str(target))
-    else:
+    elif downloads_dir.exists():
         # fallback: 递归查找
         for f in downloads_dir.rglob("*.txt"):
             if f.parent == downloads_dir or f.parent.name == book_id:
@@ -479,20 +478,21 @@ def api_download_archive():
                 moved.append(str(target))
 
     # 清理空子目录
-    for d in downloads_dir.iterdir():
-        if d.is_dir():
-            try:
-                d.rmdir()
-            except:
-                pass
+    if downloads_dir.exists():
+        for d in downloads_dir.iterdir():
+            if d.is_dir():
+                try:
+                    d.rmdir()
+                except:
+                    pass
 
     # 下载封面
     cover_url = data.get('cover', '')
     if cover_url:
         try:
             cover_path = projects_dir / "cover.jpg"
-            r = req.get(cover_url, timeout=15)
-            cover_path.write_bytes(r.content)
+            with urllib.request.urlopen(cover_url, timeout=15) as resp:
+                cover_path.write_bytes(resp.read())
         except:
             pass
 
