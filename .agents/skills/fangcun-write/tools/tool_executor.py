@@ -144,6 +144,7 @@ _PRESET_ALIAS = {
     "脑洞": "premise-draw",
     "选卡": "apply-pick", "应用": "apply-pick",
     "导入拆解": "pipeline-import",
+    "运 pipeline": "pipeline-run",
 }
 
 # 单文件工具：无标记时直接保存到预设路径
@@ -252,6 +253,12 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _run_single_file_preset("style-analysis", None, args, project_dir)
     elif preset_name == "adaptation":
         return _run_single_file_preset("adaptation", None, args, project_dir)
+    elif preset_name == "pipeline-run":
+        from pipeline_runner import run_pipeline as _run_pipeline
+        p_name = args.get("pipeline", args.get("name", ""))
+        if not p_name:
+            return "缺少 pipeline 名称"
+        return _run_pipeline(p_name, args, project_dir)
     else:
         return f"未知工具: {preset_name}"
 

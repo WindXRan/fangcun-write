@@ -1,0 +1,24 @@
+<pipeline name="拆书逆推">
+  <desc>导入章节 → 逆推套路（前3章） → 逆推总纲 → 逆推卷纲</desc>
+
+  <step tool="book-import-raw" id="import">
+    <param name="source" from="input.source" />
+    <param name="book_name" from="input.book_name" />
+    <param name="author" from="input.author" />
+    <param name="channel" value="男频" />
+  </step>
+
+  <step tool="pattern-analysis" id="pattern1">
+    <param name="ch" value="1" />
+    <param name="源文对照" from="input.source" />
+  </step>
+
+  <step tool="book-import" id="outline">
+    <param name="book_name" from="input.book_name" />
+    <param name="total_chapters" from="input.total_chapters" />
+  </step>
+
+  <step tool="volume-outline" id="volumes">
+    <param name="total_chapters" from="input.total_chapters" />
+  </step>
+</pipeline>
