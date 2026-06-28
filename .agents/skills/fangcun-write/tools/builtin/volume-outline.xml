@@ -8,7 +8,7 @@
   <author>方寸官方</author>
   <author_type>官方</author_type>
   <tags>大纲,男频,女频</tags>
-  <output tool="volume-outline">卷纲</output>
+  <output>卷纲</output>
 
   <prompt><![CDATA[
 # 角色

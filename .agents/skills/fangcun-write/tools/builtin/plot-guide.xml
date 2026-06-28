@@ -8,7 +8,7 @@
   <author_type>官方</author_type>
   <tags>大纲,男频,女频</tags>
   <category>大纲</category>
-  <output tool="plot-guide">章纲</output>
+  <output>章纲</output>
   <variables>关联章节(可选),参考剧情(可选),前文章纲(可选),关联角色(可选),背景设定(可选),势力设定(可选)</variables>
   <prompt><![CDATA[
 # 角色

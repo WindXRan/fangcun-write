@@ -27,7 +27,6 @@ for _p in [str(_TOOLS_DIR), str(_SHARED_TOOLS)]:
         sys.path.insert(0, str(_p))
 
 from variable_resolver import VariableResolver
-from source_analysis import extract_events as _extract_events
 
 _BUILTIN_DIR = _TOOLS_DIR / "builtin"
 
@@ -182,10 +181,6 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
     elif preset_name == "character-generate":
         return _run_single_file_preset("character-generate", None, args, project_dir)
     elif preset_name == "character-extract":
-        # 优先用 Python 并行提取（快），source_dir 为空时降级到 XML prompt
-        source_dir = args.get("source_dir", "")
-        if source_dir:
-            return _run_extract_events(args, project_dir)
         return _run_single_file_preset("character-extract", None, args, project_dir)
     elif preset_name == "premise-draw":
         return _run_single_file_preset("premise-draw", None, args, project_dir)
@@ -336,26 +331,6 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
             _inject_tool_attribute(str(fp), preset_name)
     return f"{preset_name} 完成: 保存 {len(saved)} 个文件"
 
-
-def _run_extract_events(args: dict, project_dir: str) -> str:
-    """提取事件表（仿写链）。"""
-    source_dir = args.get("source_dir", project_dir)
-    config = {
-        "project_dir": project_dir,
-        "source_dir": source_dir,
-        "model": args.get("model", "deepseek-chat"),
-    }
-    api_key = os.environ.get("API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN", "")
-    _base = os.environ.get("API_BASE_URL", "https://api.deepseek.com/v1").rstrip("/")
-    if not _base.endswith("/v1"): _base += "/v1"
-    api_url = _base + "/chat/completions"
-    model = config["model"]
-    prompt_text = "提取事件表"
-    workers = args.get("workers", 5)
-    events = _extract_events(config, api_key, api_url, model, prompt_text, workers)
-    if not events:
-        return "事件提取失败"
-    return f"事件提取完成: {len(events)} 章"
 
 
 # ─── 抽卡模式：多轮生成 → 用户选一 ─────────────────
