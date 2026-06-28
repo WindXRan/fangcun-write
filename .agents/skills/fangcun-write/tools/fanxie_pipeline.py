@@ -59,7 +59,34 @@ def fanxie_pipeline(source_dir: str, target_dir: str, chapters: list[int], chann
     print("阶段4/6：创建仿写项目")
     print("=" * 50)
     init_project(target_dir)
+    # 复制源文的套路分析到仿写项目，open-book 需要它做题材锁定
+    from shutil import copy2
+    src_pattern = os.path.join(source_dir, "作品信息", "套路分析.xml")
+    tgt_pattern = os.path.join(target_dir, "作品信息", "套路分析.xml")
+    genre_强制 = ""
+    if os.path.exists(src_pattern):
+        os.makedirs(os.path.dirname(tgt_pattern), exist_ok=True)
+        copy2(src_pattern, tgt_pattern)
+        print(f"  ➡️ 复制套路分析")
+        # 从套路分析中提取题材关键词，作为强制约束注入 open-book
+        import xml.etree.ElementTree as ET
+        try:
+            tree = ET.parse(src_pattern)
+            root = tree.getroot()
+            keywords = root.find("genre_keywords")
+            if keywords is not None:
+                parts = []
+                for cat in keywords.findall("category"):
+                    name = cat.get("name", "")
+                    src = cat.findtext("source", "")
+                    if src:
+                        parts.append(f"{name}: {src}")
+                if parts:
+                    genre_强制 = "题材关键词（必须使用这些词根，不能换成其他题材的词汇）：\n" + "\n".join(parts)
+        except Exception:
+            pass
     r = run_tool("open-book", {
+        "user_input": genre_强制,
         "story_name": f"仿写：{os.path.basename(source_dir.rstrip('/\\\\'))}",
         "channel": channel,
     }, target_dir)
