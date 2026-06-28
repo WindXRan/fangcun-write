@@ -135,24 +135,24 @@
 
 <output>
   <file path="作品信息/设定/角色/角色名.xml">
-<entry name="林哲" role="protagonist" gender="男">
+<character name="林哲" role="protagonist" gender="男">
   ...
-</entry>
+</character>
   </file>
   <file path="作品信息/设定/势力/势力名.xml">
-<entry name="许氏集团">
+<faction name="许氏集团">
   ...
-</entry>
+</faction>
   </file>
   <file path="作品信息/设定/地点/地点名.xml">
-<entry name="十八里店">
+<location name="十八里店">
   ...
-</entry>
+</location>
   </file>
   <file path="作品信息/设定/物品/物品名.xml">
-<entry name="黑金卡">
+<item name="黑金卡">
   ...
-</entry>
+</item>
   </file>
 </output>
 

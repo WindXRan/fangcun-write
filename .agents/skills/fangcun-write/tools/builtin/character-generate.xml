@@ -30,15 +30,21 @@
 总纲： @作品信息/主题/总纲
 
 ==== 作品信息/设定/角色/角色名.xml ====
-<entry name="角色名" gender="男/女">
+<character name="角色名" role="protagonist" gender="男/女">
   <personality>性格描述</personality>
   <tags>标签</tags>
   <background>人物背景</background>
   <bio>人物小传</bio>
+  <motivation>核心欲望 | 核心恐惧（可选）</motivation>
+  <arc>
+    <start>开局状态</start>
+    <turning_point>转折事件</turning_point>
+    <end>结局状态</end>
+  </arc>
   <lines>
     <line scene="场景">台词</line>
   </lines>
-</entry>
+</character>
   
 # 补充要求
 @补充要求

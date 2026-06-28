@@ -1,12 +1,13 @@
 <tool>
-  <name>开书设定</name>
-  <icon>📖</icon>
+  <name>仿写开书(全套)</name>
+  <icon>🚀</icon>
   <phase>open-book</phase>
   <temperature>0.1</temperature>
   <author>方寸官方</author>
   <author_type>官方</author_type>
-  <tags>拆书,人设</tags>
-  <category>人设</category>
+  <tags>开书,仿写</tags>
+  <category>开书</category>
+  <description>仿写开书全套产出：源文映射→总纲+简介+标签+角色+设定+卷纲。换名不换骨。</description>
   <output>总纲,卷纲,角色,简介</output>
   <source>prompts/open-book.md v4</source>
   <prompt><![CDATA[
@@ -69,7 +70,7 @@
 @模板_标签
 
 每个条目一个文件，路径 = 标签类型/条目名.xml。
-角色条目用 role 属性标注功能位（protagonist/antagonist/ally）。
+角色条目用 `<character name="..." role="protagonist/antagonist/ally">` 根元素。
 
 ==== 作品信息/设定/地点/地点名.xml ====
 @模板_角色

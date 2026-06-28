@@ -44,7 +44,7 @@ def call_llm(messages: list, temperature: float = 0.7):
     if not _base.endswith("/v1"):
         _base += "/v1"
     api_url = _base + "/chat/completions"
-    model = os.environ.get("FANGCUN_MODEL", "deepseek-chat")
+    model = os.environ.get("FANGCUN_MODEL", "deepseek-v4-pro")
     body = json.dumps({"model": model, "messages": messages, "temperature": temperature}).encode()
     req = Request(api_url, data=body, headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"})
     try:
@@ -118,12 +118,13 @@ def save_output_files(text: str, project_dir: str) -> list[str]:
 # ─── 工具执行 ─────────────────────────────────────────────
 
 _PRESET_ALIAS = {
-    "开书": "book-draw", "顶层设计": "book-draw",
+    "开书": "book-draw", "顶层设计": "book-draw", "原创开书": "book-draw",
+    "仿写开书": "open-book", "开书全套": "open-book",
     "简介": "synopsis-generate", "总纲": "outline-generate", "标签": "tags-generate",
     "角色生成": "character-generate", "设计角色": "character-generate", "人设": "character-generate",
     "提取角色": "character-extract",
     "卷纲": "volume-outline",
-    "章纲": "plot-guide", "细纲": "plot-guide", "生成章纲": "plot-guide",
+    "章纲": "plot-guide-nanpin", "细纲": "plot-guide-nanpin", "生成章纲": "plot-guide-nanpin",
     "男频章纲": "plot-guide-nanpin", "女频章纲": "plot-guide-nvpin",
     "写章": "write-chapter", "续写": "write-chapter",
     "去AI": "deslop", "润色": "deslop",
@@ -170,8 +171,7 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _run_single_file_preset("book-draw", None, args, project_dir)
     elif preset_name == "write-chapter":
         return _run_single_file_preset("write-chapter", None, args, project_dir)
-    elif preset_name == "plot-guide":
-        return _run_single_file_preset("plot-guide", None, args, project_dir)
+
     elif preset_name == "plot-guide-nanpin":
         return _run_single_file_preset("plot-guide-nanpin", None, args, project_dir)
     elif preset_name == "plot-guide-nvpin":
@@ -284,7 +284,11 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
             "skeleton": "故事骨架.md",
             "adaptation": "改编策略.md",
             "plot-guide": f"正文/章纲/第{args.get('chapter_number', 1)}章.xml",
+            "plot-guide-nanpin": f"正文/章纲/第{args.get('chapter_number', 1)}章.xml",
+            "plot-guide-nvpin": f"正文/章纲/第{args.get('chapter_number', 1)}章.xml",
             "write-chapter": f"正文/正文/第{args.get('chapter_number', 1)}章.xml",
+            "volume-outline": "正文/卷纲/卷纲.xml",
+            "character-generate": "作品信息/设定/角色.xml",
         }
         fallback = _FALLBACK_PATHS.get(preset_name, save_path)
         if fallback:
@@ -355,7 +359,6 @@ def _run_multi_round(preset_name: str, save_path: str | None,
         "plot-guide-nanpin": f"正文/章纲/第{ch}章.xml",
         "plot-guide-nvpin": f"正文/章纲/第{ch}章.xml",
         "write-chapter": f"正文/正文/第{ch}章.xml",
-        "synopsis-generate": "作品信息/主题/简介.xml",
         "volume-outline": "正文/卷纲/卷纲.xml",
         "character-generate": "作品信息/设定/角色.xml",
         "premise-draw": None,

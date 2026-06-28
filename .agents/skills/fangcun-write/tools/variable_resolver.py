@@ -690,25 +690,72 @@ VariableResolver.COMPUTED_HANDLERS["total_chapters"] = (
 )
 
 # ── 角色名：读第一个角色文件 ——─────────────────────────
-def _first_char_name(self, fallback: str) -> str:
+def _protagonist_name(self, fallback: str) -> str:
+    """找主角：优先 role=protagonist，降级到第一个角色卡。"""
     d = self.novel_dir / "作品信息" / "设定" / "角色"
     if not d.exists(): return fallback
     import xml.etree.ElementTree as ET
     import re as _re
+    first = None
     for f in sorted(d.glob("*.xml")):
         try:
             text = f.read_text(encoding="utf-8")
             clean = _re.sub(r'```(?:xml)?\n?', '', text).strip()
             clean = _re.sub(r'^.*?(<[a-zA-Z_])', r'\1', clean, flags=_re.DOTALL)
             root = ET.fromstring(clean)
-            if root.tag == "entry":
-                return root.get("name", fallback)
+            if root.tag in ("entry", "character"):
+                name = root.get("name", "")
+                role = root.get("role", "")
+                if role == "protagonist":
+                    return name
+                if first is None:
+                    first = name
         except: pass
-    return fallback
+    return first or fallback
 
 VariableResolver.COMPUTED_HANDLERS["protagonist_name"] = (
-    lambda self: _first_char_name(self, "主角")
+    lambda self: _protagonist_name(self, "主角")
 )
+VariableResolver.COMPUTED_HANDLERS["源文换皮"] = (
+    lambda self: _fanxie_apply(self)
+)
+
+def _fanxie_apply(self):
+    """源文换皮：读取 @源文对照 的值，应用 mapping.xml 替换后返回。"""
+    import xml.etree.ElementTree as ET
+    source = self._user_overrides.get("源文对照", "")
+    if not source:
+        return source
+    mapping_file = self.novel_dir / "作品信息" / "mapping.xml"
+    if not mapping_file.exists():
+        return source
+    try:
+        tree = ET.parse(mapping_file)
+        root = tree.getroot()
+        for cat_elem in root:
+            if cat_elem.tag in ("description",):
+                continue
+            for pair in cat_elem.findall("pair"):
+                s = pair.get("source", "").strip()
+                t = pair.get("target", "").strip()
+                if s and t:
+                    source = source.replace(s, t)
+    except:
+        pass
+    return source
+def _prev_chapter_tail_chars(self, chars=1500):
+    """上一章结尾 N 字符。"""
+    N = self._ctx("N", 1)
+    if N <= 1: return "（无前文）"
+    import re
+    for ext in ("", ".xml"):
+        p = self.novel_dir / "正文" / "正文" / f"第{N-1}章{ext}"
+        if p.exists():
+            text = p.read_text(encoding="utf-8")
+            clean = re.sub(r'<[^>]+>', '', text).strip()
+            return clean[-chars:] if len(clean) > chars else clean
+    return "（无前文）"
+
 VariableResolver.COMPUTED_HANDLERS["关联章节"] = (
     lambda self: _prev_chapter_tail(self)
 )
@@ -716,7 +763,9 @@ VariableResolver.COMPUTED_HANDLERS["关联章纲"] = (
     lambda self: _prev_chapter_guide(self)
 )
 # 旧名兼容
-VariableResolver.COMPUTED_HANDLERS["上一章结尾"] = VariableResolver.COMPUTED_HANDLERS["关联章节"]
+VariableResolver.COMPUTED_HANDLERS["上一章结尾"] = (
+    lambda self: _prev_chapter_tail_chars(self, 2000)
+)
 VariableResolver.COMPUTED_HANDLERS["上一章章纲"] = VariableResolver.COMPUTED_HANDLERS["关联章纲"]
 
 # 本章正文：读取当前章节的正文文件

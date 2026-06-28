@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-卷纲模板（新版：markdown 叙述式）
+卷纲模板（XML 格式）
 本文件同时作为 @模板_卷纲 注入卷纲生成 prompt，
-LLM 必须按以下范例的密度和具体程度产出，不得写泛泛的描述。
+LLM 必须按以下 XML 结构输出，不得写泛泛的描述。
+
+输出路径：正文/卷纲/第X卷_卷名.xml
 -->
-<volume_outline>
-  <template><![CDATA[
-**分卷：第{数字}卷·{卷名}**
-
-**卷纲核心：**
-{一段话概括本卷主线：时代背景约束 + 主角真实困境 + 情绪基调 + 核心驱动力}
-
-**分卷目标：**
-1. **{角色/势力}**：{具体可衡量的成果描述}
-2. **{角色/势力}**：{具体可衡量的成果描述}
-3. **{角色/势力}**：{具体可衡量的成果描述}
-4. **{感情/关系}**：{关系变化的具体阶段}
-
-**剧情拆分：**
-
-1. **【{幕名}】**
-   {段落式叙事——谁做了什么、为什么做、结果如何。关键事件和转折融入叙事中。}**（剧情功能标签）**
-
-2. **【{幕名}】**
-   ...
-
-10. **【{幕名}】**
-    ...**（本卷收尾、关系新平衡、下一卷伏笔）**
-
-**关键配角（本卷登场）：**
-*   **{角色名}**：{身份背景+性格要点+本卷变化弧线+剧情功能}。
-*   **{角色名}**：{同上}。
-]]></template>
-</volume_outline>
+<volume id="1" name="卷名">
+  <goal>本卷结束时的剧情状态（主角达到什么位置）</goal>
+  <description>一段话概括本卷：时代背景约束 + 主角核心困境 + 情绪基调 + 驱动力</description>
+  <emotional_arc>压抑→蓄势→爆发→余韵</emotional_arc>
+  <key_events>
+    <event order="1" title="幕名">
+      <content>谁做了什么、为什么做、结果如何。关键事件和转折融入叙事中。</content>
+      <function>剧情功能标签</function>
+    </event>
+    <event order="2" title="幕名">
+      <content>...</content>
+      <function>功能标签</function>
+    </event>
+    <event order="3" title="幕名">
+      <content>...</content>
+      <function>功能标签</function>
+    </event>
+  </key_events>
+  <characters>
+    <character name="角色名" role="功能位">身份背景+性格要点+本卷变化弧线</character>
+    <character name="角色名" role="功能位">...</character>
+  </characters>
+  <climax>本卷高潮反转</climax>
+  <hook>下一卷伏笔/悬念</hook>
+</volume>

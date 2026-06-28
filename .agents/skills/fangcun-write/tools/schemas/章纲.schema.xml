@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-章纲模板
+章纲模板（通用版）
 本文件同时作为 @模板_章纲 注入章纲生成 prompt。
-LLM 必须按以下格式输出。{章节类型} {情绪弧线} {章名} 等为占位符，LLM 自行填充。
+LLM 必须按以下 XML 结构输出，不得输出 Markdown。
+
+输出路径：正文/章纲/第N章.xml
 -->
-<chapter_guide>
-  <template><![CDATA[
-## 第@当前章节号章 {章名}
-
-### 章节类型：{推进章/日常章/高潮章/过渡章/感情章}
-### 情绪弧线：{起点→终点}
-
-1. **开端：{标题}** - {叙事段落：主角面临的困境/冲突起点}。{行动}。{结果}。**（功能标签）**
-
-2. **铺垫：{标题}** - {叙事段落：主角暗中布局/配角反应/憋屈蓄势}。{行动}。{反应}。**（功能标签）**
-
-3. **转折：{标题}** - {叙事段落：主角与对手正面交锋}。{行动/反制}。{结果}。**（功能标签）**
-
-4. **打脸：{标题}** - {叙事段落：成果展示/真相揭露}。{配角从质疑转为震惊/崇拜}。**（功能标签）**
-
-5. **收获与钩子** - {叙事段落：阶段性收益}。**结尾钩子**：{具体钩子}。**人物状态**：{变化描述}。
-]]></template>
-</chapter_guide>
+<guide chapter="1" mode="generic">
+  <core_event>一句话核心事件</core_event>
+  <chapter_type>推进章/日常章/高潮章/过渡章/感情章</chapter_type>
+  <emotional_arc>起点→终点（如：平静→震惊→决意）</emotional_arc>
+  <summary>
+    <cause>起因——从上一章结尾驱动，为什么有本章</cause>
+    <development>发展——冲突如何推进</development>
+    <turning_point>转折——信息/关系/局势哪里改变</turning_point>
+    <climax>高潮——情绪或动作峰值</climax>
+    <ending>结尾——阶段性结果 + 章尾钩子</ending>
+  </summary>
+  <scene_plan>
+    <beat function="开端">谁做了什么。行动+结果。</beat>
+    <beat function="铺垫">谁做了什么。行动+反应。</beat>
+    <beat function="转折">谁做了什么。行动+反制+结果。</beat>
+    <beat function="高潮">谁做了什么。成果展示/真相揭露。</beat>
+    <beat function="钩子">章尾留白/新威胁/未完成目标</beat>
+  </scene_plan>
+</guide>

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  guide.schema.xml — 细纲示例模板。
-  五段式骨架 + 情节点，具体格式 AI 自由发挥。
+  ⚠️ 已弃用 — 请使用 章纲.schema.xml / 章纲_男频.schema.xml / 章纲_女频.schema.xml
+
+  guide.schema.xml 是旧版细纲模板，现已被 章纲.schema.xml 取代。
+  保留此文件是为了防止现有 @模板_细纲 引用断裂。
+  新工具请直接引用 @模板_章纲 / @模板_章纲_男频 / @模板_章纲_女频。
 -->
 <guide chapter="章节号">
   <core_event>一句话核心</core_event>

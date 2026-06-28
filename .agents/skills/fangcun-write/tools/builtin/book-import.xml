@@ -122,11 +122,15 @@
 （内容按上面 6 个模块完整输出）
 
 ==== 作品信息/主题/简介.xml ====
-<blurb>
-  <short>100字以内的短简介，用第一人称自嘲口吻或第三人称冲突式</short>
-  <long>300-500字长简介，场景截取式开场，前3句话出冲突</long>
-  <selling_points>3条卖点，用|分隔</selling_points>
-</blurb>
+<synopsis>
+  <hook>100字以内短简介，用第一人称自嘲口吻或第三人称冲突式</hook>
+  <blurb>300-500字长简介，场景截取式开场，前3句话出冲突</blurb>
+  <selling_points>
+    <point>卖点1</point>
+    <point>卖点2</point>
+    <point>卖点3</point>
+  </selling_points>
+</synopsis>
 
 ==== 作品信息/主题/标签.xml ====
 <tags>

@@ -1,13 +1,13 @@
 <tool>
-  <name>开书顶层</name>
-  <icon>📖</icon>
+  <name>开书顶层(原创)</name>
+  <icon>🌟</icon>
   <category>开书</category>
   <phase>open-book</phase>
   <temperature>0.7</temperature>
-  <description>基于选定的方向，产出精品顶层设计：简介+总纲+标签。</description>
+  <description>基于选定方向产出精品顶层设计：爆款书名+简介+总纲+标签。</description>
   <author>方寸官方</author>
   <author_type>官方</author_type>
-  <tags>开书</tags>
+  <tags>开书,原创</tags>
   <output>简介,总纲,标签</output>
 
   <prompt><![CDATA[
@@ -48,8 +48,13 @@
 
 ==== 作品信息/主题/简介.xml ====
 <synopsis>
-  <title>书名</title>
-  <hook>简介文案</hook>
+  <hook>一句话开场钩子</hook>
+  <blurb>场景截取式简介文案，前几句话出吸引力</blurb>
+  <selling_points>
+    <point>卖点1</point>
+    <point>卖点2</point>
+    <point>卖点3</point>
+  </selling_points>
 </synopsis>
 
 ==== 作品信息/主题/总纲.xml ====

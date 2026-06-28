@@ -25,9 +25,9 @@
 条目模板： @模板_角色
 
 ==== 作品信息/设定/类型/条目名.xml ====
-<entry name="条目名">
+<setting name="条目名">
   <description>描述</description>
-</entry>
+</setting>
   
 # 补充要求
 @补充要求
