@@ -120,7 +120,6 @@ def save_output_files(text: str, project_dir: str) -> list[str]:
 _PRESET_ALIAS = {
     "开书": "book-draw", "顶层设计": "book-draw", "原创开书": "book-draw",
     "仿写开书": "open-book", "开书全套": "open-book",
-    "套路重建": "enhanced-open-book", "仿写2.0": "enhanced-open-book",
     "套路分析": "pattern-analysis",
     "简介": "synopsis-generate", "总纲": "outline-generate", "标签": "tags-generate",
     "角色生成": "character-generate", "设计角色": "character-generate", "人设": "character-generate",
@@ -129,11 +128,11 @@ _PRESET_ALIAS = {
     "章纲": "plot-guide-nanpin", "细纲": "plot-guide-nanpin", "生成章纲": "plot-guide-nanpin",
     "男频章纲": "plot-guide-nanpin", "女频章纲": "plot-guide-nvpin",
     "写章": "write-chapter", "续写": "write-chapter",
-    "写章仿写": "write-chapter-fanxie",
     "去AI": "deslop", "润色": "deslop",
     "对比": "compare", "审查": "compare",
     "脑洞": "premise-draw",
     "选卡": "apply-pick", "应用": "apply-pick",
+    "导入拆解": "pipeline-import",
 }
 
 # 单文件工具：无标记时直接保存到预设路径
@@ -196,11 +195,12 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _run_single_file_preset("open-book", None, args, project_dir)
     elif preset_name == "pattern-analysis":
         return _run_single_file_preset("pattern-analysis", None, args, project_dir)
-    elif preset_name == "enhanced-open-book":
-        return _run_single_file_preset("enhanced-open-book", None, args, project_dir)
     elif preset_name == "book-import":
         return _run_single_file_preset("book-import", None, args, project_dir)
+    elif preset_name == "pipeline-import":
+        return _run_pipeline_import(args, project_dir)
     elif preset_name == "book-import-raw":
+
         # 原始小说导入：需要 source（源路径）参数
         source = args.get("source", "")
         if not source:
@@ -374,6 +374,22 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
 
 # ─── 抽卡模式：多轮生成 → 用户选一 ─────────────────
 
+
+
+def _run_pipeline_import(args: dict, project_dir: str) -> str:
+    """导入+拆解管线。"""
+    source = args.get("source", "")
+    if not source:
+        return "缺少 source 参数"
+    from pipeline_import import run_pipeline
+    success = run_pipeline(
+        book_name=args.get("book_name", project_dir.split("/")[-1]),
+        author=args.get("author", ""),
+        source=source,
+        channel=args.get("channel", "男频"),
+        project_dir=project_dir,
+    )
+    return f"✓ 导入拆解完成" if success else f"✗ 导入拆解失败"
 
 def _run_multi_round(preset_name: str, save_path: str | None,
                      args: dict, project_dir: str, sp_raw: str) -> str:
