@@ -44,16 +44,26 @@ def step_book_import(project_dir, book_name, total_chapters):
     """Step 3: 逆推总纲/简介/标签。"""
     print("\n[3/4] 逆推总纲/简介/标签...")
     from tool_executor import run_tool
+    from pathlib import Path
 
-    r = run_tool("book-import", {
+    # 读第1章作为源文对照
+    ch1_text = ""
+    chap_dir = Path(project_dir) / "正文" / "正文"
+    for f in sorted(chap_dir.glob("*")):
+        stem = f.stem
+        if stem.startswith("第1章") or stem.startswith("第1 "):
+            ch1_text = f.read_text(encoding="utf-8", errors="replace")
+            break
+
+    args_dict = {
         "book_name": book_name,
         "total_chapters": total_chapters,
-        "user_input": "基于源文第1章逆向分析全书框架",
-    }, project_dir)
+        "源文对照": ch1_text,
+        "user_input": "按 @模板_总纲 格式输出总纲，基于以上源文",
+    }
+    r = run_tool("book-import", args_dict, project_dir)
     print("  V 已生成" if "完成" in r else "  W " + r[:100])
     return True
-
-
 def step_volume_outline(project_dir, book_name=None, total_chapters=None):
     """Step 4: 逆推卷纲（已有则跳过）。"""
     vol_dir = Path(project_dir) / "正文" / "卷纲"

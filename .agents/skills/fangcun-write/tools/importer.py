@@ -188,8 +188,9 @@ def import_from_epub(filepath: str) -> list[tuple[int, str, str]]:
 
 
 def build_project_xml(book_name: str, author: str, channel: str,
-                      total_chapters: int) -> str:
+                      total_chapters: int, source_book: str = "") -> str:
     """生成 作品信息/project.xml。"""
+    sb_line = f'  <source_book>{_escape_xml(source_book)}</source_book>\n' if source_book else ""
     return f'''<?xml version="1.0" encoding="UTF-8"?>
 <project>
   <story_name>{_escape_xml(book_name)}</story_name>
@@ -197,8 +198,7 @@ def build_project_xml(book_name: str, author: str, channel: str,
   <perspective>第三人称</perspective>
   <author>{_escape_xml(author)}</author>
   <total_chapters>{total_chapters}</total_chapters>
-  <source_book>{_escape_xml(book_name)}</source_book>
-</project>'''
+{sb_line}</project>'''
 
 
 def _escape_xml(s: str) -> str:
