@@ -301,6 +301,36 @@ def run_import(book_name: str, author: str, source: str,
     proj_file = out_dir / "作品信息" / "project.xml"
     proj_file.write_text(project_xml, encoding='utf-8')
 
+    # 6. 生成占位总纲（导入的书一定有总纲，后续可用 open-book 精修）
+    outline_file = out_dir / "作品信息" / "主题" / "总纲.xml"
+    if not outline_file.exists():
+        outline_file.write_text(
+            f'<?xml version="1.0" encoding="UTF-8"?>\n'
+            f'<outline>\n'
+            f'  <story_name>{_escape_xml(book_name)}</story_name>\n'
+            f'  <total_chapters>{len(chapters)}</total_chapters>\n'
+            f'  <summary>已导入 {len(chapters)} 章，待运行 open-book 生成完整总纲</summary>\n'
+            f'</outline>\n',
+            encoding='utf-8'
+        )
+
+    # 7. 生成占位卷纲（同上）
+    volume_file = out_dir / "正文" / "卷纲" / "卷纲.xml"
+    if not volume_file.exists():
+        volume_file.write_text(
+            f'<?xml version="1.0" encoding="UTF-8"?>\n'
+            f'<volumes>\n'
+            f'  <volume number="1" chapters="1-{len(chapters)}">\n'
+            f'    <name>全书</name>\n'
+            f'    <goal>待拆解</goal>\n'
+            f'    <emotional_arc>待拆解</emotional_arc>\n'
+            f'    <key_events>待拆解</key_events>\n'
+            f'    <climax>待拆解</climax>\n'
+            f'  </volume>\n'
+            f'</volumes>\n',
+            encoding='utf-8'
+        )
+
     return {
         "success": True,
         "book_name": book_name,
