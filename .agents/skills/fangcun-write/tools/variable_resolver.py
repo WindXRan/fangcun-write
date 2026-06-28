@@ -912,13 +912,21 @@ def _indent(text):
     return '\n'.join('  ' + l for l in text.split('\n'))
 
 
+def _attrs_to_kv(m):
+    """<tag a="x" b="y"> → a: x, b: y"""
+    attrs = re.findall(r"([a-zA-Z_]+)=([^\s>]+)", m.group(2))
+    return ', '.join(f'{k}: {v.strip(chr(34)+chr(39))}' for k, v in attrs)
+
+
 def _simplify_xml(raw: str) -> str:
     """剥掉 XML 标签，保留内容。标签名转为行首标签。"""
     # 剥声明和注释
     raw = re.sub(r'<\?xml[^>]*\?>', '', raw)
     raw = re.sub(r'<!--.*?-->', '', raw, flags=re.DOTALL)
-    # 自闭合标签: <tag /> → 删除
-    raw = re.sub(r'<[^>]+/>', '', raw)
+    # 自闭合标签: <tag a="x" b="y" /> → a: x, b: y
+    raw = re.sub(r'<([a-zA-Z_][^>]*?)\s+([^>]+?)\s*/>', _attrs_to_kv, raw)
+    # 无属性的自闭合标签: <tag /> → 删除
+    raw = re.sub(r'<[a-zA-Z_][^>]*/>', '', raw)
     # <tag>text</tag> → tag: text（不嵌套）
     prev = None
     while prev != raw:
@@ -981,11 +989,11 @@ def _source_pattern_analysis(self):
             for sd in candidates:
                 f = sd / "作品信息" / "套路分析.xml"
                 if f.exists():
-                    return _extract_rhythm(f.read_text(encoding='utf-8'))
+                    return _simplify_xml(f.read_text(encoding='utf-8'))
     # fallback: 从仿写项目本身读取
     f = self.novel_dir / "作品信息" / "套路分析.xml"
     if f.exists():
-        return _extract_rhythm(f.read_text(encoding='utf-8'))
+        return _simplify_xml(f.read_text(encoding='utf-8'))
     return ""
 
 VariableResolver.COMPUTED_HANDLERS["作品信息/套路分析"] = _source_pattern_analysis

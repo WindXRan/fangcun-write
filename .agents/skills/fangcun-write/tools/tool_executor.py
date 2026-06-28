@@ -170,6 +170,19 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
     # 别名解析
     preset_name = _PRESET_ALIAS.get(preset_name, preset_name)
 
+    # 女频自动路由：章纲生成默认走女频版
+    if preset_name in ("plot-guide", "plot-guide-nanpin"):
+        proj_xml = Path(project_dir) / "作品信息" / "project.xml"
+        if proj_xml.exists():
+            try:
+                import xml.etree.ElementTree as ET
+                pt = ET.parse(str(proj_xml))
+                channel = (pt.getroot().findtext("channel") or "").strip()
+                if channel == "女频":
+                    preset_name = "plot-guide-nvpin"
+            except Exception:
+                pass
+
     # 建项目（如需要）
     if preset_name in ("book-draw", "synopsis-generate", "outline-generate",
                        "tags-generate", "character-generate", "character-extract",
@@ -196,6 +209,8 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _run_single_file_preset("plot-guide-nanpin", None, args, project_dir)
     elif preset_name == "plot-guide-nvpin":
         return _run_single_file_preset("plot-guide-nvpin", None, args, project_dir)
+    elif preset_name == "source-guide":
+        return _run_single_file_preset("source-guide", None, args, project_dir)
     elif preset_name == "volume-outline":
         return _run_single_file_preset("volume-outline", None, args, project_dir)
     elif preset_name == "character-generate":
@@ -382,6 +397,7 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
             "plot-guide": f"正文/章纲/第{args.get('chapter_number', 1)}章.xml",
             "plot-guide-nanpin": f"正文/章纲/第{args.get('chapter_number', 1)}章.xml",
             "plot-guide-nvpin": f"正文/章纲/第{args.get('chapter_number', 1)}章.xml",
+            "source-guide": f"正文/章纲/第{args.get('chapter_number', 1)}章.xml",
             "write-chapter": f"正文/正文/第{args.get('chapter_number', 1)}章.xml",
             "volume-outline": "正文/卷纲/卷纲.xml",
             "character-generate": "作品信息/设定/角色.xml",
