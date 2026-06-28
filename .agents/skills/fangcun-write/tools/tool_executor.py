@@ -177,9 +177,14 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
         return f"预设 {preset_name} 解析失败"
 
     resolver = VariableResolver(project_dir)
-    resolver.set_context(N=args.get("chapter_number", args.get("ch", 1)))
+    resolver.set_context(
+        N=args.get("chapter_number", args.get("ch", 1)),
+        total_chapters=args.get("total_chapters", ""),
+        start=args.get("start", 1),
+        end=args.get("end", 1),
+    )
     # 非保留参数 → 变量覆盖
-    _reserved = {"chapter_number", "ch", "user_input", "message", "story_name", "total_chapters"}
+    _reserved = {"chapter_number", "ch", "user_input", "message", "story_name", "total_chapters", "start", "end"}
     overrides = {k: v for k, v in args.items() if k not in _reserved and isinstance(v, str)}
     if overrides:
         resolver.set_user_overrides(overrides)
