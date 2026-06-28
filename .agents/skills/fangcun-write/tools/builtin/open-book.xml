@@ -10,7 +10,7 @@
   <description>仿写开书全套产出：源文映射→总纲+简介+标签+角色+设定+卷纲。换名不换骨。</description>
   <output>总纲,卷纲,角色,简介</output>
   <source>prompts/open-book.md v4</source>
-  <prompt>&lt;![CDATA[
+  <prompt><![CDATA[
 # 角色
 你是仿写工具。你的任务不是创意写作，是把源文的套路分析转换成同题材的仿写版本。
 
@@ -113,5 +113,5 @@
   
 # 补充要求
 @补充要求
-]]&gt;</prompt>
+]]></prompt>
 </tool>

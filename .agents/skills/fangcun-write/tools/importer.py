@@ -296,8 +296,10 @@ def run_import(book_name: str, author: str, source: str,
         fp = write_chapter_xml(str(out_dir), ch_num, title, content)
         written.append(str(fp.relative_to(base_dir) if fp.is_relative_to(base_dir) else fp))
 
-    # 5. 生成 project.xml
-    project_xml = build_project_xml(book_name, author, channel, len(chapters))
+    # 5. 生成 project.xml（source_book 设为项目目录名，供仿写管线 @源文对照 使用）
+    dir_name = out_dir.name
+    project_xml = build_project_xml(book_name, author, channel, len(chapters),
+                                    source_book=dir_name)
     proj_file = out_dir / "作品信息" / "project.xml"
     proj_file.write_text(project_xml, encoding='utf-8')
 

@@ -352,6 +352,7 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
             f"{'='*60}\n"
         )
         _debug_file.write_text(_header + sp, encoding='utf-8')
+        print(f"  [debug] prompt → {_debug_file}")
     except Exception as _ex:
         try:
             (_debug_dir / "_error.log").write_text(str(_ex), encoding='utf-8')

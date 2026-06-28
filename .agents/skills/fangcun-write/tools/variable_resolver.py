@@ -121,6 +121,8 @@ class VariableResolver:
                             return val
                     else:
                         val = p.read_text(encoding='utf-8')
+                        if p.suffix == '.xml':
+                            val = _simplify_xml(val)
                         self._cache[var_name] = val
                         return val
             return f"@[未定义:{var_name}]"
@@ -787,7 +789,7 @@ def _prev_chapter_guide(self, limit=5):
         for ext in ("", ".xml"):
             p = self.novel_dir / "正文" / "章纲" / f"第{i}章{ext}"
             if p.exists():
-                parts.append(f"---第{i}章章纲---\n{p.read_text(encoding='utf-8')}")
+                parts.append(f"---第{i}章章纲---\n{_simplify_xml(p.read_text(encoding='utf-8'))}")
                 break
     return "\n\n".join(parts) if parts else "（无关联章纲）"
 
@@ -896,14 +898,72 @@ def _source_chapter(self):
 VariableResolver.COMPUTED_HANDLERS["源文对照"] = _source_chapter
 
 
+
+def _fmt_tag(m):
+    """<tag attr="x">inner</tag> → tag: inner（内层有标签时展平为子项）"""
+    tag = m.group(1).split()[0]
+    inner = m.group(2).strip()
+    # 内层有标签时递归
+    return tag + ':\n' + _indent(inner) if '<' in inner else tag + ': ' + inner
+
+
+def _indent(text):
+    """给多行文本加缩进"""
+    return '\n'.join('  ' + l for l in text.split('\n'))
+
+
+def _simplify_xml(raw: str) -> str:
+    """剥掉 XML 标签，保留内容。标签名转为行首标签。"""
+    # 剥声明和注释
+    raw = re.sub(r'<\?xml[^>]*\?>', '', raw)
+    raw = re.sub(r'<!--.*?-->', '', raw, flags=re.DOTALL)
+    # 自闭合标签: <tag /> → 删除
+    raw = re.sub(r'<[^>]+/>', '', raw)
+    # <tag>text</tag> → tag: text（不嵌套）
+    prev = None
+    while prev != raw:
+        prev = raw
+        raw = re.sub(r'<([a-zA-Z_][^>]*)>(.*?)<\/\1>', _fmt_tag, raw, flags=re.DOTALL)
+    # 清理残余标签
+    raw = re.sub(r'<[^>]+>', '', raw)
+    # 清理空行和首尾空格
+    lines = [l.strip() for l in raw.split('\n') if l.strip()]
+    return '\n'.join(lines)
+
+
+# ─── 套路分析精简器：仿写模式只提取节奏节点和情绪 ───
+
+def _extract_rhythm(raw: str) -> str:
+    """从套路分析 XML 中只提取节奏节点和情绪模板，去掉其他模块。"""
+    import re
+    parts = []
+    # 提取 rhythm_nodes 区块
+    m = re.search(r'<rhythm_nodes>(.*?)</rhythm_nodes>', raw, re.DOTALL)
+    if m:
+        nodes = _simplify_xml(m.group(0))
+        parts.append('【节奏节点】\n' + nodes)
+    # 提取 emotional_template
+    m = re.search(r'<emotional_template>(.*?)</emotional_template>', raw, re.DOTALL)
+    if m:
+        et = _simplify_xml(m.group(0))
+        parts.append('【情绪模板】\n' + et)
+    # 提取 genre 定位
+    m = re.search(r'<genre[^>]*>(.*?)<\/genre>', raw, re.DOTALL)
+    if m:
+        parts.append('题材: ' + _simplify_xml(m.group(1)))
+    return '\n\n'.join(parts) if parts else _simplify_xml(raw)
+
+
+
 def _fanxie_mode(self):
+
     """仿写模式标志。非空 = 仿写模式生效，空 = 原创模式。"""
     source_book = self._user_overrides.get("source_book", "")
     if source_book:
         return "开启"
     return ""
 
-VariableResolver.COMPUTED_HANDLERS["仿写模式"] = _fanxie_mode
+VariableResolver.COMPUTED_HANDLERS["fanxie_mode"] = _fanxie_mode
 
 
 def _source_pattern_analysis(self):
@@ -921,11 +981,11 @@ def _source_pattern_analysis(self):
             for sd in candidates:
                 f = sd / "作品信息" / "套路分析.xml"
                 if f.exists():
-                    return f.read_text(encoding='utf-8')
+                    return _extract_rhythm(f.read_text(encoding='utf-8'))
     # fallback: 从仿写项目本身读取
     f = self.novel_dir / "作品信息" / "套路分析.xml"
     if f.exists():
-        return f.read_text(encoding='utf-8')
+        return _extract_rhythm(f.read_text(encoding='utf-8'))
     return ""
 
 VariableResolver.COMPUTED_HANDLERS["作品信息/套路分析"] = _source_pattern_analysis
@@ -939,7 +999,11 @@ if _schema_dir.exists():
         if _var not in VariableResolver.COMPUTED_HANDLERS:
             @VariableResolver.register_computed(_var)
             def _loader(self, p=_f):
-                try: return p.read_text(encoding='utf-8')
+                try:
+                    text = p.read_text(encoding='utf-8')
+                    if p.suffix == '.xml':
+                        text = _simplify_xml(text)
+                    return text
                 except: return ""
             _loader.__name__ = f"template_{_base}"
     for _f in sorted(_schema_dir.glob("*.ref.xml")):
@@ -948,6 +1012,10 @@ if _schema_dir.exists():
         if _var not in VariableResolver.COMPUTED_HANDLERS:
             @VariableResolver.register_computed(_var)
             def _loader(self, p=_f):
-                try: return p.read_text(encoding='utf-8')
+                try:
+                    text = p.read_text(encoding='utf-8')
+                    if p.suffix == '.xml':
+                        text = _simplify_xml(text)
+                    return text
                 except: return ""
             _loader.__name__ = f"template_{_base}"
