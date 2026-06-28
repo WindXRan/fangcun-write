@@ -129,7 +129,9 @@ def save_output_files(text: str, project_dir: str) -> list[str]:
 _PRESET_ALIAS = {
     "开书": "book-draw", "顶层设计": "book-draw", "原创开书": "book-draw",
     "仿写开书": "open-book", "开书全套": "open-book",
+    "拆书": "pipeline-import", "逆推": "pipeline-import",
     "套路分析": "pattern-analysis",
+    "黄金开篇": "golden-opening", "黄金三章": "golden-chapters",
     "简介": "synopsis-generate", "总纲": "outline-generate", "标签": "tags-generate",
     "角色生成": "character-generate", "设计角色": "character-generate", "人设": "character-generate",
     "提取角色": "character-extract",
