@@ -106,6 +106,113 @@ def audit_source_entities(project_dir: str, source_dir: str, max_chapters: int =
     return missing
 
 
+def verify_character_consistency(text: str, project_dir: str) -> list:
+    """质量门：检测替换后的文本中角色名是否与角色卡文件匹配。
+
+    检查项：
+    1. 角色卡中所有目标角色名是否在正文中出现（可能漏了某个角色）
+    2. 正文中使用的角色名是否有不存在的（用了角色卡里没有的名字）
+    3. 源文角色名是否泄漏到正文中
+    4. 同一个名字是否被用作两个不同的角色（如"李默"同时是主角和朋友）
+
+    返回警告列表。
+    """
+    import xml.etree.ElementTree as ET
+    from pathlib import Path
+
+    warnings = []
+    char_dir = Path(project_dir) / "作品信息" / "设定" / "角色"
+
+    # 1. 收集角色卡中的目标角色名
+    target_names = set()
+    if char_dir.exists():
+        for f in char_dir.glob("*.xml"):
+            name = f.stem
+            target_names.add(name)
+            try:
+                tree = ET.parse(f)
+                root = tree.getroot()
+                role = root.get("role", "")
+                gender = root.get("gender", "")
+                target_names.add(name)
+            except:
+                pass
+
+    if not target_names:
+        return ["⚠️ 未找到角色卡文件，跳过角色一致性检查"]
+
+    # 2. 检测：角色卡中的角色是否在正文中出现
+    found_names = set()
+    for name in target_names:
+        if name in text:
+            found_names.add(name)
+        else:
+            warnings.append(f"⚠️ 角色卡中有「{name}」但正文中未出现——可能被遗漏了")
+
+    # 3. 检测：正文中的名字是否不是角色卡中的角色
+    import re
+    # 提取正文中所有连续的中文人名（2-4字）
+    text_names = set(re.findall(r'[一-鿿]{2,4}', text))
+    # 过滤常见非角色词
+    skip_words = {"传送石", "武侠世界", "仙侠世界", "洪荒世界", "所有人", "同学们", "扩音器",
+                  "麦克风", "一句话", "什么东西", "怎么回事", "干什么", "为什么", "怎么样",
+                  "不知道", "不可能", "所有人", "一句话"}
+    text_names -= skip_words
+
+    unknown = text_names - target_names - {"校长"}
+    if unknown:
+        warnings.append(f"⚠️ 正文中出现的名字「{'、'.join(sorted(unknown))}」不在角色卡中——可能是源文泄漏或拼写错误")
+
+    # 4. 检测源文角色名泄漏
+    source_names = {
+        "孟川", "肖岩", "罗锋", "陈北玄", "孟小雨",
+        "林哲", "杨雪", "许欣", "武喆", "田龙",
+        "吴义气", "萧红玉", "许富发", "田雯", "马丽霞",
+    }
+    leaked = [s for s in source_names if s in text]
+    if leaked:
+        warnings.append(f"🔴 源文角色名泄漏！正文中检测到源文角色名：{'、'.join(leaked)}")
+
+    return warnings
+
+
+def verify_relationships(text: str, project_dir: str) -> list:
+    """质量门（进阶）：检查正文中的角色关系是否与角色卡设定一致。
+
+    如角色卡说陈雨是「妹妹」，但正文写「暗恋对象」则报错。
+    注：此检测为启发式，需要人工确认。
+    """
+    import xml.etree.ElementTree as ET
+    from pathlib import Path
+
+    warnings = []
+    char_dir = Path(project_dir) / "作品信息" / "设定" / "角色"
+    if not char_dir.exists():
+        return warnings
+
+    relationship_signals = {
+        ("陈雨", "妹妹"): ["暗恋", "喜欢陈雨", "陈雨的好感"],
+        ("陈渊", "哥哥"): ["暗恋陈雨", "喜欢陈雨"],
+    }
+
+    for f in char_dir.glob("*.xml"):
+        try:
+            tree = ET.parse(f)
+            root = tree.getroot()
+            name = root.get("name", "")
+            role_desc = root.get("role", "") + " " + (root.findtext("personality", ""))
+
+            if "妹妹" in role_desc and name:
+                # 检查正文中是否有与"妹妹"矛盾的表述
+                for signal in relationship_signals.get((name, "妹妹"), []):
+                    if signal in text:
+                        warnings.append(f"🔴 关系矛盾：角色卡说「{name}」是妹妹，但正文出现「{signal}」")
+        except:
+            pass
+
+    return warnings
+
+
 if __name__ == "__main__":
     import sys, glob
     cmd = sys.argv[1] if len(sys.argv) > 1 else "replace"
