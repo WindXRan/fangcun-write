@@ -74,6 +74,12 @@ def step_book_import(project_dir, book_name, total_chapters):
 def step_volume_outline(project_dir, book_name, total_chapters):
     """Step 4: 卷纲。"""
     print("\n[4/4] 生成卷纲...")
+    vol_dir = Path(project_dir) / "正文" / "卷纲"
+    vol_existing = list(vol_dir.glob("第*卷*.xml"))
+    if vol_existing:
+        print(f"[4/4] 卷纲已存在，跳过（" + str(len(vol_existing)) + " 个文件）")
+        return True
+    
     from tool_executor import run_tool
 
     r = run_tool("volume-outline", {

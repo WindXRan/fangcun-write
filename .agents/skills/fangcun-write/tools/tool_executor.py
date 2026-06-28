@@ -56,7 +56,7 @@ def call_llm(messages: list, temperature: float = 0.7):
 
 # ─── 项目初始化 ──────────────────────────────────────────
 
-def init_project(project_dir: str):
+def init_project(project_dir: str, story_name: str = "", channel: str = "男频"):
     """创建新项目目录结构。"""
     p = Path(project_dir)
     p.mkdir(parents=True, exist_ok=True)
@@ -65,6 +65,15 @@ def init_project(project_dir: str):
               "作品信息/设定/势力", "作品信息/设定/地点",
               "作品信息/设定/物品", "作品信息/主题"]:
         (p / d).mkdir(parents=True, exist_ok=True)
+    # 确保 project.xml 存在（含故事名和频道）
+    proj_xml = p / "作品信息" / "project.xml"
+    if not proj_xml.exists():
+        name = story_name or Path(project_dir).name
+        proj_xml.write_text(
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            f'<project><story_name>{name}</story_name>'
+            f'<channel>{channel}</channel></project>\n',
+            encoding='utf-8')
 
 
 # ─── 文件保存 ─────────────────────────────────────────────
@@ -161,9 +170,12 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
     # 建项目（如需要）
     if preset_name in ("book-draw", "synopsis-generate", "outline-generate",
                        "tags-generate", "character-generate", "character-extract",
-                       "plot-guide", "volume-outline", "write-chapter"):
+                       "plot-guide", "volume-outline", "write-chapter",
+                       "open-book", "pattern-analysis"):
         if not Path(project_dir).exists():
-            init_project(project_dir)
+            init_project(project_dir,
+                       story_name=args.get("story_name", ""),
+                       channel=args.get("channel", "男频"))
 
     # ─── 单文件工具（LLM + 保存）───
     if preset_name in _SINGLE_FILE_MAP:
@@ -297,6 +309,30 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
     if overrides:
         resolver.set_user_overrides(overrides)
     sp = resolver.render(sp_raw)
+    # debug: 保存渲染后的完整 prompt 到 _debug/ 目录
+    try:
+        import datetime
+        _debug_dir = Path(project_dir) / "_debug"
+        _debug_dir.mkdir(exist_ok=True)
+        _ch = args.get("chapter_number", args.get("ch", ""))
+        _ts = datetime.datetime.now().strftime("%H%M%S")
+        _fn = f"{_ts}_{preset_name}_ch{_ch}.txt"
+        _debug_file = _debug_dir / _fn
+        # 头部：调用信息
+        _header = (
+            f"# tool: {preset_name}\n"
+            f"# time: {datetime.datetime.now().isoformat()}\n"
+            f"# chapter: {_ch}\n"
+            f"# story: {args.get('story_name', '')}\n"
+            f"# args: { {k:v for k,v in args.items() if k not in ('user_input',)} }\n"
+            f"{'='*60}\n"
+        )
+        _debug_file.write_text(_header + sp, encoding='utf-8')
+    except Exception as _ex:
+        try:
+            (_debug_dir / "_error.log").write_text(str(_ex), encoding='utf-8')
+        except Exception:
+            pass
     user_msg = args.get("user_input", args.get("message", ""))
     messages = [{"role": "system", "content": sp}]
     if user_msg:
