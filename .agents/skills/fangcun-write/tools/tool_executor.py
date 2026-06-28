@@ -247,8 +247,28 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
         traceback.print_exc()
         return f"预设 {preset_name} 解析失败: {_ex}"
 
+    # 读取仿写项目中的 source_book（源文路径）
+    proj_xml = Path(project_dir) / "作品信息" / "project.xml"
+    source_book = ""
+    source_dir = ""
+    if proj_xml.exists():
+        try:
+            pt = ET.parse(proj_xml)
+            pr = pt.getroot()
+            source_book = (pr.findtext("source_book") or "").strip()
+            source_author = (pr.findtext("author") or "").strip()
+            if source_book:
+                sb_dir = Path(project_dir).parent / source_book
+                if sb_dir.exists():
+                    source_dir = str(sb_dir / "正文" / "正文")
+                # 也尝试 拆文库/{source_book}/
+                chaifen = Path(project_dir).parent.parent / "拆文库" / source_book
+                if not source_dir and chaifen.exists():
+                    source_dir = str(chaifen)
+        except Exception:
+            pass
+
     rounds = int(args.get("rounds", 1))
-    # 抽卡模式：跑多轮，每轮结果存抽卡文件，用户选一个应用
     if rounds > 1:
         return _run_multi_round(preset_name, save_path, args, project_dir, sp_raw)
 
@@ -260,6 +280,11 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
         start=args.get("start", 1),
         end=args.get("end", 1),
     )
+    # 设置源文信息（仿写模式使用）
+    if source_book:
+        resolver.set_user_overrides({"source_book": source_book})
+    if source_dir:
+        resolver.set_source_dir(source_dir)
     # 非保留参数 → 变量覆盖
     _reserved = {"chapter_number", "ch", "volume_number", "vol", "user_input", "message", "story_name", "total_chapters", "start", "end"}
     overrides = {k: v for k, v in args.items() if k not in _reserved and isinstance(v, str)}
@@ -387,6 +412,17 @@ def _run_multi_round(preset_name: str, save_path: str | None,
             start=args.get("start", 1),
             end=args.get("end", 1),
         )
+        # 仿写模式：设置源文信息
+        _px = Path(project_dir) / "作品信息" / "project.xml"
+        if _px.exists():
+            try:
+                _pt = ET.parse(_px)
+                _pr = _pt.getroot()
+                _sb = (_pr.findtext("source_book") or "").strip()
+                if _sb:
+                    resolver.set_user_overrides({"source_book": _sb})
+            except Exception:
+                pass
         _reserved = {"chapter_number", "ch", "volume_number", "vol", "user_input",
                      "message", "story_name", "total_chapters", "start", "end", "rounds", "round"}
         overrides = {k: v for k, v in args.items() if k not in _reserved and isinstance(v, str)}

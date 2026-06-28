@@ -44,6 +44,7 @@
 对源文前10章中每个关键情节节点，标注：
 - **change_type**: preserve（保留核心功能）/ restructure（重组载体）/ merge（合并）/ cut（删除）/ add（新增）
 - **note**: 具体说明怎么变
+- **info_release**: 源文在这个位置读者知道什么，新书在这个位置读者也应该知道同等的量
 - 「功能保留」指读者感受到的"爽/虐/甜/紧张"情绪与源文相同，但发生方式完全不同
 
 ## 质量红线
@@ -109,22 +110,6 @@
 ==== 作品信息/设定/物品/物品名.xml ====
 @模板_角色
 
-==== 作品信息/mapping.xml ====
-<mapping>
-  <description>源文→仿写版 角色/场景/概念换皮映射</description>
-  <characters>
-    <!-- 每个角色pair，source=源文原名，target=新名 -->
-    <pair source="源文角色名" target="新角色名"/>
-    <!-- 映射完成后做一次姓名唯一性检查：所有target值必须不同 -->
-  </characters>
-  <scenes>
-    <pair source="源文场景名" target="新场景名"/>
-  </scenes>
-  <concepts>
-    <pair source="源文核心概念（修为等级/宗门名/招式名等）" target="新概念名"/>
-  </concepts>
-</mapping>
-
 ==== 作品信息/仿写蓝图.xml ====
 <adaptation_blueprint>
   <global_rules>
@@ -137,11 +122,13 @@
     <item source_chapter="1" source_event="源文开头关键事件">
       <target>新书对应事件</target>
       <change_type>preserve/restructure/merge/cut/add</change_type>
+      <info_release>源文在这个位置读者知道什么信息，新书在这里读者也必须知道同等的量</info_release>
       <note>具体怎么变的说明</note>
     </item>
     <item source_chapter="1" source_event="源文第二事件">
       <target>新书对应事件</target>
       <change_type>restructure</change_type>
+      <info_release>源文在这个位置读者知道XX，新书在这里读者也必须知道同等信息</info_release>
       <note>源文在餐厅发生 → 新书在教室发生。功能一致但载体全换</note>
     </item>
   </plot_map>

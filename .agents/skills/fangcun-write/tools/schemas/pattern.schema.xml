@@ -53,4 +53,14 @@
     <element name="打脸/高潮" position="50-70%" mandatory="true">情绪峰值或动作峰值</element>
     <element name="收获+钩子" position="70-100%" mandatory="true">阶段性收益 + 下文推力</element>
   </chapter_structure>
+
+  <!-- 信息释放节奏 -->
+  <info_release>
+    <point position="第10行">读者知道的关键事实</point>
+    <point position="第30行">读者知道的关键事实</point>
+    <point position="第50行">读者知道的关键事实</point>
+    <point position="第70行">读者知道的关键事实</point>
+    <point position="第100行">读者知道的关键事实</point>
+    <point position="章尾">读者知道的关键事实</point>
+  </info_release>
 </pattern_analysis>

@@ -717,32 +717,8 @@ VariableResolver.COMPUTED_HANDLERS["protagonist_name"] = (
     lambda self: _protagonist_name(self, "主角")
 )
 VariableResolver.COMPUTED_HANDLERS["源文换皮"] = (
-    lambda self: _fanxie_apply(self)
+    lambda self: self._user_overrides.get("源文对照", "")
 )
-
-def _fanxie_apply(self):
-    """源文换皮：读取 @源文对照 的值，应用 mapping.xml 替换后返回。"""
-    import xml.etree.ElementTree as ET
-    source = self._user_overrides.get("源文对照", "")
-    if not source:
-        return source
-    mapping_file = self.novel_dir / "作品信息" / "mapping.xml"
-    if not mapping_file.exists():
-        return source
-    try:
-        tree = ET.parse(mapping_file)
-        root = tree.getroot()
-        for cat_elem in root:
-            if cat_elem.tag in ("description",):
-                continue
-            for pair in cat_elem.findall("pair"):
-                s = pair.get("source", "").strip()
-                t = pair.get("target", "").strip()
-                if s and t:
-                    source = source.replace(s, t)
-    except:
-        pass
-    return source
 def _prev_chapter_tail_chars(self, chars=1500):
     """上一章结尾 N 字符。"""
     N = self._ctx("N", 1)
@@ -879,6 +855,59 @@ VariableResolver.COMPUTED_HANDLERS["previous_chapter_text"] = (
 VariableResolver.COMPUTED_HANDLERS["previous_20_chapters"] = (
     lambda self: self._compute_previous_n_chapters(20)
 )
+
+# ── 仿写变量：自动从源文目录解析 ──
+
+def _source_chapter(self):
+    """从源文项目读取当前章节正文。需要 source_book + 拆文库/ 或同级目录。"""
+    N = self._ctx("N", 1)
+    source_book = self._user_overrides.get("source_book", "")
+    if not source_book:
+        return ""
+
+    # 从用户覆盖中取
+    manual = self._user_overrides.get("源文对照", "")
+    if manual:
+        return manual
+
+    # 尝试从 source_book 的目录读取
+    # 项目结构: projects/{author}/{仿写书名}/
+    # source_book 同级: projects/{author}/{source_book}/
+    # 或拆文库/{source_book}/
+    novel_dir = self.novel_dir  # 仿写项目目录
+    for parent in [novel_dir.parent, novel_dir.parent.parent / "拆文库"]:
+        sb_dir = parent / source_book
+        if not sb_dir.exists():
+            continue
+        # 尝试正文/正文/第N章.txt
+        for pat in [f"正文/正文/第{N}章*.txt", f"正文/正文/第{N}章*.xml",
+                    f"源文/第{N}章*.txt", f"第{N}章*.txt"]:
+            files = sorted(sb_dir.glob(pat))
+            if files:
+                return files[0].read_text(encoding='utf-8', errors='replace')
+    return ""
+
+VariableResolver.COMPUTED_HANDLERS["源文对照"] = _source_chapter
+
+
+def _source_pattern_analysis(self):
+    """从源文目录读取套路分析，不存在则从仿写项目读取。"""
+    source_book = self._user_overrides.get("source_book", "")
+    if source_book:
+        novel_dir = self.novel_dir
+        for parent in [novel_dir.parent, novel_dir.parent.parent / "拆文库"]:
+            sb_dir = parent / source_book
+            if sb_dir.exists():
+                f = sb_dir / "作品信息" / "套路分析.xml"
+                if f.exists():
+                    return f.read_text(encoding='utf-8')
+    # fallback: 从仿写项目本身读取
+    f = self.novel_dir / "作品信息" / "套路分析.xml"
+    if f.exists():
+        return f.read_text(encoding='utf-8')
+    return ""
+
+VariableResolver.COMPUTED_HANDLERS["作品信息/套路分析"] = _source_pattern_analysis
 
 # ── 模板自动注册：扫描 schemas/*.schema.xml + *.ref.xml ──
 _schema_dir = Path(__file__).parent / "schemas"

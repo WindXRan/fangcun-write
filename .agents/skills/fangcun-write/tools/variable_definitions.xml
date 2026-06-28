@@ -21,7 +21,6 @@
     <variable name="本章正文" category="正文" type="computed" source="computed" handler="本章正文"/>
     <variable name="参考剧情" category="正文" type="text" source="user_input"/>
     <variable name="源文对照" category="正文" type="text" source="user_input"/>
-    <variable name="源文换皮" category="正文" type="computed" source="computed" handler="源文换皮"/>
     <variable name="前文章纲" category="大纲" type="text" source="user_input"/>
     <variable name="背景设定" category="设定" type="text" source="user_input"/>
     <variable name="势力设定" category="设定" type="text" source="user_input"/>
