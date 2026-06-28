@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-总纲模板（XML 结构版）
+总纲模板（Markdown 版）
 本文件同时作为 @模板_总纲 注入开书/导入/总纲生成 prompt。
-LLM 必须按以下 XML 结构输出，不得输出 Markdown。
-
+LLM 必须按以下 Markdown 结构输出，不得输出 XML。
 输出路径：作品信息/主题/总纲.xml
 -->
-<story_bible>
-  <elements>标签1 | 标签2 | ...（8-12个，用 | 分隔）</elements>
-  <golden_finger>
-    <name>能力名称</name>
-    <effect>具体效果</effect>
-    <cost>代价或限制</cost>
-  </golden_finger>
-  <story_lines>
-    <main>一句话主线冲突</main>
-    <side n="1">辅线1描述</side>
-    <side n="2">辅线2描述</side>
-    <side n="3">辅线3描述</side>
-  </story_lines>
-  <outline>
-（完整时间线和事件推进，每段以角色/视角开头分段叙述，多视角展开。可包含多段落文本。）
-  </outline>
-</story_bible>
+## 故事元素
+标签1 | 标签2 | 标签3 | ...（8-12个，用 | 分隔）
+
+## 金手指
+能力名称：具体效果
+代价或限制：
+
+## 故事线
+**主线**：一句话主线冲突
+**辅线1**：辅线1描述
+**辅线2**：辅线2描述
+**辅线3**：辅线3描述（可选）
+**辅线4**：辅线4描述（可选）
+
+## 故事大纲
+（完整时间线和事件推进，按剧情发展顺序叙述，可包含多段落文本。）
