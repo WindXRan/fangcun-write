@@ -1,6 +1,7 @@
 """Prompt 加载器。优先 builtin/*/preset.xml，fallback 旧 .md。"""
 import re
 import sys
+import traceback
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -171,7 +172,8 @@ def _read_preset(name, strict=False):
         if strict:
             raise
         return None, [], []
-    except Exception:
+    except Exception as _ex:
+        traceback.print_exc()
         return None, [], []
 
 

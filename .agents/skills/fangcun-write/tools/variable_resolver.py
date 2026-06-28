@@ -1,12 +1,11 @@
-"""
-VariableResolver：统一 @变量 解析引擎。
+"""VariableResolver：统一 @变量 解析引擎。
 
 替代现有三套语法（{变量}、@path、【标签】），全部统一为 @变量名。
 按 variable_definitions.json 定义的六类变量，自动提取 + 手动覆盖。
 """
-
 import json
 import re
+import traceback
 from pathlib import Path
 from typing import Any, Optional
 
@@ -307,6 +306,7 @@ class VariableResolver:
                 else:
                     return (elem.text or "").strip() if elem is not None else None
             except Exception:
+                traceback.print_exc()
                 return None
         if method == "read":
             return content

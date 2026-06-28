@@ -13,7 +13,7 @@ Claude 通过此模块调用所有写作工具。
     result = run_tool("write-chapter", {chapter_number: 5}, project_dir)
 """
 
-import os, sys, json, re
+import os, sys, json, re, traceback
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -71,8 +71,39 @@ def init_project(project_dir: str):
 # ─── 文件保存 ─────────────────────────────────────────────
 
 def save_output_files(text: str, project_dir: str) -> list[str]:
-    """扫描 `==== path ====` 标记并保存文件。"""
+    """扫描输出标记并保存文件。支持两种格式（优先 XML，降级 ====）：
+
+    XML 格式:
+      <output>
+        <file path="相对路径">
+          (文件内容)
+        </file>
+      </output>
+
+    旧格式:
+      ==== path ====
+      content
+      ==== next_path ====
+    """
+    import xml.etree.ElementTree as ET
     saved = []
+
+    # 1. 尝试 XML 格式：<output><file path="...">content</file></output>
+    # 用正则而非 XML 解析，避免文件内容中的特殊字符破坏解析
+    xml_match = re.search(r'<output>(.*?)</output>', text, re.DOTALL)
+    if xml_match:
+        for m in re.finditer(r'<file\s+path="([^"]+)"\s*>(.*?)</file>', xml_match.group(1), re.DOTALL):
+            path = m.group(1).strip()
+            content = m.group(2).strip()
+            if path and content:
+                fp = Path(project_dir) / path
+                fp.parent.mkdir(parents=True, exist_ok=True)
+                fp.write_text(content, encoding='utf-8')
+                saved.append(path)
+        if saved:
+            return saved
+
+    # 2. 降级：旧 ==== path ==== 格式
     for m in re.finditer(r'====\s*([^\n=]+)\s*====\s*\n(.*?)(?=\n====|\Z)', text, re.DOTALL):
         path = m.group(1).strip()
         content = m.group(2).strip()
@@ -152,6 +183,8 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _run_single_file_preset("character-extract", None, args, project_dir)
     elif preset_name == "premise-draw":
         return _run_single_file_preset("premise-draw", None, args, project_dir)
+    elif preset_name == "open-book":
+        return _run_single_file_preset("open-book", None, args, project_dir)
     elif preset_name == "book-import":
         return _run_single_file_preset("book-import", None, args, project_dir)
     elif preset_name == "skeleton":
@@ -173,8 +206,9 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
     try:
         tree = ET.parse(preset_file)
         sp_raw = tree.getroot().findtext("prompt", "")
-    except Exception:
-        return f"预设 {preset_name} 解析失败"
+    except Exception as _ex:
+        traceback.print_exc()
+        return f"预设 {preset_name} 解析失败: {_ex}"
 
     resolver = VariableResolver(project_dir)
     resolver.set_context(
@@ -202,11 +236,21 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
 
     saved = save_output_files(resp, project_dir)
     if not saved:
-        if save_path:
-            fp = Path(project_dir) / save_path
+        # 兜底：没有 ==== 标记时，根据工具类型自动确定保存路径
+        _FALLBACK_PATHS = {
+            "book-import": "作品信息/主题/总纲.xml",
+            "synopsis-generate": "作品信息/主题/简介.xml",
+            "outline-generate": "作品信息/主题/总纲.xml",
+            "tags-generate": "作品信息/主题/标签.xml",
+            "skeleton": "故事骨架.md",
+            "adaptation": "改编策略.md",
+        }
+        fallback = _FALLBACK_PATHS.get(preset_name, save_path)
+        if fallback:
+            fp = Path(project_dir) / fallback
             fp.parent.mkdir(parents=True, exist_ok=True)
             fp.write_text(resp, encoding='utf-8')
-            saved = [save_path]
+            saved = [fallback]
         elif preset_name == "volume-outline":
             # 卷纲落笔：从内容提取卷号（兼容 XML 和 Markdown 格式）
             vol_id = re.search(r'<volume\s+id="(\d+)"', resp) or re.search(r'第(\d+)卷', resp)

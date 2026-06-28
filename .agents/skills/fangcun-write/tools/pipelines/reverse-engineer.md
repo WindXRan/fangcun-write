@@ -65,7 +65,7 @@ run_tool("skeleton", {}, project_dir)
 
 ## Step 4: 文风分析
 
-采样前三章+随机五章，分析句长/对话比例/段落节奏/情绪交替周期/钩子类型。
+采样前三章+随机五章，分析句长/对话比例/段落节奏/情绪交替周期/开篇收尾技法。
 
 ```
 run_tool("style-analysis", {}, project_dir)
