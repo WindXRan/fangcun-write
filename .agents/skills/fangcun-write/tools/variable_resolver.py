@@ -664,6 +664,9 @@ class VariableResolver:
 VariableResolver.COMPUTED_HANDLERS["current_chapter"] = (
     lambda self: str(self._ctx("N", "?"))
 )
+VariableResolver.COMPUTED_HANDLERS["current_volume"] = (
+    lambda self: str(self._ctx("volume", "?"))
+)
 VariableResolver.COMPUTED_HANDLERS["target_words"] = (
     VariableResolver._compute_target_words
 )

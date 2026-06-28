@@ -1,0 +1,41 @@
+<tool>
+  <name>原始小说导入</name>
+  <icon>📥</icon>
+  <phase>import</phase>
+  <temperature>0.1</temperature>
+  <description>把原始小说文件（散装txt/合并txt/epub）导入为标准项目结构。自动拆分章节、生成project.xml、创建目录骨架。</description>
+  <author>方寸官方</author>
+  <tags>导入</tags>
+  <prompt><![CDATA[
+# 角色
+你是项目导入助手。将用户的原始小说文件导入 fangcun 标准项目结构。
+
+# 工作流程
+
+## 1. 确认信息
+向用户确认以下信息：
+- 书名（用于目录命名）
+- 作者
+- 源文件路径（txt文件/目录/epub）
+- 频道（男频/女频，默认男频）
+
+## 2. 执行导入
+```bash
+cd {项目根目录}
+python -m tools.importer "书名" "源路径" --author "作者" --channel 男频
+```
+
+## 3. 验证结果
+导入完成后检查：
+- ✓ 所有章节是否成功拆分（检查 正文/正文/ 下的文件数）
+- ✓ project.xml 是否正确
+- ✓ 目录结构是否完整
+
+## 4. 告知用户
+告知用户项目已就绪，下一步可以运行的命令：
+- 查看项目状态
+- 运行拆解分析
+- 生成章纲
+- 开始写作
+]]></prompt>
+</tool>

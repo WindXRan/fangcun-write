@@ -10,6 +10,7 @@
   <variables>
     <!-- 运行时上下文（调用时传入） -->
     <variable name="当前章节号" category="正文" type="computed" source="runtime" handler="current_chapter"/>
+    <variable name="当前卷号" category="正文" type="computed" source="runtime" handler="current_volume"/>
     <variable name="目标字数" category="正文" type="computed" source="computed" handler="target_words"/>
     <variable name="目标字数下限" category="正文" type="computed" source="computed" handler="target_words_min"/>
     <variable name="目标字数上限" category="正文" type="computed" source="computed" handler="target_words_max"/>
@@ -19,6 +20,7 @@
     <variable name="补充要求" category="自定义" type="text" source="user_input"/>
     <variable name="本章正文" category="正文" type="computed" source="computed" handler="本章正文"/>
     <variable name="参考剧情" category="正文" type="text" source="user_input"/>
+    <variable name="源文对照" category="正文" type="text" source="user_input"/>
     <variable name="前文章纲" category="大纲" type="text" source="user_input"/>
     <variable name="背景设定" category="设定" type="text" source="user_input"/>
     <variable name="势力设定" category="设定" type="text" source="user_input"/>

@@ -88,9 +88,9 @@ def save_output_files(text: str, project_dir: str) -> list[str]:
     import xml.etree.ElementTree as ET
     saved = []
 
-    # 1. 尝试 XML 格式：<output><file path="...">content</file></output>
+    # 1. 尝试 XML 格式：<output [tool="..."]><file path="...">content</file></output>
     # 用正则而非 XML 解析，避免文件内容中的特殊字符破坏解析
-    xml_match = re.search(r'<output>(.*?)</output>', text, re.DOTALL)
+    xml_match = re.search(r'<output[^>]*>(.*?)</output>', text, re.DOTALL)
     if xml_match:
         for m in re.finditer(r'<file\s+path="([^"]+)"\s*>(.*?)</file>', xml_match.group(1), re.DOTALL):
             path = m.group(1).strip()
@@ -125,6 +125,7 @@ _PRESET_ALIAS = {
     "提取角色": "character-extract",
     "卷纲": "volume-outline",
     "章纲": "plot-guide", "细纲": "plot-guide", "生成章纲": "plot-guide",
+    "男频章纲": "plot-guide-nanpin", "女频章纲": "plot-guide-nvpin",
     "写章": "write-chapter", "续写": "write-chapter",
     "去AI": "deslop", "润色": "deslop",
     "对比": "compare", "审查": "compare",
@@ -171,6 +172,10 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _run_single_file_preset("write-chapter", None, args, project_dir)
     elif preset_name == "plot-guide":
         return _run_single_file_preset("plot-guide", None, args, project_dir)
+    elif preset_name == "plot-guide-nanpin":
+        return _run_single_file_preset("plot-guide-nanpin", None, args, project_dir)
+    elif preset_name == "plot-guide-nvpin":
+        return _run_single_file_preset("plot-guide-nvpin", None, args, project_dir)
     elif preset_name == "volume-outline":
         return _run_single_file_preset("volume-outline", None, args, project_dir)
     elif preset_name == "character-generate":
@@ -187,6 +192,23 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _run_single_file_preset("open-book", None, args, project_dir)
     elif preset_name == "book-import":
         return _run_single_file_preset("book-import", None, args, project_dir)
+    elif preset_name == "book-import-raw":
+        # 原始小说导入：需要 source（源路径）参数
+        source = args.get("source", "")
+        if not source:
+            return "缺少 source 参数（源文件/目录路径）"
+        from importer import run_import
+        result = run_import(
+            book_name=args.get("book_name", project_dir.split("/")[-1] if "/" in project_dir else project_dir),
+            author=args.get("author", ""),
+            source=source,
+            channel=args.get("channel", "男频"),
+            project_dir=project_dir,
+        )
+        if result["success"]:
+            return (f"✓ 导入完成：{result['book_name']}（{result['author']}）\n"
+                    f"  {result['total_chapters']} 章 → {result['project_dir']}")
+        return f"✗ 导入失败: {result.get('error', '未知错误')}"
     elif preset_name == "skeleton":
         return _run_single_file_preset("skeleton", None, args, project_dir)
     elif preset_name == "style-analysis":
@@ -195,6 +217,19 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _run_single_file_preset("adaptation", None, args, project_dir)
     else:
         return f"未知工具: {preset_name}"
+
+
+def _inject_tool_attribute(xml_path: str, tool_name: str):
+    """在 XML 文件根元素添加 tool 属性（如已有则跳过）。"""
+    import xml.etree.ElementTree as ET
+    try:
+        tree = ET.parse(xml_path)
+        root = tree.getroot()
+        if root.get("tool") is None:
+            root.set("tool", tool_name)
+            tree.write(xml_path, encoding='utf-8', xml_declaration=False)
+    except Exception:
+        pass  # 非标准 XML 或解析失败，不报错
 
 
 def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict, project_dir: str) -> str:
@@ -213,12 +248,13 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
     resolver = VariableResolver(project_dir)
     resolver.set_context(
         N=args.get("chapter_number", args.get("ch", 1)),
+        volume=args.get("volume_number", args.get("vol", "")),
         total_chapters=args.get("total_chapters", ""),
         start=args.get("start", 1),
         end=args.get("end", 1),
     )
     # 非保留参数 → 变量覆盖
-    _reserved = {"chapter_number", "ch", "user_input", "message", "story_name", "total_chapters", "start", "end"}
+    _reserved = {"chapter_number", "ch", "volume_number", "vol", "user_input", "message", "story_name", "total_chapters", "start", "end"}
     overrides = {k: v for k, v in args.items() if k not in _reserved and isinstance(v, str)}
     if overrides:
         resolver.set_user_overrides(overrides)
@@ -244,6 +280,8 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
             "tags-generate": "作品信息/主题/标签.xml",
             "skeleton": "故事骨架.md",
             "adaptation": "改编策略.md",
+            "plot-guide": f"正文/章纲/第{args.get('chapter_number', 1)}章.xml",
+            "write-chapter": f"正文/正文/第{args.get('chapter_number', 1)}章.xml",
         }
         fallback = _FALLBACK_PATHS.get(preset_name, save_path)
         if fallback:
@@ -283,6 +321,11 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
                 clean = re.sub(r'```(?:xml)?\n?', '', resp).strip()
                 fp.write_text(clean, encoding='utf-8')
                 saved = [f"作品信息/设定/角色/{name_m.group(1)}.xml"]
+    # 在所有 XML 文件根元素注入 tool 属性
+    for path in saved:
+        fp = Path(project_dir) / path
+        if fp.suffix.lower() == ".xml":
+            _inject_tool_attribute(str(fp), preset_name)
     return f"{preset_name} 完成: 保存 {len(saved)} 个文件"
 
 
