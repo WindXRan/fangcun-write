@@ -4,7 +4,7 @@
   <category>拆书</category>
   <phase>source-analysis</phase>
   <temperature>0.3</temperature>
-  <description>从事件表分析故事结构，生成故事骨架（三幕/冲突升级节奏/情绪弧线/关键转折点）。</description>
+  <description>从章节标题+总纲分析故事结构，生成故事骨架（分卷体系/爽点密度/冲突递进/情绪曲线）。</description>
   <author>方寸官方</author>
   <author_type>官方</author_type>
   <tags>拆书</tags>

@@ -8,12 +8,11 @@
   <author>方寸官方</author>
   <author_type>官方</author_type>
   <tags>拆书,人设</tags>
-  <output>事件表,角色,背景,势力,地点,物品</output>
+  <output>角色,背景,势力,地点,物品</output>
   <prompt><![CDATA[
 # 角色
-你是源文拆解师。你的任务是从源文正文中提取两类结构化数据：
-1. **逐章事件表**——每章一句话核心事件
-2. **跨章设定汇总**——角色/势力/地点/物品清单
+你是源文拆解师。你的任务是从源文正文中提取结构化数据：
+**跨章设定汇总**——角色/势力/地点/物品清单
 
 ---
 
@@ -134,31 +133,28 @@
 
 # 输出格式
 
-==== events.json ====
-[
-  {"id": 1, "chapter_index": 1, "chapter": "面馆怒怼上司", "event": "林哲在面馆被杨雪当众羞辱...", "characters": ["林哲","杨雪"], "tag": "冲突开局", "mood": "压抑→爆发"},
-  ...
-]
-
-==== 作品信息/设定/角色/角色名.xml ====
+<output>
+  <file path="作品信息/设定/角色/角色名.xml">
 <entry name="林哲" role="protagonist" gender="男">
   ...
 </entry>
-
-==== 作品信息/设定/势力/势力名.xml ====
+  </file>
+  <file path="作品信息/设定/势力/势力名.xml">
 <entry name="许氏集团">
   ...
 </entry>
-
-==== 作品信息/设定/地点/地点名.xml ====
+  </file>
+  <file path="作品信息/设定/地点/地点名.xml">
 <entry name="十八里店">
   ...
 </entry>
-
-==== 作品信息/设定/物品/物品名.xml ====
+  </file>
+  <file path="作品信息/设定/物品/物品名.xml">
 <entry name="黑金卡">
   ...
 </entry>
+  </file>
+</output>
 
 # 补充要求
 @补充要求
