@@ -8,12 +8,18 @@
 LLM 必须按以下 XML 结构输出，不得输出 Markdown。
 
 结构核心：冲突链（conflict_chain）驱动，多 action 节点推进。
+每个情节段包含段级情绪和节奏指导，供正文写作对齐节奏。
 输出路径：正文/章纲/第N章.xml
 -->
 <guide chapter="1" mode="male">
   <core_event>一句话核心事件（冲突+行动+结果）</core_event>
   <chapter_type>推进章/日常章/高潮章/过渡章</chapter_type>
   <emotional_arc>起点→终点</emotional_arc>
+  <rhythm_profile>
+    <overall_pace>快/中/慢（本章整体节奏描述）</overall_pace>
+    <sentence_rhythm>短句密集/长句铺排/混合（本章句式节奏特征）</sentence_rhythm>
+    <dialogue_ratio>对话占本章比例（高/中/低）</dialogue_ratio>
+  </rhythm_profile>
   <info_release>
     <point at="第10行">读者此刻知道的关键事实</point>
     <point at="第30行">读者此刻知道的关键事实</point>
@@ -23,11 +29,56 @@ LLM 必须按以下 XML 结构输出，不得输出 Markdown。
     <point at="章尾">读者此刻知道的关键事实</point>
   </info_release>
   <conflict_chain>
-    <setup>开端——困境/冲突起点。主角面对什么局面。行动+结果。</setup>
-    <action goal="子目标A">主角主动做什么、为什么做、遇到什么阻力。功能标签。</action>
-    <action goal="子目标B">第二子目标推进。</action>
-    <twist>转折——局势反转/新信息出现/两性博弈中的权力翻转。主角如何应对。</twist>
-    <climax>高潮——成果展示/敌人被打脸/资源获取/征服目标/性张力释放或延续。</climax>
+    <setup>
+      <content>开端——困境/冲突起点。主角面对什么局面。行动+结果。</content>
+      <emotion>读者此刻的情绪（憋屈/愤怒/恐惧/好奇）</emotion>
+      <rhythm_guide>
+        <paragraph_count>本段段数</paragraph_count>
+        <pace>快/中/慢</pace>
+        <sentence_style>短句/长句/混合</sentence_style>
+        <dialogue_density>高/中/低</dialogue_density>
+      </rhythm_guide>
+    </setup>
+    <action goal="子目标A">
+      <content>主角主动做什么、为什么做、遇到什么阻力。功能标签。</content>
+      <emotion>读者此刻的情绪</emotion>
+      <rhythm_guide>
+        <paragraph_count>本段段数</paragraph_count>
+        <pace>快/中/慢</pace>
+        <sentence_style>短句/长句/混合</sentence_style>
+        <dialogue_density>高/中/低</dialogue_density>
+      </rhythm_guide>
+    </action>
+    <action goal="子目标B">
+      <content>第二子目标推进。</content>
+      <emotion>读者此刻的情绪</emotion>
+      <rhythm_guide>
+        <paragraph_count>本段段数</paragraph_count>
+        <pace>快/中/慢</pace>
+        <sentence_style>短句/长句/混合</sentence_style>
+        <dialogue_density>高/中/低</dialogue_density>
+      </rhythm_guide>
+    </action>
+    <twist>
+      <content>转折——局势反转/新信息出现/权力翻转。主角如何应对。</content>
+      <emotion>读者此刻的情绪</emotion>
+      <rhythm_guide>
+        <paragraph_count>本段段数</paragraph_count>
+        <pace>快/中/慢</pace>
+        <sentence_style>短句/长句/混合</sentence_style>
+        <dialogue_density>高/中/低</dialogue_density>
+      </rhythm_guide>
+    </twist>
+    <climax>
+      <content>高潮——成果展示/打脸/资源获取/征服/性张力释放或延续。</content>
+      <emotion>读者此刻的情绪</emotion>
+      <rhythm_guide>
+        <paragraph_count>本段段数</paragraph_count>
+        <pace>快/中/慢</pace>
+        <sentence_style>短句/长句/混合</sentence_style>
+        <dialogue_density>高/中/低</dialogue_density>
+      </rhythm_guide>
+    </climax>
   </conflict_chain>
   <aftermath>
     <payoff>本收益</payoff>

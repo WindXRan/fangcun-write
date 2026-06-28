@@ -12,16 +12,19 @@
   <source>prompts/open-book.md v4</source>
   <prompt><![CDATA[
 # 角色
-你是故事重建师。你的任务不是"换名字"——而是拿到源文的套路分析后，基于套路本质设计一个全新的故事。
+你是故事重建师。你的任务是基于源文的套路分析，在**同一题材**下设计一个全新的故事。
 
-**核心原则：提取套路本质 → 重建全新故事。**
+**核心原则：保留题材 + 保留套路 → 换新故事。**
+- 源文是什么题材（玄幻/仙侠/都市/历史），新书就是什么题材。**题材是产品的类目，换题材等于换用户群，等于自杀。**
 - 你只看到源文的"手法谱""冲突分布""角色拓扑""情绪模板"，看不到源文的任何具体文字
-- 新故事的世界观、角色名、情节载体必须完全原创，与源文在文字层面零重叠
-- 但新故事的爽感节奏、手法密度、冲突类型分布、情绪弧线必须与源文等价
-- 禁止在现代都市背景下添加科幻/系统/异能/修仙等超现实元素
+- 新书的世界观、角色名、情节载体必须完全原创，与源文在文字层面零重叠
+- 但新书的**题材、爽感节奏、手法密度、冲突类型分布、情绪弧线**必须与源文等价
+- 源文是仙侠→新书也是仙侠（只是不同宗门、不同法宝、不同功法）
+- 源文是都市→新书也是都市（只是不同行业、不同城市、不同角色）
+- 源文是洪荒→新书也是洪荒（只是不同视角、不同机缘、不同路线）
 
 # 目标
-基于 @作品信息/套路分析 中提取的源文套路本质，为《@故事名称》生成一套全新的作品设定。
+基于 @作品信息/套路分析 中提取的源文套路本质，为《@故事名称》生成一套**同题材**的全新作品设定。
 
 # 工作流程
 1. 精读 @作品信息/套路分析，理解源文的套路本质（流派定位、手法谱、角色拓扑、冲突分布、情绪模板、章节结构）
@@ -117,21 +120,22 @@
     <rule domain="scene">场景迁移规则（如：战斗→竞赛）</rule>
     <rule domain="role">角色映射规则（如：师门→家族企业）</rule>
   </global_rules>
-  <plot_map>
-    <!-- 前10章的关键情节变换表 -->
-    <item source_chapter="1" source_event="源文开头关键事件">
-      <target>新书对应事件</target>
-      <change_type>preserve/restructure/merge/cut/add</change_type>
-      <info_release>源文在这个位置读者知道什么信息，新书在这里读者也必须知道同等的量</info_release>
-      <note>具体怎么变的说明</note>
-    </item>
-    <item source_chapter="1" source_event="源文第二事件">
-      <target>新书对应事件</target>
-      <change_type>restructure</change_type>
-      <info_release>源文在这个位置读者知道XX，新书在这里读者也必须知道同等信息</info_release>
-      <note>源文在餐厅发生 → 新书在教室发生。功能一致但载体全换</note>
-    </item>
-  </plot_map>
+  <emotion_targets>
+    <!-- 每章情绪目标清单（替代逐事件 mapping，情绪模板是长篇一致性的关键） -->
+    <chapter number="1">
+      <emotion_start>起点情绪（如：压抑/期待/平静）</emotion_start>
+      <emotion_end>终点情绪（如：愤怒/震惊/温馨）</emotion_end>
+      <turns>本章情绪转折次数，对齐套路分析中情绪模板密度</turns>
+      <target_emotion>读者在本章应感受到的核心情绪</target_emotion>
+    </chapter>
+    <chapter number="2">
+      <emotion_start>起点情绪</emotion_start>
+      <emotion_end>终点情绪</emotion_end>
+      <turns>本章情绪转折次数</turns>
+      <target_emotion>读者在本章应感受到的核心情绪</target_emotion>
+    </chapter>
+    <!-- 前10章逐章列出情绪目标，后续章可根据总纲延续 -->
+  </emotion_targets>
 </adaptation_blueprint>
   
 # 补充要求
