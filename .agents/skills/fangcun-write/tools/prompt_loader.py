@@ -4,8 +4,20 @@ import sys
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
+# XSD schema validation (optional — pip install xmlschema)
+try:
+    import xmlschema
+    HAS_XMLSCHEMA = True
+except ImportError:
+    HAS_XMLSCHEMA = False
+    xmlschema = None
+
 _FILE = Path(__file__).resolve()
 _TOOLS = _FILE.parent / "builtin"          # tools/builtin/（preset.xml 目录）
+
+# Schema file path — must exist alongside the XML presets
+_SCHEMA_PATH = _TOOLS / "preset-schema.xsd"
+_SCHEMA_CACHE = None
 
 # prompt_meta（旧 .md 回退用，可能不存在）
 try:
@@ -24,6 +36,7 @@ except ImportError:
 # 变量标注解析：变量名(必选) / 变量名(可选)
 _VAR_ANNOT_PATTERN = re.compile(r'^([^(]+)(?:\(([^)]*)\))?$')
 
+
 def _parse_var_annotations(raw: str) -> list[dict]:
     """解析 <variables> 标签内容，返回 [{name, required, label}]。"""
     result = []
@@ -41,8 +54,84 @@ def _parse_var_annotations(raw: str) -> list[dict]:
     return result
 
 
-def _read_preset(name):
-    """读取 builtin/{name}.xml。"""
+def _validate_xml_schema(preset_name: str, xml_path: Path, strict: bool) -> list[str]:
+    """Validate an XML preset file against the XSD schema.
+
+    Compiles the schema once and caches it.  Returns a list of
+    human-readable error messages (empty list = valid).
+
+    strict=True  → errors printed at [ERROR] level (caller may raise).
+    strict=False → errors printed at [WARN] level only.
+    """
+    global _SCHEMA_CACHE
+
+    if not HAS_XMLSCHEMA:
+        print("  [WARN] xmlschema 未安装，跳过 XSD 校验。pip install xmlschema 启用。")
+        return []
+
+    if not _SCHEMA_PATH.exists():
+        print(f"  [WARN] schema 文件不存在: {_SCHEMA_PATH}")
+        return []
+
+    try:
+        if _SCHEMA_CACHE is None:
+            _SCHEMA_CACHE = xmlschema.XMLSchema(_SCHEMA_PATH)
+
+        errors: list[str] = []
+        for validation_error in _SCHEMA_CACHE.iter_errors(xml_path):
+            # Extract the XPath / element path for a clear error location
+            elem = validation_error.elem
+            if elem is not None:
+                element_path = _element_xpath(elem)
+            else:
+                element_path = getattr(validation_error, 'path', '?')
+
+            msg = (
+                f"  [{'ERROR' if strict else 'WARN'}] "
+                f"XML 校验失败: {preset_name}.xml\n"
+                f"      位置: {element_path}\n"
+                f"      原因: {validation_error.message}"
+            )
+            errors.append(msg)
+
+        return errors
+
+    except xmlschema.XMLSchemaException as ex:
+        return [
+            f"  [ERROR] schema 加载/解析失败: {_SCHEMA_PATH.name}\n"
+            f"      原因: {ex}"
+        ]
+    except Exception as ex:
+        return [
+            f"  [ERROR] XSD 校验异常: {ex}"
+        ]
+
+
+def _element_xpath(elem) -> str:
+    """Build a minimal XPath-like string for an Element (for error reporting)."""
+    parts = []
+    cur = elem
+    while cur is not None:
+        parts.append(cur.tag)
+        cur = cur.getparent() if hasattr(cur, 'getparent') else None
+        if cur is not None and hasattr(cur, 'tag'):
+            # stop at <tool> root to keep output concise
+            if cur.tag == 'tool':
+                break
+    return '/'.join(reversed(parts)) or elem.tag
+
+
+def _read_preset(name, strict=False):
+    """读取 builtin/{name}.xml。
+
+    Parameters
+    ----------
+    name : str
+        Preset name (with or without .md suffix).
+    strict : bool
+        When True, XSD validation errors raise ValueError.
+        When False, errors are printed as warnings and execution continues.
+    """
     name = name.replace(".md", "")
     d = _TOOLS / f"{name}.xml"
     if not d.exists():
@@ -50,6 +139,18 @@ def _read_preset(name):
     try:
         t = ET.parse(d)
         r = t.getroot()
+
+        # XSD schema validation — run immediately after parsing
+        errors = _validate_xml_schema(name, d, strict=strict)
+        if errors:
+            for e in errors:
+                print(e, file=sys.stderr)
+            if strict:
+                raise ValueError(
+                    f"Preset '{name}.xml' 未通过 XSD schema 校验，"
+                    f"共 {len(errors)} 个错误。"
+                )
+
         pe = r.find("prompt")
         prompt_text = pe.text.strip() if pe is not None and pe.text else None
 
@@ -62,6 +163,14 @@ def _read_preset(name):
             declared_vars = [m["name"] for m in var_metas]
 
         return prompt_text, declared_vars, var_metas
+
+    except ValueError:
+        raise  # re-raise strict-mode ValueError as-is
+    except ET.ParseError as ex:
+        print(f"  [ERROR] XML 语法错误: {name}.xml — {ex}", file=sys.stderr)
+        if strict:
+            raise
+        return None, [], []
     except Exception:
         return None, [], []
 
@@ -121,13 +230,28 @@ def _validate_preset_variables(
     return missing
 
 
+def load_preset(name, strict=False):
+    """Public entry point: load a preset by name.
+
+    Thin wrapper around _read_preset that also validates the XSD schema.
+
+    Parameters
+    ----------
+    name : str
+        Preset name (without path/extension).
+    strict : bool
+        When True, XSD validation failure raises ValueError.
+    """
+    return _read_preset(name, strict=strict)
+
+
 def load_prompt(prompt_path, base_dir, replacements=None, mode=None,
-                project_dir=None, source_dir=None):
+                project_dir=None, source_dir=None, strict=False):
     prompt_file = Path(prompt_path)
     if not prompt_file.is_absolute():
         prompt_file = Path(base_dir) / prompt_path
 
-    raw, declared_vars, var_metas = _read_preset(prompt_file.stem)
+    raw, declared_vars, var_metas = _read_preset(prompt_file.stem, strict=strict)
 
     if raw is None:
         if prompt_file.exists():
