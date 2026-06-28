@@ -152,7 +152,7 @@
 -----
 
 <output tool="volume-outline">
-  <file path="正文/卷纲/第@当前卷号卷.xml">
+  <file path="正文/卷纲/卷纲.xml">
 @模板_卷纲
   </file>
 </output>

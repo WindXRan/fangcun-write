@@ -225,10 +225,25 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
             channel=args.get("channel", "男频"),
             project_dir=project_dir,
         )
-        if result["success"]:
-            return (f"✓ 导入完成：{result['book_name']}（{result['author']}）\n"
-                    f"  {result['total_chapters']} 章 → {result['project_dir']}")
-        return f"✗ 导入失败: {result.get('error', '未知错误')}"
+        if not result["success"]:
+            return f"✗ 导入失败: {result.get('error', '未知错误')}"
+
+        msg = "✓ 导入完成：" + result["book_name"] + "（" + result["author"] + "）"
+        msg += "\n  " + str(result["total_chapters"]) + " 章 → " + result["project_dir"]
+
+        # 有 API key 时自动走逆推 pipeline
+        if os.environ.get("API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN"):
+            out_dir = result["project_dir"]
+            from pipeline_import import step_pattern_analysis, step_book_import, step_volume_outline
+            msg += "\n  API 就绪，自动逆推..."
+            step_pattern_analysis(out_dir)
+            step_book_import(out_dir, result["book_name"], result["total_chapters"])
+            step_volume_outline(out_dir)
+            msg += "\n  ✓ 逆推总纲/简介/标签/卷纲/套路 已生成"
+        else:
+            msg += "\n  ⚠ 未设置 API_KEY，跳过逆推（后续可跑「导入拆解」补全）"
+
+        return msg
     elif preset_name == "skeleton":
         return _run_single_file_preset("skeleton", None, args, project_dir)
     elif preset_name == "style-analysis":
