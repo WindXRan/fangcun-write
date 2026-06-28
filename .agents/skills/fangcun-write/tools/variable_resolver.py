@@ -325,7 +325,6 @@ class VariableResolver:
             return self._extract_name_map(content)
         if method == "parse":
             return content  # events.xml / volumes.xml 全文返回
-            return self._extract_source_characters(content)
         return content
 
     def _resolve_source_path(self, source: str) -> Optional[Path]:
@@ -393,8 +392,6 @@ class VariableResolver:
         """从 characters.md 提取 XML name_map。"""
         m = re.search(r"<name_map>(.*?)</name_map>", content, re.DOTALL)
         return m.group(1).strip() if m else content
-
-    @staticmethod
 
     # ─── compute 处理器 ──────────────────────────────────────
 
@@ -607,6 +604,10 @@ class VariableResolver:
                         val = self.resolve(name)
                         if not val.startswith('@'):
                             result.append(val)
+                            i += len(name) + 1
+                            matched = True
+                        elif val.startswith('@[未定义:'):
+                            result.append(f'@[解析失败:{name}]')
                             i += len(name) + 1
                             matched = True
                     if not matched:
@@ -893,6 +894,16 @@ def _source_chapter(self):
     return ""
 
 VariableResolver.COMPUTED_HANDLERS["源文对照"] = _source_chapter
+
+
+def _fanxie_mode(self):
+    """仿写模式标志。非空 = 仿写模式生效，空 = 原创模式。"""
+    source_book = self._user_overrides.get("source_book", "")
+    if source_book:
+        return "开启"
+    return ""
+
+VariableResolver.COMPUTED_HANDLERS["仿写模式"] = _fanxie_mode
 
 
 def _source_pattern_analysis(self):

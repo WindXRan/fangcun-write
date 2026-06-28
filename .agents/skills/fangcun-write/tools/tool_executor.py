@@ -129,6 +129,7 @@ _PRESET_ALIAS = {
     "章纲": "plot-guide-nanpin", "细纲": "plot-guide-nanpin", "生成章纲": "plot-guide-nanpin",
     "男频章纲": "plot-guide-nanpin", "女频章纲": "plot-guide-nvpin",
     "写章": "write-chapter", "续写": "write-chapter",
+    "写章仿写": "write-chapter-fanxie",
     "去AI": "deslop", "润色": "deslop",
     "对比": "compare", "审查": "compare",
     "脑洞": "premise-draw",
@@ -174,6 +175,8 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _run_single_file_preset("book-draw", None, args, project_dir)
     elif preset_name == "write-chapter":
         return _run_single_file_preset("write-chapter", None, args, project_dir)
+    elif preset_name == "write-chapter-fanxie":
+        return _run_single_file_preset("write-chapter-fanxie", None, args, project_dir)
 
     elif preset_name == "plot-guide-nanpin":
         return _run_single_file_preset("plot-guide-nanpin", None, args, project_dir)
