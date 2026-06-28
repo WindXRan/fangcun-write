@@ -876,15 +876,20 @@ def _source_chapter(self):
     # 或拆文库/{source_book}/
     novel_dir = self.novel_dir  # 仿写项目目录
     for parent in [novel_dir.parent, novel_dir.parent.parent / "拆文库"]:
+        # source_book 可能是独立项目（projects/A/SB/），也可能是同级（projects/SB/）
+        candidates = []
         sb_dir = parent / source_book
-        if not sb_dir.exists():
-            continue
-        # 尝试正文/正文/第N章.txt
-        for pat in [f"正文/正文/第{N}章*.txt", f"正文/正文/第{N}章*.xml",
-                    f"源文/第{N}章*.txt", f"第{N}章*.txt"]:
-            files = sorted(sb_dir.glob(pat))
-            if files:
-                return files[0].read_text(encoding='utf-8', errors='replace')
+        if sb_dir.exists():
+            candidates.append(sb_dir)
+        # 源文就在 parent 本身（projects/{source_book}/）
+        if parent.name == source_book:
+            candidates.append(parent)
+        for sb_dir in candidates:
+            for pat in [f"正文/正文/第{N}章*.txt", f"正文/正文/第{N}章*.xml",
+                        f"源文/第{N}章*.txt", f"第{N}章*.txt"]:
+                files = sorted(sb_dir.glob(pat))
+                if files:
+                    return files[0].read_text(encoding='utf-8', errors='replace')
     return ""
 
 VariableResolver.COMPUTED_HANDLERS["源文对照"] = _source_chapter
@@ -896,9 +901,14 @@ def _source_pattern_analysis(self):
     if source_book:
         novel_dir = self.novel_dir
         for parent in [novel_dir.parent, novel_dir.parent.parent / "拆文库"]:
+            candidates = []
             sb_dir = parent / source_book
             if sb_dir.exists():
-                f = sb_dir / "作品信息" / "套路分析.xml"
+                candidates.append(sb_dir)
+            if parent.name == source_book:
+                candidates.append(parent)
+            for sd in candidates:
+                f = sd / "作品信息" / "套路分析.xml"
                 if f.exists():
                     return f.read_text(encoding='utf-8')
     # fallback: 从仿写项目本身读取
