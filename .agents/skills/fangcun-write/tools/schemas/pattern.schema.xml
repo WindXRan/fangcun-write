@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  pattern.schema.xml — 套路分析模板。
+  存储于 作品信息/套路分析.xml。
+  提取源文的套路流派本质，供仿写重建使用。
+  仿写管线中所有下游工具只看此文件，不看源文原文。
+-->
+<pattern_analysis>
+  <!-- 流派定位 -->
+  <genre primary="都市" sub="身份错位">题材大类</genre>
+
+  <!-- 核心爽点公式 -->
+  <core_appeal>
+    <formula>爽点公式，如：身份错位 + 信息差 + 连续打脸</formula>
+    <reader_drive>读者追更的核心动力，一句话</reader_drive>
+  </core_appeal>
+
+  <!-- 叙事手法谱 -->
+  <technique_spectrum>
+    <technique name="动作立人设" count="6" weight="30%" mandatory="true"/>
+    <technique name="对话引冲突" count="4" weight="20%" mandatory="true"/>
+    <technique name="身份反差" count="3" weight="15%"/>
+    <technique name="内心状态外化" count="2" weight="10%"/>
+    <technique name="环境烘托情绪" count="2" weight="10%"/>
+    <technique name="留白省略" count="1" weight="5%"/>
+  </technique_spectrum>
+
+  <!-- 角色功能拓扑 -->
+  <role_topology>
+    <role function="主角-伪装者" arc="底层伪装→身份做实→真强大" mandatory="true"/>
+    <role function="对手-质疑者" arc="质疑→被打脸→被收服/消失" mandatory="true"/>
+    <role function="辅助-信以为真者" arc="相信→怀疑→再相信"/>
+  </role_topology>
+
+  <!-- 冲突类型分布 -->
+  <conflict_distribution>
+    <conflict type="身份冲突" percentage="60"/>
+    <conflict type="利益冲突" percentage="25"/>
+    <conflict type="信息差冲突" percentage="15"/>
+  </conflict_distribution>
+
+  <!-- 情绪弧线模板（按章） -->
+  <emotional_template>
+    <chapter n="1">压抑→爆发→爽→得意→欲望</chapter>
+    <chapter n="2">轻松→危机→紧张→打脸→满足</chapter>
+  </emotional_template>
+
+  <!-- 章节结构模板 -->
+  <chapter_structure>
+    <element name="开场冲突" position="1-10行" mandatory="true">读者立刻知道主角面临什么压力</element>
+    <element name="冲突升级" position="10-30%" mandatory="true">压力持续增加或叠加新压力</element>
+    <element name="转折" position="30-50%" mandatory="true">信息/关系/局势发生变化</element>
+    <element name="打脸/高潮" position="50-70%" mandatory="true">情绪峰值或动作峰值</element>
+    <element name="收获+钩子" position="70-100%" mandatory="true">阶段性收益 + 下文推力</element>
+  </chapter_structure>
+</pattern_analysis>

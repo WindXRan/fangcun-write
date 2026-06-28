@@ -70,5 +70,6 @@
     <variable name="模板_标签池" category="设定" type="computed" source="computed" handler="template_tag_pool"/>
     <variable name="模板_场景规则" category="设定" type="computed" source="computed" handler="template_scene_rules"/>
     <variable name="模板_对比维度" category="设定" type="computed" source="computed" handler="template_compare_dimensions"/>
+    <variable name="模板_套路" category="设定" type="computed" source="computed" handler="template_pattern"/>
   </variables>
 </definitions>
