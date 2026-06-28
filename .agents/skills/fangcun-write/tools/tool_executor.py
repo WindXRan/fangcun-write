@@ -120,6 +120,7 @@ def save_output_files(text: str, project_dir: str) -> list[str]:
 _PRESET_ALIAS = {
     "开书": "book-draw", "顶层设计": "book-draw", "原创开书": "book-draw",
     "仿写开书": "open-book", "开书全套": "open-book",
+    "套路重建": "enhanced-open-book", "仿写2.0": "enhanced-open-book",
     "套路分析": "pattern-analysis",
     "简介": "synopsis-generate", "总纲": "outline-generate", "标签": "tags-generate",
     "角色生成": "character-generate", "设计角色": "character-generate", "人设": "character-generate",
@@ -192,6 +193,8 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _run_single_file_preset("open-book", None, args, project_dir)
     elif preset_name == "pattern-analysis":
         return _run_single_file_preset("pattern-analysis", None, args, project_dir)
+    elif preset_name == "enhanced-open-book":
+        return _run_single_file_preset("enhanced-open-book", None, args, project_dir)
     elif preset_name == "book-import":
         return _run_single_file_preset("book-import", None, args, project_dir)
     elif preset_name == "book-import-raw":
