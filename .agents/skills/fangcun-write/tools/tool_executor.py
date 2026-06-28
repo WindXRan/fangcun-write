@@ -130,6 +130,7 @@ _PRESET_ALIAS = {
     "去AI": "deslop", "润色": "deslop",
     "对比": "compare", "审查": "compare",
     "脑洞": "premise-draw",
+    "选卡": "apply-pick", "应用": "apply-pick",
 }
 
 # 单文件工具：无标记时直接保存到预设路径
@@ -188,6 +189,8 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _run_single_file_preset("character-extract", None, args, project_dir)
     elif preset_name == "premise-draw":
         return _run_single_file_preset("premise-draw", None, args, project_dir)
+    elif preset_name == "apply-pick":
+        return _apply_pick(project_dir, args)
     elif preset_name == "open-book":
         return _run_single_file_preset("open-book", None, args, project_dir)
     elif preset_name == "book-import":
@@ -233,7 +236,7 @@ def _inject_tool_attribute(xml_path: str, tool_name: str):
 
 
 def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict, project_dir: str) -> str:
-    """加载预设→LLM→保存（通用）。"""
+    """加载预设→LLM→保存（通用）。支持 rounds 参数抽卡。"""
     import xml.etree.ElementTree as ET
     preset_file = _BUILTIN_DIR / f"{preset_name}.xml"
     if not preset_file.exists():
@@ -244,6 +247,11 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
     except Exception as _ex:
         traceback.print_exc()
         return f"预设 {preset_name} 解析失败: {_ex}"
+
+    rounds = int(args.get("rounds", 1))
+    # 抽卡模式：跑多轮，每轮结果存抽卡文件，用户选一个应用
+    if rounds > 1:
+        return _run_multi_round(preset_name, save_path, args, project_dir, sp_raw)
 
     resolver = VariableResolver(project_dir)
     resolver.set_context(
@@ -348,3 +356,117 @@ def _run_extract_events(args: dict, project_dir: str) -> str:
     if not events:
         return "事件提取失败"
     return f"事件提取完成: {len(events)} 章"
+
+
+# ─── 抽卡模式：多轮生成 → 用户选一 ─────────────────
+
+
+def _run_multi_round(preset_name: str, save_path: str | None,
+                     args: dict, project_dir: str, sp_raw: str) -> str:
+    """跑 N 轮抽卡，每轮结果存 .抽卡{N} 文件，返回菜单供用户挑选。"""
+    import xml.etree.ElementTree as ET
+    rounds = int(args.get("rounds", 5))
+    temperature_base = float(args.get("temperature", 0.8))
+
+    ch = args.get("chapter_number", args.get("ch", 1))
+    _FALLBACK_PATHS = {
+        "book-import": "作品信息/主题/总纲.xml",
+        "synopsis-generate": "作品信息/主题/简介.xml",
+        "outline-generate": "作品信息/主题/总纲.xml",
+        "tags-generate": "作品信息/主题/标签.xml",
+        "skeleton": "故事骨架.md",
+        "adaptation": "改编策略.md",
+        "plot-guide": f"正文/章纲/第{ch}章.xml",
+        "plot-guide-nanpin": f"正文/章纲/第{ch}章.xml",
+        "plot-guide-nvpin": f"正文/章纲/第{ch}章.xml",
+        "write-chapter": f"正文/正文/第{ch}章.xml",
+        "synopsis-generate": "作品信息/主题/简介.xml",
+        "volume-outline": "正文/卷纲/卷纲.xml",
+        "character-generate": "作品信息/设定/角色.xml",
+        "premise-draw": None,
+    }
+    base_path = save_path or _FALLBACK_PATHS.get(preset_name)
+    if not base_path:
+        return f"抽卡模式暂不支持 {preset_name}（未配置基准保存路径）"
+
+    base_file = Path(project_dir) / base_path
+    stem = base_file.stem
+    ext = base_file.suffix
+
+    results = []
+    for r in range(1, rounds + 1):
+        t = min(1.5, max(0.1, temperature_base + (r - 1) * 0.05))
+
+        resolver = VariableResolver(project_dir)
+        resolver.set_context(
+            N=ch,
+            volume=args.get("volume_number", args.get("vol", "")),
+            total_chapters=args.get("total_chapters", ""),
+            start=args.get("start", 1),
+            end=args.get("end", 1),
+        )
+        _reserved = {"chapter_number", "ch", "volume_number", "vol", "user_input",
+                     "message", "story_name", "total_chapters", "start", "end", "rounds", "round"}
+        overrides = {k: v for k, v in args.items() if k not in _reserved and isinstance(v, str)}
+        if overrides:
+            resolver.set_user_overrides(overrides)
+        sp = resolver.render(sp_raw)
+        user_msg = args.get("user_input", args.get("message", ""))
+        messages = [{"role": "system", "content": sp}]
+        if user_msg:
+            messages.append({"role": "user", "content": user_msg})
+
+        resp, err = call_llm(messages)
+        if err or not resp:
+            results.append((r, None, f"LLM 失败: {err or '空响应'}"))
+            continue
+
+        card_file = base_file.parent / f"{stem}.抽卡{r}{ext}"
+        card_file.parent.mkdir(parents=True, exist_ok=True)
+        card_file.write_text(resp, encoding='utf-8')
+
+        preview_lines = resp.strip().split('\n')[:3]
+        preview = " | ".join(l.strip()[:40] for l in preview_lines if l.strip())
+        if len(preview) > 120:
+            preview = preview[:120] + "..."
+
+        results.append((r, str(card_file), preview))
+
+    lines = [f"\n{'='*60}", f"  {preset_name} × {rounds} 轮抽卡完成", f"{'='*60}"]
+    for r, path, preview in results:
+        status = f"→ {path}" if path else f"✗ {preview}"
+        lines.append(f"\n  [{r}] {status}")
+        if preview and path:
+            lines.append(f"     预览: {preview[:80]}")
+
+    lines.append(f"\n  运行「选卡 N」应用第 N 轮结果到正式文件")
+    return "\n".join(lines)
+
+
+def _apply_pick(project_dir: str, args: dict) -> str:
+    """用户选中的抽卡结果 → 复制为正式文件。"""
+    import glob
+
+    round_num = args.get("round")
+    if not round_num:
+        return "缺少 round 参数，示例：选卡 3"
+
+    cards = sorted(Path(project_dir).rglob(f"*.抽卡{round_num}.*"))
+    if not cards:
+        return f"未找到 .抽卡{round_num} 文件"
+
+    picked = cards[0]
+    stem = picked.stem
+    base_stem = stem.rsplit(".抽卡", 1)[0] if ".抽卡" in stem else stem
+    target = picked.parent / f"{base_stem}{picked.suffix}"
+
+    content = picked.read_text(encoding='utf-8')
+    target.write_text(content, encoding='utf-8')
+
+    for card in sorted(Path(project_dir).rglob("*.抽卡*.*")):
+        try:
+            card.unlink()
+        except:
+            pass
+
+    return (f"✓ 已应用 [{round_num}] → {target}")

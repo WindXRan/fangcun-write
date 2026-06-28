@@ -8,7 +8,7 @@
   <author>方寸官方</author>
   <author_type>官方</author_type>
   <tags>大纲,男频,女频</tags>
-  <output>卷纲</output>
+  <output tool="volume-outline">卷纲</output>
 
   <prompt><![CDATA[
 # 角色
@@ -151,7 +151,7 @@
 
 -----
 
-<output>
+<output tool="volume-outline">
   <file path="正文/卷纲/第@当前卷号卷.xml">
 @模板_卷纲
   </file>

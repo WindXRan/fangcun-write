@@ -61,6 +61,8 @@
     <variable name="模板_卷" category="设定" type="computed" source="computed" handler="template_volumes"/>
     <variable name="模板_卷纲" category="设定" type="computed" source="computed" handler="template_卷纲"/>
     <variable name="模板_章纲" category="设定" type="computed" source="computed" handler="template_章纲"/>
+    <variable name="模板_章纲_男频" category="设定" type="computed" source="computed" handler="template_章纲_男频"/>
+    <variable name="模板_章纲_女频" category="设定" type="computed" source="computed" handler="template_章纲_女频"/>
     <variable name="模板_写作规则" category="设定" type="computed" source="computed" handler="template_writing_rules"/>
     <variable name="模板_钩子" category="设定" type="computed" source="computed" handler="template_hooks"/>
     <variable name="模板_角色规则" category="设定" type="computed" source="computed" handler="template_character_rules"/>

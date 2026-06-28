@@ -8,7 +8,7 @@
   <author_type>官方</author_type>
   <tags>大纲,男频,女频</tags>
   <category>大纲</category>
-  <output>章纲</output>
+  <output tool="plot-guide">章纲</output>
   <variables>关联章节(可选),参考剧情(可选),前文章纲(可选),关联角色(可选),背景设定(可选),势力设定(可选)</variables>
   <prompt><![CDATA[
 # 角色
@@ -155,7 +155,7 @@
 # 输出格式
 严格按 @模板_章纲 的格式输出（1.开端/2.铺垫/3.转折/4.打脸/5.收获）。所有内容写入同一个 file path。
 
-<output>
+<output tool="plot-guide">
   <file path="正文/章纲/第@当前章节号章.xml">
 @模板_章纲
   </file>
