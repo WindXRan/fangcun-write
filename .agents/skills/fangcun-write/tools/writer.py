@@ -112,8 +112,8 @@ def write_chapter(config, ch, mode="imitation", auto_fix=True):
     if style_prepend:
         user_prompt = f"<style_profile>\n{style_prepend}\n</style_profile>\n\n{user_prompt}"
 
-    # 保存完整渲染 prompt 到 _debug/
-    _debug_base = Path(project_dir) if project_dir else Path.cwd()
+    # 保存完整渲染 prompt 到 _debug/（始终输出到项目根目录）
+    _debug_base = Path(config.get("base_dir", project_dir)) if project_dir else Path.cwd()
     _debug_dir = _debug_base / "_debug"
     try:
         _debug_dir.mkdir(parents=True, exist_ok=True)
@@ -310,7 +310,7 @@ def run_preset(config, preset_name, ch=1, debug=False, start=None, end=None):
         return f"[BLOCKED] 以下变量缺失，请先创建对应数据后再重试：\n" + "\n".join(_missing)
 
     if debug or config.get("prompts_only"):
-        _dbg_base = Path(_pd) if _pd else Path.cwd()
+        _dbg_base = Path(config.get("base_dir") or _pd or ".")
         debug_dir = _dbg_base / "_debug"
         debug_dir.mkdir(parents=True, exist_ok=True)
         (debug_dir / f"{preset_name}.md").write_text(user_prompt, encoding="utf-8")

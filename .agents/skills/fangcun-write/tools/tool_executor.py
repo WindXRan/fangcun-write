@@ -145,9 +145,21 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
     elif preset_name == "character-generate":
         return _run_single_file_preset("character-generate", None, args, project_dir)
     elif preset_name == "character-extract":
-        return _run_extract_events(args, project_dir)
+        # 优先用 Python 并行提取（快），source_dir 为空时降级到 XML prompt
+        source_dir = args.get("source_dir", "")
+        if source_dir:
+            return _run_extract_events(args, project_dir)
+        return _run_single_file_preset("character-extract", None, args, project_dir)
     elif preset_name == "premise-draw":
         return _run_single_file_preset("premise-draw", None, args, project_dir)
+    elif preset_name == "book-import":
+        return _run_single_file_preset("book-import", None, args, project_dir)
+    elif preset_name == "skeleton":
+        return _run_single_file_preset("skeleton", None, args, project_dir)
+    elif preset_name == "style-analysis":
+        return _run_single_file_preset("style-analysis", None, args, project_dir)
+    elif preset_name == "adaptation":
+        return _run_single_file_preset("adaptation", None, args, project_dir)
     else:
         return f"未知工具: {preset_name}"
 
