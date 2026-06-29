@@ -1,79 +1,80 @@
+<?xml version='1.0' encoding='utf-8'?>
 <definitions>
   <categories>
-    <category key="作品信息" label="作品信息"/>
-    <category key="大纲" label="大纲"/>
-    <category key="角色" label="角色"/>
-    <category key="正文" label="正文"/>
-    <category key="设定" label="设定"/>
-    <category key="自定义" label="自定义"/>
+    <category key="作品信息" label="作品信息" />
+    <category key="大纲" label="大纲" />
+    <category key="角色" label="角色" />
+    <category key="正文" label="正文" />
+    <category key="设定" label="设定" />
+    <category key="自定义" label="自定义" />
   </categories>
   <variables>
-    <!-- 运行时上下文（调用时传入） -->
-    <variable name="当前章节号" category="正文" type="computed" source="runtime" handler="current_chapter"/>
-    <variable name="当前卷号" category="正文" type="computed" source="runtime" handler="current_volume"/>
-    <variable name="目标字数" category="正文" type="computed" source="computed" handler="target_words"/>
-    <variable name="目标字数下限" category="正文" type="computed" source="computed" handler="target_words_min"/>
-    <variable name="目标字数上限" category="正文" type="computed" source="computed" handler="target_words_max"/>
-    <variable name="总章数" category="作品信息" type="computed" source="computed" handler="total_chapters"/>
+    
+    <variable name="当前章节号" category="正文" type="computed" source="runtime" handler="current_chapter" />
+    <variable name="当前卷号" category="正文" type="computed" source="runtime" handler="current_volume" />
+    <variable name="目标字数" category="正文" type="computed" source="computed" handler="target_words" />
+    <variable name="目标字数下限" category="正文" type="computed" source="computed" handler="target_words_min" />
+    <variable name="目标字数上限" category="正文" type="computed" source="computed" handler="target_words_max" />
+    <variable name="总章数" category="作品信息" type="computed" source="computed" handler="total_chapters" />
 
-    <!-- 用户输入 -->
-    <variable name="补充要求" category="自定义" type="text" source="user_input"/>
-    <variable name="本章正文" category="正文" type="computed" source="computed" handler="本章正文"/>
-    <variable name="参考剧情" category="正文" type="text" source="user_input"/>
-    <variable name="源文对照" category="正文" type="computed" source="computed" handler="源文对照"/>
-    <variable name="前文章纲" category="大纲" type="text" source="user_input"/>
-    <variable name="背景设定" category="设定" type="text" source="user_input"/>
-    <variable name="势力设定" category="设定" type="text" source="user_input"/>
+    
+    <variable name="补充要求" category="自定义" type="text" source="user_input" />
+    <variable name="本章正文" category="正文" type="computed" source="computed" handler="本章正文" />
+    <variable name="参考剧情" category="正文" type="text" source="user_input" />
+    <variable name="源文对照" category="正文" type="computed" source="computed" handler="源文对照" />
+    <variable name="前文章纲" category="大纲" type="text" source="user_input" />
+    <variable name="背景设定" category="设定" type="text" source="user_input" />
+    <variable name="势力设定" category="设定" type="text" source="user_input" />
     <variable name="目标频道" category="作品信息" type="text" source="auto_extract">
-      <extract from="作品信息/project.xml" method="xpath" xpath=".//channel"/>
+      <extract from="作品信息/project.xml" method="xpath" xpath=".//channel" />
       <fallback>女频</fallback>
     </variable>
     <variable name="作品视角" category="作品信息" type="text" source="auto_extract">
-      <extract from="作品信息/project.xml" method="xpath" xpath=".//perspective"/>
+      <extract from="作品信息/project.xml" method="xpath" xpath=".//perspective" />
       <fallback>第三人称</fallback>
     </variable>
 
-    <!-- 角色（需要特殊计算） -->
-    <variable name="protagonist_name" category="角色" type="computed" source="computed" handler="protagonist_name"/>
-    <variable name="antagonist_name" category="角色" type="computed" source="computed" handler="antagonist_name"/>
-    <variable name="ally_name" category="角色" type="computed" source="computed" handler="ally_name"/>
-    <variable name="本章角色" category="角色" type="computed" source="computed" handler="chapter_characters"/>
+    
+    <variable name="protagonist_name" category="角色" type="computed" source="computed" handler="protagonist_name" />
+    <variable name="antagonist_name" category="角色" type="computed" source="computed" handler="antagonist_name" />
+    <variable name="ally_name" category="角色" type="computed" source="computed" handler="ally_name" />
+    <variable name="本章角色" category="角色" type="computed" source="computed" handler="chapter_characters" />
 
-    <!-- 关联上下文 -->
-    <variable name="关联章节" category="正文" type="computed" source="computed" handler="关联章节"/>
-    <variable name="关联章纲" category="大纲" type="computed" source="computed" handler="关联章纲"/>
-    <variable name="关联角色" category="角色" type="computed" source="computed" handler="关联角色"/>
+    
+    <variable name="关联章节" category="正文" type="computed" source="computed" handler="关联章节" />
+    <variable name="关联章纲" category="大纲" type="computed" source="computed" handler="关联章纲" />
+    <variable name="关联角色" category="角色" type="computed" source="computed" handler="关联角色" />
 
-    <!-- 故事元数据（从 project.xml 读取） -->
+    
     <variable name="故事名称" category="作品信息" type="text" source="auto_extract">
-      <extract from="作品信息/project.xml" method="xpath" xpath=".//story_name"/>
+      <extract from="作品信息/project.xml" method="xpath" xpath=".//story_name" />
       <fallback>未命名</fallback>
     </variable>
 
-    <!-- 模板（从 schemas/ 加载） -->
-    <variable name="模板_简介" category="设定" type="computed" source="computed" handler="template_blurb"/>
-    <variable name="模板_总纲" category="设定" type="computed" source="computed" handler="template_story"/>
-    <variable name="模板_角色" category="设定" type="computed" source="computed" handler="template_entry"/>
-    <variable name="模板_标签" category="设定" type="computed" source="computed" handler="template_tags"/>
-    <variable name="模板_策略" category="设定" type="computed" source="computed" handler="template_adaptation"/>
-    <variable name="模板_细纲" category="设定" type="computed" source="computed" handler="template_章纲" description="已弃用，请使用 模板_章纲"/>
-    <variable name="模板_事件" category="设定" type="computed" source="computed" handler="template_events"/>
-    <variable name="模板_卷" category="设定" type="computed" source="computed" handler="template_volumes"/>
-    <variable name="模板_卷纲" category="设定" type="computed" source="computed" handler="template_卷纲"/>
-    <variable name="模板_章纲" category="设定" type="computed" source="computed" handler="template_章纲"/>
-    <variable name="模板_章纲_男频" category="设定" type="computed" source="computed" handler="template_章纲_男频"/>
-    <variable name="模板_章纲_女频" category="设定" type="computed" source="computed" handler="template_章纲_女频"/>
-    <variable name="模板_写作规则" category="设定" type="computed" source="computed" handler="template_writing_rules"/>
-    <variable name="模板_钩子" category="设定" type="computed" source="computed" handler="template_hooks"/>
-    <variable name="模板_角色规则" category="设定" type="computed" source="computed" handler="template_character_rules"/>
-    <variable name="模板_标签池" category="设定" type="computed" source="computed" handler="template_tag_pool"/>
-    <variable name="模板_场景规则" category="设定" type="computed" source="computed" handler="template_scene_rules"/>
-    <variable name="模板_对比维度" category="设定" type="computed" source="computed" handler="template_compare_dimensions"/>
-    <variable name="模板_套路" category="设定" type="computed" source="computed" handler="template_pattern"/>
+    
+    <variable name="模板_简介" category="设定" type="computed" source="computed" handler="template_blurb" />
+    <variable name="模板_总纲" category="设定" type="computed" source="computed" handler="template_story" />
+    <variable name="模板_角色" category="设定" type="computed" source="computed" handler="template_entry" />
+    <variable name="模板_标签" category="设定" type="computed" source="computed" handler="template_tags" />
+    <variable name="模板_策略" category="设定" type="computed" source="computed" handler="template_adaptation" />
+    <variable name="模板_细纲" category="设定" type="computed" source="computed" handler="template_章纲" description="已弃用，请使用 模板_章纲" />
+    <variable name="模板_事件" category="设定" type="computed" source="computed" handler="template_events" />
+    <variable name="模板_卷" category="设定" type="computed" source="computed" handler="template_volumes" />
+    <variable name="模板_卷纲" category="设定" type="computed" source="computed" handler="template_卷纲" />
+    <variable name="模板_章纲" category="设定" type="computed" source="computed" handler="template_章纲" />
+    <variable name="模板_章纲_男频" category="设定" type="computed" source="computed" handler="template_章纲_男频" />
+    <variable name="模板_章纲_女频" category="设定" type="computed" source="computed" handler="template_章纲_女频" />
+    <variable name="模板_写作规则" category="设定" type="computed" source="computed" handler="template_writing_rules" />
+    <variable name="模板_钩子" category="设定" type="computed" source="computed" handler="template_hooks" />
+    <variable name="模板_角色规则" category="设定" type="computed" source="computed" handler="template_character_rules" />
+    <variable name="模板_标签池" category="设定" type="computed" source="computed" handler="template_tag_pool" />
+    <variable name="模板_场景规则" category="设定" type="computed" source="computed" handler="template_scene_rules" />
+    <variable name="模板_对比维度" category="设定" type="computed" source="computed" handler="template_compare_dimensions" />
+    <variable name="模板_套路" category="设定" type="computed" source="computed" handler="template_pattern" />
 
-    <!-- 仿写模式标志（由 pipeline 根据 project.xml source_book 是否存在自动设置） -->
+    
     <variable name="仿写模式" category="自定义" type="computed" source="computed" handler="fanxie_mode">
       <description>仿写模式标志。非空 = 仿写模式生效，空 = 原创模式。由 tool_executor 自动设置。</description>
     </variable>
-  </variables>
+  <variable name="频道模式" category="作品信息" type="computed" source="computed" handler="频道模式"><description>根据 project.xml 中 channel 自动返回男频或女频模式内容。</description></variable></variables>
 </definitions>

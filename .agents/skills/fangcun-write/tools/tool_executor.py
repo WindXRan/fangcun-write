@@ -278,6 +278,23 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return f"未知工具: {preset_name}"
 
 
+def _validate_output(preset_name: str, saved: list, project_dir: str):
+    """轻量校验：XML 可解析 + 文件非空。发现异常则返回警告字符串。"""
+    warnings = []
+    for path in saved:
+        fp = Path(project_dir) / path
+        if not fp.exists() or fp.stat().st_size == 0:
+            warnings.append(f"{path}: 文件为空")
+            continue
+        if fp.suffix.lower() == ".xml":
+            try:
+                import xml.etree.ElementTree as ET
+                ET.parse(str(fp))
+            except Exception as e:
+                warnings.append(f"{path}: XML解析失败 - {e}")
+    return warnings
+
+
 def _inject_tool_attribute(xml_path: str, tool_name: str):
     """在 XML 文件根元素添加 tool 属性（如已有则跳过）。"""
     import xml.etree.ElementTree as ET
@@ -324,6 +341,22 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
                     source_dir = str(chaifen)
         except Exception:
             pass
+    # Fix 3: 如果 args 传了 source_book 但 project.xml 没有，自动写入
+    if not source_book:
+        sb_from_args = args.get("source_book", "").strip()
+        if sb_from_args:
+            source_book = sb_from_args
+            try:
+                import xml.etree.ElementTree as ET2
+                pt2 = ET2.parse(proj_xml)
+                pr2 = pt2.getroot()
+                sb_el = pr2.find("source_book")
+                if sb_el is None:
+                    sb_el = ET2.SubElement(pr2, "source_book")
+                sb_el.text = source_book
+                pt2.write(proj_xml, encoding='utf-8', xml_declaration=True)
+            except Exception:
+                pass
 
     rounds = int(args.get("rounds", 1))
     if rounds > 1:
@@ -440,6 +473,12 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
                 clean = re.sub(r'```(?:xml)?\n?', '', resp).strip()
                 fp.write_text(clean, encoding='utf-8')
                 saved = [f"作品信息/设定/角色/{name_m.group(1)}.xml"]
+    # Fix 4: 轻量校验输出
+    _warnings = _validate_output(preset_name, saved, project_dir)
+    if _warnings:
+        for _w in _warnings:
+            print(f'  ⚠️ {_w}')
+
     # 在所有 XML 文件根元素注入 tool 属性
     for path in saved:
         fp = Path(project_dir) / path

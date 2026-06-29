@@ -120,6 +120,9 @@ class VariableResolver:
                             self._cache[var_name] = val
                             return val
                     else:
+                        # Fix 3: 跳过 schema 文件（它们是输出模板，不是数据）
+                        if p.name.endswith('.schema.xml'):
+                            continue
                         val = p.read_text(encoding='utf-8')
                         if p.suffix == '.xml':
                             val = _simplify_xml(val)
@@ -567,11 +570,19 @@ class VariableResolver:
         return f"（未知引用类别：{category}）"
 
     def render(self, template: str) -> str:
-        """将模板中的 @变量名 全部替换为值。"""
+        """将模板中的 @变量名 全部替换为值。支持条件块 {#var}...{/var} 和 XPath 提取 @变量:元素名。"""
+        # Fix 5: 解析 XPath 提取语法 @变量:元素名 → @变量，标记提取目标
+        _extract_target = None
+        _xm = re.match(r'^@([^:]+):([a-zA-Z_]+)', template)
+        if _xm:
+            template = '@' + _xm.group(1)
+            _extract_target = _xm.group(2)
+
         known = set(self.defs.keys()) | set(self._user_overrides.keys())
         known.update(k for k in self.COMPUTED_HANDLERS if k not in known)
         known = sorted(known, key=len, reverse=True)
 
+        # 第一遍：替换 @变量
         result = []
         i = 0
         while i < len(template):
@@ -579,7 +590,18 @@ class VariableResolver:
                 matched = False
                 for name in known:
                     if template.startswith('@' + name, i):
-                        result.append(self.resolve(name))
+                        val = self.resolve(name)
+                        # Fix 5: 如果指定了提取目标，从 XML 中提取指定元素
+                        if _extract_target and val:
+                            try:
+                                import xml.etree.ElementTree as ET
+                                _root = ET.fromstring(f'<root>{val}</root>')
+                                _found = _root.find(f'.//{_extract_target}')
+                                if _found is not None:
+                                    val = _found.text or ''
+                            except Exception:
+                                pass
+                        result.append(val)
                         i += len(name) + 1
                         matched = True
                         break
@@ -618,7 +640,17 @@ class VariableResolver:
             else:
                 result.append(template[i])
                 i += 1
-        return ''.join(result)
+        rendered = ''.join(result)
+
+        # Fix 2: 处理条件块 {#var}...{/var}。如果 var 为空（含空字符串），整块删除
+        def _process_conditional(text):
+            _pat = re.compile(r'\{#([^}]+)\}(.*?)\{/\1\}', re.DOTALL)
+            while _pat.search(text):
+                text = _pat.sub(lambda m: m.group(2) if self.resolve(m.group(1)) else '', text)
+            return text
+        rendered = _process_conditional(rendered)
+
+        return rendered
 
     # ─── 批量提取 ────────────────────────────────────────────
 
@@ -974,6 +1006,29 @@ def _fanxie_mode(self):
 VariableResolver.COMPUTED_HANDLERS["fanxie_mode"] = _fanxie_mode
 
 
+def _channel_mode(self):
+    """根据频道返回对应模式的内容。"""
+    channel = self._user_overrides.get("channel", "")
+    channel = channel or self._extract_value({"from": "作品信息/project.xml", "method": "xpath", "xpath": ".//channel"})
+    if "女频" in channel:
+        return (
+            "【女频模式】\n"
+            "- 情绪驱动：每个情节都要问读者此刻什么感受（甜/虐/爽/急/酸）\n"
+            "- 关系变化：本章至少推进或动摇一段人际关系\n"
+            "- 细节渲染：关键情绪点用感官细节放大，不直述\n"
+            "- 打脸节奏：打脸前有足够憋屈铺垫"
+        )
+    return (
+        "【男频模式】\n"
+        "- 主角驱动：主角必须是主动方，哪怕被动局面也要在段内转化为反击/布局\n"
+        "- 冲突密度：每段都有可感知的冲突，不写纯过渡\n"
+        "- 升级感：本章结束时主角状态/资源/认知相比章初有可量化的变化\n"
+        "- 信息差：善用读者知道而角色不知道的信息制造紧张感"
+    )
+
+VariableResolver.COMPUTED_HANDLERS["频道模式"] = _channel_mode
+
+
 def _source_pattern_analysis(self):
     """从源文目录读取套路分析，不存在则从仿写项目读取。"""
     source_book = self._user_overrides.get("source_book", "")
@@ -1007,11 +1062,7 @@ if _schema_dir.exists():
         if _var not in VariableResolver.COMPUTED_HANDLERS:
             @VariableResolver.register_computed(_var)
             def _loader(self, p=_f):
-                try:
-                    text = p.read_text(encoding='utf-8')
-                    if p.suffix == '.xml':
-                        text = _simplify_xml(text)
-                    return text
+                try: return p.read_text(encoding='utf-8')
                 except: return ""
             _loader.__name__ = f"template_{_base}"
     for _f in sorted(_schema_dir.glob("*.ref.xml")):
@@ -1020,10 +1071,6 @@ if _schema_dir.exists():
         if _var not in VariableResolver.COMPUTED_HANDLERS:
             @VariableResolver.register_computed(_var)
             def _loader(self, p=_f):
-                try:
-                    text = p.read_text(encoding='utf-8')
-                    if p.suffix == '.xml':
-                        text = _simplify_xml(text)
-                    return text
+                try: return p.read_text(encoding='utf-8')
                 except: return ""
             _loader.__name__ = f"template_{_base}"
