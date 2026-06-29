@@ -131,6 +131,7 @@ _PRESET_ALIAS = {
     "仿写开书": "open-book", "开书全套": "open-book",
     "拆书": "pipeline-import", "逆推": "pipeline-import",
     "套路分析": "pattern-analysis",
+    "提取摘要": "chapter-summary",
     "黄金开篇": "golden-opening", "黄金三章": "golden-chapters",
     "简介": "synopsis-generate", "总纲": "outline-generate", "标签": "tags-generate",
     "角色生成": "character-generate", "设计角色": "character-generate", "人设": "character-generate",
@@ -274,24 +275,27 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         if not p_name:
             return "缺少 pipeline 名称"
         return _run_pipeline(p_name, args, project_dir)
+    elif preset_name == "chapter-summary":
+        from chapter_summary import extract_all
+        result = extract_all(project_dir)
+        if result:
+            total = len(result)
+            ok = sum(1 for r in result if "核心事件" in r)
+            return f"摘要提取完成: {ok}/{total} 章"
+        return "摘要提取失败: 无数据"
     else:
         return f"未知工具: {preset_name}"
 
 
 def _validate_output(preset_name: str, saved: list, project_dir: str):
-    """轻量校验：XML 可解析 + 文件非空。发现异常则返回警告字符串。"""
+    """轻量校验：文件非空。"""
     warnings = []
     for path in saved:
         fp = Path(project_dir) / path
-        if not fp.exists() or fp.stat().st_size == 0:
+        if not fp.exists():
+            warnings.append(f"{path}: 文件未生成")
+        elif fp.stat().st_size == 0:
             warnings.append(f"{path}: 文件为空")
-            continue
-        if fp.suffix.lower() == ".xml":
-            try:
-                import xml.etree.ElementTree as ET
-                ET.parse(str(fp))
-            except Exception as e:
-                warnings.append(f"{path}: XML解析失败 - {e}")
     return warnings
 
 

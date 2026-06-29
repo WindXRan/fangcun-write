@@ -887,6 +887,21 @@ VariableResolver.COMPUTED_HANDLERS["total_words"] = (
 VariableResolver.COMPUTED_HANDLERS["previous_chapter_text"] = (
     lambda self: self._compute_previous_chapter_text()
 )
+def _chapter_summaries(self):
+    """读取全书章节摘要JSON，格式化为LLM易读文本。"""
+    f = self.novel_dir / "作品信息" / "章节摘要.json"
+    if not f.exists():
+        return "（无章节摘要，请先运行摘要提取）"
+    try:
+        import json
+        data = json.loads(f.read_text(encoding='utf-8'))
+        from chapter_summary import format_summaries
+        return format_summaries(data)
+    except Exception as e:
+        return f"（章节摘要读取失败: {e}）"
+
+VariableResolver.COMPUTED_HANDLERS["chapter_summaries"] = _chapter_summaries
+
 VariableResolver.COMPUTED_HANDLERS["previous_20_chapters"] = (
     lambda self: self._compute_previous_n_chapters(20)
 )
