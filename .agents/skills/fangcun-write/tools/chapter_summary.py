@@ -8,9 +8,13 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 _HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(_HERE))
+# lib/api_client.py 在 .agents/tools/lib/
+_SHARED = _HERE.parent.parent.parent / "tools"
+if _SHARED.exists():
+    sys.path.insert(0, str(_SHARED))
 
 # 每章提取的字段
-FIELDS = ["核心事件", "出场角色", "情绪基调", "冲突类型"]
+FIELDS = ["核心事件", "关键转折", "出场角色", "情绪基调", "冲突类型"]
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #  章节摘要格式:
@@ -44,13 +48,14 @@ def extract_one(ch_num: int, chapter_text: str, api_key: str,
     """单章摘要提取。"""
     from lib.api_client import call_api
 
-    sys_prompt = """你是有经验的网文编辑。读一章正文，提取4个字段：
-- 核心事件：一句话概括本章最重要的剧情推进（15字内）
+    sys_prompt = """你是有经验的网文编辑。读一章正文，提取5个字段：
+- 核心事件：一句话概括本章最重要的剧情推进（25字内）
+- 关键转折：本章从开头到结尾发生了什么转变（情绪/局势/认知/关系）
 - 出场角色：本章实际出场的主要角色名，逗号分隔
 - 情绪基调：读者读完本章的情绪变化，如"压抑→爽→期待"
 - 冲突类型：本章核心冲突类型，如"身份冲突/生存冲突/信息差冲突/打脸"
 
-只输出这4个字段，每行一个。不要多余内容。"""
+只输出这5个字段，每行一个。不要多余内容。"""
 
     user_prompt = f"第{ch_num}章正文（6000字内）：\n\n{chapter_text}"
 
@@ -117,7 +122,9 @@ def extract_all(project_dir: str, chapter_range: list[int] = None,
         return list(existing.values())
 
     # API 配置
-    api_key = os.environ.get("API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN", "")
+    api_key = os.environ.get("API_KEY", "")
+    if not api_key or not api_key.startswith("sk-"):
+        api_key = os.environ.get("ANTHROPIC_AUTH_TOKEN", "")
     if not api_key:
         print("  W 未设置 API_KEY")
         return []
@@ -173,12 +180,14 @@ def format_summaries(data: list[dict]) -> str:
     lines = []
     for item in data:
         ch = item.get("ch", "?")
-        event = item.get("核心事件", item.get("event", ""))
+        event = item.get("核心事件", "")
+        turn = item.get("关键转折", "")
         chars = item.get("出场角色", "")
         emotion = item.get("情绪基调", "")
         conflict = item.get("冲突类型", "")
         parts = [f"第{ch}章"]
         if event: parts.append(f"事件: {event}")
+        if turn: parts.append(f"转折: {turn}")
         if chars: parts.append(f"角色: {chars}")
         if emotion: parts.append(f"情绪: {emotion}")
         if conflict: parts.append(f"冲突: {conflict}")
