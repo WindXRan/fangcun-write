@@ -364,3 +364,22 @@ if _schema_dir.exists():
                 try: return p.read_text(encoding='utf-8')
                 except: return ""
             _loader.__name__ = f"template_{_base}"
+
+
+# ── 作品篇幅 ──
+def _work_length(self):
+    """返回作品篇幅描述。"""
+    total = self.resolve("总章数")
+    try:
+        n = int(total)
+        if n >= 100:
+            label = "长篇"
+        elif n >= 30:
+            label = "中篇"
+        else:
+            label = "短篇"
+        return f"{label}（共{n}章）"
+    except:
+        return "长篇"
+
+VariableResolver.COMPUTED_HANDLERS["作品篇幅"] = _work_length

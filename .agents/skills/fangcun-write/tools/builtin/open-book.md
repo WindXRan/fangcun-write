@@ -74,39 +74,6 @@ author_type: 官方
 （题材提醒同上）
 @模板_卷纲
 
-==== 作品信息/仿写蓝图.xml ====
-&lt;adaptation_blueprint&gt;
-  &lt;genre_keywords&gt;
-    &lt;!-- 题材关键词：仿写的所有输出必须使用这些词根，不得替换为其他题材的词汇 --&gt;
-    &lt;power&gt;灵力/真气/法力（源文题材的力量词，仿写必须同类型）&lt;/power&gt;
-    &lt;level&gt;练气/筑基/金丹/元婴（源文题材的等级词，仿写必须同类型）&lt;/level&gt;
-    &lt;item&gt;法宝/灵药/功法（源文题材的道具词，仿写必须同类型）&lt;/item&gt;
-    &lt;society&gt;宗门/家族/散修（源文题材的社会结构词，仿写必须同类型）&lt;/society&gt;
-    &lt;world&gt;灵气/秘境/洪荒（源文题材的世界观词，仿写必须同类型）&lt;/world&gt;
-    &lt;action&gt;修炼/渡劫/突破（源文题材的行为词，仿写必须同类型）&lt;/action&gt;
-  &lt;/genre_keywords&gt;
-  &lt;global_rules&gt;
-    &lt;rule domain="setting"&gt;设定替换规则（如：修炼等级→学院等级）&lt;/rule&gt;
-    &lt;rule domain="scene"&gt;场景迁移规则（如：战斗→竞赛）&lt;/rule&gt;
-    &lt;rule domain="role"&gt;角色映射规则（如：师门→家族企业）&lt;/rule&gt;
-  &lt;/global_rules&gt;
-  &lt;emotion_targets&gt;
-    &lt;!-- 每章情绪目标清单（替代逐事件 mapping，情绪模板是长篇一致性的关键） --&gt;
-    &lt;chapter number="1"&gt;
-      &lt;emotion_start&gt;起点情绪（如：压抑/期待/平静）&lt;/emotion_start&gt;
-      &lt;emotion_end&gt;终点情绪（如：愤怒/震惊/温馨）&lt;/emotion_end&gt;
-      &lt;turns&gt;本章情绪转折次数，对齐套路分析中情绪模板密度&lt;/turns&gt;
-      &lt;target_emotion&gt;读者在本章应感受到的核心情绪&lt;/target_emotion&gt;
-    &lt;/chapter&gt;
-    &lt;chapter number="2"&gt;
-      &lt;emotion_start&gt;起点情绪&lt;/emotion_start&gt;
-      &lt;emotion_end&gt;终点情绪&lt;/emotion_end&gt;
-      &lt;turns&gt;本章情绪转折次数&lt;/turns&gt;
-      &lt;target_emotion&gt;读者在本章应感受到的核心情绪&lt;/target_emotion&gt;
-    &lt;/chapter&gt;
-    &lt;!-- 前10章逐章列出情绪目标，后续章可根据总纲延续 --&gt;
-  &lt;/emotion_targets&gt;
-&lt;/adaptation_blueprint&gt;
   
 # 补充要求
 @补充要求

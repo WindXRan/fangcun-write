@@ -729,3 +729,33 @@ def _novel_setting(self):
 VariableResolver.COMPUTED_HANDLERS["novel_setting"] = _novel_setting
 
 import handlers
+
+
+def _attrs_to_kv(m):
+    import re
+    attrs = re.findall(r"([a-zA-Z_]+)=([^\s>]+)", m.group(2))
+    return ", ".join(k + ": " + v.strip(chr(34)+chr(39)) for k, v in attrs)
+
+def _indent(text):
+    return "\n".join("  " + l for l in text.split("\n"))
+
+def _fmt_tag(m):
+    tag = m.group(1).split()[0]
+    inner = m.group(2).strip()
+    if "<" in inner:
+        return tag + ":\n" + _indent(inner)
+    return tag + ": " + inner
+
+def _simplify_xml(raw):
+    import re
+    raw = re.sub(r"<\?xml[^>]*\?>", "", raw)
+    raw = re.sub(r"<!--.*?-->", "", raw, re.DOTALL)
+    raw = re.sub(r"<([a-zA-Z_][^>]*?)\s+([^>]+?)\s*/>", _attrs_to_kv, raw)
+    raw = re.sub(r"<[a-zA-Z_][^>]*/>", "", raw)
+    prev = None
+    while prev != raw:
+        prev = raw
+        raw = re.sub(r"<([a-zA-Z_][^>]*)>(.*?)</\1>", _fmt_tag, raw, re.DOTALL)
+    raw = re.sub(r"<[^>]+>", "", raw)
+    lines = [l.strip() for l in raw.split("\n") if l.strip()]
+    return "\n".join(lines)
