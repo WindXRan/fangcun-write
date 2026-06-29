@@ -72,6 +72,10 @@
     <variable name="模板_对比维度" category="设定" type="computed" source="computed" handler="template_compare_dimensions" />
 
     
+    <variable name="设定" category="作品信息" type="computed" source="computed" handler="novel_setting">
+      <description>聚合全部设定数据：角色/关系/地点/物品/势力/背景</description>
+    </variable>
+
     <variable name="章节摘要" category="正文" type="computed" source="computed" handler="chapter_summaries">
       <description>全书章节摘要，供总纲/卷纲/套路分析使用。</description>
     </variable>

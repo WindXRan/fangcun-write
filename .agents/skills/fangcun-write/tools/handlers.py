@@ -22,15 +22,6 @@ VariableResolver.COMPUTED_HANDLERS["target_words_min"] = (
 VariableResolver.COMPUTED_HANDLERS["target_words_max"] = (
     VariableResolver._compute_target_words_max
 )
-VariableResolver.COMPUTED_HANDLERS["source_chars"] = (
-    VariableResolver._compute_source_chars
-)
-VariableResolver.COMPUTED_HANDLERS["source_sent_len"] = (
-    VariableResolver._compute_source_sent_len
-)
-VariableResolver.COMPUTED_HANDLERS["recent_summary"] = (
-    VariableResolver._compute_recent_summary
-)
 VariableResolver.COMPUTED_HANDLERS["total_chapters"] = (
     lambda self: str(self._ctx("total_chapters", "?"))
 )
@@ -65,19 +56,6 @@ VariableResolver.COMPUTED_HANDLERS["protagonist_name"] = (
 VariableResolver.COMPUTED_HANDLERS["源文换皮"] = (
     lambda self: self._user_overrides.get("源文对照", "")
 )
-def _prev_chapter_tail_chars(self, chars=1500):
-    """上一章结尾 N 字符。"""
-    N = self._ctx("N", 1)
-    if N <= 1: return "（无前文）"
-    import re
-    for ext in ("", ".xml"):
-        p = self.novel_dir / "正文" / "正文" / f"第{N-1}章{ext}"
-        if p.exists():
-            text = p.read_text(encoding="utf-8")
-            clean = re.sub(r'<[^>]+>', '', text).strip()
-            return clean[-chars:] if len(clean) > chars else clean
-    return "（无前文）"
-
 VariableResolver.COMPUTED_HANDLERS["关联章节"] = (
     lambda self: _prev_chapter_tail(self)
 )
@@ -85,10 +63,6 @@ VariableResolver.COMPUTED_HANDLERS["关联章纲"] = (
     lambda self: _prev_chapter_guide(self)
 )
 # 旧名兼容
-VariableResolver.COMPUTED_HANDLERS["上一章结尾"] = (
-    lambda self: _prev_chapter_tail_chars(self, 2000)
-)
-VariableResolver.COMPUTED_HANDLERS["上一章章纲"] = VariableResolver.COMPUTED_HANDLERS["关联章纲"]
 
 # 本章正文：读取当前章节的正文文件
 def _current_chapter_text(self):
@@ -185,18 +159,11 @@ VariableResolver.COMPUTED_HANDLERS["关联角色"] = (
     lambda self: _chapter_characters(self)
 )
 VariableResolver.COMPUTED_HANDLERS["chapter_characters"] = VariableResolver.COMPUTED_HANDLERS["关联角色"]
-VariableResolver.COMPUTED_HANDLERS["本章角色"] = VariableResolver.COMPUTED_HANDLERS["关联角色"]
 VariableResolver.COMPUTED_HANDLERS["antagonist_name"] = (
     lambda self: _first_char_name(self, "对手")
 )
 VariableResolver.COMPUTED_HANDLERS["ally_name"] = (
     lambda self: _first_char_name(self, "引路人")
-)
-VariableResolver.COMPUTED_HANDLERS["total_words"] = (
-    VariableResolver._compute_total_words
-)
-VariableResolver.COMPUTED_HANDLERS["previous_chapter_text"] = (
-    lambda self: self._compute_previous_chapter_text()
 )
 def _chapter_summaries(self):
     """读取全书章节摘要JSON，格式化为LLM易读文本。"""
@@ -213,9 +180,6 @@ def _chapter_summaries(self):
 
 VariableResolver.COMPUTED_HANDLERS["chapter_summaries"] = _chapter_summaries
 
-VariableResolver.COMPUTED_HANDLERS["previous_20_chapters"] = (
-    lambda self: self._compute_previous_n_chapters(20)
-)
 
 # ── 仿写变量：自动从源文目录解析 ──
 
