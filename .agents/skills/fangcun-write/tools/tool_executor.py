@@ -33,133 +33,8 @@ _BUILTIN_DIR = _TOOLS_DIR / "builtin"
 
 # ─── LLM 调用 ─────────────────────────────────────────────
 
-def call_llm(messages: list, temperature: float = 0.7):
-    """调用 LLM。"""
-    api_key = os.environ.get("API_KEY", "")
-    if not api_key or not api_key.startswith("sk-"):
-        api_key = os.environ.get("ANTHROPIC_AUTH_TOKEN", api_key)
-    if not api_key:
-        return None, "未设置 API_KEY"
-    _base = os.environ.get("API_BASE_URL", "https://api.deepseek.com/v1").rstrip("/")
-    if not _base.endswith("/v1"):
-        _base += "/v1"
-    api_url = _base + "/chat/completions"
-    model = os.environ.get("FANGCUN_MODEL", "deepseek-v4-pro")
-    body = json.dumps({"model": model, "messages": messages, "temperature": temperature}).encode()
-    req = Request(api_url, data=body, headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"})
-    try:
-        with urlopen(req, timeout=180) as r:
-            return json.loads(r.read())["choices"][0]["message"]["content"], None
-    except Exception as e:
-        return None, str(e)
-
-
-# ─── 项目初始化 ──────────────────────────────────────────
-
-def init_project(project_dir: str, story_name: str = "", channel: str = "男频"):
-    """创建新项目目录结构。"""
-    p = Path(project_dir)
-    p.mkdir(parents=True, exist_ok=True)
-    for d in ["正文/卷纲", "正文/章纲", "正文/正文",
-              "作品信息/设定/角色", "作品信息/设定/背景",
-              "作品信息/设定/势力", "作品信息/设定/地点",
-              "作品信息/设定/物品", "作品信息/主题"]:
-        (p / d).mkdir(parents=True, exist_ok=True)
-    # 确保 project.xml 存在（含故事名和频道）
-    proj_xml = p / "作品信息" / "project.xml"
-    if not proj_xml.exists():
-        name = story_name or Path(project_dir).name
-        proj_xml.write_text(
-            '<?xml version="1.0" encoding="UTF-8"?>\n'
-            f'<project><story_name>{name}</story_name>'
-            f'<channel>{channel}</channel></project>\n',
-            encoding='utf-8')
-
-
-# ─── 文件保存 ─────────────────────────────────────────────
-
-def save_output_files(text: str, project_dir: str) -> list[str]:
-    """扫描输出标记并保存文件。支持两种格式（优先 XML，降级 ====）：
-
-    XML 格式:
-      <output>
-        <file path="相对路径">
-          (文件内容)
-        </file>
-      </output>
-
-    旧格式:
-      ==== path ====
-      content
-      ==== next_path ====
-    """
-    import xml.etree.ElementTree as ET
-    saved = []
-
-    # 1. 尝试 XML 格式：<output [tool="..."]><file path="...">content</file></output>
-    # 用正则而非 XML 解析，避免文件内容中的特殊字符破坏解析
-    xml_match = re.search(r'<output[^>]*>(.*?)</output>', text, re.DOTALL)
-    if xml_match:
-        for m in re.finditer(r'<file\s+path="([^"]+)"\s*>(.*?)</file>', xml_match.group(1), re.DOTALL):
-            path = m.group(1).strip()
-            content = m.group(2).strip()
-            if path and content:
-                fp = Path(project_dir) / path
-                # Fix: 剥离 markdown 代码块包裹（LLM 经常输出 ```xml ... ```）
-                content = re.sub(r'^```\w*\s*\n?', '', content)
-                content = re.sub(r'\n?```\s*$', '', content)
-                fp.parent.mkdir(parents=True, exist_ok=True)
-                fp.write_text(content, encoding='utf-8')
-                saved.append(path)
-        if saved:
-            return saved
-
-    # 2. 降级：旧 ==== path ==== 格式
-    for m in re.finditer(r'====\s*([^\n=]+)\s*====\s*\n(.*?)(?=\n====|\Z)', text, re.DOTALL):
-        path = m.group(1).strip()
-        content = m.group(2).strip()
-        content = re.sub(r'^```\w*\s*\n?', '', content)
-        content = re.sub(r'\n?```\s*$', '', content)
-        if not path or not content:
-            continue
-        fp = Path(project_dir) / path
-        fp.parent.mkdir(parents=True, exist_ok=True)
-        fp.write_text(content, encoding='utf-8')
-        saved.append(path)
-    return saved
-
-
-# ─── 工具执行 ─────────────────────────────────────────────
-
-_PRESET_ALIAS = {
-    "开书": "book-draw", "顶层设计": "book-draw", "原创开书": "book-draw",
-    "仿写开书": "open-book", "开书全套": "open-book",
-    "拆书": "pipeline-import", "逆推": "pipeline-import",
-    "提取摘要": "chapter-summary",
-    "黄金开篇": "golden-opening", "黄金三章": "golden-chapters",
-    "简介": "synopsis-generate", "总纲": "outline-generate", "标签": "tags-generate",
-    "角色生成": "character-generate", "设计角色": "character-generate", "人设": "character-generate",
-    "提取角色": "character-extract",
-    "角色深度": "character-deep",
-    "卷纲": "volume-outline",
-    "章纲": "plot-guide-nanpin", "细纲": "plot-guide-nanpin", "生成章纲": "plot-guide-nanpin",
-    "男频章纲": "plot-guide-nanpin", "女频章纲": "plot-guide-nvpin",
-    "写章": "write-chapter", "续写": "write-chapter",
-    "去AI": "deslop", "润色": "deslop",
-    "对比": "compare", "审查": "compare",
-    "脑洞": "premise-draw",
-    "选卡": "apply-pick", "应用": "apply-pick",
-    "导入拆解": "pipeline-import",
-    "运 pipeline": "pipeline-run",
-}
-
-# 单文件工具：无标记时直接保存到预设路径
-_SINGLE_FILE_MAP = {
-    "synopsis-generate": "作品信息/主题/简介.xml",
-    "outline-generate": "作品信息/主题/总纲.xml",
-    "tags-generate": "作品信息/主题/标签.xml",
-}
-
+from llm_provider import call_llm
+from file_utils import init_project, save_output_files, _inject_tool_attribute
 
 def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
     """执行一个写作工具。
@@ -287,21 +162,10 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return "摘要提取失败: 无数据"
     elif preset_name == "character-deep":
         return _run_single_file_preset("character-deep", None, args, project_dir)
+    elif preset_name == "setting-extract":
+        return _run_single_file_preset("setting-extract", None, args, project_dir)
     else:
         return f"未知工具: {preset_name}"
-
-
-def _inject_tool_attribute(xml_path: str, tool_name: str):
-    """在 XML 文件根元素添加 tool 属性（如已有则跳过）。"""
-    import xml.etree.ElementTree as ET
-    try:
-        tree = ET.parse(xml_path)
-        root = tree.getroot()
-        if root.get("tool") is None:
-            root.set("tool", tool_name)
-            tree.write(xml_path, encoding='utf-8', xml_declaration=False)
-    except Exception:
-        pass  # 非标准 XML 或解析失败，不报错
 
 
 def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict, project_dir: str) -> str:
