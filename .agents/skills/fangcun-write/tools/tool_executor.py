@@ -36,6 +36,37 @@ _BUILTIN_DIR = _TOOLS_DIR / "builtin"
 from llm_provider import call_llm
 from file_utils import init_project, save_output_files, _inject_tool_attribute
 
+_PRESET_ALIAS = {
+    "开书": "book-draw", "顶层设计": "book-draw", "原创开书": "book-draw",
+    "仿写开书": "open-book", "开书全套": "open-book",
+    "拆书": "pipeline-import", "逆推": "pipeline-import",
+    "提取摘要": "chapter-summary",
+    "黄金开篇": "golden-opening", "黄金三章": "golden-chapters",
+    "简介": "synopsis-generate", "总纲": "outline-generate", "标签": "tags-generate",
+    "角色生成": "character-generate", "设计角色": "character-generate", "人设": "character-generate",
+    "提取角色": "character-extract",
+    "角色深度": "character-deep",
+    "提取设定": "setting-extract",
+    "关系图谱": "relationship-extract",
+    "卷纲": "volume-outline",
+    "章纲": "plot-guide-nanpin", "细纲": "plot-guide-nanpin", "生成章纲": "plot-guide-nanpin",
+    "男频章纲": "plot-guide-nanpin", "女频章纲": "plot-guide-nvpin",
+    "写章": "write-chapter", "续写": "write-chapter",
+    "去AI": "deslop", "润色": "deslop",
+    "对比": "compare", "审查": "compare",
+    "脑洞": "premise-draw",
+    "选卡": "apply-pick", "应用": "apply-pick",
+    "导入拆解": "pipeline-import",
+    "运 pipeline": "pipeline-run",
+}
+
+_SINGLE_FILE_MAP = {
+    "synopsis-generate": "作品信息/主题/简介.xml",
+    "outline-generate": "作品信息/主题/总纲.xml",
+    "tags-generate": "作品信息/主题/标签.xml",
+}
+
+
 def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
     """执行一个写作工具。
 
@@ -164,6 +195,8 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _run_single_file_preset("character-deep", None, args, project_dir)
     elif preset_name == "setting-extract":
         return _run_single_file_preset("setting-extract", None, args, project_dir)
+    elif preset_name == "relationship-extract":
+        return _run_single_file_preset("relationship-extract", None, args, project_dir)
     else:
         return f"未知工具: {preset_name}"
 
