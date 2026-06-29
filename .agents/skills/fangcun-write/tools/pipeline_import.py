@@ -8,7 +8,7 @@ from importer import run_import
 
 
 def step_import(book_name, author, source, channel, project_dir):
-    print("\n[1/5] 导入章节文件...")
+    print("\n[1/6] 导入章节文件...")
     result = run_import(book_name=book_name, author=author, source=source, channel=channel, project_dir=project_dir)
     if not result["success"]:
         print("  X 导入失败: " + result.get("error", "未知错误"))
@@ -18,7 +18,7 @@ def step_import(book_name, author, source, channel, project_dir):
 
 
 def step_summary_extract(project_dir):
-    print("\n[2/5] 提取全书章节摘要...")
+    print("\n[2/6] 提取全书章节摘要...")
     from chapter_summary import extract_all
     result = extract_all(project_dir)
     if result:
@@ -30,7 +30,7 @@ def step_summary_extract(project_dir):
 
 
 def step_pattern_analysis(project_dir, chapters=3):
-    print("\n[3/5] 逆推套路（前" + str(chapters) + "章）...")
+    print("\n[3/6] 逆推套路（前" + str(chapters) + "章）...")
     from tool_executor import run_tool
     for ch in range(1, chapters + 1):
         run_tool("pattern-analysis", {"ch": ch, "user_input": "分析本章写作套路"}, project_dir)
@@ -38,7 +38,7 @@ def step_pattern_analysis(project_dir, chapters=3):
 
 
 def step_book_import(project_dir, book_name, total_chapters):
-    print("\n[4/5] 逆推总纲/简介/标签...")
+    print("\n[4/6] 逆推总纲/简介/标签...")
     from tool_executor import run_tool
     r = run_tool("book-import", {
         "book_name": book_name, "total_chapters": total_chapters,
@@ -48,12 +48,22 @@ def step_book_import(project_dir, book_name, total_chapters):
     return True
 
 
+def step_character_extract(project_dir):
+    print("\n[5/6] 提取角色/势力/地点/物品...")
+    from tool_executor import run_tool
+    r = run_tool("character-extract", {
+        "user_input": "基于全书摘要提取所有角色和设定",
+    }, project_dir)
+    print("  V" if "完成" in r else "  W " + r[:100])
+    return True
+
+
 def step_volume_outline(project_dir):
     vol_dir = Path(project_dir) / "正文" / "卷纲"
     if list(vol_dir.glob("第*卷*")):
-        print("\n[5/5] 卷纲已存在，跳过")
+        print("\n[6/6] 卷纲已存在，跳过")
         return True
-    print("\n[5/5] 逆推卷纲...")
+    print("\n[6/6] 逆推卷纲...")
     from tool_executor import run_tool
     r = run_tool("volume-outline", {"vol": 1, "user_input": "基于全书摘要设计卷纲"}, project_dir)
     print("  V" if "完成" in r else "  W " + r[:100])
@@ -75,6 +85,7 @@ def run_pipeline(book_name, author, source, channel="男频", project_dir=None):
     step_summary_extract(out_dir)
     step_pattern_analysis(out_dir)
     step_book_import(out_dir, book_name, total)
+    step_character_extract(out_dir)
     step_volume_outline(out_dir)
 
     elapsed = time.time() - t0

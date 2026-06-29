@@ -11,11 +11,11 @@ LLM 必须按以下 XML 结构输出，不得输出 Markdown。
   <chapter_type>推进章/日常章/高潮章/过渡章/感情章</chapter_type>
   <emotional_arc>起点→终点（如：平静→震惊→决意）</emotional_arc>
   <info_release>
-    <point at="第10行">读者此刻知道的关键事实</point>
-    <point at="第30行">读者此刻知道的关键事实</point>
-    <point at="第50行">读者此刻知道的关键事实</point>
-    <point at="第70行">读者此刻知道的关键事实</point>
-    <point at="第100行">读者此刻知道的关键事实</point>
+    <point at="开场">读者此刻知道的关键事实</point>
+    <point at="信息释放点1">读者此刻知道的关键事实</point>
+    <point at="信息释放点2">读者此刻知道的关键事实</point>
+    <point at="信息释放点3">读者此刻知道的关键事实</point>
+    <point at="高潮前">读者此刻知道的关键事实</point>
     <point at="章尾">读者此刻知道的关键事实</point>
   </info_release>
   <summary>
