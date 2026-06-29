@@ -136,6 +136,7 @@ _PRESET_ALIAS = {
     "简介": "synopsis-generate", "总纲": "outline-generate", "标签": "tags-generate",
     "角色生成": "character-generate", "设计角色": "character-generate", "人设": "character-generate",
     "提取角色": "character-extract",
+    "角色深度": "character-deep",
     "卷纲": "volume-outline",
     "章纲": "plot-guide-nanpin", "细纲": "plot-guide-nanpin", "生成章纲": "plot-guide-nanpin",
     "男频章纲": "plot-guide-nanpin", "女频章纲": "plot-guide-nvpin",
@@ -283,6 +284,8 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
             ok = sum(1 for r in result if "核心事件" in r)
             return f"摘要提取完成: {ok}/{total} 章"
         return "摘要提取失败: 无数据"
+    elif preset_name == "character-deep":
+        return _run_single_file_preset("character-deep", None, args, project_dir)
     else:
         return f"未知工具: {preset_name}"
 
