@@ -24,7 +24,6 @@
 主角：@protagonist_name
 总纲： @作品信息/主题/总纲
 ## 仿写模式
-- **🔴 第1章场景红线**：源文第1章在学校/传送前，仿写第1章也必须停在同位置。主角不能进入洪荒/异界，不能开始传送，不能进入传送后场景。传送是第2章的内容。
 @作品信息/套路分析
 - 套路分析中的 `rhythm_nodes`（节奏骨架）、`role_topology`（角色功能）、`chapter_structure`（章节结构）、`emotional_template`（情绪弧线）、`genre_keywords`（题材词根）
 - 章纲的每个情节段必须对齐对应 `rhythm_node` 的 `function` 和 `reader_emotion`，但 `vehicle`（载体）必须不同
