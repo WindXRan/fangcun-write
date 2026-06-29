@@ -59,14 +59,17 @@ def step_character_deep(project_dir):
 
 
 def step_volume_outline(project_dir):
+    print("\n[6/6] 逆推多卷卷纲...")
     vol_dir = Path(project_dir) / "正文" / "卷纲"
-    if list(vol_dir.glob("第*卷*")):
-        print("\n[6/6] 卷纲已存在，跳过")
-        return True
-    print("\n[6/6] 逆推卷纲（按总纲分的卷）...")
     from tool_executor import run_tool
-    r = run_tool("volume-outline", {"vol": 1, "user_input": "基于全书摘要设计卷纲"}, project_dir)
-    print("  V" if "完成" in r else "  W " + r[:100])
+    for v in range(1, 7):
+        out_file = vol_dir / ("第" + str(v) + "卷.xml")
+        if out_file.exists():
+            print("  第" + str(v) + "卷已存在，跳过")
+            continue
+        print("  第" + str(v) + "卷...")
+        r = run_tool("volume-outline", {"vol": v, "user_input": "基于总纲和摘要设计第" + str(v) + "卷"}, project_dir)
+        print("  V" if "完成" in r else "  W " + r[:100])
     return True
 
 

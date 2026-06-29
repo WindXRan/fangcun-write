@@ -355,7 +355,7 @@ class VariableResolver:
             return p
 
         # 3. 源文分析 → 拆文库
-        source_book = self._ctx("source_book", "")
+        source_book = self._ctx("source_book", "") or self._user_overrides.get("source_book", "")
         analyse_root = self.novel_dir.parent.parent / "拆文库"
 
         if source.startswith("_cache/"):
@@ -487,7 +487,7 @@ class VariableResolver:
         """获取源文当前章的字数。"""
         N = self._ctx("N", 1)
         # 从源文目录读
-        source_dir = self._ctx("source_chapter_dir", "")
+        source_dir = self._ctx("source_dir", "")
         if source_dir:
             for pat in [f"第{N}章*.txt", f"ch_{N:03d}.txt", f"第{N}章*.md"]:
                 files = list(Path(source_dir).glob(pat))

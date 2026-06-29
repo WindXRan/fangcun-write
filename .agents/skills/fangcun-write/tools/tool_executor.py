@@ -105,6 +105,9 @@ def save_output_files(text: str, project_dir: str) -> list[str]:
             content = m.group(2).strip()
             if path and content:
                 fp = Path(project_dir) / path
+                # Fix: 剥离 markdown 代码块包裹（LLM 经常输出 ```xml ... ```）
+                content = re.sub(r'^```\w*\s*\n?', '', content)
+                content = re.sub(r'\n?```\s*$', '', content)
                 fp.parent.mkdir(parents=True, exist_ok=True)
                 fp.write_text(content, encoding='utf-8')
                 saved.append(path)
@@ -115,6 +118,8 @@ def save_output_files(text: str, project_dir: str) -> list[str]:
     for m in re.finditer(r'====\s*([^\n=]+)\s*====\s*\n(.*?)(?=\n====|\Z)', text, re.DOTALL):
         path = m.group(1).strip()
         content = m.group(2).strip()
+        content = re.sub(r'^```\w*\s*\n?', '', content)
+        content = re.sub(r'\n?```\s*$', '', content)
         if not path or not content:
             continue
         fp = Path(project_dir) / path
@@ -130,7 +135,6 @@ _PRESET_ALIAS = {
     "开书": "book-draw", "顶层设计": "book-draw", "原创开书": "book-draw",
     "仿写开书": "open-book", "开书全套": "open-book",
     "拆书": "pipeline-import", "逆推": "pipeline-import",
-    "套路分析": "pattern-analysis",
     "提取摘要": "chapter-summary",
     "黄金开篇": "golden-opening", "黄金三章": "golden-chapters",
     "简介": "synopsis-generate", "总纲": "outline-generate", "标签": "tags-generate",
@@ -154,7 +158,6 @@ _SINGLE_FILE_MAP = {
     "synopsis-generate": "作品信息/主题/简介.xml",
     "outline-generate": "作品信息/主题/总纲.xml",
     "tags-generate": "作品信息/主题/标签.xml",
-    "pattern-analysis": "作品信息/套路分析.xml",
 }
 
 
@@ -225,8 +228,6 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _apply_pick(project_dir, args)
     elif preset_name == "open-book":
         return _run_single_file_preset("open-book", None, args, project_dir)
-    elif preset_name == "pattern-analysis":
-        return _run_single_file_preset("pattern-analysis", None, args, project_dir)
     elif preset_name == "book-import":
         return _run_single_file_preset("book-import", None, args, project_dir)
     elif preset_name == "pipeline-import":
@@ -239,7 +240,7 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
             return "缺少 source 参数（源文件/目录路径）"
         from importer import run_import
         result = run_import(
-            book_name=args.get("book_name", project_dir.split("/")[-1] if "/" in project_dir else project_dir),
+        book_name=args.get("book_name", Path(project_dir).name),
             author=args.get("author", ""),
             source=source,
             channel=args.get("channel", "男频"),
@@ -305,16 +306,30 @@ def _inject_tool_attribute(xml_path: str, tool_name: str):
 
 def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict, project_dir: str) -> str:
     """加载预设→LLM→保存（通用）。支持 rounds 参数抽卡。"""
-    import xml.etree.ElementTree as ET
-    preset_file = _BUILTIN_DIR / f"{preset_name}.xml"
-    if not preset_file.exists():
+    preset_file_md = _BUILTIN_DIR / f"{preset_name}.md"
+    preset_file_xml = _BUILTIN_DIR / f"{preset_name}.xml"
+    sp_raw = ""
+    if preset_file_md.exists():
+        try:
+            md_text = preset_file_md.read_text(encoding='utf-8')
+            if md_text.startswith('---'):
+                parts = md_text.split('---', 2)
+                sp_raw = parts[2].strip() if len(parts) >= 3 else md_text
+            else:
+                sp_raw = md_text
+        except Exception as _ex:
+            traceback.print_exc()
+            return f"预设 {preset_name}.md 解析失败: {_ex}"
+    elif preset_file_xml.exists():
+        try:
+            import xml.etree.ElementTree as ET
+            tree = ET.parse(preset_file_xml)
+            sp_raw = tree.getroot().findtext("prompt", "")
+        except Exception as _ex:
+            traceback.print_exc()
+            return f"预设 {preset_name}.xml 解析失败: {_ex}"
+    else:
         return f"预设 {preset_name} 不存在"
-    try:
-        tree = ET.parse(preset_file)
-        sp_raw = tree.getroot().findtext("prompt", "")
-    except Exception as _ex:
-        traceback.print_exc()
-        return f"预设 {preset_name} 解析失败: {_ex}"
 
     # 读取仿写项目中的 source_book（源文路径）
     proj_xml = Path(project_dir) / "作品信息" / "project.xml"
@@ -427,7 +442,7 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
             "plot-guide-nvpin": f"正文/章纲/第{args.get('chapter_number', 1)}章.xml",
             "source-guide": f"正文/章纲/第{args.get('chapter_number', 1)}章.xml",
             "write-chapter": f"正文/正文/第{args.get('chapter_number', 1)}章.xml",
-            "volume-outline": "正文/卷纲/卷纲.xml",
+            "volume-outline": f"正文/卷纲/第{args.get("volume_number", args.get("vol", 1))}卷.xml",
             "character-generate": "作品信息/设定/角色.xml",
         }
         fallback = _FALLBACK_PATHS.get(preset_name, save_path)
@@ -488,7 +503,7 @@ def _run_pipeline_import(args: dict, project_dir: str) -> str:
         return "缺少 source 参数"
     from pipeline_import import run_pipeline
     success = run_pipeline(
-        book_name=args.get("book_name", project_dir.split("/")[-1]),
+        book_name=args.get("book_name", Path(project_dir).name),
         author=args.get("author", ""),
         source=source,
         channel=args.get("channel", "男频"),
@@ -514,8 +529,9 @@ def _run_multi_round(preset_name: str, save_path: str | None,
         "plot-guide": f"正文/章纲/第{ch}章.xml",
         "plot-guide-nanpin": f"正文/章纲/第{ch}章.xml",
         "plot-guide-nvpin": f"正文/章纲/第{ch}章.xml",
+        "source-guide": f"正文/章纲/第{ch}章.xml",
         "write-chapter": f"正文/正文/第{ch}章.xml",
-        "volume-outline": "正文/卷纲/卷纲.xml",
+        "volume-outline": f"正文/卷纲/第{args.get("volume_number", args.get("vol", 1))}卷.xml",
         "character-generate": "作品信息/设定/角色.xml",
         "premise-draw": None,
     }
