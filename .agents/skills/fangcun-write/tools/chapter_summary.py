@@ -49,7 +49,7 @@ def extract_one(ch_num: int, chapter_text: str, api_key: str,
     from lib.api_client import call_api
 
     sys_prompt = """你是有经验的网文编辑。读一章正文，提取5个字段：
-- 核心事件：一句话概括本章最重要的剧情推进（25字内）
+- 核心事件：用2-3句话概括本章最重要的剧情推进。写清楚谁做了什么、结果如何。
 - 关键转折：本章从开头到结尾发生了什么转变（情绪/局势/认知/关系）
 - 出场角色：本章实际出场的主要角色名，逗号分隔
 - 情绪基调：读者读完本章的情绪变化，如"压抑→爽→期待"
@@ -61,7 +61,7 @@ def extract_one(ch_num: int, chapter_text: str, api_key: str,
 
     try:
         resp = call_api(api_key, model, user_prompt, system_prompt=sys_prompt,
-                        api_url=api_url, temperature=0.1, max_tokens=300)
+                        api_url=api_url, temperature=0.1, max_tokens=500)
     except Exception as e:
         return {"ch": ch_num, "error": str(e)}
 
