@@ -24,9 +24,18 @@ FIELDS = ["核心事件", "出场角色", "情绪基调", "冲突类型"]
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
+def _extract_xml_content(text: str) -> str:
+    """从XML中提取<content>文本。"""
+    import re
+    m = re.search(r'<content>(.*?)</content>', text, re.DOTALL)
+    return m.group(1) if m else text
+
+
 def get_chapter_text(chapter_file: str) -> str:
-    """安全读一章，截断到6000字。"""
+    """安全读一章，支持 txt 和 xml，截断到6000字。"""
     text = Path(chapter_file).read_text(encoding="utf-8", errors="replace")
+    if chapter_file.endswith('.xml'):
+        text = _extract_xml_content(text)
     return text[:6000]
 
 
@@ -78,7 +87,7 @@ def extract_all(project_dir: str, chapter_range: list[int] = None,
         except: pass
 
     # 找章节文件
-    all_chs = sorted(chap_dir.glob("第*.txt"))
+    all_chs = sorted(chap_dir.glob("第*.txt")) + sorted(chap_dir.glob("第*.xml"))
     if not all_chs:
         print("  W 无章节文件")
         return []
@@ -88,7 +97,7 @@ def extract_all(project_dir: str, chapter_range: list[int] = None,
     for f in all_chs:
         # 解析章节号
         stem = f.stem
-        for prefix in ["第", "第"]:
+        for prefix in ["第"]:
             if stem.startswith(prefix):
                 try:
                     num_str = stem[len(prefix):].split("章")[0]

@@ -287,18 +287,6 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return f"未知工具: {preset_name}"
 
 
-def _validate_output(preset_name: str, saved: list, project_dir: str):
-    """轻量校验：文件非空。"""
-    warnings = []
-    for path in saved:
-        fp = Path(project_dir) / path
-        if not fp.exists():
-            warnings.append(f"{path}: 文件未生成")
-        elif fp.stat().st_size == 0:
-            warnings.append(f"{path}: 文件为空")
-    return warnings
-
-
 def _inject_tool_attribute(xml_path: str, tool_name: str):
     """在 XML 文件根元素添加 tool 属性（如已有则跳过）。"""
     import xml.etree.ElementTree as ET
@@ -477,12 +465,6 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
                 clean = re.sub(r'```(?:xml)?\n?', '', resp).strip()
                 fp.write_text(clean, encoding='utf-8')
                 saved = [f"作品信息/设定/角色/{name_m.group(1)}.xml"]
-    # Fix 4: 轻量校验输出
-    _warnings = _validate_output(preset_name, saved, project_dir)
-    if _warnings:
-        for _w in _warnings:
-            print(f'  ⚠️ {_w}')
-
     # 在所有 XML 文件根元素注入 tool 属性
     for path in saved:
         fp = Path(project_dir) / path
