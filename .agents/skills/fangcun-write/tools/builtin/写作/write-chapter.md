@@ -50,7 +50,7 @@ output: 正文
 # 输出
 <output>
   <file path="正文/正文/第@当前章节号章.xml">
-<chapter number="@当前章节号">
+<chapter number="@当前章节号" name="（从章纲 chapter_title 取标题部分）">
   <content>
 第@当前章节号章 标题（从章纲 chapter_title 取，不写#号）
 
