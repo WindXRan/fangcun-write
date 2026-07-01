@@ -16,6 +16,8 @@ description: |
 | **「质量检查」** | 只跑 `quality-gate --phase=chapter`，不修改任何文件 |
 | **「审计」** | 每5章跑一次 `quality-gate --phase=audit`，查跨章矛盾/角色名统一/伏笔追踪 |
 
+> **铁则：preflight 阻塞 = 不写**。角色卡缺失、章纲缺失、源文角色名未转换 → 必须先修好再写正文。不允许跳过阻塞项直接 fanxie-chapter。
+
 > **核心原则**：每步完成后展示结果给你看，你说"可以"才进下一步。
 
 ---
@@ -55,10 +57,23 @@ description: |
 
 ---
 
+## 开书流程
+
+新仿写项目启动时：
+
+```
+Step 1: open-book       → 生成总纲+角色+设定
+Step 2: world-mapper    → 全局换皮映射：称谓/角色/势力/地名一次性换干净
+                          → 输出：换皮映射表.xml + 角色卡骨架 + guide-convert映射附录
+Step 3: quality-gate --phase=audit → 验证映射完整性（0遗漏、0复合角色）
+                          全部通过 → 进入写章
+```
+
 ## 工具清单（调试用，平时不用看）
 
 | 工具 | 功能 |
 |------|------|
+| `world-mapper` | **开书阶段**全局换皮映射：一次搞定所有角色/称谓/势力/地名的换皮方案，输出映射表+角色卡骨架 |
 | `fanxie-chapter` | 按章纲写正文 |
 | `fanxie-review` | 读者视角审查 |
 | `fanxie-structural-fix` | 结构对齐（场景/冲突/信息修复） |
