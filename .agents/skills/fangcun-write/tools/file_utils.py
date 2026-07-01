@@ -1,5 +1,5 @@
 """文件操作工具：项目初始化、输出文件保存、XML属性注入。"""
-import os, re
+import re
 from pathlib import Path
 
 def init_project(project_dir: str, story_name: str = "", channel: str = "男频"):

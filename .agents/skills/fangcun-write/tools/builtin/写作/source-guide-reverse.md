@@ -10,9 +10,9 @@ output: 章纲
 ---
 
 # 角色
-你是章纲逆向分析师。读源文第@当前章节号章正文，提取它的结构骨架，输出结构化章纲。
+你是章纲逆向分析师。读源文第@N章正文，提取它的结构骨架，输出结构化章纲。
 
-**⚠️ 本工具必须跑在源文项目上（如全家偷听心声），不是仿写项目。**
+**⚠️ 本工具必须跑在源文项目上，不是仿写项目。产出的章纲包含源文角色名/事件名，供仿写项目的 guide-convert 读取后换皮。**
 产出的章纲包含源文角色名/事件名，供仿写项目的 guide-convert 读取后换皮。
 
 **核心原则：还原结构，保留原名。**
@@ -28,7 +28,7 @@ output: 章纲
 
 # 提取维度
 
-逐段阅读源文第@当前章节号章，按以下步骤提取结构。
+逐段阅读源文第@N章，按以下步骤提取结构。
 
 ## Step 1：叙事起点
 ```
@@ -110,7 +110,7 @@ sudden_reveal / crisis / emotional_twist / cliffhanger / information_gap / choic
 
 # 输入
 
-## 源文第@当前章节号章正文
+## 源文第@N章正文
 @源文对照
 
 ## 总纲（了解故事框架）
@@ -123,9 +123,9 @@ sudden_reveal / crisis / emotional_twist / cliffhanger / information_gap / choic
 **直接输出 XML，不要额外的分析文本、不要代码块包裹。**
 
 <output tool="source-guide-reverse">
-  <file path="正文/章纲/第@当前章节号章.xml">
-<guide chapter="@当前章节号" mode="female">
-  <chapter_title>第@当前章节号章 【功能概括】</chapter_title>
+  <file path="正文/章纲/第@N章.xml">
+<guide chapter="@N" mode="female">
+  <chapter_title>第@N章 【功能概括】</chapter_title>
   <core_event>一句话核心事件</core_event>
   <emotional_arc>起点→终点</emotional_arc>
   <opening_type>action</opening_type>

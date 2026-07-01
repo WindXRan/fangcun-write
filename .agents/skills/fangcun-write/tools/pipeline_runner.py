@@ -48,6 +48,7 @@ def _resolve_value(spec: str, ctx: dict):
 def run_pipeline(pipeline_name: str, input_data: dict, project_dir: str) -> str:
     """运行 pipeline。"""
     from tool_executor import run_tool
+    import threading
 
     # 找 pipeline 定义
     pipeline_file = _BUILTIN / f"{pipeline_name}.xml"
@@ -62,8 +63,8 @@ def run_pipeline(pipeline_name: str, input_data: dict, project_dir: str) -> str:
         return f"根元素必须是 <pipeline>，实际是 <{root.tag}>"
 
     name = root.get("name", pipeline_name)
-    steps = root.findall("step")
-    if not steps:
+    children = list(root)
+    if not children:
         return f"pipeline '{name}' 没有定义任何步骤"
 
     ctx = {
@@ -74,38 +75,117 @@ def run_pipeline(pipeline_name: str, input_data: dict, project_dir: str) -> str:
 
     logs = [f"▶ 运行 pipeline: {name}"]
 
-    for step in steps:
+    def _check_skip(step, logs_list):
+        """检查 skip_if 条件，返回 True=跳过"""
+        skip_if = step.get("skip_if", "")
+        if not skip_if:
+            return False
+
+        # 格式: "exists:相对路径" 或 "min:相对路径:最小文件数"
+        parts = skip_if.split(":", 2)
+        mode = parts[0]
+        rel_path = parts[1] if len(parts) > 1 else ""
+        full_path = os.path.join(project_dir, rel_path) if rel_path else ""
+
+        if mode == "exists":
+            if os.path.exists(full_path):
+                if os.path.isdir(full_path):
+                    files = os.listdir(full_path)
+                    if files:
+                        logs_list.append(f"  ⏭️ 跳过（目录已存在: {rel_path}, {len(files)}文件）")
+                        return True
+                else:
+                    logs_list.append(f"  ⏭️ 跳过（文件已存在: {rel_path}）")
+                    return True
+
+        elif mode == "min":
+            min_count = int(parts[2]) if len(parts) > 2 else 1
+            if os.path.isdir(full_path):
+                files = [f for f in os.listdir(full_path) if f.endswith(".xml")]
+                if len(files) >= min_count:
+                    logs_list.append(f"  ⏭️ 跳过（目录已有{len(files)}个文件, ≥{min_count}）")
+                    return True
+
+        return False
+
+    def _run_one(step, ctx, logs_list):
+        """执行单个 step（含 skip_if 检查）"""
+        # 先检查是否跳过
+        if _check_skip(step, logs_list):
+            return None
+
         tool_name = step.get("tool", "")
         step_id = step.get("id", tool_name)
         if not tool_name:
-            logs.append(f"  ✗ 步骤缺少 tool 属性")
-            continue
+            logs_list.append(f"  ✗ 步骤缺少 tool 属性")
+            return None
 
-        # 构建参数
         args = {}
         for param in step.findall("param"):
             p_name = param.get("name", "")
             if not p_name:
                 continue
-            # from 引用
             from_spec = param.get("from", "")
             if from_spec:
                 args[p_name] = _resolve_value(from_spec, ctx)
-            # 直接值
             value = param.get("value", "")
             if value:
                 args[p_name] = value
 
-        logs.append(f"  → {tool_name}（{step_id}）")
+        logs_list.append(f"  → {tool_name}（{step_id}）")
+        try:
+            result = run_tool(tool_name, args, project_dir)
+            logs_list.append(f"    ✅ {step_id}: {str(result)[:60]}")
+            ctx["results"][step_id] = {"output": result, "project_dir": project_dir}
+            return result
+        except Exception as e:
+            logs_list.append(f"    ❌ {step_id}: {e}")
+            return None
 
-        result = run_tool(tool_name, args, project_dir)
-        logs.append(f"    {result[:80]}")
+    # 标准元数据标签（静默跳过）
+    meta_tags = {"desc", "name", "description"}
 
-        # 保存步骤结果
-        ctx["results"][step_id] = {
-            "output": result,
-            "project_dir": project_dir,
-        }
+    for child in children:
+        tag = child.tag
+
+        # 元数据标签静默跳过
+        if tag in meta_tags:
+            continue
+
+        if tag == "step":
+            _run_one(child, ctx, logs)
+
+        elif tag == "parallel":
+            sub_steps = child.findall("step")
+            if not sub_steps:
+                logs.append(f"  ⚠️ <parallel> 块为空")
+                continue
+
+            # 如果 parallel 也有 skip_if，检查整体是否跳过
+            if _check_skip(child, logs):
+                continue
+
+            threads = []
+            results = [None] * len(sub_steps)
+
+            def _run_parallel(idx, step):
+                r = _run_one(step, ctx, logs)
+                results[idx] = r
+
+            logs.append(f"  ⚡ 并行执行 {len(sub_steps)} 个步骤")
+
+            for i, step in enumerate(sub_steps):
+                t = threading.Thread(target=_run_parallel, args=(i, step))
+                threads.append(t)
+                t.start()
+
+            for t in threads:
+                t.join()
+
+            logs.append(f"  ⚡ 并行块完成")
+
+        else:
+            logs.append(f"  ⚠️ 忽略未知标签 <{tag}>")
 
     logs.append(f"✓ pipeline 完成")
     return "\n".join(logs)

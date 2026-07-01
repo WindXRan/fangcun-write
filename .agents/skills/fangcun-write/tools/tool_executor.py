@@ -60,6 +60,8 @@ _PRESET_ALIAS = {
     "运 pipeline": "pipeline-run",
     "source-guide": "source-guide-reverse", "章纲逆推": "source-guide-reverse",
     "guide-convert": "guide-convert", "章纲转换": "guide-convert",
+    "仿写章节": "write-chapter", "fanxie-chapter": "write-chapter",
+    "仿写管线": "imitation", "仿写批量": "imitation-batch", "批量仿写": "imitation-batch",
 }
 
 _SINGLE_FILE_MAP = {
@@ -84,17 +86,27 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
     preset_name = _PRESET_ALIAS.get(preset_name, preset_name)
     
     # ── 自动缓冲区：source-guide-reverse 领先写章10章 ──
-    if preset_name in ("write-chapter", "fanxie-chapter", "guide-convert"):
+    if preset_name in ("write-chapter", "guide-convert"):
         ch = args.get("chapter_number", args.get("ch", 1))
         import os as _os, glob as _glob
         from pathlib import Path as _Path
         # 计算已逆推章数
-        guide_dir = _Path(project_dir).parent / "全家偷听心声" / "正文" / "章纲"
+        # 从 project.xml 读取源文项目名
+        import xml.etree.ElementTree as _ET
+        _px = _Path(project_dir) / "作品信息" / "project.xml"
+        _src_book = ""
+        if _px.exists():
+            try: _src_book = (_ET.parse(str(_px)).getroot().findtext("source_book") or "").strip()
+            except: pass
+        if not _src_book:
+            raise ValueError(f"{project_dir}/project.xml 未设置 source_book，无法定位源文项目")
+        _src_dir = _Path(project_dir).parent / _src_book
+        guide_dir = _src_dir / "正文" / "章纲"
         existing_guides = len(list(guide_dir.glob("第*.xml"))) if guide_dir.exists() else 0
         # 如果逆推落后于写章+10章，自动补一批
         if existing_guides < ch + 10:
             need = ch + 15
-            _run_tool_silent = lambda n: _run_single_file_preset("source-guide-reverse", None, {"chapter_number": n}, str(_Path(project_dir).parent / "全家偷听心声"))
+            _run_tool_silent = lambda n: _run_single_file_preset("source-guide-reverse", None, {"chapter_number": n}, str(_src_dir))
             for n in range(existing_guides + 1, need + 1):
                 p = guide_dir / f"第{n}章.xml"
                 if p.exists(): continue
@@ -134,8 +146,6 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _run_single_file_preset("book-draw", None, args, project_dir)
     elif preset_name == "write-chapter":
         return _run_single_file_preset("write-chapter", None, args, project_dir)
-    elif preset_name == "write-chapter-fanxie":
-        return _run_single_file_preset("write-chapter-fanxie", None, args, project_dir)
 
     elif preset_name == "plot-guide-nanpin":
         return _run_single_file_preset("plot-guide-nanpin", None, args, project_dir)
@@ -155,6 +165,8 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _apply_pick(project_dir, args)
     elif preset_name in ("仿写管线", "imitation"):
         return _run_imitation_chapter(args, project_dir)
+    elif preset_name in ("仿写批量", "imitation-batch", "批量仿写"):
+        return _run_imitation_batch(args, project_dir)
     elif preset_name == "open-book":
         return _run_single_file_preset("open-book", None, args, project_dir)
     elif preset_name == "book-import":
@@ -323,6 +335,16 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
     if overrides:
         resolver.set_user_overrides(overrides)
     sp = resolver.render(sp_raw)
+    # 🛡️ P0 安全检查：检测 prompt 中的变量解析失败标记
+    _fail_markers = re.findall(r'@\[解析失败:[^\]]+\]|@\[未定义:[^\]]+\]|@\[未找到:[^\]]+\]', sp)
+    if _fail_markers:
+        _marker_str = "; ".join(_fail_markers[:5])
+        print(f"  [⚠️ P0] prompt 包含 {len(_fail_markers)} 处变量解析失败: {_marker_str}")
+        # 不终止，但把失败变量名收集起来，附加到 prompt 末尾提醒 LLM 忽略
+        _warn = f"\n\n# ⚠️ 系统提示\n以下变量解析失败，请忽略它们，不要尝试使用或补全：\n"
+        for m in _fail_markers:
+            _warn += f"- {m}\n"
+        sp = sp + _warn
     # debug: 保存渲染后的完整 prompt 到 _debug/ 目录
     try:
         import datetime
@@ -445,7 +467,7 @@ def _run_imitation_chapter(args: dict, project_dir: str) -> str:
             import xml.etree.ElementTree as ET
             src = (ET.parse(str(px)).getroot().findtext("source_book") or "").strip()
     if not src:
-        src = "全家偷听心声"
+        raise ValueError(f"{project_dir}/project.xml 未设置 source_book，无法定位源文项目")
 
     src_dir = str(Path(project_dir).parent / src)
     if not Path(src_dir).exists():
@@ -460,16 +482,28 @@ def _run_imitation_chapter(args: dict, project_dir: str) -> str:
     except Exception as e:
         msgs.append(f"源文章纲❌{str(e)[:40]}")
 
-    # Step 2: guide-convert
     try:
         run_tool("guide-convert", {"chapter_number": ch}, project_dir)
         msgs.append(f"新文章纲✅")
     except Exception as e:
         msgs.append(f"新文章纲❌{str(e)[:40]}")
 
-    # Step 3: write-chapter
+    # Step 3: write-chapter（带下一章章纲参考）
+    _wc_args = {"chapter_number": ch}
+    _next_guide = Path(project_dir) / "正文" / "章纲" / f"第{ch+1}章.xml"
+    if _next_guide.exists():
+        _ng_text = _next_guide.read_text(encoding='utf-8')
+        import xml.etree.ElementTree as _ng_et
+        try:
+            _ng_root = _ng_et.fromstring(_ng_text)
+            _ng_core = _ng_root.findtext("core_event", "")[:100]
+            _ng_title = _ng_root.findtext("chapter_title", "")
+            if _ng_core:
+                _wc_args["user_input"] = f"下一章提要：{_ng_title} — {_ng_core}"
+        except:
+            pass
     try:
-        r = run_tool("write-chapter", {"chapter_number": ch}, project_dir)
+        r = run_tool("write-chapter", _wc_args, project_dir)
         # Check output
         out = Path(project_dir) / "正文" / "正文" / f"第{ch}章.xml"
         if out.exists():
@@ -481,15 +515,116 @@ def _run_imitation_chapter(args: dict, project_dir: str) -> str:
             if '<content>' not in text and content:
                 wrapped = f'<chapter number="{ch}" tool="write-chapter">\n  <content>\n{content}\n  </content>\n</chapter>'
                 out.write_text(wrapped, encoding='utf-8')
-            bad = re.findall(r'乔娇娇|乔夫人|乔忠国|乔天经|乔地义|孟谷雪|冷面王爷轻点宠|功德商城|功德点|老阎王|阎王', content)
-            leak = f"泄露{len(bad)}" if bad else "干净"
-            msgs.append(f"正文✅{wc}字{leak}")
+            msgs.append(f"正文✅{wc}字")
         else:
             msgs.append(f"正文❌无文件")
     except Exception as e:
         msgs.append(f"正文❌{str(e)[:40]}")
 
+    # 伏笔追踪：从章纲提取未解决的冲突/预言/新角色
+    try:
+        guide_path = Path(project_dir) / "正文" / "章纲" / f"第{ch}章.xml"
+        if guide_path.exists():
+            guide_text = guide_path.read_text(encoding='utf-8')
+            import json as _json
+            tracker_path = Path(project_dir) / "作品信息" / "设定" / "plot_tracker.json"
+            threads = _json.loads(tracker_path.read_text(encoding='utf-8')) if tracker_path.exists() else []
+
+            # 从章纲的 info_hold 和 hooks 提取伏笔
+            holds = _re.findall(r'<info_hold>([^<]+)</info_hold>', guide_text)
+            hooks = _re.findall(r'<cliffhanger>([^<]+)</cliffhanger>', guide_text)
+
+            new_threads = []
+            for h in holds[:3]:  # 最多记3条
+                new_threads.append({"ch": ch, "thread": h.strip()[:150], "status": "open"})
+            for h in hooks[:1]:
+                new_threads.append({"ch": ch, "thread": h.strip()[:150], "status": "open"})
+
+            if new_threads:
+                threads.extend(new_threads)
+                tracker_path.write_text(_json.dumps(threads, ensure_ascii=False, indent=2), encoding='utf-8')
+                msgs.append(f"伏笔{len(new_threads)}条")
+    except Exception:
+        pass
+
     return f"第{ch}章: {' | '.join(msgs)}"
+
+
+def _run_imitation_batch(args: dict, project_dir: str) -> str:
+    """仿写批量：并行跑 source-guide-reverse + guide-convert → 串行 write-chapter。"""
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    import time
+    from pathlib import Path
+
+    start = int(args.get("start", args.get("chapter_number", 1)))
+    end = int(args.get("end", args.get("last", 50)))
+    src_book = args.get("source_book", "")
+    if not src_book:
+        import xml.etree.ElementTree as _ET2
+        _px2 = Path(project_dir) / "作品信息" / "project.xml"
+        if _px2.exists():
+            try: src_book = (_ET2.parse(str(_px2)).getroot().findtext("source_book") or "").strip()
+            except: pass
+    if not src_book:
+        raise ValueError(f"{project_dir}/project.xml 未设置 source_book，无法定位源文项目")
+    src_dir = str(Path(project_dir).parent / src_book)
+    concurrency = int(args.get("workers", 5))
+
+    chapters = list(range(start, end + 1))
+    lines = []
+    _total_start = time.time()
+
+    # Phase 1: parallel source-guide-reverse
+    t0 = time.time()
+    lines.append(f"Phase 1: source-guide-reverse {start}-{end} ({concurrency}并发)")
+    with ThreadPoolExecutor(max_workers=concurrency) as ex:
+        futs = {ex.submit(run_tool, "source-guide-reverse", {"chapter_number": ch}, src_dir): ch for ch in chapters}
+        for f in as_completed(futs):
+            ch = futs[f]
+            try:
+                f.result()
+                lines.append(f"  源文{ch}✅")
+            except:
+                lines.append(f"  源文{ch}❌")
+    lines.append(f"  Phase 1耗时: {time.time()-t0:.0f}s")
+
+    # Phase 2: parallel guide-convert
+    t0 = time.time()
+    lines.append(f"Phase 2: guide-convert {start}-{end} ({concurrency}并发)")
+    with ThreadPoolExecutor(max_workers=concurrency) as ex:
+        futs = {ex.submit(run_tool, "guide-convert", {"chapter_number": ch}, project_dir): ch for ch in chapters}
+        for f in as_completed(futs):
+            ch = futs[f]
+            try:
+                f.result()
+                lines.append(f"  转换{ch}✅")
+            except:
+                lines.append(f"  转换{ch}❌")
+    lines.append(f"  Phase 2耗时: {time.time()-t0:.0f}s")
+
+    # Phase 3: sequential write-chapter
+    t0 = time.time()
+    lines.append(f"Phase 3: write-chapter {start}-{end} (串行)")
+    for ch in chapters:
+        t1 = time.time()
+        try:
+            r = run_tool("write-chapter", {"chapter_number": ch}, project_dir)
+            out = Path(project_dir) / "正文" / "正文" / f"第{ch}章.xml"
+            if out.exists():
+                text = out.read_text(encoding='utf-8')
+                import re
+                m = re.search(r'<content>(.*?)</content>', text, re.DOTALL)
+                content = m.group(1).strip() if m else text.strip()
+                wc = len(content)
+                lines.append(f"  ch{ch}: ✅{wc}字 {time.time()-t1:.0f}s")
+            else:
+                lines.append(f"  ch{ch}: ❌无文件")
+        except Exception as e:
+            lines.append(f"  ch{ch}: ❌{str(e)[:40]}")
+    lines.append(f"  Phase 3耗时: {time.time()-t0:.0f}s")
+
+    lines.append(f"总耗时: {time.time()-_total_start:.0f}s")
+    return "\n".join(lines)
 
 
 def _run_pipeline_import(args: dict, project_dir: str) -> str:

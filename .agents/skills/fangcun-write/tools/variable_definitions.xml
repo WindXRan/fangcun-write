@@ -13,8 +13,6 @@
     <variable name="当前章节号" category="正文" type="computed" source="runtime" handler="current_chapter" />
     <variable name="当前卷号" category="正文" type="computed" source="runtime" handler="current_volume" />
     <variable name="目标字数" category="正文" type="computed" source="computed" handler="target_words" />
-    <variable name="目标字数下限" category="正文" type="computed" source="computed" handler="target_words_min" />
-    <variable name="目标字数上限" category="正文" type="computed" source="computed" handler="target_words_max" />
     <variable name="总章数" category="作品信息" type="computed" source="computed" handler="total_chapters" />
 
     
@@ -50,6 +48,10 @@
       <extract from="作品信息/project.xml" method="xpath" xpath=".//story_name" />
       <fallback>未命名</fallback>
     </variable>
+    <variable name="源文书名" category="作品信息" type="text" source="auto_extract">
+      <extract from="作品信息/project.xml" method="xpath" xpath=".//source_book" />
+      <fallback>源文</fallback>
+    </variable>
 
     
     <variable name="模板_简介" category="设定" type="computed" source="computed" handler="template_blurb" />
@@ -82,5 +84,6 @@
     <variable name="仿写模式" category="自定义" type="computed" source="computed" handler="fanxie_mode">
       <description>仿写模式标志。非空 = 仿写模式生效，空 = 原创模式。由 tool_executor 自动设置。</description>
     </variable>
-  <variable name="频道模式" category="作品信息" type="computed" source="computed" handler="频道模式"><description>根据 project.xml 中 channel 自动返回男频或女频模式内容。</description></variable><variable name="标签" category="作品信息" type="file_ref" source="auto_extract"><extract from="作品信息/主题/标签.xml" method="read" /><description>@标签（自动读取）</description></variable><variable name="总纲" category="作品信息" type="file_ref" source="auto_extract"><extract from="作品信息/主题/总纲.xml" method="read" /><description>@总纲（自动读取）</description></variable><variable name="简介" category="作品信息" type="file_ref" source="auto_extract"><extract from="作品信息/主题/简介.xml" method="read" /><description>@简介（自动读取）</description></variable><variable name="卷纲" category="大纲" type="file_ref" source="auto_extract"><extract from="正文/卷纲/第1卷.xml" method="read" /><description>@卷纲（自动读取）</description></variable><variable name="作品篇幅" category="作品信息" type="computed" source="computed" handler="作品篇幅"><description>返回作品篇幅描述</description></variable><variable name="角色列表" category="角色" type="computed" source="computed" handler="角色列表"><description>@角色列表 — 列出所有可用角色名，不依赖章纲。供 plot-guide 选择出场角色用。</description></variable><variable name="本章章纲" category="章纲" type="computed" source="computed" handler="本章章纲"><description>@本章章纲 — 读取当前章节的章纲文件。无章纲时报错。</description></variable><variable name="本卷章数" category="卷纲" type="computed" source="computed" handler="本卷章数"><description>@本卷章数 — 本卷总章数，自动从 start/end 计算：end - start + 1。</description></variable></variables>
+  <variable name="频道模式" category="作品信息" type="computed" source="computed" handler="频道模式"><description>根据 project.xml 中 channel 自动返回男频或女频模式内容。</description></variable><variable name="标签" category="作品信息" type="file_ref" source="auto_extract"><extract from="作品信息/主题/标签.xml" method="read" /><description>@标签（自动读取）</description></variable><variable name="总纲" category="作品信息" type="file_ref" source="auto_extract"><extract from="作品信息/主题/总纲.xml" method="read" /><description>@总纲（自动读取）</description></variable><variable name="简介" category="作品信息" type="file_ref" source="auto_extract"><extract from="作品信息/主题/简介.xml" method="read" /><description>@简介（自动读取）</description></variable><variable name="卷纲" category="大纲" type="file_ref" source="auto_extract"><extract from="正文/卷纲/第1卷.xml" method="read" /><description>@卷纲（自动读取第1卷，已弃用，改用 @当前卷纲）</description></variable>
+<variable name="当前卷纲" category="大纲" type="computed" source="computed" handler="当前卷纲"><description>@当前卷纲 — 根据当前章节号自动读取对应的卷纲文件。</description></variable><variable name="作品篇幅" category="作品信息" type="computed" source="computed" handler="作品篇幅"><description>返回作品篇幅描述</description></variable><variable name="角色列表" category="角色" type="computed" source="computed" handler="角色列表"><description>@角色列表 — 列出所有可用角色名，不依赖章纲。供 plot-guide 选择出场角色用。</description></variable><variable name="本章章纲" category="章纲" type="computed" source="computed" handler="本章章纲"><description>@本章章纲 — 读取当前章节的章纲文件。无章纲时报错。</description></variable><variable name="本卷章数" category="卷纲" type="computed" source="computed" handler="本卷章数"><description>@本卷章数 — 本卷总章数，自动从 start/end 计算：end - start + 1。</description></variable></variables>
 </definitions>

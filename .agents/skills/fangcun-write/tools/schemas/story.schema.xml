@@ -76,6 +76,18 @@
     </volume>
   </section>
 
+  <section name="角色年龄基准（所有章节以此为准）">
+    <character name="主角" first_chapter="1">年龄</character>
+    <character name="母亲" first_chapter="1">年龄</character>
+    <character name="父亲" first_chapter="1">年龄</character>
+    <character name="大哥" first_chapter="2">年龄</character>
+    <character name="二哥" first_chapter="2">年龄</character>
+  </section>
+
+  <section name="金手指/系统物品目录（所有章节以此为准）">
+    <item name="物品名" cost="消耗值">效果</item>
+  </section>
+
   <section name="写作风格与禁区">
     <style_rules>
       <rule>风格要求1</rule>

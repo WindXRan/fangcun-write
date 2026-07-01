@@ -85,9 +85,16 @@ class VariableResolver:
     # ─── 核心：解析 @变量 → 值 ─────────────────────────────────
 
     def resolve(self, var_name: str) -> str:
-        """解析单个变量。优先级：用户覆盖 > 缓存 > 自动提取。"""
+        """解析单个变量。优先级：用户覆盖 > runtime_context > 缓存 > 自动提取。"""
+        # 1. 用户显式覆盖（最高优先级）
         if var_name in self._user_overrides:
             return self._user_overrides[var_name]
+        # 2. 运行时上下文（pipeline 注入）
+        if var_name in self._runtime_context:
+            val = self._runtime_context[var_name]
+            if val is not None and val != "?":
+                return str(val)
+        # 3. 缓存
         if var_name in self._cache:
             return self._cache[var_name]
 
@@ -222,23 +229,8 @@ class VariableResolver:
         if handler_name and handler_name in self.COMPUTED_HANDLERS:
             return self.COMPUTED_HANDLERS[handler_name](self)
 
-        # 2. 旧兼容：compute 表达式精确匹配
         if not compute:
             return f"@[无compute规则:{name}]"
-
-        _legacy_handlers = {
-            "total_chapters * avg_words_per_chapter": self._compute_total_words,
-            "N from pipeline context": lambda: str(self._ctx("N", "?")),
-            "source_word_count * 1.0 ±10%": self._compute_target_words,
-            "target_words * 0.9": self._compute_target_words_min,
-            "target_words * 1.1": self._compute_target_words_max,
-            "count_chars(source_ch_N)": self._compute_source_chars,
-            "avg_sentence_length(source_ch_N)": self._compute_source_sent_len,
-            "summarize_last_3_chapters(N)": self._compute_recent_summary,
-            "style_anchors for chapter N": self._compute_style_anchors,
-        }
-        if compute in _legacy_handlers:
-            return _legacy_handlers[compute]()
 
         # 3. "last N chars" 后缀
         if "last 1500 chars" in compute:
@@ -409,89 +401,6 @@ class VariableResolver:
 
     # ─── compute 处理器 ──────────────────────────────────────
 
-    def _compute_total_words(self) -> str:
-        """从 project_dir 统计全部已完成章的均字数 × 总章数。"""
-        chapters_dir = self.novel_dir / "chapters"
-        if not chapters_dir.exists():
-            return "未知"
-        files = sorted(chapters_dir.glob("ch_*.txt"))
-        if not files:
-            return "未知"
-        total = 0
-        for f in files:
-            try:
-                text = f.read_text(encoding="utf-8")
-                total += len(text.replace("\n", "").replace(" ", ""))
-            except Exception:
-                pass
-        avg = total // len(files) if files else 0
-        total_chs = self._ctx("total_chapters", len(files))
-        return f"{avg * total_chs:,}"
-
-    def _compute_target_words(self) -> str:
-        """目标字数 = 源文章字数 × 1.0。"""
-        source_chars = self._source_chars()
-        return str(source_chars) if source_chars else self._ctx("target_words", "2000")
-
-    def _compute_target_words_min(self) -> str:
-        source = self._source_chars()
-        target = source or int(self._ctx("target_words", "2000"))
-        return str(int(int(target) * 0.9))
-
-    def _compute_target_words_max(self) -> str:
-        source = self._source_chars()
-        target = source or int(self._ctx("target_words", "2000"))
-        return str(int(int(target) * 1.1))
-
-    def _compute_source_chars(self) -> str:
-        return str(self._source_chars())
-
-    def _compute_source_sent_len(self) -> str:
-        # 从 拆文库/styles/ 读取源文句长
-        N = self._ctx("N", 1)
-        resolved = self._resolve_source_path(f"styles/style_{N:03d}.md")
-        text = self._read_file(resolved) if resolved else ""
-        if text:
-            m = re.search(r"句长[：:]\s*([\d.]+)", text)
-            if m:
-                return m.group(1)
-        return "?"
-
-    def _compute_recent_summary(self) -> str:
-        N = self._ctx("N", 1)
-        summaries = []
-        for i in range(max(1, N - 3), N):
-            text = ""
-            for ext in (".xml", ".txt"):
-                p = self.novel_dir / "正文" / "正文" / f"第{i}章{ext}"
-                if p.exists():
-                    text = p.read_text(encoding="utf-8")
-                    break
-            if text:
-                # 取每章第一段作为摘要
-                first_line = text.strip().split("\n")[0] if text else ""
-                summaries.append(f"第{i}章: {first_line[:80]}...")
-        return "\n".join(summaries)
-
-    def _compute_previous_n_chapters(self, n=20) -> str:
-        """读取前 N 章完整正文，不截取。"""
-        N = self._ctx("N", 1)
-        parts = []
-        from utils import load_chapter_text
-        for i in range(max(1, N - n), N):
-            try:
-                text = load_chapter_text(str(self.novel_dir), i)
-                if text:
-                    parts.append(f"--- 第{i}章 ---\n{text.strip()}")
-            except Exception:
-                continue
-        return "\n\n".join(parts) if parts else "（无前文）"
-
-    def _compute_style_anchors(self) -> str:
-        N = self._ctx("N", 1)
-        resolved = self._resolve_source_path(f"styles/style_{N:03d}.md")
-        return self._read_file(resolved) if resolved else ""
-
     def _source_chars(self) -> int:
         """获取源文当前章的字数。"""
         N = self._ctx("N", 1)
@@ -590,10 +499,29 @@ class VariableResolver:
             template = '@' + _xm.group(1)
             _extract_target = _xm.group(2)
 
-        known = set(self.defs.keys()) | set(self._user_overrides.keys())
+        known = set(self.defs.keys()) | set(self._user_overrides.keys()) | set(self._runtime_context.keys())
         known.update(k for k in self.COMPUTED_HANDLERS if k not in known)
         known = sorted(known, key=len, reverse=True)
 
+        # 预处理：将所有标量变量（不含 / 的 known 变量）先替换为值
+        # 这样 @正文/章纲/第@N章.xml → @正文/章纲/第78章.xml，再走文件路径解析
+        scalar_vars = [n for n in known if '/' not in n and n not in ('总纲', '标签', '简介')]
+        for name in scalar_vars:
+            # ASCII 变量名用 (?![a-zA-Z0-9_]) 防止 @N 匹配 @Name
+            # 中文变量名不需要边界（已按长度排序，长的先匹配）
+            if re.match(r'^[a-zA-Z_]', name):
+                boundary = r'(?![a-zA-Z0-9_])'
+            else:
+                boundary = r''
+            pattern = re.compile(r'@' + re.escape(name) + boundary)
+            try:
+                val = self.resolve(name)
+                if val and not val.startswith('@['):
+                    template = pattern.sub(str(val), template)
+            except Exception:
+                pass
+
+        # 重新构建 known（预处理后可能有新路径变量）
         # 第一遍：替换 @变量
         result = []
         i = 0
@@ -613,6 +541,7 @@ class VariableResolver:
                                     val = _found.text or ''
                             except Exception:
                                 pass
+                        # 直接替换，不保留 @变量 标记
                         result.append(val)
                         i += len(name) + 1
                         matched = True

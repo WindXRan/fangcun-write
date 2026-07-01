@@ -4,9 +4,7 @@ from urllib.request import Request, urlopen
 
 def call_llm(messages: list, temperature: float = 0.7):
     """调用 LLM。"""
-    api_key = os.environ.get("API_KEY", "")
-    if not api_key or not api_key.startswith("sk-"):
-        api_key = os.environ.get("ANTHROPIC_AUTH_TOKEN", api_key)
+    api_key = os.environ.get("API_KEY", "") or os.environ.get("ANTHROPIC_AUTH_TOKEN", "")
     if not api_key:
         return None, "未设置 API_KEY"
     _base = os.environ.get("API_BASE_URL", "https://api.deepseek.com/v1").rstrip("/")

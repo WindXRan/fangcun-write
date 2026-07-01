@@ -13,18 +13,26 @@ VariableResolver.COMPUTED_HANDLERS["current_chapter"] = (
 VariableResolver.COMPUTED_HANDLERS["current_volume"] = (
     lambda self: str(self._ctx("volume", "?"))
 )
-VariableResolver.COMPUTED_HANDLERS["target_words"] = (
-    VariableResolver._compute_target_words
-)
-VariableResolver.COMPUTED_HANDLERS["target_words_min"] = (
-    VariableResolver._compute_target_words_min
-)
-VariableResolver.COMPUTED_HANDLERS["target_words_max"] = (
-    VariableResolver._compute_target_words_max
-)
 VariableResolver.COMPUTED_HANDLERS["total_chapters"] = (
     lambda self: str(self._ctx("total_chapters", "?"))
 )
+
+# ── 目标字数：优先 project.xml <target_words>，否则默认 2200 ──
+def _target_words(self):
+    """目标字数：每章目标字数。"""
+    # 1. 从 project.xml 读取
+    import xml.etree.ElementTree as ET
+    px = self.novel_dir / "作品信息" / "project.xml"
+    if px.exists():
+        try:
+            val = (ET.parse(str(px)).getroot().findtext("target_words") or "").strip()
+            if val.isdigit():
+                return val
+        except: pass
+    # 2. 默认值
+    return "2200"
+
+VariableResolver.COMPUTED_HANDLERS["target_words"] = _target_words
 
 # ── 角色名：读第一个角色文件 ——─────────────────────────
 def _protagonist_name(self, fallback: str) -> str:
@@ -326,15 +334,15 @@ def _source_volume(self):
     try:
         _novel = self.novel_dir
         _parent = _novel.parent
-        _src_dir = _os.path.join(str(_parent), "全家偷听心声", "正文", "卷纲")
-        if not _os.path.isdir(_src_dir):
-            # 从 project.xml 读 source_book
-            _px = _novel / "作品信息" / "project.xml"
-            if _px.exists():
-                import xml.etree.ElementTree as _ET
-                _sb = (_ET.parse(str(_px)).getroot().findtext("source_book") or "").strip()
-                if _sb:
-                    _src_dir = _os.path.join(str(_parent), _sb, "正文", "卷纲")
+        import xml.etree.ElementTree as _ET
+        _sb = ""
+        _px = _novel / "作品信息" / "project.xml"
+        if _px.exists():
+            try: _sb = (_ET.parse(str(_px)).getroot().findtext("source_book") or "").strip()
+            except: pass
+        if not _sb:
+            return "（错误：project.xml 未设置 source_book，无法定位源文项目）"
+        _src_dir = _os.path.join(str(_parent), _sb, "正文", "卷纲")
         if _os.path.isdir(_src_dir):
             for _f in _os.listdir(_src_dir):
                 if f"第{vol}卷" in _f and (_f.endswith(".xml") or _f.endswith(".txt")):
@@ -355,14 +363,15 @@ def _source_chapter_guide(self):
     try:
         _novel = self.novel_dir
         _parent = _novel.parent
-        _src_dir = _os.path.join(str(_parent), "全家偷听心声", "正文", "章纲")
-        if not _os.path.isdir(_src_dir):
-            _px = _novel / "作品信息" / "project.xml"
-            if _px.exists():
-                import xml.etree.ElementTree as _ET
-                _sb = (_ET.parse(str(_px)).getroot().findtext("source_book") or "").strip()
-                if _sb:
-                    _src_dir = _os.path.join(str(_parent), _sb, "正文", "章纲")
+        import xml.etree.ElementTree as _ET
+        _sb = ""
+        _px = _novel / "作品信息" / "project.xml"
+        if _px.exists():
+            try: _sb = (_ET.parse(str(_px)).getroot().findtext("source_book") or "").strip()
+            except: pass
+        if not _sb:
+            return "（错误：project.xml 未设置 source_book，无法定位源文项目）"
+        _src_dir = _os.path.join(str(_parent), _sb, "正文", "章纲")
         if _os.path.isdir(_src_dir):
             for _f in sorted(_os.listdir(_src_dir)):
                 if f"第{N}章" in _f and (_f.endswith(".xml") or _f.endswith(".txt")):
@@ -551,6 +560,3 @@ def _volume_chapter_count(self):
     return str(max(0, e - s + 1))
 
 VariableResolver.COMPUTED_HANDLERS["本卷章数"] = _volume_chapter_count
-
-
-# ── 仿写章纲：从总纲读取实体映射，替换章纲中的源文名字 ──
