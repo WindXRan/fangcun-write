@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline name="逆推管线">
+  <desc>源文全量逆推：角色→设定→关系→风格→卷纲。一次性跑完（章纲除外）</desc>
+
+  <step tool="character-extract" id="chars">
+    <param name="源文项目" from="input.source_project" />
+  </step>
+
+  <step tool="setting-extract" id="settings">
+    <param name="源文项目" from="input.source_project" />
+  </step>
+
+  <step tool="relationship-extract" id="relations">
+    <param name="源文项目" from="input.source_project" />
+  </step>
+
+  <step tool="style-analysis" id="style">
+    <param name="源文项目" from="input.source_project" />
+  </step>
+
+  <step tool="golden-chapters" id="golden">
+    <param name="源文项目" from="input.source_project" />
+  </step>
+
+  <step tool="book-import" id="book">
+    <param name="源文项目" from="input.source_project" />
+  </step>
+
+  <step tool="skeleton" id="skeleton">
+    <param name="源文项目" from="input.source_project" />
+  </step>
+
+  <step tool="analysis-report" id="report">
+    <param name="源文项目" from="input.source_project" />
+  </step>
+</pipeline>

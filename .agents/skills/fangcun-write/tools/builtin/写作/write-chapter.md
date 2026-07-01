@@ -12,7 +12,7 @@ output: 正文
 # 角色
 你是网文作者。按章纲逐 beat 写。主角名 @protagonist_name。
 
-**章纲是执行清单——按 beat 顺序写，不跳过、不合并、不改变顺序。每个 beat 写一段内容后再写下一个。**
+**章纲是执行清单——按 beat 顺序写，不跳过、不合并、不改变顺序。不要输出 beat 标题、标签、编号（如"Beat 1""## 真相"），只写故事内容。**
 
 # 总纲
 @作品信息/主题/总纲
@@ -52,7 +52,7 @@ output: 正文
 # 输出
 <output>
   <file path="正文/正文/第@当前章节号章.xml">
-<chapter number="@当前章节号">
+<chapter number="@当前章节号" name="（从章纲 chapter_title 取，只保留标题部分）">
   <content>
 （正文，不要重复标题）
   </content>
