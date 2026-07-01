@@ -355,6 +355,8 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
             "write-chapter": f"正文/正文/第{args.get('chapter_number', 1)}章.xml",
             "volume-outline": f"正文/卷纲/第{args.get("volume_number", args.get("vol", 1))}卷.xml",
             "character-generate": "作品信息/设定/角色.xml",
+            "source-guide-reverse": f"正文/章纲/第{args.get('chapter_number', 1)}章.xml",
+            "guide-convert": f"正文/章纲/第{args.get('chapter_number', 1)}章.xml",
         }
         fallback = _FALLBACK_PATHS.get(preset_name, save_path)
         if fallback:
