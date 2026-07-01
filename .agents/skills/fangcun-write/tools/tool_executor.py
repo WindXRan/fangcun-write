@@ -58,6 +58,8 @@ _PRESET_ALIAS = {
     "选卡": "apply-pick", "应用": "apply-pick",
     "导入拆解": "pipeline-import",
     "运 pipeline": "pipeline-run",
+    "source-guide": "source-guide-reverse", "章纲逆推": "source-guide-reverse",
+    "guide-convert": "guide-convert", "章纲转换": "guide-convert",
 }
 
 _SINGLE_FILE_MAP = {
@@ -198,7 +200,8 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
     elif preset_name == "relationship-extract":
         return _run_single_file_preset("relationship-extract", None, args, project_dir)
     else:
-        return f"未知工具: {preset_name}"
+        # 兜底：尝试作为预设加载（支持子目录工具）
+        return _run_single_file_preset(preset_name, None, args, project_dir)
 
 
 def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict, project_dir: str) -> str:
