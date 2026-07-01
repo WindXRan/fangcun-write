@@ -82,6 +82,25 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
     """
     # 别名解析
     preset_name = _PRESET_ALIAS.get(preset_name, preset_name)
+    
+    # ── 自动缓冲区：source-guide-reverse 领先写章10章 ──
+    if preset_name in ("write-chapter", "fanxie-chapter", "guide-convert"):
+        ch = args.get("chapter_number", args.get("ch", 1))
+        import os as _os, glob as _glob
+        from pathlib import Path as _Path
+        # 计算已逆推章数
+        guide_dir = _Path(project_dir).parent / "全家偷听心声" / "正文" / "章纲"
+        existing_guides = len(list(guide_dir.glob("第*.xml"))) if guide_dir.exists() else 0
+        # 如果逆推落后于写章+10章，自动补一批
+        if existing_guides < ch + 10:
+            need = ch + 15
+            _run_tool_silent = lambda n: _run_single_file_preset("source-guide-reverse", None, {"chapter_number": n}, str(_Path(project_dir).parent / "全家偷听心声"))
+            for n in range(existing_guides + 1, need + 1):
+                p = guide_dir / f"第{n}章.xml"
+                if p.exists(): continue
+                print(f"  [auto] 逆推第{n}章...", flush=True)
+                _run_tool_silent(n)
+            print(f"  [auto] 缓冲区已扩充到第{need}章", flush=True)
 
     # 女频自动路由：章纲生成默认走女频版
     if preset_name in ("plot-guide", "plot-guide-nanpin"):

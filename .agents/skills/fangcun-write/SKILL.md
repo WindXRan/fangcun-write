@@ -22,7 +22,7 @@ description: |
 
 ## 预设表
 
-preset 定义在 `tools/builtin/*.xml`，共 21 个：
+preset 定义在 `tools/builtin/*.xml`，共 23 个：
 
 | 预设 | 用途 | 用户说 |
 |------|------|--------|
@@ -35,6 +35,7 @@ preset 定义在 `tools/builtin/*.xml`，共 21 个：
 | `compare` | 章对章对比 | 对比 |
 | `character-extract` | 从源文提取角色势力 | 提取角色 |
 | `character-generate` | 生成角色卡 | 生成角色 |
+| `character-split` | 检测复合角色并拆分为独立角色卡，修复管线映射断裂 | 拆角色、复合角色、角色拆分 |
 | `setting-generate` | 世界观设定 | 生成设定 |
 | `volume-outline` | 卷纲 | 卷纲 |
 | `skeleton` | 故事骨架 | 骨架 |
@@ -43,6 +44,7 @@ preset 定义在 `tools/builtin/*.xml`，共 21 个：
 | `postfix` | trim/expand/rewrite | 后处理 |
 | `fanxie-review` | 仿写对齐审查：D1调性/D2开场/D3冲突/D4节奏/D5AI腔 | 仿写审查、对齐审查 |
 | `fanxie-fix` | 仿写靶向修复：只改有问题的维度 | 仿写修复、靶向修复 |
+| `fanxie-structural-fix` | 仿写结构对齐修复：逐beat对比章纲与正文，重建结构偏差 | 结构修复、对齐修复、结构偏 |
 | `fanxie-prompt-opt` | 仿写提示词优化：聚合N章报告→定位根因→修prompt | 提示词优化、prompt优化 |
 | `fanxie-blindspot` | 盲区检测：原文→章纲对比，找出逆推遗漏的关键要素 | 盲区检测、遗漏分析 |
 | `source-guide-reverse-validate` | 章纲逆推质量验证：检查完整性/一致性/结构准确/泛化能力 | 验证章纲、逆推质量 |
@@ -81,6 +83,12 @@ Step 2: 仿写写章（读新文章纲+总纲+角色卡+设定）
 
 Step 3: 对齐审查
   run_tool("fanxie-review", {chapter_number: N}, 仿写项目)
+
+Step 3.5: 结构对齐修复（发现结构偏时执行）
+  run_tool("fanxie-structural-fix", {chapter_number: N}, 仿写项目)
+  → 逐beat对比章纲与正文
+  → 重建场景/冲突/角色/信息释放的结构偏差
+  → 这是 fanxie-fix 的上游：先修结构，再修技法
 
 Step 4: 靶向修复
   run_tool("fanxie-fix", {chapter_number: N, user_input: 报告}, 仿写项目)
