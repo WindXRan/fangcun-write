@@ -1,3 +1,0 @@
-{"prompt_type": "premise-draw", "ch": 1, "model": "deepseek-chat", "prompt_tokens": 474, "cached_tokens": 0, "completion_tokens": 906, "total_tokens": 1380, "timestamp": "2026-06-26T15:26:17"}
-{"prompt_type": "premise-draw", "ch": 1, "model": "deepseek-chat", "prompt_tokens": 453, "cached_tokens": 0, "completion_tokens": 1212, "total_tokens": 1665, "timestamp": "2026-06-26T15:30:07"}
-{"prompt_type": "premise-draw", "ch": 1, "model": "deepseek-chat", "prompt_tokens": 125, "cached_tokens": 0, "completion_tokens": 1128, "total_tokens": 1253, "timestamp": "2026-06-26T15:31:22"}

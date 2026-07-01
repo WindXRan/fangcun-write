@@ -153,6 +153,8 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
         return _run_single_file_preset("premise-draw", None, args, project_dir)
     elif preset_name == "apply-pick":
         return _apply_pick(project_dir, args)
+    elif preset_name in ("仿写管线", "imitation"):
+        return _run_imitation_chapter(args, project_dir)
     elif preset_name == "open-book":
         return _run_single_file_preset("open-book", None, args, project_dir)
     elif preset_name == "book-import":
@@ -426,6 +428,68 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
 
 # ─── 抽卡模式：多轮生成 → 用户选一 ─────────────────
 
+
+
+def _run_imitation_chapter(args: dict, project_dir: str) -> str:
+    """仿写管线：一条命令写一章。自动跑 source-guide-reverse → guide-convert → write-chapter。"""
+    import time, re
+    from pathlib import Path
+
+    ch = args.get("chapter_number", args.get("ch", 1))
+    src = args.get("source_book", "")
+
+    # 找源文项目
+    if not src:
+        px = Path(project_dir) / "作品信息" / "project.xml"
+        if px.exists():
+            import xml.etree.ElementTree as ET
+            src = (ET.parse(str(px)).getroot().findtext("source_book") or "").strip()
+    if not src:
+        src = "全家偷听心声"
+
+    src_dir = str(Path(project_dir).parent / src)
+    if not Path(src_dir).exists():
+        return f"源文项目 {src} 不存在"
+
+    msgs = []
+
+    # Step 1: source-guide-reverse
+    try:
+        run_tool("source-guide-reverse", {"chapter_number": ch}, src_dir)
+        msgs.append(f"源文章纲✅")
+    except Exception as e:
+        msgs.append(f"源文章纲❌{str(e)[:40]}")
+
+    # Step 2: guide-convert
+    try:
+        run_tool("guide-convert", {"chapter_number": ch}, project_dir)
+        msgs.append(f"新文章纲✅")
+    except Exception as e:
+        msgs.append(f"新文章纲❌{str(e)[:40]}")
+
+    # Step 3: write-chapter
+    try:
+        r = run_tool("write-chapter", {"chapter_number": ch}, project_dir)
+        # Check output
+        out = Path(project_dir) / "正文" / "正文" / f"第{ch}章.xml"
+        if out.exists():
+            text = out.read_text(encoding='utf-8')
+            m = re.search(r'<content>(.*?)</content>', text, re.DOTALL)
+            content = m.group(1).strip() if m else text.strip()
+            wc = len(content)
+            # Fix wrapper
+            if '<content>' not in text and content:
+                wrapped = f'<chapter number="{ch}" tool="write-chapter">\n  <content>\n{content}\n  </content>\n</chapter>'
+                out.write_text(wrapped, encoding='utf-8')
+            bad = re.findall(r'乔娇娇|乔夫人|乔忠国|乔天经|乔地义|孟谷雪|冷面王爷轻点宠|功德商城|功德点|老阎王|阎王', content)
+            leak = f"泄露{len(bad)}" if bad else "干净"
+            msgs.append(f"正文✅{wc}字{leak}")
+        else:
+            msgs.append(f"正文❌无文件")
+    except Exception as e:
+        msgs.append(f"正文❌{str(e)[:40]}")
+
+    return f"第{ch}章: {' | '.join(msgs)}"
 
 
 def _run_pipeline_import(args: dict, project_dir: str) -> str:

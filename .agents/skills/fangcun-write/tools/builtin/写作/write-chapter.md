@@ -52,11 +52,9 @@ output: 正文
 # 输出
 <output>
   <file path="正文/正文/第@当前章节号章.xml">
-<chapter number="@当前章节号" name="（从章纲 chapter_title 取标题部分）">
+<chapter number="@当前章节号">
   <content>
-第@当前章节号章 标题（从章纲 chapter_title 取，不写#号）
-
-（正文，从第二行开始）
+（正文，不要重复标题）
   </content>
 </chapter>
   </file>
