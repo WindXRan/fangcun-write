@@ -317,7 +317,7 @@ def run_import(book_name: str, author: str, source: str,
         )
 
     # 7. 生成占位卷纲（同上）
-    volume_file = out_dir / "正文" / "卷纲" / "卷纲.xml"
+    volume_file = out_dir / "正文" / "卷纲" / "第1卷.xml"
     if not volume_file.exists():
         volume_file.write_text(
             f'<?xml version="1.0" encoding="UTF-8"?>\n'

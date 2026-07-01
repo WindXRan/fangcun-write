@@ -1,71 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 章纲模板（仿写版）
-只描述情绪目标+节奏指导+信息释放节奏，不描述具体事件。
-content 字段在这里称为 function——只写"这段要达成什么情绪/功能"，不写"源文发生了什么"。
+只描述情绪目标+节奏+信息释放节奏，不描述具体事件。
+content 字段为 function —— 只写"这段要达成什么情绪/功能"，不写"源文发生了什么"。
 模型拿到章纲后必须自己设计事件来实现每个 function。
 -->
-<guide chapter="1" mode="male">
-  <core_event>本章核心功能描述（主角从什么状态→经历什么→到什么状态），不要写具体事件</core_event>
-  <chapter_type>推进章/日常章/高潮章/过渡章</chapter_type>
+<guide chapter="N" mode="fanxie">
+  <chapter_title>第N章 章名</chapter_title>
+  <core_event>本章核心功能描述（不写具体事件）</core_event>
   <emotional_arc>起点→终点</emotional_arc>
-  <rhythm_profile>
-    <overall_pace>快/中/慢</overall_pace>
-    <sentence_rhythm>短句密集/长句铺排/混合</sentence_rhythm>
-    <dialogue_ratio>高/中/低</dialogue_ratio>
-  </rhythm_profile>
-  <info_release>
-    <point at="第10行">读者此刻应该知道的关键信息（用功能描述，不要写源文事件）</point>
-    <point at="第30行">...</point>
-    <point at="第50行">...</point>
-    <point at="第70行">...</point>
-    <point at="第100行">...</point>
-    <point at="章尾">...</point>
-  </info_release>
-  <conflict_chain>
-    <setup>
-      <function>让读者对主角产生好感+建立世界调性。通过什么方式实现（不写具体事件，写方法：如"用主角内心吐槽制造喜剧感"）</function>
-      <emotion>读者此刻的情绪</emotion>
-      <rhythm_guide>
-        <paragraph_count>段数</paragraph_count>
-        <pace>快/中/慢</pace>
-        <sentence_style>短句/长句/混合</sentence_style>
-        <dialogue_density>高/中/低</dialogue_density>
-      </rhythm_guide>
-    </setup>
-    <action goal="功能目标（如：触发主角对危险的认知）">
-      <function>这段要实现什么功能，通过什么方法实现</function>
-      <emotion>读者此刻的情绪</emotion>
-      <rhythm_guide>
-        <paragraph_count>段数</paragraph_count>
-        <pace>快/中/慢</pace>
-        <sentence_style>短句/长句/混合</sentence_style>
-        <dialogue_density>高/中/低</dialogue_density>
-      </rhythm_guide>
-    </action>
-    <twist>
-      <function>转折段要实现什么功能</function>
-      <emotion>读者此刻的情绪</emotion>
-      <rhythm_guide>
-        <paragraph_count>段数</paragraph_count>
-        <pace>快/中/慢</pace>
-        <sentence_style>短句/长句/混合</sentence_style>
-        <dialogue_density>高/中/低</dialogue_density>
-      </rhythm_guide>
-    </twist>
-    <climax>
-      <function>高潮段要实现什么功能</function>
-      <emotion>读者此刻的情绪</emotion>
-      <rhythm_guide>
-        <paragraph_count>段数</paragraph_count>
-        <pace>快/中/慢</pace>
-        <sentence_style>短句/长句/混合</sentence_style>
-        <dialogue_density>高/中/低</dialogue_density>
-      </rhythm_guide>
-    </climax>
-  </conflict_chain>
-  <aftermath>
-    <payoff>本章结束时读者应该获得什么信息/感受</payoff>
-    <hook>章尾应该让读者产生什么期待</hook>
-  </aftermath>
+  <beats>
+    <beat n="1" tag="开端/建立代入感">
+      <function>让读者进入状态的方式（如：用主角内心吐槽建立喜剧感/用冲突建立压迫感）</function>
+      <emotion>读者此刻情绪</emotion>
+      <info_release>读者此刻知道什么信息</info_release>
+    </beat>
+    <beat n="2" tag="发展/制造期待">
+      <function>这段要推进什么、让读者产生什么期待</function>
+      <emotion>读者此刻情绪</emotion>
+      <info_release>释放/压制什么信息</info_release>
+    </beat>
+    <beat n="3" tag="转折/引爆">
+      <function>核心转折的功能目标</function>
+      <emotion>读者此刻情绪</emotion>
+      <info_release>读者此刻知道什么</info_release>
+    </beat>
+    <beat n="4" tag="高潮/释放">
+      <function>高潮段的功能目标</function>
+      <emotion>读者此刻情绪</emotion>
+      <info_release>读者此刻知道什么</info_release>
+    </beat>
+    <beat n="5" tag="悬念/章尾">
+      <function>章尾让读者产生什么期待</function>
+      <emotion>读者此刻情绪</emotion>
+      <info_release>悬念/未完成的信息</info_release>
+    </beat>
+  </beats>
+  <hooks>
+    <cliffhanger>章尾钩子</cliffhanger>
+    <next_drive>下章驱动力</next_drive>
+  </hooks>
 </guide>

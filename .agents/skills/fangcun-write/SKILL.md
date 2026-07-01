@@ -3,7 +3,7 @@ name: fangcun-write
 version: 5.0.0
 description: |
   方寸长篇写作引擎。XML preset + @变量 驱动 LLM 生成。
-  触发方式：/fangcun-write、/写章、「帮我写第N章」「继续写」
+  触发方式：/fangcun-write、/写章、「帮我写第N章」「继续写」「/编辑」「编辑第N章」
 ---
 
 # fangcun-write 使用说明
@@ -22,31 +22,79 @@ description: |
 
 ## 预设表
 
-preset 定义在 `tools/builtin/*.xml`，共 19 个：
+preset 定义在 `tools/builtin/*.xml`，共 21 个：
 
 | 预设 | 用途 | 用户说 |
 |------|------|--------|
 | `write-chapter` | 按章纲写一章正文 | 写第N章、帮我写、继续写 |
 | `plot-guide` | 生成场景级细纲（通用） | 生成章纲、细纲 |
 | `plot-guide/nvpin` | 生成场景级细纲（女频） | 女频章纲、开端/打脸/钩子 |
-| `plot-guide/nanpin` | 生成场景级细纲（男频） | 男频章纲、密集事件流 |
+| `editor` | 编辑诊断：逐段分析开场/节奏/情绪/对话/章尾 | 编辑、诊断、审稿 |
 | `open-book` | 开书设定 | 开书、仿写这本书 |
 | `deslop` | 去AI味 | 去AI味 |
 | `compare` | 章对章对比 | 对比 |
-| `chat-assistant` | 通用创作对话 | 默认 |
-| `character-designer` | 角色设计 | 设计角色 |
 | `character-extract` | 从源文提取角色势力 | 提取角色 |
 | `character-generate` | 生成角色卡 | 生成角色 |
 | `setting-generate` | 世界观设定 | 生成设定 |
-| `golden-opening` | 黄金开篇 | 开篇设计 |
 | `volume-outline` | 卷纲 | 卷纲 |
 | `skeleton` | 故事骨架 | 骨架 |
-| `adaptation` | 改编策略 | 改编 |
 | `premise-draw` | 脑洞抽卡 | 脑洞 |
-| `book-draw` | 顶层设计 | 顶层设计 |
-| `cover-prompt` | 封面提示词（只输出不调API） | 封面 |
 | `system-prompt` | 写作助手烘焙 | 烘焙 |
 | `postfix` | trim/expand/rewrite | 后处理 |
+| `fanxie-review` | 仿写对齐审查：D1调性/D2开场/D3冲突/D4节奏/D5AI腔 | 仿写审查、对齐审查 |
+| `fanxie-fix` | 仿写靶向修复：只改有问题的维度 | 仿写修复、靶向修复 |
+| `fanxie-prompt-opt` | 仿写提示词优化：聚合N章报告→定位根因→修prompt | 提示词优化、prompt优化 |
+| `fanxie-blindspot` | 盲区检测：原文→章纲对比，找出逆推遗漏的关键要素 | 盲区检测、遗漏分析 |
+| `source-guide-reverse-validate` | 章纲逆推质量验证：检查完整性/一致性/结构准确/泛化能力 | 验证章纲、逆推质量 |
+
+## 仿写模式自动联调流程
+
+每章流水线（源文章纲 → guide-convert → fanxie-chapter）:
+
+```
+                   全家偷听心声 (源文项目)               仿写新书 (仿写项目)
+                   ──────────────────────               ──────────────────────
+source-guide-reverse ch1
+  ↓                                               
+正文/章纲/第1章.xml (源文结构+源文名)
+                                                    
+                                                    guide-convert ch1
+                                                      ← 读 全家偷听心声/正文/章纲/第1章.xml (via @源文章纲)
+                                                      ← 读 仿写新书的总纲+角色+设定
+                                                      ↓
+                                                    正文/章纲/第1章.xml (新书内容+新书名)
+                                                      ↓
+                                                    fanxie-chapter → 正文
+```
+
+```
+Step 1: 章纲 — source-guide-reverse 跑源文项目 → guide-convert 转新书
+  run_tool("plot-guide", {chapter_number: N}, 源文项目)
+  → 源文章纲写入全家偷听心声/正文/章纲/
+  
+  run_tool("guide-convert", {chapter_number: N}, 仿写项目)
+  → 读 @源文章纲 + 新书总纲/角色/设定
+  → 新文章纲写入仿写新书/正文/章纲/
+
+Step 2: 仿写写章（读新文章纲+总纲+角色卡+设定）
+  run_tool("fanxie-chapter", {chapter_number: N}, 仿写项目)
+
+Step 3: 对齐审查
+  run_tool("fanxie-review", {chapter_number: N}, 仿写项目)
+
+Step 4: 靶向修复
+  run_tool("fanxie-fix", {chapter_number: N, user_input: 报告}, 仿写项目)
+
+Step 5: 去AI味
+  run_tool("deslop", {chapter_number: N}, 仿写项目)
+
+Step 6（可选）: 盲区检测
+  run_tool("fanxie-blindspot", {chapter_number: N}, 仿写项目)
+
+跨轮次优化：略（同上）
+```
+
+**关键原则**：展示→确认→保存。每步生成后展示给用户确认。
 
 ## @变量
 
@@ -90,8 +138,8 @@ projects/{作者}/{源书名}/
 │   ├── 设定/                ← 角色/背景/势力 XML
 │   └── 主题/                ← 简介/总纲/标签 XML
 └── 拆文库/{源书名}/       ← 对标分析产物
-    ├── events.json
-    ├── 文风.md
+    ├── 第{N}章_深度拆解.md  ← 前三章微观技法
+    ├── 拆文报告.md          ← 综合拆解摘要
     └── 骨架.md
 ```
 
@@ -99,7 +147,7 @@ projects/{作者}/{源书名}/
 
 | 函数 | 文件 | 功能 |
 |------|------|------|
-| `run_preset(config, name, ch)` | `writer.py` | 渲染 preset + 调 API，返回文本 |
+| `run_tool(preset_name, args, project_dir)` | `tool_executor.py` | 渲染 preset + 调 API，返回文本 |
 | `write_chapter(config, ch)` | `writer.py` | 写一章（含细纲+风格数据） |
 | `save_chapter(config, ch, text)` | `writer.py` | 保存到 `正文/正文/` |
 | `save_multifile_output(result, base)` | `writer.py` | 解析 `===FILE:===` 格式写入 |
@@ -112,7 +160,7 @@ projects/{作者}/{源书名}/
 
 | 文件 | 内容 |
 |------|------|
-| `tools/builtin/*.xml` | 19 个写作预设（prompt + 变量声明） |
+| `tools/builtin/*.xml` / `tools/builtin/*.md` | 21 个写作预设（prompt + 变量声明） |
 | `tools/variable_definitions.xml` | @变量定义（类别/提取规则/默认值） |
 | `tools/schemas/*.schema.xml` | 事件/卷纲等 XML 结构模板 |
 | `tools/writer.py` | 写章/run_preset/导出核心 |
@@ -132,24 +180,60 @@ projects/{作者}/{源书名}/
 
 ## 自我优化规则
 
-每次调用 LLM 时，`call_llm()` 自动保存 prompt 副本到 `_debug/{preset_name}/ch{N}_{preset}.md`。AI 必须勤查这些文件来自检：
+仿写工具链通过逆推法管线持续优化自身预设。**优化的产出不是报告，是对 prompt 文件的实际修改。**
 
-1. **每轮写作前**：看最近 3 次 `_debug/` 文件，检查实际发给 LLM 的 prompt 质量
-2. **发现问题**：@变量未填充、prompt 指令模糊、上下文遗漏 → 去修对应的 `tools/builtin/*.xml` 里的 prompt 文本
-3. **效果验证**：修完跑一次 `run_preset(..., debug=True)` 只出 prompt 不调 API，确认修好了再正式跑
-4. **定期清理**：`_debug/` 文件超过 20 个时清理最旧的，保持可读
+### 迭代循环
+
+```
+Round 前: 读异常模式库 + 补丁注册表 → 确定本轮修复目标
+  ├─ _optimize/anomaly_patterns.md → 哪个模式 active 最久
+  ├─ _optimize/fix_registry.md → 上轮补丁验证了没有
+  └─ 优先验证上轮补丁，再出新的
+
+Round 中:
+  1. 跑 checkpoint + compare → 获取当前差距
+  2. 跑 fanxie-prompt-opt → 聚合问题，产出 prompt_patch_ready.md
+     → 每条补丁含 old_string + new_string + 目标文件（可直接 Edit）
+  3. 逐条应用补丁 → Edit 目标 prompt 文件
+     → 每轮最多改 1-2 个 P0 补丁
+     → 改完必须验证文件保存成功
+  4. 重跑 compare → 确认补丁有效
+
+Round 后: 更新追踪文件
+  ├─ _optimize/anomaly_patterns.md → 更新修复历史 + 状态
+  └─ _optimize/fix_registry.md → 标记已应用补丁的状态
+```
+
+### 铁则
+
+1. **补丁未应用 = 这轮白跑了**。prompt_patch.md 描述得再好，没写进 prompt 文件就没有价值
+2. **每轮只改 1-2 个维度**。一次改 8 个不知道哪个有效
+3. **补丁必须有 old_string + new_string**，模糊的"在X段落之后插入"格式不足以执行
+4. **应用前先读文件**。其他轮次可能已经改过文件，old_string 可能已变化
+5. **已应用且验证有效的不再重复出**。如果症状复现，用升版方案
+
+### 优化数据来源
+
+| 源 | 谁产生 | 喂给谁 |
+|----|--------|--------|
+| compare 对比报告 | compare.py | fanxie-prompt-opt |
+| fanxie-review 审查 | fanxie-review.md | fanxie-prompt-opt |
+| fanxie-blindspot 盲区检测 | fanxie-blindspot.md | fanxie-prompt-opt |
+| anomaly_patterns 异常模式 | 人工/自动 | fanxie-prompt-opt（Round前） |
+| fix_registry 补丁注册表 | 自动 | fanxie-prompt-opt（Round前） |
 
 ### @变量缺失处理
 
-当渲染结果出现 `@[未找到:X]` 或 `@[未定义:X]` 时，说明项目缺少对应数据。AI 应主动调用 preset 创建，而非忽略：
+当渲染结果出现 `@[未找到:X]``@[未定义:X]` 时，说明项目缺少对应数据。AI 应主动调用 preset 创建，而非忽略：
 
 | 缺失变量 | 缺少什么 | 调用 preset |
 |----------|---------|-------------|
-| `@角色卡` / `@作品信息/设定/角色` | 角色设定文件 | `character-designer` |
-| `@核心设定` / `@作品信息/主题/总纲` | 作品总纲/设定 | `open-book` 或 `book-draw` |
+| `@角色卡` / `@作品信息/设定/角色` | 角色设定文件 | `character-generate` |
+| `@核心设定` / `@作品信息/主题/总纲` | 作品总纲/设定 | `open-book``book-draw` |
 | `@章纲` / `@上一章章纲` | 本章或上一章章纲 | `plot-guide` |
-| `@本章正文` | 本章正文 | `write-chapter` |
+| `@本章正文` | 本章正文 | `write-chapter`（有章纲时）或 `fanxie-chapter`（仿写项目） |
 | `@事件表` / `@源文角色列表` | 拆文产物 | `fangcun-long-analyze` |
+| `@本章正文` | 本章正文 | 先 `write-chapter` 写章，再用 `editor` 诊断 |
 
 ## 执行决策树
 
@@ -158,29 +242,41 @@ projects/{作者}/{源书名}/
 ### 写章 / 续写
 
 ```
-用户说「继续写」「写下一章」「写第N章」
-├─ 第一步：写前定向
-│  ├─ 问用户本章侧重（3 选 1 或自由描述）：
-│  │  ├─ 推进主线 / 日常过渡 / 关键冲突
-│  │  └─ 或用户自己说方向
-│  ├─ 如果用户说"随便""按大纲来"→ 根据章纲判断本章功能
-│  └─ 确认后标记本章定位
-│                                     ↓
-├─ 第二步：检查前置条件
-│  ├─ 检查 @章纲 → 不存在 → 先生成章纲（run_preset("plot-guide")）
-│  │  → 展示章纲概要给用户确认，说"不满意我改"，用户点头再继续
-│  ├─ 检查 @本章角色 → 缺角色卡 → 问用户哪些角色出场
-│  ├─ 检查 @前文 → N>1 且前文缺失 → 警告用户
-│                                     ↓
-├─ 第三步：产正文
-│  ├─ 用户确认章纲 → run_preset("write-chapter", ch=N)
-│  ├─ 输出后展示前 200 字 + 字数，问用户感觉
-│  │  ├─ "可以" → 保存
-│  │  ├─ "改一下风格/节奏/某个情节" → 调参数重跑
-│  │  └─ "重写" → 说明要改的方向，重跑
-│  └─ 保存后提示下一章 ready
-│                                     ↓
-└─ 重要原则：每章产出前至少有一次用户确认，不直接写
+用户说「继续写」「写下一章」「写第N章」「仿写写章」「写章仿写」
+├─ 第一步：路由判断
+│  ├─ 用户说「仿写写章」「写章仿写」→ 走仿写路线
+│  │  ├─ run_tool("fanxie-chapter", {chapter_number: N}, project)
+│  │  ├─ 读章纲 + 总纲 + 角色卡 + 设定，对齐节奏调性写一章
+│  │  └─ 保存后提示完成
+│  │
+│  ├─ 用户说「写第N章」「继续写」「帮我写」
+│  │  └─ 走标准写章路线 ↓
+│  │
+│  ├─ 第一步：写前定向
+│  │  ├─ 问用户本章侧重（3 选 1 或自由描述）：
+│  │  │  ├─ 推进主线 / 日常过渡 / 关键冲突
+│  │  │  └─ 或用户自己说方向
+│  │  ├─ 如果用户说"随便""按大纲来"→ 根据章纲判断本章功能
+│  │  └─ 确认后标记本章定位
+│  │                                     ↓
+│  ├─ 第二步：检查前置条件
+│  │  ├─ 检查 @章纲 → 不存在 → 先生成章纲（run_tool("plot-guide", {}, project)）
+│  │  │  → 展示章纲概要给用户确认，说"不满意我改"，用户点头再继续
+│  │  ├─ 检查 @本章角色 → 缺角色卡 → 问用户哪些角色出场
+│  │  ├─ 检查 @前文 → N>1 且前文缺失 → 警告用户
+│  │                                     ↓
+│  ├─ 第三步：产正文
+│  │  ├─ 用户确认章纲 → run_tool("write-chapter", {chapter_number: N}, project)
+│  │  ├─ 输出后展示前 200 字 + 字数，问用户感觉
+│  │  │  ├─ "可以" → 保存
+│  │  │  ├─ "改一下风格/节奏/某个情节" → 调参数重跑
+│  │  │  └─ "重写" → 说明要改的方向，重跑
+│  │  └─ 保存后提示下一章 ready
+│  │                                     ↓
+│  └─ 重要原则：每章产出前至少有一次用户确认，不直接写
+│
+└─ 路由依据说明：
+   └─ write-chapter：有章纲，按章纲续写
 ```
 
 ### 开书 / 原创开书
@@ -224,23 +320,50 @@ projects/{作者}/{源书名}/
    └─ 用户说"随便""你定" → AI根据上下文自己决策
 ```
 
-### 仿写（有源文拆解数据）
+### 仿写
 
 ```
-用户说「仿写这本书」「仿写」
-├─ 有源文拆解数据：
-│  ├─ 先向用户说明源文的核心卖点和可换皮的方向
-│  ├─ 产出 2-3 个换皮方案（不同题材迁移/场景变换）
-│  │  → 每个方案说明：保留了源文什么、换了什么、目标读者变化
-│  ├─ 用户选定换皮方向
-│  ├─ run_preset("book-draw") 生成顶层设计
-│  │  → 用户确认
-│  ├─ run_preset("open-book") 生成完整设定
-│  │  → 用户确认
-│  ├─ run_preset("character-designer") 逐个生成角色
-│  └─ run_preset("volume-outline") 生成卷纲
+用户说「仿写这本书」「仿写」「仿写写章」「仿写开书」
+├─ 第一步：判断意图
+│  ├─ 用户说「仿写写章」「写章仿写」→ 走仿写路线
+│  │  ├─ run_tool("fanxie-chapter", {chapter_number: N}, project)
+│  │  └─ 读章纲 + 总纲 + 角色卡 + 设定，对齐节奏和调性写一章
+│  │
+│  └─ 用户说「仿写这本书」「仿写开书」→ 走开书路线 ↓
 │
-└─ 无源文数据 → 先 /fangcun-long-analyze 拆文
+├─ 第二步：仿写定向（抽卡）
+│  ├─ 读取源文材料：
+│  │  ├─ @源文对照（源文第1章正文——感受题材DNA和节奏模式）
+│  │  └─ @作品信息/主题/总纲（如有，了解全书定位）
+│  ├─ 分析后产出 2-3 张仿写方向卡，每张卡含：
+│  │  ├─ 🎴 卡名：一句话定位（例："古装权谋×家族逆袭"）
+│  │  ├─ 题材：锁定同题材（源文女频穿书→仿写也必须是女频穿书）
+│  │  ├─ 换皮思路：换了什么（时代/身份/场景载体）
+│  │  ├─ 保留了源文什么：爽点内核/情绪路径/节奏密度
+│  │  ├─ 目标读者差异：和源文读者群有何不同（如有）
+│  │  └─ 一句话钩子：新书的简介 hook
+│  ├─ 展示给用户，问"选哪个方向？"
+│  │  ├─ 用户选定方向
+│  │  ├─ 用户说"自己组合" → 按用户描述重新设计
+│  │  └─ 用户说"都不满意" → 重新分析产出新方案
+│  │                                     ↓
+│  ├─ 第三步：开书施工（基于选定方向，增量产出）
+│  │  ├─ run_tool("book-draw", {user_input: 选定方向}, project)  → 顶层设计
+│  │  │  → 展示顶层设计给用户确认
+│  │  ├─ run_tool("open-book", {}, project)  → 完整设定
+│  │  │  → 展示产出概要给用户确认
+│  │  ├─ 角色：只生成写第1卷必需的核心角色
+│  │  │  └─ 其他角色在写到对应章节时按需生成
+│  │  ├─ 卷纲：只生成第1卷卷纲（够用即可）
+│  │  │  └─ 后续卷纲在写到对应卷时再生成
+│  │  └─ 章纲+正文：卷纲确认后进入写章流程
+│  │                                     ↓
+│  └─ 重要原则：
+│     ├─ 增量产出：不预生成不需要的东西，写到哪产出到哪
+│     ├─ 每步都展示关键内容给用户看，用户不说"可以"不进入下一步
+│     ├─ 仿写开书不依赖套路分析（直接读 @源文对照 提取模式）
+│     ├─ 如有 @作品信息/套路分析 可自动增强效果，非必需
+│     └─ 用户说「仿写」模糊 → 先问「仿写一章」还是「仿写开书」
 ```
 
 ### 章纲生成
@@ -251,7 +374,7 @@ projects/{作者}/{源书名}/
 |---------|---------|------|-------------|
 | `plot-guide`（默认） | `builtin/plot-guide.xml` | 通用，起因/发展/转折/高潮/结尾 | 通用 |
 | `plot-guide/nvpin` | `builtin/plot-guide/nvpin.xml` | **女频**，开端/铺垫/转折/打脸/收获/钩子 | 女频、言情、情绪流、打脸、甜虐 |
-| `plot-guide/nanpin` | `builtin/plot-guide/nanpin.xml` | **男频**，密集事件流+4段式 | 男频、升级、打脸、信息差、冲突密度 |
+
 
 后续可继续扩展：`plot-guide/xuanyi`（悬疑）、`plot-guide/qinggan`（纯感情流）等。
 
@@ -293,7 +416,7 @@ projects/{作者}/{源书名}/
 │  └─ 用户选定角色位和人设方向后，确认 2-3 个核心特征
 │                                     ↓
 ├─ 第二步：生成角色卡
-│  ├─ run_preset("character-designer") 或 run_preset("character-generate")
+│  ├─ run_preset("character-generate")
 │  ├─ 输出后展示角色卡概要（姓名+功能位+性格+核心动机）
 │  ├─ 用户说"改" → 指出要改的维度，重新生成
 │  └─ 用户说"可以" → 保存
@@ -352,6 +475,37 @@ projects/{作者}/{源书名}/
 └─ 未指定 → 列出最近 3 章让用户选
 ```
 
+### 编辑诊断
+
+editor 预设将方寸编辑方法论编入系统 prompt，调用 `run_tool("editor", {chapter_number: N}, project)` 一键输出诊断报告。
+
+```
+用户说「编辑」「诊断」「审稿」「编辑第N章」
+├─ 明确诊断对象
+│  ├─ 指定了章节号 → 用指定章
+│  ├─ 未指定 → 默认读最后写的一章（或列出最近 3 章让用户选）
+│                                     ↓
+├─ 第二步：产出诊断报告
+│  ├─ run_tool("editor", {chapter_number: N}, project)
+│  │  → 自动注入 @本章正文 + @正文/章纲/第N章.xml + @频道模式
+│  │  → LLM 逐段分析，输出结构化报告
+│  ├─ 展示报告摘要给用户（开场/节奏/情绪/对话章尾各一行的评价）
+│                                     ↓
+├─ 第三步：根据诊断结果决策
+│  ├─ 用户说「改XX问题」→ 定位具体维度，建议修改方向
+│  │  ├─ 开场问题 → 用 write-chapter 重写开场或手动改
+│  │  ├─ 节奏问题 → 用 postfix 做节奏调整
+│  │  └─ 情绪偏差 → 收集具体位置重新生成
+│  ├─ 用户说「改成XX」→ 收集反馈，用 write-chapter 重跑
+│  ├─ 用户说「可以了」→ 报告已保存
+│  └─ 用户说「再看看上一章」→ 切换 N-1 重新诊断
+│                                     ↓
+└─ 重要原则：
+   ├─ 报告自动保存到 作品信息/编辑/第N章.md
+   ├─ 诊断不改原文，只出建议。改由用户确认后再走写章流程
+   └─ 先出诊断结论（通过/需微调/建议重写），再展开细节
+```
+
 ### 导入小说
 
 ```
@@ -361,24 +515,39 @@ projects/{作者}/{源书名}/
 │  ├─ 拷贝到 projects/{作者}/{书名}/正文/正文/第{N}章.txt
 │  └─ 确认：章数完整、第1章标题正确
 │                                     ↓
-├─ 第二步：提取事件表
-│  ├─ extract_events() 并行提取全部章节事件
-│  ├─ 输出到 projects/{作者}/{书名}/events.json
-│  └─ 确认 events.json 条目数 == 总章数
+├─ 第二步：角色提取 + 章节摘要
+│  ├─ run_preset("character-extract") → 作品信息/设定/角色/ + @chapter_summaries
+│  └─ 展示角色列表给用户确认
 │                                     ↓
-├─ 第三步：生成总纲/简介/标签
+├─ 第三步：前三章深度拆解
+│  ├─ run_preset("golden-chapters") → 拆文库/第{N}章_深度拆解.md
+│  └─ 展示技法清单
+│                                     ↓
+├─ 第四步：生成总纲/简介/标签（基于摘要 + 深度拆解）
 │  ├─ run_preset("book-import") → 作品信息/主题/
 │  └─ 展示给用户确认
 │                                     ↓
-├─ 第四步：提取角色/设定
-│  ├─ run_preset("character-extract") → 作品信息/设定/角色/
-│  └─ 展示角色列表给用户确认
+├─ 第五步：故事骨架分析
+│  ├─ run_preset("skeleton") → 故事骨架.md
+│  └─ 展示结构总览
 │                                     ↓
-├─ 第五步：文风分析
-│  ├─ run_preset("style-analysis") → 文风分析.md
-│  └─ 展示分析概要
+├─ 第六步：文风DNA提取
+│  ├─ run_preset("style-analysis") → 作品信息/dna.json
+│  └─ 展示风格概要
 │                                     ↓
-└─ 导入完成 → 项目已就绪，可开始仿写或续写
+├─ 第七步：设定提取（地点/物品/势力/背景）
+│  ├─ run_preset("setting-extract") → 作品信息/设定/
+│  └─ 展示提取结果
+│                                     ↓
+├─ 第八步：关系图谱提取
+│  ├─ run_preset("relationship-extract") → 作品信息/设定/关系图谱.xml
+│  └─ 展示关系网概要
+│                                     ↓
+├─ 第九步：拆文报告汇聚
+│  ├─ run_preset("analysis-report") → 拆文库/拆文报告.md
+│  └─ 展示报告摘要
+│                                     ↓
+└─ 拆书完成 → 所有数据准备就绪，可进入仿写搭建管线
 ```
 
 ## 语言

@@ -124,7 +124,7 @@ class VariableResolver:
                         if p.name.endswith('.schema.xml'):
                             continue
                         val = p.read_text(encoding='utf-8')
-                        if p.suffix == '.xml':
+                        if p.suffix == '.xml' and all(x not in str(p) for x in ['章纲', '总纲', '卷纲']):
                             val = _simplify_xml(val)
                         self._cache[var_name] = val
                         return val
@@ -133,6 +133,15 @@ class VariableResolver:
         value = self._resolve_by_type(var_name, var_def)
         self._cache[var_name] = value
         return value
+
+    def _eval_cond(self, var_name: str) -> bool:
+        """条件块求值：变量非空且非「未定义/未找到」时为真。"""
+        val = self.resolve(var_name)
+        if not val:
+            return False
+        if val.startswith('@[未定义:') or val.startswith('@[未找到:'):
+            return False
+        return True
 
     def _resolve_by_type(self, name: str, var_def: dict) -> str:
         vtype = var_def.get("type", "text")
@@ -510,6 +519,9 @@ class VariableResolver:
 
     def _resolve_ref(self, category: str, name: str) -> str:
         """解析 @类别:名称 引用。"""
+        # 解析 name 中嵌套的 @变量（如 @角色:@当前角色 → @角色:沈栀）
+        if '@' in name:
+            name = self.resolve(name)
         base = self.REF_CATEGORIES.get(category)
         if base:
             d = self.novel_dir / base
@@ -646,7 +658,7 @@ class VariableResolver:
         def _process_conditional(text):
             _pat = re.compile(r'\{#([^}]+)\}(.*?)\{/\1\}', re.DOTALL)
             while _pat.search(text):
-                text = _pat.sub(lambda m: m.group(2) if self.resolve(m.group(1)) else '', text)
+                text = _pat.sub(lambda m: m.group(2) if self._eval_cond(m.group(1)) else '', text)
             return text
         rendered = _process_conditional(rendered)
 
@@ -698,33 +710,222 @@ class VariableResolver:
 
 # 加载外部处理器（handlers.py 在导入时自动注册 COMPUTED_HANDLERS）
 
+def _extract_all_text(el):
+    """提取XML元素下的所有文本（含子标签文本），去除标签本身"""
+    return ''.join(el.itertext()).strip() if el is not None else ""
+
+def _strip_tags(text):
+    import re
+    return re.sub(r'<[^>]+>', '', text).strip()
+
+def _fmt_kv(label, value, maxlen=0):
+    """格式化 key: value，可选截断"""
+    v = value.strip() if value else ""
+    if maxlen and len(v) > maxlen:
+        v = v[:maxlen] + "..."
+    return f"{label}: {v}" if v else ""
+
 def _novel_setting(self):
-    """@设定：聚合全部设定数据"""
+    """@设定：聚合全部设定数据，深度提取关键字段"""
     import re, xml.etree.ElementTree as ET
     base = self.novel_dir / "作品信息" / "设定"
     parts = []
-    for dn in ["角色", "地点", "物品", "势力", "背景"]:
+
+    cfg = {
+        "角色": {
+            "header": "【角色卡】对话和OS必须对齐角色卡的voice字段（口癖/OS风格/语气）",
+            "parse": lambda text, stem: _parse_char_setting(text, stem),
+        },
+        "地点": {
+            "header": "【地点】场景描写参考——环境/氛围/建筑布局",
+            "parse": lambda text, stem: _parse_generic_setting(text, stem, "地点"),
+        },
+        "物品": {
+            "header": "【物品】系统/金手指的准确名称和全部规则——必须严格遵守数值/名称/效果",
+            "parse": lambda text, stem: _parse_item_setting(text, stem),
+        },
+        "势力": {
+            "header": "【势力】阵营关系和立场参考",
+            "parse": lambda text, stem: _parse_generic_setting(text, stem, "势力"),
+        },
+        "背景": {
+            "header": "【背景】世界观规则——穿越机制/力量体系/时代背景，不得违背",
+            "parse": lambda text, stem: _parse_background_setting(text, stem),
+        },
+    }
+
+    # 读本章章纲，提取出场角色名（用于过滤角色卡）
+    try:
+        N = self._ctx("N", 1)
+        for ext in ("", ".xml"):
+            gp = self.novel_dir / "正文" / "章纲" / f"第{N}章{ext}"
+            if gp.exists():
+                gt = gp.read_text(encoding="utf-8")
+                chapter_chars = set(re.findall(r'name="([^"]+)"', gt))
+                break
+        else:
+            chapter_chars = set()
+    except:
+        chapter_chars = set()
+
+    for dn, c in cfg.items():
         d = base / dn
-        if d.exists():
-            for f in sorted(d.glob("*.xml")):
-                text = f.read_text(encoding="utf-8", errors="replace")
-                if dn == "角色":
-                    role = re.search(r'role="([^"]*)"', text)
-                    bg = re.search(r'<background>(.*?)</background>', text, re.DOTALL)
-                    bgt = bg.group(1).strip()[:80] if bg else ""
-                    parts.append("[角色] " + f.stem + " (" + (role.group(1) if role else "?") + "): " + bgt)
-                else:
-                    desc = re.search(r'<description>(.*?)</description>', text, re.DOTALL)
-                    if desc:
-                        parts.append("[" + dn + "] " + f.stem + ": " + desc.group(1).strip()[:80])
+        if not d.exists():
+            continue
+        files = sorted(d.glob("*.xml"))
+        if not files:
+            continue
+        parts.append(f"\n=== {c['header']} ===")
+        for f in files:
+            text = f.read_text(encoding="utf-8", errors="replace")
+            parts.append(c["parse"](text, f.stem))
+
+    # 根目录独立文件
+    for f in sorted(base.glob("*.xml")):
+        text = f.read_text(encoding="utf-8", errors="replace")
+        root = ET.fromstring(text)
+        name = root.get("name", f.stem) if root.tag in ("character","relation") else f.stem
+        desc = _extract_all_text(root.find("description")) if root.find("description") is not None else ""
+        if not desc:
+            desc = _strip_tags(text)[:200]
+        parts.append(f"[参考] {name}: {desc[:200]}")
+
+    # 关系图谱
     relf = base / "关系图谱.xml"
     if relf.exists():
         try:
             tree = ET.parse(relf)
-            for r in tree.findall(".//relation"):
-                parts.append("[关系] " + r.get("source","") + " -> " + r.get("target","") + " (" + r.get("type","") + "): " + (r.get("description") or "")[:80])
+            rels = tree.findall(".//relation")
+            if rels:
+                parts.append("\n=== 【关系图谱】角色间关系和立场 ===")
+                for r in rels:
+                    src = r.get("source","")
+                    tgt = r.get("target","")
+                    typ = r.get("type","")
+                    desc = r.get("description","") or ""
+                    parts.append(f"  {src} -> {tgt} [{typ}]: {desc[:200]}")
         except: pass
+
     return "\n".join(parts) if parts else "（无设定数据）"
+
+
+def _parse_char_setting(text, name):
+    """角色卡深度提取——voice（口癖/OS风格/语气）是核心"""
+    import re, xml.etree.ElementTree as ET
+    root = ET.fromstring(text)
+    role = root.get("role", "")
+    parts = [f"  [角色] {name} ({role})"]
+
+    # background
+    bg = _extract_all_text(root.find("background"))
+    if bg:
+        parts.append(f"    背景: {bg[:300]}")
+
+    # motivation
+    mot = _extract_all_text(root.find("motivation"))
+    if mot:
+        parts.append(f"    动机: {mot[:200]}")
+
+    # character arc
+    arc = root.find("character_arc")
+    if arc is not None:
+        for a in arc:
+            parts.append(f"    {a.tag}: {_extract_all_text(a)[:200]}")
+
+    # voice — 这是最重要的, 全量展示
+    voice = root.find("voice")
+    if voice is not None:
+        parts.append("    【声音指纹 — 写作时必须对齐】")
+        for field in ["speech_patterns", "internal_os_style", "tone", "humor_type",
+                       "identity_anchor", "catchphrases", "common_topics",
+                       "sentence_rhythm", "education_level", "emotion_expression"]:
+            v = _extract_all_text(voice.find(field)) if voice.find(field) is not None else ""
+            if v:
+                parts.append(f"    {field}: {v[:200]}")
+        # lines 对话示例
+        lines = voice.find("lines")
+        if lines is not None:
+            samples = []
+            for l in list(lines)[:5]:
+                samples.append(_strip_tags(_extract_all_text(l))[:120])
+            if samples:
+                parts.append(f"    对话示例: {' | '.join(samples)}")
+
+    # appearance
+    app = _extract_all_text(root.find("appearance"))
+    if app:
+        parts.append(f"    外貌: {app[:200]}")
+
+    return "\n".join(parts)
+
+
+def _parse_item_setting(text, name):
+    """物品/金手指深度提取——名称、规则、数值全量"""
+    import re, xml.etree.ElementTree as ET
+    root = ET.fromstring(text)
+    parts = [f"  [物品] {name}"]
+
+    desc = _extract_all_text(root.find("description"))
+    if desc:
+        parts.append(f"    描述: {desc[:300]}")
+
+    # 规则类子标签
+    for tag in ["effect", "cost", "rules", "activation_condition",
+                 "limitations", "level", "initial_points", "pricing_rules"]:
+        el = root.find(tag)
+        if el is not None:
+            txt = _extract_all_text(el)
+            if txt:
+                parts.append(f"    {tag}: {txt[:300]}")
+
+    # commoditiy items
+    items = root.findall(".//item")
+    if items:
+        parts.append(f"    包含物品 ({len(items)}个):")
+        for it in items[:10]:
+            it_name = it.get("name","") or _extract_all_text(it.find("name"))
+            it_desc = _extract_all_text(it.find("description")) if it.find("description") is not None else ""
+            it_price = _extract_all_text(it.find("price")) if it.find("price") is not None else ""
+            parts.append(f"      - {it_name}" + (f" ({it_price})" if it_price else "") + (f": {it_desc[:100]}" if it_desc else ""))
+
+    return "\n".join(parts)
+
+
+def _parse_background_setting(text, name):
+    """背景设定深度提取"""
+    import re, xml.etree.ElementTree as ET
+    root = ET.fromstring(text)
+    parts = [f"  [背景] {name}"]
+
+    desc = _extract_all_text(root.find("description"))
+    if desc:
+        parts.append(f"    描述: {desc[:400]}")
+
+    for tag in ["rules", "world_rules", "time_period", "setting", "history"]:
+        el = root.find(tag)
+        if el is not None:
+            txt = _extract_all_text(el)
+            if txt:
+                parts.append(f"    {tag}: {txt[:400]}")
+
+    return "\n".join(parts)
+
+
+def _parse_generic_setting(text, name, dtype):
+    """通用设定提取"""
+    import re, xml.etree.ElementTree as ET
+    root = ET.fromstring(text)
+    parts = [f"  [{dtype}] {name}"]
+
+    desc = _extract_all_text(root.find("description"))
+    if desc:
+        parts.append(f"    描述: {desc[:300]}")
+
+    for tag in root:
+        if tag.tag != "description" and tag.text and tag.text.strip():
+            parts.append(f"    {tag.tag}: {_strip_tags(tag.text)[:200]}")
+
+    return "\n".join(parts)
 
 VariableResolver.COMPUTED_HANDLERS["novel_setting"] = _novel_setting
 

@@ -7,12 +7,82 @@
 
 ---
 
-## 每章步骤
+## 原创模式每章步骤
 
 ```
 Step 1: 写正文 → 展示给用户 → 确认? → 不满意回炉 → 满意进下一步
 Step 2: 去AI味 → 展示给用户 → 确认? → 不满意回炉 → 满意进下一步
 Step 3: 对比审查 → 展示给用户 → 确认? → 不满意回炉 → 下一章
+```
+
+---
+
+## 仿写模式自动化管线（Pattern-First — 全自动联调）
+
+### 建书阶段（一次执行 — **每一步都需用户确认**）
+
+```
+Step A: 仿写开书（需用户确认）
+    run_tool("open-book", {story_name: "新书"}, project_dir)
+    → 读取源文第1章 → 生成总纲/简介/标签/角色/设定/卷纲（~12文件）
+    ⚠️ 展示总纲+角色名+设定给用户确认
+        用户确认题材/人设/世界观方向后再继续
+
+Step B: 卷纲验证（需用户确认）
+    run_tool("volume-outline", {}, project_dir)
+    → 独立的卷纲生成，检查开书产出的卷纲质量
+    ⚠️ 展示卷纲的arc列表给用户确认
+        确认节奏和剧情走向后再进入每章写作
+```
+
+### 每章自动化流水线
+
+```
+Step 1: 章纲（读源文结构，对齐信息释放节奏）
+    run_tool("plot-guide", {chapter_number: N}, project_dir)
+    → 读源文 info_release 节奏
+    → 生成五段式细纲，每个beat标注源文对标位置
+
+Step 2: 仿写写章（含自动字数压缩）
+    run_tool("fanxie-chapter", {chapter_number: N}, project_dir)
+    → 读章纲 + 总纲 + 角色卡 + 设定 → 写正文
+    → 自动检查字数，超3000字自动压缩
+    → 展示给用户确认
+
+Step 4: 对齐审查
+    run_tool("fanxie-review", {chapter_number: N}, project_dir)
+    → 以章纲为基准审查 D1-D5
+    → 展示诊断报告
+
+Step 5: 如有问题 → 自动靶向修复
+    run_tool("fanxie-fix", {chapter_number: N, user_input: 报告}, project_dir)
+    → 读章纲 + 审查报告，只修有问题的维度
+    → 展示修改对比
+
+Step 6: 去AI味
+    run_tool("deslop", {chapter_number: N}, project_dir)
+    → 展示修改对比
+
+每5章：fanxie-prompt-opt → 聚合失败模式 → 优化prompt
+
+### 质量增强步骤（可选，按需调用）
+
+```
+首章/改逆推prompt后：
+  Step V1: 盲区检测
+      run_tool("fanxie-blindspot", {chapter_number: N}, project_dir)
+      → 原文→章纲对比 → 找出逆推遗漏的关键要素 → 修 source-guide-reverse
+      → 展示盲区报告
+
+  Step V2: 章纲逆推质量验证
+      run_tool("source-guide-reverse-validate", {chapter_number: N}, project_dir)
+      → 检查章纲完整性/一致性/结构准确/泛化能力
+      → 展示验证报告
+
+跨轮次优化（每次 Round 前后）：
+  Round前：读 _optimize/anomaly_patterns.md → 优先修 active 最久的模式
+  Round后：更新 _optimize/anomaly_patterns.md → 跟踪复现/休眠/解决
+  同一模式连续 ≥2 轮复现 → 启动升版修复方案
 ```
 
 ---

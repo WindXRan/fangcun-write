@@ -1,21 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  character.schema.xml — 角色条目模板。
+  character.schema.xml — 角色条目模板（统一版）。
   存储于 作品信息/设定/角色/角色名.xml。
-  @role 枚举: protagonist | love_interest | antagonist | mentor | ally | sidekick | foil | minor
+  分两档：tier="main"（主要角色）和 tier="minor"（次要角色）。
+  @role 枚举: protagonist | love_interest | antagonist | mentor | ally | protagonist-family | sidekick | foil | minor
 -->
-<character name="角色名" role="protagonist" gender="男/女">
-  <personality>性格描述（2-3个核心特质）</personality>
-  <tags>标签</tags>
-  <background>人物背景</background>
-  <bio>人物小传</bio>
-  <motivation>核心欲望 | 核心恐惧（可选）</motivation>
+<character name="角色名" tier="main" role="protagonist" gender="男/女" age="年龄范围（卷一卷六）">
+  <!-- ═══════ 基础信息 ═══════ -->
+  <tags>标签1 | 标签2 | 标签3</tags>
+
+  <!-- ═══════ 性格内核 ═══════ -->
+  <core>
+    <core_desire>核心欲望——具体想要什么</core_desire>
+    <core_fear>核心恐惧——具体怕什么</core_fear>
+    <core_value>核心价值观——什么是对什么是错</core_value>
+    <core_contrast>核心反差——表里矛盾点，让人记住的特质</core_contrast>
+  </core>
+
+  <!-- ═══════ 语言风格 7 维（tier="main" 必填） ═══════ -->
+  <language_style>
+    <trait name="口癖">高频语气词/口头禅/重复句式</trait>
+    <trait name="节奏">长句多还是短句多/语速快慢/停顿习惯</trait>
+    <trait name="信息偏好">爱说事实还是情绪/直接还是绕弯</trait>
+    <trait name="立场">说话站在谁的角度/维护谁的利益</trait>
+    <trait name="身份措辞">用词水平（粗俗/文雅/专业/江湖）/敬语使用</trait>
+    <trait name="性格语气">强势/犹豫/嘲讽/热情/冷漠/阴阳怪气</trait>
+    <trait name="进度态度">推进话题还是回避/打断还是倾听</trait>
+  </language_style>
+
+  <!-- ═══════ 角色声音指纹（tier="main" 必填） ═══════ -->
+  <voice>
+    <speech_patterns>["特么的", "完了完了", "哟"]</speech_patterns>
+    <internal_os_style>吐槽 | 现代网感 | 正剧 | 文艺 | 混合</internal_os_style>
+    <humor_type>自嘲 | 毒舌 | 冷吐槽 | 夸张 | 无</humor_type>
+    <identity_anchor>一句话——角色最突出的身份标签，如"孤儿→对家庭温暖极度渴望"</identity_anchor>
+  </voice>
+
+  <!-- ═══════ 人物弧线 ═══════ -->
   <arc>
-    <start>开局状态</start>
-    <turning_point>转折事件</turning_point>
-    <end>结局状态</end>
+    <start>起点状态</start>
+    <turning_point type="first">关键转折1</turning_point>
+    <turning_point type="second">关键转折2</turning_point>
+    <end>终点状态</end>
   </arc>
+
+  <!-- ═══════ 人物小传（叙事性背景故事） ═══════ -->
+  <bio>人物小传</bio>
+
+  <!-- ═══════ 关键台词 ═══════ -->
   <lines>
     <line scene="场景">台词</line>
+    <line scene="场景">台词</line>
   </lines>
+
+  <!-- ═══════ 关系锚点（tier="main" 必填） ═══════ -->
+  <relationships>
+    <relation target="角色名" role="关系类型">关系描述</relation>
+    <relation target="角色名" role="关系类型">关系描述</relation>
+  </relationships>
+
+  <!-- ═══════ 次要角色档（tier="minor"） ═══════ -->
+  <!-- tier="minor" 时只需以下精简字段（放在 character 元素内）：
+       <tags>标签</tags>
+       <bio>背景简介</bio>
+       <arc><start>起点</start><end>终点</end></arc>
+       core / language_style / lines / relationships 均省略
+  -->
 </character>

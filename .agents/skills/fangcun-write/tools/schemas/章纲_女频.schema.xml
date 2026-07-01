@@ -1,36 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 章纲模板（女频版）
-五幕结构，情绪驱动，关系变化。
-功能标签池：推进感情 | 情绪铺垫 | 关系突破 | 打脸爽 | 信息差 | 埋伏笔 | 治愈/虐 | 误会/解开 | 甜宠/心动
+每段只写"发生了什么"，不写读者情绪、不写内心活动、不写对话。
 
-本文件同时作为 @模板_章纲_女频 注入女频章纲生成 prompt。
-LLM 必须按以下 XML 结构输出，不得输出 Markdown。
-
-结构核心：情绪弧线（emotion_arc）推进，强调感官细节和关系变化。
-输出路径：正文/章纲/第N章.xml
+段数规则：最少3段，最多8段。每段释放1-2条新事实。
 -->
-<guide chapter="1" mode="female">
-  <core_event>一句话核心事件（情绪+关系变化）</core_event>
-  <chapter_type>推进章/日常章/高潮章/感情章/过渡章</chapter_type>
-  <emotional_arc>起点→终点（如：憋屈→蓄势→反制→爽→期待）</emotional_arc>
-  <info_release>
-    <point at="开场">读者此刻知道的关键事实</point>
-    <point at="信息释放点1">读者此刻知道的关键事实</point>
-    <point at="信息释放点2">读者此刻知道的关键事实</point>
-    <point at="信息释放点3">读者此刻知道的关键事实</point>
-    <point at="高潮前">读者此刻知道的关键事实</point>
-    <point at="章尾">读者此刻知道的关键事实</point>
-  </info_release>
-  <emotion_arc>
-    <setup>开端——困境/冲突起点。情绪基调。具体细节。</setup>
-    <tension>铺垫——情绪酝酿。主角暗中观察/配角反应制造憋屈感。感官细节。</tension>
-    <contact>转折——主角与对手/男主正面接触。关键对话或对视。情绪变化。</contact>
-    <release>高潮——真相揭露/误会解开/情绪爆发。配角反应。</release>
-    <aftermath>结尾——阶段性收益/关系变化。</aftermath>
-  </emotion_arc>
+<guide chapter="N" mode="female">
+  <chapter_title>第N章 章名</chapter_title>
+  <core_event>一句话核心事件</core_event>
+  <emotional_arc>起点→终点（如"焦虑→得意""绝望→燃起希望"）</emotional_arc>
+  <opening_type>action|dialogue|suspense|emotion</opening_type>
+  <tone>压抑|轻松|紧张|爽|温馨</tone>
+  <beats>
+    <beat n="1" tag="按功能自由标注">
+      <content>发生了什么</content>
+      <info_release>本beat释放的信息（≤2条事实）</info_release>
+      <info_hold>本beat压住的信息（留到后面）</info_hold>
+      <source_excerpt>贴2-3段原文——展示这段的段落节奏和OS位置</source_excerpt>
+      <max_chars>200</max_chars>
+    </beat>
+    <beat n="2" tag="按功能自由标注">
+      <content>发生了什么</content>
+      <info_release>本beat释放的信息（≤2条事实）</info_release>
+      <info_hold>本beat压住的信息（留到后面）</info_hold>
+      <max_chars>200</max_chars>
+    </beat>
+    <beat n="3" tag="按功能自由标注">
+      <content>...</content>
+      <info_release>...</info_release>
+      <info_hold>...</info_hold>
+      <source_excerpt>...</source_excerpt>
+      <max_chars>200</max_chars>
+    </beat>
+    <beat n="4" tag="">
+      <content>...</content>
+      <info_release>...</info_release>
+      <info_hold>...</info_hold>
+      <source_excerpt>...</source_excerpt>
+      <max_chars>200</max_chars>
+    </beat>
+    <beat n="5" tag="">
+      <content>...</content>
+      <info_release>...</info_release>
+      <info_hold>...</info_hold>
+      <source_excerpt>...</source_excerpt>
+      <max_chars>200</max_chars>
+    </beat>
+    <beat n="6" tag="">
+      <content>...</content>
+      <info_release>...</info_release>
+      <info_hold>...</info_hold>
+      <source_excerpt>...</source_excerpt>
+      <max_chars>200</max_chars>
+    </beat>
+    <beat n="7" tag="">
+      <content>...</content>
+      <info_release>...</info_release>
+      <info_hold>...</info_hold>
+      <source_excerpt>...</source_excerpt>
+      <max_chars>200</max_chars>
+    </beat>
+    <beat n="8" tag="">
+      <content>...</content>
+      <info_release>...</info_release>
+      <info_hold>...</info_hold>
+      <source_excerpt>...</source_excerpt>
+      <max_chars>200</max_chars>
+    </beat>
+  </beats>
   <hooks>
-    <cliffhanger>情感悬念/未尽之言/倒计时</cliffhanger>
-    <next_drive>下章情绪推力</next_drive>
+    <cliffhanger>章尾具体钩子内容</cliffhanger>
+    <hook_type>sudden_reveal|crisis|emotional_twist|cliffhanger|information_gap|choice|countdown</hook_type>
   </hooks>
+  <characters>
+    <character name="名" role="功能">本章作用一句话</character>
+  </characters>
 </guide>

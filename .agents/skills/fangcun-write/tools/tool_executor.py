@@ -205,6 +205,17 @@ def _run_single_file_preset(preset_name: str, save_path: str | None, args: dict,
     """加载预设→LLM→保存（通用）。支持 rounds 参数抽卡。"""
     preset_file_md = _BUILTIN_DIR / f"{preset_name}.md"
     preset_file_xml = _BUILTIN_DIR / f"{preset_name}.xml"
+    if not preset_file_md.exists() and not preset_file_xml.exists():
+        for subdir in sorted(_BUILTIN_DIR.iterdir()):
+            if subdir.is_dir():
+                candidate_md = subdir / f"{preset_name}.md"
+                if candidate_md.exists():
+                    preset_file_md = candidate_md
+                    break
+                candidate_xml = subdir / f"{preset_name}.xml"
+                if candidate_xml.exists():
+                    preset_file_xml = candidate_xml
+                    break
     sp_raw = ""
     if preset_file_md.exists():
         try:

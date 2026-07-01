@@ -28,27 +28,35 @@ VariableResolver.COMPUTED_HANDLERS["total_chapters"] = (
 
 # ── 角色名：读第一个角色文件 ——─────────────────────────
 def _protagonist_name(self, fallback: str) -> str:
-    """找主角：优先 role=protagonist，降级到第一个角色卡。"""
-    d = self.novel_dir / "作品信息" / "设定" / "角色"
-    if not d.exists(): return fallback
+    """找主角：优先 project.xml <protagonist> → role=protagonist → 第一个角色卡。"""
     import xml.etree.ElementTree as ET
-    import re as _re
-    first = None
-    for f in sorted(d.glob("*.xml")):
+    # 1. 从 project.xml 读取
+    _px = self.novel_dir / "作品信息" / "project.xml"
+    if _px.exists():
         try:
-            text = f.read_text(encoding="utf-8")
-            clean = _re.sub(r'```(?:xml)?\n?', '', text).strip()
-            clean = _re.sub(r'^.*?(<[a-zA-Z_])', r'\1', clean, flags=_re.DOTALL)
-            root = ET.fromstring(clean)
-            if root.tag in ("entry", "character"):
-                name = root.get("name", "")
-                role = root.get("role", "")
-                if role == "protagonist":
-                    return name
-                if first is None:
-                    first = name
+            _pr = ET.parse(str(_px)).getroot()
+            _pn = _pr.findtext("protagonist", "").strip()
+            if _pn:
+                return _pn
         except: pass
-    return first or fallback
+    # 2. 从角色卡扫描
+    d = self.novel_dir / "作品信息" / "设定" / "角色"
+    if d.exists():
+        import re as _re
+        for f in sorted(d.glob("*.xml")):
+            try:
+                text = f.read_text(encoding="utf-8")
+                clean = _re.sub(r'```(?:xml)?\n?', '', text).strip()
+                clean = _re.sub(r'^.*?(<[a-zA-Z_])', r'\1', clean, flags=_re.DOTALL)
+                root = ET.fromstring(clean)
+                if root.tag in ("entry", "character"):
+                    name = root.get("name", "")
+                    if root.get("role", "") == "protagonist":
+                        return name
+                    if fallback == "主角":
+                        fallback = name
+            except: pass
+    return fallback
 
 VariableResolver.COMPUTED_HANDLERS["protagonist_name"] = (
     lambda self: _protagonist_name(self, "主角")
@@ -69,32 +77,41 @@ def _current_chapter_text(self):
     """当前章节正文。"""
     N = self._ctx("N", 1)
     import re
+    # 精确匹配
     for ext in ("", ".xml"):
         p = self.novel_dir / "正文" / "正文" / f"第{N}章{ext}"
         if p.exists():
             text = p.read_text(encoding="utf-8")
             clean = re.sub(r'<[^>]+>', '', text).strip()
             return clean
+    # glob 模糊匹配（兼容 "第1章带着功德投胎了.xml" 这类命名）
+    for f in sorted(self.novel_dir.glob(f"正文/正文/第{N}章*.xml")):
+        text = f.read_text(encoding="utf-8")
+        clean = re.sub(r'<[^>]+>', '', text).strip()
+        return clean
     return "（无本章正文）"
 
 VariableResolver.COMPUTED_HANDLERS["本章正文"] = _current_chapter_text
 
-def _prev_chapter_tail(self, limit=5):
-    """前文全文：最近最多 limit 章的完整正文。"""
+def _prev_chapter_tail(self, tail_chars=300):
+    """前文尾段：上一章最后 tail_chars 字（默认300），够接上钩子就行。"""
     N = self._ctx("N", 1)
     if N <= 1: return "（无前文）"
     import re
-    parts = []
-    start = max(1, N - limit)
-    for i in range(start, N):
-        for ext in ("", ".xml"):
-            p = self.novel_dir / "正文" / "正文" / f"第{i}章{ext}"
-            if p.exists():
-                text = p.read_text(encoding="utf-8")
-                clean = re.sub(r'<[^>]+>', '', text).strip()
-                parts.append(f"---第{i}章---\n{clean}")
-                break
-    return "\n\n".join(parts) if parts else "（无前文）"
+    for ext in ("", ".xml"):
+        p = self.novel_dir / "正文" / "正文" / f"第{N-1}章{ext}"
+        if p.exists():
+            text = p.read_text(encoding="utf-8")
+            clean = re.sub(r'<[^>]+>', '', text).strip()
+            tail = clean[-tail_chars:] if len(clean) > tail_chars else clean
+            return f"---上一章章尾---\n{tail}"
+        # glob
+        for f in sorted(self.novel_dir.glob(f"正文/正文/第{N-1}章*.xml")):
+            text = f.read_text(encoding="utf-8")
+            clean = re.sub(r'<[^>]+>', '', text).strip()
+            tail = clean[-tail_chars:] if len(clean) > tail_chars else clean
+            return f"---上一章章尾---\n{tail}"
+    return "（无前文）"
 
 def _prev_chapter_guide(self, limit=5):
     """最近最多 limit 章的章纲全文。"""
@@ -110,6 +127,17 @@ def _prev_chapter_guide(self, limit=5):
                 break
     return "\n\n".join(parts) if parts else "（无关联章纲）"
 
+# ── 本章章纲：读取当前章节的章纲文件 ──
+def _current_chapter_guide(self):
+    N = self._ctx("N", 1)
+    for ext in ("", ".xml"):
+        p = self.novel_dir / "正文" / "章纲" / f"第{N}章{ext}"
+        if p.exists():
+            return p.read_text(encoding="utf-8")
+    return f"（错误：第{N}章章纲不存在。请先通过 plot-guide 生成章纲）"
+
+VariableResolver.COMPUTED_HANDLERS["本章章纲"] = _current_chapter_guide
+
 def _chapter_characters(self):
     """从章纲 <characters> 字段读取本章出场角色，只返回对应角色卡。"""
     import re as _re
@@ -122,21 +150,21 @@ def _chapter_characters(self):
             guide_text = p.read_text(encoding="utf-8")
             break
     if not guide_text:
-        # fallback: 列出所有可用角色名
-        d = self.novel_dir / "作品信息" / "设定" / "角色"
-        if d.exists():
-            names = [f.stem for f in sorted(d.glob("*.xml"))]
-            return f"可用角色：{'、'.join(names)}" if names else "（无角色卡）"
-        return "（无章纲，请先生成章纲）"
+        return f"（错误：第{N}章章纲不存在。请先通过 plot-guide 生成章纲）"
 
-    # 提取 <characters> 字段
-    m = _re.search(r'<characters>([^<]+)</characters>', guide_text)
+    # 提取 <characters> 字段（兼容两种格式）
+    m = _re.search(r'<characters>(.*?)</characters>', guide_text, _re.DOTALL)
     if not m:
         return "（章纲中未标记出场角色）"
     raw = m.group(1).strip()
-    # 解析角色名（逗号/顿号/空格分隔）
-    names = _re.split(r'[、，,\s]+', raw)
-    names = [n.strip() for n in names if n.strip() and '角色' not in n]
+    # 尝试从 <character name="名"> 属性提取
+    xml_names = _re.findall(r'<character\s+name="([^"]+)"', raw)
+    if xml_names:
+        names = xml_names
+    else:
+        # 降级：逗号/顿号/空格分隔的纯文本格式
+        names = _re.split(r'[、，,\s]+', raw)
+        names = [n.strip() for n in names if n.strip() and '角色' not in n]
 
     # 查找对应角色卡
     chars_dir = self.novel_dir / "作品信息" / "设定" / "角色"
@@ -159,6 +187,16 @@ VariableResolver.COMPUTED_HANDLERS["关联角色"] = (
     lambda self: _chapter_characters(self)
 )
 VariableResolver.COMPUTED_HANDLERS["chapter_characters"] = VariableResolver.COMPUTED_HANDLERS["关联角色"]
+
+# ── 角色列表：列出所有可用角色名（不依赖章纲，供 plot-guide 使用）──
+def _all_character_names(self):
+    chars_dir = self.novel_dir / "作品信息" / "设定" / "角色"
+    if chars_dir.exists():
+        names = [f.stem for f in sorted(chars_dir.glob("*.xml"))]
+        return f"可用角色：{'、'.join(names)}" if names else "（无角色卡）"
+    return "（无角色目录）"
+
+VariableResolver.COMPUTED_HANDLERS["角色列表"] = _all_character_names
 VariableResolver.COMPUTED_HANDLERS["antagonist_name"] = (
     lambda self: _first_char_name(self, "对手")
 )
@@ -184,8 +222,42 @@ VariableResolver.COMPUTED_HANDLERS["chapter_summaries"] = _chapter_summaries
 # ── 仿写变量：自动从源文目录解析 ──
 
 def _source_chapter(self):
-    """从源文项目读取当前章节正文。需要 source_book + 拆文库/ 或同级目录。"""
+    """从源文项目读取当前章节正文。三步：source_dir → 同级目录 → 拆文库。"""
+    import os as _os
     N = self._ctx("N", 1)
+    
+    # 优先从 project.xml 读 source_book（比 _user_overrides 更可靠）
+    _sb = ""
+    try:
+        _px = self.novel_dir / "作品信息" / "project.xml"
+        if _px.exists():
+            import xml.etree.ElementTree as _ET
+            _sb = (_ET.parse(str(_px)).getroot().findtext("source_book") or "").strip()
+    except Exception:
+        pass
+    if not _sb:
+        _sb = self._user_overrides.get("source_book", "")
+    
+    # 直接从源文目录读文件
+    if _sb:
+        try:
+            _parent = self.novel_dir.parent
+            _src_dir = _os.path.join(str(_parent), _sb, "正文", "正文")
+            if _os.path.isdir(_src_dir):
+                _candidates = []
+                for _f in _os.listdir(_src_dir):
+                    if f"第{N}章" in _f and (_f.endswith(".xml") or _f.endswith(".txt")):
+                        if "_humanized" not in _f and "_repair" not in _f and "_polish" not in _f:
+                            _candidates.append(_f)
+                # 优先选文件名最长的（原文通常带章名如"第1章带着功德投胎了.xml"，
+                # 我们的输出是"第1章.xml"）
+                if _candidates:
+                    _candidates.sort(key=len, reverse=True)
+                    with open(_os.path.join(_src_dir, _candidates[0]), 'r', encoding='utf-8', errors='replace') as _fh:
+                        return _fh.read()
+        except Exception:
+            pass
+    
     source_book = self._user_overrides.get("source_book", "")
     if not source_book:
         return ""
@@ -195,29 +267,117 @@ def _source_chapter(self):
     if manual:
         return manual
 
-    # 尝试从 source_book 的目录读取
-    # 项目结构: projects/{author}/{仿写书名}/
-    # source_book 同级: projects/{author}/{source_book}/
-    # 或拆文库/{source_book}/
-    novel_dir = self.novel_dir  # 仿写项目目录
-    for parent in [novel_dir.parent, novel_dir.parent.parent / "拆文库"]:
-        # source_book 可能是独立项目（projects/A/SB/），也可能是同级（projects/SB/）
-        candidates = []
-        sb_dir = parent / source_book
-        if sb_dir.exists():
-            candidates.append(sb_dir)
-        # 源文就在 parent 本身（projects/{source_book}/）
-        if parent.name == source_book:
-            candidates.append(parent)
-        for sb_dir in candidates:
-            for pat in [f"正文/正文/第{N}章*.txt", f"正文/正文/第{N}章*.xml",
-                        f"源文/第{N}章*.txt", f"第{N}章*.txt"]:
-                files = sorted(sb_dir.glob(pat))
-                if files:
-                    return files[0].read_text(encoding='utf-8', errors='replace')
+    import os as _os
+
+    # 尝试所有可能的源文目录
+    novel_dir = self.novel_dir
+    candidates = []
+
+    # 1. source_dir（tool_executor 设定的标准入口）
+    sd = self._ctx("source_dir", "")
+    if sd:
+        candidates.append(sd)
+
+    # 2. 同级目录：{project}/../{source_book}/正文/正文/
+    candidates.append(str(novel_dir.parent / source_book / "正文" / "正文"))
+
+    # 3. 同级目录：{project}/../{source_book}/源文/
+    candidates.append(str(novel_dir.parent / source_book / "源文"))
+
+    # 4. 拆文库
+    candidates.append(str(novel_dir.parent.parent / "拆文库" / source_book / "正文" / "正文"))
+    candidates.append(str(novel_dir.parent.parent / "拆文库" / source_book / "源文"))
+
+    # 5. 同级目录直接文件
+    candidates.append(str(novel_dir.parent / source_book))
+
+    # 遍历所有候选目录，用 os.listdir 避免 Path.glob 的 Unicode 问题
+    seen = set()
+    for cd in candidates:
+        if not cd or cd in seen:
+            continue
+        seen.add(cd)
+        if not _os.path.isdir(cd):
+            continue
+        try:
+            fnames = []
+            for fn in _os.listdir(cd):
+                if f"第{N}章" in fn and (fn.endswith(".xml") or fn.endswith(".txt") or fn.endswith(".md")):
+                    fnames.append(fn)
+            # 优先长文件名（带标题的原文件），短名（纯"第N章.xml"为输出文件）靠后
+            fnames.sort(key=lambda x: len(x), reverse=True)
+            for fname in fnames:
+                fp = _os.path.join(cd, fname)
+                with open(fp, 'r', encoding='utf-8', errors='replace') as fh:
+                    return fh.read()
+        except Exception:
+            continue
     return ""
 
 VariableResolver.COMPUTED_HANDLERS["源文对照"] = _source_chapter
+
+
+# ── 源文卷纲：从源文项目读取卷纲 ──
+def _source_volume(self):
+    """从源文项目读取当前卷的卷纲。"""
+    import os as _os
+    vol = self._ctx("volume", 1)
+    # 直接从源文目录读
+    try:
+        _novel = self.novel_dir
+        _parent = _novel.parent
+        _src_dir = _os.path.join(str(_parent), "全家偷听心声", "正文", "卷纲")
+        if not _os.path.isdir(_src_dir):
+            # 从 project.xml 读 source_book
+            _px = _novel / "作品信息" / "project.xml"
+            if _px.exists():
+                import xml.etree.ElementTree as _ET
+                _sb = (_ET.parse(str(_px)).getroot().findtext("source_book") or "").strip()
+                if _sb:
+                    _src_dir = _os.path.join(str(_parent), _sb, "正文", "卷纲")
+        if _os.path.isdir(_src_dir):
+            for _f in _os.listdir(_src_dir):
+                if f"第{vol}卷" in _f and (_f.endswith(".xml") or _f.endswith(".txt")):
+                    with open(_os.path.join(_src_dir, _f), 'r', encoding='utf-8', errors='replace') as _fh:
+                        return _fh.read()
+    except Exception:
+        pass
+    return "（无源文卷纲）"
+
+VariableResolver.COMPUTED_HANDLERS["源文卷纲"] = _source_volume
+
+
+# ── 源文章纲：从源文项目读取完整章纲（供 guide-convert 翻译使用）──
+def _source_chapter_guide(self):
+    """从源文项目读取当前章纲的完整内容。"""
+    import os as _os
+    N = self._ctx("N", 1)
+    try:
+        _novel = self.novel_dir
+        _parent = _novel.parent
+        _src_dir = _os.path.join(str(_parent), "全家偷听心声", "正文", "章纲")
+        if not _os.path.isdir(_src_dir):
+            _px = _novel / "作品信息" / "project.xml"
+            if _px.exists():
+                import xml.etree.ElementTree as _ET
+                _sb = (_ET.parse(str(_px)).getroot().findtext("source_book") or "").strip()
+                if _sb:
+                    _src_dir = _os.path.join(str(_parent), _sb, "正文", "章纲")
+        if _os.path.isdir(_src_dir):
+            for _f in sorted(_os.listdir(_src_dir)):
+                if f"第{N}章" in _f and (_f.endswith(".xml") or _f.endswith(".txt")):
+                    with open(_os.path.join(_src_dir, _f), 'r', encoding='utf-8', errors='replace') as _fh:
+                        return _fh.read()
+            for _f in sorted(_os.listdir(_src_dir)):
+                if f"{N}" in _f and (_f.endswith(".xml") or _f.endswith(".txt")):
+                    with open(_os.path.join(_src_dir, _f), 'r', encoding='utf-8', errors='replace') as _fh:
+                        return _fh.read()
+    except Exception:
+        pass
+    return "（无源文章纲，请先对源文项目运行 source-guide-reverse）"
+
+VariableResolver.COMPUTED_HANDLERS["源文章纲"] = _source_chapter_guide
+
 
 
 
@@ -383,3 +543,14 @@ def _work_length(self):
         return "长篇"
 
 VariableResolver.COMPUTED_HANDLERS["作品篇幅"] = _work_length
+
+# ── 本卷章数：start - end + 1 ──
+def _volume_chapter_count(self):
+    s = int(self._ctx("start", 1))
+    e = int(self._ctx("end", 1))
+    return str(max(0, e - s + 1))
+
+VariableResolver.COMPUTED_HANDLERS["本卷章数"] = _volume_chapter_count
+
+
+# ── 仿写章纲：从总纲读取实体映射，替换章纲中的源文名字 ──

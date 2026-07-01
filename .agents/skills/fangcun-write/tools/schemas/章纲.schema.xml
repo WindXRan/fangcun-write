@@ -6,30 +6,34 @@ LLM 必须按以下 XML 结构输出，不得输出 Markdown。
 
 输出路径：正文/章纲/第N章.xml
 -->
-<guide chapter="1" mode="generic">
+<guide chapter="N" mode="generic">
+  <chapter_title>第N章 章名</chapter_title>
   <core_event>一句话核心事件</core_event>
-  <chapter_type>推进章/日常章/高潮章/过渡章/感情章</chapter_type>
-  <emotional_arc>起点→终点（如：平静→震惊→决意）</emotional_arc>
-  <info_release>
-    <point at="开场">读者此刻知道的关键事实</point>
-    <point at="信息释放点1">读者此刻知道的关键事实</point>
-    <point at="信息释放点2">读者此刻知道的关键事实</point>
-    <point at="信息释放点3">读者此刻知道的关键事实</point>
-    <point at="高潮前">读者此刻知道的关键事实</point>
-    <point at="章尾">读者此刻知道的关键事实</point>
-  </info_release>
-  <summary>
-    <cause>起因——从上一章结尾驱动，为什么有本章</cause>
-    <development>发展——冲突如何推进</development>
-    <turning_point>转折——信息/关系/局势哪里改变</turning_point>
-    <climax>高潮——情绪或动作峰值</climax>
-    <ending>结尾——阶段性结果 + 章尾钩子</ending>
-  </summary>
-  <scene_plan>
-    <beat function="开端">谁做了什么。行动+结果。</beat>
-    <beat function="铺垫">谁做了什么。行动+反应。</beat>
-    <beat function="转折">谁做了什么。行动+反制+结果。</beat>
-    <beat function="高潮">谁做了什么。成果展示/真相揭露。</beat>
-    <beat function="钩子">章尾留白/新威胁/未完成目标</beat>
-  </scene_plan>
+  <emotional_arc>起点→终点</emotional_arc>
+  <beats>
+    <beat n="1" tag="开端/困境">
+      <content>主角面临什么局面，谁在施压，情绪状态。</content>
+      <end_state>紧迫/憋屈/好奇</end_state>
+    </beat>
+    <beat n="2" tag="发展/破局">
+      <content>主角的主动行为。打破僵局的动作或决定。</content>
+      <end_state>局势松动/悬念拉起</end_state>
+    </beat>
+    <beat n="3" tag="转折/反转">
+      <content>核心信息释放/局势倒转。对方反应+旁人反应。</content>
+      <end_state>震惊/碾压/爽</end_state>
+    </beat>
+    <beat n="4" tag="高潮/收获">
+      <content>实质收益或阶段性成果。地位/资源/关系变化。</content>
+      <end_state>满足/期待/温暖</end_state>
+    </beat>
+    <beat n="5" tag="悬念/钩子">
+      <content>新危机/未解决问题/关系暗涌。</content>
+      <end_state>揪心/好奇/恐慌</end_state>
+    </beat>
+  </beats>
+  <hooks>
+    <cliffhanger>章尾钩子</cliffhanger>
+    <next_drive>下章驱动力</next_drive>
+  </hooks>
 </guide>
