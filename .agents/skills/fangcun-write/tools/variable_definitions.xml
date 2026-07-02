@@ -20,7 +20,9 @@
     <variable name="本章正文" category="正文" type="computed" source="computed" handler="本章正文" />
     <variable name="参考剧情" category="正文" type="text" source="user_input" />
     <variable name="源文对照" category="正文" type="computed" source="computed" handler="源文对照" />
-    <variable name="前文章纲" category="大纲" type="text" source="user_input" />
+    <variable name="前文章纲" category="大纲" type="computed" source="computed" handler="前文章纲">
+      <description>自动读取上一章章纲。N=1时返回空（无上一章）。</description>
+    </variable>
     <variable name="背景设定" category="设定" type="text" source="user_input" />
     <variable name="势力设定" category="设定" type="text" source="user_input" />
     <variable name="目标频道" category="作品信息" type="text" source="auto_extract">

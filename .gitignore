@@ -101,3 +101,4 @@ docs/
 # === 拆文库 ===
 拆文库/
 .workbuddy/
+.env

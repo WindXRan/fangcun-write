@@ -23,6 +23,10 @@ VariableResolver.COMPUTED_HANDLERS["total_chapters"] = (
 # ── 目标字数：优先 project.xml <target_words>，否则默认 2200 ──
 def _target_words(self):
     """目标字数：每章目标字数。"""
+    # 0. 运行时覆盖（通过 args 传入 target_words）
+    override = self._user_overrides.get("target_words", "")
+    if override and override.isdigit():
+        return override
     # 1. 从 project.xml 读取
     import xml.etree.ElementTree as ET
     px = self.novel_dir / "作品信息" / "project.xml"
@@ -120,23 +124,51 @@ def _current_chapter_text(self):
 
 VariableResolver.COMPUTED_HANDLERS["本章正文"] = _current_chapter_text
 
-def _read_chapter_tail(novel_dir, ch, tail_chars=800):
-    """读取指定章节的结尾。"""
+def _read_chapter_part(novel_dir, ch, chars=800, position='tail'):
+    """读取指定章节的开头或结尾（通用函数）。
+
+    Args:
+        novel_dir: Path 对象，项目目录
+        ch: int，章节号
+        chars: int，读取的字符数
+        position: str，'head' 或 'tail'
+
+    Returns:
+        str: 格式化的章节开头/结尾文本
+    """
     import re
     for ext in ("", ".xml"):
         p = novel_dir / "正文" / "正文" / f"第{ch}章{ext}"
         if p.exists():
             text = p.read_text(encoding="utf-8")
             clean = re.sub(r'<[^>]+>', '', text).strip()
-            tail = clean[-tail_chars:] if len(clean) > tail_chars else clean
-            return f"---第{ch}章章尾---{tail}"
-        # glob
+            if position == 'head':
+                part = clean[:chars] if len(clean) > chars else clean
+                return f"---第{ch}章章首---{part}"
+            else:
+                part = clean[-chars:] if len(clean) > chars else clean
+                return f"---第{ch}章章尾---{part}"
+        # glob 模糊匹配
         for f in sorted(novel_dir.glob(f"正文/正文/第{ch}章*.xml")):
             text = f.read_text(encoding="utf-8")
             clean = re.sub(r'<[^>]+>', '', text).strip()
-            tail = clean[-tail_chars:] if len(clean) > tail_chars else clean
-            return f"---第{ch}章章尾---{tail}"
+            if position == 'head':
+                part = clean[:chars] if len(clean) > chars else clean
+                return f"---第{ch}章章首---{part}"
+            else:
+                part = clean[-chars:] if len(clean) > chars else clean
+                return f"---第{ch}章章尾---{part}"
     return f"（第{ch}章不存在）"
+
+
+def _read_chapter_tail(novel_dir, ch, tail_chars=800):
+    """读取指定章节的结尾（兼容旧接口）。"""
+    return _read_chapter_part(novel_dir, ch, tail_chars, 'tail')
+
+
+def _read_chapter_head(novel_dir, ch, head_chars=500):
+    """读取指定章节的开头（兼容旧接口）。"""
+    return _read_chapter_part(novel_dir, ch, head_chars, 'head')
 
 
 def _prev_chapter_tail(self, tail_chars=800):
@@ -175,25 +207,6 @@ def _next_chapter_tail(self, head_chars=500):
             pass
     return "(无后续章节上下文)"
 
-def _read_chapter_head(novel_dir, ch, head_chars=500):
-    """读取指定章节的开头。"""
-    import re
-    for ext in ("", ".xml"):
-        p = novel_dir / "正文" / "正文" / f"第{ch}章{ext}"
-        if p.exists():
-            text = p.read_text(encoding="utf-8")
-            clean = re.sub(r'<[^>]+>', '', text).strip()
-            head = clean[:head_chars] if len(clean) > head_chars else clean
-            return f"---第{ch}章章首---{head}"
-        # glob
-        for f in sorted(novel_dir.glob(f"正文/正文/第{ch}章*.xml")):
-            text = f.read_text(encoding="utf-8")
-            clean = re.sub(r'<[^>]+>', '', text).strip()
-            head = clean[:head_chars] if len(clean) > head_chars else clean
-            return f"---第{ch}章章首---{head}"
-    return f"（第{ch}章不存在）"
-
-
 def _prev_chapter_guide(self, limit=1):
     """最近最多 limit 章的章纲全文。支持运行时配置 limit（通过 set_context 注入 关联章纲数）。"""
     N = self._ctx("N", 1)
@@ -220,6 +233,24 @@ def _current_chapter_guide(self):
     return f"（错误：第{N}章章纲不存在。请先通过 plot-guide 生成章纲）"
 
 VariableResolver.COMPUTED_HANDLERS["本章章纲"] = _current_chapter_guide
+
+# ── 前篇文章纲：读取上一章章纲 ──
+def _prev_chapter_guide(self):
+    """读取上一章章纲。N=1时返回空。"""
+    N = int(self._ctx("N", 1))
+    if N <= 1:
+        return "（无上一章章纲）"
+    
+    # 读取第N-1章章纲
+    prev_n = N - 1
+    for ext in ("", ".xml"):
+        p = self.novel_dir / "正文" / "章纲" / f"第{prev_n}章{ext}"
+        if p.exists():
+            return p.read_text(encoding='utf-8')
+    
+    return f"（第{prev_n}章章纲不存在）"
+
+VariableResolver.COMPUTED_HANDLERS["前篇文章纲"] = _prev_chapter_guide
 
 def _chapter_characters(self):
     """从章纲 <characters> 字段读取本章出场角色，只返回对应角色卡。"""
@@ -716,6 +747,25 @@ def _smart_context(self):
     return "\n".join(info_parts)
 
 VariableResolver.COMPUTED_HANDLERS["本卷章数"] = _volume_chapter_count
+
+# ── 当前卷纲：读取当前卷的卷纲文件 ──
+def _current_volume_outline(self):
+    """读取当前卷的卷纲。"""
+    vol = self._ctx("volume", 1)
+    import glob as _glob
+    import os as _os
+    vdir = str(self.novel_dir / "正文" / "卷纲")
+    for f in sorted(_glob.glob(_os.path.join(vdir, f"第{vol}卷*"))):
+        return open(f, encoding='utf-8').read()
+    return "（无当前卷纲）"
+
+VariableResolver.COMPUTED_HANDLERS["当前卷纲"] = _current_volume_outline
+
+# ── 目标字数中文别名 ──
+VariableResolver.COMPUTED_HANDLERS["目标字数"] = (
+    lambda self: self._user_overrides.get("target_words",
+        self.COMPUTED_HANDLERS["target_words"](self))
+)
 
 # ── 章节关联处理器 ──
 # （必须在所有关联函数定义后才能注册）

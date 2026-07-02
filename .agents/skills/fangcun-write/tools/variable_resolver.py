@@ -265,7 +265,8 @@ class VariableResolver:
         # 基础变量
         ctx["N"] = str(N)
         ctx["N03d"] = f"{N:03d}"
-        ctx["N_minus_1"] = f"{N - 1:03d}" if N > 1 else "001"
+        ctx["N_minus_1"] = f"{N - 1:03d}" if N > 1 else ""  # 第0章不存在，返回空
+        ctx["N_minus_1_display"] = f"{N - 1:03d}" if N > 1 else "（无上一章）"
         ctx["N_plus_1"] = f"{N + 1:03d}"
         ctx["start"] = str(ctx.get("start", "?"))
         ctx["end"] = str(ctx.get("end", "?"))

@@ -71,6 +71,44 @@ _SINGLE_FILE_MAP = {
 }
 
 
+def _ensure_source_guide_buffer(ch, project_dir: str) -> None:
+    """自动缓冲区：确保 source-guide-reverse 领先写章10章。
+
+    如果逆推落后于写章+10章，自动补一批到 ch+15章。
+    """
+    import os as _os
+    from pathlib import Path as _Path
+    import xml.etree.ElementTree as _ET
+
+    # 从 project.xml 读取源文项目名
+    _px = _Path(project_dir) / "作品信息" / "project.xml"
+    _src_book = ""
+    if _px.exists():
+        try:
+            _src_book = (_ET.parse(str(_px)).getroot().findtext("source_book") or "").strip()
+        except Exception:
+            pass
+    if not _src_book:
+        raise ValueError(f"{project_dir}/project.xml 未设置 source_book，无法定位源文项目")
+
+    # 计算已逆推章数
+    _src_dir = _Path(project_dir).parent / _src_book
+    guide_dir = _src_dir / "正文" / "章纲"
+    existing_guides = len(list(guide_dir.glob("第*.xml"))) if guide_dir.exists() else 0
+
+    # 如果逆推落后于写章+10章，自动补一批
+    if existing_guides < ch + 10:
+        need = ch + 15
+        _run_tool_silent = lambda n: _run_single_file_preset("source-guide-reverse", None, {"chapter_number": n}, str(_src_dir))
+        for n in range(existing_guides + 1, need + 1):
+            p = guide_dir / f"第{n}章.xml"
+            if p.exists():
+                continue
+            print(f"  [auto] 逆推第{n}章...", flush=True)
+            _run_tool_silent(n)
+        print(f"  [auto] 缓冲区已扩充到第{need}章", flush=True)
+
+
 def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
     """执行一个写作工具。
 
@@ -88,32 +126,8 @@ def run_tool(preset_name: str, args: dict, project_dir: str) -> str:
     # ── 自动缓冲区：source-guide-reverse 领先写章10章 ──
     if preset_name in ("write-chapter", "guide-convert"):
         ch = args.get("chapter_number", args.get("ch", 1))
-        import os as _os, glob as _glob
-        from pathlib import Path as _Path
-        # 计算已逆推章数
-        # 从 project.xml 读取源文项目名
-        import xml.etree.ElementTree as _ET
-        _px = _Path(project_dir) / "作品信息" / "project.xml"
-        _src_book = ""
-        if _px.exists():
-            try: _src_book = (_ET.parse(str(_px)).getroot().findtext("source_book") or "").strip()
-            except: pass
-        if not _src_book:
-            raise ValueError(f"{project_dir}/project.xml 未设置 source_book，无法定位源文项目")
-        _src_dir = _Path(project_dir).parent / _src_book
-        guide_dir = _src_dir / "正文" / "章纲"
-        existing_guides = len(list(guide_dir.glob("第*.xml"))) if guide_dir.exists() else 0
-        # 如果逆推落后于写章+10章，自动补一批
-        if existing_guides < ch + 10:
-            need = ch + 15
-            _run_tool_silent = lambda n: _run_single_file_preset("source-guide-reverse", None, {"chapter_number": n}, str(_src_dir))
-            for n in range(existing_guides + 1, need + 1):
-                p = guide_dir / f"第{n}章.xml"
-                if p.exists(): continue
-                print(f"  [auto] 逆推第{n}章...", flush=True)
-                _run_tool_silent(n)
-            print(f"  [auto] 缓冲区已扩充到第{need}章", flush=True)
-
+        _ensure_source_guide_buffer(ch, project_dir)
+    
     # 女频自动路由：章纲生成默认走女频版
     if preset_name in ("plot-guide", "plot-guide-nanpin"):
         proj_xml = Path(project_dir) / "作品信息" / "project.xml"
