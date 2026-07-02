@@ -488,8 +488,33 @@ def _run_imitation_chapter(args: dict, project_dir: str) -> str:
     except Exception as e:
         msgs.append(f"新文章纲❌{str(e)[:40]}")
 
+    # Step 2.5: 把完整设定文件注入章纲 setting_embed（章纲自包含）
+    _fw_guide = Path(project_dir) / "正文" / "章纲" / f"第{ch}章.xml"
+    if _fw_guide.exists():
+        _fw_text = _fw_guide.read_text(encoding='utf-8')
+        _settings_xml = []
+        # 角色卡
+        for _m in __import__('re').finditer(r'<character name="([^"]+)"', _fw_text):
+            _fp = Path(project_dir) / "作品信息" / "设定" / "角色" / f"{_m.group(1).strip()}.xml"
+            if _fp.exists():
+                _settings_xml.append(_fp.read_text(encoding='utf-8').strip())
+        # 地点
+        for _m in __import__('re').finditer(r'<location>([^<]+)</location>', _fw_text):
+            _fp = Path(project_dir) / "作品信息" / "设定" / "地点" / f"{_m.group(1).strip()}.xml"
+            if _fp.exists():
+                _settings_xml.append(_fp.read_text(encoding='utf-8').strip())
+        # 物品
+        for _m in __import__('re').finditer(r'<item_ref name="([^"]+)"', _fw_text):
+            _fp = Path(project_dir) / "作品信息" / "设定" / "物品" / f"{_m.group(1).strip()}.xml"
+            if _fp.exists():
+                _settings_xml.append(_fp.read_text(encoding='utf-8').strip())
+        # 替换 setting_embed
+        if _settings_xml:
+            _new_embed = "<setting_embed>\n" + "\n".join(_settings_xml) + "\n</setting_embed>"
+            _fw_text = __import__('re').sub(r'<setting_embed>.*?</setting_embed>', _new_embed, _fw_text, flags=__import__('re').DOTALL)
+            _fw_guide.write_text(_fw_text, encoding='utf-8')
+
     # Step 3: write-chapter（带下一章章纲参考）
-    _wc_args = {"chapter_number": ch}
     _next_guide = Path(project_dir) / "正文" / "章纲" / f"第{ch+1}章.xml"
     if _next_guide.exists():
         _ng_text = _next_guide.read_text(encoding='utf-8')
@@ -502,24 +527,47 @@ def _run_imitation_chapter(args: dict, project_dir: str) -> str:
                 _wc_args["user_input"] = f"下一章提要：{_ng_title} — {_ng_core}"
         except:
             pass
-    try:
-        r = run_tool("write-chapter", _wc_args, project_dir)
-        # Check output
-        out = Path(project_dir) / "正文" / "正文" / f"第{ch}章.xml"
-        if out.exists():
-            text = out.read_text(encoding='utf-8')
-            m = re.search(r'<content>(.*?)</content>', text, re.DOTALL)
-            content = m.group(1).strip() if m else text.strip()
-            wc = len(content)
-            # Fix wrapper
-            if '<content>' not in text and content:
-                wrapped = f'<chapter number="{ch}" tool="write-chapter">\n  <content>\n{content}\n  </content>\n</chapter>'
-                out.write_text(wrapped, encoding='utf-8')
-            msgs.append(f"正文✅{wc}字")
-        else:
-            msgs.append(f"正文❌无文件")
-    except Exception as e:
-        msgs.append(f"正文❌{str(e)[:40]}")
+    # 写正文（带重试+质量门禁）
+    _retries = 0
+    _max_retries = 3
+    _written = False
+    while _retries < _max_retries and not _written:
+        try:
+            r = run_tool("write-chapter", _wc_args, project_dir)
+            out = Path(project_dir) / "正文" / "正文" / f"第{ch}章.xml"
+            if out.exists():
+                text = out.read_text(encoding='utf-8')
+                m = re.search(r'<content>(.*?)</content>', text, re.DOTALL)
+                content = m.group(1).strip() if m else text.strip()
+                wc = len(content)
+
+                # 质量门禁: 源文名检查
+                _src_names = ['乔娇娇','乔夫人','乔忠国','乔天经','乔地义','孟谷雪','萧千月','萧千兰']
+                _found = [n for n in _src_names if n in content]
+                if _found:
+                    print(f"  🚨 源文名泄露 {_found}，重试({_retries+1}/{_max_retries})", flush=True)
+                    out.unlink()
+                    _retries += 1
+                    continue
+
+                # 质量门禁: 格式检查
+                if '<content>' not in text and content:
+                    wrapped = f'<chapter number="{ch}" name="第{ch}章" tool="write-chapter">\n  <content>\n{content}\n  </content>\n</chapter>'
+                    out.write_text(wrapped, encoding='utf-8')
+                elif 'name="' not in text:
+                    _fixed = re.sub(r'(<chapter number="\d+")', r'\1 name="第{ch}章"', text)
+                    out.write_text(_fixed, encoding='utf-8')
+
+                msgs.append(f"正文✅{wc}字")
+                _written = True
+            else:
+                _retries += 1
+                print(f"  ⚠️ 无文件，重试({_retries}/{_max_retries})", flush=True)
+        except Exception as e:
+            _retries += 1
+            print(f"  ⚠️ 错误: {str(e)[:40]}，重试({_retries}/{_max_retries})", flush=True)
+    if not _written:
+        msgs.append(f"正文❌{_max_retries}次重试失败")
 
     # 伏笔追踪：从章纲提取未解决的冲突/预言/新角色
     try:

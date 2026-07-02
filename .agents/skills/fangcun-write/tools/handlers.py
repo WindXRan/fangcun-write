@@ -10,6 +10,9 @@ from variable_resolver import VariableResolver
 VariableResolver.COMPUTED_HANDLERS["current_chapter"] = (
     lambda self: str(self._ctx("N", "?"))
 )
+VariableResolver.COMPUTED_HANDLERS["N"] = (
+    lambda self: str(self._ctx("N", "?"))
+)
 VariableResolver.COMPUTED_HANDLERS["current_volume"] = (
     lambda self: str(self._ctx("volume", "?"))
 )
@@ -66,6 +69,27 @@ def _protagonist_name(self, fallback: str) -> str:
             except: pass
     return fallback
 
+def _first_char_name(self, role: str) -> str:
+    """找指定角色：扫描角色卡，返回第一个匹配 role 的角色名。"""
+    import xml.etree.ElementTree as ET
+    import re as _re
+    import os
+    d = self.novel_dir / "作品信息" / "设定" / "角色"
+    if not d.exists():
+        return f"（无角色卡目录）"
+    for fname in sorted(os.listdir(str(d))):
+        if not fname.endswith(".xml"): continue
+        try:
+            text = open(d / fname, encoding="utf-8").read()
+            clean = _re.sub(r'```(?:xml)?\n?', '', text).strip()
+            clean = _re.sub(r'^.*?(<[a-zA-Z_])', r'\1', clean, flags=_re.DOTALL)
+            root = ET.fromstring(clean)
+            if root.tag in ("entry", "character"):
+                if root.get("role", "") == role:
+                    return root.get("name", "")
+        except: pass
+    return f"（未找到 role={role} 的角色）"
+
 VariableResolver.COMPUTED_HANDLERS["protagonist_name"] = (
     lambda self: _protagonist_name(self, "主角")
 )
@@ -101,7 +125,7 @@ def _current_chapter_text(self):
 
 VariableResolver.COMPUTED_HANDLERS["本章正文"] = _current_chapter_text
 
-def _prev_chapter_tail(self, tail_chars=300):
+def _prev_chapter_tail(self, tail_chars=800):
     """前文尾段：上一章最后 tail_chars 字（默认300），够接上钩子就行。"""
     N = self._ctx("N", 1)
     if N <= 1: return "（无前文）"
@@ -121,10 +145,12 @@ def _prev_chapter_tail(self, tail_chars=300):
             return f"---上一章章尾---\n{tail}"
     return "（无前文）"
 
-def _prev_chapter_guide(self, limit=5):
-    """最近最多 limit 章的章纲全文。"""
+def _prev_chapter_guide(self, limit=1):
+    """最近最多 limit 章的章纲全文。支持运行时配置 limit（通过 set_context 注入 关联章纲数）。"""
     N = self._ctx("N", 1)
     if N <= 1: return "（无关联章纲）"
+    # 优先取运行时配置的 limit
+    limit = int(self._ctx("关联章纲数", limit))
     parts = []
     start = max(1, N - limit)
     for i in range(start, N):
