@@ -515,6 +515,7 @@ def _run_imitation_chapter(args: dict, project_dir: str) -> str:
             _fw_guide.write_text(_fw_text, encoding='utf-8')
 
     # Step 3: write-chapter（带下一章章纲参考）
+    _wc_args = {"chapter_number": ch}
     _next_guide = Path(project_dir) / "正文" / "章纲" / f"第{ch+1}章.xml"
     if _next_guide.exists():
         _ng_text = _next_guide.read_text(encoding='utf-8')

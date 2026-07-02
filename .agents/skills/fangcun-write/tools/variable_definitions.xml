@@ -40,6 +40,12 @@
 
     
     <variable name="关联章节" category="正文" type="computed" source="computed" handler="关联章节" />
+    <variable name="关联章节号" category="正文" type="scalar" default="-1">
+      <description>手动指定关联章节号。默认-1=自动取上一章；指定N=取第N章结尾。用于填补中间空缺章节时衔接前文。</description>
+    </variable>
+    <variable name="后续章节号" category="正文" type="scalar" default="0">
+      <description>手动指定后续章节号。默认0=不读取；指定N=取第N章开头了解剧情走向。用于填补中间空缺章节时衔接后文。</description>
+    </variable>
     <variable name="关联章纲" category="大纲" type="computed" source="computed" handler="关联章纲" />
     <variable name="关联角色" category="角色" type="computed" source="computed" handler="关联角色" />
 

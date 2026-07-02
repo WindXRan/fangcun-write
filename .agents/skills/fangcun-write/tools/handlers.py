@@ -96,12 +96,7 @@ VariableResolver.COMPUTED_HANDLERS["protagonist_name"] = (
 VariableResolver.COMPUTED_HANDLERS["源文换皮"] = (
     lambda self: self._user_overrides.get("源文对照", "")
 )
-VariableResolver.COMPUTED_HANDLERS["关联章节"] = (
-    lambda self: _prev_chapter_tail(self)
-)
-VariableResolver.COMPUTED_HANDLERS["关联章纲"] = (
-    lambda self: _prev_chapter_guide(self)
-)
+
 # 旧名兼容
 
 # 本章正文：读取当前章节的正文文件
@@ -125,25 +120,79 @@ def _current_chapter_text(self):
 
 VariableResolver.COMPUTED_HANDLERS["本章正文"] = _current_chapter_text
 
-def _prev_chapter_tail(self, tail_chars=800):
-    """前文尾段：上一章最后 tail_chars 字（默认300），够接上钩子就行。"""
-    N = self._ctx("N", 1)
-    if N <= 1: return "（无前文）"
+def _read_chapter_tail(novel_dir, ch, tail_chars=800):
+    """读取指定章节的结尾。"""
     import re
     for ext in ("", ".xml"):
-        p = self.novel_dir / "正文" / "正文" / f"第{N-1}章{ext}"
+        p = novel_dir / "正文" / "正文" / f"第{ch}章{ext}"
         if p.exists():
             text = p.read_text(encoding="utf-8")
             clean = re.sub(r'<[^>]+>', '', text).strip()
             tail = clean[-tail_chars:] if len(clean) > tail_chars else clean
-            return f"---上一章章尾---\n{tail}"
+            return f"---第{ch}章章尾---{tail}"
         # glob
-        for f in sorted(self.novel_dir.glob(f"正文/正文/第{N-1}章*.xml")):
+        for f in sorted(novel_dir.glob(f"正文/正文/第{ch}章*.xml")):
             text = f.read_text(encoding="utf-8")
             clean = re.sub(r'<[^>]+>', '', text).strip()
             tail = clean[-tail_chars:] if len(clean) > tail_chars else clean
-            return f"---上一章章尾---\n{tail}"
-    return "（无前文）"
+            return f"---第{ch}章章尾---{tail}"
+    return f"（第{ch}章不存在）"
+
+
+def _prev_chapter_tail(self, tail_chars=800):
+    """前文尾段：智能模式——手动指定 > 自动扫描最近前置章节 > 上一章。"""
+    # 1. 检查是否手动指定了关联章节号
+    override = self._ctx("关联章节号", None)
+    if override is not None:
+        try:
+            target = int(override)
+            if target > 0:
+                return _read_chapter_tail(self.novel_dir, target, tail_chars)
+        except (ValueError, TypeError):
+            pass
+    
+    # 2. 智能模式：自动扫描最近的前置章节
+    N = self._ctx("N", 1)
+    chapters = _scan_written_chapters(self.novel_dir)
+    prev_ch = _find_nearest_previous(chapters, N)
+    if prev_ch > 0:
+        return _read_chapter_tail(self.novel_dir, prev_ch, tail_chars)
+    
+    # 3. 兜底：取上一章（可能不存在）
+    if N <= 1: return "（无前文）"
+    return _read_chapter_tail(self.novel_dir, N-1, tail_chars)
+
+
+def _next_chapter_tail(self, head_chars=500):
+    """后续章节开头：手动指定未来章节，了解剧情走向。"""
+    override = self._ctx("后续章节号", None)
+    if override is not None:
+        try:
+            target = int(override)
+            if target > 0:
+                return _read_chapter_head(self.novel_dir, target, head_chars)
+        except (ValueError, TypeError):
+            pass
+    return "(无后续章节上下文)"
+
+def _read_chapter_head(novel_dir, ch, head_chars=500):
+    """读取指定章节的开头。"""
+    import re
+    for ext in ("", ".xml"):
+        p = novel_dir / "正文" / "正文" / f"第{ch}章{ext}"
+        if p.exists():
+            text = p.read_text(encoding="utf-8")
+            clean = re.sub(r'<[^>]+>', '', text).strip()
+            head = clean[:head_chars] if len(clean) > head_chars else clean
+            return f"---第{ch}章章首---{head}"
+        # glob
+        for f in sorted(novel_dir.glob(f"正文/正文/第{ch}章*.xml")):
+            text = f.read_text(encoding="utf-8")
+            clean = re.sub(r'<[^>]+>', '', text).strip()
+            head = clean[:head_chars] if len(clean) > head_chars else clean
+            return f"---第{ch}章章首---{head}"
+    return f"（第{ch}章不存在）"
+
 
 def _prev_chapter_guide(self, limit=1):
     """最近最多 limit 章的章纲全文。支持运行时配置 limit（通过 set_context 注入 关联章纲数）。"""
@@ -585,4 +634,95 @@ def _volume_chapter_count(self):
     e = int(self._ctx("end", 1))
     return str(max(0, e - s + 1))
 
+
+# ── 智能上下文：自动扫描项目，返回最优关联章节 ──
+
+def _scan_written_chapters(novel_dir: Path) -> list:
+    """扫描项目，返回已写章节号列表（排序）。"""
+    chapters = []
+    text_dir = novel_dir / "正文" / "正文"
+    if not text_dir.exists():
+        return chapters
+    import re
+    for f in text_dir.iterdir():
+        if f.suffix in (".xml", ".txt", ".md"):
+            m = re.match(r"第(\d+)章", f.stem)
+            if m:
+                chapters.append(int(m.group(1)))
+    return sorted(chapters)
+
+def _find_nearest_previous(chapters: list, N: int) -> int:
+    """找离 N 最近的前置章节。"""
+    for ch in reversed(chapters):
+        if ch < N:
+            return ch
+    return 0
+
+def _find_nearest_next(chapters: list, N: int) -> int:
+    """找离 N 最近的后置章节。"""
+    for ch in chapters:
+        if ch > N:
+            return ch
+    return 0
+
+
+def _smart_context(self):
+    """智能上下文：自动评估文章情况，返回补充信息。
+    
+    自动完成：
+    1. 扫描已写章节，确定最优关联章节
+    2. 自动传递 关联章节号 和 后续章节号
+    3. 附带补充信息（角色变化、剧情走向）
+    """
+    N = self._ctx("N", 1)
+    chapters = _scan_written_chapters(self.novel_dir)
+    
+    if not chapters:
+        return "（无已写章节，无法生成智能上下文）"
+    
+    prev_ch = _find_nearest_previous(chapters, N)
+    next_ch = _find_nearest_next(chapters, N)
+    
+    # 自动设置上下文变量（让用户可以在 prompt 中使用 @关联章节 和 @后续章节）
+    if prev_ch > 0:
+        self._runtime_context["关联章节号"] = prev_ch
+    if next_ch > 0:
+        self._runtime_context["后续章节号"] = next_ch
+    
+    # 构建补充信息
+    info_parts = []
+    info_parts.append(f"【智能上下文分析】")
+    info_parts.append(f"- 当前目标章节：第{N}章")
+    info_parts.append(f"- 已写章节：{len(chapters)}章（{chapters[0]}~{chapters[-1]}）")
+    
+    if prev_ch > 0:
+        info_parts.append(f"- 自动关联前置章节：第{prev_ch}章（最近的前置章节）")
+        # 读取前置章节尾段
+        tail = _read_chapter_tail(self.novel_dir, prev_ch, 500)
+        info_parts.append(f"\n前置章节结尾（用于衔接）：\n{tail}")
+    
+    if next_ch > 0:
+        info_parts.append(f"- 自动关联后置章节：第{next_ch}章（最近的后置章节）")
+        head = _read_chapter_head(self.novel_dir, next_ch, 300)
+        info_parts.append(f"\n后置章节开头（用于避免冲突）：\n{head}")
+    
+    # 检查是否有章节间隙
+    if prev_ch > 0 and next_ch > 0:
+        gap = next_ch - prev_ch - 1
+        if gap > 0:
+            info_parts.append(f"\n⚠️ 检测到章节间隙：第{prev_ch}章和第{next_ch}章之间有{gap}章空缺")
+            info_parts.append(f"   建议：确保第{N}章同时衔接前后文")
+    
+    return "\n".join(info_parts)
+
 VariableResolver.COMPUTED_HANDLERS["本卷章数"] = _volume_chapter_count
+
+# ── 章节关联处理器 ──
+# （必须在所有关联函数定义后才能注册）
+VariableResolver.COMPUTED_HANDLERS["后续章节"] = _next_chapter_tail
+VariableResolver.COMPUTED_HANDLERS["关联章节"] = (
+    lambda self: _prev_chapter_tail(self)
+)
+VariableResolver.COMPUTED_HANDLERS["关联章纲"] = _prev_chapter_guide
+VariableResolver.COMPUTED_HANDLERS["智能上下文"] = _smart_context
+
